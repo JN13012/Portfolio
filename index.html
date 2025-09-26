@@ -1,276 +1,140 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nagi Jérémie Cybersécurité</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header class="header">
-      <div class="header-content">
-        <h1 class="terminal-text">
-          <span id="typewriter"></span><span class="cursor"></span>
-        </h1>
-      </div>
-      <button class="burger" id="burger-btn" aria-label="Ouvrir le menu">
-        &#9776;
-      </button>
-      <nav class="nav-header" id="nav-header">
-        <ul>
-          <li><a href="#profil">Profil</a></li>
-          <li><a href="#formations">Formations</a></li>
-          <li><a href="#competences">Compétences</a></li>
-          <li><a href="#projets">Projets</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nagi Jérémie Cybersécurité</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <section class="video-section">
-      <video id="bg-video" autoplay muted playsinline class="bg-video">
-        <source id="video-source" src="video/video1.mp4" alt="Video Cybersécurité" type="video/mp4" />
-        Votre navigateur ne supporte pas la vidéo HTML5.
-      </video>
-      <div class="video-overlay">
-        <h1>Nagi Jérémie</h1>
-        <p>
-          Passioné cybersécurité, blockchain, IA et IT en général (texte a
-          completer)
-        </p>
-        <p>Découvre mes projets, compétences et réalisations.</p>
-      </div>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#profil">Profil</a></li>
+        <li><a href="#formation">Formations</a></li>
+        <li><a href="#competences">Compétences</a></li>
+        <li><a href="#projets">Projets</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <section id="video">
+    <video autoplay muted playsinline>
+      <source src="video/video1.mp4" type="video/mp4">
+    </video>
+  </section>
+
+
+  <main>
+    <section id="profil">
+      <h2>Profil</h2>
+      <img src="photo/profil.jpg" alt="Photo de Nagi Jérémie">
+      <p>
+        Fasciné par la cybersécurité depuis mon adolescence, j’ai toujours été animé par la curiosité et la passion d’apprendre et d’évoluer. Doté d’une grande ambition, j’ai toujours visé haut. Mon parcours de vie riche et varié m’a permis de développer une maturité et une polyvalence rares : expériences militaires et stage commando, vécu sur plusieurs continents, engagement dans le sport automobile de haut niveau.  
+        Ces expériences m’ont transmis rigueur, réactivité et gestion des situations critiques, que j’applique aujourd’hui en cybersécurité. Autodidacte, j’ai développé des compétences en développement (Python, Bash, HTML, CSS, JavaScript), en audit et pentest, en défense des systèmes ainsi qu’en hardware.  
+        Je prépare actuellement un MSc Ingénieur Architecte Système et Réseaux à EPITECH Marseille, spécialisation Cybersécurité. Enthousiaste et motivé, je suis activement à la recherche d’une alternance à partir de janvier 2026.
+      </p>
     </section>
 
 
-    <main>
-      <section class="profil" id="profil">
-        <h2>Profil</h2>
-        <img src="photo/profil.jpg" alt="Photo de Nagi Jérémie" class="profil-img" />
+    <section id="formation">
+      <h2>Formations</h2>
+      <h3>EPITECH : MSc Architecte Système d’Information, spécialité Cybersécurité (2023 – 2025)</h3>
+      <h4>Compétences acquises :</h4>
+      <ul>
+        <li>Analyse et gestion des risques</li>
+        <li>Sécurité des réseaux et systèmes</li>
+        <li>Détection et réponse aux incidents de sécurité</li>
+        <li>Sécurité des applications et développement sécurisé (DevSecOps)</li>
+        <li>Gestion des identités et des accès</li>
+        <li>Sécurité des infrastructures Cloud</li>
+        <li>Analyse de vulnérabilités et tests d’intrusion</li>
+        <li>Sécurité des données et protection de la vie privée</li>
+      </ul>
+      <h4>Objectifs et réalisations :</h4>
+      <ul>
+        <li>Opérer un audit de sécurité complet</li>
+        <li>Appliquer les bases des normes ISO 2700x</li>
+        <li>Protéger un système informatique selon les normes en vigueur</li>
+        <li>Maîtriser les contextes de protection des données et la législation</li>
+      </ul>
+    </section>
+
+
+    <section id="competences">
+      <h2>Compétences</h2>
+      <ul class="competences">
+        <li><img class="logo" src="photo/python.svg" alt="Python"> Python</li>
+        <li><img class="logo" src="photo/html.svg" alt="HTML"> HTML</li>
+        <li><img class="logo" src="photo/css.svg" alt="CSS"> CSS</li>
+        <li><img class="logo" src="photo/js.svg" alt="JavaScript"> JavaScript</li>
+        <li><img class="logo" src="photo/linux.svg" alt="Linux"> Linux</li>
+        <li><img class="logo" src="photo/bash1.svg" alt="Bash"> Bash</li>
+        <li><img class="logo" src="photo/WindowsAD.svg" alt="Active Directory"> Active Directory</li>
+        <li><img class="logo" src="photo/powershell.svg" alt="Powershell"> Powershell</li>
+        <li><img class="logo" src="photo/Nmap.webp" alt="Nmap"> Nmap</li>
+        <li><img class="logo" src="photo/Tcpdump.svg" alt="Tcpdump"> Tcpdump</li>
+        <li><img class="logo" src="photo/Metasploit.svg" alt="Metasploit"> Metasploit</li>
+        <li><img class="logo" src="photo/Hydra.svg" alt="Hydra"> Hydra</li>
+        <li><img class="logo" src="photo/JTP.png" alt="John The Ripper"> John The Ripper</li>
+        <li><img class="logo" src="photo/hascat.png" alt="Hashcat"> Hashcat</li>
+        <li><img class="logo" src="photo/Fail2ban_svg.png" alt="Fail2ban"> Fail2ban</li>
+        <li><img class="logo" src="photo/Wireshark_icon_new.png" alt="Wireshark"> Wireshark</li>
+        <li><img class="logo" src="photo/Graylog_logo.svg.png" alt="Graylog"> Graylog</li>
+      </ul>
+    </section>
+
+
+    <section id="projets">
+      <h2>Projets</h2>
+
+      <article>
+        <h3>Projet 1</h3>
+        <div class="photos-projet">
+          <img src="photo/Cyberpong2.jpg" alt="">
+          <img src="photo/Cyberpong7.jpg" alt="">
+          <img src="photo/Cyberpong11.jpg" alt="">
+        </div>
+        <h4>CyberPong — Jeu arcade - Thème : Cyber/Pentest (Python)</h4>
         <p>
-Fasciné par la cybersécurité depuis mon adolescence, j’ai toujours été animé par la curiosité et la passion d’apprendre et d’évoluer. Doté d’une grande ambition,
- j’ai toujours visé haut. Mon parcours de vie, riche et varié, m’a permis de développer une maturité et une polyvalence rares : expériences militaires et stage
-  commando, vécu sur plusieurs continents, engagement dans le sport automobile de haut niveau – notamment le championnat du monde WEC LMP2 en 2017 comme tire‑man 
-  et responsable refueling. <br>
-  Ces expériences m’ont transmis rigueur, réactivité et gestion des situations critiques, que j’applique aujourd’hui en cybersécurité. Autodidacte, 
-  j’ai développé des compétences en développement (Python, Bash, HTML, CSS, JavaScript), en audit et pentest (Nmap, TCPDump, Hydra, Hashcat, John the Ripper…),
-   en défense des systèmes (SIEM, firewall, Fail2ban, Graylog, Wireshark) ainsi qu’en hardware (conception et assemblage de rigs de minage). <br>
-   Je prépare actuellement un MSc Ingénieur Architecte Système et Réseaux à EPITECH Marseille, spécialisation Cybersécurité, pour donner un cadre professionnel à
-    cette passion et contribuer à des projets ambitieux dans la protection des systèmes et des données. Enthousiaste et motivé, je suis activement à la recherche 
-    d’une alternance à partir de janvier 2026, où je pourrai mettre mes compétences techniques et mon énergie au service de missions stimulantes et innovantes.
+          CyberPong réinvente le classique Pong en y ajoutant une couche narrative et technique inspirée de la cybersécurité.
         </p>
-      </section>
+      </article>
 
-
-            <section class="formations" id="formations">
-        <h2>Formations</h2>
-        <h3>Epitech : Msc Ingénieur - Architecte Système d’Information, spécialité Cybersécurité <br> (2023 – 2025)</h3>
-        <h4>Compétences acquises</h4>
-        <ul>
-          <li>Analyse et gestion des risques</li>
-          <li>Sécurité des réseaux et systèmes</li>
-          <li>Détection et réponse aux incidents de sécurité</li>
-          <li>Sécurité des applications et développement sécurisé (DevSecOps)</li>
-          <li>Gestion des identités et des accès</li>
-          <li>Sécurité des infrastructures Cloud</li>
-          <li>Analyse de vulnérabilités et tests d’intrusion</li>
-          <li>Sécurité des données et protection de la vie privée </li>                     
-        </ul>
-        <h4> Objectifs et réalisations : </h4>
-        <ul>
-            <li>Opérer un audit de sécurité complet</li>
-  <li>Appliquer les bases des normes ISO 2700x</li>
-  <li>Protéger un système informatique selon les normes en vigueur</li>
-  <li>Maîtriser les contextes de protection des données et la législation</li>
-</ul>
-
-        
-
-
-
-      </section>
-
-      <section class="skills" id="competences">
-        <h2>Compétences</h2>
-        <div class="cards">
-          <div class="card accordion">
-            <button class="accordion-btn">Programmation / Développement</button>
-            <div class="accordion-panel">
-              <ul>
-                <li>
-                  <img
-                    src="photo/python.svg"
-                    alt="Logo Python"
-                    class="profil-img"
-                  />
-                  Python
-                </li>
-                <li>
-                  <img
-                    src="photo/html.svg"
-                    alt="Logo HTML"
-                    class="profil-img"
-                  />
-                  HTML
-                </li>
-                <li>
-                  <img
-                    src="photo/css.svg"
-                    alt="Logo CSS"
-                    class="profil-img"
-                  />
-                  CSS
-                </li>
-                <li>
-                  <img
-                    src="photo/js.svg"
-                    alt="Logo JavaScript"
-                    class="profil-img"
-                  />
-                  JAVASCRIPT
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="card accordion">
-            <button class="accordion-btn">Systèmes / Réseaux</button>
-            <div class="accordion-panel">
-              <ul>
-                <li>
-                  <img
-                    src="photo/linux.svg"
-                    alt="Logo Linux"
-                    class="profil-img"
-                  />
-                </li>
-                <li>
-                  <img
-                    src="photo/bash1.svg"
-                    alt="Logo Bash"
-                    class="profil-img"
-                  />
-                </li>
-                <li>
-                  <img
-                    src="photo/WindowsAD.svg"
-                    alt="Logo Windows Active Directory"
-                    class="profil-img"
-                  />
-                </li>
-                <li>
-                  <img
-                    src="photo/powershell.svg"
-                    alt="Logo Powershell"
-                    class="profil-img"
-                  />
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="card accordion">
-            <button class="accordion-btn">
-              Pentesting / Sécurité offensive
-            </button>
-            <div class="accordion-panel">
-              <ul>
-                <li> <img src="photo/Nmap.webp" alt="Logo Nmap" class="profil-img" /></li>
-                <li> <img src="photo/Tcpdump.svg" alt="Logo Tcpdump" class="profil-img" /></li>
-                <li> <img src="photo/Metasploit.svg" alt="Logo Metasploit" class="profil-img" /></li>
-                <li> <img src="photo/Hydra.svg" alt="Logo Hydra" class="profil-img" /></li>
-                <li> <img src="photo/JTP.png" alt="Logo John The Ripper" class="profil-img" /></li>
-                <li> <img src="photo/hascat.png" alt="Logo Hashcat" class="profil-img" /></li>
-            </ul>
-            </div>
-          </div>
-
-          <div class="card accordion">
-            <button class="accordion-btn">
-              Sécurité défensive / Monitoring
-            </button>
-            <div class="accordion-panel">
-                            <ul>
-                <li> <img src="photo/Fail2ban_svg.png" alt="Logo Fail2ban" class="profil-img" /></li>
-                <li> <img src="photo/Wireshark_icon_new.png" alt="Logo Wireshark" class="profil-img" /></li>
-                <li> <img src="photo/Graylog_logo.svg.png" alt="Logo Graylog" class="profil-img" /></li>
-            </div>
-          </div>
+      <article>
+        <h3>Projet 2</h3>
+        <div class="photos-projet">
+          <img src="photo/Convertisseur1.png" alt="">
+          <img src="photo/Convertisseur2.png" alt="">
         </div>
-      </section>
+        <h4>Convertisseur d’unités (Python)</h4>
+        <p>
+          Convertisseur d’unités pour transformer facilement des valeurs entre différentes unités de mesure.
+        </p>
+      </article>
+    </section>
 
-      <section class="projects" id="projets">
-        <h2>Projets</h2>
-        <div class="cards">
-          <div class="card">
-            <h3>Projet 1</h3>
-            <ul>
-            <img src="photo/Cyberpong2.jpg" alt="Photo du jeux Cyberpong" class="profil-img" />
-                        <img src="photo/Cyberpong7.jpg" alt="Photo du jeux Cyberpong" class="profil-img" />
-                       <img src="photo/Cyberpong11.jpg" alt="Photo du jeux Cyberpong" class="profil-img" />
-            <h2>CyberPong — Jeu arcade - Thème :Cyber/Pentest (Python)</h2>
-<p>CyberPong réinvente le classique Pong en y ajoutant une couche narrative et technique inspirée de la cybersécurité. Le jeu propose une arène instable, 
-  des virus-débuffs (shrinking, hyper-worm, crazy angles, firewall obstacles…), une interface de type « terminal » simulant scans Nmap/Hydra et une gestion musicale 
-  dynamique selon le niveau. L’implémentation combine animation graphique (module turtle), gestion audio (pygame.mixer), logique de jeu (collisions, niveaux, effets
-   aléatoires) et UI textuelle animée (effet « typing »).</p>
-   <h3>Fonctionnalités clés</h3>
-   <ul>
-<li>Arène dynamique avec évènements (shake, flash, obstacles firewall).</li>
-<li>Système de debuffs progressifs modifiant raquettes, balle et vitesse.</li>
-<li>Séquences d’intro/hack simulées (texte animé, logs d’attaque).</li>
-<li>Audio adaptatif : musiques/effets par niveau et par debuff.</li>
-<li>Gestion du score, niveaux, replay et interface click/drag.</li>
-</ul>
-<h3>Technos & outils</h3>
-<ul>
-  <li>Langage : Python</li>
-  <li>Son : pygame.mixer (musique et effets)</li></ul>
-        </div>
 
-          <div class="card">
-            <h3>Projet 2</h3>
-            <ul>
-            <img src="photo/Convertisseur1.png" alt="Photo du convertisseur d'unités" class="profil-img" />
-                        <img src="photo/Convertisseur2.png" alt="Photo du convertisseur d'unités" class="profil-img" />
-            <p>Ce projet est un convertisseur d’unités développé en Python, permettant de transformer facilement des valeurs entre différentes unités de mesure (longueur, masse, température…). 
-              L’application met en pratique mes compétences en programmation Python et en mathématiques, tout en offrant une interface simple et intuitive. Ce convertisseur 
-              peut être utile aux étudiants, lycéens, scientifiques ou toute personne ayant besoin de réaliser rapidement des conversions d’unités. Le projet est en constante 
-              évolution et peut être enrichi avec de nouvelles fonctionnalités ou types de conversions à l’avenir.</p>
-            </ul>
-          </div>
-        </div>
-      </section>
+    <section id="contact">
+      <h2>Contact</h2>
+      <form action="mailto:jeremie.nagi@epitec.eu" method="POST" enctype="text/plain">
+        <input type="text" name="prenom" placeholder="Prénom" required>
+        <input type="text" name="nom" placeholder="Nom" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="tel" name="tel" placeholder="Téléphone">
+        <textarea name="message" placeholder="Votre message..." rows="5" required></textarea>
+        <button type="submit">Envoyer</button>
+      </form>
+    </section>
+  </main>
 
-<section class="contact" id="contact">
-  <h2>Contact</h2>
-  <form class="contact-form" action="contact.php" method="POST">
-    <div class="form-row">
-      <input type="text" name="prenom" placeholder="Prénom" required />
-      <input type="text" name="nom" placeholder="Nom" required />
-    </div>
-    <div class="form-row">
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="tel" name="tel" placeholder="Téléphone" />
-    </div>
-    <div class="form-row">
-      <textarea name="message" placeholder="Votre message..." rows="5" required></textarea>
-    </div>
-    <button type="submit">Envoyer</button>
-  </form>
-</section>
-    </main>
-
-    
-  <footer class="footer">
+  <footer>
     <p>&copy; 2024 Nagi Jérémie. Tous droits réservés.</p>
   </footer>
 
-
-    <script src="menu.js"></script>
-    <script src="logo_animation.js"></script>
-    <script src="bouton_competences.js"></script>
-  </body>
-
-
-
+</body>
 </html>
