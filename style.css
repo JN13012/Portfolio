@@ -4,8 +4,17 @@
 }
 
 .fade-in {
-  animation: fadeIn 8s ease-in;
-  animation-delay: 1s;
+  animation: fadeIn 4s ease-in;
+}
+
+h1 {
+  display: inline-block;
+  animation: bouge 2s infinite alternate;
+}
+
+@keyframes bouge {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(200px); }
 }
 
 body, html {
@@ -62,10 +71,10 @@ img, video {
     padding: 0.5rem;
   }
 
-  h2 h3 h4 {
+  h2, h3, h4 {
     font-size: 1rem;
   }
 }
 
 .competences li {
-  width: 5%;}
+  width: 15%;}
