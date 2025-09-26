@@ -78,3 +78,16 @@ img, video {
 
 .competences li {
   width: 15%;}
+
+
+  a {
+  background-color: blue;
+  color: white;
+  padding: 0.5rem 1rem;
+  transition: all 5s ease;
+}
+
+a:hover {
+  background-color: white;
+  color: blue;
+}
