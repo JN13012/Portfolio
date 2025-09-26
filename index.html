@@ -22,15 +22,15 @@
   </header>
 
 
-  <section id="video">
-    <video autoplay muted playsinline>
+  <section class="fade-in" id="video">
+    <video autoplay muted playsinline loop>
       <source src="video/video1.mp4" type="video/mp4">
     </video>
   </section>
 
 
   <main>
-    <section id="profil">
+    <section class="fade-in" id="profil">
       <h2>Profil</h2>
       <img src="photo/profil.jpg" alt="Photo de Nagi Jérémie">
       <p>
@@ -41,7 +41,7 @@
     </section>
 
 
-    <section id="formation">
+    <section class="fade-in" id="formation">
       <h2>Formations</h2>
       <h3>EPITECH : MSc Architecte Système d’Information, spécialité Cybersécurité (2023 – 2025)</h3>
       <h4>Compétences acquises :</h4>
@@ -65,7 +65,7 @@
     </section>
 
 
-    <section id="competences">
+    <section class="fade-in" id="competences">
       <h2>Compétences</h2>
       <ul class="competences">
         <li><img class="logo" src="photo/python.svg" alt="Python"> Python</li>
@@ -89,12 +89,17 @@
     </section>
 
 
-    <section id="projets">
+    <section class="fade-in" id="projets">
       <h2>Projets</h2>
 
       <article>
         <h3>Projet 1</h3>
         <div class="photos-projet">
+
+              <video autoplay muted playsinline loop>
+      <source src="video/1.mp4" type="video/mp4"></video>
+      <video autoplay muted playsinline loop>
+            <source src="video/2.mp4" type="video/mp4"> </video>
           <img src="photo/Cyberpong2.jpg" alt="">
           <img src="photo/Cyberpong7.jpg" alt="">
           <img src="photo/Cyberpong11.jpg" alt="">
@@ -119,7 +124,7 @@
     </section>
 
 
-    <section id="contact">
+    <section class="fade-in" id="contact">
       <h2>Contact</h2>
       <form action="mailto:jeremie.nagi@epitec.eu" method="POST" enctype="text/plain">
         <input type="text" name="prenom" placeholder="Prénom" required>
