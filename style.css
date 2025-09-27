@@ -9,12 +9,13 @@
 
 h1 {
   display: inline-block;
+  max-width: 20%;
   animation: bouge 2s infinite alternate;
 }
 
 @keyframes bouge {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(200px); }
+  100% { transform: translateX(50vw); }
 }
 
 body, html {
@@ -84,10 +85,22 @@ img, video {
   background-color: blue;
   color: white;
   padding: 0.5rem 1rem;
-  transition: all 5s ease;
+  transition: all 3s ease;
 }
 
 a:hover {
   background-color: white;
   color: blue;
+}
+
+
+body {
+  background-color: #22406d;
+  color: #e6edf3;
+  font-family: Arial, sans-serif;
+}
+
+.photos-projet img,
+.photos-projet video {
+  margin: 2%;
 }
