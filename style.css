@@ -1,106 +1,15 @@
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+<style>
+@keyframes type {
+  0% { width: 0; }
+  50% { width: 100%; }
+  100% { width: 0; }
 }
 
-.fade-in {
-  animation: fadeIn 4s ease-in;
-}
-
-h1 {
+.animate-type {
   display: inline-block;
-  max-width: 20%;
-  animation: bouge 2s infinite alternate;
+  width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: type 5s steps(30) infinite;
 }
-
-@keyframes bouge {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(50vw); }
-}
-
-body, html {
-  margin: 10px;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-header, main, footer, section {
-  width: 90%;
-  margin: 10px auto;
-  padding: 1rem;
-}
-
-nav ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  list-style: none;
-  padding: 0;
-}
-
-nav li {
-  margin: 0.5rem;
-}
-
-img, video {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-@media (max-width: 900px) {
-  nav ul {
-    flex-direction: column;
-  }
-
-  section {
-    padding: 0.5rem;
-  }
-
-  h2 h3 h4 {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 500px) {
-  nav ul {
-    flex-direction: column;
-  }
-
-  section {
-    padding: 0.5rem;
-  }
-
-  h2, h3, h4 {
-    font-size: 1rem;
-  }
-}
-
-.competences li {
-  width: 15%;}
-
-
-  a {
-  background-color: blue;
-  color: white;
-  padding: 0.5rem 1rem;
-  transition: all 3s ease;
-}
-
-a:hover {
-  background-color: white;
-  color: blue;
-}
-
-
-body {
-  background-color: #22406d;
-  color: #e6edf3;
-  font-family: Arial, sans-serif;
-}
-
-.photos-projet img,
-.photos-projet video {
-  margin: 2%;
-}
+</style>
