@@ -8,6 +8,38 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
+<audio id="bg-music" loop>
+  <source src="audio/audio.mp3">
+</audio>
+
+<div class="fixed bottom-5 right-5 flex items-center gap-2 bg-black/70 border border-green-400 px-4 py-2 rounded-xl shadow-lg z-50">
+  <button id="toggle-sound" class="text-green-300 hover:text-yellow-300 transition">
+    🎧 Activer le son
+  </button>
+</div>
+
+<script>
+  const audio = document.getElementById('bg-music');
+  const btn = document.getElementById('toggle-sound');
+
+  let isPlaying = true;
+
+  btn.addEventListener('click', () => {
+    if (!isPlaying) {
+      audio.volume = 0.3;
+      audio.play();
+      btn.textContent = '🔇 Couper le son';
+      isPlaying = true;
+    } else {
+      audio.pause();
+      btn.textContent = '🎧 Activer le son';
+      isPlaying = false;
+    }
+  });
+</script>
+
+
+
 <body class="bg-black text-green-400 font-mono">
 
 
