@@ -1,146 +1,439 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nagi Jérémie Cybersécurité</title>
-  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
 
-<h1>Nagi Jérémie — Portfolio Cyber</h1>
+<body class="bg-black text-green-400 font-mono">
+
+
 
   <header>
-    <nav>
-      <ul>
-        <li><a href="#profil">Profil</a></li>
-        <li><a href="#formation">Formations</a></li>
-        <li><a href="#competences">Compétences</a></li>
-        <li><a href="#projets">Projets</a></li>
-        <li><a href="#contact">Contact</a></li>
+    <nav class="container mx-auto flex flex-col md:flex-row justify-between items-center p-4">
+      <h1 class="hover:text-yellow-300 transition">Nagi Jérémie — Portfolio Cyber</h1>
+      <ul class="flex flex-col md:flex-row gap-5 text-sm">
+        <li><a href="#profil" class="hover:text-green-300 transition">Profil</a></li>
+        <li><a href="#formation" class="hover:text-green-300 transition">Formations & Certifications</a></li>
+        <li><a href="#experiences" class="hover:text-green-300 transition">Expériences</a></li>
+        <li><a href="#competences" class="hover:text-green-300 transition">Compétences</a></li>
+        <li><a href="#projets" class="hover:text-green-300 transition">Projets</a></li>
+        <li><a href="#contact" class="hover:text-green-300 transition">Contact</a></li>
       </ul>
     </nav>
   </header>
 
 
-  <section class="fade-in" id="video">
-    <video autoplay muted playsinline loop>
+  <section class="mx-auto" id="video">
+    <video class="w-full" autoplay muted playsinline loop>
       <source src="video/video1.mp4" type="video/mp4">
     </video>
   </section>
 
 
-  <main>
-    <section class="fade-in" id="profil">
-      <h2>Profil</h2>
-      <img src="photo/profil.jpg" alt="Photo de Nagi Jérémie">
-      <p>
-        Fasciné par la cybersécurité depuis mon adolescence, j’ai toujours été animé par la curiosité et la passion d’apprendre et d’évoluer. Doté d’une grande ambition, j’ai toujours visé haut. Mon parcours de vie riche et varié m’a permis de développer une maturité et une polyvalence rares : expériences militaires et stage commando, vécu sur plusieurs continents, engagement dans le sport automobile de haut niveau.  
-        Ces expériences m’ont transmis rigueur, réactivité et gestion des situations critiques, que j’applique aujourd’hui en cybersécurité. Autodidacte, j’ai développé des compétences en développement (Python, Bash, HTML, CSS, JavaScript), en audit et pentest, en défense des systèmes ainsi qu’en hardware.  
-        Je prépare actuellement un MSc Ingénieur Architecte Système et Réseaux à EPITECH Marseille, spécialisation Cybersécurité. Enthousiaste et motivé, je suis activement à la recherche d’une alternance à partir de janvier 2026.
-      </p>
-      <a href="cv.pdf" download>Télécharger mon CV</a>
+  <main class="mx-20">
+    <section class="bg-neutral-900 border border-green-700 rounded-xl p-6 my-10" id="profil">
+
+
+      <h2 class="text-3xl font-bold text-center my-5 text-green-400">Profil</h2>
+
+      <div class="grid md:px-20 lg:px-0 lg:grid-cols-2 gap-5">
+        <img src="photo/profil1.png" alt="Photo de Nagi Jérémie">
+
+        <div class="flex flex-col items-center justify-center">
+          <p class="text-center mb-5">
+            Après un parcours de vie riche et varié — marqué par des expériences militaires, sportives et
+            internationales — j’ai choisi
+            de me reconvertir dans un domaine qui me passionne depuis toujours : la cybersécurité.
+          </p>
+          <p class="text-center mb-5">
+            Actuellement en Pré-Master of Science à <strong>EPITECH</strong> Marseille, parcours Architecte Systèmes
+            d’Information, spécialité Cybersécurité, je monte en compétences rapidement à travers une formation
+            intensive.
+            Grâce à la méthodologie du <em>Learn by Doing</em>, j’ai pu mener de nombreux projets concrets, appliquer
+            les
+            compétences
+            acquises et en développer de nouvelles. J’ai ainsi appris plusieurs langages de programmation. En parallèle,
+            j’ai
+            souhaité approfondir mes connaissances en cybersécurité via la plateforme TryHackMe, où j’ai obtenu mon
+            premier
+            certificat.
+          </p>
+          <p class="text-center mb-5">
+            Animé par la passion de réussir, ma curiosité et ma volonté me permettent d'évoluer rapidement.
+            Je peux apporter un fort esprit d’équipe, une grande maturité et une rigueur professionnelle.
+            Je suis actuellement à la recherche d’une alternance ou d’un stage dans tous les domaines de l’IT,
+            disponible à partir de janvier 2026 pour une durée de 33 mois.
+          </p>
+          <p class="text-center mb-5">
+            jeremie.nagi@epitech.eu <br>
+            07.88.29.43.03 <br>
+            Localisation : Marseille
+          </p>
+
+          <a class="inline-block px-4 py-2 border border-green-400 rounded-md text-green-300 transition hover:bg-[rgba(255,140,0,0.15)]"
+            href="cv.pdf" download>Télécharger mon CV</a>
+        </div>
+      </div>
     </section>
 
-    <section class="fade-in" id="formation">
-      <h2>Formations</h2>
-      <h3>EPITECH : MSc Architecte Système d’Information, spécialité Cybersécurité (2023 – 2025)</h3>
-      <h4>Compétences acquises :</h4>
-      <ul>
-        <li>Analyse et gestion des risques</li>
-        <li>Sécurité des réseaux et systèmes</li>
-        <li>Détection et réponse aux incidents de sécurité</li>
-        <li>Sécurité des applications et développement sécurisé (DevSecOps)</li>
-        <li>Gestion des identités et des accès</li>
-        <li>Sécurité des infrastructures Cloud</li>
-        <li>Analyse de vulnérabilités et tests d’intrusion</li>
-        <li>Sécurité des données et protection de la vie privée</li>
-      </ul>
-      <h4>Objectifs et réalisations :</h4>
-      <ul>
-        <li>Opérer un audit de sécurité complet</li>
-        <li>Appliquer les bases des normes ISO 2700x</li>
-        <li>Protéger un système informatique selon les normes en vigueur</li>
-        <li>Maîtriser les contextes de protection des données et la législation</li>
-      </ul>
+    <section class="bg-neutral-900 border border-green-700 rounded-xl p-6 my-10" id="formation">
+
+      <h2 class="text-3xl font-bold text-center my-5 text-green-400">Formations</h2>
+
+      <div class="grid lg:grid-cols-2 gap-5 items-center text-center justify-center">
+        <div class="flex justify-center my-4">
+          <img src="photo/Epitech.png" alt="Photo EPITECH">
+        </div>
+        <div>
+          <h3 class="text-green-300 font-bold text-center mb-4"><strong>EPITECH: MSc Architecte Système d’Information :
+            </strong> spécialité Cybersécurité (2025 – 2028) -
+            Marseille (13)
+            Alternance : 01/2026 → 10/2028 (33 mois)
+          </h3>
+          <h4 class="text-green-350 font-bold text-center mb-4">Compétences & Objectifs :</h4>
+          <ul class="list-disc list-inside mb-6">
+            <li class="list-none">Analyse et gestion des risques, sécurité réseaux et systèmes, tests d’intrusion</li>
+            <li class="list-none">Développement sécurisé (DevSecOps), gestion des accès et infrastructures Cloud</li>
+            <li class="list-none">Opérer des audits, appliquer les normes ISO 2700x et protéger les données</li>
+          </ul>
+          <a class="inline-block px-4 py-2 border border-green-400 rounded-md text-green-300 transition hover:bg-[rgba(255,140,0,0.3)]"
+            href="https://www.epitech.eu/formation-alternance/master-of-science-post-bac3/#h-decouvrez-les-15-masters-of-science-d-epitech"
+            target="_blank">Voir la formation EPITECH</a>
+        </div>
+
+
+        <div>
+          <h3 class="text-green-300 font-bold text-center mb-4">Préparateur et Développeur de Véhicules de Compétition —
+            École de la
+            Performance, Nogaro</h3>
+
+
+          <p class="mb-4 text-center">
+            Formation Bac+2 préparant aux métiers de technicien dans le sport automobile, avec un enseignement
+            approfondi
+            en mécanique de précision.
+            Le programme couvre les moteurs, les boîtes de vitesses et les châssis, et inclut un stage pratique en
+            entreprise.
+          </p>
+          <a class="inline-block px-4 py-2 border border-green-400 rounded-md text-green-300 transition hover:bg-[rgba(255,140,0,0.3)]"
+            href="https://www.ecoleperformance.com/" target="_blank">Voir la formation Ecole de la Performance</a>
+        </div>
+        <img src="photo/ECOLE-PERFORMANCE-10.jpg" alt="Photo Ecole de la Performance">
+
+        <img src="photo/bts.jpg" alt="Photo Ecole de la Performance">
+        <div>
+          <h3 class="text-green-300 font-bold text-center mb-4">BTS Moteurs à Combustion Interne — Lycée Albert
+            Claveille,
+            Périgueux
+          </h3>
+
+
+          <p class="mb-4 text-center">
+            Formation Bac+2 spécialisée dans la conception, l’optimisation et la maintenance des moteurs thermiques.
+            Le programme propose des enseignements théoriques en thermodynamique, développement moteur et construction
+            mécanique.
+            Il inclut également des stages pratiques en entreprise, permettant d’acquérir des compétences
+            professionnelles.
+          </p>
+          <a class="inline-block px-4 py-2 border border-green-400 rounded-md text-green-300 transition hover:bg-[rgba(255,140,0,0.3)]"
+            href="https://claveille.org/bts/" target="_blank">Voir la formation Brevet de technicien Supérieur</a>
+        </div>
+
+
+        <div>
+          <h3 class="text-green-300 font-bold text-center mb-4">Certifications : Certificat Cyber Security 101,
+            TryHackMe
+          </h3>
+
+          <p class="mb-4 text-center">
+            Parcours d’initiation à la cybersécurité sur la plateforme TryHackMe.
+            Cette certification couvre les fondamentaux des systèmes Linux et Windows, la gestion des réseaux,
+            l’exploitation de vulnérabilités, ainsi que les principes de la sécurité
+            défensive.
+            Le programme inclut la mise en pratique d’outils essentiels (Nmap, Burp Suite, Metasploit,
+            SIEM, etc.),
+            l’analyse de menaces et la compréhension du fonctionnement d’un SOC.
+            Ce parcours m’a permis de consolider mes compétences dans le domaine de la cybersécurité.
+          </p>
+          <a class="inline-block px-4 py-2 border border-green-400 rounded-md text-green-300 transition hover:bg-[rgba(255,140,0,0.3)]"
+            href="https://tryhackme.com/p/JN13" target="_blank">Voir le profil TryHackMe</a>
+        </div>
+        <img src="photo/THM.jpg" alt="Photo TryHackMe">
+      </div>
     </section>
 
 
-    <section class="fade-in" id="competences">
-      <h2>Compétences</h2>
-      <ul class="competences">
-        <li><img class="logo" src="photo/python.svg" alt="Python"> Python</li>
-        <li><img class="logo" src="photo/html.svg" alt="HTML"> HTML</li>
-        <li><img class="logo" src="photo/css.svg" alt="CSS"> CSS</li>
-        <li><img class="logo" src="photo/js.svg" alt="JavaScript"> JavaScript</li>
-        <li><img class="logo" src="photo/linux.svg" alt="Linux"> Linux</li>
-        <li><img class="logo" src="photo/bash1.svg" alt="Bash"> Bash</li>
-        <li><img class="logo" src="photo/WindowsAD.svg" alt="Active Directory"> Active Directory</li>
-        <li><img class="logo" src="photo/powershell.svg" alt="Powershell"> Powershell</li>
-        <li><img class="logo" src="photo/Nmap.webp" alt="Nmap"> Nmap</li>
-        <li><img class="logo" src="photo/Tcpdump.svg" alt="Tcpdump"> Tcpdump</li>
-        <li><img class="logo" src="photo/Metasploit.svg" alt="Metasploit"> Metasploit</li>
-        <li><img class="logo" src="photo/Hydra.svg" alt="Hydra"> Hydra</li>
-        <li><img class="logo" src="photo/JTP.png" alt="John The Ripper"> John The Ripper</li>
-        <li><img class="logo" src="photo/hascat.png" alt="Hashcat"> Hashcat</li>
-        <li><img class="logo" src="photo/Fail2ban_svg.png" alt="Fail2ban"> Fail2ban</li>
-        <li><img class="logo" src="photo/Wireshark_icon_new.png" alt="Wireshark"> Wireshark</li>
-        <li><img class="logo" src="photo/Graylog_logo.svg.png" alt="Graylog"> Graylog</li>
+
+    <section class="bg-neutral-900 border border-green-700 rounded-xl p-6 my-10" id="competences">
+      <h2 class="text-3xl font-bold text-center my-5 text-green-400">Compétences</h2>
+      <ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/python.svg" alt="Python">
+          <span class="font-medium text-green-300">Python</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/html.svg" alt="HTML">
+          <span class="font-medium text-green-300">HTML</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/css.svg" alt="CSS">
+          <span class="font-medium text-green-300">CSS</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/js.svg" alt="JavaScript">
+          <span class="font-medium text-green-300">JavaScript</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/linux.svg" alt="Linux">
+          <span class="font-medium text-green-300">Linux</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/bash1.svg" alt="Bash">
+          <span class="font-medium text-green-300">Bash</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/WindowsAD.svg" alt="Active Directory">
+          <span class="font-medium text-green-300">Active Directory</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/powershell.svg" alt="Powershell">
+          <span class="font-medium text-green-300">Powershell</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/Nmap.webp" alt="Nmap">
+          <span class="font-medium text-green-300">Nmap</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/Meta.png" alt="Metasploit">
+          <span class="font-medium text-green-300">Metasploit</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/Hydra.svg" alt="Hydra">
+          <span class="font-medium text-green-300">Hydra</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/JTP.png" alt="John The Ripper">
+          <span class="font-medium text-green-300">John The Ripper</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/hascat.png" alt="Hashcat">
+          <span class="font-medium text-green-300">Hashcat</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/Fail2ban_svg.png" alt="Fail2ban">
+          <span class="font-medium text-green-300">Fail2ban</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/Wireshark_icon_new.png" alt="Wireshark">
+          <span class="font-medium text-green-300">Wireshark</span>
+        </li>
+
+        <li
+          class="p-5 bg-black/60 shadow-[0_12px_28px_rgba(255,140,0,0.407)] text-center rounded-xl transition-transform duration-200 ease-linear hover:-translate-y-5 hover:shadow-[0_18px_38px_rgba(0,0,0,0.35)]">
+          <img class="mx-auto w-16 h-16 mb-2" src="photo/Graylog_logo.svg.png" alt="Graylog">
+          <span class="font-medium text-green-300">Graylog</span>
+        </li>
       </ul>
     </section>
 
+    <section class="bg-neutral-900 border border-green-700 rounded-xl p-6 my-10" id="experiences">
 
-    <section class="fade-in" id="projets">
-      <h2>Projets</h2>
+      <h2 class="text-3xl font-bold text-center my-5 text-green-400">Expériences</h2>
+      <div class="grid lg:grid-cols-2 gap-5 items-center text-center justify-center">
+        <img src="photo/wec2017.jpg" alt="WEC2017">
+        <div>
+          <h3 class="text-green-300 font-bold text-center mb-4">Mécanicien — Saison 2017</h3>
+          <h4>World Endurance Championship (WEC) — G-Drive Racing</h4>
 
-      <article>
-        <h3>Projet 1</h3>
-        <div class="photos-projet">
+          <p class="text-center mb-5">
+            Participation à la saison 2017 du WEC avec l’équipe G-Drive Racing, basée à Saint-Aunès (34), en tant que
+            Tire
+            Man.
+            Responsable de la préparation des pneumatiques et du refueling lors des pit stops.
+            Cette expérience a permis de travailler dans un environnement de compétition automobile de très haut niveau,
+            aux côtés d’équipes prestigieuses telles que Ferrari, Porsche et Toyota, renforçant réactivité, précision et
+            capacité à
+            performer sous pression.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-green-300 font-bold text-center mb-4">Mécanique générale</h3>
 
-              <video autoplay muted playsinline loop>
-      <source src="video/1.mp4" type="video/mp4"></video>
-      <video autoplay muted playsinline loop>
-            <source src="video/2.mp4" type="video/mp4"> </video>
+          <p class="text-center mb-5">
+            Intervention dans différents ateliers de mécanique automobile et navale, pour contrôler,
+            réparer et
+            reconditionner les pièces.
+            Ces missions m'ont permis de développer un savoir-faire technique polyvalent et une grande rigueur dans le
+            diagnostic et
+            la résolution de problèmes mécaniques.
+          </p>
+        </div>
+        <img src="photo/wartsila.jpg" alt="Wartsila VASA 32">
+
+
+        <img src="photo/artisan1.jpg" alt="Photo artisanat">
+        <div>
+          <h3 class="text-green-300 font-bold text-center mb-4">Auto-entrepreneur — Artisan du Bâtiment</h3>
+          <p class="text-center mb-5">
+            Prise en charge de divers travaux de construction et rénovation, du second œuvre au gros œuvre, incluant
+            murs,
+            chapes, façades
+            terrassement... Ainsi que des travaux de paysagisme, plantations et entretien d’espaces verts, permettant de
+            développer
+            polyvalence, autonomie et expertise manuelle.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="bg-neutral-900 border border-green-700 rounded-xl p-6 my-10" id="projets">
+      <h2 class="text-3xl font-bold text-center my-5 text-center text-green-400">Projets</h2>
+      <div class="grid  lg:grid-cols-2 gap-5">
+
+        <div>
+
+          <img src="photo/platino.png" alt="">
+        </div>
+        <article class=" my-10">
+
+          <div class="flex flex-col items-center justify-center">
+            <h3 class="text-green-300 font-bold text-center mb-4">
+              Platino — Backend et API Job Board (Node.js / PostgreSQL)
+            </h3>
+
+            <p class="text-center mb-5">
+              Platino est un Job Board complet, avec une API CRUD backend qui permet de Create Read Update and Delete
+              des
+              utilisateurs,
+              annonces...
+              Le projet m’a confronté à plusieurs défis techniques : conception de la base de données avec PostgreSQL
+              sur
+              pgAdmin,
+              mise en place d’un serveur Node.js,
+              définition de routes, création de controllers pour gérer la logique métier, et gestion sécurisée des
+              données.
+            </p>
+            <a class="inline-block px-4 py-2 border border-green-400 rounded-md text-green-300 transition hover:bg-[rgba(255,140,0,0.3)]"
+              href="https://github.com/EpitechMscProPromo2028/T-WEB-501-MAR_16" target="_blank">Voir le projet sur
+              GitHub</a>
+          </div>
+        </article>
+
+      </div>
+
+
+      <article class=" my-10">
+        <h3 class="text-green-300 font-bold text-center mb-4">CyberPong — Jeu arcade - Thème : Cyber/Pentest (Python)
+        </h3>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 my-10">
+
+          <video autoplay muted playsinline loop>
+            <source src="video/2.mp4" type="video/mp4">
+          </video>
           <img src="photo/Cyberpong2.jpg" alt="">
-          <img src="photo/Cyberpong7.jpg" alt="">
           <img src="photo/Cyberpong11.jpg" alt="">
         </div>
-        <h4>CyberPong — Jeu arcade - Thème : Cyber/Pentest (Python)</h4>
-        <p>
-          CyberPong réinvente le classique Pong en y ajoutant une couche narrative et technique inspirée de la cybersécurité.
+        <p class="text-center mb-5">
+          CyberPong revisite le classique Pong en y intégrant un univers cyber/pentest.
+          Le projet m’a confronté à plusieurs défis techniques : programmation de la logique du jeu en Python, gestion
+          des collisions,
+          intégration d’une interface graphique, ajout d’effets spéciaux et de mécaniques de jeu avancées comme les
+          debuffs
+          Ce projet m’a permis de renforcer mes compétences en Python, en algorithmie,
+          ainsi qu’en conception orientée objet.
         </p>
       </article>
 
-      <article>
-        <h3>Projet 2</h3>
-        <div class="photos-projet">
-          <img src="photo/Convertisseur1.png" alt="">
-          <img src="photo/Convertisseur2.png" alt="">
+      <article class=" my-10">
+        <h3 class="text-green-300 font-bold text-center mb-4">Convertisseur d’unités — Premier projet Python</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <img class="w-[75%] mx-auto flex" src="photo/Convertisseur1.png" alt="">
+          <img class="w-[75%] mx-auto flex" src="photo/Convertisseur2.png" alt="">
         </div>
-        <h4>Convertisseur d’unités (Python)</h4>
-        <p>
-          Convertisseur d’unités pour transformer facilement des valeurs entre différentes unités de mesure.
+        <p class="text-center mb-5 my-10">
+          Convertisseur d’unités — Mon premier projet en Python : un outil permettant de transformer facilement et
+          avec précision des valeurs entre différentes unités de mesure. Les conversions reposent sur des formules
+          mathématiques
+          exactes plutôt que sur de simples arrondis, garantissant une justesse optimale des résultats. Ce projet m’a
+          permis de
+          m’initier à la programmation, de revoir les formules mathématiques de base, de comprendre la gestion des
+          variable et
+          des fonctions, et d’acquérir les premières notions de logique algorithmique.
         </p>
+        <div class="text-center mb-5">
+          <a class="inline-block px-4 py-2 border border-green-400 rounded-md text-green-300 transition hover:bg-[rgba(255,140,0,0.3)]"
+            href="https://github.com/JN13012/Unit_converter" target="_blank">Voir le projet sur GitHub</a>
+        </div>
       </article>
     </section>
 
 
-    <section class="fade-in" id="contact">
-      <h2>Contact</h2>
-      <form action="mailto:jeremie.nagi@epitec.eu" method="POST" enctype="text/plain">
-        <input type="text" name="prenom" placeholder="Prénom" required>
-        <input type="text" name="nom" placeholder="Nom" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="tel" name="tel" placeholder="Téléphone">
-        <textarea name="message" placeholder="Votre message..." rows="5" required></textarea>
-        <button type="submit">Envoyer</button>
+    <section class="bg-neutral-900 border border-green-700 rounded-xl p-6 my-10" id="contact">
+      <h2 class="text-3xl font-bold text-center my-5 text-green-400">Contact</h2>
+      <form action="mailto:jeremie.nagi@epitech.eu" method="POST" enctype="text/plain"
+        class="max-w-xl mx-auto flex flex-col gap-4">
+
+        <input type="text" name="prenom" placeholder="Prénom" required
+          class="p-3 rounded-md bg-black border border-green-400 text-green-300 focus:outline-none">
+
+        <input type="text" name="nom" placeholder="Nom" required
+          class="p-3 rounded-md bg-black border border-green-400 text-green-300 focus:outline-none">
+
+        <input type="email" name="email" placeholder="Email" required
+          class="p-3 rounded-md bg-black border border-green-400 text-green-300 focus:outline-none">
+
+        <input type="tel" name="tel" placeholder="Téléphone"
+          class="p-3 rounded-md bg-black border border-green-400 text-green-300 focus:outline-none">
+
+        <textarea name="message" placeholder="Votre message..." rows="5" required
+          class="p-3 rounded-md bg-black border border-green-400 text-green-300 focus:outline-none"></textarea>
+
+        <button type="submit"
+          class="px-4 py-2 border border-green-400 rounded-md text-green-300 transition hover:bg-[rgba(255,140,0,0.3)]">
+          Envoyer
+        </button>
       </form>
     </section>
   </main>
 
-  <footer>
+  <footer class="text-center">
     <p>&copy; 2024 Nagi Jérémie. Tous droits réservés.</p>
   </footer>
 
 </body>
+
 </html>
