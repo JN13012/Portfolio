@@ -64,7 +64,7 @@ const ProfileConsole = () => {
       <div className="bg-cyber/10 px-3 py-2 flex justify-between items-center border-b border-cyber/20">
         <div className="flex items-center gap-2">
           <Terminal size={12} className="text-cyber" />
-          <span className="text-[9px] font-mono text-cyber uppercase font-bold tracking-wider">Live_Ops_Console</span>
+          <span className="text-[9px] font-mono text-cyber uppercase font-bold tracking-wider">Live_Ops_Console (CTF in progress)</span>
         </div>
         <div className="text-[8px] text-red-500 animate-pulse font-bold">REC ●</div>
       </div>
