@@ -5,7 +5,7 @@ import heroImg from "./assets/hero.png";
 import "./App.css";
 
 // Composants
-import Navbar from "./components/NavBar";
+import NavBar from "./components/NavBar";
 import Presentation from "./components/Presentation";
 import Profile from "./components/Profile";
 import Formations from "./components/Formations";
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <div className="bg-black min-h-screen font-mono">
-      <Navbar />
+      <NavBar />
       <div className="w-[95%] max-w-[1800px] mx-auto px-6 py-10">
         <Presentation />
         <Profile />
