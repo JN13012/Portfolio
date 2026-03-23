@@ -27,13 +27,10 @@ const Presentation = () => {
         </h2>
       </div>
 
-      {/* Description : On enlève le max-w trop petit pour laisser respirer le texte */}
+      {/* Description */}
       <p className="max-w-3xl text-center text-gray-400 text-sm md:text-lg leading-relaxed mb-12 font-mono">
-        Ancien militaire et mécanicien de compétition.
+        Étudiant en reconversion vers la cybersécurité. Projets pratiques en IA, DevOps et cybersécurité via TryHackMe et Coursera.
         <br className="hidden md:block" />
-
-
-        AVEC TOUTE LES COMPETENCES QUI DEFILES !!!!!!!!!!!!
       </p>
 
       {/* Actions */}
