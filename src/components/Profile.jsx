@@ -135,7 +135,7 @@ const interests = [
 
 const Profile = () => {
   return (
-    <section className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10">
+    <section id="profile" className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10">
       <div className="mx-auto px-2">
         {/* TITRE */}
         <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
