@@ -1,30 +1,93 @@
 import React from "react";
+import Salesforce_dev from "../assets/Experiences/Salesforce_dev.png";
+import Wec2017 from "../assets/Experiences/wec2017_1.jpg";
+import Mining from "../assets/Experiences/HiveOs_monitoring.png";
+import Artisan from "../assets/Experiences/artisan1.jpg";
 
-const BlocExperience = ({ date, titre, entreprise, details }) => (
-  <div className="relative pl-10 pb-16 group">
-    {/* La ligne verticale */}
-    <div className="absolute left-0 top-0 h-full w-px bg-cyber/20 group-last:bg-transparent"></div>
+const BlocExperience = ({
+  date,
+  titre,
+  entreprises,
+  softSkills, // Nouvelle prop
+  details,
+  isCurrent,
+  imgSrc,
+  imgAlt,
+  imgCaption,
+}) => (
+  <div className="relative pl-12 pb-24 group max-w-7xl mx-auto transition-all duration-500">
+    {/* Timeline Line & Node */}
+    <div className="absolute left-0 top-3 h-full w-[1px] bg-zinc-800 group-hover:bg-cyber/30 transition-colors duration-500"></div>
+    <div
+      className={`absolute -left-[5px] top-3 w-2.5 h-2.5 rounded-full border transition-all duration-500 ${
+        isCurrent
+          ? "bg-cyber shadow-[0_0_15px_#4ade80] border-cyber"
+          : "bg-zinc-950 border-zinc-700 group-hover:border-cyber"
+      }`}
+    ></div>
 
-    {/* Le voyant lumineux */}
-    <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full border border-cyber bg-black shadow-[0_0_10px_#4ade80] group-hover:scale-125 transition-transform duration-300"></div>
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start p-2">
+      {/* COLONNE TEXTE */}
+      <div className="md:col-span-7 space-y-5">
+        <div>
+          <span className="text-cyber/60 font-mono text-[10px] tracking-widest uppercase mb-2 block">
+            {date}
+          </span>
+          <h3 className="text-zinc-100 text-2xl font-bold group-hover:text-cyber transition-colors uppercase tracking-tighter italic">
+            {titre}
+          </h3>
 
-    <div className="font-mono">
-      <div className="flex flex-wrap items-center gap-x-4 mb-2">
-        <h3 className="text-white text-base md:text-xl font-bold uppercase tracking-tighter">
-          {titre}
-        </h3>
-        <span className="text-[10px] md:text-xs bg-cyber/5 text-cyber/60 border border-cyber/10 px-2 py-0.5">
-          [{date}]
-        </span>
+          {/* ENTREPRISES */}
+          <div className="text-zinc-500 text-sm font-mono mt-2 flex flex-wrap items-center gap-2">
+            <span className="text-cyber/40 font-bold">@</span>
+            {entreprises &&
+              entreprises.map((ent, index) => (
+                <React.Fragment key={index}>
+                  <span className="uppercase tracking-widest">{ent}</span>
+                  {index < entreprises.length - 1 && (
+                    <span className="text-zinc-800 mx-1">|</span>
+                  )}
+                </React.Fragment>
+              ))}
+          </div>
+
+          {/* SOFT SKILLS BADGES */}
+          <div className="flex flex-wrap gap-2 mt-4">
+            {softSkills &&
+              softSkills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="text-[9px] font-mono px-2 py-0.5 border border-zinc-800 text-zinc-500 rounded-sm uppercase tracking-tighter group-hover:border-cyber/30 group-hover:text-zinc-300 transition-all"
+                >
+                  + {skill}
+                </span>
+              ))}
+          </div>
+        </div>
+
+        {/* DETAILS */}
+        <div className="border-l-2 border-zinc-800 group-hover:border-cyber/20 pl-6 py-2 transition-colors">
+          <p className="text-zinc-400 text-sm md:text-base leading-relaxed font-light whitespace-pre-line italic">
+            {details}
+          </p>
+        </div>
       </div>
 
-      <div className="text-cyber text-xs mb-4 font-bold uppercase tracking-widest">
-        // {entreprise}
+      {/* COLONNE IMAGE */}
+      <div className="md:col-span-5">
+        <div className="relative group/photo max-w-[380px] mx-auto md:ml-auto">
+          <div className="overflow-hidden rounded-sm border border-zinc-800 group-hover:border-cyber/40 transition-all duration-500 shadow-xl">
+            <img
+              src={imgSrc || "/api/placeholder/400/250"}
+              alt={imgAlt}
+              className="w-full h-auto object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105"
+            />
+          </div>
+          <div className="mt-2 text-[9px] font-mono text-zinc-600 text-right uppercase tracking-tighter">
+            <span className="text-cyber/40">#</span> {imgCaption}
+          </div>
+        </div>
       </div>
-
-      <p className="text-gray-500 text-xs md:text-sm leading-relaxed max-w-3xl border-l-2 border-white/5 pl-4 py-1 italic">
-        {details}
-      </p>
     </div>
   </div>
 );
@@ -33,43 +96,90 @@ const Experiences = () => {
   const experiences = [
     {
       date: "2025 - PRÉSENT",
-      titre: "Cybersecurity Training",
-      entreprise: "EPITECH MARSEILLE",
-      details:
-        "Apprentissage intensif par projets : Pentest, sécurité réseau, cryptographie et administration système Unix.",
+      titre: "Alternant Développeur Salesforce",
+      entreprises: ["ULIT"],
+      softSkills: ["Analyse", "Autonomie", "Rigueur technique"],
+      isCurrent: true,
+      imgSrc: Salesforce_dev,
+      imgAlt: "Salesforce Developer",
+      imgCaption: "Salesforce Developer",
+      details: `> Conception et déploiement de solutions Cloud personnalisées.
+      > Développement logique Apex (Back-end) et Lightning Web Components (Front-end).
+      > Sécurisation des flux de données et optimisation des Governor Limits.`,
     },
     {
-      date: "2017 - 2018",
-      titre: "Mécanicien Compétition (Tire Man)",
-      entreprise: "G-DRIVE RACING (WEC)",
-      details:
-        "Championnat du monde d'endurance. Gestion du stress extrême, rigueur absolue et travail d'équipe millimétré lors des arrêts aux stands.",
+      date: "2018 - 2022",
+      titre: "Sécurisation Blockchain (Minage Crypto)",
+      entreprises: ["Indépendant"],
+      softSkills: ["Entrepreneuriat", "Vision", "Gestion de projet"],
+      isCurrent: false,
+      imgSrc: Mining,
+      imgAlt: "HiveOS RIG Monitoring",
+      imgCaption: "Monitoring de ferme GPU (HiveOS)",
+      details: `> Conception et assemblage de fermes de minage.
+      > Optimisation hardware/software : gestion des performances (overclocking), consommation et refroidissement.
+      > Monitoring distant et automatisation des processus de maintenance (Reboot, MAJ...) sur HiveOS.`,
     },
     {
-      date: "2 ANS",
+      date: "2018 - 2023",
+      titre: "Artisan du bâtiment",
+      entreprises: ["Auto-entrepreneur"],
+      softSkills: ["Relation client", "Polyvalence", "Adaptabilité"],
+      isCurrent: false,
+      imgSrc: Artisan,
+      imgAlt: "Maçonnerie",
+      imgCaption: "Rénovation de maisons anciennes",
+      details: `> Gestion de chantiers et relation client/fournisseurs.
+      > Travaux de maçonnerie générale (gros oeuvre & second oeuvre). Rénovations de maisons anciennes, sols, murs, extérieurs, intérieur, toitures...
+      > Travaux de terrassement et paysagisme.
+      > Polyvalence.`,
+    },
+    {
+      date: "2012 - 2017",
+      titre: "Technicien Mécanicien Expert",
+      entreprises: ["Renault", "G-DRIVE RACING (WEC)", "Wärtsilä"],
+      softSkills: ["Haute précision", "Esprit d'équipe", "Performance"],
+      isCurrent: false,
+      imgSrc: Wec2017,
+      imgAlt: "WEC 2017",
+      imgCaption: "Pitlane - G-Drive Racing LMP2",
+      details: `> Opérateur ravitaillement/pneumatiques en Championnat du Monde d'Endurance (WEC 2017). Gestion de la performance, accuité et de la fatigue en milieu de competition de haut niveau. (G-Drive)
+      > Diagnostic, entretiens et réparation automobile (Renault).
+      > Entretiens, contrôles et remise en service de pieces moteurs de bateau et generateur electriques. (Wärtsilä)`,
+    },
+    {
+      date: "2010 - 2012",
       titre: "Combattant de l'Infanterie",
-      entreprise: "2ÈME RIMA",
-      details:
-        "Discipline militaire, sens des responsabilités, autonomie en milieu hostile et gestion de crises.",
+      entreprises: ["2ÈME RIMa"],
+      softSkills: ["Résilience", "Discipline", "Gestion du stress"],
+      isCurrent: false,
+      imgSrc: null,
+      imgAlt: "Infanterie Marine",
+      imgCaption: "Discipline et Engagement",
+      details: `> Développement d'une rigueur et d'une résilience face au stress/fatigue...
+      > Travail d'équipe en milieu hostile.
+      > Stage Commando (CNEC Mont-Louis) : dépassement de soi et autonomie.`,
     },
   ];
 
   return (
-    <section id="experiences" className="py-24">
-      <div className="w-full">
-        <h2 className="text-xl md:text-2xl font-bold mb-16 flex items-center gap-6">
-          <span className="text-cyber opacity-40 font-mono text-sm">03.</span>
-          <span className="text-zinc-100 tracking-widest uppercase">
-            Experiences
+    <section id="experiences" className="py-24 px-6 bg-zinc-950">
+      <div className="flex flex-col mb-20 px-2">
+        <h2 className="text-xl md:text-2xl font-bold mb-12 flex items-center gap-6">
+          <span className="text-cyber font-mono text-base opacity-60">03.</span>
+          <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
+            Parcours & Expériences
           </span>
-          <div className="h-px bg-cyber/10 flex-1"></div>
+          <div className="h-px bg-cyber/20 flex-1 relative">
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-cyber"></div>
+          </div>
         </h2>
+      </div>
 
-        <div className="mt-8">
-          {experiences.map((exp, index) => (
-            <BlocExperience key={index} {...exp} />
-          ))}
-        </div>
+      <div className="space-y-4">
+        {experiences.map((exp, index) => (
+          <BlocExperience key={index} {...exp} />
+        ))}
       </div>
     </section>
   );
