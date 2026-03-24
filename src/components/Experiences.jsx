@@ -130,7 +130,7 @@ const Experiences = () => {
       imgAlt: "Maçonnerie",
       imgCaption: "Rénovation de maisons anciennes",
       details: `> Gestion de chantiers et relation client/fournisseurs.
-      > Travaux de maçonnerie générale (gros oeuvre & second oeuvre). Rénovations de maisons anciennes, sols, murs, extérieurs, intérieur, toitures...
+      > Travaux de maçonnerie générale (gros oeuvre & second oeuvre).
       > Travaux de terrassement et paysagisme.
       > Polyvalence.`,
     },
