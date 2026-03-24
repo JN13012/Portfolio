@@ -171,7 +171,7 @@ const Formations = () => {
     <section id="formations" className="py-20 relative px-4 md:px-0">
       <div className="w-full mb-20">
         <h2 className="text-xl md:text-2xl font-bold flex items-center gap-6">
-          <span className="text-cyber opacity-40 font-mono text-sm">02.</span>
+          <span className="text-cyber font-mono text-base opacity-60">02.</span>
           <span className="text-zinc-100 tracking-widest uppercase font-mono">
             Formations
           </span>

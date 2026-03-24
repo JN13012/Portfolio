@@ -260,7 +260,7 @@ const Certifications = () => {
       ></div>
 
       <h2 className="text-xl md:text-2xl font-bold mb-12 flex items-center gap-6">
-        <span className="text-cyber opacity-40 font-mono text-sm">06.</span>
+        <span className="text-cyber font-mono text-base opacity-60">06.</span>
         <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
           Certifications
         </span>

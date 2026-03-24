@@ -139,7 +139,7 @@ const Profile = () => {
       <div className="mx-auto px-2">
         {/* TITRE */}
         <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
-          <span className="text-cyber opacity-40 font-mono text-base">01.</span>
+          <span className="text-cyber font-mono text-base opacity-60">01.</span>
           <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
             Profile_Analysis
           </span>
