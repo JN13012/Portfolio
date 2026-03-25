@@ -3,6 +3,7 @@ import Salesforce_dev from "../assets/Experiences/Salesforce_dev.png";
 import Wec2017 from "../assets/Experiences/wec2017_1.jpg";
 import Mining from "../assets/Experiences/HiveOs_monitoring.png";
 import Artisan from "../assets/Experiences/artisan1.jpg";
+import RIMA from "../assets/Formations/RIMA.png";
 
 const BlocExperience = ({
   date,
@@ -136,7 +137,7 @@ const Experiences = () => {
     },
     {
       date: "2012 - 2017",
-      titre: "Technicien Mécanicien Expert",
+      titre: "Technicien Mécanicien",
       entreprises: ["Renault", "G-DRIVE RACING (WEC)", "Wärtsilä"],
       softSkills: ["Haute précision", "Esprit d'équipe", "Performance"],
       isCurrent: false,
@@ -153,9 +154,9 @@ const Experiences = () => {
       entreprises: ["2ÈME RIMa"],
       softSkills: ["Résilience", "Discipline", "Gestion du stress"],
       isCurrent: false,
-      imgSrc: null,
-      imgAlt: "Infanterie Marine",
-      imgCaption: "Discipline et Engagement",
+      imgSrc: RIMA,
+      imgAlt: "2e RIMa",
+      imgCaption: "2e RIMa",
       details: `> Développement d'une rigueur et d'une résilience face au stress/fatigue...
       > Travail d'équipe en milieu hostile.
       > Stage Commando (CNEC Mont-Louis) : dépassement de soi et autonomie.`,
@@ -163,9 +164,9 @@ const Experiences = () => {
   ];
 
   return (
-    <section id="experiences" className="py-24 px-6 bg-zinc-950">
-      <div className="flex flex-col mb-20 px-2">
-        <h2 className="text-xl md:text-2xl font-bold mb-12 flex items-center gap-6">
+    <section id="experiences" className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10">
+      <div className="mx-auto px-2">
+        <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
           <span className="text-cyber font-mono text-base opacity-60">03.</span>
           <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
             Parcours & Expériences
