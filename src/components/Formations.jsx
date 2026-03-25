@@ -232,11 +232,11 @@ const Formations = () => {
   ];
 
   return (
-    <section id="formations" className="py-20 relative px-4 md:px-0">
-      <div className="w-full mb-16">
-        <h2 className="text-xl md:text-2xl font-bold flex items-center gap-6">
+    <section id="formations" className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10">
+      <div className="mx-auto px-2">
+        <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
           <span className="text-cyber font-mono text-base opacity-60">02.</span>
-          <span className="text-zinc-100 tracking-widest uppercase font-mono">
+          <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
             Formations
           </span>
           <div className="h-px bg-cyber/20 flex-1" />

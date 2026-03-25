@@ -28,7 +28,7 @@ const Certifications = () => {
       titre: "Pre-Security",
       plateforme: "TryHackMe",
       cat: "TryHackMe",
-      date: "2025",
+      date: "09/2025",
       image: PRE_SECURITY_IMG,
       url: "https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-ZCUCFFIQO5.pdf",
       description:
@@ -51,7 +51,7 @@ const Certifications = () => {
       titre: "Cyber Security 101",
       plateforme: "TryHackMe",
       cat: "TryHackMe",
-      date: "2025",
+      date: "10/2025",
       image: CYBERSECYRITY_101,
       url: "https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-VEMPGXQSXD.pdf",
       description:
@@ -77,7 +77,7 @@ const Certifications = () => {
       titre: "Introduction to Artificial Intelligence",
       plateforme: "Coursera (IBM)",
       cat: "COURSERA",
-      date: "2025",
+      date: "12/2025",
       image: Introduction_to_AI,
       url: "https://coursera.org/share/466abca0568c44dd7e3d3258a47e99ee",
       description:
@@ -97,7 +97,7 @@ const Certifications = () => {
       titre: "Generative AI - Introduction and Applications",
       plateforme: "Coursera (IBM)",
       cat: "COURSERA",
-      date: "2025",
+      date: "12/2025",
       image: Generative_AI_Introduction,
       url: "https://coursera.org/share/7a06aa71ef5a258e81ad1af7c66a6f80",
       description:
@@ -117,7 +117,7 @@ const Certifications = () => {
       titre: "Generative AI - Prompt Engineering Basics",
       plateforme: "Coursera (IBM)",
       cat: "COURSERA",
-      date: "2025",
+      date: "12/2025",
       image: Prompt_Engineering,
       url: "https://coursera.org/share/3ce0e969ef13867efe203fe6f1bdbf0d",
       description:
@@ -137,7 +137,7 @@ const Certifications = () => {
       titre: "Introduction to Software Engineering",
       plateforme: "Coursera (IBM)",
       cat: "COURSERA",
-      date: "2025",
+      date: "12/2025",
       image: Software_Engineering,
       url: "https://coursera.org/share/1f4b38f67dfcdb136733cd9ec6d77da7",
       description:
@@ -157,7 +157,7 @@ const Certifications = () => {
       titre: "Introduction to HTML, CSS & JavaScript",
       plateforme: "Coursera (IBM)",
       cat: "COURSERA",
-      date: "2025",
+      date: "12/2025",
       image: Intro_HTML_CSS_JavaScript,
       url: "https://coursera.org/share/19c6fb4f7b7534c8d92b934ad11dc2f4",
       description:
@@ -178,7 +178,7 @@ const Certifications = () => {
       titre: "Python for Data Science, AI & Development",
       plateforme: "Coursera (IBM)",
       cat: "COURSERA",
-      date: "2025",
+      date: "12/2025",
       image: Python_Data_Science,
       url: "https://coursera.org/share/12ef6d1161ebabe8bd0bc270f208d8f3",
       description:
@@ -201,7 +201,7 @@ const Certifications = () => {
       titre: "Developing AI Applications with Python and Flask",
       plateforme: "Coursera (IBM)",
       cat: "COURSERA",
-      date: "2025",
+      date: "01/2026",
       image: Developing_AI_With_Python_Flask,
       url: "https://coursera.org/share/9e097eac39d7c42bdb4fa1826f485bc5",
       description:
@@ -252,14 +252,9 @@ const Certifications = () => {
   return (
     <section
       id="certifications"
-      className="py-24 relative overflow-hidden min-h-screen flex flex-col"
+      className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
     >
-      <div
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.03] transition-all duration-1000 scale-105"
-        style={{ backgroundImage: `url(${activeConfig.image})` }}
-      ></div>
-
-      <h2 className="text-xl md:text-2xl font-bold mb-12 flex items-center gap-6">
+      <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
         <span className="text-cyber font-mono text-base opacity-60">06.</span>
         <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
           Certifications
@@ -299,13 +294,17 @@ const Certifications = () => {
 
         {/* GRILLE */}
         <div className="bg-black/40 border border-white/5 p-6 md:p-10 backdrop-blur-sm min-h-[400px]">
+          <div
+            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.45] transition-all duration-1000 scale-100"
+            style={{ backgroundImage: `url(${activeConfig.image})` }}
+          ></div>
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
             <h3
               className={`font-mono text-base tracking-[0.3em] uppercase ${activeConfig.theme.text}`}
             >
               QUERY_RESULTS: {activeConfig.id}
             </h3>
-            <span className="text-[10px] text-zinc-500 font-mono animate-pulse">
+            <span className="text-base text-zinc-300 font-mono animate-pulse">
               [ {certifs.filter((c) => c.cat === activeNode).length} RECORDS
               FOUND ]
             </span>
@@ -340,7 +339,7 @@ const Certifications = () => {
             };
 
             return (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl">
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 pt-20 bg-black/95 backdrop-blur-xl">
                 <div
                   className={`bg-zinc-950 border ${activeConfig.theme.border} w-[95vw] md:w-[85vw] lg:w-[75vw] max-h-[90vh] relative overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]`}
                 >
