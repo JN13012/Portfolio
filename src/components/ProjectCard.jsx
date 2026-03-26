@@ -5,7 +5,6 @@ const ProjectCard = ({
   description,
   tags,
   image,
-  lien,
   categorie,
   date,
   onClick,
@@ -13,8 +12,8 @@ const ProjectCard = ({
   return (
     <div
       onClick={onClick}
-      className="group relative bg-black/40 border border-white/20 p-6 transition-all duration-500 hover:border-cyber/70 overflow-hidden cursor-pointer h-full flex flex-col"
-      // 2. APPLICATION DE L'IMAGE EN ARRIÈRE-PLAN
+      className="group relative bg-black/40 border border-white/20 px-6 py-[18px] transition-all duration-500 hover:border-cyber/70 overflow-hidden cursor-pointer h-full flex flex-col"
+      // BG IMAGE
       style={{
         backgroundImage: `url(${image})`,
         backgroundSize: "cover",

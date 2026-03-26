@@ -130,7 +130,22 @@ const ProjectSection = () => {
   const [activeFilter, setActiveFilter] = useState("Tous");
   const [sortOrder, setSortOrder] = useState("desc");
 
-  const categories = ["Tous", ...new Set(projets.map((p) => p.categorie))];
+  const ordrePriorite = [
+    "Tous",
+    "DevOps",
+    "IA",
+    "Software Engineering",
+    "Gestion de Projet",
+  ];
+
+  const categoriesExistantes = [...new Set(projets.map((p) => p.categorie))];
+
+  const categories = [
+    "Tous",
+    ...categoriesExistantes.sort((a, b) => {
+      return ordrePriorite.indexOf(a) - ordrePriorite.indexOf(b);
+    }),
+  ];
 
   const filteredAndSorted = useMemo(() => {
     let result =
@@ -211,7 +226,7 @@ const ProjectSection = () => {
       {/* MODALE */}
       {selectedProject && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl">
-          <div className="bg-zinc-950 border border-white/10 w-[95vw] md:w-[85vw] lg:w-[75vw] max-h-[90vh] relative overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+          <div className="bg-zinc-950 border border-white/10 w-[95vw] md:w-[85vw] lg:w-[75vw] h-[90vh] relative overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
             {/* HEADER MODALE */}
             <div className="p-6 text-center relative">
               <p className="text-base font-mono tracking-[0.3em] uppercase mb-3 text-cyber opacity-80">
@@ -237,7 +252,7 @@ const ProjectSection = () => {
                     {selectedProject.date}
                   </span>
                 </div>
-                {/* REMPLACEMENT DU STATUT PAR LA CATÉGORIE */}
+                {/* CATEGORIE */}
                 <div className="flex items-center gap-2">
                   <span className="text-cyber font-mono text-base uppercase">
                     Catégorie:
@@ -263,8 +278,8 @@ const ProjectSection = () => {
 
               {/* DÉTAILS */}
               <div className="w-full md:w-1/2 p-8 overflow-y-auto bg-zinc-900/20 flex flex-col gap-8">
-                <div>
-                  <h4 className="text-zinc-100 font-mono text-lg uppercase tracking-[0.2em] mb-3 flex items-center gap-3">
+                <div className="flex flex-col gap-4">
+                  <h4 className="text-zinc-100 font-mono text-lg uppercase tracking-[0.2em] flex items-center gap-3">
                     <span className="text-cyber">⬢</span> DESCRIPTION
                   </h4>
                   <p className="text-zinc-200 text-base font-mono leading-relaxed border-l-2 border-cyber/30 pl-4">
@@ -272,7 +287,7 @@ const ProjectSection = () => {
                   </p>
                 </div>
 
-                <div className="p-4 bg-black/40 border border-white/5">
+                <div className="p-4 bg-black/40 border border-white/5 mt-15">
                   <h4 className="text-zinc-100 font-mono text-base uppercase mb-3">
                     Expertise Technique
                   </h4>
