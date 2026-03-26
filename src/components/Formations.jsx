@@ -69,7 +69,7 @@ const FormationStep = ({
             >
               {diplome}
             </h3>
-            <span className="text-zinc-500 text-[10px] md:text-sm font-medium whitespace-nowrap shrink-0">
+            <span className="text-zinc-400 text-[10px] md:text-base font-medium whitespace-nowrap shrink-0">
               // {date}
             </span>
           </div>
@@ -164,13 +164,13 @@ const FormationStep = ({
             {/* Badge status en bas de l'image */}
             <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 flex items-center justify-between">
               <span
-                className={`text-[8px] font-mono uppercase tracking-widest ${
+                className={`text-xs font-mono uppercase tracking-widest ${
                   status === "current" ? "text-cyber" : "text-zinc-500"
                 }`}
               >
                 {status === "current" ? "● ACTUEL" : "✓ TERMINÉ"}
               </span>
-              <span className="text-[8px] font-mono text-zinc-600 tracking-wider">
+              <span className="text-xs font-mono text-zinc-600 tracking-wider">
                 {date}
               </span>
             </div>
