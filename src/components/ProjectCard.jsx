@@ -48,7 +48,7 @@ const ProjectCard = ({
         </div>
 
         {/* Description */}
-        <div className="flex-grow overflow-hidden">
+        <div className="flex-grow overflow-hidden mb-4">
           <p className="text-zinc-300 text-[10px] md:text-xs leading-relaxed font-mono uppercase tracking-tight line-clamp-3">
             {description}
           </p>

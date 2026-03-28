@@ -8,10 +8,29 @@ import Vaultborn from "../assets/Projets/Vaultborn.png";
 import Vocal_assistant_AI from "../assets/Projets/Vocal_assistant_AI.png";
 import LLM_Context_Wrapper from "../assets/Projets/LLM-Context-Wrapper.png";
 import Unit_converter from "../assets/Projets/Unit_converter.png";
+import Business_AI_Meeting from "../assets/Projets/Business_AI_Meeting_Companion_STT.jpg";
+
+const categoryColors = {
+  "IA": "text-purple-400 border-purple-500/30 bg-purple-500/5",
+  "DevOps": "text-blue-400 border-blue-500/30 bg-blue-500/5",
+  "Software Engineering": "text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
+  "Gestion de Projet": "text-amber-400 border-amber-500/30 bg-amber-500/5",
+};
 
 const projets = [
   {
-    titre: "Smart-Fridge",
+    titre: "Business_AI_Companion_STT",
+    description:
+      "Application de transcription STT et d'analyse IA exploitant Whisper (OpenAI) et Granite (IBM) via un pipeline LangChain. L'outil segmente l'audio pour un traitement GPU par lots (CUDA) afin de générer des  résumés, des plans d'action et une analyse de la tonalité.",
+    tags: ["Python", "PyTorch", "LLM", "NLP", "LangChain", "IBM WatsonX", "Whisper", "CUDA"],
+    lien: "https://github.com/JN13012/Business_AI_Meeting_Companion_STT",
+    image: Business_AI_Meeting,
+    date: "03/2026",
+    categorie: "IA",
+    complexity: 3,
+  },
+  {
+    titre: "Smart_Fridge",
     description:
       "Pilotage complet d'une phase de conception : de l'analyse de marché (SWOT/PESTEL) à la planification opérationnelle. Inclut la définition des personas (Client/Équipe), la cartographie des risques (RiskMap/KPI) et la structuration budgétaire via diagrammes de Gantt.",
     tags: [
@@ -62,7 +81,7 @@ const projets = [
     complexity: 3,
   },
   {
-    titre: "AI-Voice-Assistant",
+    titre: "AI_Voice_Assistant",
     description:
       "Pipeline complet d'assistant vocal orchestrant Llama 3 (via Groq) pour le raisonnement, couplé aux services IBM Watson pour la reconnaissance (STT) et synthèse vocale (TTS). Interface de gestion développée sous Flask.",
     tags: ["Python", "Flask", "NLP", "LLM", "Llama 3", "IBM Watson"],
@@ -73,7 +92,7 @@ const projets = [
     complexity: 3,
   },
   {
-    titre: "LLM-Context-Wrapper",
+    titre: "LLM_Context_Wrapper",
     description:
       "Interface Python (Wrapper) optimisant l'usage de la bibliothèque Transformers (Hugging Face). Développement d'un système de gestion d'historique d'états pour maintenir le contexte conversationnel du modèle Blenderbot.",
     tags: ["Python", "PyTorch", "Transformers", "NLP", "LLM", "Hugging_Face"],
@@ -95,7 +114,7 @@ const projets = [
     complexity: 3,
   },
   {
-    titre: "Salesforce-Executor",
+    titre: "Salesforce_Executor",
     description:
       "Outil d'exécution de scripts et de traçage de logs pour l'écosystème Salesforce.",
     tags: [
@@ -113,7 +132,7 @@ const projets = [
     complexity: 3,
   },
   {
-    titre: "Unit Converter",
+    titre: "Unit_Converter",
     description:
       "Convertisseur universel d'unités : Masses, Longeurs, Temps, Volumes, Surfaces, Vitesses, Stockage",
     tags: ["Python", "Algorithmie", "GUI"],
