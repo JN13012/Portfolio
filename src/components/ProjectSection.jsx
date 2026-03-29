@@ -10,6 +10,7 @@ import LLM_Context_Wrapper from "../assets/Projets/LLM-Context-Wrapper.png";
 import Unit_converter from "../assets/Projets/Unit_converter.png";
 import Business_AI_Meeting from "../assets/Projets/Business_AI_Meeting_Companion_STT.jpg";
 import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.jpg";
+import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.jpg";
 
 const categoryColors = {
   IA: "text-purple-400 border-purple-500/30 bg-purple-500/5",
@@ -20,6 +21,26 @@ const categoryColors = {
 };
 
 const projets = [
+  {
+    titre: "AI_Assistant_Translator",
+    description:
+      "Solution de traduction vocale universelle pilotée par l'architecture LPU de Groq. Le système orchestre Llama 3.3 pour le raffinement contextuel des traductions, couplé aux services IBM Watson pour la transcription (STT) et la synthèse vocale (TTS).",
+    tags: [
+      "Python",
+      "Flask",
+      "Groq",
+      "Llama 3.3",
+      "IBM Watson",
+      "NLP",
+      "STT/TTS",
+      "JavaScript",
+    ],
+    lien: "https://github.com/JN13012/AI-Assistant-Translator",
+    image: AI_Assistant_Translator,
+    date: "03/2026",
+    categorie: "IA",
+    complexity: 3,
+  },
   {
     titre: "RAG_pdf_Chatbot",
     description:
