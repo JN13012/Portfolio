@@ -9,20 +9,53 @@ import Vocal_assistant_AI from "../assets/Projets/Vocal_assistant_AI.png";
 import LLM_Context_Wrapper from "../assets/Projets/LLM-Context-Wrapper.png";
 import Unit_converter from "../assets/Projets/Unit_converter.png";
 import Business_AI_Meeting from "../assets/Projets/Business_AI_Meeting_Companion_STT.jpg";
+import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.jpg";
 
 const categoryColors = {
-  "IA": "text-purple-400 border-purple-500/30 bg-purple-500/5",
-  "DevOps": "text-blue-400 border-blue-500/30 bg-blue-500/5",
-  "Software Engineering": "text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
+  IA: "text-purple-400 border-purple-500/30 bg-purple-500/5",
+  DevOps: "text-blue-400 border-blue-500/30 bg-blue-500/5",
+  "Software Engineering":
+    "text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
   "Gestion de Projet": "text-amber-400 border-amber-500/30 bg-amber-500/5",
 };
 
 const projets = [
   {
+    titre: "RAG_pdf_Chatbot",
+    description:
+      "Assistant IA d'analyse de CV exploitant l'architecture RAG (Retrieval-Augmented Generation). Le système segmente les PDF, génère des embeddings sémantiques stockés via FAISS et interroge Llama 3 pour identifier les avantages et axes d'amélioration de chaque profil.",
+    tags: [
+      "Python",
+      "Flask",
+      "LLM",
+      "NLP",
+      "LangChain",
+      "RAG",
+      "FAISS",
+      "Llama 3",
+      "IBM Watsonx",
+    ],
+    lien: "https://github.com/JN13012/RAG-pdf-Chatbot",
+    image: RAG_pdf_Chatbot,
+    date: "03/2026",
+    categorie: "IA",
+    complexity: 3,
+  },
+
+  {
     titre: "Business_AI_Companion_STT",
     description:
       "Application de transcription STT et d'analyse IA exploitant Whisper (OpenAI) et Granite (IBM) via un pipeline LangChain. L'outil segmente l'audio pour un traitement GPU par lots (CUDA) afin de générer des  résumés, des plans d'action et une analyse de la tonalité.",
-    tags: ["Python", "PyTorch", "LLM", "NLP", "LangChain", "IBM WatsonX", "Whisper", "CUDA"],
+    tags: [
+      "Python",
+      "PyTorch",
+      "LLM",
+      "NLP",
+      "LangChain",
+      "IBM WatsonX",
+      "Whisper",
+      "CUDA",
+    ],
     lien: "https://github.com/JN13012/Business_AI_Meeting_Companion_STT",
     image: Business_AI_Meeting,
     date: "03/2026",
