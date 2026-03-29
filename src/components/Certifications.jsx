@@ -10,6 +10,7 @@ import Software_Engineering from "../assets/Coursera/Introduction_to_Software_En
 import Intro_HTML_CSS_JavaScript from "../assets/Coursera/Introduction_to_HTML_CSS_JavaScript.jpg";
 import Python_Data_Science from "../assets/Coursera/Python_for_Data_Science_AI_Development.jpg";
 import Developing_AI_With_Python_Flask from "../assets/Coursera/Developing_AI_Applications_with_Python_and_Flask.jpg";
+import Building_Generative_AI_Powered_Applications_with_Python from "../assets/Coursera/Building_Generative_AI_Powered_Applications_with_Python.jpg";
 
 const DIFFICULTY_CONFIG = {
   1: { text: "text-green-300", bg: "bg-green-300/90", label: "INTRO" },
@@ -215,6 +216,35 @@ const certifs = [
       "SDLC",
     ],
     duration: "11 Hours",
+  },
+
+  {
+    titre: "Building Generative AI Powered Applications with Python",
+    plateforme: "Coursera (IBM)",
+    cat: "COURSERA",
+    date: "03/2026",
+    image: Building_Generative_AI_Powered_Applications_with_Python,
+    url: "https://www.coursera.org/account/accomplishments/verify/OM4ZXGM73HG4",
+    description:
+      "Conception et développement d’applications basées sur l’IA générative, incluant la mise en place de pipelines RAG, l’intégration d’API (Hugging Face, watsonX), ainsi que le développement d’interfaces web et vocales avec Flask et Gradio.",
+    difficulte: 3,
+    stack: [
+      "Python",
+      "PyTorch",
+      "Flask",
+      "LLMs",
+      "NLP",
+      "LangChain",
+      "RAG",
+      "Hugging Face",
+      "IBM watsonX",
+      "Gradio",
+      "Prompt Engineering",
+      "REST APIs",
+      "Speech-to-Text",
+      "Text-to-Speech",
+    ],
+    duration: "14 Hours",
   },
 ];
 
