@@ -11,16 +11,35 @@ import Unit_converter from "../assets/Projets/Unit_converter.png";
 import Business_AI_Meeting from "../assets/Projets/Business_AI_Meeting_Companion_STT.jpg";
 import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.jpg";
 import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.jpg";
+import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.jpg";
 
-const categoryColors = {
-  IA: "text-purple-400 border-purple-500/30 bg-purple-500/5",
-  DevOps: "text-blue-400 border-blue-500/30 bg-blue-500/5",
-  "Software Engineering":
-    "text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
-  "Gestion de Projet": "text-amber-400 border-amber-500/30 bg-amber-500/5",
-};
+// const categoryColors = {
+//   IA: "text-purple-400 border-purple-500/30 bg-purple-500/5",
+//   DevOps: "text-blue-400 border-blue-500/30 bg-blue-500/5",
+//   "Software Engineering":
+//     "text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
+//   "Gestion de Projet": "text-amber-400 border-amber-500/30 bg-amber-500/5",
+// };
 
 const projets = [
+  {
+    titre: "AI_Career_Coach",
+    description:
+      "Solution d'accompagnement RH automatisée pilotée par Llama 3.2 via l'infrastructure IBM Watsonx.ai. Le système orchestre l'extraction de données PDF, l'optimisation contextuelle de CV, la génération de lettres de motivation personnalisées et l'analyse stratégique de profils.",
+    tags: [
+      "Python",
+      "Gradio",
+      "Llama 3.2",
+      "IBM Watsonx",
+      "NLP",
+      "PDF Parsing",
+    ],
+    lien: "https://github.com/JN13012/AI-Career-Coach",
+    image: AI_Career_Coach,
+    date: "04/2026",
+    categorie: "IA",
+    complexity: 3,
+  },
   {
     titre: "AI_Assistant_Translator",
     description:
