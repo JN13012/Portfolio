@@ -10,7 +10,6 @@ import ProjectSection from "./components/ProjectSection";
 import Certifications from "./components/Certifications";
 
 function App() {
-
   return (
     <div className="bg-black min-h-screen font-mono">
       <NavBar />
@@ -30,7 +29,7 @@ function App() {
           rel="noopener noreferrer"
         >
           <img
-            src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://TON-SITE.netlify.app&count_bg=%234ADE80&title_bg=%233F3F46&title=TRAFFIC_LOG&edge_flat=true&color=%23FFFFFF"
+            src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2FTON-SITE.netlify.app&count_bg=%234ADE80&title_bg=%233F3F46&title=TRAFFIC_LOG&edge_flat=true&color=%23FFFFFF"
             alt="System Traffic Log"
             className="h-5"
           />
