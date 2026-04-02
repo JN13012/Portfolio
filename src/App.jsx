@@ -28,34 +28,19 @@ function App() {
         <ProjectSection />
       </div>
 
-      <section id="center" className="py-10 border-t border-cyber/10">
-        <div className="hero flex justify-center gap-4 mb-8">
+      <footer className="pb-12 pt-6 flex justify-center opacity-30 hover:opacity-100 transition-opacity duration-1000">
+        <a
+          href="https://hits.seeyoufarm.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <img
-            src={heroImg}
-            className="base"
-            width="100"
-            height="100"
-            alt="Hero"
+            src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com&count_bg=%234ADE80&title_bg=%2327272A&icon=&icon_color=%23E7E7E2&title=TRAFFIC_LOG&edge_flat=true"
+            alt="System Traffic Log"
+            className="h-5"
           />
-          <img src={reactLogo} className="framework w-10" alt="React logo" />
-          <img src={viteLogo} className="vite w-10" alt="Vite logo" />
-        </div>
-
-        <div className="text-center">
-          <h2 className="text-xl mb-4">Initialisation du terminal...</h2>
-          <button
-            className="border border-cyber px-4 py-2 hover:bg-cyber hover:text-black transition"
-            onClick={() => setCount((count) => count + 1)}
-          >
-            Niveau d'accès : {count}
-          </button>
-        </div>
-      </section>
-
-      {/* Reste de ton code (Next Steps, etc.) si tu veux le garder pour le moment */}
-      <section id="next-steps" className="max-w-4xl mx-auto p-10 opacity-50">
-        {/* ... Ton code existant ... */}
-      </section>
+        </a>
+      </footer>
     </div>
   );
 }
