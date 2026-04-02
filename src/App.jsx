@@ -22,7 +22,7 @@ function App() {
         <ProjectSection />
       </div>
 
-      <footer className="pb-12 pt-6 flex justify-center opacity-30 hover:opacity-100 transition-opacity duration-1000">
+      {/* <footer className="pb-12 pt-6 flex justify-center opacity-30 hover:opacity-100 transition-opacity duration-1000">
         <a
           href="https://hits.seeyoufarm.com"
           target="_blank"
@@ -34,7 +34,7 @@ function App() {
             className="h-5"
           />
         </a>
-      </footer>
+      </footer> */}
     </div>
   );
 }
