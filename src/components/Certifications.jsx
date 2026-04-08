@@ -11,6 +11,9 @@ import Intro_HTML_CSS_JavaScript from "../assets/Coursera/Introduction_to_HTML_C
 import Python_Data_Science from "../assets/Coursera/Python_for_Data_Science_AI_Development.jpg";
 import Developing_AI_With_Python_Flask from "../assets/Coursera/Developing_AI_Applications_with_Python_and_Flask.jpg";
 import Building_Generative_AI_Powered_Applications_with_Python from "../assets/Coursera/Building_Generative_AI_Powered_Applications_with_Python.jpg";
+import IBM_AI_Developer from "../assets/Coursera/IBM_AI_Developer.jpg"; 
+import Generative_AI_Elevate_Career from "../assets/Coursera/Generative_AI_Elevate_Career.jpg"; 
+import Software_Career_Guide from "../assets/Coursera/Software_Career_Guide.jpg";
 
 const DIFFICULTY_CONFIG = {
   1: { text: "text-green-300", bg: "bg-green-300/90", label: "INTRO" },
@@ -217,7 +220,6 @@ const certifs = [
     ],
     duration: "11 Hours",
   },
-
   {
     titre: "Building Generative AI Powered Applications with Python",
     plateforme: "Coursera (IBM)",
@@ -245,6 +247,76 @@ const certifs = [
       "Text-to-Speech",
     ],
     duration: "14 Hours",
+  },
+  {
+    titre: "Generative AI: Elevate your Software Development Career",
+    plateforme: "Coursera (IBM)",
+    cat: "COURSERA",
+    date: "04/2026",
+    image: Generative_AI_Elevate_Career,
+    url: "https://www.coursera.org/account/accomplishments/verify/KGTVEZVG1XYB", 
+    description:
+      "Spécialisation sur l'intégration de l'IA générative et agentique dans le cycle de vie logiciel. Application des outils GenAI (GitHub Copilot, Gemini) pour le design d'architecture, le refactoring automatisé, la détection de vulnérabilités (DevSecOps) et l'optimisation de workflows via le 'vibe coding'.",
+    difficulte: 3,
+    stack: [
+      "Generative AI",
+      "Agentic AI",
+      "GitHub Copilot",
+      "n8n / Bolt",
+      "Software Architecture",
+      "DevSecOps",
+      "LLM Applications",
+      "Debugging",
+      "Unit Testing",
+      "CI/CD"
+    ],
+    duration: "25 Hours",
+  },
+  {
+    titre: "Software Developer Career Guide and Interview Preparation",
+    plateforme: "Coursera (IBM)",
+    cat: "COURSERA",
+    date: "04/2026",
+    image: Software_Career_Guide,
+    url: "https://www.coursera.org/account/accomplishments/verify/WGEQM8VRU3ER",
+    description:
+      "Validation des soft-skills et préparation avancée aux processus de recrutement en ingénierie logicielle. Maîtrise des stratégies de recherche ciblée, préparation aux défis techniques (Live Coding), résolution de problèmes complexes et communication professionnelle pour le déploiement de solutions applicatives.",
+    difficulte: 2,
+    stack: [
+      "Professional Development",
+      "Software Engineering",
+      "Technical Interviewing",
+      "Problem Solving",
+      "Communication",
+      "Career Strategy",
+      "Technical Networking",
+      "Application Development"
+    ],
+    duration: "11 Hours",
+  },
+  {
+    titre: "AI Developer Professional Certificate",
+    plateforme: "Coursera (IBM)",
+    cat: "COURSERA",
+    date: "04/2026",
+    image: IBM_AI_Developer,
+    url: "https://www.coursera.org/account/accomplishments/professional-cert/NLPNAKCP7EFK",
+    description:
+      "Cursus complet d'ingénierie logicielle spécialisée en IA. Maîtrise du cycle de vie complet (SDLC) : de la conception d'architectures web avec Flask à l'intégration avancée de modèles LLM, gestion d'inférence, NLP et déploiement de solutions d'IA générative.",
+    difficulte: 4,
+    stack: [
+      "AI Engineering",
+      "Python",
+      "Flask",
+      "Generative AI",
+      "LLMs",
+      "NLP",
+      "Prompt Engineering",
+      "SDLC",
+      "IBM WatsonX",
+      "Unit Testing",
+    ],
+    duration: "160 Hours",
   },
 ];
 
