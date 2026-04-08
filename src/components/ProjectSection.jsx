@@ -13,6 +13,7 @@ import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.jpg";
 import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.jpg";
 import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.jpg";
 
+
 // const categoryColors = {
 //   IA: "text-purple-400 border-purple-500/30 bg-purple-500/5",
 //   DevOps: "text-blue-400 border-blue-500/30 bg-blue-500/5",
