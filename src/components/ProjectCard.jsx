@@ -8,11 +8,12 @@ const ProjectCard = ({
   categorie,
   date,
   onClick,
+  theme,
 }) => {
   return (
     <div
       onClick={onClick}
-      className="group relative bg-black/40 border border-white/20 px-6 py-[18px] transition-all duration-500 hover:border-cyber/70 overflow-hidden cursor-pointer h-full flex flex-col"
+      className={`group relative bg-black/40 border border-white/20 px-6 py-[18px] transition-all duration-500 overflow-hidden cursor-pointer h-full flex flex-col ${theme.card}`}
       // BG IMAGE
       style={{
         backgroundImage: `url(${image})`,
@@ -23,14 +24,9 @@ const ProjectCard = ({
       }}
     >
       {/* OVERLAY */}
-      <div
-        className="absolute inset-0 z-0 
-    bg-black/70 backdrop-blur-[2px] 
-    group-hover:bg-black/40 group-hover:backdrop-blur-none 
-    transition-all duration-500 shadow-inner"
-      ></div>
+      <div className="absolute inset-0 z-0 bg-black/70 backdrop-blur-[2px] group-hover:bg-black/40 group-hover:backdrop-blur-none transition-all duration-500 shadow-inner"></div>
 
-      {/* Ton effet de brillance (Glow) existant - On le garde car il apporte du relief */}
+      {/* EFFET BRILLANCE GLOW */}
       <div className="absolute -top-24 -left-24 w-48 h-48 bg-cyber/10 rounded-full blur-3xl group-hover:bg-cyber/40 transition-all duration-5000 z-0"></div>
 
       {/* CARD CONTENT */}
@@ -40,11 +36,12 @@ const ProjectCard = ({
           <h3 className="text-zinc-100 font-mono font-bold tracking-tighter group-hover:text-cyber transition-colors uppercase text-sm md:text-base mb-2">
             {titre}
           </h3>
-          <div className="text-cyber/40 group-hover:text-cyber transition-colors -mr-2">
-            <span className="text-xs font-mono border border-cyber/30 px-2 py-0.5 text-cyber/80 uppercase bg-cyber/5">
-              {categorie}
-            </span>
-          </div>
+
+          <span
+            className={`text-xs font-mono border px-2 py-0.5 uppercase transition-all duration-300 ${theme.badge}`}
+          >
+            {categorie}
+          </span>
         </div>
 
         {/* Description */}

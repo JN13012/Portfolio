@@ -11,9 +11,10 @@ import Intro_HTML_CSS_JavaScript from "../assets/Coursera/Introduction_to_HTML_C
 import Python_Data_Science from "../assets/Coursera/Python_for_Data_Science_AI_Development.jpg";
 import Developing_AI_With_Python_Flask from "../assets/Coursera/Developing_AI_Applications_with_Python_and_Flask.jpg";
 import Building_Generative_AI_Powered_Applications_with_Python from "../assets/Coursera/Building_Generative_AI_Powered_Applications_with_Python.jpg";
-import IBM_AI_Developer from "../assets/Coursera/IBM_AI_Developer.jpg"; 
-import Generative_AI_Elevate_Career from "../assets/Coursera/Generative_AI_Elevate_Career.jpg"; 
+import IBM_AI_Developer from "../assets/Coursera/IBM_AI_Developer.jpg";
+import Generative_AI_Elevate_Career from "../assets/Coursera/Generative_AI_Elevate_Career.jpg";
 import Software_Career_Guide from "../assets/Coursera/Software_Career_Guide.jpg";
+import THM_PreSecurity1 from "../assets/THM/THM_PreSecurity1.png";
 
 const DIFFICULTY_CONFIG = {
   1: { text: "text-green-300", bg: "bg-green-300/90", label: "INTRO" },
@@ -25,27 +26,28 @@ const DIFFICULTY_CONFIG = {
 
 const certifs = [
   {
-    titre: "Pre-Security",
+    titre: "Pre-Security (New update)",
     plateforme: "TryHackMe",
     cat: "TryHackMe",
-    date: "09/2025",
-    image: PRE_SECURITY_IMG,
-    url: "https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-ZCUCFFIQO5.pdf",
+    date: "04/2026",
+    image: THM_PreSecurity1,
+    url: "https://tryhackme.com/certificate/THM-RHPS6ZUQ2H",
     description:
       "Introduction à la cybersécurité : exploration des fondamentaux informatiques, réseaux, systèmes d’exploitation, web, codage de base, et concepts d’attaque et de défense.",
     difficulte: 1,
     stack: [
       "Networking",
-      "Linux",
-      "Windows",
+      "Linux & Windows",
+      "Web Architecture",
+      "Cloud Fundamentals",
+      "Hardware Basics",
       "Python",
       "JavaScript",
-      "Web Fundamentals",
-      "OS Security",
-      "SQL Basics",
-      "Cryptography",
+      "SQL",
+      "Offensive Security",
+      "Defensive Security",
     ],
-    duration: "8 Hours",
+    duration: "19 Hours",
   },
   {
     titre: "Cyber Security 101",
@@ -142,7 +144,7 @@ const certifs = [
     url: "https://coursera.org/share/1f4b38f67dfcdb136733cd9ec6d77da7",
     description:
       "Introduction aux principes du génie logiciel, incluant le cycle de vie (SDLC), les architectures, les patterns de conception et les bases du développement en Python.",
-    difficulte: 2,
+    difficulte: 1,
     stack: [
       "Python",
       "SDLC",
@@ -162,7 +164,7 @@ const certifs = [
     url: "https://coursera.org/share/19c6fb4f7b7534c8d92b934ad11dc2f4",
     description:
       "Introduction au développement web : création de pages avec HTML et CSS, développement interactif avec JavaScript, et compréhension des concepts front-end et back-end.",
-    difficulte: 2,
+    difficulte: 1,
     stack: [
       "HTML",
       "CSS",
@@ -183,7 +185,7 @@ const certifs = [
     url: "https://coursera.org/share/12ef6d1161ebabe8bd0bc270f208d8f3",
     description:
       "Pratique de Python pour la Data Science et le développement IA : syntaxe, structures de données, programmation orientée objet, bibliothèques Pandas et NumPy, web scraping et utilisation d’API.",
-    difficulte: 3,
+    difficulte: 2,
     stack: [
       "Python",
       "Pandas",
@@ -206,7 +208,7 @@ const certifs = [
     url: "https://coursera.org/share/9e097eac39d7c42bdb4fa1826f485bc5",
     description:
       "Développement d’applications IA avec Python et Flask : création de modules, tests unitaires, déploiement web, opérations CRUD et intégration des bibliothèques IBM Watson.",
-    difficulte: 3,
+    difficulte: 2,
     stack: [
       "Python",
       "Flask",
@@ -229,7 +231,7 @@ const certifs = [
     url: "https://www.coursera.org/account/accomplishments/verify/OM4ZXGM73HG4",
     description:
       "Conception et développement d’applications basées sur l’IA générative, incluant la mise en place de pipelines RAG, l’intégration d’API (Hugging Face, watsonX), ainsi que le développement d’interfaces web et vocales avec Flask et Gradio.",
-    difficulte: 3,
+    difficulte: 2,
     stack: [
       "Python",
       "PyTorch",
@@ -254,10 +256,10 @@ const certifs = [
     cat: "COURSERA",
     date: "04/2026",
     image: Generative_AI_Elevate_Career,
-    url: "https://www.coursera.org/account/accomplishments/verify/KGTVEZVG1XYB", 
+    url: "https://www.coursera.org/account/accomplishments/verify/KGTVEZVG1XYB",
     description:
       "Spécialisation sur l'intégration de l'IA générative et agentique dans le cycle de vie logiciel. Application des outils GenAI (GitHub Copilot, Gemini) pour le design d'architecture, le refactoring automatisé, la détection de vulnérabilités (DevSecOps) et l'optimisation de workflows via le 'vibe coding'.",
-    difficulte: 3,
+    difficulte: 1,
     stack: [
       "Generative AI",
       "Agentic AI",
@@ -268,7 +270,7 @@ const certifs = [
       "LLM Applications",
       "Debugging",
       "Unit Testing",
-      "CI/CD"
+      "CI/CD",
     ],
     duration: "25 Hours",
   },
@@ -281,7 +283,7 @@ const certifs = [
     url: "https://www.coursera.org/account/accomplishments/verify/WGEQM8VRU3ER",
     description:
       "Validation des soft-skills et préparation avancée aux processus de recrutement en ingénierie logicielle. Maîtrise des stratégies de recherche ciblée, préparation aux défis techniques (Live Coding), résolution de problèmes complexes et communication professionnelle pour le déploiement de solutions applicatives.",
-    difficulte: 2,
+    difficulte: 1,
     stack: [
       "Professional Development",
       "Software Engineering",
@@ -290,7 +292,7 @@ const certifs = [
       "Communication",
       "Career Strategy",
       "Technical Networking",
-      "Application Development"
+      "Application Development",
     ],
     duration: "11 Hours",
   },
@@ -303,7 +305,7 @@ const certifs = [
     url: "https://www.coursera.org/account/accomplishments/professional-cert/NLPNAKCP7EFK",
     description:
       "Cursus complet d'ingénierie logicielle spécialisée en IA. Maîtrise du cycle de vie complet (SDLC) : de la conception d'architectures web avec Flask à l'intégration avancée de modèles LLM, gestion d'inférence, NLP et déploiement de solutions d'IA générative.",
-    difficulte: 4,
+    difficulte: 3,
     stack: [
       "AI Engineering",
       "Python",
@@ -317,6 +319,7 @@ const certifs = [
       "Unit Testing",
     ],
     duration: "160 Hours",
+    isPro: true,
   },
 ];
 
@@ -348,8 +351,8 @@ const nodes = [
 const Certifications = () => {
   const [activeNode, setActiveNode] = useState("TryHackMe");
   const [selectedCert, setSelectedCert] = useState(null);
-  const [sortBy, setSortBy] = useState("date");
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortBy, setSortBy] = useState("difficulte");
+  const [sortOrder, setSortOrder] = useState("desc");
 
   const handleSort = (type) => {
     if (sortBy === type) {
@@ -445,33 +448,57 @@ const Certifications = () => {
 
             {/* CONTROLES DE TRI */}
             <div className="flex items-center gap-5 text-[12px] font-mono tracking-tight">
-              <div className="flex items-center gap-2 text-zinc-300">
-                <span className="opacity-50">[</span> SORT:
-                {["date", "diff", "duration"].map((type, idx) => {
+              <div className="flex items-center gap-3">
+                {["date", "diff", "duration"].map((type) => {
                   const internalKey = type === "diff" ? "difficulte" : type;
                   const isActive = sortBy === internalKey;
 
                   return (
-                    <React.Fragment key={type}>
-                      <button
-                        onClick={() => handleSort(internalKey)}
-                        className={`uppercase hover:text-white transition-all flex items-center gap-1 ${
-                          isActive ? activeConfig.theme.text : ""
-                        }`}
-                      >
-                        {type}
-                        {/* Affichage de la flèche */}
-                        {isActive && (
-                          <span className="text-[8px] font-bold">
-                            {sortOrder === "desc" ? "▼" : "▲"}
-                          </span>
-                        )}
-                      </button>
-                      {idx < 2 && <span className="opacity-20">|</span>}
-                    </React.Fragment>
+                    <button
+                      key={type}
+                      onClick={() => handleSort(internalKey)}
+                      className={`group relative overflow-hidden h-9 min-w-[110px] font-mono text-[10px] uppercase tracking-tighter transition-all duration-500 border ${
+                        isActive
+                          ? `${activeConfig.theme.border} ${activeConfig.theme.text} bg-zinc-900 shadow-[inset_0_0_12px_rgba(var(--cyber-rgb),0.4),0_0_25px_rgba(var(--cyber-rgb),0.2)]`
+                          : "text-zinc-300 border-white/25 bg-zinc-950/50 hover:border-white/50 hover:text-zinc-200"
+                      }`}
+                    >
+                      {/* Halo derrière (Aura Externe Diffuse) */}
+                      {isActive && (
+                        <div
+                          className={`absolute -inset-1 blur-xl opacity-40 ${activeConfig.theme.bg} z-0`}
+                        />
+                      )}
+
+                      {/* Aura de survol interne */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_90%)] transition-opacity" />
+
+                      <div className="relative z-10 flex items-center justify-center gap-2">
+                        {/* Indicateur dynamique : :: devient > en vert */}
+                        <span
+                          className={`mb-1 transition-all duration-300 font-bold ${
+                            isActive
+                              ? "text-emerald-400 opacity-100 scale-110"
+                              : "opacity-70"
+                          }`}
+                        >
+                          {isActive ? ">" : "::"}
+                        </span>
+
+                        <span className="leading-none">{type}</span>
+
+                        {/* Flèche de tri stable */}
+                        <div className="w-2 flex justify-center text-[8px]">
+                          {isActive && (
+                            <span className="animate-pulse">
+                              {sortOrder === "desc" ? "▼" : "▲"}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </button>
                   );
                 })}
-                <span className="opacity-50">]</span>
               </div>
 
               <div className="flex items-center gap-2 bg-zinc-900/80 px-3 py-1 border border-white/5 italic">
@@ -491,7 +518,7 @@ const Certifications = () => {
                 key={`${activeNode}-${i}`}
                 onClick={() => setSelectedCert(c)}
               >
-                <CertifBadge {...c} themeColor={activeConfig.theme} index={i} />
+                <CertifCard {...c} themeColor={activeConfig.theme} index={i} />
               </div>
             ))}
           </div>
@@ -539,7 +566,7 @@ const Certifications = () => {
                         </span>
                       </div>
 
-                      {/* --- SECTION DIFFICULTÉ NETTOYÉE --- */}
+                      {/* --- SECTION DIFFICULTÉ --- */}
                       <div>
                         <h4
                           className={`font-mono text-sm uppercase mb-1 ${Difficulty_Level.text}`}
@@ -658,7 +685,7 @@ const Certifications = () => {
   );
 };
 
-const CertifBadge = ({
+const CertifCard = ({
   titre,
   plateforme,
   date,
@@ -666,6 +693,7 @@ const CertifBadge = ({
   index,
   difficulte,
   duration,
+  isPro,
 }) => {
   const Difficulty_Level = DIFFICULTY_CONFIG[difficulte] || {
     text: "text-zinc-400",
@@ -682,28 +710,37 @@ const CertifBadge = ({
         className={`absolute top-0 left-0 w-full h-1 ${themeColor.bg} opacity-50 group-hover:opacity-100 transition-opacity group-hover:shadow-[0_0_15px_currentColor] ${themeColor.text}`}
       ></div>
 
-      <div className="flex justify-between items-start mb-6 z-10">
+      <div className="flex justify-between items-start mb-4 z-10">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 border border-white/40 group-hover:border-white/80 rotate-45 transition-colors"></div>
           <span
             className={`text-sm font-mono tracking-[0.2em] uppercase ${themeColor.text}`}
           >
-            {plateforme}
+            {plateforme}{" "}
           </span>
         </div>
 
         {/* DIFFICULTY LEVEL */}
-        <div className="flex flex-col items-end gap-1">
+        <div className="relative flex flex-col items-end gap-1">
           <span
             className={`text-[9px] font-mono font-black tracking-widest ${Difficulty_Level.text} ${difficulte === 5 ? "animate-pulse" : ""}`}
           >
+            {/*<div className="absolute left-3 top-[-1px]">
+              {isPro && (
+                <span
+                  className={`text-zinc-100/90 text-[9px] font-mono border px-1.5 py-0.1 uppercase transition-all duration-300 {Pro} mx-2`}
+                >
+                  PRO
+                </span>
+              )}
+            </div>*/}
             {Difficulty_Level.label}
           </span>
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((step) => (
               <div
                 key={step}
-                className={`w-3 h-1 ${
+                className={`w-4 h-1 ${
                   step <= difficulte ? Difficulty_Level.bg : "bg-zinc-800"
                 }`}
               ></div>

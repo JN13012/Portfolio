@@ -8,18 +8,22 @@ import Formations from "./components/Formations";
 import Experiences from "./components/Experiences";
 import ProjectSection from "./components/ProjectSection";
 import Certifications from "./components/Certifications";
+import Competences from "./components/Competences";
+import ProfileConsole from "./components/ProfileConsole";
 
 function App() {
   return (
     <div className="bg-black min-h-screen font-mono">
       <NavBar />
       <div className="w-[95%] max-w-[1800px] mx-auto px-6 py-10">
-        <Presentation />
-        <Profile />
-        <Formations />
-        <Certifications />
-        <Experiences />
-        <ProjectSection />
+        <Presentation/>
+        <Profile/>
+        <Competences/>
+        <ProjectSection/>
+        <Certifications/>
+        <Formations/>
+        <Experiences/>
+        <ProfileConsole />
       </div>
 
       {/* <footer className="pb-12 pt-6 flex justify-center opacity-30 hover:opacity-100 transition-opacity duration-1000">
