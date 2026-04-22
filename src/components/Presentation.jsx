@@ -1,8 +1,18 @@
 import React from "react";
+import video_intro from "../assets/video_intro.mp4";
 
 const Presentation = () => {
   return (
-    <section className="flex flex-col items-center justify-center min-h-[70vh] py-20">
+    <section className="flex flex-col items-center justify-center min-h-[90vh] py-20">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
+      >
+        <source src={video_intro} type="video/mp4" />
+      </video>
       {/* Badge de Statut */}
       <div className="mb-8 flex items-center gap-3 border border-cyber/30 bg-cyber/5 px-4 py-1.5 self-center">
         <span className="relative flex h-2 w-2">
@@ -29,7 +39,8 @@ const Presentation = () => {
 
       {/* Description */}
       <p className="max-w-3xl text-center text-gray-400 text-sm md:text-lg leading-relaxed mb-12 font-mono">
-        Étudiant en reconversion vers la cybersécurité. Projets pratiques en IA, DevOps et cybersécurité via TryHackMe et Coursera.
+        Étudiant en reconversion vers la cybersécurité. Projets pratiques en IA,
+        DevOps et cybersécurité via TryHackMe et Coursera.
         <br className="hidden md:block" />
       </p>
 

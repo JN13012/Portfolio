@@ -25,20 +25,6 @@ function App() {
         <Experiences/>
         <ProfileConsole />
       </div>
-
-      {/* <footer className="pb-12 pt-6 flex justify-center opacity-30 hover:opacity-100 transition-opacity duration-1000">
-        <a
-          href="https://hits.seeyoufarm.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjnagi.netlify.app&count_bg=%234ADE80&title_bg=%233F3F46&title=TRAFFIC_LOG&edge_flat=true&color=%23FFFFFF"
-            alt="System Traffic Log"
-            className="h-5"
-          />
-        </a>
-      </footer> */}
     </div>
   );
 }
