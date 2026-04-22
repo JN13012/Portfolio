@@ -1,6 +1,6 @@
 import React from "react";
 import Salesforce_dev from "../assets/Experiences/Salesforce_dev.png";
-import Wec2017 from "../assets/Experiences/Wec2017.jpg";
+import Wec2017 from "../assets/Experiences/wec2017_1.jpg";
 import Mining from "../assets/Experiences/HiveOs_monitoring.png";
 import Artisan from "../assets/Experiences/artisan1.jpg";
 import RIMA from "../assets/Formations/RIMA.png";

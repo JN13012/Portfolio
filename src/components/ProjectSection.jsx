@@ -12,17 +12,53 @@ import Business_AI_Meeting from "../assets/Projets/Business_AI_Meeting_Companion
 import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.jpg";
 import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.jpg";
 import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.jpg";
-
-
-// const categoryColors = {
-//   IA: "text-purple-400 border-purple-500/30 bg-purple-500/5",
-//   DevOps: "text-blue-400 border-blue-500/30 bg-blue-500/5",
-//   "Software Engineering":
-//     "text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
-//   "Gestion de Projet": "text-amber-400 border-amber-500/30 bg-amber-500/5",
-// };
-
+import Tor from "../assets/Projets/Tor.png";
+const categoryThemes = {
+  IA: {
+    card: "hover:border-cyber/40",
+    badge: "text-blue-300 border-blue-500/30 bg-blue-500/10",
+  },
+  "Cyber-securité": {
+    card: "hover:border-cyber/40",
+    badge: "text-red-400 border-red-500/30 bg-red-500/10",
+  },
+  DevOps: {
+    card: "hover:border-cyber/40",
+    badge: "text-emerald-300 border-emerald-500/30 bg-emerald-500/10",
+  },
+  "Software Engineering": {
+    card: "hover:border-cyber/40",
+    badge: "text-lime-400 border-lime-500/30 bg-lime-500/10",
+  },
+  "Gestion de Projet": {
+    card: "hover:border-cyber/40",
+    badge: "text-yellow-300 border-yellow-500/30 bg-yellow-500/10",
+  },
+  Default: {
+    card: "hover:border-cyber/40",
+    badge: "text-zinc-400 border-white/10 bg-white/5",
+  },
+};
 const projets = [
+{
+    titre: "Audit - 1",
+    description:
+      "Audit de sécurité offensif sur une infrastructure Joomla. Mise en place d'une Kill Chain : énumération furtive via Tor/SOCKS5, fingerprinting de CMS et analyse technique des mécanismes de blocage d'un WAF (Layer 7). Élaboration de stratégies de bypass, tests d'injections SQL et tentatives de brute force.",
+    tags: [
+      "Pentest",
+      "Tor Proxy",
+      "WAF Bypass",
+      "Scan & Enumeration",
+      "OWASP Top 10",
+      "Brute Force",
+      "SQLi",
+    ],
+    lien: "https://github.com/votre-repo-audit",
+    image: Tor,
+    date: "04/2026",
+    categorie: "Cyber-securité",
+    complexity: 4,
+  },
   {
     titre: "AI_Career_Coach",
     description:
@@ -277,19 +313,24 @@ const ProjectSection = () => {
       {/* --- 1. BARRE DE FILTRES ET TRI --- */}
       <div className="container mx-auto px-6 mb-12 flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex flex-wrap gap-3">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveFilter(cat)}
-              className={`px-4 py-1.5 font-mono text-xs uppercase tracking-widest transition-all border ${
-                activeFilter === cat
-                  ? "bg-cyber text-black border-cyber shadow-[0_0_15px_rgba(var(--cyber-rgb),0.4)]"
-                  : "text-cyber/90 border-white/10 hover:border-cyber/50 hover:text-white"
-              }`}
-            >
-              {`[ ${cat} ]`}
-            </button>
-          ))}
+          {categories.map((cat) => {
+            const theme = categoryThemes[cat] || categoryThemes.Default;
+            const isActive = activeFilter === cat;
+
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveFilter(cat)}
+                className={`px-4 py-1.5 font-mono text-xs uppercase tracking-widest transition-all border ${
+                  isActive
+                    ? "bg-cyber text-black border-cyber shadow-[0_0_15px_rgba(var(--cyber-rgb),0.4)] scale-105"
+                    : `${theme.badge} opacity-70 hover:opacity-100 hover:scale-105`
+                } active:scale-95`}
+              >
+                {`[ ${cat} ]`}
+              </button>
+            );
+          })}
         </div>
 
         <button
@@ -310,6 +351,7 @@ const ProjectSection = () => {
             <ProjectCard
               key={p.titre}
               {...p}
+              theme={categoryThemes[p.categorie] || categoryThemes.Default}
               onClick={() => setSelectedProject(p)}
             />
           ))}

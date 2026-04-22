@@ -5,14 +5,14 @@ const NavBar = () => {
     { name: "PROFILE", href: "#profile" },
     { name: "FORMATION", href: "#formations" },
     { name: "EXPERIENCES", href: "#experiences" },
-    { name: "COMPETENCES (à rajouter)", href: "#skills" },
+    { name: "COMPETENCES", href: "#competences" },
     { name: "PROJETS", href: "#projects" },
   ];
 
   return (
     <header className="fixed top-0 w-full z-50 flex flex-col">
       {/* --- BANDE D'AVERTISSEMENT --- */}
-      <div className="bg-yellow-500/20 border-b border-yellow-400/40 text-yellow-400 text-center py-2 px-4 font-mono text-[9px] md:text-xs uppercase animate-pulse tracking-[0.2em]">
+      <div className="bg-yellow-500/20 border-b border-yellow-400/40 text-yellow-400 text-center py-2 px-4 font-mono text-[9px] md:text-xs uppercase animate-pulse tracking-[0.4em]">
         🚧 Ce portfolio est en cours de construction 🚧
       </div>
 

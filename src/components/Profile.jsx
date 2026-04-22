@@ -135,7 +135,10 @@ const interests = [
 
 const Profile = () => {
   return (
-    <section id="profile" className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10">
+    <section
+      id="profile"
+      className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
+    >
       <div className="mx-auto px-2">
         {/* TITRE */}
         <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
@@ -154,7 +157,7 @@ const Profile = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-20 gap-12">
           {/* COL 1 */}
-          <div className="lg:col-span-6 space-y-7">
+          <div className="lg:col-span-8 space-y-7">
             {/* TOOLKIT */}
             <div className="flex items-center gap-3 mb-5">
               <Shield size={20} className="text-cyber/60" />
@@ -162,14 +165,14 @@ const Profile = () => {
                 SOC_Toolkit_v2.0
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap justify-center gap-5">
               {socTools.map((tool) => (
                 <a
                   key={tool.name}
                   href={tool.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs font-mono border border-cyber/20 px-3 py-2 text-zinc-400 hover:border-cyber hover:text-cyber hover:bg-cyber/5 transition-all cursor-crosshair"
+                  className="text-base font-mono border border-cyber/20 px-3 py-2 text-zinc-400 hover:border-cyber hover:text-cyber hover:bg-cyber/5 transition-all cursor-crosshair"
                 >
                   {tool.name}
                 </a>
@@ -177,7 +180,7 @@ const Profile = () => {
             </div>
 
             {/* PHOTO */}
-            <div className="relative group mx-auto lg:mx-0 w-full max-w-[320px] lg:max-w-none">
+            <div className="relative group mx-auto w-full max-w-[240px] lg:max-w-[500px]">
               <div className="absolute -top-1 -left-1 w-8 h-8 border-t-2 border-l-2 border-cyber z-20"></div>
               <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-2 border-r-2 border-cyber z-20"></div>
               <div className="absolute inset-0 w-full h-[3px] bg-cyber/60 z-30 shadow-[0_0_15px_#4ade80] animate-scan opacity-0 group-hover:opacity-100"></div>
@@ -217,7 +220,7 @@ const Profile = () => {
           </div>
 
           {/* COL 2 */}
-          <div className="lg:col-span-6 space-y-8">
+          <div className="lg:col-span-12 space-y-8">
             {/* PERSONNAL DATA */}
             <div>
               <SectionTitle
@@ -291,8 +294,7 @@ const Profile = () => {
           </div>
 
           {/* COL 3 */}
-          <div className="lg:col-span-8 space-y-10">
-            <ProfileConsole />
+          <div className="lg:col-span-20">
             <a
               href={CV}
               download="CV_Jérémie_Nagi.pdf"
