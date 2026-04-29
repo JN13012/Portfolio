@@ -36,7 +36,6 @@ const ProfileConsole = () => {
     const args = trimmedInput.split(/\s+/);
     const command = args[0].toLowerCase();
     const currentData = CTF_LEVELS[level];
-    
 
     addLog(trimmedInput, "in");
 
@@ -118,9 +117,14 @@ const ProfileConsole = () => {
       if (level >= 4) {
         baseCmds += ", gobuster [IP], curl [endpoint], sqlmap [url]";
       }
+      if (level >= 5) {
+        baseCmds += ", john [hash], ssh [user]@[IP], hashcat [hash]";
+      }
       addLog(`COMMANDES DISPONIBLES : ${baseCmds}`, "sys");
-      // Basic commands
-    } else if (command === "clear") {
+      
+    } 
+    // Basic commands
+    else if (command === "clear") {
       setHistory([]);
     } else if (command === "hint") {
       addLog(`HINT: ${currentData.hint}`, "sys");
