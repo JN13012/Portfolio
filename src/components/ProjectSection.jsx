@@ -43,7 +43,7 @@ const projets = [
 {
     titre: "Audit - 1",
     description:
-      "Audit de sécurité offensif sur une infrastructure Joomla. Mise en place d'une Kill Chain : énumération furtive via Tor/SOCKS5, fingerprinting de CMS et analyse technique des mécanismes de blocage d'un WAF (Layer 7). Élaboration de stratégies de bypass, tests d'injections SQL et tentatives de brute force.",
+      "¨Pentest avec mise en place d'une methodologie : Reconnaissance, Blocage WAF, Proxy + Énumération via Tor, Injections SQL, brute force.",
     tags: [
       "Pentest",
       "Tor Proxy",

@@ -12,9 +12,9 @@ const BlocExperience = ({
   softSkills,
   details,
   isCurrent,
-  imgSrc,
-  imgAlt,
-  imgCaption,
+  // imgSrc,
+  //imgAlt,
+  //imgCaption,
 }) => (
   <div className="relative pl-12 pb-24 group max-w-[85%] mx-auto transition-all duration-500">
     {/* Timeline Line & Node */}
@@ -29,7 +29,7 @@ const BlocExperience = ({
 
     <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-35 items-start p-2">
       {/* COLONNE TEXTE */}
-      <div className="md:col-span-6 space-y-5">
+      <div className="md:col-span-12 space-y-5">
         <div>
           <span className="text-cyber/75 font-mono text-base tracking-widest uppercase mb-2 block">
             {date}
@@ -74,7 +74,7 @@ const BlocExperience = ({
         </div>
       </div>
 
-      {/* COLONNE IMAGE */}
+      {/* COLONNE IMAGE
       <div className="md:col-span-6">
         <div className="relative max-w-[450px] mx-auto md:ml-auto">
           <div className="overflow-hidden rounded-sm border border-zinc-800 group-hover:border-cyber/40 transition-all duration-500 shadow-xl">
@@ -91,7 +91,7 @@ const BlocExperience = ({
             {imgCaption}
           </div>
         </div>
-      </div>
+      </div>*/}
     </div>
   </div>
 );
@@ -104,7 +104,7 @@ const Experiences = () => {
       entreprises: ["ULIT"],
       softSkills: ["Autonomie", "Communication", "Rigueur"],
       isCurrent: true,
-      imgSrc: Salesforce_dev,
+      // imgSrc: Salesforce_dev,
       imgAlt: "Salesforce Developer",
       imgCaption: "Salesforce Developer",
       details: `> Conception et déploiement de solutions Full-Stack (Apex & LWC) pour l'automatisation de processus métier.
@@ -117,7 +117,7 @@ const Experiences = () => {
       entreprises: ["Indépendant"],
       softSkills: ["Architecture Systèmes", "Sécurité", "Gestion de stratégie"],
       isCurrent: false,
-      imgSrc: Mining,
+      // imgSrc: Mining,
       imgAlt: "HiveOS RIG Monitoring",
       imgCaption: "Monitoring de fermes GPU (HiveOS)",
       details: `> Conception et assemblage de fermes de minage.
@@ -130,7 +130,7 @@ const Experiences = () => {
       entreprises: ["Auto-entrepreneur"],
       softSkills: ["Gestion de projet", "Organisation", "Polyvalence"],
       isCurrent: false,
-      imgSrc: Artisan,
+      // imgSrc: Artisan,
       imgAlt: "Maçonnerie",
       imgCaption: "Chantier de rénovation",
       details: `> Gestion de chantiers et relation client/fournisseurs.
@@ -143,7 +143,7 @@ const Experiences = () => {
       entreprises: ["Renault", "G-DRIVE RACING (WEC 2017)", "Wärtsilä"],
       softSkills: ["Réactivité", "Fiabilité", "Travail d'équipe"],
       isCurrent: false,
-      imgSrc: Wec2017,
+      // // imgSrc: Wec2017,
       imgAlt: "WEC 2017",
       imgCaption: "G-Drive LMP2 #26 - Monza (ITA) - WEC 2017",
       details: `> Opérateur ravitaillement/pneumatiques en Championnat du Monde d'Endurance (WEC 2017). Gestion de la performance, accuité et de la fatigue en milieu de competition de haut niveau. (G-Drive)
@@ -156,7 +156,7 @@ const Experiences = () => {
       entreprises: ["2ÈME RIMa"],
       softSkills: ["Résilience", "Discipline", "Capacité de décision"],
       isCurrent: false,
-      imgSrc: RIMA,
+      // // imgSrc: RIMA,
       imgAlt: "2ᵉ RIMa",
       imgCaption: "2ᵉ Régiment d'Infanterie de Marine",
       details: `> Développement d'une rigueur et d'une résilience face au stress et à la fatigue.
