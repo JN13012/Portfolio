@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import ProfilImg from "../assets/Profil.png";
-import ProfileConsole from "./ProfileConsole";
+import ProfileConsole from "./ProfileConsole/ProfileConsole";
 import CV from "../assets/CV.pdf";
 import {
   Plane,
@@ -34,7 +34,7 @@ const SectionTitle = ({
     )}
     <div className="relative z-10 flex items-center gap-3 px-4 py-2">
       <Icon
-        size={18} // Augmenté
+        size={18}
         className={`transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
       />
       <h3
@@ -137,7 +137,7 @@ const Profile = () => {
   return (
     <section
       id="profile"
-      className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
+      className="py-32 bg-transparent text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2">
         {/* TITRE */}
@@ -192,7 +192,7 @@ const Profile = () => {
                 />
                 <div className="absolute bottom-5 left-5 right-5 bg-black/80 backdrop-blur-md border border-cyber/20 p-3 z-20 text-center">
                   <p className="text-[11px] font-mono text-cyber animate-pulse tracking-[0.2em] uppercase">
-                    Biometric_Match: Stable
+                    In_Progress
                   </p>
                 </div>
               </div>

@@ -22,6 +22,7 @@ const DIFFICULTY_CONFIG = {
   3: { text: "text-yellow-300", bg: "bg-yellow-300/90", label: "MEDIUM" },
   4: { text: "text-yellow-600", bg: "bg-yellow-600/90", label: "HARD" },
   5: { text: "text-red-500", bg: "bg-red-500/90", label: "INSANE" },
+  6: { text: "text-zinc-100", bg: "bg-gradient-to-r from-zinc-400 via-zinc-100 to-zinc-400", label: "PRO" },
 };
 
 const certifs = [
@@ -305,7 +306,7 @@ const certifs = [
     url: "https://www.coursera.org/account/accomplishments/professional-cert/NLPNAKCP7EFK",
     description:
       "Cursus complet d'ingénierie logicielle spécialisée en IA. Maîtrise du cycle de vie complet (SDLC) : de la conception d'architectures web avec Flask à l'intégration avancée de modèles LLM, gestion d'inférence, NLP et déploiement de solutions d'IA générative.",
-    difficulte: 3,
+    difficulte: 6,
     stack: [
       "AI Engineering",
       "Python",
@@ -574,7 +575,7 @@ const Certifications = () => {
                           Difficulty_Level
                         </h4>
                         <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((level) => (
+                          {[1, 2, 3, 4, 5, 6].map((level) => (
                             <div
                               key={level}
                               className={`w-5 h-2 ${level <= selectedCert.difficulte ? Difficulty_Level.bg : "bg-zinc-800"}`}
@@ -693,7 +694,6 @@ const CertifCard = ({
   index,
   difficulte,
   duration,
-  isPro,
 }) => {
   const Difficulty_Level = DIFFICULTY_CONFIG[difficulte] || {
     text: "text-zinc-400",
@@ -725,15 +725,6 @@ const CertifCard = ({
           <span
             className={`text-[9px] font-mono font-black tracking-widest ${Difficulty_Level.text} ${difficulte === 5 ? "animate-pulse" : ""}`}
           >
-            {/*<div className="absolute left-3 top-[-1px]">
-              {isPro && (
-                <span
-                  className={`text-zinc-100/90 text-[9px] font-mono border px-1.5 py-0.1 uppercase transition-all duration-300 {Pro} mx-2`}
-                >
-                  PRO
-                </span>
-              )}
-            </div>*/}
             {Difficulty_Level.label}
           </span>
           <div className="flex gap-1">
