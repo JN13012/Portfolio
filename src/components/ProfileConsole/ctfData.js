@@ -92,7 +92,7 @@ export const CTF_LEVELS = {
 
     5: {
         label: "CREDENTIAL ACCESS",
-        flag: "SSH_Access_Granted",
+        flag: "M0tivation2026!",
         unlocks: [
             "john",
             "hashcat",
@@ -101,8 +101,8 @@ export const CTF_LEVELS = {
         hint: "Extract hashes from the database. Crack them using dictionary attacks. Use recovered credentials to access SSH and investigate internal files for further secrets.",
         targetIp: "10.0.2.15",
         hashes: [
-            { user: "admin", hash: "5f4dcc3b5aa765d61d8327deb882cf99" },
-            { user: "dev", hash: "e99a18c428cb38d5f260853678922e03" }
+            { user: "admin", hash: "39678cb269782223fb548ea91d07d540" },
+            { user: "dev", hash: "aba0b545a32585915e3318b92d987bfa" }
         ],
         hashInfo: {
             type: "MD5",
@@ -119,43 +119,28 @@ export const CTF_LEVELS = {
 
         files: {
             "readme.txt":
-                "User credentials are stored in the database as unsalted MD5 hashes.\nWeak passwords may be crackable using common wordlists.",
+                "User credentials have been extracted from database and stored in the .hashes.txt as MD5 hashes.\nWeak passwords may be crackable using common wordlists. (hint : you can copy & paste hashes)",
 
             ".hashes.txt":
-                "admin:5f4dcc3b5aa765d61d8327deb882cf99\ndev:e99a18c428cb38d5f260853678922e03",
-
-            ".note.txt":
-                "Developers often reuse weak passwords across services.",
-            "backup.txt": "Encrypted archive (AES-256). Key might be derived from weak password reuse.",
-            "ssh_banner.txt": "Welcome dev. Sensitive backups detected on system.",
+                "admin:216b0a84582521479c73b7ba56d17f77\ndev:650a82a075701f1e40c182082cbf3e15",
         }
     },
 
     6: {
-        label: "POST-EXPLOITATION",
-        flag: "Meterpreter_Inside",
-        hint: "Génère un payload avec msfvenom et exécute-le sur la machine cible.",
+        label: "METASPLOIT",
+        flag: "pivoted_root",
+        unlocks: ["msfconsole"],
+        targetIp: "10.0.2.25",
 
-        payload: {
-            type: "reverse_shell",
-            format: "elf",
-            tool: "msfvenom"
-        },
-
-        files: {
-            "readme.txt": "Tu as accès en SSH. Upload un payload et lance un reverse shell.",
-            ".note.txt": "Listener requis (port 4444)."
-        }
-    },
-
-    7: {
-        label: "PRIVILEGE ESCALATION",
-        flag: "I_Am_Root",
-        hint: "Cherche les binaires SUID : 'find / -perm -4000'. Python3 est exploitable.",
+        services: [
+            { port: "445", state: "open", service: "microsoft-ds", version: "Windows 7 SMBv1" },
+            { port: "3389", state: "open", service: "rdp", version: "Remote Desktop" }
+        ],
 
         files: {
-            "/usr/bin/python3": "[SUID SET]",
-            "note_root.txt": "Seul root peut lire ce fichier."
+            "readme.txt": "You have discovered a new target in the intership.txt of admin@10.0.2.15. Focus on the new IP : 10.0.2.25",
+            ".note.txt": "Legacy Windows system - patching delayed"
         }
     }
+
 };

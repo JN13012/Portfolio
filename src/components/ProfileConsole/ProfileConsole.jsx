@@ -19,6 +19,7 @@ const ProfileConsole = () => {
     ssh: false,
   });
   const [leakedHashes, setLeakedHashes] = useState([]);
+  const [sshLoginPending, setSshLoginPending] = useState(null);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -30,12 +31,45 @@ const ProfileConsole = () => {
     setHistory((prev) => [...prev, { msg, type }]);
   };
   const handleCommand = (input) => {
+    const enterSshShell = (user, host) => {
+      setRemoteSession({
+        type: "ssh",
+        user,
+        host,
+      });
+
+      addLog("SSH session established", "out");
+      addLog(`Logged in as ${user}@${host}`, "sys");
+
+      addLog("Available commands: ls, cat [file], exit, help", "sys");
+
+      if (user === "dev") {
+        addLog("Tip: internal services may exist...", "sys");
+      }
+    };
     const trimmedInput = input.trim();
     if (!trimmedInput) return;
 
     const args = trimmedInput.split(/\s+/);
     const command = args[0].toLowerCase();
     const currentData = CTF_LEVELS[level];
+    if (sshLoginPending && remoteSession?.type !== "ssh") {
+      const password = trimmedInput;
+
+      const expected = crackedPasswords[sshLoginPending.user];
+
+      if (password !== expected) {
+        addLog("Permission denied, try again.", "err");
+        setSshLoginPending(null);
+        return;
+      }
+
+      enterSshShell(sshLoginPending.user, sshLoginPending.host);
+
+      setSshLoginPending(null);
+      setInputValue("");
+      return;
+    }
 
     addLog(trimmedInput, "in");
 
@@ -79,30 +113,201 @@ const ProfileConsole = () => {
     }
     // --- SHELL (SSH) ---
     else if (remoteSession?.type === "ssh") {
-      const shellPrefix = `${remoteSession.user ?? "user"}@${remoteSession.host}`;
+      const shellPrefix = `${remoteSession.user}@${remoteSession.host}`;
 
-      if (command === "ls") {
-        addLog(`${shellPrefix} : secret.txt flag.txt`, "out");
-      } else if (command === "cat") {
-        const file = args[1];
-
-        if (file === "flag.txt") {
-          addLog(`${shellPrefix} : FLAG{${CTF_LEVELS[level].flag}}`, "out");
-        } else if (file === "secret.txt") {
-          addLog(`${shellPrefix} : TOP_SECRET_DATABASE_ACCESS`, "out");
-        } else if (!file) {
-          addLog(`${shellPrefix} : usage: cat [file]`, "err");
-        } else {
-          addLog(`${shellPrefix} : no such file`, "err");
-        }
-      } else if (command === "exit") {
-        addLog("Closing SSH session...", "sys");
-        setRemoteSession(null);
-      } else {
-        addLog(`${shellPrefix} : command not found`, "err");
+      if (!remoteSession.initialized) {
+        addLog("Welcome to Ubuntu 20.04 LTS (CTF VM)", "sys");
+        setRemoteSession((prev) => ({ ...prev, initialized: true }));
       }
 
-      return;
+      // HELP
+      if (command === "help") {
+        addLog("Available commands: ls, cat [file], exit", "sys");
+        return;
+      }
+
+      // =========================
+      // 🟢 USER: DEV (HONEYPOT)
+      // =========================
+      if (remoteSession.user === "dev") {
+        if (command === "ls") {
+          addLog(`${shellPrefix} : secret.txt flag.txt`, "out");
+        } else if (command === "cat") {
+          const file = args[1];
+
+          if (file === "flag.txt") {
+            addLog(`${shellPrefix} : FLAG{DEV_ACCESS_IS_A_TRAP}`, "sys");
+            addLog(`${shellPrefix} : [!] suspicious flag detected...`, "sys");
+          } else if (file === "secret.txt") {
+            addLog(`${shellPrefix} : Verify ssh admin@10.0.2.15`, "sys");
+          } else if (!file) {
+            addLog(`${shellPrefix} : usage: cat [file]`, "err");
+          } else {
+            addLog(`${shellPrefix} : no such file`, "err");
+          }
+        } else if (command === "exit") {
+          addLog("Closing SSH session...", "sys");
+          setRemoteSession(null);
+        } else {
+          addLog(`${shellPrefix} : command not found`, "err");
+        }
+
+        return;
+      }
+      // =========================
+      // 🔴 USER: ADMIN (REAL TARGET)
+      // =========================
+      if (remoteSession.user === "admin") {
+        if (command === "hashcat") {
+          //
+        } else if (command === "ls") {
+          addLog(
+            `${shellPrefix} : .secrets.txt .hashcat.txt notes.log intership.txt`,
+            "out",
+          );
+        } else if (command === "cat") {
+          const file = args[1];
+
+          if (file === ".secrets.txt") {
+            addLog(`${shellPrefix} : HASHES_DUMP`, "out");
+            addLog(
+              `${shellPrefix} : FLAG : d4f3c1a5f1c6b6f5b1a6c8a0d8e5f2a1`,
+              "out",
+            );
+
+            setLeakedHashes([
+              { user: "FLAG", hash: "d4f3c1a5f1c6b6f5b1a6c8a0d8e5f2a1" },
+            ]);
+
+            addLog(`${shellPrefix} : [!] hashes use advanced format`, "sys");
+            addLog(`${shellPrefix} : [!] recommended tool: hashcat`, "sys");
+          } else if (file === "intership.txt") {
+            addLog(`${shellPrefix} : ====================`, "out");
+            addLog(`${shellPrefix} : INTERSHIP PROFILE DATA`, "out");
+            addLog(`${shellPrefix} : ====================`, "out");
+            addLog(`${shellPrefix} :`, "out");
+
+            addLog(`${shellPrefix} : NAME: Jérémie Nagi`, "out");
+            addLog(
+              `${shellPrefix} : ROLE: Intership Cybersecurity / IA`,
+              "out",
+            );
+            addLog(`${shellPrefix} : EMAIL: jeremie.nagi@epitech.eu`, "out");
+            addLog(`${shellPrefix} : PHONE: +33 7 88 29 43 03`, "out");
+            addLog(`${shellPrefix} : ====================`, "out");
+            addLog(`${shellPrefix} : IP (internal): 10.0.2.25`, "out");
+          } else if (file === ".hashcat.txt") {
+            addLog(
+              `${shellPrefix} : [internal] hashcat reference guide`,
+              "out",
+            );
+
+            addLog(`${shellPrefix} :`, "out");
+
+            addLog(`${shellPrefix} : BASIC USAGE:`, "out");
+            addLog(
+              `${shellPrefix} : hashcat -m <mode> -a <attack> <hashfile> <wordlist/mask> [options]`,
+              "out",
+            );
+
+            addLog(`${shellPrefix} :`, "out");
+
+            addLog(`${shellPrefix} : HASH MODES:`, "out");
+            addLog(`${shellPrefix} : -m 0     MD5`, "out");
+            addLog(`${shellPrefix} : -m 1000  NTLM`, "out");
+
+            addLog(`${shellPrefix} :`, "out");
+
+            addLog(`${shellPrefix} : ATTACK MODES:`, "out");
+            addLog(
+              `${shellPrefix} : -a 0  dictionary attack (wordlist based)`,
+              "out",
+            );
+            addLog(
+              `${shellPrefix} : -a 3  brute-force attack (mask based)`,
+              "out",
+            );
+
+            addLog(`${shellPrefix} :`, "out");
+            addLog(`${shellPrefix} : MASK EXAMPLES:`, "out");
+            addLog(`${shellPrefix} : ?l?l?l?l   (4 lowercase letters)`, "out");
+            addLog(
+              `${shellPrefix} : ?u?l?l?l?l?l?l?l?l?d?d?d?d?s (enterprise pattern: word + year + symbol)`,
+              "out",
+            );
+
+            addLog(`${shellPrefix} :`, "out");
+
+            addLog(`${shellPrefix} : OPTIONAL FLAGS:`, "out");
+            addLog(`${shellPrefix} : --force   ignore warnings`, "out");
+            addLog(`${shellPrefix} : -O        optimized GPU kernels`, "out");
+            addLog(
+              `${shellPrefix} : -w 4       maximum workload profile`,
+              "out",
+            );
+            addLog(`${shellPrefix} : -D 1,2    select compute devices`, "out");
+
+            addLog(`${shellPrefix} :`, "out");
+
+            addLog(`${shellPrefix} : EXAMPLE:`, "out");
+            addLog(
+              `${shellPrefix} : hashcat -m 1000 -a 3 .secrets.txt ?l?l?l?l -O -w 4`,
+              "out",
+            );
+
+            addLog(`${shellPrefix} :`, "out");
+
+            addLog(
+              `${shellPrefix} : NOTE: choose correct mode and attack type carefully`,
+              "sys",
+            );
+
+            addLog(
+              `${shellPrefix} : NOTE: GPU acceleration recommended for real performance`,
+              "sys",
+            );
+          } else if (file === "notes.log") {
+            addLog(
+              `${shellPrefix} : security notice - hash recovery update`,
+              "out",
+            );
+
+            addLog(`${shellPrefix} : hash mode detected: NTLM`, "out");
+
+            addLog(`${shellPrefix} : dictionary attack ineffective`, "out");
+
+            addLog(`${shellPrefix} : recommended approach: brute-force`, "out");
+
+            addLog(
+              `${shellPrefix} : hint: use mask-based attack strategy`,
+              "out",
+            );
+
+            addLog(
+              `${shellPrefix} : enable GPU optimized kernels for performance`,
+              "out",
+            );
+
+            addLog(
+              `${shellPrefix} : use maximum workload profile for cracking efficiency"`,
+              "out",
+            );
+          } else if (!file) {
+            addLog(`${shellPrefix} : usage: cat [file]`, "err");
+          } else {
+            addLog(`${shellPrefix} : no such file`, "err");
+          }
+        } else if (command === "exit") {
+          addLog("Closing SSH session...", "sys");
+          setRemoteSession(null);
+        } else {
+          addLog(`${shellPrefix} : command not found`, "err");
+        }
+
+        if (command !== "hashcat") {
+          return;
+        }
+      }
     }
 
     // HELP
@@ -118,11 +323,11 @@ const ProfileConsole = () => {
         baseCmds += ", gobuster [IP], curl [endpoint], sqlmap [url]";
       }
       if (level >= 5) {
-        baseCmds += ", john [hash], ssh [user]@[IP], hashcat [hash]";
+        baseCmds +=
+          ", john --wordlist=[file] [hashfile], ssh [user]@[IP], hashcat [hash]";
       }
       addLog(`COMMANDES DISPONIBLES : ${baseCmds}`, "sys");
-      
-    } 
+    }
     // Basic commands
     else if (command === "clear") {
       setHistory([]);
@@ -336,8 +541,8 @@ const ProfileConsole = () => {
 
           addLog("users table:", "out");
           setLeakedHashes([
-            { user: "admin", hash: "5f4dcc3b5aa765d61d8327deb882cf99" },
-            { user: "dev", hash: "e99a18c428cb38d5f260853678922e03" },
+            { user: "admin", hash: "216b0a84582521479c73b7ba56d17f77" },
+            { user: "dev", hash: "650a82a075701f1e40c182082cbf3e15" },
           ]);
           setLevel5State((prev) => ({ ...prev, hashesFound: true }));
           addLog(`[+] FLAG FOUND: ${currentData.flag}`, "out");
@@ -347,100 +552,245 @@ const ProfileConsole = () => {
 
     // JOHN
     else if (command === "john") {
-      if (!level5State.hashesFound) {
-        return addLog("john: no hashes available (run sqlmap first)", "err");
-      }
       if (level < 5) return addLog("john: command not found", "err");
 
-      if (!leakedHashes.length) {
-        return addLog("john: no hashes available (run sqlmap first)", "err");
+      const wordlistArg = args.find((a) => a.startsWith("--wordlist="));
+      const wordlistPath = wordlistArg?.split("=")[1];
+
+      const hashFile = args.find(
+        (a) => a.endsWith(".txt") && !a.startsWith("--"),
+      );
+
+      if (remoteSession?.type === "ssh" && remoteSession.user === "admin") {
+        return addLog("[!] john failed: hash format not supported", "err");
+      }
+      if (!wordlistPath) {
+        return addLog(
+          "Usage: john --wordlist=/usr/share/wordlists/rockyou.txt .hashes.txt",
+          "err",
+        );
       }
 
-      const hash = args[1];
-      if (!hash) return addLog("Usage: john [hash]", "err");
+      if (!hashFile) {
+        return addLog("Usage: john --wordlist=... .hashes.txt", "err");
+      }
 
-      const entry = leakedHashes.find((h) => h.hash === hash);
+      if (hashFile !== ".hashes.txt") {
+        return addLog(`john: ${hashFile}: No such file`, "err");
+      }
 
-      if (!entry) return addLog("john: hash not found", "err");
+      addLog("[*] Initializing John the Ripper...", "sys");
 
-      const wordlist = {
-        "5f4dcc3b5aa765d61d8327deb882cf99": "password",
-        e99a18c428cb38d5f260853678922e03: "abc123",
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      const runCrack = async (user, hash, password) => {
+        addLog("[*] Loaded 2 password hashes", "sys");
+        await sleep(300);
+
+        addLog(`[*] Loading hash: ${user} (${hash})`, "sys");
+        await sleep(500);
+
+        addLog(`[*] Using wordlist: ${wordlistPath}`, "sys");
+        await sleep(400);
+
+        addLog("[*] Starting dictionary attack...", "sys");
+        await sleep(400);
+
+        const progress = [12, 31, 48, 66, 83, 97];
+
+        for (const p of progress) {
+          addLog(`[*] Progress: ${p}%`, "sys");
+          await sleep(300);
+        }
+
+        addLog(`[+] ${user}:${password} FOUND`, "out");
       };
 
-      const cracked = wordlist[entry.hash];
+      (async () => {
+        await runCrack(
+          "admin",
+          "39678cb269782223fb548ea91d07d540",
+          "JTR13012!!",
+        );
 
-      if (!cracked) return addLog("john: no match in wordlist", "err");
+        await sleep(700);
 
-      setCrackedPasswords((prev) => ({
-        ...prev,
-        [entry.user]: cracked,
-      }));
+        await runCrack("dev", "aba0b545a32585915e3318b92d987bfa", "jtr13");
 
-      addLog(`[+] john cracked ${entry.user}: ${cracked}`, "out");
+        addLog("[*] Cracking complete", "sys");
+
+        setCrackedPasswords({
+          admin: "JTPJTR13012!",
+          dev: "jtr13",
+        });
+
+        setLevel5State((prev) => ({ ...prev, cracked: true }));
+      })();
     }
     // SSH
     else if (command === "ssh") {
       if (level < 5) return addLog("ssh: command not found", "err");
 
-      const user = args[1];
-      const pass = args[2];
+      const raw = args[1];
+      const [user, host] = raw.split("@");
 
-      if (!crackedPasswords[user]) {
-        return addLog("ssh: no cracked credentials for this user", "err");
+      if (!user || !host) {
+        return addLog("Usage: ssh user@host", "err");
       }
 
-      if (pass !== crackedPasswords[user]) {
-        return addLog("ssh: authentication failed", "err");
+      if (user === "admin" && !level5State.cracked) {
+        addLog("[!] Access denied: credentials required", "err");
+        addLog("[!] Hint: password reuse or hash cracking", "sys");
+        return;
       }
 
-      addLog(`[+] connecting to ${CTF_LEVELS[5].ssh.host}...`, "sys");
+      addLog(`[+] connecting to ${host}...`, "sys");
 
       setTimeout(() => {
-        addLog("SSH session established", "out");
+        addLog("Password:", "sys");
 
-        setSshSession({
-          user,
-          host: CTF_LEVELS[5].ssh.host,
-        });
-
-        setRemoteSession({
-          type: "ssh",
-          user,
-          host: CTF_LEVELS[5].ssh.host,
-        });
-
-        setLevel5State((prev) => ({ ...prev, ssh: true }));
-
-        addLog("Available: ls, cat, exit", "sys");
+        setSshLoginPending({ user, host });
       }, 600);
+
+      return;
     }
     // HASHCAT
     else if (command === "hashcat") {
       if (level < 5) return addLog("hashcat: command not found", "err");
 
-      addLog("[*] running hashcat (simulated)...", "sys");
+      if (!leakedHashes.length) {
+        return addLog("[!] no hashes loaded (read .secrets.txt first)", "err");
+      }
+
+      const argsStr = args.slice(1);
+
+      const modeIndex = argsStr.indexOf("-m");
+      const attackIndex = argsStr.indexOf("-a");
+      const force = argsStr.includes("--force");
+      const optimized = argsStr.includes("-O");
+      const workloadIndex = argsStr.indexOf("-w");
+
+      const mode = modeIndex !== -1 ? argsStr[modeIndex + 1] : null;
+      const attack = attackIndex !== -1 ? argsStr[attackIndex + 1] : null;
+
+      const inputFile = argsStr.find((a) => a.includes(".secrets.txt"));
+      const mask = argsStr.find((a) => a.includes("?"));
+
+      // =========================
+      // VALIDATION
+      // =========================
+      if (!mode) return addLog("[!] missing -m (hash type required)", "err");
+      if (mode !== "1000") {
+        return addLog("[!] expected NTLM mode (-m 1000)", "err");
+      }
+
+      if (!attack) return addLog("[!] missing -a (attack mode)", "err");
+      if (!inputFile)
+        return addLog("[!] missing hash file (.secrets.txt)", "err");
+
+      addLog("[*] initializing hashcat engine...", "sys");
+
+      if (force) addLog("[*] --force enabled", "sys");
+      if (optimized) addLog("[*] optimized GPU kernels enabled (-O)", "sys");
+      if (workloadIndex !== -1) {
+        addLog(`[*] workload profile: ${argsStr[workloadIndex + 1]}`, "sys");
+      }
 
       setTimeout(() => {
-        const result = leakedHashes.reduce((acc, h) => {
-          const dict = {
-            "5f4dcc3b5aa765d61d8327deb882cf99": "password",
-            e99a18c428cb38d5f260853678922e03: "abc123",
-          };
+        addLog("[*] loading hashes...", "sys");
+        addLog("[*] detected format: NTLM", "sys");
 
-          acc[h.user] = dict[h.hash] || null;
-          return acc;
-        }, {});
+        setTimeout(() => {
+          // ======================================================
+          // 🔸 DICTIONARY ATTACK (FAIL volontaire)
+          // ======================================================
+          if (attack === "0") {
+            addLog("[*] starting dictionary attack...", "sys");
 
-        setCrackedPasswords(result);
+            const progress = [14, 29, 47, 62, 80, 96];
 
-        Object.entries(result).forEach(([u, p]) => {
-          if (p) addLog(`[+] ${u}:${p}`, "out");
-        });
+            progress.forEach((p, i) => {
+              setTimeout(() => {
+                addLog(`[*] progress: ${p}%`, "sys");
+              }, i * 250);
+            });
 
-        setLevel5State((prev) => ({ ...prev, cracked: true }));
-        addLog("[+] credentials ready for ssh", "sys");
-      }, 800);
+            setTimeout(() => {
+              addLog("[!] no matches found in wordlist", "err");
+              addLog("[!] password not in common dictionaries", "sys");
+              addLog("[!] analysis: structured pattern detected", "sys");
+              addLog("[!] recommendation: use mask attack (-a 3)", "sys");
+            }, 1800);
+          }
+
+          // ======================================================
+          // 🔸 BRUTE FORCE MASK (SUCCESS / FAIL REALISTIC)
+          // ======================================================
+          else if (attack === "3") {
+            // -------------------------
+            // VALIDATION INPUT
+            // -------------------------
+            if (!mask) {
+              return addLog("[!] missing mask pattern", "err");
+            }
+
+            const tokens = (mask.match(/\?[ulds]/g) || []).length;
+
+            if (tokens < 12) {
+              return addLog(
+                "[!] mask too weak (expected high complexity password ~15 chars)",
+                "err",
+              );
+            }
+
+            addLog("[*] starting brute-force (mask attack)...", "sys");
+            addLog("[*] analyzing password structure...", "sys");
+
+            setTimeout(() => {
+              addLog(`[*] testing mask: ${mask}`, "sys");
+
+              setTimeout(() => {
+                // ------------------------------------------------------
+                // 🔐 STRICT MASK VALIDATION (ONE TRUE SOLUTION)
+                // ------------------------------------------------------
+
+                const expectedMask = "?u?l?l?l?l?l?l?l?l?d?d?d?d?s";
+
+                if (mask !== expectedMask) {
+                  addLog("[!] incorrect mask pattern", "err");
+                  addLog("[!] analysis: structure mismatch", "sys");
+                  addLog(
+                    "[!] hint: enterprise pattern (word + year + symbol)",
+                    "sys",
+                  );
+                  return;
+                }
+
+                // ------------------------------------------------------
+                // SUCCESS PATH
+                // ------------------------------------------------------
+
+                addLog("[*] high entropy credential detected", "sys");
+                addLog("[*] GPU acceleration options (-O, -w 4)", "sys");
+
+                setTimeout(() => {
+                  addLog("[+] hash successfully cracked", "out");
+
+                  addLog(`FLAG{${currentData.flag}}`, "out");
+                }, 1200);
+              }, 800);
+            }, 600);
+          }
+
+          // ======================================================
+          // 🔸 INVALID ATTACK MODE
+          // ======================================================
+          else {
+            addLog("[!] invalid attack mode", "err");
+            addLog("[!] use -a 0 (dictionary) or -a 3 (mask)", "sys");
+          }
+        }, 1000);
+      }, 600);
     }
 
     // SUBMIT
