@@ -18,9 +18,8 @@ const Presentation = () => {
             <div className="inline-flex items-center gap-2 border-l-2 border-cyber pl-4 py-1">
               <span className="font-mono text-xl text-zinc-400 uppercase tracking-tight">
                 Architecte Systèmes <span className="text-cyber">&</span>{" "}
-                Cyber_Spec 
-                Welcome_User / grep_is_magic / Nice
-
+                Cyber_Spec Welcome_User / grep_is_magic / 1 2 3 4 / Nice / 1 2 3
+                4
               </span>
             </div>
           </div>
