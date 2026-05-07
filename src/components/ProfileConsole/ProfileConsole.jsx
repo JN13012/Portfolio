@@ -20,6 +20,10 @@ const ProfileConsole = () => {
   });
   const [leakedHashes, setLeakedHashes] = useState([]);
   const [sshLoginPending, setSshLoginPending] = useState(null);
+  const [msfState, setMsfState] = useState({
+    module: null,
+    options: {},
+  });
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -72,6 +76,133 @@ const ProfileConsole = () => {
     }
 
     addLog(trimmedInput, "in");
+
+    // SHELL METERPRETER
+    // =========================
+    // 🔴 METERPRETER SESSION
+    // =========================
+    if (remoteSession?.type === "meterpreter") {
+      const shellPrefix = `meterpreter@${remoteSession.host}`;
+
+      // HELP
+      if (command === "help") {
+        addLog(
+          `${shellPrefix} Core Commands: getuid, sysinfo, ps, migrate, shell, hashdump, search`,
+          "sys",
+        );
+        return;
+      }
+
+      // IDENTITÉ UTILISATEUR
+      if (command === "getuid") {
+        addLog(`${shellPrefix} Server username: NT AUTHORITY\\SYSTEM`, "out");
+        return;
+      }
+
+      // INFOS SYSTÈME
+      if (command === "sysinfo") {
+        addLog(`${shellPrefix} Computer        : WIN-CTF-TARGET`, "out");
+        addLog(
+          `${shellPrefix} OS              : Windows 10 (Build 19045)`,
+          "out",
+        );
+        addLog(`${shellPrefix} Architecture    : x64`, "out");
+        return;
+      }
+
+      // PROCESS LIST
+      if (command === "ps") {
+        addLog(`${shellPrefix} Listing processes...`, "out");
+
+        addLog(`PID   Name                 User`, "out");
+        addLog(`4     System              SYSTEM`, "out");
+        addLog(`716   lsass.exe           SYSTEM`, "out");
+        addLog(`1276  cmd.exe             SYSTEM`, "out");
+        addLog(`1304  spoolsv.exe         SYSTEM`, "out");
+
+        return;
+      }
+
+      // HASH DUMP (simplifié CTF)
+      if (command === "hashdump") {
+        addLog(`${shellPrefix} dumping SAM database...`, "sys");
+
+        setLeakedHashes([
+          {
+            user: "Administrator",
+            hash: "aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0",
+          },
+          {
+            user: "admin",
+            hash: "aad3b435b51404eeaad3b435b51404ee:216b0a84582521479c73b7ba56d17f77",
+          },
+        ]);
+
+        addLog(`[+] hashes extracted and stored`, "out");
+        return;
+      }
+
+      // SEARCH FILES
+      if (command === "search") {
+        const query = args.slice(1).join(" ");
+
+        if (!query) {
+          addLog(`${shellPrefix} usage: search -f filename`, "err");
+          return;
+        }
+
+        if (query.includes("flag")) {
+          addLog(`c:\\Windows\\System32\\flag.txt`, "out");
+        } else {
+          addLog(`${shellPrefix} no results found`, "sys");
+        }
+
+        return;
+      }
+
+      // MIGRATION (simulation)
+      if (command === "migrate") {
+        const pid = args[1];
+
+        if (!pid) {
+          addLog(`${shellPrefix} usage: migrate <PID>`, "err");
+          return;
+        }
+
+        addLog(`${shellPrefix} migrating to process ${pid}...`, "sys");
+
+        setTimeout(() => {
+          addLog(`[+] Migration completed successfully`, "out");
+        }, 800);
+
+        return;
+      }
+
+      // PASSAGE EN SHELL
+      if (command === "shell") {
+        addLog(`${shellPrefix} spawning system shell...`, "sys");
+
+        setRemoteSession({
+          type: "shell",
+          host: remoteSession.host,
+          user: "SYSTEM",
+        });
+
+        addLog(`You are now in Windows shell`, "sys");
+        return;
+      }
+
+      // EXIT SESSION
+      if (command === "exit") {
+        addLog(`Closing Meterpreter session...`, "sys");
+        setRemoteSession(null);
+        return;
+      }
+
+      // FALLBACK
+      addLog(`${shellPrefix} command not found: ${command}`, "err");
+      return;
+    }
 
     // --- SHELL (NC) ---
     if (remoteSession?.type === "nc") {
@@ -326,6 +457,10 @@ const ProfileConsole = () => {
         baseCmds +=
           ", john --wordlist=[file] [hashfile], ssh [user]@[IP], hashcat [hash]";
       }
+      if (level >= 6) {
+        baseCmds +=
+          ", msfvenom -p [payload] LHOST=[ip] LPORT=[port], smbclient //[IP]/[share], route add [subnet] [session], sessions -i [id]";
+      }
       addLog(`COMMANDES DISPONIBLES : ${baseCmds}`, "sys");
     }
     // Basic commands
@@ -343,11 +478,65 @@ const ProfileConsole = () => {
       });
       addLog(filtered.sort().join("    "), "out");
     } else if (command === "cat") {
-      const target = args[1];
-      if (currentData.files[target]) {
-        addLog(currentData.files[target], "out");
+      const file = args[1];
+
+      if (!file) {
+        addLog("usage: cat [file]", "err");
+        return;
+      }
+
+      // metasploit
+      if (file === ".metasploit.txt") {
+        addLog("Metasploit Framework - Exploit Reference Guide", "out");
+        addLog("----------------------------------------------", "out");
+
+        addLog("[+] CONTEXT: SMB TARGET DETECTED (PORT 445)", "out");
+        addLog("", "out");
+
+        addLog("[?] POSSIBLE EXPLOIT MODULES:", "out");
+        addLog(
+          "  - exploit/windows/smb/psexec (requires credentials or auth bypass)",
+          "out",
+        );
+        addLog(
+          "  - exploit/windows/smb/ms17_010_eternalblue (Recomended)",
+          "out",
+        );
+        addLog(
+          "  - exploit/windows/smb/ms08_067_netapi (older systems)",
+          "out",
+        );
+        addLog("", "out");
+
+        addLog("[+] STANDARD METASPLOIT WORKFLOW:", "out");
+        addLog("  use <exploit/module>", "out");
+        addLog("  set RHOSTS <target_ip>", "out");
+        addLog("  set LHOST <your_ip> (optional)", "out");
+        addLog("  set LPORT 4444 (optional)", "out");
+        addLog("  run", "out");
+        addLog("", "out");
+
+        addLog("[+] EXAMPLE (CTF TARGET):", "out");
+        addLog("  use exploit/windows/smb/ms17_010_eternalblue", "out");
+        addLog("  set RHOSTS 10.0.2.25", "out");
+        addLog("  run", "out");
+        addLog("", "out");
+        addLog(
+          "[!] NOTE: Incorrect module or parameters will result in failed session",
+          "sys",
+        );
+        addLog(
+          "[*] Expected result: Meterpreter session on successful exploitation",
+          "sys",
+        );
+
+        return;
+      }
+      // fichiers classiques
+      if (currentData.files[file]) {
+        addLog(currentData.files[file], "out");
       } else {
-        addLog(`cat: ${target || ""}: No such file or directory`, "err");
+        addLog(`cat: ${file}: No such file or directory`, "err");
       }
     }
 
@@ -791,6 +980,65 @@ const ProfileConsole = () => {
           }
         }, 1000);
       }, 600);
+    }
+    // METASPLOIT
+    else if (command === "use") {
+      const module = args.slice(1).join(" ");
+
+      setMsfState({
+        module,
+        options: {},
+      });
+
+      addLog(`[*] selected module: ${module}`, "sys");
+    } else if (command === "set") {
+      const key = args[1];
+      const value = args.slice(2).join(" ");
+
+      if (!key || !value) {
+        addLog("[!] usage: set <OPTION> <VALUE>", "err");
+        return;
+      }
+
+      setMsfState((prev) => ({
+        ...prev,
+        options: {
+          ...prev.options,
+          [key.toUpperCase()]: value,
+        },
+      }));
+
+      addLog(`[*] ${key.toUpperCase()} => ${value}`, "sys");
+    } else if (command === "run") {
+      const module = msfState?.module;
+      const opts = msfState?.options || {};
+
+      const rhosts = opts["RHOSTS"];
+
+      if (!module) {
+        return addLog("[!] no module selected", "err");
+      }
+
+      if (!rhosts) {
+        return addLog("[!] invalid RHOSTS configuration", "err");
+      }
+
+      if (module.includes("ms17_010_eternalblue")) {
+        if (rhosts !== "10.0.2.25") {
+          return addLog("[!] invalid target", "err");
+        }
+
+        addLog("[*] Exploit running...", "sys");
+
+        setTimeout(() => {
+          addLog("[+] Meterpreter session opened", "out");
+          setRemoteSession({ type: "meterpreter", host: rhosts });
+        }, 1200);
+
+        return;
+      }
+
+      addLog("[!] invalid configuration", "err");
     }
 
     // SUBMIT
