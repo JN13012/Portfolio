@@ -25,6 +25,12 @@ const ProfileConsole = () => {
     options: {},
   });
 
+  const [meterpreterState, setMeterpreterState] = useState({
+    user: "GUEST USER",
+    integrity: "Low",
+    migratedPid: null,
+  });
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -82,80 +88,209 @@ const ProfileConsole = () => {
     // 🔴 METERPRETER SESSION
     // =========================
     if (remoteSession?.type === "meterpreter") {
-      const shellPrefix = `meterpreter@${remoteSession.host}`;
+      const shellPrefix = `meterpreter >`;
 
       // HELP
       if (command === "help") {
         addLog(
-          `${shellPrefix} Core Commands: getuid, sysinfo, ps, migrate, shell, hashdump, search`,
+          `${shellPrefix} Session Commands: ls, cat, getuid, sysinfo, ps, migrate [PID]`,
           "sys",
         );
         return;
       }
 
-      // IDENTITÉ UTILISATEUR
-      if (command === "getuid") {
-        addLog(`${shellPrefix} Server username: NT AUTHORITY\\SYSTEM`, "out");
+      if (command === "ls") {
+        const files = currentData.meterpreterFiles["/"];
+
+        addLog(`meterpreter > ${files.join("    ")}`, "out");
+
         return;
       }
 
-      // INFOS SYSTÈME
-      if (command === "sysinfo") {
-        addLog(`${shellPrefix} Computer        : WIN-CTF-TARGET`, "out");
+      if (command === "cat") {
+        const file = args[1];
+
+        if (!file) {
+          addLog("meterpreter > usage: cat [file]", "err");
+          return;
+        }
+
+        // =========================
+        // README.TXT
+        // =========================
+        if (file === "readme.txt") {
+          addLog("meterpreter > ===============================", "out");
+          addLog(
+            "meterpreter > Congratulations, you now have a Meterpreter session.",
+            "out",
+          );
+          addLog(
+            `meterpreter > Connected target : ${remoteSession.host}`,
+            "out",
+          );
+          addLog("meterpreter > Current privilege level : GUEST USER", "out");
+
+          addLog("meterpreter >", "out");
+
+          addLog(
+            "meterpreter > Your objective is to escalate privileges.",
+            "out",
+          );
+
+          addLog("meterpreter >", "out");
+
+          addLog("meterpreter > Suggested reconnaissance commands:", "out");
+
+          addLog(
+            "meterpreter > - getuid (show current user and privilege level)",
+            "out",
+          );
+          addLog(
+            "meterpreter > - sysinfo (display system information of the target)",
+            "out",
+          );
+          addLog(
+            "meterpreter > - ps (list running processes to identify privilege escalation targets)",
+            "out",
+          );
+          addLog(
+            "meterpreter > - migrate [PID] (move session to another process to inherit its privileges)",
+            "out",
+          );
+
+          addLog("meterpreter >", "out");
+
+          addLog(
+            "meterpreter > Hint: privilege escalation will require process migration.",
+            "sys",
+          );
+
+          addLog("meterpreter > ===============================", "out");
+
+          return;
+        }
+
+        // =========================
+        // FLAG.TXT
+        // =========================
+        if (file === "flag.txt") {
+          if (meterpreterState.integrity !== "System") {
+            addLog(
+              "meterpreter > Access denied: System privileges required",
+              "err",
+            );
+
+            addLog(
+              "meterpreter > Hint: current session integrity is too low",
+              "sys",
+            );
+
+            return;
+          }
+
+         addLog(`meterpreter > FLAG{${currentData.flag}}`, "out");
+
+          return;
+        }
+
+        // =========================
+        // GENERIC FILES
+        // =========================
+        const content = currentData.meterpreterFiles[file];
+
+        if (!content) {
+          addLog(`meterpreter > cat: ${file}: No such file`, "err");
+
+          return;
+        }
+
+        addLog(`meterpreter > ${content}`, "out");
+
+        return;
+      }
+
+      // GETUID
+      if (command === "getuid") {
         addLog(
-          `${shellPrefix} OS              : Windows 10 (Build 19045)`,
+          `${shellPrefix} Server username: ${meterpreterState.user}`,
           "out",
         );
-        addLog(`${shellPrefix} Architecture    : x64`, "out");
+
+        addLog(
+          `${shellPrefix} Integrity level: ${meterpreterState.integrity}`,
+          "out",
+        );
+
+        return;
+      }
+
+      // SYSINFO
+      if (command === "sysinfo") {
+        addLog(`${shellPrefix} OS: Windows 7 (Build 7601)`, "out");
+        addLog(`${shellPrefix} Architecture: x64`, "out");
         return;
       }
 
       // PROCESS LIST
       if (command === "ps") {
         addLog(`${shellPrefix} Listing processes...`, "out");
+        addLog(``, "out");
 
-        addLog(`PID   Name                 User`, "out");
-        addLog(`4     System              SYSTEM`, "out");
-        addLog(`716   lsass.exe           SYSTEM`, "out");
-        addLog(`1276  cmd.exe             SYSTEM`, "out");
-        addLog(`1304  spoolsv.exe         SYSTEM`, "out");
+        addLog(`PID    Name                 User              Notes`, "out");
+        addLog(
+          `==============================================================`,
+          "out",
+        );
 
-        return;
-      }
+        addLog(
+          `4      System               SYSTEM            [KERNEL EXECUTIVE]`,
+          "out",
+        );
 
-      // HASH DUMP (simplifié CTF)
-      if (command === "hashdump") {
-        addLog(`${shellPrefix} dumping SAM database...`, "sys");
+        addLog(
+          `112    smss.exe            SYSTEM            [Session Manager Subsystem]`,
+          "out",
+        );
+        addLog(
+          `260    wininit.exe         SYSTEM            [Windows Initialization]`,
+          "out",
+        );
+        addLog(
+          `380    services.exe        SYSTEM            [Service Control Manager]`,
+          "out",
+        );
+        addLog(
+          `396    lsass.exe           SYSTEM            [Local Security Authority Subsystem]`,
+          "out",
+        );
 
-        setLeakedHashes([
-          {
-            user: "Administrator",
-            hash: "aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0",
-          },
-          {
-            user: "admin",
-            hash: "aad3b435b51404eeaad3b435b51404ee:216b0a84582521479c73b7ba56d17f77",
-          },
-        ]);
+        addLog(
+          `520    svchost.exe         NETWORK SERVICE   [Service Host Group]`,
+          "out",
+        );
+        addLog(
+          `824    explorer.exe        USER              [Windows Shell]`,
+          "out",
+        );
+        addLog(
+          `1040   notepad.exe         USER              [Text Editor]`,
+          "out",
+        );
 
-        addLog(`[+] hashes extracted and stored`, "out");
-        return;
-      }
+        addLog(
+          `1276   cmd.exe             ADMIN             [Elevated Shell]`,
+          "out",
+        );
 
-      // SEARCH FILES
-      if (command === "search") {
-        const query = args.slice(1).join(" ");
+        addLog(
+          `==============================================================`,
+          "out",
+        );
 
-        if (!query) {
-          addLog(`${shellPrefix} usage: search -f filename`, "err");
-          return;
-        }
-
-        if (query.includes("flag")) {
-          addLog(`c:\\Windows\\System32\\flag.txt`, "out");
-        } else {
-          addLog(`${shellPrefix} no results found`, "sys");
-        }
+        addLog(
+          `${shellPrefix} Hint: use the security-related process to migrate and escalate privileges`,
+          "sys",
+        );
 
         return;
       }
@@ -172,7 +307,33 @@ const ProfileConsole = () => {
         addLog(`${shellPrefix} migrating to process ${pid}...`, "sys");
 
         setTimeout(() => {
+          // LSASS = SUCCESS
+          if (pid === "396") {
+            setMeterpreterState({
+              user: "NT AUTHORITY\\SYSTEM",
+              integrity: "System",
+              migratedPid: pid,
+            });
+
+            addLog(`[+] Migration completed successfully`, "out");
+
+            addLog(
+              `${shellPrefix} SYSTEM token successfully impersonated`,
+              "sys",
+            );
+
+            addLog(`${shellPrefix} Privilege escalation successful`, "sys");
+
+            return;
+          }
+
+          // OTHER PROCESS = FAIL / LOW PRIV
           addLog(`[+] Migration completed successfully`, "out");
+
+          addLog(
+            `${shellPrefix} Warning: migrated process does not provide the apropriated privileges`,
+            "sys",
+          );
         }, 800);
 
         return;
@@ -1034,6 +1195,9 @@ const ProfileConsole = () => {
           addLog("[+] Meterpreter session opened", "out");
           setRemoteSession({ type: "meterpreter", host: rhosts });
         }, 1200);
+        setTimeout(() => {
+          addLog("type 'help' for avaible commands", "sys");
+        }, 1800);
 
         return;
       }

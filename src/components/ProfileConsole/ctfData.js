@@ -126,113 +126,26 @@ export const CTF_LEVELS = {
         }
     },
 
-    // =========================
-    // 🔴 LEVEL 6 - PIVOT / METASPLOIT
-    // =========================
     6: {
         label: "INTERNAL PIVOT (METASPLOIT SIMULATION)",
         flag: "6",
         unlocks: ["msfvenom", "meterpreter", "smb", "route"],
         hint: "Exploitez SMB sur 10.0.2.25 via pivot réseau. Un reverse shell est nécessaire.",
         targetIp: "10.0.2.25",
-
-        network: {
-            internal: "10.0.2.0/24",
-            gateway: "10.0.2.1"
-        },
-
-        commands: {
-            "msfvenom": "Payload generated: windows/meterpreter/reverse_tcp",
-            "use exploit smb": "Exploit loaded (EternalBlue simulation)",
-            "set RHOST 10.0.2.25": "Target set",
-            "exploit": "Meterpreter session opened"
-        },
-
-        sessions: {
-            meterpreter: true,
-            pivot: true
-        },
-
         files: {
-            "readme.txt": "Scan completed on : 10.0.2.25. Windows 7 detected. SMB service exposed on port 445. !Critical remote SMB RCE vulnerability (MS17-010)",
-            ".metasploit.txt" : "Check cat in basic commands"
+            "readme.txt": "Your AI Assistant completed a reconnaissance scan on 10.0.2.25. Detected OS: Windows 7. SMB service exposed on port 445. [CRITICAL] Remote SMB RCE vulnerability detected (MS17-010).",
+            ".metasploit.txt": "Check cat in basic commands"
+        },
+        meterpreterFiles: {
+            "/": [
+                "readme.txt",
+                "flag.txt",
+            ],
+
+            "readme.txt": "...",
+            "flag.txt": "..."
         },
     },
+    
 
-    // =========================
-    // 🔵 LEVEL 7 - SOC ANALYSIS
-    // =========================
-    7: {
-        label: "SOC INVESTIGATION (SIEM ANALYSIS)",
-        flag: "ioc_confirmed",
-        unlocks: ["grep", "awk", "SIEM", "elk"],
-        hint: "Analysez les logs Apache, SSH et firewall pour identifier l’attaque.",
-        files: {
-            "auth.log": `
-May 07 03:14 sshd[1234]: Failed password for root from 185.22.33.10
-May 07 03:15 sshd[1234]: Failed password for admin from 185.22.33.10
-May 07 03:16 sshd[1234]: Accepted password for dev from 185.22.33.10
-            `,
-
-            "access.log": `
-185.22.33.10 - - POST /api/login.php SQLi payload detected
-185.22.33.10 - - GET /dev_admin_portal
-            `,
-
-            "firewall.log": `
-                            DROP IN 185.22.33.10 -> 10.0.2.15:445
-                            ALLOW OUT 10.0.2.15 -> 185.22.33.10
-            `
-        }
-    },
-
-    // =========================
-    // 🟣 LEVEL 8 - FORENSIC
-    // =========================
-    8: {
-        label: "DIGITAL FORENSICS ANALYSIS",
-        flag: "forensic_complete",
-        unlocks: ["strings", "volatility", "binwalk"],
-        hint: "Analysez mémoire et fichiers supprimés pour reconstruire l’attaque.",
-        files: {
-            "memory.dump": "binary_data_with_strings_admin_SuperSecret123",
-            "deleted_files.txt": "backup.zip (recoverable)",
-            "timeline.log": `
-                            03:14 initial access
-                            03:17 privilege escalation
-                            03:20 data exfiltration
-                            03:25 cleanup attempt
-                                        `
-        }
-    },
-
-    // =========================
-    // 🟢 LEVEL 9 - HARDENING
-    // =========================
-    9: {
-        label: "SYSTEM HARDENING (BLUE TEAM FINAL)",
-        flag: "system_secure",
-        unlocks: ["ufw", "iptables", "fail2ban", "auditd"],
-        hint: "Corrigez les vulnérabilités et sécurisez le système entièrement.",
-        files: {
-            "ssh_config": "PermitRootLogin yes (vulnerable)",
-            "services.txt": "SMB open, unused ports exposed",
-            "security_report.txt": "Multiple critical vulnerabilities detected"
-        },
-
-        tasks: [
-            "Disable root SSH login",
-            "Block SMB (445)",
-            "Enable firewall rules",
-            "Activate IDS/IPS",
-            "Patch vulnerable services"
-        ],
-
-        commands: {
-            "ufw enable": "Firewall activated",
-            "ufw deny 445": "SMB blocked",
-            "set PermitRootLogin no": "SSH hardened",
-            "ids status": "No intrusion detected"
-        }
-    }
 };
