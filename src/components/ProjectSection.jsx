@@ -43,7 +43,7 @@ const projets = [
 {
     titre: "Audit - 1",
     description:
-      "¨Pentest avec mise en place d'une methodologie : Reconnaissance, Blocage WAF, Proxy + Énumération via Tor, Injections SQL, brute force.",
+      "Premier Pentest avec accord du responsable de l'infrastructure. Decouverte des conditions réelles, mise en place d'une methodologie : Reconnaissance, Blocage WAF, Proxy + Énumération via Tor, interception trafic, injections SQL, brute force.",
     tags: [
       "Pentest",
       "Tor Proxy",
