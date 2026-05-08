@@ -58,6 +58,7 @@ const ProfileConsole = () => {
       }
     };
     const trimmedInput = input.trim();
+    const fullCommand = trimmedInput;
     if (!trimmedInput) return;
 
     const args = trimmedInput.split(/\s+/);
@@ -83,11 +84,148 @@ const ProfileConsole = () => {
 
     addLog(trimmedInput, "in");
 
-    // SHELL METERPRETER
-    // =========================
-    // 🔴 METERPRETER SESSION
-    // =========================
-    if (remoteSession?.type === "meterpreter") {
+    if (remoteSession?.type === "siem") {
+      const shellPrefix = `splunk@siem`;
+
+      // =========================
+      // HELP
+      // =========================
+      if (fullCommand === "help") {
+        addLog(`${shellPrefix} Available SPL commands:`, "sys");
+        addLog(`${shellPrefix} search index=ctf | stats count`, "sys");
+        addLog(`${shellPrefix} exit`, "sys");
+        return;
+      }
+
+      // =========================
+      // EXIT
+      // =========================
+      if (fullCommand === "exit") {
+        addLog(`${shellPrefix} closing SIEM session...`, "sys");
+        setRemoteSession(null);
+        return;
+      }
+
+      // =========================
+      // REALISTIC SPL QUERY
+      // =========================
+      if (fullCommand === "search index=ctf | stats count") {
+        addLog(`${shellPrefix} executing SPL query...`, "sys");
+
+        setTimeout(() => {
+          addLog(
+            `==============================================================`,
+            "out",
+          );
+          addLog(`${shellPrefix} --- SPLUNK JOB RESULT ---`, "sys");
+          addLog(`==============================`, "out");
+          addLog(`${shellPrefix} total_events = 698`, "out");
+          addLog(`${shellPrefix} time_range = last_24h`, "out");
+          addLog(`${shellPrefix} sourcetype_distribution:`, "out");
+          addLog(`==============================`, "out");
+          addLog(
+            `${shellPrefix} auth        -> 120 events (authentication logs)`,
+            "out",
+          );
+          addLog(
+            `${shellPrefix} web         -> 340 events  (HTTP traffic)`,
+            "out",
+          );
+          addLog(
+            `${shellPrefix} scan_nmap   -> 15 events (network reconnaissance)`,
+            "out",
+          );
+          addLog(
+            `${shellPrefix} gobuster    -> 220 events (directory enumeration)`,
+            "out",
+          );
+          addLog(
+            `${shellPrefix} endpoint    -> 3 events (meterpreter / post-exploitation)`,
+            "out",
+          );
+          addLog(
+            `==============================================================`,
+            "out",
+          );
+          addLog(
+            `${shellPrefix} ANALYSIS: suspicious post-exploitation activity detected. Investigate endpoint events `,
+            "sys",
+          );
+          addLog(
+            `${shellPrefix} RECOMMENDED ACTION: search index=ctf sourcetype=endpoint`,
+            "sys",
+          );
+        }, 400);
+
+        return;
+      }
+
+      if (fullCommand === "search index=ctf sourcetype=endpoint") {
+        addLog(`${shellPrefix} executing SPL query...`, "sys");
+
+        setTimeout(() => {
+          addLog(
+            `==============================================================`,
+            "out",
+          );
+          addLog(`${shellPrefix} --- SPLUNK JOB RESULT ---`, "sys");
+          addLog(
+            `==============================================================`,
+            "out",
+          );
+          addLog(
+            `${shellPrefix} [02:14:33] suspicious meterpreter session opened`,
+            "out",
+          );
+          addLog(
+            `${shellPrefix} src_ip=45.83.122.91 dst_host=WIN-SRV01 user=guest`,
+            "out",
+          );
+          addLog(
+            `${shellPrefix} [02:14:37] privilege escalation behavior detected`,
+            "out",
+          );
+          addLog(
+            `${shellPrefix} process=migrate.exe target=lsass.exe pid=396`,
+            "out",
+          );
+          addLog(`${shellPrefix} integrity_level=SYSTEM`, "out");
+          addLog(
+            `${shellPrefix} [02:14:40] remote code execution confirmed`,
+            "out",
+          );
+          addLog(`${shellPrefix} attacker_ip=45.83.122.91`, "err");
+          addLog(`${shellPrefix} FLAG{45.83.122.91} - exit siem before submit`, "sys");
+        }, 400);
+
+        return;
+      }
+
+      // =========================
+      // INVALID SEARCH HANDLING
+      // =========================
+      if (fullCommand.startsWith("search")) {
+        addLog(`${shellPrefix} executing SPL query...`, "sys");
+
+        setTimeout(() => {
+          addLog(
+            `${shellPrefix} ERROR: invalid or unsupported SPL syntax`,
+            "err",
+          );
+          addLog(
+            `${shellPrefix} hint: try 'search index=ctf | stats count'`,
+            "sys",
+          );
+        }, 400);
+
+        return;
+      }
+
+      return;
+    }
+
+    // METERPRETER SESSION
+    else if (remoteSession?.type === "meterpreter") {
       const shellPrefix = `meterpreter >`;
 
       // HELP
@@ -101,23 +239,18 @@ const ProfileConsole = () => {
 
       if (command === "ls") {
         const files = currentData.meterpreterFiles["/"];
-
         addLog(`meterpreter > ${files.join("    ")}`, "out");
-
         return;
       }
 
       if (command === "cat") {
         const file = args[1];
-
         if (!file) {
           addLog("meterpreter > usage: cat [file]", "err");
           return;
         }
 
-        // =========================
         // README.TXT
-        // =========================
         if (file === "readme.txt") {
           addLog("meterpreter > ===============================", "out");
           addLog(
@@ -136,11 +269,8 @@ const ProfileConsole = () => {
             "meterpreter > Your objective is to escalate privileges.",
             "out",
           );
-
           addLog("meterpreter >", "out");
-
           addLog("meterpreter > Suggested reconnaissance commands:", "out");
-
           addLog(
             "meterpreter > - getuid (show current user and privilege level)",
             "out",
@@ -157,58 +287,39 @@ const ProfileConsole = () => {
             "meterpreter > - migrate [PID] (move session to another process to inherit its privileges)",
             "out",
           );
-
           addLog("meterpreter >", "out");
-
           addLog(
             "meterpreter > Hint: privilege escalation will require process migration.",
             "sys",
           );
-
           addLog("meterpreter > ===============================", "out");
-
           return;
         }
-
-        // =========================
         // FLAG.TXT
-        // =========================
         if (file === "flag.txt") {
           if (meterpreterState.integrity !== "System") {
             addLog(
               "meterpreter > Access denied: System privileges required",
               "err",
             );
-
             addLog(
               "meterpreter > Hint: current session integrity is too low",
               "sys",
             );
-
             return;
           }
-
-         addLog(`meterpreter > FLAG{${currentData.flag}}`, "out");
-
+          addLog(`meterpreter > FLAG{${currentData.flag}}`, "out");
           return;
         }
-
-        // =========================
-        // GENERIC FILES
-        // =========================
+        // METERPRETER FILES
         const content = currentData.meterpreterFiles[file];
-
         if (!content) {
           addLog(`meterpreter > cat: ${file}: No such file`, "err");
-
           return;
         }
-
         addLog(`meterpreter > ${content}`, "out");
-
         return;
       }
-
       // GETUID
       if (command === "getuid") {
         addLog(
@@ -223,30 +334,25 @@ const ProfileConsole = () => {
 
         return;
       }
-
       // SYSINFO
       if (command === "sysinfo") {
         addLog(`${shellPrefix} OS: Windows 7 (Build 7601)`, "out");
         addLog(`${shellPrefix} Architecture: x64`, "out");
         return;
       }
-
-      // PROCESS LIST
+      // PS
       if (command === "ps") {
         addLog(`${shellPrefix} Listing processes...`, "out");
         addLog(``, "out");
-
         addLog(`PID    Name                 User              Notes`, "out");
         addLog(
           `==============================================================`,
           "out",
         );
-
         addLog(
           `4      System               SYSTEM            [KERNEL EXECUTIVE]`,
           "out",
         );
-
         addLog(
           `112    smss.exe            SYSTEM            [Session Manager Subsystem]`,
           "out",
@@ -263,7 +369,6 @@ const ProfileConsole = () => {
           `396    lsass.exe           SYSTEM            [Local Security Authority Subsystem]`,
           "out",
         );
-
         addLog(
           `520    svchost.exe         NETWORK SERVICE   [Service Host Group]`,
           "out",
@@ -276,36 +381,28 @@ const ProfileConsole = () => {
           `1040   notepad.exe         USER              [Text Editor]`,
           "out",
         );
-
         addLog(
           `1276   cmd.exe             ADMIN             [Elevated Shell]`,
           "out",
         );
-
         addLog(
           `==============================================================`,
           "out",
         );
-
         addLog(
           `${shellPrefix} Hint: use the security-related process to migrate and escalate privileges`,
           "sys",
         );
-
         return;
       }
-
-      // MIGRATION (simulation)
+      // MIGRATION
       if (command === "migrate") {
         const pid = args[1];
-
         if (!pid) {
           addLog(`${shellPrefix} usage: migrate <PID>`, "err");
           return;
         }
-
         addLog(`${shellPrefix} migrating to process ${pid}...`, "sys");
-
         setTimeout(() => {
           // LSASS = SUCCESS
           if (pid === "396") {
@@ -314,20 +411,15 @@ const ProfileConsole = () => {
               integrity: "System",
               migratedPid: pid,
             });
-
             addLog(`[+] Migration completed successfully`, "out");
-
             addLog(
               `${shellPrefix} SYSTEM token successfully impersonated`,
               "sys",
             );
-
             addLog(`${shellPrefix} Privilege escalation successful`, "sys");
-
             return;
           }
-
-          // OTHER PROCESS = FAIL / LOW PRIV
+          // WRON MIGRATION PS
           addLog(`[+] Migration completed successfully`, "out");
 
           addLog(
@@ -338,28 +430,12 @@ const ProfileConsole = () => {
 
         return;
       }
-
-      // PASSAGE EN SHELL
-      if (command === "shell") {
-        addLog(`${shellPrefix} spawning system shell...`, "sys");
-
-        setRemoteSession({
-          type: "shell",
-          host: remoteSession.host,
-          user: "SYSTEM",
-        });
-
-        addLog(`You are now in Windows shell`, "sys");
-        return;
-      }
-
       // EXIT SESSION
       if (command === "exit") {
         addLog(`Closing Meterpreter session...`, "sys");
         setRemoteSession(null);
         return;
       }
-
       // FALLBACK
       addLog(`${shellPrefix} command not found: ${command}`, "err");
       return;
@@ -619,8 +695,7 @@ const ProfileConsole = () => {
           ", john --wordlist=[file] [hashfile], ssh [user]@[IP], hashcat [hash]";
       }
       if (level >= 6) {
-        baseCmds +=
-          ", msfvenom -p [payload] LHOST=[ip] LPORT=[port], smbclient //[IP]/[share], route add [subnet] [session], sessions -i [id]";
+        baseCmds += ", metasploit, meterpreter";
       }
       addLog(`COMMANDES DISPONIBLES : ${baseCmds}`, "sys");
     }
@@ -1088,7 +1163,7 @@ const ProfileConsole = () => {
 
             if (tokens < 12) {
               return addLog(
-                "[!] mask too weak (expected high complexity password ~15 chars)",
+                "[!] mask too weak (high complexity password expected ~15 chars)",
                 "err",
               );
             }
@@ -1203,6 +1278,20 @@ const ProfileConsole = () => {
       }
 
       addLog("[!] invalid configuration", "err");
+    }
+
+    // SIEM
+    else if (command === "siem") {
+      setRemoteSession({
+        type: "siem",
+        host: "splunk-sim",
+      });
+
+      addLog("[+] Splunk SIEM initialized", "sys");
+      addLog("[+] Indexes loaded: auth, web, sys", "sys");
+      addLog("[+] Type 'help' for available SPL commands", "sys");
+
+      return;
     }
 
     // SUBMIT
