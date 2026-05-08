@@ -146,6 +146,17 @@ export const CTF_LEVELS = {
             "flag.txt": "..."
         },
     },
-    
 
+    7: {
+        label: "SOC L1 - Detection & Correlation",
+
+        flag: "185.220.101.45",
+
+        hint: "Correlate logs from authentication, web traffic, and IDS alerts. Identify the attack source across multiple signals.",
+
+        files: {
+            "readme.txt": "You are now a SOC analyst. A critical security alert has been triggered. Your task's to analyze logs, and identify the attacker IP address as quick as possible.",
+            "siem.txt": "To enter splunk SIEM use: siem",
+        }
+    }
 };
