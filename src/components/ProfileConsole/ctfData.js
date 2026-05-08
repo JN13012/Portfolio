@@ -179,7 +179,7 @@ export const CTF_LEVELS = {
 
         files: {
             "readme.txt": "SOC analysis confirms system compromise. Investigate running processes, and suspicious binaries.",
-            "forensic.txt": "A suspicious binary (updater.exe) was recovered from the compromised machine. Begin forensic using strings [file].",
+            "forensic.txt": "A suspicious binary (updater.exe) was recovered from the compromised machine. Begin forensic workflow using strings [file].",
             "updater.exe": "Binary flagged as suspicious (PE32 executable, packed)."
         },
     }

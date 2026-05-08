@@ -87,9 +87,6 @@ const ProfileConsole = () => {
     if (remoteSession?.type === "siem") {
       const shellPrefix = `splunk@siem`;
 
-      // =========================
-      // HELP
-      // =========================
       if (fullCommand === "help") {
         addLog(`${shellPrefix} Available SPL commands:`, "sys");
         addLog(`${shellPrefix} search index=ctf | stats count`, "sys");
@@ -97,64 +94,31 @@ const ProfileConsole = () => {
         return;
       }
 
-      // =========================
-      // EXIT
-      // =========================
       if (fullCommand === "exit") {
         addLog(`${shellPrefix} closing SIEM session...`, "sys");
         setRemoteSession(null);
         return;
       }
 
-      // =========================
-      // REALISTIC SPL QUERY
-      // =========================
       if (fullCommand === "search index=ctf | stats count") {
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
         setTimeout(() => {
-          addLog(
-            `==============================================================`,
-            "out",
-          );
+          addLog(`==============================================================`, "out",);
           addLog(`${shellPrefix} --- SPLUNK JOB RESULT ---`, "sys");
           addLog(`==============================`, "out");
           addLog(`${shellPrefix} total_events = 698`, "out");
           addLog(`${shellPrefix} time_range = last_24h`, "out");
           addLog(`${shellPrefix} sourcetype_distribution:`, "out");
           addLog(`==============================`, "out");
-          addLog(
-            `${shellPrefix} auth        -> 120 events (authentication logs)`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} web         -> 340 events  (HTTP traffic)`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} scan_nmap   -> 15 events (network reconnaissance)`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} gobuster    -> 220 events (directory enumeration)`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} endpoint    -> 3 events (meterpreter / post-exploitation)`,
-            "out",
-          );
-          addLog(
-            `==============================================================`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} ANALYSIS: suspicious post-exploitation activity detected. Investigate endpoint events `,
-            "sys",
-          );
-          addLog(
-            `${shellPrefix} RECOMMENDED ACTION: search index=ctf sourcetype=endpoint`,
-            "sys",
-          );
+          addLog(`${shellPrefix} auth        -> 120 events (authentication logs)`, "out",);
+          addLog(`${shellPrefix} web         -> 340 events  (HTTP traffic)`, "out",);
+          addLog(`${shellPrefix} scan_nmap   -> 15 events (network reconnaissance)`, "out",);
+          addLog(`${shellPrefix} gobuster    -> 220 events (directory enumeration)`, "out",);
+          addLog(`${shellPrefix} endpoint    -> 3 events (meterpreter / post-exploitation)`, "out",);
+          addLog(`==============================================================`, "out",);
+          addLog(`${shellPrefix} ANALYSIS: suspicious post-exploitation activity detected. Investigate endpoint events `, "sys",);
+          addLog(`${shellPrefix} RECOMMENDED ACTION: search index=ctf sourcetype=endpoint`, "sys",);
         }, 400);
 
         return;
@@ -164,77 +128,30 @@ const ProfileConsole = () => {
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
         setTimeout(() => {
-          addLog(
-            `==============================================================`,
-            "out",
-          );
+          addLog(`==============================================================`, "out",);
           addLog(`${shellPrefix} --- SPLUNK JOB RESULT ---`, "sys");
-          addLog(
-            `==============================================================`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} timestamp=02:14:33 alert_name="Meterpreter Activity Detected" severity=critical`,
-            "out",
-          );
-
-          addLog(
-            `${shellPrefix} src_ip=45.83.122.91 dst_host=WIN-SRV01 user=guest`,
-            "out",
-          );
-
-          addLog(
-            `${shellPrefix} payload=windows/x64/meterpreter/reverse_tcp`,
-            "out",
-          );
-
+          addLog(`==============================================================`, "out",);
+          addLog(`${shellPrefix} timestamp=02:14:33 alert_name="Meterpreter Activity Detected" severity=critical`, "out",);
+          addLog(`${shellPrefix} src_ip=45.83.122.91 dst_host=WIN-SRV01 user=guest`, "out",);
+          addLog(`${shellPrefix} payload=windows/x64/meterpreter/reverse_tcp`, "out",);
           addLog(`${shellPrefix} outbound_connection=45.83.122.91:4444`, "out");
-
-          addLog(
-            `${shellPrefix} timestamp=02:14:37 event_type=process_migration`,
-            "out",
-          );
-
-          addLog(
-            `${shellPrefix} source_process=meterpreter.exe target_process=lsass.exe pid=396`,
-            "out",
-          );
-
-          addLog(
-            `${shellPrefix} token_impersonation=SYSTEM integrity_level=High`,
-            "out",
-          );
-
-          addLog(
-            `${shellPrefix} timestamp=02:14:40 event_type=privilege_escalation status=confirmed`,
-            "out",
-          );
-
+          addLog(`${shellPrefix} timestamp=02:14:37 event_type=process_migration`, "out",);
+          addLog(`${shellPrefix} source_process=meterpreter.exe target_process=lsass.exe pid=396`, "out",);
+          addLog(`${shellPrefix} token_impersonation=SYSTEM integrity_level=High`, "out",);
+          addLog(`${shellPrefix} timestamp=02:14:40 event_type=privilege_escalation status=confirmed`, "out",);
           addLog(`${shellPrefix} attacker_ip=45.83.122.91`, "err");
-          addLog(
-            `${shellPrefix} FLAG{45.83.122.91} - exit siem before submit`,
-            "sys",
-          );
+          addLog(`${shellPrefix} FLAG{45.83.122.91} - exit siem before submit`, "sys",);
         }, 950);
 
         return;
       }
 
-      // =========================
-      // INVALID SEARCH HANDLING
-      // =========================
       if (fullCommand.startsWith("search")) {
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
         setTimeout(() => {
-          addLog(
-            `${shellPrefix} ERROR: invalid or unsupported SPL syntax`,
-            "err",
-          );
-          addLog(
-            `${shellPrefix} hint: try 'search index=ctf | stats count'`,
-            "sys",
-          );
+          addLog(`${shellPrefix} ERROR: invalid or unsupported SPL syntax`, "err",);
+          addLog(`${shellPrefix} hint: try 'search index=ctf | stats count'`, "sys",);
         }, 400);
 
         return;
@@ -247,7 +164,6 @@ const ProfileConsole = () => {
     else if (remoteSession?.type === "meterpreter") {
       const shellPrefix = `meterpreter >`;
 
-      // HELP
       if (command === "help") {
         addLog(
           `${shellPrefix} Session Commands: ls, cat, getuid, sysinfo, ps, migrate [PID]`,
@@ -269,73 +185,34 @@ const ProfileConsole = () => {
           return;
         }
 
-        // README.TXT
         if (file === "readme.txt") {
           addLog("meterpreter > ===============================", "out");
-          addLog(
-            "meterpreter > Congratulations, you now have a Meterpreter session.",
-            "out",
-          );
-          addLog(
-            `meterpreter > Connected target : ${remoteSession.host}`,
-            "out",
-          );
+          addLog("meterpreter > Congratulations, you now have a Meterpreter session.", "out",);
+          addLog(`meterpreter > Connected target : ${remoteSession.host}`, "out",);
           addLog("meterpreter > Current privilege level : GUEST USER", "out");
-
           addLog("meterpreter >", "out");
-
-          addLog(
-            "meterpreter > Your objective is to escalate privileges.",
-            "out",
-          );
+          addLog("meterpreter > Your objective is to escalate privileges.", "out",);
           addLog("meterpreter >", "out");
           addLog("meterpreter > Suggested reconnaissance commands:", "out");
-          addLog(
-            "meterpreter > - getuid (show current user and privilege level)",
-            "out",
-          );
-          addLog(
-            "meterpreter > - sysinfo (display system information of the target)",
-            "out",
-          );
-          addLog(
-            "meterpreter > - ps (list running processes to identify privilege escalation targets)",
-            "out",
-          );
-          addLog(
-            "meterpreter > - migrate [PID] (move session to another process to inherit its privileges)",
-            "out",
-          );
+          addLog("meterpreter > - getuid (show current user and privilege level)", "out",);
+          addLog("meterpreter > - sysinfo (display system information of the target)", "out",);
+          addLog("meterpreter > - ps (list running processes to identify privilege escalation targets)", "out",);
+          addLog("meterpreter > - migrate [PID] (move session to another process to inherit its privileges)", "out",);
           addLog("meterpreter >", "out");
-          addLog(
-            "meterpreter > Hint: privilege escalation will require process migration.",
-            "sys",
-          );
+          addLog("meterpreter > Hint: privilege escalation will require process migration.", "sys",);
           addLog("meterpreter > ===============================", "out");
           return;
         }
         // FLAG.TXT
         if (file === "flag.txt") {
           if (meterpreterState.integrity !== "System") {
-            addLog(
-              "meterpreter > Access denied: System privileges required",
-              "err",
-            );
-            addLog(
-              "meterpreter > Hint: current session integrity is too low",
-              "sys",
-            );
+            addLog("meterpreter > Access denied: System privileges required", "err",);
+            addLog("meterpreter > Hint: current session integrity is too low", "sys",);
             return;
           }
-          addLog(
-            `meterpreter > [POST-EXPLOITATION] persistence deployed`,
-            "sys",
-          );
+          addLog(`meterpreter > [POST-EXPLOITATION] persistence deployed`, "sys",);
           addLog(`meterpreter > payload installed: updater.exe`, "out");
-          addLog(
-            `meterpreter > location: C:\\Users\\Public\\updater.exe`,
-            "out",
-          );
+          addLog(`meterpreter > location: C:\\Users\\Public\\updater.exe`, "out",);
           addLog(`meterpreter > FLAG{${currentData.flag}}`, "out");
           return;
         }
@@ -373,54 +250,18 @@ const ProfileConsole = () => {
         addLog(`${shellPrefix} Listing processes...`, "out");
         addLog(``, "out");
         addLog(`PID    Name                 User              Notes`, "out");
-        addLog(
-          `==============================================================`,
-          "out",
-        );
-        addLog(
-          `4      System               SYSTEM            [KERNEL EXECUTIVE]`,
-          "out",
-        );
-        addLog(
-          `112    smss.exe            SYSTEM            [Session Manager Subsystem]`,
-          "out",
-        );
-        addLog(
-          `260    wininit.exe         SYSTEM            [Windows Initialization]`,
-          "out",
-        );
-        addLog(
-          `380    services.exe        SYSTEM            [Service Control Manager]`,
-          "out",
-        );
-        addLog(
-          `396    lsass.exe           SYSTEM            [Local Security Authority Subsystem]`,
-          "out",
-        );
-        addLog(
-          `520    svchost.exe         NETWORK SERVICE   [Service Host Group]`,
-          "out",
-        );
-        addLog(
-          `824    explorer.exe        USER              [Windows Shell]`,
-          "out",
-        );
-        addLog(
-          `1040   notepad.exe         USER              [Text Editor]`,
-          "out",
-        );
-        addLog(
-          `1276   cmd.exe             ADMIN             [Elevated Shell]`,
-          "out",
-        );
-        addLog(
-          `==============================================================`,
-          "out",
-        );
-        addLog(
-          `${shellPrefix} Hint: use the security-related process to migrate and escalate privileges`,
-          "sys",
-        );
+        addLog(`==============================================================`, "out",);
+        addLog(`4      System               SYSTEM            [KERNEL EXECUTIVE]`, "out",);
+        addLog(`112    smss.exe            SYSTEM            [Session Manager Subsystem]`, "out",);
+        addLog(`260    wininit.exe         SYSTEM            [Windows Initialization]`, "out",);
+        addLog(`380    services.exe        SYSTEM            [Service Control Manager]`, "out",);
+        addLog(`396    lsass.exe           SYSTEM            [Local Security Authority Subsystem]`, "out",);
+        addLog(`520    svchost.exe         NETWORK SERVICE   [Service Host Group]`, "out",);
+        addLog(`824    explorer.exe        USER              [Windows Shell]`, "out",);
+        addLog(`1040   notepad.exe         USER              [Text Editor]`, "out",);
+        addLog(`1276   cmd.exe             ADMIN             [Elevated Shell]`, "out",);
+        addLog(`==============================================================`, "out",);
+        addLog(`${shellPrefix} Hint: use the security-related process to migrate and escalate privileges`, "sys",);
         return;
       }
       // MIGRATION
@@ -521,10 +362,7 @@ const ProfileConsole = () => {
         addLog("Available commands: ls, cat [file], exit", "sys");
         return;
       }
-
-      // =========================
-      // 🟢 USER: DEV (HONEYPOT)
-      // =========================
+      // DEV
       if (remoteSession.user === "dev") {
         if (command === "ls") {
           addLog(`${shellPrefix} : secret.txt flag.txt`, "out");
@@ -550,9 +388,7 @@ const ProfileConsole = () => {
 
         return;
       }
-      // =========================
-      // 🔴 USER: ADMIN (REAL TARGET)
-      // =========================
+      // ADMIN
       if (remoteSession.user === "admin") {
         if (command === "hashcat") {
           //
@@ -669,25 +505,11 @@ const ProfileConsole = () => {
             );
 
             addLog(`${shellPrefix} : hash mode detected: NTLM`, "out");
-
             addLog(`${shellPrefix} : dictionary attack ineffective`, "out");
-
             addLog(`${shellPrefix} : recommended approach: brute-force`, "out");
-
-            addLog(
-              `${shellPrefix} : hint: use mask-based attack strategy`,
-              "out",
-            );
-
-            addLog(
-              `${shellPrefix} : enable GPU optimized kernels for performance`,
-              "out",
-            );
-
-            addLog(
-              `${shellPrefix} : use maximum workload profile for cracking efficiency"`,
-              "out",
-            );
+            addLog(`${shellPrefix} : hint: use mask-based attack strategy`, "out",);
+            addLog(`${shellPrefix} : enable GPU optimized kernels for performance`, "out",);
+            addLog(`${shellPrefix} : use maximum workload profile for cracking efficiency"`, "out",);
           } else if (!file) {
             addLog(`${shellPrefix} : usage: cat [file]`, "err");
           } else {
@@ -1371,22 +1193,15 @@ const ProfileConsole = () => {
         addLog("[*] strings analysis: updater.exe", "sys");
 
         setTimeout(() => {
-          addLog(
-            "[*] updater.exe : PE32 executable (possible packed payload)",
-            "sys",
-          );
+          addLog("[*] updater.exe : PE32 executable (possible packed payload)", "sys",);
           addLog("C:\\Users\\Public\\updater.exe", "out");
           addLog("[IOC] C2: http://45.83.122.91/payload.bin", "out");
           addLog("[IOC] meterpreter_reverse_tcp (Metasploit session)", "out");
           addLog("[IOC] process injection indicators:", "out");
           addLog("  - CreateProcessA (execution chain)", "out");
           addLog("  - VirtualAllocEx (remote memory allocation)", "out");
-          addLog(
-            "[IOC] execution context: SYSTEM (post-migration via lsass.exe)",
-            "out",
-          );
-          addLog("[!] updater.exe persistence artifact detected", "err");
-          addLog("[*] next step: netstat -ano", "sys");
+          addLog("[IOC] execution context: SYSTEM (post-migration via lsass.exe)", "out",);
+          addLog("[*] next step: use netstat to inspect active network connexions", "sys",);
         }, 600);
         return;
       }
@@ -1395,56 +1210,34 @@ const ProfileConsole = () => {
     }
     // NETSTAT
     else if (command === "netstat") {
-      setTimeout(() => {
+      const hasAno = args.includes("-ano");
+
+      if (!hasAno) {
         addLog("Active Connections", "out");
         addLog("", "out");
 
-        addLog(
-          "Proto  Local Address          Foreign Address        State           PID",
-          "out",
-        );
+        addLog("Proto  Local Address          Foreign Address        State", "out",);
+        addLog("==========================================================================", "out",);
+        addLog("TCP    10.0.2.25:49822        45.83.122.91:4444      ESTABLISHED", "out",);
+        addLog("", "out");
+        addLog("[!] PID information hidden. Use netstat -ano for process correlation", "sys",);
 
-        addLog(
-          "==========================================================================",
-          "out",
-        );
-        addLog(
-          "TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       4",
-          "out",
-        );
-        addLog(
-          "TCP    127.0.0.1:49152        0.0.0.0:0              LISTENING       396",
-          "out",
-        );
-        addLog(
-          "UDP    0.0.0.0:68             *:*                                    520",
-          "out",
-        );
-        addLog(
-          "TCP    10.0.2.25:49712        52.97.132.18:443       ESTABLISHED     824",
-          "out",
-        );
-        addLog(
-          "TCP    10.0.2.25:49781        172.217.22.14:443      TIME_WAIT       824",
-          "out",
-        );
-        addLog(
-          "TCP    10.0.2.25:49822        45.83.122.91:4444      ESTABLISHED     1337",
-          "out",
-        );
-        addLog(
-          "==========================================================================",
-          "out",
-        );
-        addLog(
-          "[!] external host 45.83.122.91 matches IOC extracted from updater.exe",
-          "err",
-        );
+        return;
+      }
 
-        addLog(
-          "[*] next step: ps → correlate PID 1337 with running process",
-          "sys",
-        );
+      setTimeout(() => {
+        addLog("Active Connections", "out");
+        addLog("Proto  Local Address          Foreign Address        State           PID", "out",);
+        addLog("==========================================================================", "out",);
+        addLog("TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       4", "out",);
+        addLog("TCP    127.0.0.1:49152        0.0.0.0:0              LISTENING       396", "out",);
+        addLog("UDP    0.0.0.0:68             *:*                                    520", "out",);
+        addLog("TCP    10.0.2.25:49712        52.97.132.18:443       ESTABLISHED     824", "out",);
+        addLog("TCP    10.0.2.25:49781        172.217.22.14:443      TIME_WAIT       824", "out",);
+        addLog("TCP    10.0.2.25:49822        45.83.122.91:4444      ESTABLISHED     1337", "out",);
+        addLog("==========================================================================", "out",);
+        addLog("[!] external host 45.83.122.91 matches IOC extracted from updater.exe", "err",);
+        addLog("[*] next step: use ps to identify the process associated with the suspicious network activity", "sys",);
       }, 700);
     }
     // PS
@@ -1469,11 +1262,8 @@ const ProfileConsole = () => {
         addLog("520     svchost.exe          NETWORK SERVICE", "out");
         addLog("824     explorer.exe         USER", "out");
         addLog("1276     cmd.exe             USER", "out");
-        addLog("1337    updater.exe          SYSTEM", "out");
-        addLog(
-          "[*] next step: terminate malicious persistence process using kill <PID>",
-          "sys",
-        );
+        addLog("1337    svchost.exe          SYSTEM", "out");
+        addLog("[*] next step: terminate malicious persistence process using kill <PID>", "sys",);
       }, 700);
 
       return;
