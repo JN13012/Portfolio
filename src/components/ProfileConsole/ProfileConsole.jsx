@@ -174,29 +174,48 @@ const ProfileConsole = () => {
             "out",
           );
           addLog(
-            `${shellPrefix} [02:14:33] suspicious meterpreter session opened`,
+            `${shellPrefix} timestamp=02:14:33 alert_name="Meterpreter Activity Detected" severity=critical`,
             "out",
           );
+
           addLog(
             `${shellPrefix} src_ip=45.83.122.91 dst_host=WIN-SRV01 user=guest`,
             "out",
           );
+
           addLog(
-            `${shellPrefix} [02:14:37] privilege escalation behavior detected`,
+            `${shellPrefix} payload=windows/x64/meterpreter/reverse_tcp`,
             "out",
           );
+
+          addLog(`${shellPrefix} outbound_connection=45.83.122.91:4444`, "out");
+
           addLog(
-            `${shellPrefix} process=migrate.exe target=lsass.exe pid=396`,
+            `${shellPrefix} timestamp=02:14:37 event_type=process_migration`,
             "out",
           );
-          addLog(`${shellPrefix} integrity_level=SYSTEM`, "out");
+
           addLog(
-            `${shellPrefix} [02:14:40] remote code execution confirmed`,
+            `${shellPrefix} source_process=meterpreter.exe target_process=lsass.exe pid=396`,
             "out",
           );
+
+          addLog(
+            `${shellPrefix} token_impersonation=SYSTEM integrity_level=High`,
+            "out",
+          );
+
+          addLog(
+            `${shellPrefix} timestamp=02:14:40 event_type=privilege_escalation status=confirmed`,
+            "out",
+          );
+
           addLog(`${shellPrefix} attacker_ip=45.83.122.91`, "err");
-          addLog(`${shellPrefix} FLAG{45.83.122.91} - exit siem before submit`, "sys");
-        }, 400);
+          addLog(
+            `${shellPrefix} FLAG{45.83.122.91} - exit siem before submit`,
+            "sys",
+          );
+        }, 950);
 
         return;
       }
@@ -308,6 +327,15 @@ const ProfileConsole = () => {
             );
             return;
           }
+          addLog(
+            `meterpreter > [POST-EXPLOITATION] persistence deployed`,
+            "sys",
+          );
+          addLog(`meterpreter > payload installed: updater.exe`, "out");
+          addLog(
+            `meterpreter > location: C:\\Users\\Public\\updater.exe`,
+            "out",
+          );
           addLog(`meterpreter > FLAG{${currentData.flag}}`, "out");
           return;
         }
@@ -1331,6 +1359,165 @@ const ProfileConsole = () => {
       } else {
         addLog("[-] FLAG INCORRECT.", "err");
       }
+    } else if (command === "strings") {
+      const file = args[1];
+
+      if (!file) {
+        addLog("usage: strings [file]", "err");
+        return;
+      }
+
+      if (file === "updater.exe") {
+        addLog("[*] strings analysis: updater.exe", "sys");
+
+        setTimeout(() => {
+          addLog(
+            "[*] updater.exe : PE32 executable (possible packed payload)",
+            "sys",
+          );
+          addLog("C:\\Users\\Public\\updater.exe", "out");
+          addLog("[IOC] C2: http://45.83.122.91/payload.bin", "out");
+          addLog("[IOC] meterpreter_reverse_tcp (Metasploit session)", "out");
+          addLog("[IOC] process injection indicators:", "out");
+          addLog("  - CreateProcessA (execution chain)", "out");
+          addLog("  - VirtualAllocEx (remote memory allocation)", "out");
+          addLog(
+            "[IOC] execution context: SYSTEM (post-migration via lsass.exe)",
+            "out",
+          );
+          addLog("[!] updater.exe persistence artifact detected", "err");
+          addLog("[*] next step: netstat -ano", "sys");
+        }, 600);
+        return;
+      }
+
+      addLog(`strings: ${file}: No such file`, "err");
+    }
+    // NETSTAT
+    else if (command === "netstat") {
+      setTimeout(() => {
+        addLog("Active Connections", "out");
+        addLog("", "out");
+
+        addLog(
+          "Proto  Local Address          Foreign Address        State           PID",
+          "out",
+        );
+
+        addLog(
+          "==========================================================================",
+          "out",
+        );
+        addLog(
+          "TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       4",
+          "out",
+        );
+        addLog(
+          "TCP    127.0.0.1:49152        0.0.0.0:0              LISTENING       396",
+          "out",
+        );
+        addLog(
+          "UDP    0.0.0.0:68             *:*                                    520",
+          "out",
+        );
+        addLog(
+          "TCP    10.0.2.25:49712        52.97.132.18:443       ESTABLISHED     824",
+          "out",
+        );
+        addLog(
+          "TCP    10.0.2.25:49781        172.217.22.14:443      TIME_WAIT       824",
+          "out",
+        );
+        addLog(
+          "TCP    10.0.2.25:49822        45.83.122.91:4444      ESTABLISHED     1337",
+          "out",
+        );
+        addLog(
+          "==========================================================================",
+          "out",
+        );
+        addLog(
+          "[!] external host 45.83.122.91 matches IOC extracted from updater.exe",
+          "err",
+        );
+
+        addLog(
+          "[*] next step: ps → correlate PID 1337 with running process",
+          "sys",
+        );
+      }, 700);
+    }
+    // PS
+    else if (command === "ps") {
+      if (level < 6) {
+        return addLog("ps: command not found", "err");
+      }
+
+      addLog("[*] Enumerating active processes...", "sys");
+
+      setTimeout(() => {
+        addLog("PID     PROCESS               USER", "out");
+        addLog(
+          "==========================================================",
+          "out",
+        );
+        addLog("4       System               SYSTEM ", "out");
+        addLog("112     smss.exe             SYSTEM ", "out");
+        addLog("260     wininit.exe          SYSTEM ", "out");
+        addLog("380     services.exe         SYSTEM ", "out");
+        addLog("396     lsass.exe            SYSTEM ", "out");
+        addLog("520     svchost.exe          NETWORK SERVICE", "out");
+        addLog("824     explorer.exe         USER", "out");
+        addLog("1276     cmd.exe             USER", "out");
+        addLog("1337    updater.exe          SYSTEM", "out");
+        addLog(
+          "[*] next step: terminate malicious persistence process using kill <PID>",
+          "sys",
+        );
+      }, 700);
+
+      return;
+    } // KILL PROCESS
+    else if (command === "kill") {
+      if (level < 6) {
+        return addLog("kill: command not found", "err");
+      }
+
+      const pid = args[1];
+
+      if (!pid) {
+        return addLog("usage: kill [PID]", "err");
+      }
+
+      if (pid !== "1337") {
+        return addLog(
+          `[!] process ${pid} is not the malicious persistence`,
+          "err",
+        );
+      }
+
+      addLog(`[*] terminating process ${pid}...`, "sys");
+
+      const logs = [
+        { msg: "[+] updater.exe successfully terminated", type: "out" },
+        { msg: "[+] persistence removed", type: "out" },
+        { msg: "[+] outbound C2 communication stopped", type: "out" },
+        { msg: "[+]", type: "sys" },
+        { msg: "[+]", type: "sys" },
+        { msg: "[+]", type: "sys" },
+        { msg: `[+] FLAG{${currentData.flag}}`, type: "sys" },
+      ];
+
+      logs.forEach((log, i) => {
+        setTimeout(
+          () => {
+            addLog(log.msg, log.type);
+          },
+          (i + 1) * 500,
+        );
+      });
+
+      return;
     } else {
       addLog(`command not found: ${command}`, "err");
     }
