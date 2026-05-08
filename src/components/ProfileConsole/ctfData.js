@@ -1,6 +1,6 @@
 export const CTF_LEVELS = {
     1: {
-        label: "OSINT & FOOTPRINTING",
+        label: "FOOTPRINTING",
         flag: "1",
         unlocks: [],
         hint: "Inspectez le code source de la page (DOM) pour trouver des indices laissés par le développeur.",
@@ -91,7 +91,7 @@ export const CTF_LEVELS = {
     },
 
     5: {
-        label: "CREDENTIAL ACCESS - M0tivation2026!",
+        label: "BRUTE FORCING - M0tivation2026!",
         flag: "5",
         unlocks: [
             "john",
@@ -104,18 +104,18 @@ export const CTF_LEVELS = {
             { user: "admin", hash: "39678cb269782223fb548ea91d07d540" },
             { user: "dev", hash: "aba0b545a32585915e3318b92d987bfa" }
         ],
-        hashInfo: {
-            type: "MD5",
-            weakness: "fast hash, vulnerable to dictionary attacks"
-        },
+        // hashInfo: {
+        //     type: "MD5",
+        //     weakness: "fast hash, vulnerable to dictionary attacks"
+        // },
 
-        wordlist: "rockyou.txt",
+        // wordlist: "rockyou.txt",
 
-        ssh: {
-            host: "10.0.2.15",
-            port: 22,
-            note: "Login grants access to internal filesystem. Look for encrypted backups."
-        },
+        // ssh: {
+        //     host: "10.0.2.15",
+        //     port: 22,
+        //     note: "Login grants access to internal filesystem. Look for encrypted backups."
+        // },
 
         files: {
             "readme.txt":
@@ -127,9 +127,9 @@ export const CTF_LEVELS = {
     },
 
     6: {
-        label: "INTERNAL PIVOT (METASPLOIT SIMULATION)",
+        label: "METASPLOIT ESCALATE",
         flag: "6",
-        unlocks: ["msfvenom", "meterpreter", "smb", "route"],
+        unlocks: ["metasploit", "meterpreter"],
         hint: "Exploitez SMB sur 10.0.2.25 via pivot réseau. Un reverse shell est nécessaire.",
         targetIp: "10.0.2.25",
         files: {
@@ -148,9 +148,9 @@ export const CTF_LEVELS = {
     },
 
     7: {
-        label: "SOC L1 - Detection & Correlation",
+        label: "SIEM - LOG ANALYSIS",
 
-        flag: "185.220.101.45",
+        flag: "7",
 
         hint: "Correlate logs from authentication, web traffic, and IDS alerts. Identify the attack source across multiple signals.",
 
@@ -158,5 +158,29 @@ export const CTF_LEVELS = {
             "readme.txt": "You are now a SOC analyst. A critical security alert has been triggered. Your task's to analyze logs, and identify the attacker IP address as quick as possible.",
             "siem.txt": "To enter splunk SIEM use: siem",
         }
+    },
+
+    8: {
+        label: "FORENSIC",
+
+        flag: "HOST_CONTAINED_SUCCESSFULLY",
+
+        unlocks: [
+            "strings",
+            "pcap",
+            "kill",
+            "ps",
+            "registry",
+            "netscan",
+            "iocscan"
+        ],
+
+        hint: "Use strings updater.exe",
+
+        files: {
+            "readme.txt": "SOC analysis confirms system compromise. Investigate running processes, and suspicious binaries.",
+            "forensic.txt": "A suspicious binary (updater.exe) was recovered from the compromised machine. Begin forensic using strings [file].",
+            "updater.exe": "Binary flagged as suspicious (PE32 executable, packed)."
+        },
     }
 };
