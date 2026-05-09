@@ -127,7 +127,7 @@ export const CTF_LEVELS = {
     },
 
     6: {
-        label: "METASPLOIT ESCALATE",
+        label: "METASPLOIT",
         flag: "6",
         unlocks: ["metasploit", "meterpreter"],
         hint: "Exploitez SMB sur 10.0.2.25 via pivot réseau. Un reverse shell est nécessaire.",
@@ -149,7 +149,7 @@ export const CTF_LEVELS = {
 
     7: {
         label: "SIEM - LOG ANALYSIS",
-
+        unlocks: ["SIEM"],
         flag: "7",
 
         hint: "Correlate logs from authentication, web traffic, and IDS alerts. Identify the attack source across multiple signals.",
@@ -163,24 +163,37 @@ export const CTF_LEVELS = {
     8: {
         label: "FORENSIC",
 
-        flag: "HOST_CONTAINED_SUCCESSFULLY",
+        flag: "8",
 
         unlocks: [
             "strings",
-            "pcap",
-            "kill",
+            "netstat",
             "ps",
-            "registry",
-            "netscan",
-            "iocscan"
+            "kill",
         ],
 
-        hint: "Use strings updater.exe",
+        hint: "Track the process associated to the attacker IP address and kill it.",
 
         files: {
-            "readme.txt": "SOC analysis confirms system compromise. Investigate running processes, and suspicious binaries.",
-            "forensic.txt": "A suspicious binary (updater.exe) was recovered from the compromised machine. Begin forensic workflow using strings [file].",
-            "updater.exe": "Binary flagged as suspicious (PE32 executable, packed)."
+            "readme.txt": "SOC analysis confirms system compromise. Investigate running processes, network and suspicious binaries.",
+            "forensic.txt": "A suspicious binary (updater.exe) was recovered from the compromised machine. Begin forensic workflow using strings [file to analyse].",
+            "updater.exe": "Binary flagged as suspicious (PE32 executable, packed).",
+            "netstat.txt": " ",
         },
-    }
+    },
+    9: {
+        label: "HARDENING - FINAL - FIREWALL - WAF - IDS",
+        flag: "9",
+        unlocks: [
+            "waf",
+            "firewall",
+            "ids",
+            "snort",
+            "ps"
+        ],
+        hint: "Workflow order - Configure firewall rules - Enable WAF protection - Configure IDS .",
+        files: {
+            "readme.txt": "You are now responsible for hardening the infrastructure.",}
+    },
+
 };
