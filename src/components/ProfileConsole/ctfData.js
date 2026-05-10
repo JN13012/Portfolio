@@ -195,6 +195,8 @@ export const CTF_LEVELS = {
             "readme.txt":
                 "You are now responsible for hardening the infrastructure (firewall / waf / ids).",
             "firewall.txt": "...",
+            "waf.txt": "...",
+            "snort.txt": "...",
 
         }
     },

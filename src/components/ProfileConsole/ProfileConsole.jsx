@@ -38,6 +38,29 @@ const ProfileConsole = () => {
       blockedIps: [],
     },
 
+    waf: {
+      enabled: false,
+      rateLimit: false,
+      rateLimitValue: null,
+      rulesets: {
+        sqli_basic: false,
+        xss_basic: false,
+        bot_prot: false,
+      },
+      blockedIps: [],
+    },
+
+    snort: {
+      enabled: true,
+      interface: "eth0",
+      scanThreshold: null,
+      rules: {
+        "local.rules": false,
+        "scan.rules": false,
+        "malware.rules": false,
+      },
+    },
+    
     firewallConfig: "INCOMPLETE",
     wafConfig: "INCOMPLETE",
     idsConfig: "INCOMPLETE",
@@ -49,10 +72,7 @@ const ProfileConsole = () => {
     idsEnabled: false,
     snortRuleLoaded: false,
   });
-  const firewallConfigLabel = {
-    OK: "Firewall configuration completed",
-    INCOMPLETE: "Complete firewall configuration",
-  };
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -892,6 +912,88 @@ const ProfileConsole = () => {
 
         return;
       }
+
+      if (file === "waf.txt") {
+        addLog("Web Application Firewall reference guide", "out");
+        addLog("--------------------------------", "out");
+        addLog("AVAILABLE COMMANDS:", "out");
+        addLog("------------", "out");
+
+        addLog("Display WAF status:", "out");
+        addLog("waf status", "out");
+        addLog("---", "out");
+
+        addLog("Set rate limiting policy:", "out");
+        addLog("waf ratelimit set global <req/min>", "out");
+        addLog("Example: waf ratelimit set global 60", "out");
+        addLog("---", "out");
+
+        addLog("Enable rule set:", "out");
+        addLog("waf ruleset enable <name>", "out");
+        addLog("Example: waf ruleset enable sqli_basic", "out");
+        addLog("---", "out");
+
+        addLog("AVAILABLE RULESETS:", "out");
+        addLog("  - sqli_basic", "out");
+        addLog("  - xss_basic", "out");
+        addLog("  - bot_prot", "out");
+        addLog("---", "out");
+
+        addLog("HARDENING PRACTICES:", "out");
+        addLog("  - Set rate limiting at 60 req/min", "out");
+        addLog("  - Prevent SQL injection", "out");
+        addLog("", "out");
+
+        return;
+      }
+
+      if (file === "snort.txt") {
+        addLog("Snort reference guide", "out");
+        addLog("--------------------------------", "out");
+        addLog("AVAILABLE COMMANDS:", "out");
+        addLog("------------", "out");
+        addLog("Start Snort engine:", "out");
+        addLog("snort start", "out");
+        addLog("---", "out");
+        addLog("Display Snort status:", "out");
+        addLog("snort status", "out");
+        addLog("---", "out");
+        addLog("Set monitoring interface:", "out");
+        addLog("snort interface <iface>", "out");
+        addLog("Example: snort interface eth0", "out");
+        addLog("---", "out");
+        addLog("Enable/disable rule file:", "out");
+        addLog("snort rules enable/disable <rule>", "out");
+        addLog("Example: snort rules enable scan.rules", "out");
+        addLog("---", "out");
+
+        addLog("Configure portscan detection policy:", "out");
+        addLog(
+          "snort threshold scan --rate <events>/sec --window <sec> --track <src_ip | dst_ip | dst_port>",
+          "out",
+        );
+        addLog(
+          "Example: snort threshold scan --rate 10 --window 1 --track dst_ip",
+          "out",
+        );
+        addLog("---", "out");
+
+        addLog("AVAILABLE RULE FILES:", "out");
+        addLog("  - local.rules", "out");
+        addLog("  - scan.rules", "out");
+        addLog("  - malware.rules", "out");
+        addLog("---", "out");
+
+        addLog("HARDENING PRACTICES:", "out");
+        addLog("  - Start Snort engine", "out");
+        addLog("  - Monitor the eth0 interface", "out");
+        addLog("  - Enable scan.rules", "out");
+        addLog("  - Enable malware.rules", "out");
+        addLog("  - Set scan threshold to 10", "out");
+
+        return;
+      }
+
       // fichiers classiques
       if (currentData.files[file]) {
         addLog(currentData.files[file], "out");
@@ -1714,8 +1816,12 @@ const ProfileConsole = () => {
       const action = args[1];
       const target = args[2];
 
+      // =========================
+      // STATUS
+      // =========================
       if (action === "status") {
         addLog("Firewall status:", "sys");
+
         const ports = [22, 80, 443, 445, 4444, 5000];
 
         ports.forEach((port) => {
@@ -1732,22 +1838,53 @@ const ProfileConsole = () => {
           addLog(`${port}/tcp    ${status}`, "out");
         });
 
-        addLog("", "out");
-
+        // BLOCKED IPS
         if (hardeningState.firewall.blockedIps.length > 0) {
-          addLog("Blocked IPs:", "sys");
+          addLog("BLOCKED IPS:", "sys");
 
           hardeningState.firewall.blockedIps.forEach((ip) => {
             addLog(`- ${ip}`, "out");
           });
         }
-        addLog(
-          `Configuration: ${firewallConfigLabel[hardeningState.firewallConfig]}`,
-          "sys",
+
+        // CONFIG VALIDATION
+        const requiredPorts = {
+          22: "ALLOW",
+          80: "ALLOW",
+          443: "ALLOW",
+          445: "DENY",
+          4444: "DENY",
+          5000: "DENY",
+        };
+
+        const firewallOk = Object.entries(requiredPorts).every(
+          ([port, expected]) => {
+            const rule = hardeningState.firewall.rules
+              .slice()
+              .reverse()
+              .find((r) => r.port === Number(port));
+
+            const current = rule?.action || "ALLOW";
+
+            return current === expected;
+          },
         );
+
+        addLog(
+          `${
+            firewallOk
+              ? "Firewall configuration completed"
+              : "Complete firewall configuration"
+          }`,
+          firewallOk ? "sys" : "err",
+        );
+
         return;
       }
 
+      // =========================
+      // DENY
+      // =========================
       if (action === "deny") {
         if (!target) {
           addLog("usage: firewall deny <port>", "err");
@@ -1756,27 +1893,46 @@ const ProfileConsole = () => {
 
         const port = parseInt(target);
 
-        setHardeningState((prev) => ({
-          ...prev,
-          firewall: {
-            ...prev.firewall,
-            rules: [
-              ...prev.firewall.rules,
-              {
-                action: "DENY",
-                protocol: "tcp",
-                port,
-                source: "any",
-              },
-            ],
-          },
-        }));
+        if (isNaN(port) || port <= 0) {
+          addLog("[!] invalid port", "err");
+          return;
+        }
+
+        setHardeningState((prev) => {
+          const updatedState = {
+            ...prev,
+            firewall: {
+              ...prev.firewall,
+              rules: [
+                ...prev.firewall.rules,
+                {
+                  action: "DENY",
+                  protocol: "tcp",
+                  port,
+                  source: "ANY",
+                },
+              ],
+            },
+          };
+
+          return updatedState;
+        });
 
         addLog(`[+] Rule added: DENY tcp/${port} from ANY`, "out");
-        updateFirewallState();
+
+        // RECOMMENDED PORTS
+        if ([445, 4444, 5000].includes(port)) {
+          addLog("[+] recommended blocking policy applied", "sys");
+        } else {
+          addLog("[!] verify exposed service necessity", "err");
+        }
+
         return;
       }
 
+      // =========================
+      // ALLOW
+      // =========================
       if (action === "allow") {
         if (!target) {
           addLog("usage: firewall allow <port>", "err");
@@ -1784,6 +1940,11 @@ const ProfileConsole = () => {
         }
 
         const port = parseInt(target);
+
+        if (isNaN(port) || port <= 0) {
+          addLog("[!] invalid port", "err");
+          return;
+        }
 
         setHardeningState((prev) => {
           const filtered = prev.firewall.rules.filter(
@@ -1800,7 +1961,7 @@ const ProfileConsole = () => {
                   action: "ALLOW",
                   protocol: "tcp",
                   port,
-                  source: "any",
+                  source: "ANY",
                 },
               ],
             },
@@ -1808,9 +1969,20 @@ const ProfileConsole = () => {
         });
 
         addLog(`[+] Rule added: ALLOW tcp/${port} from ANY`, "out");
-        updateFirewallState();
+
+        // SAFE SERVICES
+        if ([22, 80, 443].includes(port)) {
+          addLog("[+] trusted service exposed", "sys");
+        } else {
+          addLog("[!] verify security exposure", "err");
+        }
+
         return;
       }
+
+      // =========================
+      // BLOCK IP
+      // =========================
       if (action === "blockip") {
         if (!target) {
           addLog("usage: firewall blockip <ip>", "err");
@@ -1821,7 +1993,7 @@ const ProfileConsole = () => {
         const attackerIP = "45.83.122.91";
 
         if (ip !== attackerIP) {
-          addLog("It is not the attacker IP address", "err");
+          addLog("[!] This is not the attacker IP", "err");
           return;
         }
 
@@ -1834,14 +2006,19 @@ const ProfileConsole = () => {
         }));
 
         addLog(`[+] IP blocked: ${ip}`, "out");
+        addLog("[+] attacker IP blocked", "sys");
+
         return;
       }
 
+      // =========================
+      // RULESET
+      // =========================
       if (action === "ruleset") {
         addLog("Current firewall ruleset:", "sys");
 
         if (!hardeningState.firewall.rules.length) {
-          addLog("No explicit rules defined (default policy in effect)", "sys");
+          addLog("No explicit firewall rules configured", "err");
           return;
         }
 
@@ -1855,107 +2032,447 @@ const ProfileConsole = () => {
         return;
       }
 
-      addLog("usage: firewall [status|allow|deny|ruleset]", "err");
+      // =========================
+      // FALLBACK
+      // =========================
+      addLog("usage: firewall [status|allow|deny|ruleset|blockip]", "err");
     }
     // WAF
     else if (command === "waf") {
       const action = args[1];
-      const feature = args[2];
 
+      // =========================
+      // STATUS
+      // =========================
       if (action === "status") {
+        addLog("WAF status:", "sys");
+
+        // RATE LIMIT VALUE
         addLog(
-          `WAF: ${hardeningState.wafEnabled ? "ENABLED" : "DISABLED"}`,
+          `GLOBAL LIMIT   ${
+            hardeningState.waf.rateLimitValue
+              ? `${hardeningState.waf.rateLimitValue} req/min`
+              : "NOT SET"
+          }`,
           "out",
         );
 
+        const rateLimitOk = hardeningState.waf.rateLimitValue === 60;
+        const sqliEnabled = hardeningState.waf.rulesets?.sqli_basic === true;
+
         addLog(
-          `SQLI FILTER: ${hardeningState.sqliProtection ? "ON" : "OFF"}`,
+          `WAF RULESET    ${sqliEnabled ? "sqli_basic" : "NOT CONFIGURED"}`,
           "out",
         );
 
-        addLog(`RATE LIMIT: ${hardeningState.rateLimit ? "ON" : "OFF"}`, "out");
+        const wafOk = rateLimitOk && sqliEnabled;
+
+        addLog(
+          `${
+            wafOk ? "WAF configuration completed" : "Complete WAF configuration"
+          }`,
+          wafOk ? "sys" : "err",
+        );
 
         return;
       }
 
-      if (action === "enable") {
-        if (!feature) {
+      // =========================
+      // RATELIMIT
+      // =========================
+      if (action === "ratelimit") {
+        const subAction = args[2];
+        const scope = args[3];
+        const value = args[4];
+
+        if (subAction === "set" && scope === "global") {
+          if (!value) {
+            return addLog("usage: waf ratelimit set global <req/min>", "err");
+          }
+
+          const limit = parseInt(value);
+
+          if (isNaN(limit) || limit <= 0) {
+            return addLog("[!] invalid rate limit value", "err");
+          }
+
+          const isCorrectPolicy = limit === 60;
+
           setHardeningState((prev) => ({
             ...prev,
-            wafEnabled: true,
+            waf: {
+              ...prev.waf,
+              rateLimit: true,
+              rateLimitValue: limit,
+            },
+            wafConfig:
+              prev.waf.rulesets?.sqli_basic && isCorrectPolicy
+                ? "OK"
+                : "INCOMPLETE",
           }));
 
-          addLog("[+] WAF enabled", "out");
+          addLog(`[+] global rate limit set to ${limit} req/min`, "out");
+
+          if (isCorrectPolicy) {
+            addLog("[+] recommended policy applied", "sys");
+          } else {
+            addLog("[!] non-compliant policy detected", "err");
+            addLog("[!] expected policy: 60 req/min", "sys");
+          }
 
           return;
         }
 
-        if (feature === "sqli") {
-          setHardeningState((prev) => ({
-            ...prev,
-            sqliProtection: true,
-          }));
-
-          addLog("[+] SQLi protection enabled", "out");
-
-          return;
-        }
-
-        if (feature === "rate-limit") {
-          setHardeningState((prev) => ({
-            ...prev,
-            rateLimit: true,
-          }));
-
-          addLog("[+] Rate limit enabled", "out");
-
-          return;
-        }
+        return addLog("usage: waf ratelimit set global <req/min>", "err");
       }
+
+      // =========================
+      // ENABLE
+      // =========================
+      if (action === "enable") {
+        setHardeningState((prev) => ({
+          ...prev,
+          waf: {
+            ...prev.waf,
+            enabled: true,
+            rulesets: prev.waf.rulesets || {},
+            blockedIps: prev.waf.blockedIps || [],
+          },
+        }));
+
+        addLog("[+] WAF enabled", "out");
+        return;
+      }
+
+      // =========================
+      // RULESET
+      // =========================
+      if (action === "ruleset") {
+        const subAction = args[2];
+        const name = args[3];
+
+        const allowedRulesets = ["sqli_basic", "xss_basic", "bot_prot"];
+
+        // =========================
+        // ENABLE RULESET
+        // =========================
+        if (subAction === "enable") {
+          if (!name) {
+            return addLog("usage: waf ruleset enable <name>", "err");
+          }
+
+          if (!allowedRulesets.includes(name)) {
+            addLog("[!] unknown ruleset", "err");
+            addLog("[!] available: sqli_basic, xss_basic, bot_prot", "sys");
+            return;
+          }
+
+          setHardeningState((prev) => {
+            const updatedState = {
+              ...prev,
+              waf: {
+                ...prev.waf,
+
+                rulesets: {
+                  ...(prev.waf?.rulesets || {}),
+                  [name]: true,
+                },
+              },
+            };
+
+            // =========================
+            // CONFIG VALIDATION
+            // =========================
+            const sqliEnabled = updatedState.waf.rulesets?.sqli_basic === true;
+
+            return {
+              ...updatedState,
+
+              wafConfig:
+                updatedState.waf.rateLimitValue === 60 && sqliEnabled
+                  ? "OK"
+                  : "INCOMPLETE",
+            };
+          });
+
+          addLog(`[+] ruleset enabled: ${name}`, "out");
+
+          if (name === "sqli_basic") {
+            addLog("[+] SQLi detection patterns loaded", "sys");
+            addLog("[+] WAF configuration updated", "sys");
+          }
+
+          return;
+        }
+
+        return addLog("usage: waf ruleset enable <name>", "err");
+      }
+
+      // =========================
+      // FALLBACK
+      // =========================
+      addLog("usage: waf [status|enable|ratelimit|ruleset|blockip]", "err");
     }
     // SNORT
     else if (command === "snort") {
       const action = args[1];
+      const target = args[2];
 
+      // =========================
+      // STATUS
+      // =========================
       if (action === "status") {
+        addLog("SNORT IDS STATUS", "sys");
+
+        // ENGINE
         addLog(
-          `IDS: ${hardeningState.idsEnabled ? "ONLINE" : "OFFLINE"}`,
+          `ENGINE        ${
+            hardeningState.snort?.enabled ? "RUNNING" : "STOPPED"
+          }`,
           "out",
         );
 
+        // INTERFACE
         addLog(
-          `RULES: ${hardeningState.snortRuleLoaded ? "1 ACTIVE" : "0 ACTIVE"}`,
+          `INTERFACE     ${hardeningState.snort?.interface || "NOT SET"}`,
           "out",
+        );
+
+        // THRESHOLD
+        addLog(
+          `SCAN LIMIT    ${
+            hardeningState.snort?.scanPolicy
+              ? `${hardeningState.snort.scanPolicy.count} events/sec (track=${hardeningState.snort.scanPolicy.track})`
+              : "NOT SET"
+          }`,
+          "out",
+        );
+
+        // RULES STATUS
+        addLog("RULES:", "sys");
+
+        const rules = hardeningState.snort?.rules || {};
+        const ruleEntries = Object.entries(rules);
+
+        if (ruleEntries.length === 0) {
+          addLog("[!] no rules loaded", "out");
+        } else {
+          let enabledCount = 0;
+
+          ruleEntries.forEach(([name, state]) => {
+            if (state) enabledCount++;
+
+            addLog(`- ${name}   ${state ? "ENABLED" : "DISABLED"}`, "out");
+          });
+
+          addLog(
+            `RULESET STATUS: ${enabledCount}/${ruleEntries.length} active`,
+            "sys",
+          );
+
+          if (enabledCount === ruleEntries.length) {
+            addLog("[+] ruleset fully loaded", "sys");
+          } else {
+            addLog("[!] partial ruleset detected", "err");
+          }
+        }
+
+        // VALIDATION LOGIC (niveau completion)
+        const snortOk =
+          hardeningState.snort?.enabled &&
+          hardeningState.snort?.interface === "eth0" &&
+          hardeningState.snort?.scanPolicy?.count === 10 &&
+          rules["scan.rules"] &&
+          rules["malware.rules"];
+
+        addLog(
+          snortOk
+            ? "IDS configuration completed"
+            : "Complete IDS configuration",
+          snortOk ? "sys" : "err",
         );
 
         return;
       }
 
-      if (action === "enable") {
+      // =========================
+      // START ENGINE
+      // =========================
+      if (action === "start") {
         setHardeningState((prev) => ({
           ...prev,
-          idsEnabled: true,
+          snort: {
+            ...prev.snort,
+            enabled: true,
+          },
         }));
 
-        addLog("[+] Snort IDS enabled", "out");
-
+        addLog("[+] Snort engine started", "out");
+        addLog("[+] packet inspection enabled", "sys");
         return;
       }
 
-      if (action === "load") {
-        const rule = args[2];
+      // =========================
+      // INTERFACE SET
+      // =========================
+      if (action === "interface") {
+        if (!target) {
+          return addLog("usage: snort interface <iface>", "err");
+        }
 
-        if (rule === "meterpreter.rules") {
+        setHardeningState((prev) => ({
+          ...prev,
+          snort: {
+            ...prev.snort,
+            interface: target,
+          },
+        }));
+
+        addLog(`[+] monitoring interface set to ${target}`, "out");
+        return;
+      }
+
+      // =========================
+      // RULES ENABLE
+      // =========================
+      if (action === "rules") {
+        const sub = args[2];
+        const name = args[3];
+
+        const allowedRules = ["local.rules", "scan.rules", "malware.rules"];
+
+        if (sub === "enable") {
+          if (!name) {
+            return addLog("usage: snort rules enable <rule>", "err");
+          }
+
+          if (!allowedRules.includes(name)) {
+            addLog("[!] unknown rule file", "err");
+            addLog(
+              "[!] available: local.rules, scan.rules, malware.rules",
+              "sys",
+            );
+            return;
+          }
+
           setHardeningState((prev) => ({
             ...prev,
-            snortRuleLoaded: true,
+            snort: {
+              ...prev.snort,
+              rules: {
+                ...(prev.snort?.rules || {}),
+                [name]: true,
+              },
+            },
           }));
 
-          addLog("[+] Meterpreter detection rule loaded", "out");
+          addLog(`[+] rule enabled: ${name}`, "out");
+
+          if (name === "scan.rules") {
+            addLog("[+] port scan detection active", "sys");
+          }
+
+          if (name === "malware.rules") {
+            addLog("[+] malware/C2 detection active", "sys");
+          }
 
           return;
         }
+
+        if (sub === "disable") {
+          if (!name) {
+            return addLog("usage: snort rules disable <rule>", "err");
+          }
+
+          setHardeningState((prev) => ({
+            ...prev,
+            snort: {
+              ...prev.snort,
+              rules: {
+                ...(prev.snort?.rules || {}),
+                [name]: false,
+              },
+            },
+          }));
+
+          addLog(`[+] rule disabled: ${name}`, "out");
+          return;
+        }
+
+        return addLog("usage: snort rules enable|disable <rule>", "err");
       }
+
+      // =========================
+      // THRESHOLD
+      // =========================
+      if (action === "threshold") {
+        const type = args[2];
+
+        if (type === "scan") {
+          const rateIndex = args.indexOf("--rate");
+          const windowIndex = args.indexOf("--window");
+          const trackIndex = args.indexOf("--track");
+
+          const rate = parseInt(args[rateIndex + 1]);
+          const window = parseInt(args[windowIndex + 1]);
+          const track = args[trackIndex + 1] || "src_ip";
+
+          if (!rate || isNaN(rate) || rate <= 0) {
+            return addLog("[!] invalid --rate value", "err");
+          }
+
+          if (!window || isNaN(window) || window <= 0) {
+            return addLog("[!] invalid --window value", "err");
+          }
+
+          const allowedTracks = ["src_ip", "dst_ip", "dst_port"];
+
+          if (!allowedTracks.includes(track)) {
+            return addLog("[!] invalid --track value", "err");
+          }
+
+          const policy = {
+            type: "portscan",
+            track,
+            count: rate,
+            interval: window,
+          };
+
+          setHardeningState((prev) => ({
+            ...prev,
+            snort: {
+              ...prev.snort,
+              scanPolicy: policy,
+            },
+          }));
+
+          addLog(
+            `[+] portscan policy updated: >${rate} events / ${window}s (track=${track})`,
+            "out",
+          );
+
+          if (rate === 10 && window === 1 && track === "src_ip") {
+            addLog("[+] IDS policy applied", "sys");
+          } else {
+            addLog("[!] Very scan policy configuration", "err");
+          }
+
+          return;
+        }
+
+        return addLog(
+          "usage: snort threshold scan --rate X --window Y --track Z",
+          "err",
+        );
+      }
+
+      // =========================
+      // FALLBACK
+      // =========================
+      addLog(
+        "usage: snort [status|start|interface|rules|threshold|alerts]",
+        "err",
+      );
     }
 
     // SUBMIT
