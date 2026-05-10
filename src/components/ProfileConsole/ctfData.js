@@ -189,11 +189,14 @@ export const CTF_LEVELS = {
             "firewall",
             "ids",
             "snort",
-            "ps"
         ],
         hint: "Workflow order - Configure firewall rules - Enable WAF protection - Configure IDS .",
         files: {
-            "readme.txt": "You are now responsible for hardening the infrastructure.",}
+            "readme.txt":
+                "You are now responsible for hardening the infrastructure (firewall / waf / ids).",
+            "firewall.txt": "...",
+
+        }
     },
 
 };
