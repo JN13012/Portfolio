@@ -31,6 +31,28 @@ const ProfileConsole = () => {
     migratedPid: null,
   });
 
+  const [hardeningState, setHardeningState] = useState({
+    firewall: {
+      defaultPolicy: "ALLOW",
+      rules: [],
+      blockedIps: [],
+    },
+
+    firewallConfig: "INCOMPLETE",
+    wafConfig: "INCOMPLETE",
+    idsConfig: "INCOMPLETE",
+
+    wafEnabled: false,
+    sqliProtection: false,
+    rateLimit: false,
+
+    idsEnabled: false,
+    snortRuleLoaded: false,
+  });
+  const firewallConfigLabel = {
+    OK: "Firewall configuration completed",
+    INCOMPLETE: "Complete firewall configuration",
+  };
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -40,6 +62,58 @@ const ProfileConsole = () => {
   const addLog = (msg, type = "out") => {
     setHistory((prev) => [...prev, { msg, type }]);
   };
+
+  function checkFlagStatus(state) {
+    const allOk =
+      state.firewallConfig === "OK" &&
+      state.idsConfig === "OK" &&
+      state.wafConfig === "OK";
+
+    if (allOk && state.flagStatus !== "UNLOCKED") {
+      addLog("ALL SECURITY SYSTEMS SECURED. FLAG UNLOCKED.", "sys");
+    }
+
+    return allOk ? "UNLOCKED" : "LOCKED";
+  }
+  function evaluateFirewallConfig(state) {
+    const requiredPorts = {
+      22: "ALLOW",
+      80: "ALLOW",
+      443: "ALLOW",
+      445: "DENY",
+      4444: "DENY",
+      5000: "DENY",
+    };
+
+    const rules = state.firewall.rules;
+
+    const isValid = Object.entries(requiredPorts).every(([port, expected]) => {
+      const portRules = rules.filter((r) => r.port === Number(port));
+
+      if (portRules.length === 0) {
+        return expected === "ALLOW";
+      }
+
+      const lastRule = portRules[portRules.length - 1];
+
+      return lastRule.action === expected;
+    });
+
+    return isValid;
+  }
+
+  function updateFirewallState() {
+    setHardeningState((prev) => {
+      const ok = evaluateFirewallConfig(prev);
+
+      const next = {
+        ...prev,
+        firewallConfig: ok ? "OK" : "INCOMPLETE",
+      };
+      return next;
+    });
+  }
+
   const handleCommand = (input) => {
     const enterSshShell = (user, host) => {
       setRemoteSession({
@@ -651,7 +725,7 @@ const ProfileConsole = () => {
               "out",
             );
             addLog(
-              `${shellPrefix} : use maximum workload profile for cracking efficiency"`,
+              `${shellPrefix} : use maximum workload profile for cracking efficiency`,
               "out",
             );
           } else if (!file) {
@@ -780,6 +854,41 @@ const ProfileConsole = () => {
           "[*] Expected result: Meterpreter session on successful exploitation",
           "sys",
         );
+
+        return;
+      }
+
+      if (file === "firewall.txt") {
+        addLog("Firewall reference guide", "out");
+        addLog("------------------------", "out");
+        addLog("AVAILABLE COMMANDS:", "out");
+        addLog("------------", "out");
+        addLog("Display current firewall rules:", "out");
+        addLog("firewall status", "out");
+        addLog("---", "out");
+        addLog("Allow inbound TCP traffic on a port:", "out");
+        addLog("firewall allow <port>", "out");
+        addLog("Example: firewall allow 80", "out");
+        addLog("---", "out");
+        addLog("Block inbound TCP traffic on a port:", "out");
+        addLog("firewall deny <port>", "out");
+        addLog("Example: firewall deny 445", "out");
+        addLog("---", "out");
+        addLog("Block all traffic from an IP address:", "out");
+        addLog("firewall blockip <ip>", "out");
+        addLog("Example: firewall blockip 45.83.122.91", "out");
+        addLog("---", "out");
+        addLog("Restore default firewall configuration:", "out");
+        addLog("  firewall reset", "out");
+        addLog("---", "out");
+        addLog("HARDENING PRACTICES:", "out");
+        addLog("  - Keep SSH open (22)", "out");
+        addLog("  - Keep HTTP/HTTPS open (80/443)", "out");
+        addLog("  - Disable SMB exposure (445)", "out");
+        addLog("  - Block exploit framework ports (4444)", "out");
+        addLog("  - Disable debug services (5000)", "out");
+        addLog("  - Block suspicious IP addresses", "out");
+        addLog("", "out");
 
         return;
       }
@@ -1352,7 +1461,7 @@ const ProfileConsole = () => {
       const connectionsDNS = [
         "TCP    10.0.2.25:49712        login.microsoftonline.com:443        ESTABLISHED     824",
         "TCP    10.0.2.25:49781        www.google.com:443                  TIME_WAIT       824",
-        "TCP    10.0.2.25:49822        telemetry-service.azureedge.net:4444 ESTABLISHED     1337",
+        "TCP    10.0.2.25:49822        windows-security-update.com:4444 ESTABLISHED     1337",
       ];
 
       const connectionsIP = [
@@ -1600,9 +1709,257 @@ const ProfileConsole = () => {
 
       return;
     }
+    // FIREWALL
+    else if (command === "firewall") {
+      const action = args[1];
+      const target = args[2];
+
+      if (action === "status") {
+        addLog("Firewall status:", "sys");
+        const ports = [22, 80, 443, 445, 4444, 5000];
+
+        ports.forEach((port) => {
+          const rule = hardeningState.firewall.rules
+            .slice()
+            .reverse()
+            .find((r) => r.port === port);
+
+          let status = "ALLOW";
+
+          if (rule?.action === "DENY") status = "DENY";
+          if (rule?.action === "ALLOW") status = "ALLOW";
+
+          addLog(`${port}/tcp    ${status}`, "out");
+        });
+
+        addLog("", "out");
+
+        if (hardeningState.firewall.blockedIps.length > 0) {
+          addLog("Blocked IPs:", "sys");
+
+          hardeningState.firewall.blockedIps.forEach((ip) => {
+            addLog(`- ${ip}`, "out");
+          });
+        }
+        addLog(
+          `Configuration: ${firewallConfigLabel[hardeningState.firewallConfig]}`,
+          "sys",
+        );
+        return;
+      }
+
+      if (action === "deny") {
+        if (!target) {
+          addLog("usage: firewall deny <port>", "err");
+          return;
+        }
+
+        const port = parseInt(target);
+
+        setHardeningState((prev) => ({
+          ...prev,
+          firewall: {
+            ...prev.firewall,
+            rules: [
+              ...prev.firewall.rules,
+              {
+                action: "DENY",
+                protocol: "tcp",
+                port,
+                source: "any",
+              },
+            ],
+          },
+        }));
+
+        addLog(`[+] Rule added: DENY tcp/${port} from ANY`, "out");
+        updateFirewallState();
+        return;
+      }
+
+      if (action === "allow") {
+        if (!target) {
+          addLog("usage: firewall allow <port>", "err");
+          return;
+        }
+
+        const port = parseInt(target);
+
+        setHardeningState((prev) => {
+          const filtered = prev.firewall.rules.filter(
+            (r) => !(r.port === port && r.action === "DENY"),
+          );
+
+          return {
+            ...prev,
+            firewall: {
+              ...prev.firewall,
+              rules: [
+                ...filtered,
+                {
+                  action: "ALLOW",
+                  protocol: "tcp",
+                  port,
+                  source: "any",
+                },
+              ],
+            },
+          };
+        });
+
+        addLog(`[+] Rule added: ALLOW tcp/${port} from ANY`, "out");
+        updateFirewallState();
+        return;
+      }
+      if (action === "blockip") {
+        if (!target) {
+          addLog("usage: firewall blockip <ip>", "err");
+          return;
+        }
+
+        const ip = target;
+        const attackerIP = "45.83.122.91";
+
+        if (ip !== attackerIP) {
+          addLog("It is not the attacker IP address", "err");
+          return;
+        }
+
+        setHardeningState((prev) => ({
+          ...prev,
+          firewall: {
+            ...prev.firewall,
+            blockedIps: [...prev.firewall.blockedIps, ip],
+          },
+        }));
+
+        addLog(`[+] IP blocked: ${ip}`, "out");
+        return;
+      }
+
+      if (action === "ruleset") {
+        addLog("Current firewall ruleset:", "sys");
+
+        if (!hardeningState.firewall.rules.length) {
+          addLog("No explicit rules defined (default policy in effect)", "sys");
+          return;
+        }
+
+        hardeningState.firewall.rules.forEach((r, i) => {
+          addLog(
+            `${i + 1}. ${r.action} ${r.protocol}/${r.port} from ${r.source}`,
+            "out",
+          );
+        });
+
+        return;
+      }
+
+      addLog("usage: firewall [status|allow|deny|ruleset]", "err");
+    }
+    // WAF
+    else if (command === "waf") {
+      const action = args[1];
+      const feature = args[2];
+
+      if (action === "status") {
+        addLog(
+          `WAF: ${hardeningState.wafEnabled ? "ENABLED" : "DISABLED"}`,
+          "out",
+        );
+
+        addLog(
+          `SQLI FILTER: ${hardeningState.sqliProtection ? "ON" : "OFF"}`,
+          "out",
+        );
+
+        addLog(`RATE LIMIT: ${hardeningState.rateLimit ? "ON" : "OFF"}`, "out");
+
+        return;
+      }
+
+      if (action === "enable") {
+        if (!feature) {
+          setHardeningState((prev) => ({
+            ...prev,
+            wafEnabled: true,
+          }));
+
+          addLog("[+] WAF enabled", "out");
+
+          return;
+        }
+
+        if (feature === "sqli") {
+          setHardeningState((prev) => ({
+            ...prev,
+            sqliProtection: true,
+          }));
+
+          addLog("[+] SQLi protection enabled", "out");
+
+          return;
+        }
+
+        if (feature === "rate-limit") {
+          setHardeningState((prev) => ({
+            ...prev,
+            rateLimit: true,
+          }));
+
+          addLog("[+] Rate limit enabled", "out");
+
+          return;
+        }
+      }
+    }
+    // SNORT
+    else if (command === "snort") {
+      const action = args[1];
+
+      if (action === "status") {
+        addLog(
+          `IDS: ${hardeningState.idsEnabled ? "ONLINE" : "OFFLINE"}`,
+          "out",
+        );
+
+        addLog(
+          `RULES: ${hardeningState.snortRuleLoaded ? "1 ACTIVE" : "0 ACTIVE"}`,
+          "out",
+        );
+
+        return;
+      }
+
+      if (action === "enable") {
+        setHardeningState((prev) => ({
+          ...prev,
+          idsEnabled: true,
+        }));
+
+        addLog("[+] Snort IDS enabled", "out");
+
+        return;
+      }
+
+      if (action === "load") {
+        const rule = args[2];
+
+        if (rule === "meterpreter.rules") {
+          setHardeningState((prev) => ({
+            ...prev,
+            snortRuleLoaded: true,
+          }));
+
+          addLog("[+] Meterpreter detection rule loaded", "out");
+
+          return;
+        }
+      }
+    }
 
     // SUBMIT
-    else if (command === "submit" || input === currentData.flag) {
+    else if (command === "submit" || trimmedInput === currentData.flag) {
       const userFlag = command === "submit" ? args[1] : input;
 
       if (userFlag === currentData.flag) {
