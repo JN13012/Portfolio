@@ -60,7 +60,7 @@ const ProfileConsole = () => {
         "malware.rules": false,
       },
     },
-    
+
     firewallConfig: "INCOMPLETE",
     wafConfig: "INCOMPLETE",
     idsConfig: "INCOMPLETE",
@@ -541,7 +541,7 @@ const ProfileConsole = () => {
 
     // --- SHELL (NC) ---
     if (remoteSession?.type === "nc") {
-      const shellPrefix = `root@${remoteSession.host}`;
+      const shellPrefix = `flask-debug@${remoteSession.host}`;
 
       if (command === "ls") {
         addLog(`${shellPrefix} : app.py  config.py  flag.txt`, "out");
@@ -599,10 +599,13 @@ const ProfileConsole = () => {
           const file = args[1];
 
           if (file === "flag.txt") {
-            addLog(`${shellPrefix} : FLAG{DEV_ACCESS_IS_A_TRAP}`, "sys");
-            addLog(`${shellPrefix} : [!] suspicious flag detected...`, "sys");
+            addLog(`${shellPrefix} : FLAG{HONEY_POT}`, "out");
+            addLog(
+              `${shellPrefix} : [!] A big honey pot. Bees loves it...`,
+              "sys",
+            );
           } else if (file === "secret.txt") {
-            addLog(`${shellPrefix} : Verify ssh admin@10.0.2.15`, "sys");
+            addLog(`${shellPrefix} : Verify ssh admin@10.0.2.15`, "out");
           } else if (!file) {
             addLog(`${shellPrefix} : usage: cat [file]`, "err");
           } else {
@@ -630,7 +633,6 @@ const ProfileConsole = () => {
           const file = args[1];
 
           if (file === ".secrets.txt") {
-            addLog(`${shellPrefix} : HASHES_DUMP`, "out");
             addLog(
               `${shellPrefix} : FLAG : d4f3c1a5f1c6b6f5b1a6c8a0d8e5f2a1`,
               "out",
@@ -654,20 +656,20 @@ const ProfileConsole = () => {
               "out",
             );
             addLog(`${shellPrefix} : EMAIL: jeremie.nagi@epitech.eu`, "out");
-            addLog(`${shellPrefix} : PHONE: +33 7 88 29 43 03`, "out");
             addLog(`${shellPrefix} : ====================`, "out");
-            addLog(`${shellPrefix} : IP (internal): 10.0.2.25`, "out");
+            addLog(`${shellPrefix} : IP : 10.0.2.25`, "out");
           } else if (file === ".hashcat.txt") {
-            addLog(
-              `${shellPrefix} : [internal] hashcat reference guide`,
-              "out",
-            );
+            addLog(`${shellPrefix} : Hashcat reference guide`, "out");
 
-            addLog(`${shellPrefix} :`, "out");
+            addLog("------------------------", "out");
 
             addLog(`${shellPrefix} : BASIC USAGE:`, "out");
             addLog(
-              `${shellPrefix} : hashcat -m <mode> -a <attack> <hashfile> <wordlist/mask> [options]`,
+              `${shellPrefix} : hashcat -m <mode> -a <attack modes> <hashfile> <wordlist_or_mask> [options]`,
+              "out",
+            );
+            addLog(
+              `${shellPrefix} : EXAMPLE: hashcat -m 1000 -a 3 .secrets.txt ?l?l?l?l -O -w 4`,
               "out",
             );
 
@@ -688,6 +690,12 @@ const ProfileConsole = () => {
               `${shellPrefix} : -a 3  brute-force attack (mask based)`,
               "out",
             );
+            addLog(`${shellPrefix} :`, "out");
+            addLog(`${shellPrefix} : AVAILABLE WORDLISTS`, "out");
+            addLog(`${shellPrefix} : fast.txt`, "out");
+            addLog(`${shellPrefix} : medium.txt`, "out");
+            addLog(`${shellPrefix} : rockyou.txt`, "out");
+            addLog(`${shellPrefix} :`, "out");
 
             addLog(`${shellPrefix} :`, "out");
             addLog(`${shellPrefix} : MASK EXAMPLES:`, "out");
@@ -710,22 +718,21 @@ const ProfileConsole = () => {
 
             addLog(`${shellPrefix} :`, "out");
 
-            addLog(`${shellPrefix} : EXAMPLE:`, "out");
-            addLog(
-              `${shellPrefix} : hashcat -m 1000 -a 3 .secrets.txt ?l?l?l?l -O -w 4`,
-              "out",
-            );
-
             addLog(`${shellPrefix} :`, "out");
 
             addLog(
               `${shellPrefix} : NOTE: choose correct mode and attack type carefully`,
               "sys",
             );
+            addLog(`${shellPrefix} : Hash mode detected is : NTLM`, "out");
+            addLog(
+              `${shellPrefix} : Recommended approach: brute-force with enterprise pattern mask`,
+              "out",
+            );
 
             addLog(
-              `${shellPrefix} : NOTE: GPU acceleration recommended for real performance`,
-              "sys",
+              `${shellPrefix} : Use optimized GPU acceleration and maximum worload for better performance`,
+              "out",
             );
           } else if (file === "notes.log") {
             addLog(
@@ -770,20 +777,23 @@ const ProfileConsole = () => {
     if (command === "help") {
       let baseCmds = "ls, ls -la, cat [file], hint, submit [flag], clear";
       if (level >= 2) {
-        baseCmds += ", find [nom], grep [texte]";
+        baseCmds =
+          "ls, ls -la, cat [file], find [name], grep [text], hint, submit [flag], clear";
       }
       if (level >= 3) {
-        baseCmds += ", nmap [IP], nc [IP] [PORT]";
+        baseCmds =
+          "ls, cat [file], nmap [IP], nc [IP] [PORT], hint, submit [flag], clear";
       }
       if (level >= 4) {
-        baseCmds += ", gobuster [IP], curl [endpoint], sqlmap [url]";
+        baseCmds =
+          "ls, ls -la, cat [file], gobuster [IP], curl [endpoint], sqlmap <url> --data='<post_data>', hint, submit [flag], clear";
       }
       if (level >= 5) {
-        baseCmds +=
-          ", john --wordlist=[file] [hashfile], ssh [user]@[IP], hashcat [hash]";
+        baseCmds =
+          "ls, ls -la cat [file], john [wordlist] [hashfile], ssh [user]@[IP], hashcat [hash], hint, submit [flag], clear";
       }
       if (level >= 6) {
-        baseCmds += ", metasploit, meterpreter";
+        baseCmds = ", metasploit, meterpreter";
       }
       addLog(`COMMANDES DISPONIBLES : ${baseCmds}`, "sys");
     }
@@ -830,42 +840,94 @@ const ProfileConsole = () => {
 
         addLog("NOTE: combining options improves forensic visibility", "sys");
       }
+      // JOHN
+      if (file === "john.txt") {
+        addLog("John reference guide", "out");
+        addLog("------------------------", "out");
+
+        addLog("AVAILABLE COMMANDS:", "out");
+        addLog("------------", "out");
+
+        addLog("Display hashes file:", "out");
+        addLog("cat .hashes.txt", "out");
+        addLog("---", "out");
+
+        addLog("Crack hashes using wordlist attack:", "out");
+        addLog("john --wordlist <wordlist_path> <hash_file>", "out");
+        addLog(
+          "Example: john --wordlist=/usr/share/wordlists/fast.txt .hashes.txt",
+          "out",
+        );
+        addLog("---", "out");
+
+        addLog("AVAILABLE WORDLISTS:", "out");
+        addLog("------------", "out");
+        addLog("/usr/share/wordlists/fast.txt", "out");
+        addLog("Low coverage / fast execution", "out");
+        addLog("---", "out");
+        addLog("/usr/share/wordlists/medium.txt", "out");
+        addLog("Balanced speed / success rate", "out");
+        addLog("---", "out");
+        addLog("/usr/share/wordlists/rockyou.txt", "out");
+        addLog("Slow execution / high coverage", "out");
+        addLog("---", "out");
+
+        addLog("STRATEGY:", "out");
+        addLog(
+          "  - Prefer high-coverage dictionaries for higher success rate",
+          "out",
+        );
+        addLog("");
+        return;
+      }
+      if (file === "ssh.txt") {
+        addLog("SSH reference guide", "out");
+        addLog("------------------------", "out");
+
+        addLog("AVAILABLE COMMANDS:", "out");
+        addLog("Connect to remote host:", "out");
+        addLog("ssh <user>@<ip>", "out");
+        addLog("Example: ssh dev@10.0.2.15", "out");
+
+        addLog("DISCOVERED ACCOUNTS:", "out");
+        addLog("dev", "out");
+        addLog("admin", "out");
+        addLog("");
+
+        return;
+      }
       // metasploit
-      if (file === ".metasploit.txt") {
-        addLog("Metasploit Framework - Exploit Reference Guide", "out");
+      if (file === "metasploit.txt") {
+        addLog("Metasploit reference guide", "out");
         addLog("----------------------------------------------", "out");
-
-        addLog("[+] CONTEXT: SMB TARGET DETECTED (PORT 445)", "out");
-        addLog("", "out");
-
-        addLog("[?] POSSIBLE EXPLOIT MODULES:", "out");
-        addLog(
-          "  - exploit/windows/smb/psexec (requires credentials or auth bypass)",
-          "out",
-        );
-        addLog(
-          "  - exploit/windows/smb/ms17_010_eternalblue (Recomended)",
-          "out",
-        );
-        addLog(
-          "  - exploit/windows/smb/ms08_067_netapi (older systems)",
-          "out",
-        );
-        addLog("", "out");
-
-        addLog("[+] STANDARD METASPLOIT WORKFLOW:", "out");
+        addLog("STANDARD METASPLOIT WORKFLOW:", "out");
         addLog("  use <exploit/module>", "out");
         addLog("  set RHOSTS <target_ip>", "out");
         addLog("  set LHOST <your_ip> (optional)", "out");
         addLog("  set LPORT 4444 (optional)", "out");
         addLog("  run", "out");
-        addLog("", "out");
+        addLog("---", "out");
+
+        addLog("AVAIBLE EXPLOIT MODULES:", "out");
+        addLog(
+          "  - exploit/windows/smb/psexec (requires credentials or auth bypass)",
+          "out",
+        );
+        addLog("  - exploit/windows/smb/ms17_010_eternalblue (windows 7)", "out");
+        addLog(
+          "  - exploit/windows/smb/ms08_067_netapi (older windows systems)",
+          "out",
+        );
+        addLog("---", "out");
 
         addLog("[+] EXAMPLE (CTF TARGET):", "out");
         addLog("  use exploit/windows/smb/ms17_010_eternalblue", "out");
         addLog("  set RHOSTS 10.0.2.25", "out");
         addLog("  run", "out");
-        addLog("", "out");
+        addLog("---", "out");
+        addLog("  Scan  result", "out");
+        addLog("  OS : Windows 7", "out");
+        addLog("  Target IP : 10.0.2.25", "out");
         addLog(
           "[!] NOTE: Incorrect module or parameters will result in failed session",
           "sys",
@@ -1029,18 +1091,24 @@ const ProfileConsole = () => {
           "err",
         );
       }
+
       const pattern = args[1];
-      if (!pattern) return addLog("Usage: grep [texte]", "err");
+
+      if (!pattern) {
+        return addLog("Usage: grep [texte]", "err");
+      }
 
       const results = Object.entries(currentData.files)
-        .filter(([content]) =>
+        .filter(([name, content]) =>
           content.toLowerCase().includes(pattern.toLowerCase()),
         )
         .map(([name]) => name);
 
-      results.length > 0
-        ? results.forEach((res) => addLog(`Match found in: ${res}`, "out"))
-        : addLog("No match found.", "sys");
+      if (results.length > 0) {
+        results.forEach((res) => addLog(`Match found in: ${res}`, "out"));
+      } else {
+        addLog("No match found.", "sys");
+      }
     }
 
     // --- NMAP ---
@@ -1101,9 +1169,11 @@ const ProfileConsole = () => {
       if (host === currentData.targetIp && port === "5000") {
         addLog(`Establish connection to ${host}:${port}...`, "sys");
         setTimeout(() => {
-          addLog("Connected! Entering Werkzeug Debug Shell.", "out");
-          addLog("Logged in as root@target-node", "sys");
-          addLog("Remote Commands: ls, cat [file], exit", "sys");
+          addLog("Logged in as flask-debug@10.0.2.15>", "sys");
+          addLog(
+            "Remote Commands (exit remote before submit flag): ls, cat [file], exit",
+            "sys",
+          );
           setRemoteSession({
             type: "nc",
             host,
@@ -1127,155 +1197,263 @@ const ProfileConsole = () => {
         return addLog("Usage: gobuster [IP]", "err");
       }
 
-      addLog("Scanning directories on 10.0.2.15...", "sys");
+      addLog("Enumerating web directories on 10.0.2.15...", "sys");
 
       const logs = [
-        ["Found: /api/login (Status: 200) [AUTH ENDPOINT]", "out"],
-        ["Found: /api/users (Status: 200)", "out"],
-        ["Found: /backup (Status: 403)", "out"],
-        [
-          "Found: /dev_admin_portal (Status: 200) [!] POTENTIAL ADMIN PANEL",
-          "out",
-        ],
+        ["Found: /api/login (Status: 200)", "out"],
+        ["Found: /admin (Status: 403)", "out"],
         ["Scan complete.", "sys"],
-        ["[!] Try interacting with endpoints using curl", "sys"],
-        ["[!] If vulnerable, consider automating with sqlmap", "sys"],
+        [
+          "Interact with endpoints using curl to inspect request/response behavior",
+          "sys",
+        ],
+        ["Verify possible SQL injection behavior", "sys"],
       ];
 
       logs.forEach(([msg, type], index) => {
-        setTimeout(
-          () => {
-            addLog(msg, type);
-          },
-          800 + index * 600,
-        );
+        setTimeout(() => addLog(msg, type), 600 + index * 450);
       });
     }
-
     // CURL
     else if (command === "curl") {
       if (level < 4) return addLog("curl: command not found", "err");
+
       const endpoint = args[1];
       if (!endpoint) return addLog("Usage: curl [endpoint]", "err");
-      if (endpoint === "/dev_admin_portal") {
-        addLog("Admin Portal v1", "out");
-        addLog("Login system detected at /api/login", "sys");
-        addLog("[!] SQL injection suspected on login endpoint", "sys");
-        addLog("[!] Recommended tool: sqlmap", "sys");
-        addLog("[!] Example: sqlmap /api/login", "sys");
-      } else if (endpoint === "/api/login") {
-        addLog("POST /api/login", "sys");
-        addLog("username=admin&password=test", "out");
-        addLog("[!] Authentication failed", "err");
-      } else {
-        addLog("404 Not Found", "err");
+
+      if (endpoint === "/admin") {
+        addLog("HTTP/1.1 403 Forbidden", "err");
+        addLog("Access denied", "out");
+        return;
       }
+
+      if (endpoint === "/api/login") {
+        addLog("", "out");
+        addLog("POST /api/login", "out");
+        addLog("Content-Type: application/x-www-form-urlencoded", "out");
+        addLog("username=admin&password=test", "out");
+        addLog("", "out");
+
+        addLog("[!] SECURITY NOTE:", "sys");
+        addLog("[!] Vulnerable parameter detected: username", "out");
+        addLog("[!] Suggested tool: sqlmap", "out");
+        addLog(
+          "[!] Example: sqlmap http://10.0.2.15/api/login --data='username=admin&password=test'",
+          "out",
+        );
+
+        return;
+      }
+
+      addLog("HTTP/1.1 404 Not Found", "err");
     }
 
     // --- SQLMAP (NIVEAU 4) ---
     else if (command === "sqlmap") {
       if (level < 4) return addLog("sqlmap: command not found", "err");
 
-      const url = args.slice(1).join(" ");
-      if (!url) return addLog("Usage: sqlmap [url]", "err");
+      const fullArgs = args.slice(1);
+
+      if (fullArgs.length < 2) {
+        addLog("Usage: sqlmap <url> --data='key=value&key2=value2'", "err");
+        addLog(
+          "Example: sqlmap http://10.0.2.15/api/login --data='username=admin&password=test'",
+          "sys",
+        );
+        return;
+      }
+
+      const url = fullArgs[0];
+      const options = fullArgs.slice(1).join(" ");
+      if (!url.startsWith("http://10.0.2.15/")) {
+        addLog("[!] Invalid target host", "err");
+        addLog("[!] Verify complete url 'http://10.0.2.15/*'", "sys");
+        return;
+      }
+      const allowedTargets = ["http://10.0.2.15/api/login"];
+      if (!allowedTargets.includes(url)) {
+        addLog("[!] Target not found (404)", "err");
+        return;
+      }
+      const dataMatch = options.match(/--data='([^']+)'/);
+      if (!dataMatch) {
+        addLog("[!] Missing or malformed --data parameter", "err");
+        addLog("Expected format: --data='username=admin&password=test'", "sys");
+        return;
+      }
+      const postData = dataMatch[1];
+      if (!postData.includes("=")) {
+        addLog("[!] Invalid POST data format", "err");
+        return;
+      }
+
+      const params = postData
+        .split("&")
+        .filter((p) => p.includes("="))
+        .map((p) => p.split("=")[0]);
 
       addLog("[*] Starting sqlmap engine...", "sys");
-      addLog(`[+] Target: ${url}`, "sys");
+      addLog(`[+] Target: ${url}`, "out");
+      addLog(`[+] POST data detected`, "out");
+      addLog(`[+] Parameters: ${params.join(", ")}`, "out");
 
       setTimeout(() => {
-        addLog("[*] Testing GET parameter 'username'...", "sys");
-        addLog("[+] Injection point found!", "out");
-        addLog("[+] Type: Boolean-based blind SQLi", "out");
-
         setTimeout(() => {
-          addLog("[*] Dumping database...", "sys");
+          setTimeout(() => {
+            addLog("[+] Confirmed: Boolean-based SQL injection", "out");
 
-          addLog("users table:", "out");
-          setLeakedHashes([
-            { user: "admin", hash: "216b0a84582521479c73b7ba56d17f77" },
-            { user: "dev", hash: "650a82a075701f1e40c182082cbf3e15" },
-          ]);
-          setLevel5State((prev) => ({ ...prev, hashesFound: true }));
-          addLog(`[+] FLAG FOUND: ${currentData.flag}`, "out");
-        }, 1000);
-      }, 1000);
+            addLog("[*] Enumerating database...", "out");
+
+            setTimeout(() => {
+              addLog("[*] Found table: users", "out");
+
+              setTimeout(() => {
+                setTimeout(() => {
+                  addLog("[+] Dump successful", "sys");
+                  addLog(`[+] FLAG FOUND: ${currentData.flag}`, "out");
+                }, 900);
+              }, 900);
+            }, 900);
+          }, 800);
+        }, 800);
+      }, 600);
     }
 
     // JOHN
     else if (command === "john") {
       if (level < 5) return addLog("john: command not found", "err");
 
-      const wordlistArg = args.find((a) => a.startsWith("--wordlist="));
-      const wordlistPath = wordlistArg?.split("=")[1];
-
       const hashFile = args.find(
         (a) => a.endsWith(".txt") && !a.startsWith("--"),
       );
 
-      if (remoteSession?.type === "ssh" && remoteSession.user === "admin") {
-        return addLog("[!] john failed: hash format not supported", "err");
-      }
-      if (!wordlistPath) {
-        return addLog(
-          "Usage: john --wordlist=/usr/share/wordlists/rockyou.txt .hashes.txt",
-          "err",
-        );
+      let wordlistPath = null;
+
+      const wordlistIndex = args.findIndex(
+        (a) => a === "--wordlist" || a.startsWith("--wordlist="),
+      );
+
+      if (wordlistIndex !== -1) {
+        const arg = args[wordlistIndex];
+
+        if (arg.includes("=")) {
+          wordlistPath = arg.split("=")[1];
+        } else {
+          wordlistPath = args[wordlistIndex + 1];
+        }
       }
 
-      if (!hashFile) {
-        return addLog("Usage: john --wordlist=... .hashes.txt", "err");
+      if (!wordlistPath || !hashFile) {
+        addLog("Usage: john --wordlist <path> <hash_file>", "err");
+        addLog(
+          "Example: john --wordlist /usr/share/wordlists/fast.txt .hashes.txt",
+          "sys",
+        );
+        return;
       }
 
       if (hashFile !== ".hashes.txt") {
-        return addLog(`john: ${hashFile}: No such file`, "err");
+        addLog(`john: ${hashFile}: No such file`, "err");
+        return;
+      }
+
+      const validWordlists = [
+        "/usr/share/wordlists/fast.txt",
+        "/usr/share/wordlists/medium.txt",
+        "/usr/share/wordlists/rockyou.txt",
+      ];
+
+      if (!validWordlists.includes(wordlistPath)) {
+        addLog(`john: ${wordlistPath}: No such file or directory`, "err");
+        return;
       }
 
       addLog("[*] Initializing John the Ripper...", "sys");
 
       const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-      const runCrack = async (user, hash, password) => {
+      const runCrack = async (user, hash, password, success) => {
         addLog("[*] Loaded 2 password hashes", "sys");
         await sleep(300);
 
         addLog(`[*] Loading hash: ${user} (${hash})`, "sys");
-        await sleep(500);
+        await sleep(400);
 
         addLog(`[*] Using wordlist: ${wordlistPath}`, "sys");
         await sleep(400);
 
         addLog("[*] Starting dictionary attack...", "sys");
-        await sleep(400);
+        await sleep(500);
 
         const progress = [12, 31, 48, 66, 83, 97];
 
         for (const p of progress) {
           addLog(`[*] Progress: ${p}%`, "sys");
-          await sleep(300);
+          await sleep(250);
+        }
+
+        if (!success) {
+          addLog(`[!] ${user}: password not found in wordlist`, "err");
+          return;
         }
 
         addLog(`[+] ${user}:${password} FOUND`, "out");
       };
 
       (async () => {
-        await runCrack(
-          "admin",
-          "39678cb269782223fb548ea91d07d540",
-          "JTR13012!!",
-        );
+        if (wordlistPath.includes("rockyou")) {
+          await runCrack(
+            "admin",
+            "39678cb269782223fb548ea91d07d540",
+            "JTR13012!!",
+            true,
+          );
 
-        await sleep(700);
+          await sleep(600);
 
-        await runCrack("dev", "aba0b545a32585915e3318b92d987bfa", "jtr13");
+          await runCrack(
+            "dev",
+            "aba0b545a32585915e3318b92d987bfa",
+            "jtr13",
+            true,
+          );
 
-        addLog("[*] Cracking complete", "sys");
+          addLog("[*] Cracking complete", "sys");
 
-        setCrackedPasswords({
-          admin: "JTPJTR13012!",
-          dev: "jtr13",
-        });
+          setCrackedPasswords({
+            admin: "JTR13012!!",
+            dev: "jtr13",
+          });
 
-        setLevel5State((prev) => ({ ...prev, cracked: true }));
+          setLevel5State((prev) => ({ ...prev, cracked: true }));
+        } else if (
+          wordlistPath.includes("fast") ||
+          wordlistPath.includes("medium")
+        ) {
+          await runCrack(
+            "dev",
+            "aba0b545a32585915e3318b92d987bfa",
+            "jtr13",
+            true,
+          );
+
+          await sleep(600);
+
+          await runCrack(
+            "admin",
+            "39678cb269782223fb548ea91d07d540",
+            null,
+            false,
+          );
+
+          addLog("[*] Cracking complete (fast mode)", "sys");
+
+          setCrackedPasswords({
+            dev: "jtr13",
+          });
+
+          setLevel5State((prev) => ({ ...prev, cracked: true }));
+        }
       })();
     }
     // SSH
@@ -1352,7 +1530,19 @@ const ProfileConsole = () => {
         setTimeout(() => {
           // DICTIONARY ATTACK
           if (attack === "0") {
+            const wordlist = argsStr.find(
+              (a) =>
+                a.includes("rockyou") ||
+                a.includes("fast") ||
+                a.includes("medium"),
+            );
+
+            if (!wordlist || wordlist.startsWith("-")) {
+              return addLog("[!] invalid wordlist", "err");
+            }
+
             addLog("[*] starting dictionary attack...", "sys");
+            addLog(`[*] using wordlist: ${wordlist}`, "sys");
 
             const progress = [14, 29, 47, 62, 80, 96];
 
@@ -1364,20 +1554,26 @@ const ProfileConsole = () => {
 
             setTimeout(() => {
               addLog("[!] no matches found in wordlist", "err");
-              addLog("[!] password not in common dictionaries", "sys");
-              addLog("[!] analysis: structured pattern detected", "sys");
-              addLog("[!] recommendation: use mask attack (-a 3)", "sys");
+              addLog("[!] password not in common dictionaries", "out");
+              addLog("[!] recommendation: use mask attack (-a 3)", "out");
             }, 1800);
           }
 
           // BRUTE FORCE MASK
           else if (attack === "3") {
             if (!mask) {
-              return addLog("[!] missing mask pattern", "err");
+              return addLog("[!] invalid mask pattern", "err");
             }
 
             const tokens = (mask.match(/\?[ulds]/g) || []).length;
 
+            const hasOptimized = argsStr.includes("-O");
+            const hasWorkload =
+              argsStr.includes("-w") || argsStr.includes("-w4");
+
+            if (!hasOptimized || !hasWorkload) {
+              return addLog("[!] invalid GPU options", "err");
+            }
             if (tokens < 12) {
               return addLog(
                 "[!] mask too weak (high complexity password expected ~15 chars)",
@@ -1412,6 +1608,7 @@ const ProfileConsole = () => {
                   addLog("[+] hash successfully cracked", "out");
 
                   addLog(`FLAG{${currentData.flag}}`, "out");
+                  addLog("(exit ssh session before submit flag)", "out");
                 }, 1200);
               }, 800);
             }, 600);
