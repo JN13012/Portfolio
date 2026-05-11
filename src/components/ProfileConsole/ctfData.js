@@ -3,22 +3,22 @@ export const CTF_LEVELS = {
         label: "FOOTPRINTING",
         flag: "1",
         unlocks: [],
-        hint: "Inspectez le code source de la page (DOM) pour trouver des indices laissés par le développeur.",
+        hint: "Inspect your browser page => source code => index.html (refresh the page if needed).",
         files: {
-            "readme.txt": "Bienvenue dans ce CTF. Cherchez, trouvez et validez.",
-            ".note.txt": "Cherchez le commentaire SYSTEM_ACCESS_KEY dans le code source de la page index.html."
+            "readme.txt": "Welcome to this CTF. Search, find, and validate.",
+            ".note.txt": "Look for the comment <!-- SYSTEM_ACCESS_KEY --> in the source code of the index.html page."
         }
     },
     2: {
-        label: "SYSTEM ENUMERATION",
+        label: "LINUX COMMANDS",
         flag: "2",
         unlocks: [
             "Find",
             "grep",
         ],
-        hint: "Utilisez 'grep' pour chercher 'FLAG' dans tous les fichiers.",
+        hint: "Use 'grep' to search for 'FLAG' in all files.",
         files: {
-            "readme.txt": "Le flag est caché dans un des fichiers système. Bonne chance.",
+            "readme.txt": "The flag is hidden in one of the system files. Good luck.",
             ".password.txt": "File is empty.",
             ".Password.txt": "File is empty.",
             ".passwords.txt": "File is empty.",
@@ -26,17 +26,19 @@ export const CTF_LEVELS = {
             ".p4ssw0rd.txt": "File is empty.",
             ".p_assword.txt": "File is empty.",
             ".pass.word.txt": "File is empty.",
-            ".pass_word.txt": "flag is not here.",
+            ".pass_word.txt": "File is empty.",
             ".p4ss_w0rd.txt": "Try harder.",
             ".p@ssword.txt": "File is empty.",
             ".p@ssw0rd.txt": "File is empty.",
             ".passwrd.txt": "File is empty.",
             ".psswrd.txt": "Log file: 2026-04-23",
             ".P@55w0rd.txt": "File is empty.",
-            ".passw0rd.txt": "Mot de passe : 123456 (trop facile)",
-            ".Password4.txt": "Le flag est : grep_is_magic",
+            ".passw0rd.txt": "Password : 123456 (trop facile)",
+            ".Password4.txt": "The flag is : grep_is_magic",
             ".Flag": "File is empty.",
             ".flag": "File is empty.",
+            ".flagO": "File is empty.",
+            ".flag0": "File is empty.",
 
         }
     },
@@ -47,7 +49,7 @@ export const CTF_LEVELS = {
             "nmap",
             "nc",
         ],
-        hint: "Utilisez 'nmap -sV'. Une API en mode debug est exposée...",
+        hint: "use 'nmap -sV' for scanning services...",
         targetIp: "10.0.2.15",
         services: [
             { port: "21", state: "open", service: "ftp", version: "vsftpd 3.0.3 (Anonymous allowed)" },
@@ -56,20 +58,20 @@ export const CTF_LEVELS = {
             { port: "5000", state: "open", service: "http", version: "Flask API (DEBUG MODE ENABLED -- DANGER)" }
         ],
         files: {
-            "readme.txt": "Une API semble exposée en mode debug.",
-            ".network.txt": "Target IP : 10.0.2.15.",
+            "readme.txt": "You are now acting as a penetration tester. Your objective is to enumerate exposed services on the target host. Identify potential attack surfaces and misconfigurations.",
+            "network.txt": "Target IP : 10.0.2.15.",
         }
     },
 
     4: {
-        label: "WEB EXPLOITATION (SQLi)",
+        label: "WEB EXPLOITATION (SQLi) NOPAIN NOGAIN",
         flag: "4",
         unlocks: [
             "gobuster",
             "curl",
             "sqlmap"
         ],
-        hint: "Utilisez 'gobuster' pour trouver les endpoints API. Une injection SQL est possible...",
+        hint: "Use 'gobuster [IP]' for endpoints enumeration. A SQL injection is possible...",
         targetIp: "10.0.2.15",
 
         directories: [
@@ -80,7 +82,7 @@ export const CTF_LEVELS = {
         ],
 
         files: {
-            "readme.txt": "Une API Flask tourne en debug. Regardez la config.",
+            "readme.txt": "Continue the security audit. A Flask API is exposed on 10.0.2.15 with debug mode enabled.",
             ".web_config": `
                             DEBUG=True
                             DB_ENGINE=SQLite
@@ -91,38 +93,27 @@ export const CTF_LEVELS = {
     },
 
     5: {
-        label: "BRUTE FORCING - M0tivation2026!",
+        label: "BRUTE FORCE - M0tivation2026!",
         flag: "5",
         unlocks: [
             "john",
             "hashcat",
             "ssh"
         ],
-        hint: "Extract hashes from the database. Crack them using dictionary attacks. Use recovered credentials to access SSH and investigate internal files for further secrets.",
+        hint: "Expected workflow : john => ssh => investigate internal files for further secrets.",
         targetIp: "10.0.2.15",
         hashes: [
             { user: "admin", hash: "39678cb269782223fb548ea91d07d540" },
             { user: "dev", hash: "aba0b545a32585915e3318b92d987bfa" }
         ],
-        // hashInfo: {
-        //     type: "MD5",
-        //     weakness: "fast hash, vulnerable to dictionary attacks"
-        // },
-
-        // wordlist: "rockyou.txt",
-
-        // ssh: {
-        //     host: "10.0.2.15",
-        //     port: 22,
-        //     note: "Login grants access to internal filesystem. Look for encrypted backups."
-        // },
-
         files: {
             "readme.txt":
-                "User credentials have been extracted from database and stored in the .hashes.txt as MD5 hashes.\nWeak passwords may be crackable using common wordlists. (hint : you can copy & paste hashes)",
+                "User credentials have been extracted from database and stored in the .hashes.txt as MD5 hashes. Crack them and use credentials to connect ssh. Target IP : 10.0.2.15",
 
             ".hashes.txt":
                 "admin:216b0a84582521479c73b7ba56d17f77\ndev:650a82a075701f1e40c182082cbf3e15",
+            "john.txt": "...",
+            "ssh.txt": "...",
         }
     },
 
@@ -130,11 +121,11 @@ export const CTF_LEVELS = {
         label: "METASPLOIT",
         flag: "6",
         unlocks: ["metasploit", "meterpreter"],
-        hint: "Exploitez SMB sur 10.0.2.25 via pivot réseau. Un reverse shell est nécessaire.",
+        hint: "Exploit SMB on 10.0.2.25 and escalate privilege to get acces to the flag.",
         targetIp: "10.0.2.25",
         files: {
             "readme.txt": "Your AI Assistant completed a reconnaissance scan on 10.0.2.25. Detected OS: Windows 7. SMB service exposed on port 445. [CRITICAL] Remote SMB RCE vulnerability detected (MS17-010).",
-            ".metasploit.txt": "Check cat in basic commands"
+            "metasploit.txt": "Check cat in basic commands"
         },
         meterpreterFiles: {
             "/": [
