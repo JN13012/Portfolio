@@ -34,7 +34,7 @@ export const CTF_LEVELS = {
             ".psswrd.txt": "Log file: 2026-04-23",
             ".P@55w0rd.txt": "File is empty.",
             ".passw0rd.txt": "Password : 123456 (trop facile)",
-            ".Password4.txt": "The flag is : grep_is_magic",
+            ".Password4.txt": "FLAG{grep_is_magic}",
             ".Flag": "File is empty.",
             ".flag": "File is empty.",
             ".flagO": "File is empty.",
