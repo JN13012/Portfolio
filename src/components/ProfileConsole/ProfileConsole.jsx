@@ -111,7 +111,6 @@ const ProfileConsole = () => {
     return ok ? "OK" : "INCOMPLETE";
   }
 
-
   function evaluateAll(state) {
     return {
       firewallConfig: evaluateFirewallConfig(state) ? "OK" : "INCOMPLETE",
@@ -131,8 +130,25 @@ const ProfileConsole = () => {
     if (allOk && !flagTriggeredRef.current) {
       flagTriggeredRef.current = true;
 
-      addLog("ALL SECURITY SYSTEMS SECURED. FLAG UNLOCKED.", "sys");
-      addLog(`FLAG{${CTF_LEVELS[9].flag}}`, "out");
+      setTimeout(() => {
+        addLog("HARDENING COMPLETE. UNLOCKING FLAG.", "sys");
+      }, 500);
+
+      setTimeout(() => {
+        addLog("[+]", "sys");
+      }, 900);
+
+      setTimeout(() => {
+        addLog("[+]", "sys");
+      }, 1300);
+
+      setTimeout(() => {
+        addLog("[+]", "sys");
+      }, 1700);
+
+      setTimeout(() => {
+        addLog(`FLAG{${CTF_LEVELS[9].flag}}`, "out");
+      }, 2200);
     }
 
     if (!allOk) {
@@ -3104,7 +3120,7 @@ const ProfileConsole = () => {
             setLevel((prev) => prev + 1);
           }, 150);
         } else {
-          addLog("[!] SYSTEM BREACH. TOTAL ROOT ACCESS.", "sys");
+          addLog("[!] CONGRATULATIONS !", "sys");
           setSolved(true);
         }
       } else {
@@ -3128,10 +3144,10 @@ const ProfileConsole = () => {
           ) : (
             <Terminal size={14} className="text-cyber" />
           )}
-          <span className="text-zinc-400 uppercase tracking-widest">
+          <span className="text-white uppercase tracking-widest">
             {solved
-              ? "ROOT@NAGI_SYS:~#"
-              : `CHALLENGE_MODE: LVL_${level}_${CTF_LEVELS[level].label}`}
+              ? "ROOT@NCTF:~#"
+              : `LVL_${level}_${CTF_LEVELS[level].label}`}
           </span>
         </div>
       </div>
@@ -3162,17 +3178,26 @@ const ProfileConsole = () => {
           </div>
         ))}
         {solved && (
-          <div className="mt-6 p-4 border border-green-500/50 text-green-500 text-center uppercase text-[10px] space-y-1">
-            <div className="animate-pulse">[ SECURITY INCIDENT RESOLVED ]</div>
+          <div className="mt-6 p-4 border border-green-500/50 text-center uppercase text-sm space-y-2 text-green-500">
+            <div className="animate-pulse text-green-300">
+              [ CTF COMPLETED ]
+            </div>
 
-            <div>ALL THREAT VECTORS CONTAINED</div>
+            <div className="text-white mt-8">Gained skills</div>
 
-            <div className="text-cyan-400">FIREWALL ✓ IDS ✓ WAF ✓</div>
+            <div className="text-cyan-400 mt-3 space-y-1">
+              <div>✔ Linux commands</div>
+              <div>✔ Network protocols TCP/IP</div>
+              <div>✔ Attack surface enumeration & port exposure</div>
+              <div>✔ Hash cracking</div>
+              <div>✔ Exploitation & privilege escalation</div>
+              <div>✔ SOC monitoring & log analysis</div>
+              <div>✔ Threat hunting & containment</div>
+              <div>✔ System hardening</div>
+            </div>
 
-            <div className="text-green-300 mt-2">FLAG UNLOCKED</div>
-
-            <div className="text-zinc-500 mt-2">
-              Access granted: ROOT SESSION ESTABLISHED
+            <div className="mt-8 text-yellow-400">
+              CYBERSECURITY CERTIFICATE GRANTED
             </div>
           </div>
         )}
