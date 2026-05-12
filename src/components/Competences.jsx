@@ -1,22 +1,37 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { DOMAINS } from "./CompetencesData";
 
+const ALL = DOMAINS.flatMap((d) =>
+  d.items.map((it) => ({
+    ...it,
+    domain: d,
+  })),
+);
 
+/* ───────────────────────────────────────────────────────────── */
+/* COMPONENT */
+/* ───────────────────────────────────────────────────────────── */
 
-const ALL = DOMAINS.flatMap((d) => d.items.map((it) => ({ ...it, domain: d })));
-
-/* ─── COMPONENT ─────────────────────────────────────────────────────────── */
 export default function Competences() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [panelVis, setPanelVis] = useState(true);
+
   const timeoutRef = useRef(null);
 
   const active = ALL[activeIdx];
   const dom = active.domain;
 
+  /* ───────────────────────────────────────────────────────────── */
+  /* NAVIGATION */
+  /* ───────────────────────────────────────────────────────────── */
+
   const go = useCallback((dir) => {
     setPanelVis(false);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
     timeoutRef.current = setTimeout(() => {
       setActiveIdx((i) => (i + dir + ALL.length) % ALL.length);
       setPanelVis(true);
@@ -28,183 +43,523 @@ export default function Competences() {
       if (e.key === "ArrowLeft") go(-1);
       if (e.key === "ArrowRight") go(1);
     };
+
     window.addEventListener("keydown", fn);
+
     return () => window.removeEventListener("keydown", fn);
   }, [go]);
 
-  const getCardTransform = (i) => {
+  /* ───────────────────────────────────────────────────────────── */
+  /* COVERFLOW TRANSFORM */
+  /* ───────────────────────────────────────────────────────────── */
+
+  const getCardTransform = (index) => {
     const total = ALL.length;
-    const angle  = (i / total) * Math.PI * 2;
-    const offset = (activeIdx / total) * Math.PI * 2;
-    const fin    = angle - offset;
-    const x = Math.cos(fin) * 370;
-    const y = Math.sin(fin) * 148;
-    const z = Math.sin(fin) * 95;
-    const depth = (z + 95) / 190;
+
+    const spacing = 340;
+
+    let offset = index - activeIdx;
+
+    /* LOOP */
+    if (offset > total / 2) {
+      offset -= total;
+    }
+
+    if (offset < -total / 2) {
+      offset += total;
+    }
+
+    const abs = Math.abs(offset);
+
+    const scale = Math.max(1 - abs * 0.12, 0.65);
+
+    const rotateY = offset * -28;
+
+    const x = offset * spacing;
+
+    const z = -abs * 180;
+
+    const opacity = Math.max(1 - abs * 0.18, 0.18);
+
     return {
-      transform: `translate3d(${x}px,${y}px,${z}px) scale(${0.46 + depth * 0.58})`,
-      opacity: 0.1 + depth * 0.9,
-      zIndex: Math.floor(depth * 100),
-      transition: "all 0.7s cubic-bezier(0.4,0,0.2,1)",
+      transform: `
+        translateX(${x}px)
+        translateZ(${z}px)
+        rotateY(${rotateY}deg)
+        scale(${scale})
+      `,
+      zIndex: 100 - abs,
+      opacity,
+      filter: `blur(${abs * 0.6}px)`,
+      transition: "all 0.7s cubic-bezier(0.22,1,0.36,1)",
     };
   };
 
+  /* ───────────────────────────────────────────────────────────── */
+  /* DOMAIN PROGRESS */
+  /* ───────────────────────────────────────────────────────────── */
 
-  // Domain progress across all skills
-  const domainStart = DOMAINS.slice(0, DOMAINS.indexOf(dom)).reduce((a, d) => a + d.items.length, 0);
+  const domainStart = DOMAINS.slice(0, DOMAINS.indexOf(dom)).reduce(
+    (a, d) => a + d.items.length,
+    0,
+  );
+
   const skillIndexInDomain = activeIdx - domainStart;
 
+  /* ───────────────────────────────────────────────────────────── */
+  /* RENDER */
+  /* ───────────────────────────────────────────────────────────── */
+
   return (
-    <div style={{ backgroundColor:"#080808", minHeight:"100vh", color:"#e8e4df", position:"relative", overflow:"hidden", fontFamily:"sans-code" }}>
+    <div
+      style={{
+        backgroundColor: "#020202",
+        minHeight: "100vh",
+        color: "#e8e4df",
+        position: "relative",
+        overflow: "hidden",
+        fontFamily: "sans-code",
+      }}
+    >
+      {/* GRID BACKGROUND */}
 
-      {/* Subtle noise texture via CSS */}
-      <div style={{
-        position:"absolute", inset:0, pointerEvents:"none", opacity:0.025,
-        backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-        backgroundSize:"200px 200px",
-      }} />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: `
+            linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: "48px 48px",
+          pointerEvents: "none",
+        }}
+      />
 
-      {/* Ambient radial glow — very subtle */}
-      <div style={{
-        position:"absolute", inset:0, pointerEvents:"none",
-        background:`radial-gradient(ellipse 60% 50% at 50% 45%, rgba(${domToRgb(dom.hue)},0.06) 0%, transparent 68%)`,
-        transition:"background 1s ease",
-      }} />
+      {/* RADIAL LIGHT */}
 
-      <div style={{ maxWidth:1100, margin:"0 auto", padding:"60px 40px", boxSizing:"border-box" }}>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background: `
+            radial-gradient(
+              circle at center,
+              rgba(${domToRgb(dom.hue)},0.08),
+              transparent 60%
+            )
+          `,
+          transition: "background 1s ease",
+        }}
+      />
 
-        {/* ── HEADER ── */}
-        <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:56 }}>
+      {/* VIGNETTE */}
 
-          <div>
-            <div className="code" style={{ fontSize:10, letterSpacing:"0.35em", color:"rgba(232,228,223,0.3)", marginBottom:14, textTransform:"uppercase" }}>
-              04 — Compétences techniques
-            </div>
-            <h2 className="code" style={{ margin:0, fontSize:38, fontWeight:300, color:"#e8e4df", letterSpacing:"0.02em", lineHeight:1 }}>
-              Hard Skills
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "rgba(0,0,0,0.45)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* CONTENT */}
+
+      <div
+        style={{
+          maxWidth: 1400,
+          margin: "0 auto",
+          padding: "70px 40px",
+          position: "relative",
+          zIndex: 10,
+        }}
+      >
+        {/* ───────────────────────────────────────────────────── */}
+        /* HEADER */
+        {/* ───────────────────────────────────────────────────── */}
+
+        <div
+          style={{
+            marginBottom: 80,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 28,
+            }}
+          >
+            <span
+              style={{
+                color: dom.hue,
+                fontSize: 12,
+                opacity: 0.6,
+                letterSpacing: "0.3em",
+              }}
+            >
+              04.
+            </span>
+
+            <h2
+              style={{
+                margin: 0,
+                color: "#fff",
+                fontSize: 42,
+                textTransform: "uppercase",
+                letterSpacing: "0.18em",
+                fontWeight: 400,
+                fontStyle: "italic",
+              }}
+            >
+              Technical Expertise
             </h2>
+
+            <div
+              style={{
+                flex: 1,
+                height: 1,
+                background: "rgba(255,255,255,0.08)",
+              }}
+            />
           </div>
 
-          {/* Domain pills */}
-          <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:10 }}>
-            {DOMAINS.map((d, di) => {
-              const isA = dom.category === d.category;
-              const startIdx = DOMAINS.slice(0, di).reduce((a, x) => a + x.items.length, 0);
-              return (
-                <button key={d.category} onClick={() => { setPanelVis(false); setTimeout(()=>{ setActiveIdx(startIdx); setPanelVis(true); }, 180); }}
-                  className="code nav-btn"
-                  style={{ display:"flex", alignItems:"center", gap:10, opacity: isA ? 1 : 0.35, padding:0 }}>
-                  <span style={{ fontSize:9, letterSpacing:"0.3em", color: isA ? d.hue : "inherit", textTransform:"uppercase" }}>
-                    {d.index} {d.label}
-                  </span>
-                  <div style={{ width:24, height:1, background: isA ? d.hue : "rgba(232,228,223,0.2)", transition:"all 0.3s" }} />
-                </button>
-              );
-            })}
-          </div>
+          <p
+            style={{
+              marginTop: 28,
+              maxWidth: 720,
+              color: "rgba(255,255,255,0.4)",
+              lineHeight: 1.9,
+              fontSize: 13,
+              letterSpacing: "0.04em",
+            }}
+          >
+            Cybersécurité offensive et défensive, architectures backend
+            modernes, systèmes IA génératifs et pipelines DevSecOps avancés.
+          </p>
+          <div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+    marginTop: 20,
+  }}
+>
+  {DOMAINS.map((d, di) => {
+    const isActive = dom.category === d.category;
 
+    const startIdx = DOMAINS.slice(0, di).reduce(
+      (a, x) => a + x.items.length,
+      0
+    );
+
+    return (
+      <button
+        key={d.category}
+        onClick={() => {
+          setPanelVis(false);
+
+          setTimeout(() => {
+            setActiveIdx(startIdx);
+            setPanelVis(true);
+          }, 180);
+        }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          opacity: isActive ? 1 : 0.35,
+          cursor: "pointer",
+          background: "none",
+          border: "none",
+        }}
+      >
+        <span
+          style={{
+            fontSize: 10,
+            letterSpacing: "0.25em",
+            color: isActive ? d.hue : "rgba(255,255,255,0.4)",
+            textTransform: "uppercase",
+          }}
+        >
+          {d.index} {d.label}
+        </span>
+
+        <div
+          style={{
+            width: 24,
+            height: 1,
+            background: isActive
+              ? d.hue
+              : "rgba(255,255,255,0.2)",
+          }}
+        />
+      </button>
+    );
+  })}
+</div>
         </div>
 
-        {/* ── CAROUSEL SCENE ── */}
-        <div style={{ position:"relative", height:500, display:"flex", alignItems:"center", justifyContent:"center", perspective:"1800px" }}>
+        {/* ───────────────────────────────────────────────────── */}
+        /* CAROUSEL */
+        {/* ───────────────────────────────────────────────────── */}
 
-          {/* Big ghost domain label — behind everything */}
-          <div className="code domain-enter" key={dom.category} style={{
-            position:"absolute", zIndex:0, pointerEvents:"none",
-            fontSize:130, fontWeight:300, fontStyle:"italic",
-            color:"rgba(232,228,223,0.018)",
-            letterSpacing:"-0.02em",
-            whiteSpace:"nowrap",
-            userSelect:"none",
-            top:"50%", left:"50%",
-            transform:"translate(-50%,-50%)",
-          }}>
-            {dom.label}
-          </div>
+        <div
+          style={{
+            position: "relative",
+            height: 720,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            perspective: "2400px",
+          }}
+        >
+          {/* LEFT */}
 
-          {/* Domain orb — center */}
-          <div style={{ position:"absolute", zIndex:40, pointerEvents:"none", display:"flex", flexDirection:"column", alignItems:"center" }}>
-            <div key={`orb-${dom.category}`} style={{
-              width:96, height:96,
-              borderRadius:"50%",
-              border:`1px solid ${dom.border}`,
-              background:`radial-gradient(circle at 40% 38%, ${dom.muted} 0%, rgba(8,8,8,0.9) 65%)`,
-              display:"flex", alignItems:"center", justifyContent:"center",
-              flexDirection:"column",
-              boxShadow:`0 0 40px rgba(${domToRgb(dom.hue)},0.12), 0 0 1px ${dom.border}`,
-              animation:"fadeIn 0.5s ease",
-            }}>
-              <span style={{ fontSize:30, lineHeight:1 }}>{dom.icon}</span>
-              <div className="code" style={{ fontSize:7, letterSpacing:"0.2em", color:dom.hue, marginTop:5, opacity:0.7 }}>
-                {dom.index}
-              </div>
-            </div>
-            <div className="code domain-enter" key={`label-${dom.category}-${activeIdx}`} style={{ marginTop:10, fontSize:8, letterSpacing:"0.35em", color:dom.hue, textTransform:"uppercase", opacity:0.8 }}>
-              {dom.label}
-            </div>
-            <div className="code" style={{ marginTop:4, fontSize:8, color:"rgba(232,228,223,0.2)", letterSpacing:"0.2em" }}>
-              {String(activeIdx + 1).padStart(2,"0")} / {String(ALL.length).padStart(2,"0")}
-            </div>
-          </div>
-
-          {/* Nav */}
-          <button onClick={() => go(-1)} className="nav-btn" style={{ position:"absolute", left:0, zIndex:60, opacity:0.3, fontSize:28, color:"#e8e4df" }}>
-            ←
-          </button>
-          <button onClick={() => go(1)} className="nav-btn" style={{ position:"absolute", right:0, zIndex:60, opacity:0.3, fontSize:28, color:"#e8e4df" }}>
-            →
+          <button
+            onClick={() => go(-1)}
+            style={{
+              position: "absolute",
+              left: 0,
+              zIndex: 999,
+              width: 56,
+              height: 56,
+              borderRadius: "50%",
+              border: "1px solid rgba(255,255,255,0.1)",
+              background: "rgba(0,0,0,0.4)",
+              backdropFilter: "blur(18px)",
+              color: "rgba(255,255,255,0.6)",
+              fontSize: 30,
+              cursor: "pointer",
+              transition: "all .3s ease",
+            }}
+          >
+            ‹
           </button>
 
-          {/* Cards */}
-          <div style={{ position:"relative", width:"100%", height:"100%", display:"flex", alignItems:"center", justifyContent:"center", transformStyle:"preserve-3d" }}>
+          {/* RIGHT */}
+
+          <button
+            onClick={() => go(1)}
+            style={{
+              position: "absolute",
+              right: 0,
+              zIndex: 999,
+              width: 56,
+              height: 56,
+              borderRadius: "50%",
+              border: "1px solid rgba(255,255,255,0.1)",
+              background: "rgba(0,0,0,0.4)",
+              backdropFilter: "blur(18px)",
+              color: "rgba(255,255,255,0.6)",
+              fontSize: 30,
+              cursor: "pointer",
+              transition: "all .3s ease",
+            }}
+          >
+            ›
+          </button>
+
+          {/* TRACK */}
+
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transformStyle: "preserve-3d",
+            }}
+          >
             {ALL.map((skill, i) => {
-              const isActive = i === activeIdx;
               const d = skill.domain;
-              const st = getCardTransform(i);
+
               return (
-                <div key={i} className="card-item" onClick={() => { setPanelVis(false); setTimeout(()=>{ setActiveIdx(i); setPanelVis(true); }, 180); }}
+                <div
+                  key={i}
+                  onClick={() => {
+                    setPanelVis(false);
+
+                    setTimeout(() => {
+                      setActiveIdx(i);
+                      setPanelVis(true);
+                    }, 180);
+                  }}
                   style={{
-                    position:"absolute", transformStyle:"preserve-3d",
-                    width:196, height:240,
-                    ...st,
-                    border:`1px solid ${isActive ? d.border : "rgba(232,228,223,0.06)"}`,
-                    background: isActive
-                      ? `linear-gradient(150deg, ${d.muted} 0%, rgba(10,10,10,0.95) 60%)`
-                      : "rgba(10,10,10,0.7)",
-                    backdropFilter:"blur(4px)",
-                    padding:"22px 20px",
-                    boxSizing:"border-box",
-                    boxShadow: isActive ? `0 0 60px rgba(${domToRgb(d.hue)},0.14)` : "none",
-                  }}>
+                    position: "absolute",
+                    width: 320,
+                    height: 420,
+                    cursor: "pointer",
+                    transformStyle: "preserve-3d",
+                    ...getCardTransform(i),
+                  }}
+                >
+                  {/* CARD */}
 
-                  {/* Thin top accent */}
-                  {isActive && (
-                    <div style={{ position:"absolute", top:0, left:0, right:0, height:1, background:`linear-gradient(to right, transparent, ${d.hue} 30%, ${d.hue} 70%, transparent)`, opacity:0.7 }} />
-                  )}
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      height: "100%",
+                      overflow: "hidden",
+                      borderRadius: 32,
+                      border: `1px solid ${d.border}`,
+                      background: "rgba(9,9,9,0.88)",
+                      backdropFilter: "blur(24px)",
+                      padding: 28,
+                      boxSizing: "border-box",
+                      boxShadow: `
+                        0 20px 80px rgba(0,0,0,0.65),
+                        0 0 40px rgba(${domToRgb(d.hue)},0.08)
+                      `,
+                    }}
+                  >
+                    {/* TOP LIGHT */}
 
-                  {/* Domain index */}
-                  <div className="code" style={{ fontSize:8, letterSpacing:"0.28em", color:d.hue, opacity:isActive?0.65:0.3, marginBottom:14, textTransform:"uppercase" }}>
-                    {d.index} · {d.label}
-                  </div>
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background:
+                          "linear-gradient(180deg, rgba(255,255,255,0.08), transparent 30%)",
+                        pointerEvents: "none",
+                      }}
+                    />
 
-                  {/* Skill name */}
-                  <div className="code" style={{ fontSize:16, fontWeight:400, color:"#e8e4df", lineHeight:1.35, marginBottom:14, opacity:isActive?1:0.6 }}>
-                    {skill.name}
-                  </div>
+                    {/* NUMBER */}
 
-                  {/* Separator */}
-                  <div style={{ width:18, height:1, background:d.hue, opacity:0.4, marginBottom:14 }} />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 24,
+                        right: 24,
+                        fontSize: 10,
+                        letterSpacing: "0.35em",
+                        color: "rgba(255,255,255,0.2)",
+                      }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </div>
 
-                  {/* Details snippet */}
-                  <div className="code" style={{ fontSize:9, color:"rgba(232,228,223,0.4)", lineHeight:1.75, flex:1 }}>
-                    {skill.details.slice(0, 82)}…
-                  </div>
+                    {/* TOP */}
 
-                  {/* Tools footer */}
-                  <div style={{ marginTop:14, paddingTop:12, borderTop:"1px solid rgba(232,228,223,0.05)" }}>
-                    <div className="code" style={{ fontSize:7.5, color:"rgba(232,228,223,0.18)", letterSpacing:"0.08em", lineHeight:1.7 }}>
-                      {skill.tools.slice(0,2).join(" · ")}
-                      {skill.tools.length > 2 ? ` +${skill.tools.length-2}` : ""}
+                    <div
+                      style={{
+                        position: "relative",
+                        zIndex: 2,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: 48,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 10,
+                          letterSpacing: "0.35em",
+                          textTransform: "uppercase",
+                          opacity: 0.5,
+                          color: "#fff",
+                        }}
+                      >
+                        {d.label}
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: 34,
+                          opacity: 0.85,
+                        }}
+                      >
+                        {d.icon}
+                      </div>
+                    </div>
+
+                    {/* TITLE */}
+
+                    <h3
+                      style={{
+                        position: "relative",
+                        zIndex: 2,
+                        fontSize: 28,
+                        lineHeight: 1.2,
+                        color: "#fff",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.06em",
+                        marginBottom: 22,
+                        fontWeight: 400,
+                      }}
+                    >
+                      {skill.name}
+                    </h3>
+
+                    {/* DESCRIPTION */}
+
+                    <p
+                      style={{
+                        position: "relative",
+                        zIndex: 2,
+                        color: "rgba(255,255,255,0.45)",
+                        lineHeight: 1.8,
+                        fontSize: 13,
+                        marginBottom: 34,
+                      }}
+                    >
+                      {skill.details}
+                    </p>
+
+                    {/* TOOLS */}
+
+                    <div
+                      style={{
+                        position: "relative",
+                        zIndex: 2,
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 8,
+                      }}
+                    >
+                      {skill.tools.slice(0, 5).map((tool, idx) => (
+                        <span
+                          key={idx}
+                          style={{
+                            padding: "8px 12px",
+                            fontSize: 10,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.14em",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            background: "rgba(255,255,255,0.03)",
+                            color: "rgba(255,255,255,0.7)",
+                          }}
+                        >
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* BOTTOM LINE */}
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        width: "100%",
+                        height: 2,
+                        background: "rgba(255,255,255,0.08)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "50%",
+                          height: "100%",
+                          background: d.hue,
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -213,122 +568,262 @@ export default function Competences() {
           </div>
         </div>
 
-        {/* ── PROGRESS DOTS ── */}
-        <div style={{ display:"flex", justifyContent:"center", gap:5, marginTop:8 }}>
-          {/* Domain separators */}
-          {ALL.map((sk, i) => {
-            const isA = i === activeIdx;
-            const isDomainBoundary = i > 0 && ALL[i].domain !== ALL[i-1].domain;
-            return (
-              <React.Fragment key={i}>
-                {isDomainBoundary && <div style={{ width:1, height:6, background:"rgba(232,228,223,0.08)", alignSelf:"center" }} />}
-                <div onClick={() => { setPanelVis(false); setTimeout(()=>{ setActiveIdx(i); setPanelVis(true); }, 180); }} style={{
-                  width: isA ? 20 : 4, height: 4, borderRadius: 2,
-                  background: isA ? sk.domain.hue : "rgba(232,228,223,0.08)",
-                  cursor:"pointer",
-                  transition:"all 0.38s cubic-bezier(0.34,1.56,0.64,1)",
-                }} />
-              </React.Fragment>
-            );
-          })}
+        {/* ───────────────────────────────────────────────────── */}
+        /* INDICATORS */
+        {/* ───────────────────────────────────────────────────── */}
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 10,
+            marginTop: 20,
+          }}
+        >
+          {ALL.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIdx(i)}
+              style={{
+                width: i === activeIdx ? 42 : 8,
+                height: 8,
+                borderRadius: 999,
+                border: "none",
+                cursor: "pointer",
+                background:
+                  i === activeIdx
+                    ? dom.hue
+                    : "rgba(255,255,255,0.18)",
+                transition: "all .45s ease",
+              }}
+            />
+          ))}
         </div>
 
-        {/* ── DETAIL PANEL ── */}
-        <div className={panelVis ? "panel-enter" : "panel-exit"} style={{
-          marginTop:40,
-          display:"grid", gridTemplateColumns:"1fr 1px 1fr 1px 1fr",
-          gap:0,
-          border:"1px solid rgba(232,228,223,0.07)",
-          borderLeft:`3px solid ${dom.hue}`,
-          background:"rgba(10,10,10,0.6)",
-          backdropFilter:"blur(8px)",
-        }}>
+        {/* ───────────────────────────────────────────────────── */}
+        /* DETAIL PANEL */
+        {/* ───────────────────────────────────────────────────── */}
 
-          {/* COL 1 — Domain + Skill identity */}
-          <div style={{ padding:"30px 32px" }}>
-            <div className="code" style={{ fontSize:8, letterSpacing:"0.35em", color:dom.hue, marginBottom:10, textTransform:"uppercase" }}>
+        <div
+          className={panelVis ? "panel-enter" : "panel-exit"}
+          style={{
+            marginTop: 60,
+            display: "grid",
+            gridTemplateColumns: "1fr 1px 1fr 1px 1fr",
+            border: "1px solid rgba(255,255,255,0.06)",
+            background: "rgba(8,8,8,0.7)",
+            backdropFilter: "blur(12px)",
+            overflow: "hidden",
+            borderRadius: 24,
+          }}
+        >
+          {/* COL 1 */}
+
+          <div style={{ padding: "34px" }}>
+            <div
+              style={{
+                fontSize: 10,
+                letterSpacing: "0.35em",
+                color: dom.hue,
+                marginBottom: 14,
+                textTransform: "uppercase",
+              }}
+            >
               {dom.index} — {dom.label}
             </div>
-            <div className="code" style={{ fontSize:26, fontWeight:300, color:"#e8e4df", lineHeight:1.2, marginBottom:6 }}>
+
+            <div
+              style={{
+                fontSize: 30,
+                lineHeight: 1.2,
+                color: "#fff",
+                marginBottom: 10,
+              }}
+            >
               {active.name}
             </div>
-            <div className="code" style={{ fontSize:9, color:"rgba(232,228,223,0.25)", letterSpacing:"0.15em" }}>
+
+            <div
+              style={{
+                fontSize: 10,
+                color: "rgba(255,255,255,0.25)",
+                letterSpacing: "0.18em",
+              }}
+            >
               {dom.tag}
             </div>
 
-            {/* Domain progress bar */}
-            <div style={{ marginTop:22 }}>
-              <div className="code" style={{ fontSize:7.5, color:"rgba(232,228,223,0.2)", letterSpacing:"0.2em", marginBottom:6 }}>
-                {dom.label} · {String(skillIndexInDomain+1).padStart(2,"0")}/{String(dom.items.length).padStart(2,"0")}
+            {/* PROGRESS */}
+
+            <div style={{ marginTop: 24 }}>
+              <div
+                style={{
+                  fontSize: 8,
+                  color: "rgba(255,255,255,0.25)",
+                  letterSpacing: "0.2em",
+                  marginBottom: 8,
+                }}
+              >
+                {dom.label} · {String(skillIndexInDomain + 1).padStart(2, "0")}
+                /{String(dom.items.length).padStart(2, "0")}
               </div>
-              <div style={{ height:1, background:"rgba(232,228,223,0.07)", position:"relative" }}>
-                <div style={{
-                  position:"absolute", top:0, left:0, height:"100%",
-                  width:`${((skillIndexInDomain+1)/dom.items.length)*100}%`,
-                  background:dom.hue,
-                  transition:"width 0.5s ease",
-                }} />
+
+              <div
+                style={{
+                  height: 1,
+                  background: "rgba(255,255,255,0.08)",
+                  position: "relative",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: `${((skillIndexInDomain + 1) / dom.items.length) * 100}%`,
+                    background: dom.hue,
+                  }}
+                />
               </div>
             </div>
           </div>
 
-          {/* Divider */}
-          <div style={{ background:"rgba(232,228,223,0.06)" }} />
+          {/* DIVIDER */}
 
-          {/* COL 2 — Description */}
-          <div style={{ padding:"30px 32px" }}>
-            <div className="code" style={{ fontSize:8, letterSpacing:"0.3em", color:"rgba(232,228,223,0.2)", marginBottom:14, textTransform:"uppercase" }}>
+          <div
+            style={{
+              background: "rgba(255,255,255,0.05)",
+            }}
+          />
+
+          {/* COL 2 */}
+
+          <div style={{ padding: "34px" }}>
+            <div
+              style={{
+                fontSize: 10,
+                letterSpacing: "0.35em",
+                color: "rgba(255,255,255,0.25)",
+                marginBottom: 18,
+                textTransform: "uppercase",
+              }}
+            >
               Description
             </div>
-            <p className="code" style={{ fontSize:10.5, color:"rgba(232,228,223,0.65)", lineHeight:1.95, margin:0 }}>
+
+            <p
+              style={{
+                margin: 0,
+                color: "rgba(255,255,255,0.6)",
+                lineHeight: 2,
+                fontSize: 13,
+              }}
+            >
               {active.details}
             </p>
           </div>
 
-          {/* Divider */}
-          <div style={{ background:"rgba(232,228,223,0.06)" }} />
+          {/* DIVIDER */}
 
-          {/* COL 3 — Tools + nav */}
-          <div style={{ padding:"30px 32px", display:"flex", flexDirection:"column" }}>
-            <div className="code" style={{ fontSize:8, letterSpacing:"0.3em", color:"rgba(232,228,223,0.2)", marginBottom:14, textTransform:"uppercase" }}>
-              Stack & Outils
+          <div
+            style={{
+              background: "rgba(255,255,255,0.05)",
+            }}
+          />
+
+          {/* COL 3 */}
+
+          <div
+            style={{
+              padding: "34px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div
+              style={{
+                fontSize: 10,
+                letterSpacing: "0.35em",
+                color: "rgba(255,255,255,0.25)",
+                marginBottom: 18,
+                textTransform: "uppercase",
+              }}
+            >
+              Stack & Tools
             </div>
 
-            <div style={{ display:"flex", flexWrap:"wrap", gap:6, flex:1 }}>
-              {active.tools.map((t) => (
-                <span key={t} className="code tool-pill" style={{
-                  fontSize:8.5, padding:"5px 10px",
-                  border:"1px solid rgba(232,228,223,0.1)",
-                  background:"rgba(232,228,223,0.03)",
-                  color:"rgba(232,228,223,0.5)",
-                  letterSpacing:"0.06em",
-                  "--hue": dom.hue,
-                  "--hue-muted": dom.muted,
-                }}>
-                  {t}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 10,
+                flex: 1,
+              }}
+            >
+              {active.tools.map((tool) => (
+                <span
+                  key={tool}
+                  style={{
+                    padding: "8px 12px",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.03)",
+                    color: "rgba(255,255,255,0.6)",
+                    fontSize: 10,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {tool}
                 </span>
               ))}
             </div>
 
-            {/* Footer nav hints */}
-            <div style={{ marginTop:20, paddingTop:16, borderTop:"1px solid rgba(232,228,223,0.05)", display:"flex", justifyContent:"space-between" }}>
-              <div className="code" style={{ fontSize:7.5, color:"rgba(232,228,223,0.15)", letterSpacing:"0.2em" }}>← → NAVIGUER</div>
-              <div className="code" style={{ fontSize:7.5, color:"rgba(232,228,223,0.15)", letterSpacing:"0.2em" }}>
-                {String(activeIdx+1).padStart(2,"0")} / {String(ALL.length).padStart(2,"0")}
+            {/* FOOTER */}
+
+            <div
+              style={{
+                marginTop: 24,
+                paddingTop: 18,
+                borderTop: "1px solid rgba(255,255,255,0.05)",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 8,
+                  color: "rgba(255,255,255,0.18)",
+                  letterSpacing: "0.2em",
+                }}
+              >
+                ← → NAVIGUER
+              </div>
+
+              <div
+                style={{
+                  fontSize: 8,
+                  color: "rgba(255,255,255,0.18)",
+                  letterSpacing: "0.2em",
+                }}
+              >
+                {String(activeIdx + 1).padStart(2, "0")} /{" "}
+                {String(ALL.length).padStart(2, "0")}
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   );
 }
 
-/* Helper: hex → "r,g,b" for rgba() */
+/* ───────────────────────────────────────────────────────────── */
+/* HELPER */
+/* ───────────────────────────────────────────────────────────── */
+
 function domToRgb(hex) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
   return `${r},${g},${b}`;
 }
