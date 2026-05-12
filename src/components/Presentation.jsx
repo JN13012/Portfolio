@@ -17,12 +17,9 @@ const Presentation = () => {
               NAGI <span className="text-cyber">JÉRÉMIE</span>
             </h1>
 
-            <div className="inline-flex items-center gap-2 border-l-2 border-cyber pl-4 py-1">
-              <span className="font-mono text-xl text-zinc-400 uppercase tracking-tight">
-                Étudiant Epitech — 3e année <br />
-                <span className="text-cyber">
-                  Recherche Alternance Cybersécurité & IA
-                </span>
+            <div className="items-center gap-2 border-l-2 border-cyber/90 pl-4 py-1">
+              <span className="font-mono text-xl text-cyber/70 uppercase tracking-tight">
+                Recherche Alternance Cybersécurité & IA
               </span>
             </div>
           </div>
@@ -31,101 +28,59 @@ const Presentation = () => {
           <div className="bg-zinc-900/50 border border-white/5 p-6 space-y-4 rounded-sm backdrop-blur-sm">
             <div className="flex items-center gap-2 text-cyber">
               <span className="font-mono text-sm font-bold uppercase tracking-[0.2em]">
-                Bienvenue sur ce portfolio
+                Portfolio intéractif
               </span>
             </div>
 
-            <p className="text-zinc-400 font-mono text-sm leading-relaxed">
-              Developez votre maitrise en cybersécurité grace au laboratoire d'entrainement. Simulation scénarion attaque et defense complet.
+            <p className="text-zinc-100 font-mono text-sm leading-relaxed">
+              Ce portfolio représente mes aspirations professionnelles, mon parcours, mes projets, mes formations et
+              mes certifications.
             </p>
 
-            <ul className="space-y-2 font-mono text-[12px] text-zinc-500">
+            {/* SPACE / SEPARATION VISUELLE */}
+            <div className="my-6 h-px w-full bg-white/10" />
+
+            <div className="flex items-center gap-2 text-cyber">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.2em]">
+                LABOIRATOIRE CTF
+              </span>
+            </div>
+
+            <p className="text-zinc-100 font-mono text-sm leading-relaxed mt-2">
+              Testez et améliorer vos compétences grâce à l'environnement
+              d’entraînement cybersécurité intégré sur la partie droite de
+              l'ecran. <br />
+              <br />
+              Compétences développées :
+            </p>
+            <ul className="space-y-2 font-mono text-sm text-zinc-100/90">
               <li className="flex gap-2">
-                <span className="text-cyber">[01]</span> Linux command-line &
-                navigation avancée
+                <span className="text-cyber">[01]</span> Commandes Linux
+              </li>{" "}
+              <li className="flex gap-2">
+                <span className="text-cyber">[02]</span> Réseaux TCP/IP
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[02]</span> Reconnaissance &
-                enumeration réseau
+                <span className="text-cyber">[03]</span> Reconnaissance réseau &
+                énumération de services
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[03]</span> Analyse de surface
-                d’attaque
+                <span className="text-cyber">[04]</span> Hashes Cracking
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[04]</span> Exploitation &
+                <span className="text-cyber">[05]</span> Exploitation &
                 élévation de privilèges
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[05]</span> Analyse de logs &
-                forensic
+                <span className="text-cyber">[06]</span> Analyse de logs
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[06]</span> Hardening &
-                sécurisation système
+                <span className="text-cyber">[07]</span> Réponse incident
+              </li>
+              <li className="flex gap-2">
+                <span className="text-cyber">[87]</span> Durcissement
               </li>
             </ul>
-
-            <div className="pt-4 flex gap-4">
-              <div className="flex flex-col">
-                <span className="text-[10px] text-zinc-600 uppercase">
-                  Focus
-                </span>
-                <span className="text-xs text-cyber font-mono uppercase">
-                  Offensive Security
-                </span>
-              </div>
-
-              <div className="flex flex-col border-l border-zinc-800 pl-4">
-                <span className="text-[10px] text-zinc-600 uppercase">
-                  Level
-                </span>
-                <span className="text-xs text-white font-mono uppercase">
-                  Intermediate (1 year intensive practice)
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* ================= ABOUT ME ================= */}
-          <div className="bg-zinc-900/50 border border-white/5 p-6 space-y-4 rounded-sm backdrop-blur-sm">
-            <div className="flex items-center gap-2 text-cyber">
-              <span className="font-mono text-sm font-bold uppercase tracking-[0.2em]">
-                Profile_System
-              </span>
-            </div>
-
-            <p className="text-zinc-400 font-mono text-sm leading-relaxed">
-              Étudiant en 3e année à Epitech, je recherche une alternance en
-              cybersécurité ou en intelligence artificielle, avec un fort
-              intérêt pour un profil hybride.
-              <br />
-              <br />
-              Mon orientation principale est le pentesting et la sécurité
-              offensive, mais je développe également des compétences en SOC,
-              forensic, durcissement système, cloud security et ingénierie IA
-              appliquée à la cybersécurité.
-            </p>
-
-            <div className="pt-2 flex gap-4">
-              <div className="flex flex-col">
-                <span className="text-[10px] text-zinc-600 uppercase">
-                  Level
-                </span>
-                <span className="text-xs text-cyber font-mono uppercase">
-                  Intermediate Operator
-                </span>
-              </div>
-
-              <div className="flex flex-col border-l border-zinc-800 pl-4">
-                <span className="text-[10px] text-zinc-600 uppercase">
-                  Status
-                </span>
-                <span className="text-xs text-white font-mono uppercase">
-                  Actively Seeking Apprenticeship
-                </span>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -137,7 +92,7 @@ const Presentation = () => {
 
             {/* Label flottant */}
             <div className="absolute -top-4 right-8 bg-cyber text-black text-[10px] font-bold px-3 py-1 z-30 uppercase tracking-tighter">
-              CTF v 2.
+              CTF v 2.0
             </div>
 
             {/* HAUTEUR AUGMENTÉE : h-[500px] sur mobile, 75vh sur desktop */}

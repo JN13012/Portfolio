@@ -15,7 +15,7 @@
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-glow: glow 2s ease-in-out infinite alternate;
   --animate-scan: scan 2.5s linear infinite;
-  --animate-flicker: flicker 0.15s infinite;
+  --animate-flicker: flicker 0.55s infinite;
 
   /* --- 4. KEYFRAMES (LOGIQUE DES ANIMATIONS) --- */
 
@@ -47,23 +47,10 @@
     }
   }
 
-  /* Effet de clignotement électrique (Flicker) */
-  /* Les paliers irréguliers créent un aspect "bug" réaliste */
-  @keyframes flicker {
-    /* Phase stable : l'élément est parfaitement visible de 0% à 80% */
-    0%,
-    80%,
-    85%,
-    95%,
-    100% {
-      opacity: 1;
-    }
-    /* Phase de "bug" : les coupures sont regroupées entre 81% et 94% */
-    81%,
-    84.999%,
-    91%,
-    94.999% {
-      opacity: 0.4;
-    }
-  }
+  /* Flicker */
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
 }

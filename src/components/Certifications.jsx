@@ -27,7 +27,7 @@ const DIFFICULTY_CONFIG = {
 
 const certifs = [
   {
-    titre: "Pre-Security (New update)",
+    titre: "Pre-Security",
     plateforme: "TryHackMe",
     cat: "TryHackMe",
     date: "04/2026",

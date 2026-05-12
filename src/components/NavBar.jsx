@@ -19,8 +19,12 @@ const NavBar = () => {
       <nav className="bg-black/90 backdrop-blur-md border-b border-cyber/35 py-4">
         <div className="max-w-9xl mx-auto px-6 flex justify-between">
           {/* LOGO à gauche */}
-          <div className="font-mono text-lg font-bold text-white">
-            NAGI_SYS<span className="text-cyber">.EXE</span>
+          <div className="font-mono text-lg font-bold text-white leading-tight">
+            NAGI_JÉRÉMIE
+            <span className="text-zinc-500">.</span>
+
+            <span className="text-cyber">CYBERSÉCURITÉ</span>
+            <span className="text-sky-500">.IA</span>
           </div>
 
           {/* LIENS à droite*/}
