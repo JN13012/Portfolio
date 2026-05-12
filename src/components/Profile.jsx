@@ -149,7 +149,7 @@ const Profile = () => {
           <div className="h-px bg-cyber/10 flex-1"></div>
           <div className="hidden sm:flex items-center gap-3 border border-green-500/30 px-4 py-1.5 bg-red-500/5">
             <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></span>
-            <span className="text-green-500 font-mono text-xs uppercase tracking-tighter">
+            <span className="text-green-500 font-mono text-sm uppercase tracking-tighter">
               Niveau : Junior
             </span>
           </div>
