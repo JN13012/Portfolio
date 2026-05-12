@@ -1,49 +1,156 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────
+   1. THEME (TAILWIND TOKENS UNIQUEMENT)
+───────────────────────────────────────────── */
 @theme {
-  /* --- 1. COULEURS PERSONNALISÉES --- */
   --color-cyber: #4ade80;
   --color-cyber-dark: #166534;
   --color-cyber-light: #86efac;
   --color-background: #000000;
 
-  /* --- 2. TYPOGRAPHIE --- */
-  --font-mono: "JetBrains Mono", "Figma Mono", "ui-monospace", "monospace";
+  --font-mono: "JetBrains Mono", "Figma Mono", "ui-monospace", monospace;
+}
 
-  /* --- 3. ANIMATIONS --- */
-  /* Déclinaisons des durées et comportements */
-  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --animate-glow: glow 2s ease-in-out infinite alternate;
-  --animate-scan: scan 2.5s linear infinite;
+/* ─────────────────────────────────────────────
+   2. TYPOGRAPHY GLOBAL UTILITIES
+───────────────────────────────────────────── */
 
-  /* --- 4. KEYFRAMES (LOGIQUE DES ANIMATIONS) --- */
+.code {
+  font-family: var(--font-mono);
+}
 
-  /* Effet de lueur pulsée sur le texte */
-  @keyframes glow {
-    0% {
-      text-shadow: 0 0 5px rgba(74, 222, 128, 0.2);
-    }
-    100% {
-      text-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
-    }
+.serif {
+  font-family: "Cormorant Garamond", serif;
+}
+
+/* ─────────────────────────────────────────────
+   3. KEYFRAMES (GLOBAL ANIMATIONS)
+───────────────────────────────────────────── */
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px rgba(74, 222, 128, 0.2);
   }
-
-  /* Effet de ligne de scan (laser) */
-  @keyframes scan {
-    0% {
-      top: 0%;
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-    }
-    90% {
-      opacity: 1;
-    }
-    100% {
-      top: 100%;
-      opacity: 0;
-    }
+  100% {
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
   }
-  
+}
+
+@keyframes scan {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes domainFade {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes linegrow {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   4. UI COMPONENT CLASSES (GLOBAL DESIGN SYSTEM)
+───────────────────────────────────────────── */
+
+.panel-enter {
+  animation: fadeSlideUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.panel-exit {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.18s ease;
+}
+
+.domain-enter {
+  animation: domainFade 0.5s ease both;
+}
+
+/* ─────────────────────────────────────────────
+   5. INTERACTIVE ELEMENTS
+───────────────────────────────────────────── */
+
+.card-item {
+  cursor: pointer;
+  transition: all 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-item:hover {
+  filter: brightness(1.12);
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  opacity: 1 !important;
+}
+
+.tool-pill {
+  transition: all 0.2s;
+}
+
+.tool-pill:hover {
+  background: var(--hue-muted) !important;
+  color: var(--hue) !important;
+}
+
+/* ─────────────────────────────────────────────
+   6. GLOBAL BASE (OPTIONNEL MAIS PROPRE)
+───────────────────────────────────────────── */
+
+body {
+  margin: 0;
+  background-color: #080808;
+  color: #e8e4df;
 }

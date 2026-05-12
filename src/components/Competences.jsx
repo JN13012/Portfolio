@@ -1,59 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { DOMAINS } from "./CompetencesData";
 
-/* ─── DATA ──────────────────────────────────────────────────────────────── */
-const DOMAINS = [
-  {
-    category: "Cybersécurité",
-    label: "SECURITY",
-    index: "01",
-    icon: "🛡️",
-    hue: "#bf3a2e",
-    muted: "rgba(191,58,46,0.1)",
-    border: "rgba(191,58,46,0.2)",
-    tag: "Offensive · Defensive · Forensics",
-    items: [
-      { name: "Pentest Offensif",     tools: ["Nmap","Gobuster","Metasploit","SQLMap"],      details: "Tests d'intrusion Web et réseau : reconnaissance, énumération de services, exploitation de vulnérabilités OWASP Top 10, brute force et analyse de surface d'attaque. Simulation complète d'attaquants réels sur des environnements cibles contrôlés." },
-      { name: "Sécurité Réseau",      tools: ["Snort","Wireshark","TCPdump","Nftables"],     details: "Analyse approfondie du trafic réseau, détection d'anomalies comportementales, configuration IDS/IPS et maîtrise des protocoles TCP/IP, DNS, HTTP/S. Segmentation réseau et politique de pare-feux adaptée à chaque contexte." },
-      { name: "Sécurité Applicative", tools: ["JWT","Bcrypt","OWASP","Middleware"],          details: "Sécurisation des APIs et applications web : authentification JWT, hashing des mots de passe, protection des routes, gestion fine des accès et prévention des injections SQL, XSS et CSRF." },
-      { name: "Forensics",            tools: ["Autopsy","FlareVM","REMnux","Volatility"],    details: "Investigation post-incident : analyse de malwares, récupération d'artefacts numériques et examen de systèmes compromis. Reconstruction chronologique d'une intrusion avec corrélation des événements systèmes et réseau." },
-      { name: "SOC & Monitoring",     tools: ["SIEM","ELK Stack","Grafana","Alerting"],      details: "Surveillance continue de systèmes d'information, analyse de logs à grande échelle, détection d'intrusions et mise en place de systèmes d'alerte en temps réel avec réponse aux incidents structurée." },
-    ],
-  },
-  {
-    category: "Intelligence Artificielle",
-    label: "AI / ML",
-    index: "02",
-    icon: "🤖",
-    hue: "#2563c4",
-    muted: "rgba(37,99,196,0.1)",
-    border: "rgba(37,99,196,0.2)",
-    tag: "Generative · RAG · Governance",
-    items: [
-      { name: "IA Générative",    tools: ["Watsonx","Llama","Claude API","Mistral"],    details: "Développement de solutions IA génératives bout en bout : intégration de LLMs de frontier, prompt engineering avancé, chaînes d'inférence et déploiement d'APIs métier. Fine-tuning et adaptation de modèles à des domaines spécialisés." },
-      { name: "RAG Systems",      tools: ["FAISS","LangChain","ChromaDB","Pinecone"],   details: "Architecture complète de systèmes Retrieval Augmented Generation : embeddings vectoriels, recherche sémantique dense, gestion de la mémoire contextuelle longue durée et pipelines documentaires indexés à grande échelle." },
-      { name: "Machine Learning", tools: ["Scikit-learn","Pandas","NumPy","XGBoost"],  details: "Cycle complet de machine learning supervisé et non supervisé : exploration et nettoyage de données, feature engineering, entraînement de modèles, validation croisée et déploiement en conditions réelles de production." },
-      { name: "NLP",              tools: ["HuggingFace","BERT","Transformers","spaCy"], details: "Traitement du langage naturel appliqué : classification de texte, extraction d'entités nommées, embeddings sémantiques et analyse de sentiment sur des corpus textuels à grande échelle. Modèles multilingues et spécialisés." },
-      { name: "AI Governance",    tools: ["Fairness360","Evidently","MLflow","SHAP"],  details: "Encadrement responsable des systèmes IA : détection et réduction des biais algorithmiques, monitoring de dérive de modèle en production, conformité aux réglementations et explicabilité des décisions automatisées." },
-    ],
-  },
-  {
-    category: "Ingénierie & DevSecOps",
-    label: "ENGINEERING",
-    index: "03",
-    icon: "⚙️",
-    hue: "#0e9e6e",
-    muted: "rgba(14,158,110,0.1)",
-    border: "rgba(14,158,110,0.2)",
-    tag: "Fullstack · DevOps · Cloud",
-    items: [
-      { name: "Fullstack Architecture", tools: ["Next.js","Prisma","Socket.io","tRPC"],        details: "Conception et développement d'applications fullstack production-ready : rendu hybride SSR/SSG, temps réel WebSocket, ORM typé et architecture API robuste. Gestion de l'état côté client et optimisation des performances." },
-      { name: "CI/CD DevSecOps",        tools: ["Docker","Jenkins","GitHub Actions","K8s"],    details: "Automatisation complète du cycle de livraison : pipelines CI/CD sécurisés, conteneurisation et orchestration des services, intégration des scans de sécurité (SAST/DAST) directement dans le flux de déploiement." },
-      { name: "Linux & Systèmes",       tools: ["Bash","Ansible","Systemd","Nginx"],          details: "Administration système Linux avancée, scripting Bash pour l'automatisation, gestion fine des permissions, hardening de serveurs et configuration d'environnements de production haute disponibilité." },
-      { name: "Salesforce",             tools: ["Apex","SOQL","Flows","LWC"],                  details: "Développement sur Salesforce Platform : personnalisation Apex, automatisation des processus métier via Flows, développement de composants Lightning Web Components et gestion des données CRM complexes." },
-      { name: "Databases",              tools: ["MySQL","Redis","Prisma","PostgreSQL"],        details: "Modélisation et optimisation de bases de données relationnelles et cache : conception de schémas, indexation avancée, gestion de l'intégrité des données, caching distribué avec Redis et migrations en production sans downtime." },
-    ],
-  },
-];
+
 
 const ALL = DOMAINS.flatMap((d) => d.items.map((it) => ({ ...it, domain: d })));
 
@@ -65,15 +13,6 @@ export default function Competences() {
 
   const active = ALL[activeIdx];
   const dom = active.domain;
-
-  // Font injection
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap";
-    document.head.appendChild(link);
-    return () => { try { document.head.removeChild(link); } catch(e) {} };
-  }, []);
 
   const go = useCallback((dir) => {
     setPanelVis(false);
@@ -110,64 +49,13 @@ export default function Competences() {
     };
   };
 
-const css = `
-  .code  { font-family: 'JetBrains Mono', monospace; }
-
-  @keyframes fadeSlideUp {
-    from { opacity:0; transform:translateY(18px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
-
-  @keyframes fadeIn {
-    from { opacity:0; }
-    to   { opacity:1; }
-  }
-
-  @keyframes domainFade {
-    from { opacity:0; transform:translateX(-10px); }
-    to   { opacity:1; transform:translateX(0); }
-  }
-
-  @keyframes linegrow {
-    from { width:0; }
-    to   { width:100%; }
-  }
-
-  .panel-enter  { animation: fadeSlideUp 0.45s cubic-bezier(0.4,0,0.2,1) both; }
-  .panel-exit   { opacity:0; transform:translateY(8px); transition:all 0.18s ease; }
-
-  .domain-enter { animation: domainFade 0.5s ease both; }
-
-  .card-item {
-    cursor: pointer;
-    transition: all 0.65s cubic-bezier(0.4,0,0.2,1);
-  }
-  .card-item:hover { filter: brightness(1.12); }
-
-  .nav-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .nav-btn:hover { opacity: 1 !important; }
-
-  .tool-pill {
-    transition: all 0.2s;
-  }
-  .tool-pill:hover {
-    background: var(--hue-muted) !important;
-    color: var(--hue) !important;
-  }
-`;
 
   // Domain progress across all skills
   const domainStart = DOMAINS.slice(0, DOMAINS.indexOf(dom)).reduce((a, d) => a + d.items.length, 0);
   const skillIndexInDomain = activeIdx - domainStart;
 
   return (
-    <div style={{ backgroundColor:"#080808", minHeight:"100vh", color:"#e8e4df", position:"relative", overflow:"hidden", fontFamily:"sans-serif" }}>
-      <style>{css}</style>
+    <div style={{ backgroundColor:"#080808", minHeight:"100vh", color:"#e8e4df", position:"relative", overflow:"hidden", fontFamily:"sans-code" }}>
 
       {/* Subtle noise texture via CSS */}
       <div style={{
@@ -192,7 +80,7 @@ const css = `
             <div className="code" style={{ fontSize:10, letterSpacing:"0.35em", color:"rgba(232,228,223,0.3)", marginBottom:14, textTransform:"uppercase" }}>
               04 — Compétences techniques
             </div>
-            <h2 className="serif" style={{ margin:0, fontSize:38, fontWeight:300, color:"#e8e4df", letterSpacing:"0.02em", lineHeight:1 }}>
+            <h2 className="code" style={{ margin:0, fontSize:38, fontWeight:300, color:"#e8e4df", letterSpacing:"0.02em", lineHeight:1 }}>
               Hard Skills
             </h2>
           </div>
@@ -221,7 +109,7 @@ const css = `
         <div style={{ position:"relative", height:500, display:"flex", alignItems:"center", justifyContent:"center", perspective:"1800px" }}>
 
           {/* Big ghost domain label — behind everything */}
-          <div className="serif domain-enter" key={dom.category} style={{
+          <div className="code domain-enter" key={dom.category} style={{
             position:"absolute", zIndex:0, pointerEvents:"none",
             fontSize:130, fontWeight:300, fontStyle:"italic",
             color:"rgba(232,228,223,0.018)",
@@ -300,7 +188,7 @@ const css = `
                   </div>
 
                   {/* Skill name */}
-                  <div className="serif" style={{ fontSize:16, fontWeight:400, color:"#e8e4df", lineHeight:1.35, marginBottom:14, opacity:isActive?1:0.6 }}>
+                  <div className="code" style={{ fontSize:16, fontWeight:400, color:"#e8e4df", lineHeight:1.35, marginBottom:14, opacity:isActive?1:0.6 }}>
                     {skill.name}
                   </div>
 
@@ -361,7 +249,7 @@ const css = `
             <div className="code" style={{ fontSize:8, letterSpacing:"0.35em", color:dom.hue, marginBottom:10, textTransform:"uppercase" }}>
               {dom.index} — {dom.label}
             </div>
-            <div className="serif" style={{ fontSize:26, fontWeight:300, color:"#e8e4df", lineHeight:1.2, marginBottom:6 }}>
+            <div className="code" style={{ fontSize:26, fontWeight:300, color:"#e8e4df", lineHeight:1.2, marginBottom:6 }}>
               {active.name}
             </div>
             <div className="code" style={{ fontSize:9, color:"rgba(232,228,223,0.25)", letterSpacing:"0.15em" }}>
