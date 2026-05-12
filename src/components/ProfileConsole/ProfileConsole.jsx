@@ -220,6 +220,19 @@ const ProfileConsole = () => {
         addLog("siem.txt", "out");
         return;
       }
+
+      // -------------------------
+      // HELP
+      // -------------------------
+      if (fullCommand === "help") {
+        addLog(`${shellPrefix} SPLUNK SIEM COMMAND REFERENCE`, "sys");
+
+        addLog(
+          "Available commands : ls, cat [file], search [query] [source], exit",
+          "sys",
+        );
+        return;
+      }
       if (fullCommand === "cat readme.txt") {
         addLog(
           "You are now a SOC analyst. A critical security alert has been triggered. Your task's to analyze logs, and identify the attacker IP address as quick as possible.",
@@ -2282,6 +2295,10 @@ const ProfileConsole = () => {
         addLog("824     explorer.exe         USER", "out");
         addLog("1276     cmd.exe             USER", "out");
         addLog("1337    svchost.exe          SYSTEM", "out");
+        addLog(
+          "[!] Payload probably renamed for stealth and persistence.",
+          "err",
+        );
         addLog(
           "[*] Terminate malicious persistence process using kill <PID>",
           "sys",

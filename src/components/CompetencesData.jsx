@@ -1,89 +1,145 @@
 export const hardSkills = [
+  // CYBERSECURITE
   {
     category: "Cybersécurité",
     icon: "🛡️",
     theme: "border-red-500/40 text-red-400",
     glow: "shadow-[0_0_25px_rgba(239,68,68,0.15)]",
-    tools: ["Nmap", "Metasploit", "Wireshark", "Burp Suite", "Hydra", "Snort", "Hashcat"],
+
+    tools: [
+      "Nmap",
+      "Gobuster",
+      "SQLMap",
+      "Metasploit",
+      "Hydra",
+      "Hashcat",
+      "JTR",
+      "Splunk",
+      "Snort",
+      "Fail2Ban",
+      "FlareVM",
+      "TCP/IP",
+    ],
+
     items: [
-      { 
-        name: "Pentest Offensif (THM 101)", 
-        tools: "Nmap, Gobuster, Metasploit, SQLMap", 
-        details: "Scan & énumération de services. Exploitation de vulnérabilités Web (Injections SQL, XSS, IDOR) et brute-force (Hydra, John the Ripper). Méthodologie alignée sur l'OWASP Top 10." 
+      {
+        name: "Sécurité Offensive",
+        icon: "⚔️",
+        tools:
+          "Nmap, Gobuster, SQLMap, Metasploit, Hydra, John The Ripper, Hashcat",
+        details:
+          "Réalisation de tests d’intrusion Web et réseau : reconnaissance, énumération de services, exploitation de vulnérabilités, brute force et analyse de surface d’attaque selon les méthodologies OWASP.",
       },
-      { 
-        name: "Sécurité Défensive & Réseaux", 
-        tools: "Snort, Fail2ban, Wireshark, TCPdump", 
-        details: "Analyse du modèle OSI et des protocoles (TCP/IP, DNS, HTTP). Configuration d'IDS/IPS et analyse de trafic réseau pour détecter des patterns d'attaque ou des exfiltrations." 
+
+      {
+        name: "Sécurité Défensive & Forensics",
+        icon: "🧱",
+        tools:
+          "Splunk, Snort, Fail2Ban, SIEM, Monitoring, FlareVM, Reverse Engineering, Malware Analysis",
+        details:
+          "Mise en place de mécanismes de défense et de surveillance de sécurité : détection d’intrusions, supervision d’événements via SIEM, analyse de logs et monitoring d’infrastructure. Investigation post-incident, analyse de malwares en environnement isolé et récupération d’artefacts numériques.",
       },
-      { 
-        name: "Sécurité Applicative & Auth", 
-        tools: "JWT, Bcrypt, Middleware Security", 
-        details: "Implémentation de protocoles d'authentification sécurisés (Tokens JWT), hachage de mots de passe et protection des routes API (CRUD) contre les accès non autorisés." 
+
+      {
+        name: "Réseaux & Protocoles",
+        icon: "🌐",
+        tools: "TCP/IP, DNS, HTTP, Routing, Wireshark",
+        details:
+          "Analyse des protocoles réseau, compréhension des couches TCP/IP, inspection de trafic et diagnostic de communications réseau.",
       },
-      { 
-        name: "Digital Forensic", 
-        tools: "REMnux, FlareVM, Autopsy", 
-        details: "Analyse de malwares en environnement isolé, investigation de logs système et récupération d'artefacts numériques pour l'analyse post-incident." 
-      }
-    ]
+    ],
   },
+
+  // IA
   {
     category: "Intelligence Artificielle",
     icon: "🤖",
     theme: "border-blue-500/40 text-blue-400",
     glow: "shadow-[0_0_25px_rgba(59,130,246,0.15)]",
-    tools: ["IBM Watsonx", "PyTorch", "LangChain", "Hugging Face", "FAISS", "Python"],
+
+    tools: [
+      "LLM",
+      "NLP",
+      "PyTorch",
+      "Flask",
+      "Inference",
+      "Embeddings",
+      "LangChain",
+      "FAISS",
+      "ChromaDB",
+      "Transformers",
+    ],
+
     items: [
-      { 
-        name: "Développement IA (IBM)", 
-        tools: "Watsonx.ai, Llama 3, Granite", 
-        details: "Conception de solutions d'IA générative. Maîtrise des APIs d'inférence, du Prompt Engineering et de l'intégration de modèles STT (Speech-to-Text) et TTS (Text-to-Speech)." 
+      {
+        name: "AI Engineering & Backend",
+        icon: "⚙️",
+        tools:
+          "Flask, REST APIs, LangChain, Prompt Engineering, AI Workflows, Deployment, Groq, IBM Watsonx",
+        details:
+          "Conception et déploiement d’applications IA en production : développement de backends et APIs pour exposer des modèles d’IA, intégration de LLMs via prompt engineering, orchestration de workflows avec LangChain et gestion d’inférences via APIs. Focus sur la mise en production et l’intégration des modèles dans des systèmes applicatifs.",
       },
-      { 
-        name: "Architecture RAG", 
-        tools: "FAISS, ChromaDB, LangChain", 
-        details: "Mise en place de systèmes de récupération augmentée (RAG). Indexation de documents via embeddings sémantiques et gestion de la persistance du contexte conversationnel." 
+
+      {
+        name: "Machine Learning & IA Fondamentale",
+        icon: "🧠",
+        tools:
+          "PyTorch, Transformers, NLP, Embeddings, FAISS, ChromaDB, LLMs, Llama 3, Hugging Face, Inference Pipelines",
+        details:
+          "Maîtrise des concepts fondamentaux de l’intelligence artificielle moderne : modèles de langage (LLMs), NLP, embeddings et recherche sémantique. Expérience en inférence de modèles, construction de pipelines IA, indexation vectorielle et exploitation d’écosystèmes comme PyTorch et Hugging Face pour l’entraînement et l’évaluation de modèles.",
       },
-      { 
-        name: "Data Processing & NLP", 
-        tools: "Pandas, NumPy, Scikit-learn", 
-        details: "Nettoyage et préparation de datasets, tokenization et analyse du langage naturel pour l'entraînement ou le fine-tuning léger de pipelines IA." 
-      },
-      { 
-        name: "Éthique & Gouvernance IA", 
-        tools: "AI Fairness 360, Watsonx.governance", 
-        details: "Évaluation des biais dans les modèles, monitoring de la 'dérive' (drift) et implémentation de pratiques d'IA responsable selon les standards IBM." 
-      }
-    ]
+    ],
   },
+
+  // =========================================================
+  // DEV & DEVSECOPS
+  // =========================================================
   {
     category: "Ingénierie & DevSecOps",
     icon: "⚙️",
     theme: "border-emerald-500/40 text-emerald-400",
     glow: "shadow-[0_0_25px_rgba(16,185,129,0.15)]",
-    tools: ["Docker", "Jenkins", "Linux", "Node.js", "MySQL", "Prisma", "Salesforce"],
+
+    tools: [
+      "React",
+      "Next.js",
+      "Node.js",
+      "Docker",
+      "Jenkins",
+      "Linux",
+      "Git",
+      "Socket.io",
+      "MySQL",
+      "Prisma",
+      "CI/CD",
+    ],
+
     items: [
-      { 
-        name: "Architecture Fullstack", 
-        tools: "Next.js, Socket.io, Prisma", 
-        details: "Développement d'applications temps réel avec WebSockets. Gestion de bases de données relationnelles (MySQL) et ORM pour garantir l'intégrité des données." 
+      {
+        name: "Fullstack & Applications Web",
+        icon: "💻",
+        tools: "React, Next.js, Node.js, Socket.io",
+        details:
+          "Développement d’applications web complètes et modernes avec interfaces dynamiques, communication temps réel et intégration frontend/backend. Conception d’expériences utilisateur interactives et performantes.",
       },
-      { 
-        name: "DevSecOps & CI/CD", 
-        tools: "Docker, Jenkins, JCasC, Git", 
-        details: "Conteneurisation d'applications complexes via Docker-Compose. Automatisation de pipelines de déploiement et intégration de tests de sécurité automatisés." 
+
+      {
+        name: "Backend, APIs & Données",
+        icon: "🔌",
+        tools:
+          "Node.js, Flask, REST APIs, Authentication, MySQL, Prisma, ORM, SQL",
+        details:
+          "Conception d’architectures backend robustes et sécurisées. Développement d’APIs REST, gestion de l’authentification et modélisation de bases de données relationnelles avec optimisation des accès et des performances.",
       },
-      { 
-        name: "Administration Système & AD", 
-        tools: "Linux (Bash), Active Directory, GPO", 
-        details: "Gestion des utilisateurs et des politiques de sécurité (GPO) sous Windows Server. Automatisation de tâches d'administration via scripts Bash et Python." 
+
+      {
+        name: "DevOps, Systèmes & Infrastructure",
+        icon: "🚀",
+        tools:
+          "Docker, Jenkins, Git, CI/CD, Linux, Bash, System Administration",
+        details:
+          "Mise en place de pipelines CI/CD et automatisation des déploiements. Administration de systèmes Linux, scripting Bash et gestion d’infrastructures pour assurer fiabilité, scalabilité et reproductibilité des environnements.",
       },
-      { 
-        name: "Écosystème Salesforce", 
-        tools: "Apex, SOQL, Salesforce Flows", 
-        details: "Développement de composants personnalisés, gestion de la planification (scheduling) et suivi rigoureux des logs d'exécution sur la plateforme Salesforce." 
-      }
-    ]
-  }
+    ],
+  },
 ];

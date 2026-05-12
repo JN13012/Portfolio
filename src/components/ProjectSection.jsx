@@ -13,6 +13,7 @@ import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.jpg";
 import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.jpg";
 import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.jpg";
 import Tor from "../assets/Projets/Tor.png";
+import Btc from "../assets/Experiences/Mining_rig.png";
 const categoryThemes = {
   IA: {
     card: "hover:border-cyber/40",
@@ -40,7 +41,7 @@ const categoryThemes = {
   },
 };
 const projets = [
-{
+  {
     titre: "Audit - 1",
     description:
       "Premier Pentest avec accord du responsable de l'infrastructure. Decouverte des conditions réelles, mise en place d'une methodologie : Reconnaissance, Blocage WAF, Proxy + Énumération via Tor, interception trafic, injections SQL, brute force.",
@@ -251,6 +252,26 @@ const projets = [
     date: "08/2025",
     categorie: "Software Engineering",
     complexity: 3,
+  },
+  {
+    titre: "Blockchain_Mining",
+    description:
+      "Conception, assemblage et exploitation de fermes de minage GPU dédiées à Ethereum (avant transition vers Proof-of-Stake). Mise en place complète de l'infrastructure hardware et logicielle incluant l'optimisation des performances, la gestion énergétique et la gestion du refroidissement des rigs. Analyse des marchés crypto et optimisation des stratégies de rendement.",
+
+    tags: [
+      "Hardware",
+      "Blockchain",
+      "Monitoring",
+      "Performance Tunning",
+      "Administration Systèmes",
+      "Analyse de Marché",
+    ],
+
+    lien: "#",
+    image: Btc,
+    date: "01/2018 - 09/2022",
+    categorie: "Gestion de Projet",
+    complexity: 4,
   },
 ];
 

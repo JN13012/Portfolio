@@ -1,105 +1,446 @@
-import React, { useState } from 'react';
-import { hardSkills } from '../components/CompetencesData';
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
-const Competences = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedSkill, setSelectedSkill] = useState(null);
+/* ─── DATA ──────────────────────────────────────────────────────────────── */
+const DOMAINS = [
+  {
+    category: "Cybersécurité",
+    label: "SECURITY",
+    index: "01",
+    icon: "🛡️",
+    hue: "#bf3a2e",
+    muted: "rgba(191,58,46,0.1)",
+    border: "rgba(191,58,46,0.2)",
+    tag: "Offensive · Defensive · Forensics",
+    items: [
+      { name: "Pentest Offensif",     tools: ["Nmap","Gobuster","Metasploit","SQLMap"],      details: "Tests d'intrusion Web et réseau : reconnaissance, énumération de services, exploitation de vulnérabilités OWASP Top 10, brute force et analyse de surface d'attaque. Simulation complète d'attaquants réels sur des environnements cibles contrôlés." },
+      { name: "Sécurité Réseau",      tools: ["Snort","Wireshark","TCPdump","Nftables"],     details: "Analyse approfondie du trafic réseau, détection d'anomalies comportementales, configuration IDS/IPS et maîtrise des protocoles TCP/IP, DNS, HTTP/S. Segmentation réseau et politique de pare-feux adaptée à chaque contexte." },
+      { name: "Sécurité Applicative", tools: ["JWT","Bcrypt","OWASP","Middleware"],          details: "Sécurisation des APIs et applications web : authentification JWT, hashing des mots de passe, protection des routes, gestion fine des accès et prévention des injections SQL, XSS et CSRF." },
+      { name: "Forensics",            tools: ["Autopsy","FlareVM","REMnux","Volatility"],    details: "Investigation post-incident : analyse de malwares, récupération d'artefacts numériques et examen de systèmes compromis. Reconstruction chronologique d'une intrusion avec corrélation des événements systèmes et réseau." },
+      { name: "SOC & Monitoring",     tools: ["SIEM","ELK Stack","Grafana","Alerting"],      details: "Surveillance continue de systèmes d'information, analyse de logs à grande échelle, détection d'intrusions et mise en place de systèmes d'alerte en temps réel avec réponse aux incidents structurée." },
+    ],
+  },
+  {
+    category: "Intelligence Artificielle",
+    label: "AI / ML",
+    index: "02",
+    icon: "🤖",
+    hue: "#2563c4",
+    muted: "rgba(37,99,196,0.1)",
+    border: "rgba(37,99,196,0.2)",
+    tag: "Generative · RAG · Governance",
+    items: [
+      { name: "IA Générative",    tools: ["Watsonx","Llama","Claude API","Mistral"],    details: "Développement de solutions IA génératives bout en bout : intégration de LLMs de frontier, prompt engineering avancé, chaînes d'inférence et déploiement d'APIs métier. Fine-tuning et adaptation de modèles à des domaines spécialisés." },
+      { name: "RAG Systems",      tools: ["FAISS","LangChain","ChromaDB","Pinecone"],   details: "Architecture complète de systèmes Retrieval Augmented Generation : embeddings vectoriels, recherche sémantique dense, gestion de la mémoire contextuelle longue durée et pipelines documentaires indexés à grande échelle." },
+      { name: "Machine Learning", tools: ["Scikit-learn","Pandas","NumPy","XGBoost"],  details: "Cycle complet de machine learning supervisé et non supervisé : exploration et nettoyage de données, feature engineering, entraînement de modèles, validation croisée et déploiement en conditions réelles de production." },
+      { name: "NLP",              tools: ["HuggingFace","BERT","Transformers","spaCy"], details: "Traitement du langage naturel appliqué : classification de texte, extraction d'entités nommées, embeddings sémantiques et analyse de sentiment sur des corpus textuels à grande échelle. Modèles multilingues et spécialisés." },
+      { name: "AI Governance",    tools: ["Fairness360","Evidently","MLflow","SHAP"],  details: "Encadrement responsable des systèmes IA : détection et réduction des biais algorithmiques, monitoring de dérive de modèle en production, conformité aux réglementations et explicabilité des décisions automatisées." },
+    ],
+  },
+  {
+    category: "Ingénierie & DevSecOps",
+    label: "ENGINEERING",
+    index: "03",
+    icon: "⚙️",
+    hue: "#0e9e6e",
+    muted: "rgba(14,158,110,0.1)",
+    border: "rgba(14,158,110,0.2)",
+    tag: "Fullstack · DevOps · Cloud",
+    items: [
+      { name: "Fullstack Architecture", tools: ["Next.js","Prisma","Socket.io","tRPC"],        details: "Conception et développement d'applications fullstack production-ready : rendu hybride SSR/SSG, temps réel WebSocket, ORM typé et architecture API robuste. Gestion de l'état côté client et optimisation des performances." },
+      { name: "CI/CD DevSecOps",        tools: ["Docker","Jenkins","GitHub Actions","K8s"],    details: "Automatisation complète du cycle de livraison : pipelines CI/CD sécurisés, conteneurisation et orchestration des services, intégration des scans de sécurité (SAST/DAST) directement dans le flux de déploiement." },
+      { name: "Linux & Systèmes",       tools: ["Bash","Ansible","Systemd","Nginx"],          details: "Administration système Linux avancée, scripting Bash pour l'automatisation, gestion fine des permissions, hardening de serveurs et configuration d'environnements de production haute disponibilité." },
+      { name: "Salesforce",             tools: ["Apex","SOQL","Flows","LWC"],                  details: "Développement sur Salesforce Platform : personnalisation Apex, automatisation des processus métier via Flows, développement de composants Lightning Web Components et gestion des données CRM complexes." },
+      { name: "Databases",              tools: ["MySQL","Redis","Prisma","PostgreSQL"],        details: "Modélisation et optimisation de bases de données relationnelles et cache : conception de schémas, indexation avancée, gestion de l'intégrité des données, caching distribué avec Redis et migrations en production sans downtime." },
+    ],
+  },
+];
+
+const ALL = DOMAINS.flatMap((d) => d.items.map((it) => ({ ...it, domain: d })));
+
+/* ─── COMPONENT ─────────────────────────────────────────────────────────── */
+export default function Competences() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [panelVis, setPanelVis] = useState(true);
+  const timeoutRef = useRef(null);
+
+  const active = ALL[activeIdx];
+  const dom = active.domain;
+
+  // Font injection
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap";
+    document.head.appendChild(link);
+    return () => { try { document.head.removeChild(link); } catch(e) {} };
+  }, []);
+
+  const go = useCallback((dir) => {
+    setPanelVis(false);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setActiveIdx((i) => (i + dir + ALL.length) % ALL.length);
+      setPanelVis(true);
+    }, 180);
+  }, []);
+
+  useEffect(() => {
+    const fn = (e) => {
+      if (e.key === "ArrowLeft") go(-1);
+      if (e.key === "ArrowRight") go(1);
+    };
+    window.addEventListener("keydown", fn);
+    return () => window.removeEventListener("keydown", fn);
+  }, [go]);
+
+  const getCardTransform = (i) => {
+    const total = ALL.length;
+    const angle  = (i / total) * Math.PI * 2;
+    const offset = (activeIdx / total) * Math.PI * 2;
+    const fin    = angle - offset;
+    const x = Math.cos(fin) * 370;
+    const y = Math.sin(fin) * 148;
+    const z = Math.sin(fin) * 95;
+    const depth = (z + 95) / 190;
+    return {
+      transform: `translate3d(${x}px,${y}px,${z}px) scale(${0.46 + depth * 0.58})`,
+      opacity: 0.1 + depth * 0.9,
+      zIndex: Math.floor(depth * 100),
+      transition: "all 0.7s cubic-bezier(0.4,0,0.2,1)",
+    };
+  };
+
+const css = `
+  .code  { font-family: 'JetBrains Mono', monospace; }
+
+  @keyframes fadeSlideUp {
+    from { opacity:0; transform:translateY(18px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity:0; }
+    to   { opacity:1; }
+  }
+
+  @keyframes domainFade {
+    from { opacity:0; transform:translateX(-10px); }
+    to   { opacity:1; transform:translateX(0); }
+  }
+
+  @keyframes linegrow {
+    from { width:0; }
+    to   { width:100%; }
+  }
+
+  .panel-enter  { animation: fadeSlideUp 0.45s cubic-bezier(0.4,0,0.2,1) both; }
+  .panel-exit   { opacity:0; transform:translateY(8px); transition:all 0.18s ease; }
+
+  .domain-enter { animation: domainFade 0.5s ease both; }
+
+  .card-item {
+    cursor: pointer;
+    transition: all 0.65s cubic-bezier(0.4,0,0.2,1);
+  }
+  .card-item:hover { filter: brightness(1.12); }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { opacity: 1 !important; }
+
+  .tool-pill {
+    transition: all 0.2s;
+  }
+  .tool-pill:hover {
+    background: var(--hue-muted) !important;
+    color: var(--hue) !important;
+  }
+`;
+
+  // Domain progress across all skills
+  const domainStart = DOMAINS.slice(0, DOMAINS.indexOf(dom)).reduce((a, d) => a + d.items.length, 0);
+  const skillIndexInDomain = activeIdx - domainStart;
 
   return (
-    <section id="competences" className="py-32 bg-[#020202] text-white relative border-y border-white/5 overflow-hidden">
-      {/* Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+    <div style={{ backgroundColor:"#080808", minHeight:"100vh", color:"#e8e4df", position:"relative", overflow:"hidden", fontFamily:"sans-serif" }}>
+      <style>{css}</style>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
-          <span className="text-blue-500 font-mono text-base opacity-60">04.</span>
-          <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono italic">Tech_Stack_Audit</span>
-          <div className="h-px bg-white/10 flex-1"></div>
-        </h2>
+      {/* Subtle noise texture via CSS */}
+      <div style={{
+        position:"absolute", inset:0, pointerEvents:"none", opacity:0.025,
+        backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        backgroundSize:"200px 200px",
+      }} />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {hardSkills.map((group, i) => (
-            <div 
-              key={i} 
-              onClick={() => setSelectedCategory(group)}
-              className={`group p-8 bg-zinc-900/10 border ${group.theme} cursor-pointer transition-all duration-700 hover:bg-zinc-900/30 hover:${group.glow} relative`}
-            >
-              <div className="flex justify-between items-start mb-12">
-                <span className="text-4xl filter grayscale group-hover:grayscale-0 transition-all">{group.icon}</span>
-                <div className="text-[10px] font-mono text-zinc-500 uppercase flex flex-col items-end italic">
-                  <span>Status: Operational</span>
-                  <span className="text-blue-400">Access_Granted</span>
-                </div>
-              </div>
+      {/* Ambient radial glow — very subtle */}
+      <div style={{
+        position:"absolute", inset:0, pointerEvents:"none",
+        background:`radial-gradient(ellipse 60% 50% at 50% 45%, rgba(${domToRgb(dom.hue)},0.06) 0%, transparent 68%)`,
+        transition:"background 1s ease",
+      }} />
 
-              <h3 className="font-mono text-xl uppercase text-zinc-100 mb-6 tracking-tighter">{group.category}</h3>
-              
-              <div className="flex flex-wrap gap-2">
-                {group.tools.slice(0, 4).map(tool => (
-                  <span key={tool} className="text-[9px] px-2 py-0.5 bg-white/5 border border-white/10 text-zinc-400 font-mono italic">
-                    {tool}
-                  </span>
-                ))}
-              </div>
+      <div style={{ maxWidth:1100, margin:"0 auto", padding:"60px 40px", boxSizing:"border-box" }}>
+
+        {/* ── HEADER ── */}
+        <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:56 }}>
+
+          <div>
+            <div className="code" style={{ fontSize:10, letterSpacing:"0.35em", color:"rgba(232,228,223,0.3)", marginBottom:14, textTransform:"uppercase" }}>
+              04 — Compétences techniques
             </div>
-          ))}
+            <h2 className="serif" style={{ margin:0, fontSize:38, fontWeight:300, color:"#e8e4df", letterSpacing:"0.02em", lineHeight:1 }}>
+              Hard Skills
+            </h2>
+          </div>
+
+          {/* Domain pills */}
+          <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:10 }}>
+            {DOMAINS.map((d, di) => {
+              const isA = dom.category === d.category;
+              const startIdx = DOMAINS.slice(0, di).reduce((a, x) => a + x.items.length, 0);
+              return (
+                <button key={d.category} onClick={() => { setPanelVis(false); setTimeout(()=>{ setActiveIdx(startIdx); setPanelVis(true); }, 180); }}
+                  className="code nav-btn"
+                  style={{ display:"flex", alignItems:"center", gap:10, opacity: isA ? 1 : 0.35, padding:0 }}>
+                  <span style={{ fontSize:9, letterSpacing:"0.3em", color: isA ? d.hue : "inherit", textTransform:"uppercase" }}>
+                    {d.index} {d.label}
+                  </span>
+                  <div style={{ width:24, height:1, background: isA ? d.hue : "rgba(232,228,223,0.2)", transition:"all 0.3s" }} />
+                </button>
+              );
+            })}
+          </div>
+
         </div>
 
-        {/* MODALE */}
-        {selectedCategory && (
-          <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 md:p-12 bg-black/95 backdrop-blur-xl">
-            <div className={`bg-[#050505] border ${selectedCategory.theme} w-full max-w-6xl h-[85vh] flex flex-col shadow-2xl overflow-hidden relative`}>
-              
-              <div className="p-8 border-b border-white/5 flex justify-between items-center bg-zinc-900/20">
-                <h3 className="text-2xl font-mono uppercase text-white flex items-center gap-4">
-                   {selectedCategory.category}
-                </h3>
-                <button onClick={() => {setSelectedCategory(null); setSelectedSkill(null)}} className="font-mono text-zinc-500 hover:text-white transition-colors">
-                  [ TERMINATE_SESSION ]
-                </button>
+        {/* ── CAROUSEL SCENE ── */}
+        <div style={{ position:"relative", height:500, display:"flex", alignItems:"center", justifyContent:"center", perspective:"1800px" }}>
+
+          {/* Big ghost domain label — behind everything */}
+          <div className="serif domain-enter" key={dom.category} style={{
+            position:"absolute", zIndex:0, pointerEvents:"none",
+            fontSize:130, fontWeight:300, fontStyle:"italic",
+            color:"rgba(232,228,223,0.018)",
+            letterSpacing:"-0.02em",
+            whiteSpace:"nowrap",
+            userSelect:"none",
+            top:"50%", left:"50%",
+            transform:"translate(-50%,-50%)",
+          }}>
+            {dom.label}
+          </div>
+
+          {/* Domain orb — center */}
+          <div style={{ position:"absolute", zIndex:40, pointerEvents:"none", display:"flex", flexDirection:"column", alignItems:"center" }}>
+            <div key={`orb-${dom.category}`} style={{
+              width:96, height:96,
+              borderRadius:"50%",
+              border:`1px solid ${dom.border}`,
+              background:`radial-gradient(circle at 40% 38%, ${dom.muted} 0%, rgba(8,8,8,0.9) 65%)`,
+              display:"flex", alignItems:"center", justifyContent:"center",
+              flexDirection:"column",
+              boxShadow:`0 0 40px rgba(${domToRgb(dom.hue)},0.12), 0 0 1px ${dom.border}`,
+              animation:"fadeIn 0.5s ease",
+            }}>
+              <span style={{ fontSize:30, lineHeight:1 }}>{dom.icon}</span>
+              <div className="code" style={{ fontSize:7, letterSpacing:"0.2em", color:dom.hue, marginTop:5, opacity:0.7 }}>
+                {dom.index}
               </div>
+            </div>
+            <div className="code domain-enter" key={`label-${dom.category}-${activeIdx}`} style={{ marginTop:10, fontSize:8, letterSpacing:"0.35em", color:dom.hue, textTransform:"uppercase", opacity:0.8 }}>
+              {dom.label}
+            </div>
+            <div className="code" style={{ marginTop:4, fontSize:8, color:"rgba(232,228,223,0.2)", letterSpacing:"0.2em" }}>
+              {String(activeIdx + 1).padStart(2,"0")} / {String(ALL.length).padStart(2,"0")}
+            </div>
+          </div>
 
-              <div className="flex flex-col md:flex-row flex-grow overflow-hidden">
-                <div className="w-full md:w-1/3 border-r border-white/5 overflow-y-auto bg-black/40">
-                  {selectedCategory.items.map((skill, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setSelectedSkill(skill)}
-                      className={`w-full text-left p-6 font-mono transition-all border-b border-white/5 group ${selectedSkill?.name === skill.name ? `bg-white/5 border-l-4 border-current` : 'hover:bg-white/5'}`}
-                    >
-                      <span className="text-[10px] mb-2 block opacity-50 font-mono">0{idx + 1}.</span>
-                      <span className="text-sm uppercase tracking-widest">{skill.name}</span>
-                    </button>
-                  ))}
-                </div>
+          {/* Nav */}
+          <button onClick={() => go(-1)} className="nav-btn" style={{ position:"absolute", left:0, zIndex:60, opacity:0.3, fontSize:28, color:"#e8e4df" }}>
+            ←
+          </button>
+          <button onClick={() => go(1)} className="nav-btn" style={{ position:"absolute", right:0, zIndex:60, opacity:0.3, fontSize:28, color:"#e8e4df" }}>
+            →
+          </button>
 
-                <div className="w-full md:w-2/3 p-12 overflow-y-auto">
-                  {selectedSkill ? (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                      <h4 className="font-mono text-xs text-zinc-500 uppercase tracking-[0.4em] mb-8 italic">// Deep_Analysis_Report</h4>
-                      <p className="text-zinc-100 font-mono text-lg leading-relaxed mb-10 italic">"{selectedSkill.details}"</p>
-                      <div className="bg-white/5 border border-white/10 p-6">
-                        <h5 className="text-zinc-500 font-mono text-[10px] uppercase mb-4 tracking-widest">Stack_Utilisée:</h5>
-                        <div className="flex flex-wrap gap-3">
-                          {selectedSkill.tools.split(', ').map(t => (
-                            <span key={t} className="px-3 py-1 bg-black border border-white/10 text-zinc-300 font-mono text-xs italic">{t}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="h-full flex items-center justify-center text-zinc-600 font-mono text-xs uppercase animate-pulse">
-                      Awaiting_Selection...
-                    </div>
+          {/* Cards */}
+          <div style={{ position:"relative", width:"100%", height:"100%", display:"flex", alignItems:"center", justifyContent:"center", transformStyle:"preserve-3d" }}>
+            {ALL.map((skill, i) => {
+              const isActive = i === activeIdx;
+              const d = skill.domain;
+              const st = getCardTransform(i);
+              return (
+                <div key={i} className="card-item" onClick={() => { setPanelVis(false); setTimeout(()=>{ setActiveIdx(i); setPanelVis(true); }, 180); }}
+                  style={{
+                    position:"absolute", transformStyle:"preserve-3d",
+                    width:196, height:240,
+                    ...st,
+                    border:`1px solid ${isActive ? d.border : "rgba(232,228,223,0.06)"}`,
+                    background: isActive
+                      ? `linear-gradient(150deg, ${d.muted} 0%, rgba(10,10,10,0.95) 60%)`
+                      : "rgba(10,10,10,0.7)",
+                    backdropFilter:"blur(4px)",
+                    padding:"22px 20px",
+                    boxSizing:"border-box",
+                    boxShadow: isActive ? `0 0 60px rgba(${domToRgb(d.hue)},0.14)` : "none",
+                  }}>
+
+                  {/* Thin top accent */}
+                  {isActive && (
+                    <div style={{ position:"absolute", top:0, left:0, right:0, height:1, background:`linear-gradient(to right, transparent, ${d.hue} 30%, ${d.hue} 70%, transparent)`, opacity:0.7 }} />
                   )}
+
+                  {/* Domain index */}
+                  <div className="code" style={{ fontSize:8, letterSpacing:"0.28em", color:d.hue, opacity:isActive?0.65:0.3, marginBottom:14, textTransform:"uppercase" }}>
+                    {d.index} · {d.label}
+                  </div>
+
+                  {/* Skill name */}
+                  <div className="serif" style={{ fontSize:16, fontWeight:400, color:"#e8e4df", lineHeight:1.35, marginBottom:14, opacity:isActive?1:0.6 }}>
+                    {skill.name}
+                  </div>
+
+                  {/* Separator */}
+                  <div style={{ width:18, height:1, background:d.hue, opacity:0.4, marginBottom:14 }} />
+
+                  {/* Details snippet */}
+                  <div className="code" style={{ fontSize:9, color:"rgba(232,228,223,0.4)", lineHeight:1.75, flex:1 }}>
+                    {skill.details.slice(0, 82)}…
+                  </div>
+
+                  {/* Tools footer */}
+                  <div style={{ marginTop:14, paddingTop:12, borderTop:"1px solid rgba(232,228,223,0.05)" }}>
+                    <div className="code" style={{ fontSize:7.5, color:"rgba(232,228,223,0.18)", letterSpacing:"0.08em", lineHeight:1.7 }}>
+                      {skill.tools.slice(0,2).join(" · ")}
+                      {skill.tools.length > 2 ? ` +${skill.tools.length-2}` : ""}
+                    </div>
+                  </div>
                 </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ── PROGRESS DOTS ── */}
+        <div style={{ display:"flex", justifyContent:"center", gap:5, marginTop:8 }}>
+          {/* Domain separators */}
+          {ALL.map((sk, i) => {
+            const isA = i === activeIdx;
+            const isDomainBoundary = i > 0 && ALL[i].domain !== ALL[i-1].domain;
+            return (
+              <React.Fragment key={i}>
+                {isDomainBoundary && <div style={{ width:1, height:6, background:"rgba(232,228,223,0.08)", alignSelf:"center" }} />}
+                <div onClick={() => { setPanelVis(false); setTimeout(()=>{ setActiveIdx(i); setPanelVis(true); }, 180); }} style={{
+                  width: isA ? 20 : 4, height: 4, borderRadius: 2,
+                  background: isA ? sk.domain.hue : "rgba(232,228,223,0.08)",
+                  cursor:"pointer",
+                  transition:"all 0.38s cubic-bezier(0.34,1.56,0.64,1)",
+                }} />
+              </React.Fragment>
+            );
+          })}
+        </div>
+
+        {/* ── DETAIL PANEL ── */}
+        <div className={panelVis ? "panel-enter" : "panel-exit"} style={{
+          marginTop:40,
+          display:"grid", gridTemplateColumns:"1fr 1px 1fr 1px 1fr",
+          gap:0,
+          border:"1px solid rgba(232,228,223,0.07)",
+          borderLeft:`3px solid ${dom.hue}`,
+          background:"rgba(10,10,10,0.6)",
+          backdropFilter:"blur(8px)",
+        }}>
+
+          {/* COL 1 — Domain + Skill identity */}
+          <div style={{ padding:"30px 32px" }}>
+            <div className="code" style={{ fontSize:8, letterSpacing:"0.35em", color:dom.hue, marginBottom:10, textTransform:"uppercase" }}>
+              {dom.index} — {dom.label}
+            </div>
+            <div className="serif" style={{ fontSize:26, fontWeight:300, color:"#e8e4df", lineHeight:1.2, marginBottom:6 }}>
+              {active.name}
+            </div>
+            <div className="code" style={{ fontSize:9, color:"rgba(232,228,223,0.25)", letterSpacing:"0.15em" }}>
+              {dom.tag}
+            </div>
+
+            {/* Domain progress bar */}
+            <div style={{ marginTop:22 }}>
+              <div className="code" style={{ fontSize:7.5, color:"rgba(232,228,223,0.2)", letterSpacing:"0.2em", marginBottom:6 }}>
+                {dom.label} · {String(skillIndexInDomain+1).padStart(2,"0")}/{String(dom.items.length).padStart(2,"0")}
+              </div>
+              <div style={{ height:1, background:"rgba(232,228,223,0.07)", position:"relative" }}>
+                <div style={{
+                  position:"absolute", top:0, left:0, height:"100%",
+                  width:`${((skillIndexInDomain+1)/dom.items.length)*100}%`,
+                  background:dom.hue,
+                  transition:"width 0.5s ease",
+                }} />
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </section>
-  );
-};
 
-export default Competences;
+          {/* Divider */}
+          <div style={{ background:"rgba(232,228,223,0.06)" }} />
+
+          {/* COL 2 — Description */}
+          <div style={{ padding:"30px 32px" }}>
+            <div className="code" style={{ fontSize:8, letterSpacing:"0.3em", color:"rgba(232,228,223,0.2)", marginBottom:14, textTransform:"uppercase" }}>
+              Description
+            </div>
+            <p className="code" style={{ fontSize:10.5, color:"rgba(232,228,223,0.65)", lineHeight:1.95, margin:0 }}>
+              {active.details}
+            </p>
+          </div>
+
+          {/* Divider */}
+          <div style={{ background:"rgba(232,228,223,0.06)" }} />
+
+          {/* COL 3 — Tools + nav */}
+          <div style={{ padding:"30px 32px", display:"flex", flexDirection:"column" }}>
+            <div className="code" style={{ fontSize:8, letterSpacing:"0.3em", color:"rgba(232,228,223,0.2)", marginBottom:14, textTransform:"uppercase" }}>
+              Stack & Outils
+            </div>
+
+            <div style={{ display:"flex", flexWrap:"wrap", gap:6, flex:1 }}>
+              {active.tools.map((t) => (
+                <span key={t} className="code tool-pill" style={{
+                  fontSize:8.5, padding:"5px 10px",
+                  border:"1px solid rgba(232,228,223,0.1)",
+                  background:"rgba(232,228,223,0.03)",
+                  color:"rgba(232,228,223,0.5)",
+                  letterSpacing:"0.06em",
+                  "--hue": dom.hue,
+                  "--hue-muted": dom.muted,
+                }}>
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            {/* Footer nav hints */}
+            <div style={{ marginTop:20, paddingTop:16, borderTop:"1px solid rgba(232,228,223,0.05)", display:"flex", justifyContent:"space-between" }}>
+              <div className="code" style={{ fontSize:7.5, color:"rgba(232,228,223,0.15)", letterSpacing:"0.2em" }}>← → NAVIGUER</div>
+              <div className="code" style={{ fontSize:7.5, color:"rgba(232,228,223,0.15)", letterSpacing:"0.2em" }}>
+                {String(activeIdx+1).padStart(2,"0")} / {String(ALL.length).padStart(2,"0")}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Helper: hex → "r,g,b" for rgba() */
+function domToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
