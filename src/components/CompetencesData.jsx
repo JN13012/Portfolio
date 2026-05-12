@@ -1,144 +1,139 @@
-export const hardSkills = [
-  // CYBERSECURITE
+export const DOMAINS = [
+  // =========================================================
+  // CYBERSÉCURITÉ (5 → 3 items)
+  // =========================================================
   {
     category: "Cybersécurité",
+    label: "SECURITY",
+    index: "01",
     icon: "🛡️",
-    theme: "border-red-500/40 text-red-400",
-    glow: "shadow-[0_0_25px_rgba(239,68,68,0.15)]",
-
-    tools: [
-      "Nmap",
-      "Gobuster",
-      "SQLMap",
-      "Metasploit",
-      "Hydra",
-      "Hashcat",
-      "JTR",
-      "Splunk",
-      "Snort",
-      "Fail2Ban",
-      "FlareVM",
-      "TCP/IP",
-    ],
-
+    hue: "#bf3a2e",
+    muted: "rgba(191,58,46,0.1)",
+    border: "rgba(191,58,46,0.2)",
+    tag: "Offensive · Defensive · Forensics",
     items: [
       {
-        name: "Sécurité Offensive",
-        icon: "⚔️",
-        tools:
-          "Nmap, Gobuster, SQLMap, Metasploit, Hydra, John The Ripper, Hashcat",
+        name: "Offensive Security & Réseau",
+        tools: ["Nmap", "Gobuster", "Metasploit", "SQLMap", "Wireshark", "TCPdump"],
         details:
-          "Réalisation de tests d’intrusion Web et réseau : reconnaissance, énumération de services, exploitation de vulnérabilités, brute force et analyse de surface d’attaque selon les méthodologies OWASP.",
+          "Tests d’intrusion Web et réseau : reconnaissance, énumération de services, exploitation de vulnérabilités OWASP, analyse de trafic réseau et compréhension des protocoles TCP/IP. Approche offensive complète combinant pentest et audit réseau.",
       },
-
       {
-        name: "Sécurité Défensive & Forensics",
-        icon: "🧱",
-        tools:
-          "Splunk, Snort, Fail2Ban, SIEM, Monitoring, FlareVM, Reverse Engineering, Malware Analysis",
+        name: "Sécurité Applicative",
+        tools: ["JWT", "Bcrypt", "OWASP", "Middleware", "Nftables"],
         details:
-          "Mise en place de mécanismes de défense et de surveillance de sécurité : détection d’intrusions, supervision d’événements via SIEM, analyse de logs et monitoring d’infrastructure. Investigation post-incident, analyse de malwares en environnement isolé et récupération d’artefacts numériques.",
+          "Sécurisation des APIs et applications web : authentification, hashing, protection des routes, prévention des injections SQL/XSS/CSRF et mise en place de politiques de sécurité applicatives robustes.",
       },
-
       {
-        name: "Réseaux & Protocoles",
-        icon: "🌐",
-        tools: "TCP/IP, DNS, HTTP, Routing, Wireshark",
+        name: "Blue Team & Forensics",
+        tools: [
+          "Snort",
+          "SIEM",
+          "ELK Stack",
+          "Grafana",
+          "FlareVM",
+          "Volatility",
+          "Autopsy",
+        ],
         details:
-          "Analyse des protocoles réseau, compréhension des couches TCP/IP, inspection de trafic et diagnostic de communications réseau.",
-      },
-    ],
-  },
-
-  // IA
-  {
-    category: "Intelligence Artificielle",
-    icon: "🤖",
-    theme: "border-blue-500/40 text-blue-400",
-    glow: "shadow-[0_0_25px_rgba(59,130,246,0.15)]",
-
-    tools: [
-      "LLM",
-      "NLP",
-      "PyTorch",
-      "Flask",
-      "Inference",
-      "Embeddings",
-      "LangChain",
-      "FAISS",
-      "ChromaDB",
-      "Transformers",
-    ],
-
-    items: [
-      {
-        name: "AI Engineering & Backend",
-        icon: "⚙️",
-        tools:
-          "Flask, REST APIs, LangChain, Prompt Engineering, AI Workflows, Deployment, Groq, IBM Watsonx",
-        details:
-          "Conception et déploiement d’applications IA en production : développement de backends et APIs pour exposer des modèles d’IA, intégration de LLMs via prompt engineering, orchestration de workflows avec LangChain et gestion d’inférences via APIs. Focus sur la mise en production et l’intégration des modèles dans des systèmes applicatifs.",
-      },
-
-      {
-        name: "Machine Learning & IA Fondamentale",
-        icon: "🧠",
-        tools:
-          "PyTorch, Transformers, NLP, Embeddings, FAISS, ChromaDB, LLMs, Llama 3, Hugging Face, Inference Pipelines",
-        details:
-          "Maîtrise des concepts fondamentaux de l’intelligence artificielle moderne : modèles de langage (LLMs), NLP, embeddings et recherche sémantique. Expérience en inférence de modèles, construction de pipelines IA, indexation vectorielle et exploitation d’écosystèmes comme PyTorch et Hugging Face pour l’entraînement et l’évaluation de modèles.",
+          "Détection d’intrusions, analyse de logs et investigation post-incident. Analyse de malwares, corrélation d’événements systèmes et réseau, monitoring temps réel et réponse aux incidents (SOC + forensic).",
       },
     ],
   },
 
   // =========================================================
-  // DEV & DEVSECOPS
+  // IA (5 → 3 items)
+  // =========================================================
+  {
+    category: "Intelligence Artificielle",
+    label: "AI / ML",
+    index: "02",
+    icon: "🤖",
+    hue: "#2563c4",
+    muted: "rgba(37,99,196,0.1)",
+    border: "rgba(37,99,196,0.2)",
+    tag: "Generative · RAG · Governance",
+    items: [
+      {
+        name: "LLMs & IA Générative",
+        tools: [
+          "Watsonx",
+          "Llama",
+          "Claude API",
+          "Mistral",
+          "HuggingFace",
+          "Transformers",
+          "spaCy",
+        ],
+        details:
+          "Conception de systèmes IA génératifs : intégration de LLMs, prompt engineering avancé, NLP, classification de texte, embeddings et adaptation de modèles à des domaines spécifiques.",
+      },
+      {
+        name: "RAG & Search Systems",
+        tools: ["FAISS", "LangChain", "ChromaDB", "Pinecone"],
+        details:
+          "Architecture de systèmes RAG : embeddings vectoriels, recherche sémantique, gestion de mémoire longue durée et pipelines documentaires scalables pour LLMs.",
+      },
+      {
+        name: "Machine Learning & AI Ops",
+        tools: [
+          "Scikit-learn",
+          "Pandas",
+          "NumPy",
+          "XGBoost",
+          "MLflow",
+          "SHAP",
+          "Evidently",
+          "Fairness360",
+        ],
+        details:
+          "Machine learning complet : entraînement de modèles, feature engineering, validation croisée, déploiement en production et monitoring (drift, biais, explicabilité).",
+      },
+    ],
+  },
+
+  // =========================================================
+  // ENGINEERING (5 → 3 items)
   // =========================================================
   {
     category: "Ingénierie & DevSecOps",
+    label: "ENGINEERING",
+    index: "03",
     icon: "⚙️",
-    theme: "border-emerald-500/40 text-emerald-400",
-    glow: "shadow-[0_0_25px_rgba(16,185,129,0.15)]",
-
-    tools: [
-      "React",
-      "Next.js",
-      "Node.js",
-      "Docker",
-      "Jenkins",
-      "Linux",
-      "Git",
-      "Socket.io",
-      "MySQL",
-      "Prisma",
-      "CI/CD",
-    ],
-
+    hue: "#0e9e6e",
+    muted: "rgba(14,158,110,0.1)",
+    border: "rgba(14,158,110,0.2)",
+    tag: "Fullstack · DevOps · Cloud",
     items: [
       {
-        name: "Fullstack & Applications Web",
-        icon: "💻",
-        tools: "React, Next.js, Node.js, Socket.io",
+        name: "Fullstack Architecture",
+        tools: ["Next.js", "Prisma", "Socket.io", "tRPC"],
         details:
-          "Développement d’applications web complètes et modernes avec interfaces dynamiques, communication temps réel et intégration frontend/backend. Conception d’expériences utilisateur interactives et performantes.",
+          "Applications fullstack modernes : SSR/SSG, APIs typées, temps réel, architecture scalable et optimisation performance frontend/backend.",
       },
-
       {
-        name: "Backend, APIs & Données",
-        icon: "🔌",
-        tools:
-          "Node.js, Flask, REST APIs, Authentication, MySQL, Prisma, ORM, SQL",
+        name: "DevOps & Infrastructure",
+        tools: [
+          "Docker",
+          "Jenkins",
+          "GitHub Actions",
+          "K8s",
+          "Bash",
+          "Ansible",
+          "Nginx",
+          "Systemd",
+          "Redis",
+          "PostgreSQL",
+          "MySQL",
+        ],
         details:
-          "Conception d’architectures backend robustes et sécurisées. Développement d’APIs REST, gestion de l’authentification et modélisation de bases de données relationnelles avec optimisation des accès et des performances.",
+          "CI/CD, conteneurisation, orchestration Kubernetes, administration Linux, scripting, hardening serveurs et gestion de bases de données en production.",
       },
-
       {
-        name: "DevOps, Systèmes & Infrastructure",
-        icon: "🚀",
-        tools:
-          "Docker, Jenkins, Git, CI/CD, Linux, Bash, System Administration",
+        name: "Enterprise Systems",
+        tools: ["Apex", "SOQL", "Flows", "LWC"],
         details:
-          "Mise en place de pipelines CI/CD et automatisation des déploiements. Administration de systèmes Linux, scripting Bash et gestion d’infrastructures pour assurer fiabilité, scalabilité et reproductibilité des environnements.",
+          "Développement Salesforce : automatisation des processus métier, composants Lightning, logique backend et gestion de données CRM complexes.",
       },
     ],
   },
