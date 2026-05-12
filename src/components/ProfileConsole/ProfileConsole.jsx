@@ -51,14 +51,15 @@ const ProfileConsole = () => {
     },
 
     snort: {
-      enabled: true,
-      interface: "eth0",
+      enabled: false,
+      interface: null,
       scanThreshold: null,
       rules: {
         "local.rules": false,
         "scan.rules": false,
         "malware.rules": false,
       },
+      scanPolicy: null,
     },
 
     firewallConfig: "INCOMPLETE",
@@ -91,6 +92,7 @@ const ProfileConsole = () => {
 
     if (allOk && state.flagStatus !== "UNLOCKED") {
       addLog("ALL SECURITY SYSTEMS SECURED. FLAG UNLOCKED.", "sys");
+      addLog(`FLAG{${CTF_LEVELS[9].flag}}`, "out");
     }
 
     return allOk ? "UNLOCKED" : "LOCKED";
@@ -118,20 +120,17 @@ const ProfileConsole = () => {
 
       return lastRule.action === expected;
     });
-
-    return isValid;
+    const ipBlocked = state.firewall.blockedIps.includes("45.83.122.91");
+    return isValid && ipBlocked;
   }
 
-  function updateFirewallState() {
-    setHardeningState((prev) => {
-      const ok = evaluateFirewallConfig(prev);
-
-      const next = {
-        ...prev,
-        firewallConfig: ok ? "OK" : "INCOMPLETE",
-      };
-      return next;
-    });
+  function evaluateAll(state) {
+    return {
+      ...state,
+      firewallConfig: evaluateFirewallConfig(state) ? "OK" : "INCOMPLETE",
+      wafConfig: evaluateWAF(state),
+      idsConfig: evaluateSnort(state),
+    };
   }
 
   const handleCommand = (input) => {
@@ -180,33 +179,87 @@ const ProfileConsole = () => {
 
     if (remoteSession?.type === "siem") {
       const shellPrefix = `splunk@siem`;
-
-      if (fullCommand === "help") {
-        addLog(`${shellPrefix} Available SPL commands:`, "sys");
-        addLog(`${shellPrefix} search index=ctf | stats count`, "sys");
-        addLog(`${shellPrefix} exit`, "sys");
+      const cmd = fullCommand.trim();
+      if (fullCommand === "ls") {
+        addLog(`${shellPrefix} listing available files...`, "sys");
+        addLog("readme.txt", "out");
+        addLog("siem.txt", "out");
         return;
       }
+      if (fullCommand === "cat readme.txt") {
+        addLog(
+          "You are now a SOC analyst. A critical security alert has been triggered. Your task's to analyze logs, and identify the attacker IP address as quick as possible.",
+          "out",
+        );
+        return;
+      }
+      if (fullCommand === "cat siem.txt") {
+        addLog(`${shellPrefix} reading SIEM reference guide...`, "sys");
 
+        addLog("Splunk reference guide", "out");
+        addLog("------------------------", "out");
+
+        addLog("AVAILABLE COMMANDS:", "out");
+        addLog("------------", "out");
+        addLog("Start Splunk SIEM using 'siem'", "out");
+        addLog("---", "out");
+
+        addLog("Run statistics query:", "out");
+        addLog("search index=ctf | stats count", "out");
+        addLog("---", "out");
+
+        addLog("Filter by log source type:", "out");
+        addLog("search index=ctf sourcetype=<type>", "out");
+        addLog("Example: search index=ctf sourcetype=gobuster", "out");
+        addLog("---", "out");
+
+        addLog("THREAT DETECTION HINTS:", "out");
+        addLog("  - Use statistics queries to monitor sourcetype", "out");
+        addLog(
+          "  - Query meterpreter-related events to extract attacker IP",
+          "out",
+        );
+
+        return;
+      }
+      // -------------------------
+      // EXIT
+      // -------------------------
       if (fullCommand === "exit") {
         addLog(`${shellPrefix} closing SIEM session...`, "sys");
         setRemoteSession(null);
         return;
       }
 
+      // -------------------------
+      // BASIC SEARCH
+      // -------------------------
+      if (fullCommand === "search index=ctf") {
+        addLog(`${shellPrefix} executing SPL query...`, "sys");
+
+        setTimeout(() => {
+          addLog(`${shellPrefix} ERROR: incomplete query`, "err");
+          addLog(
+            `${shellPrefix} hint: try 'search index=ctf | stats count'`,
+            "sys",
+          );
+        }, 400);
+
+        return;
+      }
+
+      // -------------------------
+      // STATS QUERY
+      // -------------------------
       if (fullCommand === "search index=ctf | stats count") {
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
         setTimeout(() => {
           addLog(
-            `==============================================================`,
+            "==============================================================",
             "out",
           );
           addLog(`${shellPrefix} --- SPLUNK JOB RESULT ---`, "sys");
-          addLog(`==============================`, "out");
-          addLog(`${shellPrefix} total_events = 698`, "out");
-          addLog(`${shellPrefix} time_range = last_24h`, "out");
-          addLog(`${shellPrefix} sourcetype_distribution:`, "out");
           addLog(`==============================`, "out");
           addLog(
             `${shellPrefix} auth        -> 120 events (authentication logs)`,
@@ -225,78 +278,143 @@ const ProfileConsole = () => {
             "out",
           );
           addLog(
-            `${shellPrefix} endpoint    -> 3 events (meterpreter / post-exploitation)`,
+            `${shellPrefix} endpoint_telemetry    -> 3 events (meterpreter / post-exploitation)`,
             "out",
           );
           addLog(
             `==============================================================`,
             "out",
           );
-          addLog(
-            `${shellPrefix} ANALYSIS: suspicious post-exploitation activity detected. Investigate endpoint events `,
-            "sys",
-          );
-          addLog(
-            `${shellPrefix} RECOMMENDED ACTION: search index=ctf sourcetype=endpoint`,
-            "sys",
-          );
-        }, 400);
+        }, 500);
 
         return;
       }
 
-      if (fullCommand === "search index=ctf sourcetype=endpoint") {
+      if (cmd.startsWith("search index=ctf sourcetype=")) {
+        const sourcetype = cmd.split("sourcetype=")[1]?.trim();
+
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
         setTimeout(() => {
+          if (sourcetype === "auth") {
+            addLog(
+              `==============================================================`,
+              "out",
+            );
+            addLog(`${shellPrefix} --- SPLUNK AUTH_LOGS ANALYSIS ---`, "out");
+            addLog(`${shellPrefix} 120 events (authentication logs)`, "out");
+            addLog(`${shellPrefix} suspicious login attempts detected`, "out");
+            return;
+          }
+
+          if (sourcetype === "web") {
+            addLog(
+              `==============================================================`,
+              "out",
+            );
+            addLog(`${shellPrefix} --- SPLUNK WEB_TRAFFIC ANALYSIS ---`, "out");
+            addLog(`${shellPrefix} 340 events (HTTP traffic)`, "out");
+            addLog(
+              `${shellPrefix} directory enumeration activity detected`,
+              "out",
+            );
+            return;
+          }
+
+          if (sourcetype === "scan_nmap") {
+            addLog(
+              `==============================================================`,
+              "out",
+            );
+            addLog(`${shellPrefix} --- SPLUNK NMAP_SCAN ANALYSIS---`, "out");
+            addLog(`${shellPrefix} 15 events (network reconnaissance)`, "out");
+            addLog(`${shellPrefix} SMB port 445 exposed`, "out");
+            return;
+          }
+
+          if (sourcetype === "gobuster") {
+            addLog(
+              `==============================================================`,
+              "out",
+            );
+            addLog(`${shellPrefix} --- SPLUNK GOBUSTER ANALYSIS ---`, "out");
+            addLog(`${shellPrefix} 220 events (directory enumeration)`, "out");
+            addLog(`${shellPrefix} /admin /uploads /backup discovered`, "out");
+            return;
+          }
+
+          if (sourcetype === "endpoint_telemetry") {
+            setTimeout(() => {
+              addLog(
+                "==============================================================",
+                "out",
+              );
+              addLog(`${shellPrefix} --- SPLUNK ENDPOINT ANALYSIS ---`, "out");
+              addLog(
+                "==============================================================",
+                "out",
+              );
+
+              addLog(
+                `${shellPrefix} timestamp=02:14:33 alert="Meterpreter Activity Detected" severity=critical`,
+                "out",
+              );
+              addLog(
+                `${shellPrefix} src_ip=45.83.122.91 dst_host=WIN-SRV01 user=guest`,
+                "out",
+              );
+              addLog(
+                `${shellPrefix} payload=windows/x64/meterpreter/reverse_tcp`,
+                "out",
+              );
+              addLog(
+                `${shellPrefix} outbound_connection=45.83.122.91:4444`,
+                "out",
+              );
+
+              addLog(
+                `${shellPrefix} event_type=process_migration pid=396 target=lsass.exe`,
+                "out",
+              );
+              addLog(
+                `${shellPrefix} token_impersonation=SYSTEM integrity_level=High`,
+                "out",
+              );
+
+              addLog(
+                `${shellPrefix} event_type=privilege_escalation status=confirmed`,
+                "out",
+              );
+
+              addLog(
+                "==============================================================",
+                "out",
+              );
+
+              addLog(`${shellPrefix} ATTACKER_IP = 45.83.122.91`, "err");
+              addLog(`${shellPrefix} FLAG{45.83.122.91}`, "sys");
+              addLog(`${shellPrefix} exit siem before submit`, "out");
+            }, 900);
+
+            return;
+          }
+
           addLog(
-            `==============================================================`,
-            "out",
+            `${shellPrefix} ERROR: unknown sourcetype '${sourcetype}'`,
+            "err",
           );
-          addLog(`${shellPrefix} --- SPLUNK JOB RESULT ---`, "sys");
           addLog(
-            `==============================================================`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} timestamp=02:14:33 alert_name="Meterpreter Activity Detected" severity=critical`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} src_ip=45.83.122.91 dst_host=WIN-SRV01 user=guest`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} payload=windows/x64/meterpreter/reverse_tcp`,
-            "out",
-          );
-          addLog(`${shellPrefix} outbound_connection=45.83.122.91:4444`, "out");
-          addLog(
-            `${shellPrefix} timestamp=02:14:37 event_type=process_migration`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} source_process=meterpreter.exe target_process=lsass.exe pid=396`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} token_impersonation=SYSTEM integrity_level=High`,
-            "out",
-          );
-          addLog(
-            `${shellPrefix} timestamp=02:14:40 event_type=privilege_escalation status=confirmed`,
-            "out",
-          );
-          addLog(`${shellPrefix} attacker_ip=45.83.122.91`, "err");
-          addLog(
-            `${shellPrefix} FLAG{45.83.122.91} - exit siem before submit`,
+            `${shellPrefix} hint: use auth, web, scan_nmap, gobuster, endpoint_telemetry`,
             "sys",
           );
-        }, 950);
+        }, 600);
 
         return;
       }
 
+      // -------------------------
+      // GENERIC SEARCH ERROR
+      // -------------------------
       if (fullCommand.startsWith("search")) {
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
@@ -305,15 +423,16 @@ const ProfileConsole = () => {
             `${shellPrefix} ERROR: invalid or unsupported SPL syntax`,
             "err",
           );
-          addLog(
-            `${shellPrefix} hint: try 'search index=ctf | stats count'`,
-            "sys",
-          );
         }, 400);
 
         return;
       }
 
+      // -------------------------
+      // FALLBACK
+      // -------------------------
+      addLog(`${shellPrefix} ERROR: unknown command`, "err");
+      addLog(`${shellPrefix} use 'help' to list available SPL commands`, "sys");
       return;
     }
 
@@ -391,10 +510,6 @@ const ProfileConsole = () => {
               "meterpreter > Access denied: System privileges required",
               "err",
             );
-            addLog(
-              "meterpreter > Hint: current session integrity is too low",
-              "sys",
-            );
             return;
           }
           addLog(
@@ -436,6 +551,16 @@ const ProfileConsole = () => {
       if (command === "sysinfo") {
         addLog(`${shellPrefix} OS: Windows 7 (Build 7601)`, "out");
         addLog(`${shellPrefix} Architecture: x64`, "out");
+
+        addLog(
+          `${shellPrefix} Hint: Security Subsystem: LSASS service running`,
+          "sys",
+        );
+        addLog(
+          `${shellPrefix} Hint: security processes as lsass are often used for privilege escalation`,
+          "sys",
+        );
+
         return;
       }
       // PS
@@ -488,7 +613,7 @@ const ProfileConsole = () => {
           "out",
         );
         addLog(
-          `${shellPrefix} Hint: use the security-related process to migrate and escalate privileges`,
+          `${shellPrefix} Use the correct ps for escalate privilege and get acces to flag.txt`,
           "sys",
         );
         return;
@@ -510,20 +635,34 @@ const ProfileConsole = () => {
               migratedPid: pid,
             });
             addLog(`[+] Migration completed successfully`, "out");
-            addLog(
-              `${shellPrefix} SYSTEM token successfully impersonated`,
-              "sys",
-            );
             addLog(`${shellPrefix} Privilege escalation successful`, "sys");
             return;
           }
-          // WRON MIGRATION PS
-          addLog(`[+] Migration completed successfully`, "out");
 
-          addLog(
-            `${shellPrefix} Warning: migrated process does not provide the apropriated privileges`,
-            "sys",
-          );
+          if (
+            pid === "4" ||
+            pid === "112" ||
+            pid === "260" ||
+            pid === "380" ||
+            pid === "520" ||
+            pid === "824" ||
+            pid === "1040" ||
+            pid === "1276"
+          ) {
+            setMeterpreterState({
+              user: "GUEST",
+              integrity: "LOW",
+              migratedPid: pid,
+            });
+            addLog(`[+] Migration completed successfully`, "out");
+            addLog(
+              `${shellPrefix} Warning: migrated process does not provide elevated privileges`,
+              "sys",
+            );
+            return;
+          }
+          addLog(`[!] Invalid PID: ${pid}`, "err");
+          addLog(`${shellPrefix} migration failed`, "sys");
         }, 800);
 
         return;
@@ -776,26 +915,37 @@ const ProfileConsole = () => {
     // HELP
     if (command === "help") {
       let baseCmds = "ls, ls -la, cat [file], hint, submit [flag], clear";
-      if (level >= 2) {
+      if (level == 2) {
         baseCmds =
           "ls, ls -la, cat [file], find [name], grep [text], hint, submit [flag], clear";
       }
-      if (level >= 3) {
+      if (level == 3) {
         baseCmds =
           "ls, cat [file], nmap [IP], nc [IP] [PORT], hint, submit [flag], clear";
       }
-      if (level >= 4) {
+      if (level == 4) {
         baseCmds =
           "ls, ls -la, cat [file], gobuster [IP], curl [endpoint], sqlmap <url> --data='<post_data>', hint, submit [flag], clear";
       }
-      if (level >= 5) {
+      if (level == 5) {
         baseCmds =
           "ls, ls -la cat [file], john [wordlist] [hashfile], ssh [user]@[IP], hashcat [hash], hint, submit [flag], clear";
       }
-      if (level >= 6) {
-        baseCmds = ", metasploit, meterpreter";
+      if (level == 6) {
+        baseCmds = "ls, cat [file], msfconsole, hint, submit [flag], clear";
       }
-      addLog(`COMMANDES DISPONIBLES : ${baseCmds}`, "sys");
+      if (level == 7) {
+        baseCmds = "ls, cat [file], siem, hint, submit [flag], clear";
+      }
+      if (level == 8) {
+        baseCmds =
+          "ls, cat [file], strings, netstat [IP], ps, kill [PID] hint, submit [flag], clear";
+      }
+      if (level == 9) {
+        baseCmds =
+          "ls, cat [file], firewall [command], waf [command], snort [command], hint, submit [flag], clear";
+      }
+      addLog(`AVAILABLE COMMANDS : ${baseCmds}`, "sys");
     }
     // Basic commands
     else if (command === "clear") {
@@ -900,6 +1050,7 @@ const ProfileConsole = () => {
       if (file === "metasploit.txt") {
         addLog("Metasploit reference guide", "out");
         addLog("----------------------------------------------", "out");
+        addLog(" Start metasploit using 'msfconsole'", "out");
         addLog("STANDARD METASPLOIT WORKFLOW:", "out");
         addLog("  use <exploit/module>", "out");
         addLog("  set RHOSTS <target_ip>", "out");
@@ -913,7 +1064,10 @@ const ProfileConsole = () => {
           "  - exploit/windows/smb/psexec (requires credentials or auth bypass)",
           "out",
         );
-        addLog("  - exploit/windows/smb/ms17_010_eternalblue (windows 7)", "out");
+        addLog(
+          "  - exploit/windows/smb/ms17_010_eternalblue (windows 7)",
+          "out",
+        );
         addLog(
           "  - exploit/windows/smb/ms08_067_netapi (older windows systems)",
           "out",
@@ -928,6 +1082,7 @@ const ProfileConsole = () => {
         addLog("  Scan  result", "out");
         addLog("  OS : Windows 7", "out");
         addLog("  Target IP : 10.0.2.25", "out");
+        addLog("  Attacker IP : 45.83.122.91", "out");
         addLog(
           "[!] NOTE: Incorrect module or parameters will result in failed session",
           "sys",
@@ -937,6 +1092,33 @@ const ProfileConsole = () => {
           "sys",
         );
 
+        return;
+      }
+
+      if (file === "siem.txt") {
+        addLog("Splunk reference guide", "out");
+        addLog("------------------------", "out");
+
+        addLog("AVAILABLE COMMANDS:", "out");
+        addLog("------------", "out");
+        addLog("Start Splunk SIEM using 'siem'", "out");
+        addLog("---", "out");
+
+        addLog("Run statistics query:", "out");
+        addLog("search index=ctf | stats count", "out");
+        addLog("---", "out");
+
+        addLog("Investigate log source type:", "out");
+        addLog("search index=ctf sourcetype=<type>", "out");
+        addLog("Example: search index=ctf sourcetype=gobuster", "out");
+        addLog("---", "out");
+
+        addLog("THREAT DETECTION HINTS:", "out");
+        addLog("  - Use statistics queries to monitor sourcetype", "out");
+        addLog(
+          "  - Investigate meterpreter-related events to extract attacker IP",
+          "out",
+        );
         return;
       }
 
@@ -950,18 +1132,15 @@ const ProfileConsole = () => {
         addLog("---", "out");
         addLog("Allow inbound TCP traffic on a port:", "out");
         addLog("firewall allow <port>", "out");
-        addLog("Example: firewall allow 80", "out");
         addLog("---", "out");
         addLog("Block inbound TCP traffic on a port:", "out");
         addLog("firewall deny <port>", "out");
-        addLog("Example: firewall deny 445", "out");
         addLog("---", "out");
         addLog("Block all traffic from an IP address:", "out");
         addLog("firewall blockip <ip>", "out");
-        addLog("Example: firewall blockip 45.83.122.91", "out");
         addLog("---", "out");
-        addLog("Restore default firewall configuration:", "out");
-        addLog("  firewall reset", "out");
+        addLog("Display actual ruleset configuration:", "out");
+        addLog("  firewall ruleset", "out");
         addLog("---", "out");
         addLog("HARDENING PRACTICES:", "out");
         addLog("  - Keep SSH open (22)", "out");
@@ -969,7 +1148,7 @@ const ProfileConsole = () => {
         addLog("  - Disable SMB exposure (445)", "out");
         addLog("  - Block exploit framework ports (4444)", "out");
         addLog("  - Disable debug services (5000)", "out");
-        addLog("  - Block suspicious IP addresses", "out");
+        addLog("  - Block attacker IP : 45.83.122.91", "out");
         addLog("", "out");
 
         return;
@@ -987,12 +1166,12 @@ const ProfileConsole = () => {
 
         addLog("Set rate limiting policy:", "out");
         addLog("waf ratelimit set global <req/min>", "out");
-        addLog("Example: waf ratelimit set global 60", "out");
+        addLog("Example: waf ratelimit set global 30", "out");
         addLog("---", "out");
 
         addLog("Enable rule set:", "out");
         addLog("waf ruleset enable <name>", "out");
-        addLog("Example: waf ruleset enable sqli_basic", "out");
+        addLog("Example: waf ruleset enable xss_basic", "out");
         addLog("---", "out");
 
         addLog("AVAILABLE RULESETS:", "out");
@@ -1003,7 +1182,10 @@ const ProfileConsole = () => {
 
         addLog("HARDENING PRACTICES:", "out");
         addLog("  - Set rate limiting at 60 req/min", "out");
-        addLog("  - Prevent SQL injection", "out");
+        addLog(
+          "  - Apply specific WAF rules for SQL injection detection",
+          "out",
+        );
         addLog("", "out");
 
         return;
@@ -1026,7 +1208,7 @@ const ProfileConsole = () => {
         addLog("---", "out");
         addLog("Enable/disable rule file:", "out");
         addLog("snort rules enable/disable <rule>", "out");
-        addLog("Example: snort rules enable scan.rules", "out");
+        addLog("Example: snort rules enable malware.rules", "out");
         addLog("---", "out");
 
         addLog("Configure portscan detection policy:", "out");
@@ -1051,7 +1233,10 @@ const ProfileConsole = () => {
         addLog("  - Monitor the eth0 interface", "out");
         addLog("  - Enable scan.rules", "out");
         addLog("  - Enable malware.rules", "out");
-        addLog("  - Set scan threshold to 10", "out");
+        addLog(
+          "  - Configure port scan detection for 10 events per second using src_ip tracking and a 1s window",
+          "out",
+        );
 
         return;
       }
@@ -1170,10 +1355,7 @@ const ProfileConsole = () => {
         addLog(`Establish connection to ${host}:${port}...`, "sys");
         setTimeout(() => {
           addLog("Logged in as flask-debug@10.0.2.15>", "sys");
-          addLog(
-            "Remote Commands (exit remote before submit flag): ls, cat [file], exit",
-            "sys",
-          );
+          addLog("Remote Commands: ls, cat [file], exit", "sys");
           setRemoteSession({
             type: "nc",
             host,
@@ -1622,68 +1804,182 @@ const ProfileConsole = () => {
       }, 600);
     }
     // METASPLOIT
-    else if (command === "use") {
-      const module = args.slice(1).join(" ");
+    else if (command === "msfconsole") {
+      if (level < 6) {
+        return addLog("msfconsole: command not found", "err");
+      }
 
-      setMsfState({
-        module,
-        options: {},
-      });
+      addLog("[*] Starting Metasploit Framework...", "sys");
 
-      addLog(`[*] selected module: ${module}`, "sys");
-    } else if (command === "set") {
-      const key = args[1];
-      const value = args.slice(2).join(" ");
+      setTimeout(() => {
+        addLog("Metasploit Framework 6.4.0", "out");
+        addLog(
+          "Msfconsole Commands: ls, cat [file], use, set, run, exit",
+          "sys",
+        );
 
-      if (!key || !value) {
-        addLog("[!] usage: set <OPTION> <VALUE>", "err");
+        setRemoteSession({
+          type: "msfconsole",
+          prompt: "msf6 >",
+        });
+
+        setMsfState({
+          module: null,
+          options: {},
+        });
+      }, 1200);
+    } else if (remoteSession?.type === "msfconsole") {
+      if (command === "exit") {
+        setRemoteSession(null);
+
+        setMsfState({
+          module: null,
+          options: {},
+        });
+
+        addLog("[*] Leaving Metasploit Framework...", "sys");
         return;
-      }
+      } else if (command === "use") {
+        const module = args.slice(1).join(" ");
 
-      setMsfState((prev) => ({
-        ...prev,
-        options: {
-          ...prev.options,
-          [key.toUpperCase()]: value,
-        },
-      }));
+        const validModules = [
+          "exploit/windows/smb/psexec",
+          "exploit/windows/smb/ms17_010_eternalblue",
+          "exploit/windows/smb/ms08_067_netapi",
+        ];
 
-      addLog(`[*] ${key.toUpperCase()} => ${value}`, "sys");
-    } else if (command === "run") {
-      const module = msfState?.module;
-      const opts = msfState?.options || {};
-
-      const rhosts = opts["RHOSTS"];
-
-      if (!module) {
-        return addLog("[!] no module selected", "err");
-      }
-
-      if (!rhosts) {
-        return addLog("[!] invalid RHOSTS configuration", "err");
-      }
-
-      if (module.includes("ms17_010_eternalblue")) {
-        if (rhosts !== "10.0.2.25") {
-          return addLog("[!] invalid target", "err");
+        if (!module) {
+          return addLog("[!] usage: use <exploit/module>", "err");
         }
 
-        addLog("[*] Exploit running...", "sys");
+        if (!validModules.includes(module)) {
+          return addLog("[!] unknown exploit module", "err");
+        }
+
+        setMsfState({
+          module,
+          options: {},
+        });
+
+        addLog(`[*] module loaded: ${module}`, "sys");
+      } else if (command === "set") {
+        const key = args[1]?.toUpperCase();
+        const value = args.slice(2).join(" ");
+
+        if (!key || !value) {
+          return addLog("[!] usage: set <OPTION> <VALUE>", "err");
+        }
+
+        const allowedOptions = ["RHOSTS", "LHOST", "LPORT"];
+
+        if (!allowedOptions.includes(key)) {
+          return addLog("[!] unknown option", "err");
+        }
+
+        // -------------------------
+        // VALIDATE RHOSTS
+        // -------------------------
+        if (key === "RHOSTS") {
+          if (value !== "10.0.2.25") {
+            return addLog("[!] target unreachable", "err");
+          }
+        }
+
+        // -------------------------
+        // VALIDATE LHOST
+        // -------------------------
+        if (key === "LHOST") {
+          if (value !== "45.83.122.91") {
+            return addLog(
+              "[!] invalid LHOST: expected attacker IP or leave unset",
+              "err",
+            );
+          }
+        }
+
+        // -------------------------
+        // VALIDATE LPORT
+        // -------------------------
+        if (key === "LPORT") {
+          if (value !== "4444") {
+            return addLog(
+              "[!] invalid LPORT: expected 4444 or leave unset",
+              "err",
+            );
+          }
+        }
+
+        setMsfState((prev) => ({
+          ...prev,
+          options: {
+            ...prev.options,
+            [key]: value,
+          },
+        }));
+
+        addLog(`[*] ${key} => ${value}`, "sys");
+      } else if (command === "run") {
+        const module = msfState?.module;
+        const opts = msfState?.options || {};
+
+        const rhosts = opts["RHOSTS"];
+
+        if (!module) {
+          return addLog("[!] no exploit module selected", "err");
+        }
+
+        if (!rhosts) {
+          return addLog("[!] RHOSTS not configured", "err");
+        }
+
+        addLog("[*] Launching exploit...", "sys");
 
         setTimeout(() => {
-          addLog("[+] Meterpreter session opened", "out");
-          setRemoteSession({ type: "meterpreter", host: rhosts });
+          if (module === "exploit/windows/smb/ms17_010_eternalblue") {
+            addLog("[+] SMBv1 vulnerability detected", "out");
+            addLog("[+] Target appears vulnerable to MS17-010", "out");
+
+            setTimeout(() => {
+              addLog("[*] Sending exploit payload...", "out");
+
+              setTimeout(() => {
+                addLog("[+] Meterpreter session 1 opened", "out");
+
+                setRemoteSession({
+                  type: "meterpreter",
+                  host: rhosts,
+                });
+
+                addLog("meterpreter > Session established", "sys");
+                addLog(
+                  "meterpreter > Type 'help' for available commands",
+                  "sys",
+                );
+              }, 1200);
+            }, 1000);
+
+            return;
+          }
+
+          if (module === "exploit/windows/smb/psexec") {
+            addLog("[!] exploit failed", "err");
+            addLog("[!] valid SMB credentials required", "out");
+            return;
+          }
+
+          if (module === "exploit/windows/smb/ms08_067_netapi") {
+            addLog("[!] exploit failed", "err");
+            addLog("[!] target does not appear vulnerable", "out");
+            addLog("[!] exploit designed for older Windows systems", "out");
+            return;
+          }
+
+          addLog("[!] exploit execution failed", "err");
         }, 1200);
-        setTimeout(() => {
-          addLog("type 'help' for avaible commands", "sys");
-        }, 1800);
-
-        return;
+      } else {
+        addLog("[!] unknown msfconsole command", "err");
       }
-
-      addLog("[!] invalid configuration", "err");
     }
-
     // SIEM
     else if (command === "siem") {
       setRemoteSession({
@@ -1692,8 +1988,10 @@ const ProfileConsole = () => {
       });
 
       addLog("[+] Splunk SIEM initialized", "sys");
-      addLog("[+] Indexes loaded: auth, web, sys", "sys");
-      addLog("[+] Type 'help' for available SPL commands", "sys");
+      addLog(
+        "[+] Avaible comnands : ls, cat [file], search <query> <command>, exit",
+        "sys",
+      );
 
       return;
     } else if (command === "strings") {
@@ -1721,10 +2019,6 @@ const ProfileConsole = () => {
           addLog(
             "[IOC] execution context: SYSTEM (post-migration via lsass.exe)",
             "out",
-          );
-          addLog(
-            "[*] next step: use netstat to inspect active network connexions",
-            "sys",
           );
         }, 600);
         return;
@@ -1924,11 +2218,6 @@ const ProfileConsole = () => {
             "==========================================================================",
             "out",
           );
-          addLog(
-            "[!] external host 45.83.122.91 matches IOC from updater.exe",
-            "err",
-          );
-          addLog("[*] next step: use ps to identify malicious process", "sys");
         }, 700);
 
         return;
@@ -2096,7 +2385,7 @@ const ProfileConsole = () => {
         }
 
         setHardeningState((prev) => {
-          const updatedState = {
+          const next = {
             ...prev,
             firewall: {
               ...prev.firewall,
@@ -2111,8 +2400,9 @@ const ProfileConsole = () => {
               ],
             },
           };
-
-          return updatedState;
+          updateFirewallState(next);
+          checkFlagStatus(next);
+          return next;
         });
 
         addLog(`[+] Rule added: DENY tcp/${port} from ANY`, "out");
@@ -2148,7 +2438,7 @@ const ProfileConsole = () => {
             (r) => !(r.port === port && r.action === "DENY"),
           );
 
-          return {
+          const next = {
             ...prev,
             firewall: {
               ...prev.firewall,
@@ -2163,11 +2453,15 @@ const ProfileConsole = () => {
               ],
             },
           };
+
+          updateFirewallState(next);
+          checkFlagStatus(next);
+
+          return next;
         });
 
         addLog(`[+] Rule added: ALLOW tcp/${port} from ANY`, "out");
 
-        // SAFE SERVICES
         if ([22, 80, 443].includes(port)) {
           addLog("[+] trusted service exposed", "sys");
         } else {
@@ -2194,13 +2488,20 @@ const ProfileConsole = () => {
           return;
         }
 
-        setHardeningState((prev) => ({
-          ...prev,
-          firewall: {
-            ...prev.firewall,
-            blockedIps: [...prev.firewall.blockedIps, ip],
-          },
-        }));
+        setHardeningState((prev) => {
+          const next = {
+            ...prev,
+            firewall: {
+              ...prev.firewall,
+              blockedIps: [...prev.firewall.blockedIps, ip],
+            },
+          };
+
+          updateFirewallState(next);
+          checkFlagStatus(next);
+
+          return next;
+        });
 
         addLog(`[+] IP blocked: ${ip}`, "out");
         addLog("[+] attacker IP blocked", "sys");
@@ -2234,7 +2535,10 @@ const ProfileConsole = () => {
       // =========================
       addLog("usage: firewall [status|allow|deny|ruleset|blockip]", "err");
     }
+
+    // =========================
     // WAF
+    // =========================
     else if (command === "waf") {
       const action = args[1];
 
@@ -2295,18 +2599,23 @@ const ProfileConsole = () => {
 
           const isCorrectPolicy = limit === 60;
 
-          setHardeningState((prev) => ({
-            ...prev,
-            waf: {
-              ...prev.waf,
-              rateLimit: true,
-              rateLimitValue: limit,
-            },
-            wafConfig:
-              prev.waf.rulesets?.sqli_basic && isCorrectPolicy
-                ? "OK"
-                : "INCOMPLETE",
-          }));
+          setHardeningState((prev) => {
+            const next = {
+              ...prev,
+              waf: {
+                ...prev.waf,
+                rateLimit: true,
+                rateLimitValue: limit,
+              },
+              wafConfig:
+                prev.waf.rulesets?.sqli_basic && isCorrectPolicy
+                  ? "OK"
+                  : "INCOMPLETE",
+            };
+
+            checkFlagStatus(next);
+            return next;
+          });
 
           addLog(`[+] global rate limit set to ${limit} req/min`, "out");
 
@@ -2327,18 +2636,20 @@ const ProfileConsole = () => {
       // ENABLE
       // =========================
       if (action === "enable") {
-        setHardeningState((prev) => ({
-          ...prev,
-          waf: {
-            ...prev.waf,
-            enabled: true,
-            rulesets: prev.waf.rulesets || {},
-            blockedIps: prev.waf.blockedIps || [],
-          },
-        }));
+        setHardeningState((prev) => {
+          const next = {
+            ...prev,
+            waf: {
+              ...prev.waf,
+              enabled: true,
+              rulesets: prev.waf.rulesets || {},
+              blockedIps: prev.waf.blockedIps || [],
+            },
+          };
 
-        addLog("[+] WAF enabled", "out");
-        return;
+          checkFlagStatus(next);
+          return next;
+        });
       }
 
       // =========================
@@ -2365,11 +2676,10 @@ const ProfileConsole = () => {
           }
 
           setHardeningState((prev) => {
-            const updatedState = {
+            const next = {
               ...prev,
               waf: {
                 ...prev.waf,
-
                 rulesets: {
                   ...(prev.waf?.rulesets || {}),
                   [name]: true,
@@ -2377,19 +2687,16 @@ const ProfileConsole = () => {
               },
             };
 
-            // =========================
-            // CONFIG VALIDATION
-            // =========================
-            const sqliEnabled = updatedState.waf.rulesets?.sqli_basic === true;
+            const sqliEnabled = next.waf.rulesets?.sqli_basic === true;
 
-            return {
-              ...updatedState,
+            next.wafConfig =
+              next.waf.rateLimitValue === 60 && sqliEnabled
+                ? "OK"
+                : "INCOMPLETE";
 
-              wafConfig:
-                updatedState.waf.rateLimitValue === 60 && sqliEnabled
-                  ? "OK"
-                  : "INCOMPLETE",
-            };
+            checkFlagStatus(next);
+
+            return next;
           });
 
           addLog(`[+] ruleset enabled: ${name}`, "out");
@@ -2415,6 +2722,21 @@ const ProfileConsole = () => {
       const action = args[1];
       const target = args[2];
 
+      function evaluateSnort(next) {
+        const rules = next.snort?.rules || {};
+
+        const snortOk =
+          next.snort?.enabled &&
+          next.snort?.interface === "eth0" &&
+          next.snort?.scanPolicy?.count === 10 &&
+          next.snort?.scanPolicy?.interval === 1 &&
+          next.snort?.scanPolicy?.track === "src_ip" &&
+          rules["scan.rules"] &&
+          rules["malware.rules"] &&
+          !rules["local.rules"];
+
+        return snortOk ? "OK" : "INCOMPLETE";
+      }
       // =========================
       // STATUS
       // =========================
@@ -2446,48 +2768,50 @@ const ProfileConsole = () => {
         );
 
         // RULES STATUS
-        addLog("RULES:", "sys");
-
         const rules = hardeningState.snort?.rules || {};
-        const ruleEntries = Object.entries(rules);
 
-        if (ruleEntries.length === 0) {
-          addLog("[!] no rules loaded", "out");
+        const requiredRules = ["scan.rules", "malware.rules"];
+
+        const activeRequiredRules = requiredRules.filter((rule) => rules[rule]);
+
+        const activeAllRules = Object.entries(rules)
+          .filter(([_, state]) => state)
+          .map(([name]) => name);
+
+        addLog("ACTIVATED RULES:", "sys");
+
+        if (activeAllRules.length === 0) {
+          addLog("[!] no active rules", "out");
         } else {
-          let enabledCount = 0;
-
-          ruleEntries.forEach(([name, state]) => {
-            if (state) enabledCount++;
-
-            addLog(`- ${name}   ${state ? "ENABLED" : "DISABLED"}`, "out");
+          activeAllRules.forEach((rule) => {
+            addLog(`- ${rule}`, "out");
           });
-
-          addLog(
-            `RULESET STATUS: ${enabledCount}/${ruleEntries.length} active`,
-            "sys",
-          );
-
-          if (enabledCount === ruleEntries.length) {
-            addLog("[+] ruleset fully loaded", "sys");
-          } else {
-            addLog("[!] partial ruleset detected", "err");
-          }
         }
 
-        // VALIDATION LOGIC (niveau completion)
-        const snortOk =
-          hardeningState.snort?.enabled &&
-          hardeningState.snort?.interface === "eth0" &&
-          hardeningState.snort?.scanPolicy?.count === 10 &&
-          rules["scan.rules"] &&
-          rules["malware.rules"];
+        // VALIDATION MESSAGE ONLY FOR REQUIRED RULES
+        if (activeRequiredRules.length === requiredRules.length) {
+          addLog("[+] required detection rules correctly loaded", "sys");
+        } else {
+          addLog("[!] required detection rules missing", "err");
+        }
 
-        addLog(
-          snortOk
-            ? "IDS configuration completed"
-            : "Complete IDS configuration",
-          snortOk ? "sys" : "err",
-        );
+        // // FINAL VALIDATION
+        // const snortOk =
+        //   hardeningState.snort?.enabled &&
+        //   hardeningState.snort?.interface === "eth0" &&
+        //   hardeningState.snort?.scanPolicy?.count === 10 &&
+        //   hardeningState.snort?.scanPolicy?.interval === 1 &&
+        //   hardeningState.snort?.scanPolicy?.track === "src_ip" &&
+        //   rules["scan.rules"] &&
+        //   rules["malware.rules"] &&
+        //   !rules["local.rules"];
+
+        // addLog(
+        //   snortOk
+        //     ? "IDS configuration completed"
+        //     : "Complete IDS configuration",
+        //   snortOk ? "sys" : "err",
+        // );
 
         return;
       }
@@ -2496,14 +2820,20 @@ const ProfileConsole = () => {
       // START ENGINE
       // =========================
       if (action === "start") {
-        setHardeningState((prev) => ({
-          ...prev,
-          snort: {
-            ...prev.snort,
-            enabled: true,
-          },
-        }));
+        setHardeningState((prev) => {
+          const next = {
+            ...prev,
+            snort: {
+              ...prev.snort,
+              enabled: true,
+            },
+          };
 
+          next.idsConfig = evaluateSnort(next);
+          checkFlagStatus(next);
+
+          return next;
+        });
         addLog("[+] Snort engine started", "out");
         addLog("[+] packet inspection enabled", "sys");
         return;
@@ -2517,14 +2847,20 @@ const ProfileConsole = () => {
           return addLog("usage: snort interface <iface>", "err");
         }
 
-        setHardeningState((prev) => ({
-          ...prev,
-          snort: {
-            ...prev.snort,
-            interface: target,
-          },
-        }));
+        setHardeningState((prev) => {
+          const next = {
+            ...prev,
+            snort: {
+              ...prev.snort,
+              interface: target,
+            },
+          };
 
+          next.idsConfig = evaluateSnort(next);
+          checkFlagStatus(next);
+
+          return next;
+        });
         addLog(`[+] monitoring interface set to ${target}`, "out");
         return;
       }
@@ -2552,16 +2888,23 @@ const ProfileConsole = () => {
             return;
           }
 
-          setHardeningState((prev) => ({
-            ...prev,
-            snort: {
-              ...prev.snort,
-              rules: {
-                ...(prev.snort?.rules || {}),
-                [name]: true,
+          setHardeningState((prev) => {
+            const next = {
+              ...prev,
+              snort: {
+                ...prev.snort,
+                rules: {
+                  ...(prev.snort?.rules || {}),
+                  [name]: true,
+                },
               },
-            },
-          }));
+            };
+
+            next.idsConfig = evaluateSnort(next);
+            checkFlagStatus(next);
+
+            return next;
+          });
 
           addLog(`[+] rule enabled: ${name}`, "out");
 
@@ -2581,16 +2924,23 @@ const ProfileConsole = () => {
             return addLog("usage: snort rules disable <rule>", "err");
           }
 
-          setHardeningState((prev) => ({
-            ...prev,
-            snort: {
-              ...prev.snort,
-              rules: {
-                ...(prev.snort?.rules || {}),
-                [name]: false,
+          setHardeningState((prev) => {
+            const next = {
+              ...prev,
+              snort: {
+                ...prev.snort,
+                rules: {
+                  ...(prev.snort?.rules || {}),
+                  [name]: false,
+                },
               },
-            },
-          }));
+            };
+
+            next.idsConfig = evaluateSnort(next);
+            checkFlagStatus(next);
+
+            return next;
+          });
 
           addLog(`[+] rule disabled: ${name}`, "out");
           return;
@@ -2635,13 +2985,20 @@ const ProfileConsole = () => {
             interval: window,
           };
 
-          setHardeningState((prev) => ({
-            ...prev,
-            snort: {
-              ...prev.snort,
-              scanPolicy: policy,
-            },
-          }));
+          setHardeningState((prev) => {
+            const next = {
+              ...prev,
+              snort: {
+                ...prev.snort,
+                scanPolicy: policy,
+              },
+            };
+
+            next.idsConfig = evaluateSnort(next);
+            checkFlagStatus(next);
+
+            return next;
+          });
 
           addLog(
             `[+] portscan policy updated: >${rate} events / ${window}s (track=${track})`,
@@ -2761,8 +3118,18 @@ const ProfileConsole = () => {
           </div>
         ))}
         {solved && (
-          <div className="mt-6 p-4 border border-green-500/50 text-green-500 text-center animate-pulse uppercase text-[10px]">
-            Accès Root Confirmé. Félicitations, vous avez terminé le CTF.
+          <div className="mt-6 p-4 border border-green-500/50 text-green-500 text-center uppercase text-[10px] space-y-1">
+            <div className="animate-pulse">[ SECURITY INCIDENT RESOLVED ]</div>
+
+            <div>ALL THREAT VECTORS CONTAINED</div>
+
+            <div className="text-cyan-400">FIREWALL ✓ IDS ✓ WAF ✓</div>
+
+            <div className="text-green-300 mt-2">FLAG UNLOCKED</div>
+
+            <div className="text-zinc-500 mt-2">
+              Access granted: ROOT SESSION ESTABLISHED
+            </div>
           </div>
         )}
       </div>

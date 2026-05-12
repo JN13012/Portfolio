@@ -5,7 +5,7 @@ export const CTF_LEVELS = {
         unlocks: [],
         hint: "Inspect your browser page => source code => index.html (refresh the page if needed).",
         files: {
-            "readme.txt": "Welcome to this CTF. Search, find, and validate.",
+            "readme.txt": "Welcome to this CTF. Search, find, and validate. Exit any session before submit flag.",
             ".note.txt": "Look for the comment <!-- SYSTEM_ACCESS_KEY --> in the source code of the index.html page."
         }
     },
@@ -120,11 +120,11 @@ export const CTF_LEVELS = {
     6: {
         label: "METASPLOIT",
         flag: "6",
-        unlocks: ["metasploit", "meterpreter"],
+        unlocks: ["msfconsole", "meterpreter"],
         hint: "Exploit SMB on 10.0.2.25 and escalate privilege to get acces to the flag.",
         targetIp: "10.0.2.25",
         files: {
-            "readme.txt": "Your AI Assistant completed a reconnaissance scan on 10.0.2.25. Detected OS: Windows 7. SMB service exposed on port 445. [CRITICAL] Remote SMB RCE vulnerability detected (MS17-010).",
+            "readme.txt": "Your AI Assistant completed an automated reconnaissance scan on 10.0.2.25. Detected OS: Windows 7. SMB service exposed on port 445. [CRITICAL] Remote SMB RCE vulnerability detected (MS17-010).",
             "metasploit.txt": "Check cat in basic commands"
         },
         meterpreterFiles: {
@@ -140,14 +140,14 @@ export const CTF_LEVELS = {
 
     7: {
         label: "SIEM - LOG ANALYSIS",
-        unlocks: ["SIEM"],
+        unlocks: ["SPLUNK SIEM"],
         flag: "7",
 
-        hint: "Correlate logs from authentication, web traffic, and IDS alerts. Identify the attack source across multiple signals.",
+        hint: "Expected workflow : siem => search statistic query => search meterpreter realted events",
 
         files: {
             "readme.txt": "You are now a SOC analyst. A critical security alert has been triggered. Your task's to analyze logs, and identify the attacker IP address as quick as possible.",
-            "siem.txt": "To enter splunk SIEM use: siem",
+            "siem.txt": "",
         }
     },
 
@@ -166,14 +166,14 @@ export const CTF_LEVELS = {
         hint: "Track the process associated to the attacker IP address and kill it.",
 
         files: {
-            "readme.txt": "SOC analysis confirms system compromise. Investigate running processes, network and suspicious binaries.",
+            "readme.txt": "SOC analysis confirms system compromise. A malicious binary has been detected. You're responsible for incident response and containment of the threat.",
             "forensic.txt": "A suspicious binary (updater.exe) was recovered from the compromised machine. Begin forensic workflow using strings [file to analyse].",
             "updater.exe": "Binary flagged as suspicious (PE32 executable, packed).",
             "netstat.txt": " ",
         },
     },
     9: {
-        label: "HARDENING - FINAL - FIREWALL - WAF - IDS",
+        label: "HARDENING - FINAL",
         flag: "9",
         unlocks: [
             "waf",
@@ -184,7 +184,7 @@ export const CTF_LEVELS = {
         hint: "Workflow order - Configure firewall rules - Enable WAF protection - Configure IDS .",
         files: {
             "readme.txt":
-                "You are now responsible for hardening the infrastructure (firewall / waf / ids).",
+                "You are now responsible for hardening the infrastructure. Configure firewall - waf - ids to finish CTF.",
             "firewall.txt": "...",
             "waf.txt": "...",
             "snort.txt": "...",
