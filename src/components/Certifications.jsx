@@ -22,7 +22,11 @@ const DIFFICULTY_CONFIG = {
   3: { text: "text-yellow-300", bg: "bg-yellow-300/90", label: "MEDIUM" },
   4: { text: "text-yellow-600", bg: "bg-yellow-600/90", label: "HARD" },
   5: { text: "text-red-500", bg: "bg-red-500/90", label: "INSANE" },
-  6: { text: "text-zinc-100", bg: "bg-gradient-to-r from-zinc-400 via-zinc-100 to-zinc-400", label: "PRO" },
+  6: {
+    text: "text-zinc-100",
+    bg: "bg-gradient-to-r from-zinc-400 via-zinc-100 to-zinc-400",
+    label: "PRO",
+  },
 };
 
 const certifs = [
@@ -334,8 +338,14 @@ const nodes = [
       text: "text-red-500",
       border: "border-red-500/30",
       activeBg: "bg-red-500/10",
+      sort: {
+        active: "bg-black border-red-500/40 text-red-400",
+        indicator: "text-red-400",
+        hover: "hover:text-red-300 hover:border-red-400/60",
+      },
     },
   },
+
   {
     id: "COURSERA",
     label: "IA",
@@ -345,6 +355,11 @@ const nodes = [
       text: "text-blue-500",
       border: "border-blue-500/30",
       activeBg: "bg-blue-500/10",
+      sort: {
+        active: "bg-black border-blue-500/40 text-blue-400",
+        indicator: "text-blue-400",
+        hover: "hover:text-blue-300 hover:border-blue-400/60",
+      },
     },
   },
 ];
@@ -448,7 +463,7 @@ const Certifications = () => {
             </h3>
 
             {/* CONTROLES DE TRI */}
-            <div className="flex items-center gap-5 text-[12px] font-mono tracking-tight">
+            <div className="flex items-center gap-5 text-sm font-mono tracking-tight">
               <div className="flex items-center gap-3">
                 {["date", "diff", "duration"].map((type) => {
                   const internalKey = type === "diff" ? "difficulte" : type;
@@ -458,10 +473,10 @@ const Certifications = () => {
                     <button
                       key={type}
                       onClick={() => handleSort(internalKey)}
-                      className={`group relative overflow-hidden h-9 min-w-[110px] font-mono text-[10px] uppercase tracking-tighter transition-all duration-500 border ${
+                      className={`group relative overflow-hidden h-8 min-w-[150px] font-mono text-sm uppercase tracking-tighter transition-all duration-300 border ${
                         isActive
-                          ? `${activeConfig.theme.border} ${activeConfig.theme.text} bg-zinc-900 shadow-[inset_0_0_12px_rgba(var(--cyber-rgb),0.4),0_0_25px_rgba(var(--cyber-rgb),0.2)]`
-                          : "text-zinc-300 border-white/25 bg-zinc-950/50 hover:border-white/50 hover:text-zinc-200"
+                          ? `bg-black ${activeConfig.theme.sort.active} scale-105`
+                          : `bg-black text-zinc-200 border-white/10 hover:text-zinc-300 hover:border-white/30 hover:scale-105`
                       }`}
                     >
                       {/* Halo derrière (Aura Externe Diffuse) */}
@@ -475,18 +490,22 @@ const Certifications = () => {
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_90%)] transition-opacity" />
 
                       <div className="relative z-10 flex items-center justify-center gap-2">
-                        {/* Indicateur dynamique : :: devient > en vert */}
+                        {/* Indicateur dynamique */}
                         <span
-                          className={`mb-1 transition-all duration-300 font-bold ${
+                          className={`mb-1 font-bold transition-all ${
                             isActive
-                              ? "text-emerald-400 opacity-100 scale-110"
-                              : "opacity-70"
+                              ? activeConfig.theme.sort.indicator
+                              : "text-zinc-400"
                           }`}
                         >
                           {isActive ? ">" : "::"}
                         </span>
 
-                        <span className="leading-none">{type}</span>
+                        <span className="leading-none">
+                          {isActive && (type === "date" || type === "diff" || type === "duration")
+                            ? `[ ${type} ]`
+                            : type}
+                        </span>
 
                         {/* Flèche de tri stable */}
                         <div className="w-2 flex justify-center text-[8px]">

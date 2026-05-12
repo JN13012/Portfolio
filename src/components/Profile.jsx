@@ -175,9 +175,17 @@ const Profile = () => {
             <a
               href={CV}
               download="CV_Jérémie_Nagi.pdf"
-              className="w-full relative px-8 py-5 bg-black text-cyber border border-cyber font-mono text-xs uppercase tracking-[0.4em] hover:bg-cyber/10 hover:shadow-[0_0_20px_#4ade8033] hover:animate-flicker transition-all text-center flex items-center justify-center overflow-hidden font-bold"
+              className="group w-full relative px-6 py-4 bg-zinc-800/30 border-l-2 border-cyber font-mono text-xs tracking-[0.2em] transition-all hover:bg-cyber/90 hover:text-black flex items-center justify-between"
             >
-              Download_CV.exe
+              <span className="flex items-center gap-2">
+                <span className="group-hover:text-black inline-block animate-pulse">
+                  {">"}
+                </span>
+                Download_CV
+              </span>
+              <span className="text-[10px] opacity-90 group-hover:opacity-100 italic">
+                (.pdf)
+              </span>
             </a>
           </div>
 
@@ -203,7 +211,6 @@ const Profile = () => {
               <SectionTitle
                 icon={Terminal}
                 title="Orientation professionnelle"
-  
               />
 
               <div className="space-y-3 px-2 text-sm font-mono text-zinc-100 leading-relaxed">
@@ -224,10 +231,7 @@ const Profile = () => {
             </div>
             {/* PERSONNAL DATA */}
             <div>
-              <SectionTitle
-                icon={Database}
-                title="Informations personnelles"
-              />
+              <SectionTitle icon={Database} title="Informations personnelles" />
               <ul className="space-y-2 font-mono px-2">
                 {personalData.map((item, i) => (
                   <li
@@ -252,10 +256,10 @@ const Profile = () => {
           <div className="lg:col-span-7 space-y-14">
             {/* SOFT SKILL */}
             <div>
-              <SectionTitle icon={Cpu} title="Soft skills"/>
+              <SectionTitle icon={Cpu} title="Soft skills" />
               <div className="space-y-2 px-2">
-                <SkillBar label="Esprit critique" progress={90} />
-                <SkillBar label="Curiosité technique" progress={85} />
+                <SkillBar label="Autonomie" progress={90} />
+                <SkillBar label="Esprit critique" progress={85} />
                 <SkillBar label="Polyvalence" progress={80} />
                 <SkillBar label="Communication" progress={70} />
               </div>
