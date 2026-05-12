@@ -24,7 +24,7 @@ const SectionTitle = ({
   Animate = true,
 }) => (
   <div
-    className={`relative inline-block overflow-hidden mb-5 border border-cyber/20 ${Animate ? "group/title cursor-help" : ""}`}
+    className={`relative inline-block overflow-hidden mb-5 border border-cyber/20 ${Animate ? "group/title cursor-cell" : ""}`}
   >
     {Animate && (
       <div
@@ -48,9 +48,9 @@ const SectionTitle = ({
 
 const SkillBar = memo(({ label, progress }) => (
   <div className="space-y-2 group cursor-default">
-    <div className="flex justify-between text-sm font-mono text-zinc-400 uppercase group-hover:text-zinc-200 transition-colors">
+    <div className="flex justify-between text-sm font-mono text-zinc-300 uppercase group-hover:text-zinc-100 transition-colors">
       <span>{label}</span>
-      <span className="text-cyber/80">{progress}%</span>
+      <span className="text-cyber">{progress}%</span>
     </div>
     <div className="h-[3px] w-full bg-white/5 relative overflow-hidden">
       <div
@@ -65,9 +65,9 @@ const InterestCell = memo(({ icon: Icon, label }) => (
   <div className="group p-3 border border-white/5 bg-zinc-900/10 flex flex-col items-center justify-center gap-1 hover:border-cyber/40 hover:bg-cyber/5 transition-all duration-500 relative overflow-hidden">
     <Icon
       size={27}
-      className="text-zinc-500 group-hover:text-cyber transition-all group-hover:scale-110"
+      className="text-zinc-400 group-hover:text-cyber transition-all group-hover:scale-110"
     />
-    <div className="text-xs font-mono text-zinc-400 group-hover:text-zinc-200 uppercase text-center">
+    <div className="text-xs font-mono text-zinc-200 group-hover:text-zinc-100 uppercase text-center">
       {label}
     </div>
     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyber/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000"></div>
@@ -111,8 +111,8 @@ const languages = [
 ];
 
 const socTools = [
-  { name: "GITHUB", url: "https://github.com/JN13012" },
-  { name: "LINKEDIN", url: "https://www.linkedin.com/in/jn13012" },
+  { name: "Github", url: "https://github.com/JN13012" },
+  { name: "Linkedin", url: "https://www.linkedin.com/in/jn13012" },
   { name: "TryHackMe", url: "https://tryhackme.com/p/JN13" },
   {
     name: "Coursera",
@@ -144,41 +144,20 @@ const Profile = () => {
         <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
           <span className="text-cyber font-mono text-base opacity-60">01.</span>
           <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
-            Profile_Analysis
+            Profile
           </span>
           <div className="h-px bg-cyber/10 flex-1"></div>
-          <div className="hidden sm:flex items-center gap-3 border border-red-500/30 px-4 py-1.5 bg-red-500/5">
-            <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
-            <span className="text-red-500 font-mono text-xs uppercase tracking-tighter">
-              Threat: High
+          <div className="hidden sm:flex items-center gap-3 border border-green-500/30 px-4 py-1.5 bg-red-500/5">
+            <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></span>
+            <span className="text-green-500 font-mono text-xs uppercase tracking-tighter">
+              Niveau : Junior
             </span>
           </div>
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-20 gap-12">
           {/* COL 1 */}
-          <div className="lg:col-span-8 space-y-7">
-            {/* TOOLKIT */}
-            <div className="flex items-center gap-3 mb-5">
-              <Shield size={20} className="text-cyber/60" />
-              <p className="text-base text-zinc-400 font-mono uppercase tracking-widest">
-                SOC_Toolkit_v2.0
-              </p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-5">
-              {socTools.map((tool) => (
-                <a
-                  key={tool.name}
-                  href={tool.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-base font-mono border border-cyber/20 px-3 py-2 text-zinc-400 hover:border-cyber hover:text-cyber hover:bg-cyber/5 transition-all cursor-crosshair"
-                >
-                  {tool.name}
-                </a>
-              ))}
-            </div>
-
+          <div className="lg:col-span-5 flex flex-col justify-center space-y-14 min-h-full">
             {/* PHOTO */}
             <div className="relative group mx-auto w-full max-w-[240px] lg:max-w-[500px]">
               <div className="absolute -top-1 -left-1 w-8 h-8 border-t-2 border-l-2 border-cyber z-20"></div>
@@ -190,43 +169,64 @@ const Profile = () => {
                   alt="Profile"
                   className="w-full grayscale contrast-110 group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
                 />
-                <div className="absolute bottom-5 left-5 right-5 bg-black/80 backdrop-blur-md border border-cyber/20 p-3 z-20 text-center">
-                  <p className="text-[11px] font-mono text-cyber animate-pulse tracking-[0.2em] uppercase">
-                    In_Progress
-                  </p>
-                </div>
               </div>
             </div>
-
-            {/* CENTRE INTERET */}
-            <div>
-              <div className="flex items-center gap-3 mb-5 group/title cursor-crosshair">
-                <User
-                  size={20}
-                  className="text-cyber/60 group-hover/title:text-cyber transition-colors"
-                />
-                <p className="text-base text-zinc-400 font-mono uppercase tracking-widest group-hover/title:text-zinc-200 transition-colors">
-                  Interest_Nodes_v1.0
-                </p>
-                <div className="h-[1px] flex-1 bg-white/5 group-hover/title:bg-cyber/20 transition-colors"></div>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {interests.map((item) => (
-                  <InterestCell key={item.id} {...item} />
-                ))}
-              </div>
-            </div>
+            {/* CV  */}
+            <a
+              href={CV}
+              download="CV_Jérémie_Nagi.pdf"
+              className="w-full relative px-8 py-5 bg-black text-cyber border border-cyber font-mono text-xs uppercase tracking-[0.4em] hover:bg-cyber/10 hover:shadow-[0_0_20px_#4ade8033] hover:animate-flicker transition-all text-center flex items-center justify-center overflow-hidden font-bold"
+            >
+              Download_CV.exe
+            </a>
           </div>
 
           {/* COL 2 */}
-          <div className="lg:col-span-12 space-y-8">
+          <div className="lg:col-span-8 space-y-14">
+            {/* TOOLKIT */}
+            <SectionTitle icon={Shield} title="Liens professionnels" />
+            <div className="flex flex-wrap justify-center gap-5">
+              {socTools.map((tool) => (
+                <a
+                  key={tool.name}
+                  href={tool.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-base font-mono border border-cyber/20 px-3 py-2 text-zinc-100/80 hover:border-cyber hover:text-cyber hover:bg-cyber/5 transition-all cursor-crosshair"
+                >
+                  {tool.name}
+                </a>
+              ))}
+            </div>
+            {/* ORIENTATION PROFESSIONNELLE */}
+            <div>
+              <SectionTitle
+                icon={Terminal}
+                title="Orientation professionnelle"
+  
+              />
+
+              <div className="space-y-3 px-2 text-sm font-mono text-zinc-100 leading-relaxed">
+                <p>
+                  Étudiant passionné par les systèmes informatiques, la
+                  cybersécurité et l’intelligence artificielle.
+                </p>
+                <p className="text-zinc-150">
+                  Actuellement en recherche d’une alternance en lien avec ces
+                  domaines.
+                </p>
+                <p className="text-zinc-200">Disponible immédiatement.</p>
+                <p className="text-zinc-250">
+                  Objectifs : évoluer vers des postes d’ingénieur en
+                  cybersécurité, pentester, analyste SOC ou ingénieur IA.
+                </p>
+              </div>
+            </div>
             {/* PERSONNAL DATA */}
             <div>
               <SectionTitle
                 icon={Database}
-                title="Personnel_Data"
-                duration={1800}
+                title="Informations personnelles"
               />
               <ul className="space-y-2 font-mono px-2">
                 {personalData.map((item, i) => (
@@ -234,7 +234,7 @@ const Profile = () => {
                     key={i}
                     className="flex justify-between border-b border-white/5 pb-3 group/item relative z-10"
                   >
-                    <span className="text-sm text-white/40 uppercase group-hover/item:text-cyber transition-colors">
+                    <span className="text-sm text-zinc-100 uppercase group-hover/item:text-cyber transition-colors">
                       {item.label}
                     </span>
                     <span
@@ -246,14 +246,13 @@ const Profile = () => {
                 ))}
               </ul>
             </div>
+          </div>
 
+          {/* COL 3 */}
+          <div className="lg:col-span-7 space-y-14">
             {/* SOFT SKILL */}
             <div>
-              <SectionTitle
-                icon={Cpu}
-                title="Soft_Skills_Processing"
-                duration={1000}
-              />
+              <SectionTitle icon={Cpu} title="Soft skills"/>
               <div className="space-y-2 px-2">
                 <SkillBar label="Esprit critique" progress={90} />
                 <SkillBar label="Curiosité technique" progress={85} />
@@ -261,29 +260,28 @@ const Profile = () => {
                 <SkillBar label="Communication" progress={70} />
               </div>
             </div>
-
             {/* LANGUAGE */}
             <div>
               <SectionTitle
                 icon={MessageSquare}
-                title="Language_Protocols"
+                title="Langues"
                 duration={500}
               />
               <div className="grid grid-cols-2 gap-5 px-2">
                 {languages.map((l) => (
                   <div
                     key={l.id}
-                    className="p-4 border border-white/5 bg-zinc-900/10 hover:border-cyber/40 transition-all group"
+                    className="p-4 border border-white/5 bg-zinc-900/10 hover:border-cyber/40 transition-all group cursor-crosshair"
                   >
                     <div className="flex justify-between text-sm font-mono mb-3">
-                      <span className="text-zinc-400 group-hover:text-white">
+                      <span className="text-zinc-100 group-hover:text-white">
                         {l.lang}
                       </span>
-                      <span className="text-cyber font-bold">{l.code}</span>
+                      <span className="text-zinc-100 font-bold">{l.code}</span>
                     </div>
                     <div className="h-[2px] w-full bg-white/5">
                       <div
-                        className="h-full bg-cyber/40 group-hover:bg-cyber transition-all duration-1000"
+                        className="h-full bg-cyber group-hover:bg-cyber transition-all duration-1000"
                         style={{ width: `${l.progress}%` }}
                       />
                     </div>
@@ -291,17 +289,19 @@ const Profile = () => {
                 ))}
               </div>
             </div>
-          </div>
 
-          {/* COL 3 */}
-          <div className="lg:col-span-20">
-            <a
-              href={CV}
-              download="CV_Jérémie_Nagi.pdf"
-              className="w-full relative px-8 py-5 bg-black text-cyber border border-cyber font-mono text-xs uppercase tracking-[0.4em] hover:bg-cyber/10 hover:shadow-[0_0_20px_#4ade8033] hover:animate-flicker transition-all text-center flex items-center justify-center overflow-hidden font-bold"
-            >
-              Download_CV.exe
-            </a>
+            {/* CENTRE INTERET */}
+            <div>
+              <div>
+                <SectionTitle icon={User} title="Centres d'intérêts" />
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 cursor-crosshair">
+                  {interests.map((item) => (
+                    <InterestCell key={item.id} {...item} />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

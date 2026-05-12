@@ -80,31 +80,6 @@ const FormationStep = ({
         </div>
 
           {/* Barre de progression */}
-      <div className="md:ml-6 mb-6 max-w-xl">
-        <div className="flex justify-between items-end mb-1 text-xs md:text-lg font-bold uppercase tracking-widest">
-          <span
-            className={
-              status === "current"
-                ? "text-cyber animate-pulse"
-                : "text-zinc-600"
-            }
-          >
-            {status === "current" ? "Loading ..." : "Archive_Loaded"}
-          </span>
-          <span className="text-zinc-400">{percent}%</span>
-        </div>
-
-        <div className="h-[4px] w-full bg-zinc-900 border border-white/5 relative overflow-hidden">
-          <div
-            className={`absolute top-0 left-0 h-full transition-all duration-[2000ms] ease-out ${
-              status === "current"
-                ? "bg-cyber shadow-[0_0_10px_#4ade80]"
-                : "bg-zinc-600"
-            }`}
-            style={{ width: `${percent}%` }}
-          ></div>
-        </div>
-      </div>
 
           {/* Bloc objectifs */}
           <div className="ml-4 md:ml-6 relative">
@@ -165,7 +140,7 @@ const FormationStep = ({
             <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 flex items-center justify-between">
               <span
                 className={`text-xs font-mono uppercase tracking-widest ${
-                  status === "current" ? "text-cyber" : "text-zinc-500"
+                  status === "current" ? "text-cyber" : "text-zinc-200"
                 }`}
               >
                 {status === "current" ? "● ACTUEL" : "✓ TERMINÉ"}
@@ -213,22 +188,22 @@ const Formations = () => {
       date: "2016 – 2017",
       percent: 100,
       details:
-        "Formation Bac+2 préparant aux métiers de technicien dans le sport automobile.",
+        "Formation Bac+2 préparant aux métiers de technicien motoriste dans le sport automobile.",
       status: "completed",
       imgSrc: EcoleDeLaPerformance,
     },
-    {
-      id: "03",
-      diplome: "BTS Moteurs à Combustion Interne",
-      url: "https://claveille.org/bts/",
-      ecole: "Lycée Albert Claveille — Périgueux (24)",
-      date: "2011 – 2013",
-      percent: 100,
-      details:
-        "Enseignements en développement moteur, dépollution thermodynamique et construction mécanique.",
-      status: "completed",
-      imgSrc: bts,
-    },
+    // {
+    //   id: "03",
+    //   diplome: "BTS Moteurs à Combustion Interne",
+    //   url: "https://claveille.org/bts/",
+    //   ecole: "Lycée Albert Claveille — Périgueux (24)",
+    //   date: "2011 – 2013",
+    //   percent: 100,
+    //   details:
+    //     "Enseignements en développement moteur, dépollution thermodynamique et construction mécanique.",
+    //   status: "completed",
+    //   imgSrc: bts,
+    // },
   ];
 
   return (
