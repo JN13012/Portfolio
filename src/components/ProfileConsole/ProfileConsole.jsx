@@ -61,42 +61,7 @@ const ProfileConsole = () => {
       },
       scanPolicy: null,
     },
-
-    firewallConfig: "INCOMPLETE",
-    wafConfig: "INCOMPLETE",
-    idsConfig: "INCOMPLETE",
-
-    wafEnabled: false,
-    sqliProtection: false,
-    rateLimit: false,
-
-    idsEnabled: false,
-    snortRuleLoaded: false,
   });
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [history]);
-
-  const addLog = (msg, type = "out") => {
-    setHistory((prev) => [...prev, { msg, type }]);
-  };
-
-  function checkFlagStatus(state) {
-    const allOk =
-      state.firewallConfig === "OK" &&
-      state.idsConfig === "OK" &&
-      state.wafConfig === "OK";
-
-    if (allOk && state.flagStatus !== "UNLOCKED") {
-      addLog("ALL SECURITY SYSTEMS SECURED. FLAG UNLOCKED.", "sys");
-      addLog(`FLAG{${CTF_LEVELS[9].flag}}`, "out");
-    }
-
-    return allOk ? "UNLOCKED" : "LOCKED";
-  }
   function evaluateFirewallConfig(state) {
     const requiredPorts = {
       22: "ALLOW",
@@ -109,29 +74,82 @@ const ProfileConsole = () => {
 
     const rules = state.firewall.rules;
 
-    const isValid = Object.entries(requiredPorts).every(([port, expected]) => {
-      const portRules = rules.filter((r) => r.port === Number(port));
+    const portsOk = Object.entries(requiredPorts).every(([port, expected]) => {
+      const lastRule = rules
+        .filter((r) => r.port === Number(port))
+        .slice(-1)[0];
 
-      if (portRules.length === 0) {
-        return expected === "ALLOW";
-      }
-
-      const lastRule = portRules[portRules.length - 1];
-
-      return lastRule.action === expected;
+      if (!lastRule && expected === "ALLOW") return true;
+      return lastRule?.action === expected;
     });
-    const ipBlocked = state.firewall.blockedIps.includes("45.83.122.91");
-    return isValid && ipBlocked;
+
+    const attackerBlocked = state.firewall.blockedIps.includes("45.83.122.91");
+
+    return portsOk && attackerBlocked;
   }
+
+  function evaluateWAF(state) {
+    return state.waf.rateLimitValue === 60 &&
+      state.waf.rulesets?.sqli_basic === true
+      ? "OK"
+      : "INCOMPLETE";
+  }
+
+  function evaluateSnort(state) {
+    const r = state.snort?.rules || {};
+
+    const ok =
+      state.snort?.enabled &&
+      state.snort?.interface === "eth0" &&
+      state.snort?.scanPolicy?.count === 10 &&
+      state.snort?.scanPolicy?.interval === 1 &&
+      state.snort?.scanPolicy?.track === "src_ip" &&
+      r["scan.rules"] &&
+      r["malware.rules"] &&
+      !r["local.rules"];
+
+    return ok ? "OK" : "INCOMPLETE";
+  }
+
 
   function evaluateAll(state) {
     return {
-      ...state,
       firewallConfig: evaluateFirewallConfig(state) ? "OK" : "INCOMPLETE",
       wafConfig: evaluateWAF(state),
       idsConfig: evaluateSnort(state),
     };
   }
+
+  const flagTriggeredRef = useRef(false);
+
+  function checkFlagStatus(state) {
+    const allOk =
+      state.firewallConfig === "OK" &&
+      state.idsConfig === "OK" &&
+      state.wafConfig === "OK";
+
+    if (allOk && !flagTriggeredRef.current) {
+      flagTriggeredRef.current = true;
+
+      addLog("ALL SECURITY SYSTEMS SECURED. FLAG UNLOCKED.", "sys");
+      addLog(`FLAG{${CTF_LEVELS[9].flag}}`, "out");
+    }
+
+    if (!allOk) {
+      flagTriggeredRef.current = false;
+    }
+    return allOk ? "UNLOCKED" : "LOCKED";
+  }
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [history]);
+
+  const addLog = (msg, type = "out") => {
+    setHistory((prev) => [...prev, { msg, type }]);
+  };
 
   const handleCommand = (input) => {
     const enterSshShell = (user, host) => {
@@ -2400,8 +2418,9 @@ const ProfileConsole = () => {
               ],
             },
           };
-          updateFirewallState(next);
-          checkFlagStatus(next);
+          const evaluated = evaluateAll(next);
+
+          checkFlagStatus(evaluated);
           return next;
         });
 
@@ -2454,8 +2473,9 @@ const ProfileConsole = () => {
             },
           };
 
-          updateFirewallState(next);
-          checkFlagStatus(next);
+          const evaluated = evaluateAll(next);
+
+          checkFlagStatus(evaluated);
 
           return next;
         });
@@ -2497,8 +2517,9 @@ const ProfileConsole = () => {
             },
           };
 
-          updateFirewallState(next);
-          checkFlagStatus(next);
+          const evaluated = evaluateAll(next);
+
+          checkFlagStatus(evaluated);
 
           return next;
         });
@@ -2613,7 +2634,10 @@ const ProfileConsole = () => {
                   : "INCOMPLETE",
             };
 
-            checkFlagStatus(next);
+            const evaluated = evaluateAll(next);
+
+            checkFlagStatus(evaluated);
+
             return next;
           });
 
@@ -2647,7 +2671,10 @@ const ProfileConsole = () => {
             },
           };
 
-          checkFlagStatus(next);
+          const evaluated = evaluateAll(next);
+
+          checkFlagStatus(evaluated);
+
           return next;
         });
       }
@@ -2694,7 +2721,9 @@ const ProfileConsole = () => {
                 ? "OK"
                 : "INCOMPLETE";
 
-            checkFlagStatus(next);
+            const evaluated = evaluateAll(next);
+
+            checkFlagStatus(evaluated);
 
             return next;
           });
@@ -2722,21 +2751,21 @@ const ProfileConsole = () => {
       const action = args[1];
       const target = args[2];
 
-      function evaluateSnort(next) {
-        const rules = next.snort?.rules || {};
+      // function evaluateSnort(next) {
+      //   const rules = next.snort?.rules || {};
 
-        const snortOk =
-          next.snort?.enabled &&
-          next.snort?.interface === "eth0" &&
-          next.snort?.scanPolicy?.count === 10 &&
-          next.snort?.scanPolicy?.interval === 1 &&
-          next.snort?.scanPolicy?.track === "src_ip" &&
-          rules["scan.rules"] &&
-          rules["malware.rules"] &&
-          !rules["local.rules"];
+      //   const snortOk =
+      //     next.snort?.enabled &&
+      //     next.snort?.interface === "eth0" &&
+      //     next.snort?.scanPolicy?.count === 10 &&
+      //     next.snort?.scanPolicy?.interval === 1 &&
+      //     next.snort?.scanPolicy?.track === "src_ip" &&
+      //     rules["scan.rules"] &&
+      //     rules["malware.rules"] &&
+      //     !rules["local.rules"];
 
-        return snortOk ? "OK" : "INCOMPLETE";
-      }
+      //   return snortOk ? "OK" : "INCOMPLETE";
+      // }
       // =========================
       // STATUS
       // =========================
@@ -2829,8 +2858,11 @@ const ProfileConsole = () => {
             },
           };
 
-          next.idsConfig = evaluateSnort(next);
-          checkFlagStatus(next);
+          //next.idsConfig = evaluateSnort(next);
+
+          const evaluated = evaluateAll(next);
+
+          checkFlagStatus(evaluated);
 
           return next;
         });
@@ -2856,8 +2888,11 @@ const ProfileConsole = () => {
             },
           };
 
-          next.idsConfig = evaluateSnort(next);
-          checkFlagStatus(next);
+          //next.idsConfig = evaluateSnort(next);
+
+          const evaluated = evaluateAll(next);
+
+          checkFlagStatus(evaluated);
 
           return next;
         });
@@ -2900,8 +2935,11 @@ const ProfileConsole = () => {
               },
             };
 
-            next.idsConfig = evaluateSnort(next);
-            checkFlagStatus(next);
+            //next.idsConfig = evaluateSnort(next);
+
+            const evaluated = evaluateAll(next);
+
+            checkFlagStatus(evaluated);
 
             return next;
           });
@@ -2936,8 +2974,11 @@ const ProfileConsole = () => {
               },
             };
 
-            next.idsConfig = evaluateSnort(next);
-            checkFlagStatus(next);
+            //next.idsConfig = evaluateSnort(next);
+
+            const evaluated = evaluateAll(next);
+
+            checkFlagStatus(evaluated);
 
             return next;
           });
@@ -2994,8 +3035,11 @@ const ProfileConsole = () => {
               },
             };
 
-            next.idsConfig = evaluateSnort(next);
-            checkFlagStatus(next);
+            //next.idsConfig = evaluateSnort(next);
+
+            const evaluated = evaluateAll(next);
+
+            checkFlagStatus(evaluated);
 
             return next;
           });
