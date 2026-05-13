@@ -27,7 +27,7 @@ const categoryThemes = {
     card: "hover:border-cyber/40",
     badge: "text-emerald-300 border-emerald-500/30 bg-emerald-500/10",
   },
-  "Software Engineering": {
+  "Ingénierie logicielle": {
     card: "hover:border-cyber/40",
     badge: "text-lime-400 border-lime-500/30 bg-lime-500/10",
   },
@@ -188,7 +188,7 @@ const projets = [
     lien: "https://github.com/ton-username/Vaultborn",
     image: Vaultborn,
     date: "10/2025",
-    categorie: "Software Engineering",
+    categorie: "Ingénierie logicielle",
     complexity: 3,
   },
   {
@@ -221,7 +221,7 @@ const projets = [
     lien: "https://github.com/ton-username/CyberPong",
     image: Cyberpong,
     date: "09/2025",
-    categorie: "Software Engineering",
+    categorie: "Ingénierie logicielle",
     complexity: 3,
   },
   {
@@ -239,7 +239,7 @@ const projets = [
     ],
     lien: "#",
     date: "2024",
-    categorie: "Software Engineering",
+    categorie: "Ingénierie logicielle",
     complexity: 3,
   },
   {
@@ -250,7 +250,7 @@ const projets = [
     lien: "https://github.com/JN13012/Unit_converter",
     image: Unit_converter,
     date: "08/2025",
-    categorie: "Software Engineering",
+    categorie: "Ingénierie logicielle",
     complexity: 3,
   },
   {
@@ -284,7 +284,7 @@ const ProjectSection = () => {
     "Tous",
     "DevOps",
     "IA",
-    "Software Engineering",
+    "Ingénierie logicielle",
     "Gestion de Projet",
   ];
 

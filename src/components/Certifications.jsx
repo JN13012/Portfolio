@@ -331,7 +331,7 @@ const certifs = [
 const nodes = [
   {
     id: "TryHackMe",
-    label: "Cyber-Sécurité",
+    label: "Cybersécurité",
     image: THM_BG,
     theme: {
       bg: "bg-red-500",
@@ -348,7 +348,7 @@ const nodes = [
 
   {
     id: "COURSERA",
-    label: "IA",
+    label: "Intelligence Artificielle",
     image: COURSERA_BG,
     theme: {
       bg: "bg-blue-500",
@@ -439,7 +439,7 @@ const Certifications = () => {
                       className={`absolute top-0 left-0 w-1 h-full ${node.theme.bg} shadow-[0_0_10px_currentColor] ${node.theme.text}`}
                     ></div>
                   )}
-                  {node.id} - ({node.label})
+                  {node.label}
                 </button>
               );
             })}

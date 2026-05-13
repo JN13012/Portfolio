@@ -1,139 +1,95 @@
+import Sec from "../assets/THM.jpg";
+import IA from "../assets/COURSERA.jpg";
+
+// Devicon CDN — fallback silencieux via onError dans le composant
+export const TOOL_ICONS = {
+  "Docker":         "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg",
+  "Docker Compose": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg",
+  "Jenkins":        "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg",
+  "React":          "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
+  "Next.js":        "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
+  "Node.js":        "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-plain.svg",
+  "PostgreSQL":     "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
+  "Python":         "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg",
+  "Java":           "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
+  "PyTorch (CUDA)": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pytorch/pytorch-original.svg",
+  "Socket.io":      "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/socketio/socketio-original.svg",
+  "Linux (CLI)":    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg",
+};
+
 export const DOMAINS = [
-  // =========================================================
-  // CYBERSÉCURITÉ (5 → 3 items)
-  // =========================================================
   {
     category: "Cybersécurité",
     label: "SECURITY",
     index: "01",
-    icon: "🛡️",
-    hue: "#bf3a2e",
-    muted: "rgba(191,58,46,0.1)",
-    border: "rgba(191,58,46,0.2)",
-    tag: "Offensive · Defensive · Forensics",
+    hue: "#960505",
+    backgroundImage: Sec,
+    tag: "Red Team · Blue Team · Ingénierie logicielle",
     items: [
       {
-        name: "Offensive Security & Réseau",
-        tools: ["Nmap", "Gobuster", "Metasploit", "SQLMap", "Wireshark", "TCPdump"],
+        name: "Red Teaming",
+        level: "Avancé",
+        shortDesc: "Tests d'intrusion Web & réseau · OWASP Top 10 · CVE",
+        featured: ["Nmap", "BurpSuite", "Metasploit", "Wireshark"],
+        tools: ["TCP/IP", "Nmap", "BurpSuite", "Wireshark", "Metasploit", "SQLMap", "Hashcat", "Hydra", "Linux (CLI)"],
         details:
-          "Tests d’intrusion Web et réseau : reconnaissance, énumération de services, exploitation de vulnérabilités OWASP, analyse de trafic réseau et compréhension des protocoles TCP/IP. Approche offensive complète combinant pentest et audit réseau.",
+          "Compréhension de la chaîne d'attaque : réalisation de tests d'intrusion sur environnements Web et réseaux via l'exploitation de vulnérabilités (OWASP Top 10) et de failles (CVE). Utilisation du framework Metasploit pour le déploiement de payloads, la gestion de sessions Meterpreter et escalade de privilèges. Capacité à intercepter et analyser le trafic web via l'utilisation du Proxy Burp Suite.",
       },
       {
-        name: "Sécurité Applicative",
-        tools: ["JWT", "Bcrypt", "OWASP", "Middleware", "Nftables"],
+        name: "Blue Teaming & SOC",
+        level: "Intermédiaire",
+        shortDesc: "Analyse de logs · Forensics · Hardening système",
+        featured: ["Splunk SIEM", "Wireshark", "FlareVM", "Snort"],
+        tools: ["Splunk SIEM", "Wireshark", "Snort", "Fail2ban", "Firewall / WAF", "FlareVM", "REMnux", "CyberChef"],
         details:
-          "Sécurisation des APIs et applications web : authentification, hashing, protection des routes, prévention des injections SQL/XSS/CSRF et mise en place de politiques de sécurité applicatives robustes.",
-      },
-      {
-        name: "Blue Team & Forensics",
-        tools: [
-          "Snort",
-          "SIEM",
-          "ELK Stack",
-          "Grafana",
-          "FlareVM",
-          "Volatility",
-          "Autopsy",
-        ],
-        details:
-          "Détection d’intrusions, analyse de logs et investigation post-incident. Analyse de malwares, corrélation d’événements systèmes et réseau, monitoring temps réel et réponse aux incidents (SOC + forensic).",
+          "Analyse de logs via search queries SPL sur le SIEM Splunk. Pratique Forensics et analyse de malwares en environnements isolés (FlareVM/REMnux). Mise en œuvre de mesures de durcissement (Hardening) incluant la configuration de WAF, de firewalls et d'IDS/IPS.",
       },
     ],
   },
-
-  // =========================================================
-  // IA (5 → 3 items)
-  // =========================================================
   {
     category: "Intelligence Artificielle",
-    label: "AI / ML",
+    label: "AI / LLM",
     index: "02",
-    icon: "🤖",
-    hue: "#2563c4",
-    muted: "rgba(37,99,196,0.1)",
-    border: "rgba(37,99,196,0.2)",
-    tag: "Generative · RAG · Governance",
+    hue: "#053396",
+    backgroundImage: IA,
+    tag: "GenAI · RAG · Voice Processing",
     items: [
       {
-        name: "LLMs & IA Générative",
-        tools: [
-          "Watsonx",
-          "Llama",
-          "Claude API",
-          "Mistral",
-          "HuggingFace",
-          "Transformers",
-          "spaCy",
-        ],
+        name: "Dev IA",
+        level: "Avancé",
+        shortDesc: "Pipelines RAG · Assistants vocaux temps réel · LLM",
+        featured: ["LangChain", "Llama 3.x", "PyTorch (CUDA)", "Whisper"],
+        tools: ["LangChain", "Llama 3.x", "IBM Watsonx", "Groq (LPU)", "FAISS / ChromaDB", "Whisper", "PyTorch (CUDA)", "Hugging Face"],
         details:
-          "Conception de systèmes IA génératifs : intégration de LLMs, prompt engineering avancé, NLP, classification de texte, embeddings et adaptation de modèles à des domaines spécifiques.",
-      },
-      {
-        name: "RAG & Search Systems",
-        tools: ["FAISS", "LangChain", "ChromaDB", "Pinecone"],
-        details:
-          "Architecture de systèmes RAG : embeddings vectoriels, recherche sémantique, gestion de mémoire longue durée et pipelines documentaires scalables pour LLMs.",
-      },
-      {
-        name: "Machine Learning & AI Ops",
-        tools: [
-          "Scikit-learn",
-          "Pandas",
-          "NumPy",
-          "XGBoost",
-          "MLflow",
-          "SHAP",
-          "Evidently",
-          "Fairness360",
-        ],
-        details:
-          "Machine learning complet : entraînement de modèles, feature engineering, validation croisée, déploiement en production et monitoring (drift, biais, explicabilité).",
+          "Conception de systèmes d'IA générative incluant des pipelines RAG pour l'analyse de documents et des assistants vocaux temps réel (STT/TTS). Expertise dans l'orchestration de LLMs via LangChain, l'optimisation de l'inférence sur matériel spécialisé (Groq, GPU/CUDA) et l'intégration de services Cloud IA.",
       },
     ],
   },
-
-  // =========================================================
-  // ENGINEERING (5 → 3 items)
-  // =========================================================
   {
-    category: "Ingénierie & DevSecOps",
-    label: "ENGINEERING",
+    category: "Ingénierie Logicielle",
+    label: "SOFTWARE",
     index: "03",
-    icon: "⚙️",
-    hue: "#0e9e6e",
-    muted: "rgba(14,158,110,0.1)",
-    border: "rgba(14,158,110,0.2)",
-    tag: "Fullstack · DevOps · Cloud",
+    hue: "#059669",
+    backgroundImage: IA,
+    tag: "POO · Fullstack · Architecture",
     items: [
       {
-        name: "Fullstack Architecture",
-        tools: ["Next.js", "Prisma", "Socket.io", "tRPC"],
+        name: "Full Stack",
+        level: "Avancé",
+        shortDesc: "API REST · WebSockets · Architecture modulaire",
+        featured: ["React", "Node.js", "PostgreSQL", "Next.js"],
+        tools: ["Java", "Python", "LibGDX", "Pygame", "Apex (Salesforce)", "Next.js", "React", "Node.js", "Socket.io", "PostgreSQL", "REST API"],
         details:
-          "Applications fullstack modernes : SSR/SSG, APIs typées, temps réel, architecture scalable et optimisation performance frontend/backend.",
+          "Conception et développement de systèmes logiciels complets allant d'applications et jeux en Java/Python (POO, héritage, polymorphisme, design patterns comme Factory) à des architectures web full stack modernes. Mise en place d'API REST scalables, de communications temps réel via WebSockets (Socket.io) et de bases de données relationnelles (PostgreSQL). Approche orientée architecture, performance et modularité dans des environnements frontend et backend.",
       },
       {
-        name: "DevOps & Infrastructure",
-        tools: [
-          "Docker",
-          "Jenkins",
-          "GitHub Actions",
-          "K8s",
-          "Bash",
-          "Ansible",
-          "Nginx",
-          "Systemd",
-          "Redis",
-          "PostgreSQL",
-          "MySQL",
-        ],
+        name: "DevOps",
+        level: "Intermédiaire",
+        shortDesc: "Conteneurisation · CI/CD · Infrastructure as Code",
+        featured: ["Docker", "Jenkins", "Docker Compose", "CI/CD"],
+        tools: ["Docker", "Docker Compose", "Jenkins", "Groovy / JCasC", "CI/CD"],
         details:
-          "CI/CD, conteneurisation, orchestration Kubernetes, administration Linux, scripting, hardening serveurs et gestion de bases de données en production.",
-      },
-      {
-        name: "Enterprise Systems",
-        tools: ["Apex", "SOQL", "Flows", "LWC"],
-        details:
-          "Développement Salesforce : automatisation des processus métier, composants Lightning, logique backend et gestion de données CRM complexes.",
+          "Conteneurisation d'applications micro-services via Docker Compose. Automatisation de l'infrastructure (JCasC) et création de pipelines CI/CD reproductibles avec Jenkins.",
       },
     ],
   },
