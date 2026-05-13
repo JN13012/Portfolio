@@ -177,9 +177,8 @@ export default function Competences() {
         }}
       >
         {/* ───────────────────────────────────────────────────── */}
-        /* HEADER */
+        {/* HEADER */}
         {/* ───────────────────────────────────────────────────── */}
-
         <div
           style={{
             marginBottom: 80,
@@ -226,86 +225,70 @@ export default function Competences() {
             />
           </div>
 
-          <p
+
+          <div
             style={{
-              marginTop: 28,
-              maxWidth: 720,
-              color: "rgba(255,255,255,0.4)",
-              lineHeight: 1.9,
-              fontSize: 13,
-              letterSpacing: "0.04em",
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+              marginTop: 20,
             }}
           >
-            Cybersécurité offensive et défensive, architectures backend
-            modernes, systèmes IA génératifs et pipelines DevSecOps avancés.
-          </p>
-          <div
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
-    marginTop: 20,
-  }}
->
-  {DOMAINS.map((d, di) => {
-    const isActive = dom.category === d.category;
+            {DOMAINS.map((d, di) => {
+              const isActive = dom.category === d.category;
 
-    const startIdx = DOMAINS.slice(0, di).reduce(
-      (a, x) => a + x.items.length,
-      0
-    );
+              const startIdx = DOMAINS.slice(0, di).reduce(
+                (a, x) => a + x.items.length,
+                0,
+              );
 
-    return (
-      <button
-        key={d.category}
-        onClick={() => {
-          setPanelVis(false);
+              return (
+                <button
+                  key={d.category}
+                  onClick={() => {
+                    setPanelVis(false);
 
-          setTimeout(() => {
-            setActiveIdx(startIdx);
-            setPanelVis(true);
-          }, 180);
-        }}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          opacity: isActive ? 1 : 0.35,
-          cursor: "pointer",
-          background: "none",
-          border: "none",
-        }}
-      >
-        <span
-          style={{
-            fontSize: 10,
-            letterSpacing: "0.25em",
-            color: isActive ? d.hue : "rgba(255,255,255,0.4)",
-            textTransform: "uppercase",
-          }}
-        >
-          {d.index} {d.label}
-        </span>
+                    setTimeout(() => {
+                      setActiveIdx(startIdx);
+                      setPanelVis(true);
+                    }, 180);
+                  }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    opacity: isActive ? 1 : 0.35,
+                    cursor: "pointer",
+                    background: "none",
+                    border: "none",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 10,
+                      letterSpacing: "0.25em",
+                      color: isActive ? d.hue : "rgba(255,255,255,0.4)",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {d.index} {d.label}
+                  </span>
 
-        <div
-          style={{
-            width: 24,
-            height: 1,
-            background: isActive
-              ? d.hue
-              : "rgba(255,255,255,0.2)",
-          }}
-        />
-      </button>
-    );
-  })}
-</div>
+                  <div
+                    style={{
+                      width: 24,
+                      height: 1,
+                      background: isActive ? d.hue : "rgba(255,255,255,0.2)",
+                    }}
+                  />
+                </button>
+              );
+            })}
+          </div>
         </div>
-
         {/* ───────────────────────────────────────────────────── */}
-        /* CAROUSEL */
+        {/* CAROUSEL */}
         {/* ───────────────────────────────────────────────────── */}
-
         <div
           style={{
             position: "relative",
@@ -567,11 +550,9 @@ export default function Competences() {
             })}
           </div>
         </div>
-
         {/* ───────────────────────────────────────────────────── */}
-        /* INDICATORS */
+        {/* INDICATORS */}
         {/* ───────────────────────────────────────────────────── */}
-
         <div
           style={{
             display: "flex",
@@ -591,19 +572,15 @@ export default function Competences() {
                 border: "none",
                 cursor: "pointer",
                 background:
-                  i === activeIdx
-                    ? dom.hue
-                    : "rgba(255,255,255,0.18)",
+                  i === activeIdx ? dom.hue : "rgba(255,255,255,0.18)",
                 transition: "all .45s ease",
               }}
             />
           ))}
         </div>
-
         {/* ───────────────────────────────────────────────────── */}
-        /* DETAIL PANEL */
+        {/* DETAIL PANEL */}
         {/* ───────────────────────────────────────────────────── */}
-
         <div
           className={panelVis ? "panel-enter" : "panel-exit"}
           style={{
@@ -664,8 +641,8 @@ export default function Competences() {
                   marginBottom: 8,
                 }}
               >
-                {dom.label} · {String(skillIndexInDomain + 1).padStart(2, "0")}
-                /{String(dom.items.length).padStart(2, "0")}
+                {dom.label} · {String(skillIndexInDomain + 1).padStart(2, "0")}/
+                {String(dom.items.length).padStart(2, "0")}
               </div>
 
               <div
