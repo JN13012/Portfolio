@@ -65,7 +65,7 @@ const Presentation = () => {
                 énumération de services
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[04]</span> Hashes Cracking
+                <span className="text-cyber">[04]</span> Hashs Cracking
               </li>
               <li className="flex gap-2">
                 <span className="text-cyber">[05]</span> Exploitation &

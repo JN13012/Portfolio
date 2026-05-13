@@ -3,10 +3,10 @@ export const CTF_LEVELS = {
         label: "FOOTPRINTING",
         flag: "1",
         unlocks: [],
-        hint: "Inspect your browser page => source code => index.html (refresh the page if needed).",
+        hint: "Inspect the page => source code => index.html. (refresh the page if needed or 'ctrl+u').",
         files: {
             "readme.txt": "Welcome to this CTF. Search, find, and validate. Exit any session before submit flag.",
-            ".note.txt": "Look for the comment <!-- SYSTEM_ACCESS_KEY --> in the source code of the index.html page."
+            ".flag.txt": "Did you think it would be that easy? The flag is hidden within the source code of the index.html page."
         }
     },
     2: {
