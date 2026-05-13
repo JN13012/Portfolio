@@ -213,7 +213,7 @@ const certifs = [
     url: "https://coursera.org/share/9e097eac39d7c42bdb4fa1826f485bc5",
     description:
       "Développement d’applications IA avec Python et Flask : création de modules, tests unitaires, déploiement web, opérations CRUD et intégration des bibliothèques IBM Watson.",
-    difficulte: 2,
+    difficulte: 3,
     stack: [
       "Python",
       "Flask",
@@ -236,7 +236,7 @@ const certifs = [
     url: "https://www.coursera.org/account/accomplishments/verify/OM4ZXGM73HG4",
     description:
       "Conception et développement d’applications basées sur l’IA générative, incluant la mise en place de pipelines RAG, l’intégration d’API (Hugging Face, watsonX), ainsi que le développement d’interfaces web et vocales avec Flask et Gradio.",
-    difficulte: 2,
+    difficulte: 3,
     stack: [
       "Python",
       "PyTorch",
