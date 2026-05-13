@@ -53,45 +53,20 @@ export default function Competences() {
   /* COVERFLOW TRANSFORM */
   /* ───────────────────────────────────────────────────────────── */
 
-  const getCardTransform = (index) => {
+  const getCardTransform = (i) => {
     const total = ALL.length;
-
-    const spacing = 340;
-
-    let offset = index - activeIdx;
-
-    /* LOOP */
-    if (offset > total / 2) {
-      offset -= total;
-    }
-
-    if (offset < -total / 2) {
-      offset += total;
-    }
-
-    const abs = Math.abs(offset);
-
-    const scale = Math.max(1 - abs * 0.12, 0.65);
-
-    const rotateY = offset * -28;
-
-    const x = offset * spacing;
-
-    const z = -abs * 180;
-
-    const opacity = Math.max(1 - abs * 0.18, 0.18);
-
+    const angle  = (i / total) * Math.PI * 2;
+    const offset = (activeIdx / total) * Math.PI * 2;
+    const fin    = angle - offset;
+    const x = Math.cos(fin) * 500;
+    const y = Math.sin(fin) * 125;
+    const z = Math.sin(fin) * 95;
+    const depth = (z + 95) / 190;
     return {
-      transform: `
-        translateX(${x}px)
-        translateZ(${z}px)
-        rotateY(${rotateY}deg)
-        scale(${scale})
-      `,
-      zIndex: 100 - abs,
-      opacity,
-      filter: `blur(${abs * 0.6}px)`,
-      transition: "all 0.7s cubic-bezier(0.22,1,0.36,1)",
+      transform: `translate3d(${x}px,${y}px,${z}px) scale(${0.46 + depth * 0.5})`,
+      opacity: 0.1 + depth * 0.9,
+      zIndex: Math.floor(depth * 100),
+      transition: "all 0.7s cubic-bezier(0.4,0,0.2,1)",
     };
   };
 
@@ -181,7 +156,7 @@ export default function Competences() {
         {/* ───────────────────────────────────────────────────── */}
         <div
           style={{
-            marginBottom: 80,
+            marginBottom: 10,
           }}
         >
           <div
@@ -292,7 +267,7 @@ export default function Competences() {
         <div
           style={{
             position: "relative",
-            height: 720,
+            height: 600,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -374,8 +349,8 @@ export default function Competences() {
                   }}
                   style={{
                     position: "absolute",
-                    width: 320,
-                    height: 420,
+                    width: 240,
+                    height: 320,
                     cursor: "pointer",
                     transformStyle: "preserve-3d",
                     ...getCardTransform(i),
@@ -586,7 +561,7 @@ export default function Competences() {
           style={{
             marginTop: 60,
             display: "grid",
-            gridTemplateColumns: "1fr 1px 1fr 1px 1fr",
+            gridTemplateColumns: "1fr 1px 2fr 1px 1fr",
             border: "1px solid rgba(255,255,255,0.06)",
             background: "rgba(8,8,8,0.7)",
             backdropFilter: "blur(12px)",
