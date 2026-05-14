@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import SectionHeader from "./SectionHeader";
 import { DOMAINS, TOOL_ICONS } from "./CompetencesData";
 
 const ALL = DOMAINS.flatMap((d) =>
@@ -8,23 +9,15 @@ const ALL = DOMAINS.flatMap((d) =>
   })),
 );
 
-const LEVEL_COLORS = {
-  Expert: {
-    bg: "rgba(250,204,21,0.12)",
-    border: "rgba(250,204,21,0.35)",
-    text: "#facc15",
-  },
-  Avancé: {
-    bg: "rgba(34,197,94,0.10)",
-    border: "rgba(34,197,94,0.30)",
-    text: "#22c55e",
-  },
-  Intermédiaire: {
-    bg: "rgba(148,163,184,0.10)",
-    border: "rgba(148,163,184,0.25)",
-    text: "#94a3b8",
-  },
-};
+const CAROUSEL_PERSPECTIVE = 2400;
+const FIRST_CARD_SPACING = 390;
+const BACKGROUND_CARD_SPACING = 335;
+const CARD_DEPTH = 260;
+const CARD_SCALE_STEP = 0.1;
+const MIN_CARD_SCALE = 0.72;
+const ACTIVE_CARD_SIZE = { width: 380, height: 120 };
+const INACTIVE_CARD_SIZE = { width: 260, height: 110 };
+const HITBOX_PADDING = 22;
 
 export default function Competences() {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -52,6 +45,24 @@ export default function Competences() {
     }, 180);
   }, []);
 
+  const selectSkill = useCallback(
+    (idx) => {
+      if (idx === activeIdx) return;
+
+      setPanelVis(false);
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setActiveIdx(idx);
+        setPanelVis(true);
+      }, 180);
+    },
+    [activeIdx],
+  );
+
   useEffect(() => {
     const fn = (e) => {
       if (e.key === "ArrowLeft") go(-1);
@@ -67,7 +78,7 @@ export default function Competences() {
   /* COVERFLOW */
   /* ───────────────────────────────────────────── */
 
-  const getCardTransform = (i) => {
+  const getCardOffset = (i) => {
     const offset = i - activeIdx;
     const total = ALL.length;
 
@@ -76,16 +87,30 @@ export default function Competences() {
     if (offset > total / 2) normalizedOffset -= total;
     if (offset < -total / 2) normalizedOffset += total;
 
+    return normalizedOffset;
+  };
+
+  const getCardX = (normalizedOffset) => {
+    const direction = Math.sign(normalizedOffset);
     const abs = Math.abs(normalizedOffset);
-    const spacing = 270;
-    const x = normalizedOffset * spacing;
-    const z = -abs * 220;
-    const rotateY = normalizedOffset * -30;
-    const scale = Math.max(1 - abs * 0.12, 0.68);
-    const opacity = Math.max(1 - abs * 0.18, 0.15);
+
+    if (abs === 0) return 0;
+
+    return direction * (FIRST_CARD_SPACING + (abs - 1) * BACKGROUND_CARD_SPACING);
+  };
+
+  const getCardTransform = (i) => {
+    const normalizedOffset = getCardOffset(i);
+    const abs = Math.abs(normalizedOffset);
+    const x = getCardX(normalizedOffset);
+    const z = -abs * CARD_DEPTH;
+    const rotateY = normalizedOffset * -24;
+    const scale = Math.max(1 - abs * CARD_SCALE_STEP, MIN_CARD_SCALE);
+    const opacity = 1;
 
     return {
       transform: `
+        translate(-50%,-50%)
         translate3d(${x}px,0,${z}px)
         rotateY(${rotateY}deg)
         rotateX(4deg)
@@ -93,15 +118,33 @@ export default function Competences() {
       `,
       opacity,
       zIndex: 100 - abs,
-      filter: `blur(${abs * 0.7}px)`,
+      filter: "none",
       transition:
-        "transform 900ms cubic-bezier(0.22,1,0.36,1), opacity 700ms ease, filter 700ms ease",
+        "transform 900ms cubic-bezier(0.22,1,0.36,1), opacity 700ms ease",
       willChange: "transform",
     };
   };
 
+  const getCardHitboxStyle = (i) => {
+    const normalizedOffset = getCardOffset(i);
+    const abs = Math.abs(normalizedOffset);
+    const z = -abs * CARD_DEPTH;
+    const perspectiveScale = CAROUSEL_PERSPECTIVE / (CAROUSEL_PERSPECTIVE - z);
+    const scale = Math.max(1 - abs * CARD_SCALE_STEP, MIN_CARD_SCALE);
+    const projectedScale = scale * perspectiveScale;
+
+    return {
+      width: `${INACTIVE_CARD_SIZE.width * projectedScale + HITBOX_PADDING}px`,
+      height: `${INACTIVE_CARD_SIZE.height * projectedScale + HITBOX_PADDING}px`,
+      transform: `translate(-50%, -50%) translateX(${
+        getCardX(normalizedOffset) * perspectiveScale
+      }px)`,
+      zIndex: 100 - abs,
+    };
+  };
+
   /* ───────────────────────────────────────────── */
-  /* PROGRESS */
+  /* DISPLAY DATA */
   /* ───────────────────────────────────────────── */
 
   const domainStart = DOMAINS.slice(0, DOMAINS.indexOf(dom)).reduce(
@@ -110,335 +153,273 @@ export default function Competences() {
   );
 
   const skillIndexInDomain = activeIdx - domainStart;
+  const visibleIconCount =
+    active.tools.filter((tool) => TOOL_ICONS?.[tool]).length ||
+    active.tools.length;
+  const iconGlowColor = active.accent ?? dom.hue;
+  const iconGlowWidthMultiplier =
+    active.name === "Red Team" || active.name === "Blue Team"
+      ? 1.2
+      : active.name === "Full Stack"
+        ? 1.08
+      : active.name === "DevOps"
+        ? 0.72
+        : 1;
+  const iconGlowCoreWidth = `${Math.min(
+    86,
+    Math.max(28, (24 + visibleIconCount * 5.5) * iconGlowWidthMultiplier),
+  )}%`;
+  const iconGlowCoreHeight = `${Math.min(195, Math.max(92, 72 + visibleIconCount * 11))}px`;
 
   /* ───────────────────────────────────────────── */
   /* RENDER */
   /* ───────────────────────────────────────────── */
 
   return (
-    <div className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10">
-      <div className="container mx-auto px-6 relative z-10">
-        {/* HEADER */}
-        <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
-          <span className="text-cyber font-mono text-base opacity-60">06.</span>
-          <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
-            Technical Expertise
-          </span>
-          <div className="h-px bg-cyber/20 flex-1" />
-        </h2>
+    <div
+      id="competences"
+      className="py-24 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
+    >
+      <div className="mx-auto px-2 relative z-10">
+        <SectionHeader index="02" title="Expertise Technique" />
 
-        {/* DOMAIN NAV */}
-        <div className="mb-3">
-          <div className="mt-5 flex flex-col gap-3">
-            {DOMAINS.map((d, di) => {
-              const isActive = dom.category === d.category;
-
-              const startIdx = DOMAINS.slice(0, di).reduce(
-                (a, x) => a + x.items.length,
-                0,
-              );
-
-              return (
-                <button
-                  key={d.category}
-                  onClick={() => {
-                    setPanelVis(false);
-                    setTimeout(() => {
-                      setActiveIdx(startIdx);
-                      setPanelVis(true);
-                    }, 180);
-                  }}
-                  className={`flex items-center gap-3 border-none bg-transparent transition-all duration-300 ${
-                    isActive ? "opacity-100" : "opacity-35"
-                  }`}
-                >
-                  <span
-                    className="text-[10px] uppercase tracking-[0.25em]"
-                    style={{
-                      color: isActive ? d.hue : "rgba(255,255,255,0.4)",
-                    }}
-                  >
-                    {d.index} {d.label}
-                  </span>
-
-                  <div
-                    className="h-px w-6"
-                    style={{
-                      background: isActive ? d.hue : "rgba(255,255,255,0.2)",
-                    }}
-                  />
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* CAROUSEL */}
+        {/* Carousel */}
         <div
-          className="relative flex h-[300px] items-center justify-center"
-          style={{ perspective: "2400px" }}
+          className="relative -mt-6 flex h-[175px] items-center justify-center"
+          style={{ perspective: `${CAROUSEL_PERSPECTIVE}px` }}
         >
-          {/* LEFT */}
-          <button
-            onClick={() => go(-1)}
-            className="
-              absolute left-0 z-[999]
-              h-14 w-14 rounded-full
-              border border-white/10
-              bg-black/40
-              text-[30px] text-white/60
-              backdrop-blur-xl
-              transition-all duration-300
-              hover:border-white/20
-              hover:bg-white/10
-              hover:text-white
-            "
-          >
-            ‹
-          </button>
-
-          {/* RIGHT */}
-          <button
-            onClick={() => go(1)}
-            className="
-              absolute right-0 z-[999]
-              h-14 w-14 rounded-full
-              border border-white/10
-              bg-black/40
-              text-[30px] text-white/60
-              backdrop-blur-xl
-              transition-all duration-300
-              hover:border-white/20
-              hover:bg-white/10
-              hover:text-white
-            "
-          >
-            ›
-          </button>
-
-          {/* TRACK */}
+          {/* Track */}
           <div
             className="relative flex h-full w-full items-center justify-center"
             style={{ transformStyle: "preserve-3d" }}
           >
             {ALL.map((skill, i) => {
               const d = skill.domain;
+              const skillAccent = skill.accent ?? d.hue;
+              const isActiveCard = i === activeIdx;
+              const cardSize = isActiveCard
+                ? ACTIVE_CARD_SIZE
+                : INACTIVE_CARD_SIZE;
 
               return (
                 <div
                   key={i}
-                  onClick={() => {
-                    setPanelVis(false);
-                    setTimeout(() => {
-                      setActiveIdx(i);
-                      setPanelVis(true);
-                    }, 180);
-                  }}
-                  className="absolute h-[320px] w-[240px] cursor-pointer"
+                  className="absolute left-1/2 top-1/2 cursor-crosshair"
                   style={{
+                    cursor: "crosshair",
+                    width: `${cardSize.width}px`,
+                    height: `${cardSize.height}px`,
+                    pointerEvents: "none",
                     transformStyle: "preserve-3d",
                     ...getCardTransform(i),
                   }}
+                  aria-hidden="true"
                 >
-                  {/* CARD */}
+                  {/* Card */}
                   <div
-                    className="relative h-[90px] w-[220px] cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-black/40 backdrop-blur-md transition hover:border-white/30"
+                    className={`relative h-full w-full overflow-hidden rounded-md border bg-[#080808] transition ${
+                      isActiveCard
+                        ? "shadow-[0_0_34px_rgba(255,255,255,0.08),0_26px_70px_rgba(0,0,0,0.62)]"
+                        : "shadow-[0_18px_45px_rgba(0,0,0,0.45)]"
+                    }`}
                     style={{
+                      cursor: "crosshair",
+                      borderColor: isActiveCard
+                        ? `${skillAccent}77`
+                        : "rgba(255,255,255,0.25)",
                       transformStyle: "preserve-3d",
-                      ...getCardTransform(i),
+                      boxShadow: isActiveCard
+                        ? `0 0 14px ${skillAccent}44, 0 0 36px ${skillAccent}24, 0 28px 70px rgba(0,0,0,0.62)`
+                        : undefined,
                     }}
                   >
-                    <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-white/10 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.1] to-transparent" />
 
-                    <div className="relative z-10 flex h-full flex-col justify-center px-4">
-                      <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">
+                    <div
+                      className={`relative z-10 flex h-full flex-col ${isActiveCard ? "px-7 pb-8 pt-5" : "px-4 pb-7 pt-4"}`}
+                    >
+                      <div
+                        className={`min-h-[1.2em] max-w-full truncate uppercase leading-none tracking-[0.2em] ${
+                          isActiveCard ? "text-[14px]" : "text-[11px]"
+                        }`}
+                        style={{ color: d.hue }}
+                      >
                         {d.label}
                       </div>
 
-                      <div className="text-[14px] font-medium text-white">
-                        {skill.name}
+                      <div
+                        className={`flex flex-1 items-center font-medium text-white ${
+                          isActiveCard
+                            ? "mt-2 text-[24px] leading-[1.08]"
+                            : "mt-1 text-[17px] leading-[1.12]"
+                        }`}
+                      >
+                        <span className="line-clamp-2">{skill.name}</span>
                       </div>
                     </div>
 
-                    {/* accent bar */}
-                    <div className="absolute bottom-0 left-0 h-[2px] w-full bg-white/10">
+                    {/* Accent bar */}
+                    <div className="absolute bottom-4 left-5 right-5 h-[3px] bg-white/25">
                       <div
-                        className="h-full"
-                        style={{ width: "60%", background: d.hue }}
+                        className="h-full rounded-full"
+                        style={{ width: "60%", background: skillAccent }}
                       />
                     </div>
                   </div>
                 </div>
               );
             })}
-          </div>
-        </div>
 
-        {/* TOOLS STRIP (entre cards et panel) */}
-        <div className="mt-6 flex justify-center gap-3 flex-wrap">
-          {active.tools.map((tool) => {
-            const iconUrl = TOOL_ICONS?.[tool];
+            <div className="pointer-events-none absolute inset-0 z-[200]">
+              {ALL.map((skill, i) => {
+                if (i === activeIdx) return null;
 
-            return (
-              <div
-                key={tool}
-                className="group flex items-center justify-center"
-                title={tool}
-              >
-                {iconUrl ? (
-                  <img
-                    src={iconUrl}
-                    alt={tool}
-                    className="h-7 w-7 object-contain opacity-60 transition hover:opacity-100 hover:scale-110"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-                ) : (
-                  <div className="h-2 w-2 rounded-full bg-white/30" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* DETAIL PANEL */}
-        <div
-          className={`
-            mt-[60px]
-            grid overflow-hidden rounded-[24px]
-            border border-white/5
-            bg-[#080808]/70
-            backdrop-blur-xl
-            transition-all duration-500
-            ${panelVis ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}
-          `}
-          style={{ gridTemplateColumns: "1fr 1px 2fr 1px 1fr" }}
-        >
-          {/* COL 1 — Identité */}
-          <div className="p-[34px]">
-            <div
-              className="mb-[14px] text-base uppercase tracking-[0.35em]"
-              style={{ color: dom.hue }}
-            >
-              {dom.index} — {dom.label}
-            </div>
-
-            <div className="mb-[10px] text-[30px] leading-[1.2] text-white">
-              {active.name}
-            </div>
-
-            <div className="text-[10px] tracking-[0.18em] text-white/25">
-              {dom.tag}
-            </div>
-
-            {/* PROGRESS */}
-            <div className="mt-6">
-              <div className="mb-2 text-base tracking-[0.2em] text-white">
-                {dom.label} · {String(skillIndexInDomain + 1).padStart(2, "0")}/
-                {String(dom.items.length).padStart(2, "0")}
-              </div>
-
-              <div className="relative h-px bg-white/10">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    width: `${((skillIndexInDomain + 1) / dom.items.length) * 100}%`,
-                    background: dom.hue,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* DIVIDER */}
-          <div className="bg-white/5" />
-
-          {/* COL 2 — Description */}
-          <div className="p-[34px]">
-            <div className="mb-[18px] text-base uppercase tracking-[0.35em] text-white">
-              Description
-            </div>
-
-            <p className="text-[13px] leading-[2] text-white/60">
-              {active.details}
-            </p>
-          </div>
-
-          {/* DIVIDER */}
-          <div className="bg-white/5" />
-
-          {/* COL 3 — Stack & Tools */}
-          <div className="flex flex-col p-[34px]">
-            {/* HEADER + NIVEAU */}
-            <div className="mb-5 flex items-center justify-between">
-              <div className="text-base uppercase tracking-[0.35em] text-white">
-                Stack & Tools
-              </div>
-
-              {active.level &&
-                (() => {
-                  const lc =
-                    LEVEL_COLORS[active.level] ?? LEVEL_COLORS["Intermédiaire"];
-                  return (
-                    <span
-                      className="rounded-sm px-2.5 py-1 text-[9px] uppercase tracking-[0.18em]"
-                      style={{
-                        background: lc.bg,
-                        border: `1px solid ${lc.border}`,
-                        color: lc.text,
-                      }}
-                    >
-                      {active.level}
-                    </span>
-                  );
-                })()}
-            </div>
-
-            {/* TOOLS avec icônes devicon */}
-            <div className="flex flex-1 flex-wrap gap-2">
-              {active.tools.map((tool) => {
-                const iconUrl = TOOL_ICONS?.[tool];
                 return (
-                  <div
-                    key={tool}
-                    className="flex items-center gap-1.5 border border-white/10 bg-white/[0.03] px-2.5 py-1.5"
-                  >
-                    {iconUrl && (
-                      <img
-                        src={iconUrl}
-                        alt={tool}
-                        className="h-3.5 w-3.5 object-contain"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                        }}
-                      />
-                    )}
-                    <span className="text-[9px] uppercase tracking-[0.08em] text-white/60">
-                      {tool}
-                    </span>
-                  </div>
+                  <button
+                    type="button"
+                    key={skill.name}
+                    onClick={() => selectSkill(i)}
+                    className="pointer-events-auto absolute left-1/2 top-1/2 cursor-crosshair bg-transparent"
+                    style={getCardHitboxStyle(i)}
+                    aria-label={`Afficher la compétence ${skill.name}`}
+                  />
                 );
               })}
             </div>
           </div>
         </div>
 
-        {/* INDICATORS */}
-        <div className="mt-5 flex justify-center gap-2.5">
-          {ALL.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveIdx(i)}
-              className="h-2 rounded-full transition-all duration-500"
+        <div className="relative -mt-2 px-20">
+          <button
+            onClick={() => go(-1)}
+            className="
+              absolute left-0 top-1/2 z-20
+              h-14 w-14 -translate-y-1/2 rounded-full
+              border border-white/25
+              bg-black/85
+              text-[36px] text-white
+              transition-all duration-300
+              hover:border-white/45
+              hover:bg-white/15
+            "
+          >
+            ‹
+          </button>
+
+          <button
+            onClick={() => go(1)}
+            className="
+              absolute right-0 top-1/2 z-20
+              h-14 w-14 -translate-y-1/2 rounded-full
+              border border-white/25
+              bg-black/85
+              text-[36px] text-white
+              transition-all duration-300
+              hover:border-white/45
+              hover:bg-white/15
+            "
+          >
+            ›
+          </button>
+
+          {/* Icons */}
+          <div className="relative mt-6 min-h-[15.5rem]">
+            <div
+              className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40 blur-2xl transition-all duration-500"
               style={{
-                width: i === activeIdx ? 42 : 8,
-                background:
-                  i === activeIdx ? dom.hue : "rgba(255,255,255,0.18)",
+                width: iconGlowCoreWidth,
+                height: iconGlowCoreHeight,
+                background: `linear-gradient(180deg, transparent 0%, ${iconGlowColor}26 24%, ${iconGlowColor}cc 50%, ${iconGlowColor}26 76%, transparent 100%)`,
               }}
             />
-          ))}
+            <div className="relative z-10 flex min-h-[15.5rem] flex-wrap content-center items-center justify-center gap-x-6 gap-y-3">
+              {active.tools.map((tool) => {
+                const iconUrl = TOOL_ICONS?.[tool];
+
+                return (
+                  <div
+                    key={tool}
+                    className="group flex h-28 w-32 items-center justify-center"
+                    title={tool}
+                  >
+                    {iconUrl ? (
+                      <img
+                        src={iconUrl}
+                        alt={tool}
+                        className="h-28 w-28 object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)] transition duration-300 group-hover:scale-110"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                    ) : (
+                      <div className="h-2 w-2 rounded-full bg-white/30" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Detail panel */}
+          <div
+            className={`
+    min-h-[205px]
+    grid grid-cols-[0.95fr_1px_2.35fr]
+    overflow-hidden rounded-md
+    border border-white/15
+    bg-[#080808]
+    shadow-[0_22px_70px_rgba(0,0,0,0.46)]
+    transition-all duration-500
+    ${panelVis ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}
+  `}
+          >
+            {/* Identity */}
+            <div className="flex flex-col justify-center p-6">
+              <div className="max-w-[92%]">
+                <div
+                  className="mb-4 h-px w-7 rounded-full"
+                  style={{ background: active.accent ?? dom.hue }}
+                />
+
+                <div className="text-[32px] leading-[1.04] text-white">
+                  {active.name}
+                </div>
+
+                {/* Tags */}
+                <div className="mt-6">
+                  <div className="mb-3 text-[13px] uppercase leading-[1.7] tracking-[0.16em] text-zinc-300">
+                    {active.tag}
+                  </div>
+
+                  <div className="relative h-px bg-white/20">
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        width: `${((skillIndexInDomain + 1) / dom.items.length) * 100}%`,
+                        background: active.accent ?? dom.hue,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="bg-white/15" />
+
+            {/* Description */}
+            <div className="p-6">
+              <div className="mb-3 text-xl uppercase tracking-[0.26em] text-white/90">
+                Description
+              </div>
+
+              <p className="text-base leading-[1.72] text-white/82">
+                {active.details}
+              </p>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   );

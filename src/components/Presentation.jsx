@@ -4,7 +4,7 @@ import { Terminal, ShieldAlert, Binary } from "lucide-react";
 
 const Presentation = () => {
   return (
-    <section className="relative flex min-h-screen w-full items-center justify-center bg-transparent overflow-hidden">
+    <section id="acceuil" className="relative flex min-h-screen w-full items-center justify-center bg-transparent overflow-hidden">
       {/* Background Decor */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#1a1a1a_0%,#000_100%)]" />
 

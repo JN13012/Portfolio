@@ -1,4 +1,5 @@
 import React from "react";
+import SectionHeader from "./SectionHeader";
 import Epitech from "../assets/Formations/Epitech.png";
 import EcoleDeLaPerformance from "../assets/Formations/ECOLE-PERFORMANCE-10.jpg";
 import bts from "../assets/Formations/Bts.png";
@@ -207,21 +208,15 @@ const Formations = () => {
   ];
 
   return (
-    <section id="formations" className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10">
-      <div className="mx-auto px-2">
-        <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
-          <span className="text-cyber font-mono text-base opacity-60">02.</span>
-          <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
-            Formations
-          </span>
-          <div className="h-px bg-cyber/20 flex-1" />
-        </h2>
-      </div>
+    <section id="formations" className="py-24 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10">
+      <div className="mx-auto px-2 relative z-10">
+        <SectionHeader index="03" title="Formation" />
 
-      <div className="max-w-screen-2xl mx-auto">
-        {etudes.map((item, index) => (
-          <FormationStep key={index} {...item} />
-        ))}
+        <div className="max-w-screen-2xl mx-auto">
+          {etudes.map((item, index) => (
+            <FormationStep key={index} {...item} />
+          ))}
+        </div>
       </div>
     </section>
   );

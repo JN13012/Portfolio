@@ -10,10 +10,13 @@ const ProjectCard = ({
   onClick,
   theme,
 }) => {
+  const visibleTags = tags.slice(0, 8);
+  const hasMoreTags = tags.length > visibleTags.length;
+
   return (
     <div
       onClick={onClick}
-      className={`group relative bg-black/40 border border-white/20 px-6 py-[18px] transition-all duration-500 overflow-hidden cursor-pointer h-full flex flex-col ${theme.card}`}
+      className={`group relative bg-black/40 border border-white/20 px-5 py-4 transition-all duration-500 overflow-hidden cursor-pointer h-full flex flex-col ${theme.card}`}
       // BG IMAGE
       style={{
         backgroundImage: `url(${image})`,
@@ -24,21 +27,21 @@ const ProjectCard = ({
       }}
     >
       {/* OVERLAY */}
-      <div className="absolute inset-0 z-0 bg-black/70 backdrop-blur-[2px] group-hover:bg-black/40 group-hover:backdrop-blur-none transition-all duration-500 shadow-inner"></div>
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/90 via-black/75 to-black/90 backdrop-blur-[1px] transition-all duration-500 group-hover:from-black/58 group-hover:via-black/34 group-hover:to-black/62 group-hover:backdrop-blur-0 shadow-inner"></div>
 
       {/* EFFET BRILLANCE GLOW */}
       <div className="absolute -top-24 -left-24 w-48 h-48 bg-cyber/10 rounded-full blur-3xl group-hover:bg-cyber/40 transition-all duration-5000 z-0"></div>
 
       {/* CARD CONTENT */}
-      <div className="relative z-10 flex flex-col h-full flex-grow">
+      <div className="relative z-10 flex flex-col h-full flex-grow rounded-sm border border-white/10 bg-black/38 p-4 backdrop-blur-[1px] transition-colors duration-500 group-hover:bg-black/46">
         {/* CARD HEADER */}
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-zinc-100 font-mono font-bold tracking-tighter group-hover:text-cyber transition-colors uppercase text-sm md:text-base mb-2">
+          <h3 className="text-base md:text-lg text-zinc-100 font-mono font-bold tracking-tighter group-hover:text-cyber transition-colors uppercase mb-2">
             {titre}
           </h3>
 
           <span
-            className={`text-xs font-mono border px-2 py-0.5 uppercase transition-all duration-300 ${theme.badge}`}
+            className={`text-sm font-mono border px-2.5 py-1 uppercase transition-all duration-300 ${theme.badge}`}
           >
             {categorie}
           </span>
@@ -46,26 +49,31 @@ const ProjectCard = ({
 
         {/* Description */}
         <div className="flex-grow overflow-hidden mb-4">
-          <p className="text-zinc-300 text-[10px] md:text-xs leading-relaxed font-mono uppercase tracking-tight line-clamp-3">
+          <p className="text-zinc-200 text-sm md:text-base leading-relaxed font-mono tracking-tight line-clamp-3">
             {description}
           </p>
         </div>
 
         {/* Liste des Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-6">
-          {tags.slice(0, 10).map((tag, index) => (
+        <div className="mb-3 flex max-h-[4.95rem] flex-wrap gap-1.5 overflow-hidden pb-0.5">
+          {visibleTags.map((tag, index) => (
             <span
               key={index}
-              className="text-sm font-mono px-2 py-0.5 bg-black/50 border border-cyber/20 text-zinc-400 group-hover:border-cyber/80 group-hover:text-cyber/80 transition-all"
+              className="text-base font-mono px-2.5 py-1 bg-black/50 border border-cyber/20 text-zinc-400 group-hover:border-cyber/80 group-hover:text-cyber/80 transition-all"
             >
               {tag}
             </span>
           ))}
+          {hasMoreTags && (
+            <span className="border border-cyber/20 bg-black/70 px-2.5 py-1 font-mono text-base text-cyber/80 transition-all group-hover:border-cyber/80">
+              ...
+            </span>
+          )}
         </div>
 
         {/* BLOC DATE */}
         <div className="flex justify-end">
-          <span className="text-xs font-mono text-zinc-400 group-hover:text-cyber/80 transition-colors uppercase tracking-widest">
+          <span className="text-sm font-mono text-zinc-400 group-hover:text-cyber/80 transition-colors uppercase tracking-widest">
             [{date}]
           </span>
         </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import SectionHeader from "./SectionHeader";
 import Salesforce_dev from "../assets/Experiences/Salesforce_dev.png";
 import Wec2017 from "../assets/Experiences/wec2017_1.jpg";
 import Mining from "../assets/Experiences/HiveOs_monitoring.png";
@@ -99,7 +100,7 @@ const BlocExperience = ({
 const Experiences = () => {
   const experiences = [
     {
-      date: "2025 - PRÉSENT",
+      date: "01/2026 - PRÉSENT",
       titre: "Alternant Développeur Salesforce",
       entreprises: ["ULIT"],
       softSkills: ["Autonomie", "Communication", "Rigueur"],
@@ -107,9 +108,7 @@ const Experiences = () => {
       // imgSrc: Salesforce_dev,
       imgAlt: "Salesforce Developer",
       imgCaption: "Salesforce Developer",
-      details: `> Conception et déploiement de solutions Full-Stack (Apex & LWC) pour l'automatisation de processus métier.
-      > Administration technique pour le monitoring des logs et la gestion des niveaux de debug.
-      > Mise en place de standards de qualité logicielle avec tests unitaires systématiques pour sécuriser les déploiements.`,
+      details: `> Conception et déploiement de d'applications et de composants web en Apex & Javascript pour l'automatisation de processus métier. Développement de composant depuis scratch, reprise de composants existants necessitant un peu de reverse engineering. Gestion des test unitaires apres chaque methode. J'ai fais des tickets.`,
     },
     {
       date: "2018 - 2022",
@@ -168,22 +167,16 @@ const Experiences = () => {
   return (
     <section
       id="experiences"
-      className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
+      className="py-24 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
     >
-      <div className="mx-auto px-2">
-        <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
-          <span className="text-cyber font-mono text-base opacity-60">03.</span>
-          <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
-            Parcours & Expériences
-          </span>
-          <div className="h-px bg-cyber/20 flex-1 relative"></div>
-        </h2>
-      </div>
+      <div className="mx-auto px-2 relative z-10">
+        <SectionHeader index="06" title="Expériences" />
 
-      <div className="space-y-4">
-        {experiences.map((exp, index) => (
-          <BlocExperience key={index} {...exp} />
-        ))}
+        <div className="space-y-4">
+          {experiences.map((exp, index) => (
+            <BlocExperience key={index} {...exp} />
+          ))}
+        </div>
       </div>
     </section>
   );

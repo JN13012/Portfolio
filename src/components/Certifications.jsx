@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import SectionHeader from "./SectionHeader";
 import THM_BG from "../assets/THM.jpg";
 import COURSERA_BG from "../assets/COURSERA.jpg";
 import PRE_SECURITY_IMG from "../assets/THM/PreSecutiry.jpg";
@@ -406,16 +407,10 @@ const Certifications = () => {
   return (
     <section
       id="certifications"
-      className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
+      className="py-24 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
     >
-      <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
-        <span className="text-cyber font-mono text-base opacity-60">06.</span>
-        <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
-          Certifications
-        </span>
-        <div className="h-px bg-cyber/20 flex-1"></div>
-      </h2>
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="mx-auto px-2 relative z-10">
+        <SectionHeader index="04" title="Certifications" />
         {/* SELECTEUR DE PLATEFORME DE FORMATION */}
         <div className="mb-12 flex flex-col md:flex-row gap-4 justify-start items-start md:items-center">
           <span className="text-base text-zinc-500 font-mono tracking-widest uppercase">

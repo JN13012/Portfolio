@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import SectionHeader from "./SectionHeader";
 import ProjectCard from "./ProjectCard";
 import Smartfridge from "../assets/Projets/Smartfridge.png";
 import Cyberpong from "../assets/Projets/Cyberpong.png";
@@ -14,6 +15,9 @@ import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.j
 import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.jpg";
 import Tor from "../assets/Projets/Tor.png";
 import Btc from "../assets/Experiences/Mining_rig.png";
+
+const PROJECTS_PER_PAGE = 6;
+
 const categoryThemes = {
   IA: {
     card: "hover:border-cyber/40",
@@ -42,23 +46,49 @@ const categoryThemes = {
 };
 const projets = [
   {
+    titre: "CTF",
+    description:
+      "Environnement CTF intégré à la page d'accueil du portfolio. Le projet simule une chaîne d'apprentissage cybersécurité en 9 niveaux progressifs : footprinting, commandes Linux, énumération réseau, exploitation web, cracking, Metasploit, analyse SIEM, forensic et hardening final. Le terminal gère des sessions simulées SSH, Netcat, Meterpreter et SIEM dans des workflows proches d’un audit réel.",
+    tags: [
+      "Linux",
+      "Nmap",
+      "Gobuster",
+      "SQLMap",
+      "John",
+      "Hashcat",
+      "Metasploit",
+      "Splunk",
+      "Forensic",
+      "Hardening",
+    ],
+    lien: "#acceuil",
+    lienLabel: "OUVRIR_LE_CTF",
+    image: Tor,
+    date: "05/2026",
+    categorie: "Cyber-securité",
+    complexity: 5,
+  },
+  {
     titre: "Audit - 1",
     description:
-      "Premier Pentest avec accord du responsable de l'infrastructure. Decouverte des conditions réelles, mise en place d'une methodologie : Reconnaissance, Blocage WAF, Proxy + Énumération via Tor, interception trafic, injections SQL, brute force.",
+      "Premier audit de sécurité web réalisé dans un cadre autorisé sur une infrastructure réelle. Environ 20 heures consacrées à la réalisation des phases de reconnaissance, fingerprinting, énumération de ressources, détection de mécanismes WAF. Utilisation de techniques d’anonymisation via proxy Tor, interception et analyse du trafic HTTP avec Burp Suite ainsi que recherche de vulnérabilités web basées sur l’OWASP Top 10 afin d’évaluer l’exposition de l’application. Rédaction d’un rapport technique détaillant les observations et résultats de l’analyse.",
+
     tags: [
-      "Pentest",
-      "Tor Proxy",
-      "WAF Bypass",
-      "Scan & Enumeration",
+      "Pentest Web",
+      "Reconnaissance",
+      "Fingerprinting",
+      "Énumération",
+      "Burp Suite",
+      "WAF",
       "OWASP Top 10",
-      "Brute Force",
-      "SQLi",
+      "SQL Injection",
+      "Tor Proxy",
     ],
     lien: "https://github.com/votre-repo-audit",
     image: Tor,
     date: "04/2026",
     categorie: "Cyber-securité",
-    complexity: 4,
+    complexity: 5,
   },
   {
     titre: "AI_Career_Coach",
@@ -156,7 +186,7 @@ const projets = [
     image: Smartfridge,
     date: "12/2025",
     categorie: "Gestion de Projet",
-    complexity: 3,
+    complexity: 1,
   },
   {
     titre: "My_Marvin",
@@ -167,7 +197,7 @@ const projets = [
     image: My_marvin,
     date: "11/2025",
     categorie: "DevOps",
-    complexity: 3,
+    complexity: 2,
   },
   {
     titre: "POPEYE",
@@ -178,7 +208,7 @@ const projets = [
     image: Popeye,
     date: "11/2025",
     categorie: "DevOps",
-    complexity: 3,
+    complexity: 2,
   },
   {
     titre: "Vaultborn",
@@ -238,9 +268,9 @@ const projets = [
       "Salesforce",
     ],
     lien: "#",
-    date: "2024",
+    date: "02/2026",
     categorie: "Ingénierie logicielle",
-    complexity: 3,
+    complexity: 5,
   },
   {
     titre: "Unit_Converter",
@@ -251,7 +281,7 @@ const projets = [
     image: Unit_converter,
     date: "08/2025",
     categorie: "Ingénierie logicielle",
-    complexity: 3,
+    complexity: 1,
   },
   {
     titre: "Blockchain_Mining",
@@ -278,7 +308,10 @@ const projets = [
 const ProjectSection = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeFilter, setActiveFilter] = useState("Tous");
+  const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [complexityOrder, setComplexityOrder] = useState("desc");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const ordrePriorite = [
     "Tous",
@@ -310,79 +343,167 @@ const ProjectSection = () => {
           ? new Date(parts[1], parts[0] - 1)
           : new Date(parts[0], 0);
       };
+
+      if (sortBy === "complexity") {
+        const diff = (b.complexity || 0) - (a.complexity || 0);
+        return complexityOrder === "desc" ? diff : -diff;
+      }
+
       const diff = parseDate(b.date) - parseDate(a.date);
       return sortOrder === "desc" ? diff : -diff;
     });
-  }, [activeFilter, sortOrder]);
+  }, [activeFilter, sortBy, sortOrder, complexityOrder]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredAndSorted.length / PROJECTS_PER_PAGE),
+  );
+  const paginatedProjects = filteredAndSorted.slice(
+    (currentPage - 1) * PROJECTS_PER_PAGE,
+    currentPage * PROJECTS_PER_PAGE,
+  );
+  const formattedPage = String(currentPage).padStart(2, "0");
+  const formattedTotalPages = String(totalPages).padStart(2, "0");
+
+  const changeFilter = (category) => {
+    setActiveFilter(category);
+    setCurrentPage(1);
+  };
+
+  const toggleSortOrder = () => {
+    setSortBy("date");
+    setSortOrder((current) => (current === "desc" ? "asc" : "desc"));
+    setCurrentPage(1);
+  };
+
+  const sortByComplexity = () => {
+    if (sortBy === "complexity") {
+      setComplexityOrder((current) => (current === "desc" ? "asc" : "desc"));
+    }
+    setSortBy("complexity");
+    setCurrentPage(1);
+  };
 
   return (
     <section
       id="projects"
-      className="py-32 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
+      className="py-24 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
     >
-      {/* 1. SECTION TITRE */}
-      <div className="mx-auto px-2">
-        <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
-          <span className="text-cyber font-mono text-base opacity-60">05.</span>
-          <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
-            Projets_Réalisés
-          </span>
-          <div className="h-px bg-cyber/20 flex-1"></div>
-        </h2>
-      </div>
+      <div className="mx-auto px-2 relative z-10">
+        {/* 1. SECTION TITRE */}
+        <SectionHeader index="05" title="Réalisations" />
 
-      {/* --- 1. BARRE DE FILTRES ET TRI --- */}
-      <div className="container mx-auto px-6 mb-12 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex flex-wrap gap-3">
-          {categories.map((cat) => {
-            const theme = categoryThemes[cat] || categoryThemes.Default;
-            const isActive = activeFilter === cat;
+        {/* --- 1. BARRE DE FILTRES ET TRI --- */}
+        <div className="mb-12 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex flex-wrap gap-3">
+            {categories.map((cat) => {
+              const theme = categoryThemes[cat] || categoryThemes.Default;
+              const isActive = activeFilter === cat;
 
-            return (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-4 py-1.5 font-mono text-xs uppercase tracking-widest transition-all border ${
-                  isActive
-                    ? "bg-cyber text-black border-cyber shadow-[0_0_15px_rgba(var(--cyber-rgb),0.4)] scale-105"
-                    : `${theme.badge} opacity-70 hover:opacity-100 hover:scale-105`
-                } active:scale-95`}
-              >
-                {`[ ${cat} ]`}
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={cat}
+                  onClick={() => changeFilter(cat)}
+                  className={`px-4 py-1.5 font-mono text-xs uppercase tracking-widest transition-all border ${
+                    isActive
+                      ? "bg-cyber text-black border-cyber shadow-[0_0_15px_rgba(var(--cyber-rgb),0.4)] scale-105"
+                      : `${theme.badge} opacity-70 hover:opacity-100 hover:scale-105`
+                  } active:scale-95`}
+                >
+                  {`[ ${cat} ]`}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={toggleSortOrder}
+              className={`font-mono text-xs transition-colors flex items-center gap-2 uppercase ${
+                sortBy === "date"
+                  ? "text-cyber"
+                  : "text-cyber/55 hover:text-cyber"
+              }`}
+            >
+              <span>
+                {sortOrder === "desc"
+                  ? "SORT: Plus récent"
+                  : "SORT: Plus ancien"}
+              </span>
+              <span className="text-sm">
+                {sortOrder === "desc" ? "▼" : "▲"}
+              </span>
+            </button>
+
+            <button
+              onClick={sortByComplexity}
+              className={`font-mono text-xs transition-colors flex items-center gap-2 uppercase ${
+                sortBy === "complexity"
+                  ? "text-cyber"
+                  : "text-cyber/55 hover:text-cyber"
+              }`}
+            >
+              <span>SORT: Complexité</span>
+              <span className="text-sm">
+                {complexityOrder === "desc" ? "▼" : "▲"}
+              </span>
+            </button>
+          </div>
         </div>
 
-        <button
-          onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
-          className="font-mono text-xs text-cyber/90 hover:text-cyber transition-colors flex items-center gap-2 uppercase"
-        >
-          <span>
-            {sortOrder === "desc" ? "SORT: Plus récent" : "SORT: Plus ancien"}
-          </span>
-          <span className="text-sm">{sortOrder === "desc" ? "▼" : "▲"}</span>
-        </button>
-      </div>
+        {/* 2. GRILLE DE PROJETS */}
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {paginatedProjects.map((p) => (
+              <ProjectCard
+                key={p.titre}
+                {...p}
+                theme={categoryThemes[p.categorie] || categoryThemes.Default}
+                onClick={() => setSelectedProject(p)}
+              />
+            ))}
+          </div>
 
-      {/* 2. GRILLE DE PROJETS */}
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredAndSorted.map((p) => (
-            <ProjectCard
-              key={p.titre}
-              {...p}
-              theme={categoryThemes[p.categorie] || categoryThemes.Default}
-              onClick={() => setSelectedProject(p)}
-            />
-          ))}
+          {totalPages > 1 && (
+            <div className="mt-10 flex items-center justify-center gap-5 font-mono text-sm uppercase tracking-[0.18em]">
+              <button
+                type="button"
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                disabled={currentPage === 1}
+                className="text-cyber/80 transition hover:text-cyber disabled:cursor-not-allowed disabled:text-white/20"
+              >
+                [ PREV ]
+              </button>
+
+              <span className="text-white/65">
+                PAGE {formattedPage} / {formattedTotalPages}
+              </span>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setCurrentPage((page) => Math.min(totalPages, page + 1))
+                }
+                disabled={currentPage === totalPages}
+                className="text-cyber/80 transition hover:text-cyber disabled:cursor-not-allowed disabled:text-white/20"
+              >
+                [ NEXT ]
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* MODALE */}
       {selectedProject && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl">
-          <div className="bg-zinc-950 border border-white/10 w-[95vw] md:w-[85vw] lg:w-[75vw] h-[90vh] relative overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+        <div
+          onClick={() => setSelectedProject(null)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl"
+        >
+          <div
+            onClick={(event) => event.stopPropagation()}
+            className="bg-zinc-950 border border-white/10 w-[95vw] md:w-[85vw] lg:w-[75vw] h-[90vh] relative overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+          >
             {/* HEADER MODALE */}
             <div className="p-6 text-center relative">
               <p className="text-base font-mono tracking-[0.3em] uppercase mb-3 text-cyber opacity-80">
@@ -473,7 +594,7 @@ const ProjectSection = () => {
 
               <span className="relative font-mono text-base font-bold uppercase tracking-[0.2em] text-cyber flex items-center gap-3">
                 <span className="opacity-50">--</span>[
-                VOIR_LE_PROJET_SUR_GITHUB ]
+                {selectedProject.lienLabel || "VOIR_LE_PROJET_SUR_GITHUB"} ]
                 <span className="opacity-50">--</span>
               </span>
             </a>
