@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import ProfilImg from "../assets/Profil.png";
 import ProfileConsole from "./ProfileConsole/ProfileConsole";
+import SectionHeader from "./SectionHeader";
 import CV from "../assets/CV.pdf";
 import {
   Plane,
@@ -137,23 +138,21 @@ const Profile = () => {
   return (
     <section
       id="profile"
-      className="py-32 bg-transparent text-white relative overflow-hidden border-y border-cyber/10"
+      className="py-24 bg-transparent text-white relative overflow-hidden border-y border-cyber/10"
     >
-      <div className="mx-auto px-2">
-        {/* TITRE */}
-        <h2 className="text-2xl md:text-3xl font-bold mb-20 flex items-center gap-6">
-          <span className="text-cyber font-mono text-base opacity-60">01.</span>
-          <span className="text-zinc-100 tracking-[0.2em] uppercase font-mono">
-            Profile
-          </span>
-          <div className="h-px bg-cyber/10 flex-1"></div>
-          <div className="hidden sm:flex items-center gap-3 border border-green-500/30 px-4 py-1.5 bg-red-500/5">
-            <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></span>
-            <span className="text-green-500 font-mono text-sm uppercase tracking-tighter">
-              Niveau : Junior
-            </span>
-          </div>
-        </h2>
+      <div className="mx-auto px-2 relative z-10">
+        <SectionHeader
+          index="01"
+          title="Profil"
+          action={
+            <div className="hidden sm:flex items-center gap-3 border border-green-500/30 px-4 py-1.5 bg-red-500/5">
+              <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></span>
+              <span className="text-green-500 font-mono text-sm uppercase tracking-tighter">
+                Niveau : Junior
+              </span>
+            </div>
+          }
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-20 gap-12">
           {/* COL 1 */}
@@ -258,10 +257,10 @@ const Profile = () => {
             <div>
               <SectionTitle icon={Cpu} title="Soft skills" />
               <div className="space-y-2 px-2">
-                <SkillBar label="Autonomie" progress={90} />
-                <SkillBar label="Esprit critique" progress={85} />
-                <SkillBar label="Polyvalence" progress={80} />
-                <SkillBar label="Communication" progress={70} />
+                <SkillBar label="Esprit critique" progress={90} />
+                <SkillBar label="Autonomie" progress={85} />
+                <SkillBar label="Communication" progress={80} />
+                <SkillBar label="Polyvalence" progress={75} />
               </div>
             </div>
             {/* LANGUAGE */}

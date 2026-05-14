@@ -9,6 +9,7 @@ import Experiences from "./components/Experiences";
 import ProjectSection from "./components/ProjectSection";
 import Certifications from "./components/Certifications";
 import Competences from "./components/Competences";
+import Contact from "./components/Contact";
 
 function App() {
   return (
@@ -17,11 +18,12 @@ function App() {
       <div className="w-[95%] max-w-[1800px] mx-auto px-6 py-10">
         <Presentation />
         <Profile />
+        <Competences />
         <Formations />
         <Certifications />
-        <Competences />
         <ProjectSection />
         <Experiences />
+        <Contact />
       </div>
     </div>
   );
