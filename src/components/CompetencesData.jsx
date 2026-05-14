@@ -78,7 +78,7 @@ export const DOMAINS = [
       {
         name: "Red Team",
         accent: "#ef4444",
-        tag: "Énumération - Exploitation - Post-exploitation - Escalade ",
+        tag: "Reconnaissance - Énumération - Exploitation - Post-exploitation",
         tools: [
           "Linux (CLI)",
           "TCP/IP",
@@ -87,19 +87,17 @@ export const DOMAINS = [
           "BurpSuite",
           "SQLMap",
           "Metasploit",
-
           "Hashcat",
           "Hydra",
-
           "Wireshark",
         ],
         details:
-          "Compréhension de la chaîne d'attaque : réalisation de tests d'intrusion sur environnements Web et réseaux via l'exploitation de vulnérabilités (OWASP Top 10) et de failles (CVE). Utilisation de Meterpreter pour le déploiement de payloads, la gestion de sessions Meterpreter et escalade de privilèges. Capacité à intercepter et analyser le trafic web via l'utilisation du Proxy Burp Suite.",
+          "Réalisation de tests d'intrusion sur environnements Web et réseaux via l'exploitation de vulnérabilités (OWASP Top 10) et de failles (CVE). Utilisation de Metasploit pour génération et déploiement de payloads, gestion de sessions Meterpreter et escalade de privilèges. Capacité à intercepter et analyser le trafic HTTP via l'utilisation du Proxy Burp Suite. Audit d'authentification et cassage de hahs: attaques par dictionnaire et brute force.",
       },
       {
         name: "Blue Team",
         accent: "#2563eb",
-        tag: "Analyse de logs - Réponse incident - Forensic - Durcissement",
+        tag: "SIEM - Analyse de logs - Réponse incident - Forensic - Durcissement",
         tools: [
           "Splunk",
           "Active Directory",
@@ -107,13 +105,12 @@ export const DOMAINS = [
           "Wireshark",
           "Snort",
           "Fail2ban",
-
           "FlareVM",
           "REMnux",
           "CyberChef",
         ],
         details:
-          "Analyse de logs via search queries SPL sur le SIEM Splunk. Pratique Forensics et analyse de malwares en environnements isolés (FlareVM/REMnux). Mise en œuvre de mesures de durcissement (Hardening) incluant la configuration de WAF, de firewalls et d'IDS/IPS.",
+          "Analyse de logs via search queries SPL sur le SIEM Splunk. Analyse Forensics et malwares en environnements isolés (FlareVM/REMnux). Mise en œuvre de mesures de durcissement (Hardening) incluant la configuration de WAF, Firewall et d'IDS/IPS.",
       },
     ],
   },
@@ -127,7 +124,7 @@ export const DOMAINS = [
       {
         name: "Développement IA",
         accent: "#818cf8",
-        tag: "LLM - RAG - GenAI - NLP - Pipeline - Data analysis",
+        tag: "LLM - RAG - NLP - Pipeline - Data analysis",
         tools: ["Flask", "PyTorch", "LangChain", "Pandas", "NumPy"],
         details:
           "Conception d’API backend avec Flask pour des applications d’intelligence artificielle. Développement de pipelines RAG, de systèmes NLP et d’assistants vocaux temps réel (STT/TTS) via LangChain et intégration de modèles de deep learning avec PyTorch. Traitement et analyse de données avec Pandas et NumPy.",
@@ -144,16 +141,15 @@ export const DOMAINS = [
       {
         name: "Full Stack",
         accent: "#22c55e",
-        tag: "POO · Fullstack · Architecture",
+        tag: "Back-end - API REST - POO - Base de données",
         tools: ["Python", "Java", "JavaScript", "Nodejs", "React", "SQL"],
         details:
-        
           "Développement de logiciels et de jeux en Java/Python en appliquant les principes de POO. Développement d’applications back-end et de composants web Salesforce (LWC), conception d’API REST et manipulation de bases de données.",
       },
       {
         name: "DevOps",
         accent: "#f59e0b",
-        tag: "POO · Fullstack · Architecture",
+        tag: "Conteuneurisation -  Automatisation - CI/CD",
         tools: ["Docker", "Jenkins"],
         details:
           "Conteneurisation d’applications avec Docker et mise en place de pipelines CI/CD afin d’automatiser l’intégration, les tests et le déploiement des applications.",
