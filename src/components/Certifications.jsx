@@ -23,11 +23,6 @@ const DIFFICULTY_CONFIG = {
   3: { text: "text-yellow-300", bg: "bg-yellow-300/90", label: "MEDIUM" },
   4: { text: "text-yellow-600", bg: "bg-yellow-600/90", label: "HARD" },
   5: { text: "text-red-500", bg: "bg-red-500/90", label: "INSANE" },
-  6: {
-    text: "text-zinc-100",
-    bg: "bg-gradient-to-r from-zinc-400 via-zinc-100 to-zinc-400",
-    label: "PRO",
-  },
 };
 
 const certifs = [
@@ -39,19 +34,15 @@ const certifs = [
     image: THM_PreSecurity1,
     url: "https://tryhackme.com/certificate/THM-RHPS6ZUQ2H",
     description:
-      "Introduction à la cybersécurité : exploration des fondamentaux informatiques, réseaux, systèmes d’exploitation, web, codage de base, et concepts d’attaque et de défense.",
+      "Introduction aux fondamentaux de la cybersécurité : réseaux, systèmes Linux/Windows, architecture web et principes de sécurité offensive/défensive.",
     difficulte: 1,
     stack: [
-      "Networking",
-      "Linux & Windows",
-      "Web Architecture",
-      "Cloud Fundamentals",
-      "Hardware Basics",
-      "Python",
-      "JavaScript",
-      "SQL",
-      "Offensive Security",
-      "Defensive Security",
+      "Réseaux",
+      "Linux",
+      "Windows",
+      "Architecture Web",
+      "Sécurité Offensive",
+      "Sécurité Défensive",
     ],
     duration: "19 Hours",
   },
@@ -63,82 +54,63 @@ const certifs = [
     image: CYBERSECYRITY_101,
     url: "https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-VEMPGXQSXD.pdf",
     description:
-      "Concepts et pratiques en cybersécurité : réseaux, cryptographie, systèmes Linux et Windows, Active Directory, sécurité offensive et défensive, outils et techniques d’exploitation, et principes de réponse aux incidents.",
+      "Administration Linux/Windows, analyse réseau, cryptographie et exploitation de vulnérabilités web et systèmes, ainsi que principes de réponse à incident, d’analyse forensique et de configuration de firewall et IDS/IPS.",
     difficulte: 3,
     stack: [
-      "TCP/IP",
-      "Nmap",
-      "JtR",
-      "Hashcat",
-      "Burp Suite",
-      "OWASP TOP 10",
-      "Hydra",
-      "Metasploit",
-      "Wireshark",
-      "Active Directory",
       "Linux",
-      "IDS",
+      "TCP/IP",
+      "Active Directory",
+      "Nmap",
+      "Wireshark",
+      "Burp Suite",
+      "OWASP Top 10",
+      "Metasploit",
+      "JohnTheRipper",
+      "Hashcat",
+      "Hydra",
+      "Firewall",
+      "IDS/IPS",
+      "Forensic",
     ],
     duration: "46 Hours",
   },
   {
-    titre: "Introduction to Artificial Intelligence",
+    titre: "Introduction to AI",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "12/2025",
     image: Introduction_to_AI,
     url: "https://coursera.org/share/466abca0568c44dd7e3d3258a47e99ee",
     description:
-      "Acquisition des fondamentaux de l’IA incluant machine learning, deep learning et IA générative, avec application à des cas métiers et intégration des enjeux éthiques.",
+      "Introduction des fondamentaux de l’IA générative incluant les notions de machine learning, deep learning, réseaux de neurones, ainsi que ses application à des cas métiers et aux enjeux de gouvernance.",
     difficulte: 1,
-    stack: [
-      "Machine Learning",
-      "Deep Learning",
-      "Neural Networks",
-      "NLP",
-      "Generative AI",
-      "Responsible AI",
-    ],
+    stack: ["GenAI", "Architecture IA", "Gouvernance IA"],
     duration: "12 Hours",
   },
   {
-    titre: "Generative AI - Introduction and Applications",
+    titre: "GenAI - Introduction and Applications",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "12/2025",
     image: Generative_AI_Introduction,
     url: "https://coursera.org/share/7a06aa71ef5a258e81ad1af7c66a6f80",
     description:
-      "Introduction aux concepts clés de l’IA générative, ses modèles, outils et cas d’usage concrets dans différents secteurs.",
+      "Introduction aux concepts fondammentaux de l’IA générative. Modèles, outils et cas d’usage dans différents secteurs.",
     difficulte: 1,
-    stack: [
-      "Generative AI",
-      "ChatGPT",
-      "Machine Learning",
-      "AI/ML Foundations",
-      "AI Personalization",
-      "Real-Time Data",
-    ],
+    stack: ["GenAI", "LLM", "Prompt Engineering"],
     duration: "8 Hours",
   },
   {
-    titre: "Generative AI - Prompt Engineering Basics",
+    titre: "Prompt Engineering Basics",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "12/2025",
     image: Prompt_Engineering,
     url: "https://coursera.org/share/3ce0e969ef13867efe203fe6f1bdbf0d",
     description:
-      "Fondamentaux du prompt engineering appliqué à l’IA générative, incluant les bonnes pratiques, techniques d’optimisation et outils associés.",
+      "Introduction aux techniques de prompt engineering pour l’IA générative : structuration de prompts, gestion du contexte et optimisation des réponses.",
     difficulte: 1,
-    stack: [
-      "Prompt Engineering",
-      "ChatGPT",
-      "Generative AI",
-      "Prompt Patterns",
-      "AI Workflows",
-      "Context Management",
-    ],
+    stack: ["Prompt Patterns", "Gestion du Context", "Workflows IA"],
     duration: "9 Hours",
   },
   {
@@ -149,16 +121,9 @@ const certifs = [
     image: Software_Engineering,
     url: "https://coursera.org/share/1f4b38f67dfcdb136733cd9ec6d77da7",
     description:
-      "Introduction aux principes du génie logiciel, incluant le cycle de vie (SDLC), les architectures, les patterns de conception et les bases du développement en Python.",
+      "Introduction aux principes de l'ingénierie logicielle : cycle de vie (SDLC), les architectures et les bases du développement en Python.",
     difficulte: 1,
-    stack: [
-      "Python",
-      "SDLC",
-      "Software Architecture",
-      "Design Patterns",
-      "Version Control",
-      "Web Applications",
-    ],
+    stack: ["Python", "SDLC", "Design Patterns", "Git"],
     duration: "14 Hours",
   },
   {
@@ -169,17 +134,9 @@ const certifs = [
     image: Intro_HTML_CSS_JavaScript,
     url: "https://coursera.org/share/19c6fb4f7b7534c8d92b934ad11dc2f4",
     description:
-      "Introduction au développement web : création de pages avec HTML et CSS, développement interactif avec JavaScript, et compréhension des concepts front-end et back-end.",
+      "Introduction au développement web : création de pages avec HTML et CSS, développement interactif avec JavaScript.",
     difficulte: 1,
-    stack: [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "DOM Manipulation",
-      "Responsive Design",
-      "Bootstrap",
-      "APIs",
-    ],
+    stack: ["HTML", "CSS", "JavaScript", "DOM", "Responsive"],
     duration: "14 Hours",
   },
   {
@@ -190,18 +147,15 @@ const certifs = [
     image: Python_Data_Science,
     url: "https://coursera.org/share/12ef6d1161ebabe8bd0bc270f208d8f3",
     description:
-      "Pratique de Python pour la Data Science et le développement IA : syntaxe, structures de données, programmation orientée objet, bibliothèques Pandas et NumPy, web scraping et utilisation d’API.",
-    difficulte: 2,
+      "Développement en Python pour la Data Science : manipulation et traitement de datasets et DataFrames (filtrage, nettoyage, transformation de données). Web scraping, parsing HTML et extraction automatisée de données.",
+    difficulte: 3,
     stack: [
       "Python",
       "Pandas",
       "NumPy",
       "Jupyter Notebooks",
-      "Web Scraping",
-      "REST APIs",
-      "OOP",
-      "Data Manipulation",
-      "Automation",
+      "BeautifulSoup",
+      "Requests",
     ],
     duration: "25 Hours",
   },
@@ -213,95 +167,78 @@ const certifs = [
     image: Developing_AI_With_Python_Flask,
     url: "https://coursera.org/share/9e097eac39d7c42bdb4fa1826f485bc5",
     description:
-      "Développement d’applications IA avec Python et Flask : création de modules, tests unitaires, déploiement web, opérations CRUD et intégration des bibliothèques IBM Watson.",
+      "Développement d’applications IA, incluant un chatbot conversationnel avec gestion de contexte. Mise en place de pipelines NLP et orchestration backend des modèles IA.",
     difficulte: 3,
-    stack: [
-      "Python",
-      "Flask",
-      "IBM Watson",
-      "RESTful API",
-      "NLP",
-      "Web Applications",
-      "Unit Testing",
-      "Application Deployment",
-      "SDLC",
-    ],
+    stack: ["Python", "Flask", "REST API", "NLP"],
     duration: "11 Hours",
   },
   {
-    titre: "Building Generative AI Powered Applications with Python",
+    titre: "AI Powered Applications with Python",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "03/2026",
     image: Building_Generative_AI_Powered_Applications_with_Python,
     url: "https://www.coursera.org/account/accomplishments/verify/OM4ZXGM73HG4",
     description:
-      "Conception et développement d’applications basées sur l’IA générative, incluant la mise en place de pipelines RAG, l’intégration d’API (Hugging Face, watsonX), ainsi que le développement d’interfaces web et vocales avec Flask et Gradio.",
+      "Développement d'application IA Speech-To-Text/Text-To-Speech. Mise en place de pipelines RAG et orchestration de modèles d’IA générative via Hugging Face et WatsonX.",
     difficulte: 3,
     stack: [
       "Python",
-      "PyTorch",
       "Flask",
-      "LLMs",
-      "NLP",
+      "PyTorch",
       "LangChain",
+      "LLM",
       "RAG",
-      "Hugging Face",
-      "IBM watsonX",
-      "Gradio",
+      "NLP",
+      "STT/TTS",
       "Prompt Engineering",
-      "REST APIs",
-      "Speech-to-Text",
-      "Text-to-Speech",
     ],
     duration: "14 Hours",
   },
   {
-    titre: "Generative AI: Elevate your Software Development Career",
+    titre: "Elevate your Software Development Career",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "04/2026",
     image: Generative_AI_Elevate_Career,
     url: "https://www.coursera.org/account/accomplishments/verify/KGTVEZVG1XYB",
     description:
-      "Spécialisation sur l'intégration de l'IA générative et agentique dans le cycle de vie logiciel. Application des outils GenAI (GitHub Copilot, Gemini) pour le design d'architecture, le refactoring automatisé, la détection de vulnérabilités (DevSecOps) et l'optimisation de workflows via le 'vibe coding'.",
+      "Utilisation d’outils d’IA générative pour le développement logiciel : assistance au code, debugging, refactoring tests et automatisation de workflows.",
     difficulte: 1,
     stack: [
-      "Generative AI",
-      "Agentic AI",
-      "GitHub Copilot",
-      "n8n / Bolt",
-      "Software Architecture",
+      "IA Générative",
+      "Agents IA",
       "DevSecOps",
-      "LLM Applications",
+      "LLM",
+      "Architecture Logicielle",
       "Debugging",
-      "Unit Testing",
+      "Tests Unitaires",
       "CI/CD",
     ],
     duration: "25 Hours",
   },
-  {
-    titre: "Software Developer Career Guide and Interview Preparation",
-    plateforme: "Coursera (IBM)",
-    cat: "COURSERA",
-    date: "04/2026",
-    image: Software_Career_Guide,
-    url: "https://www.coursera.org/account/accomplishments/verify/WGEQM8VRU3ER",
-    description:
-      "Validation des soft-skills et préparation avancée aux processus de recrutement en ingénierie logicielle. Maîtrise des stratégies de recherche ciblée, préparation aux défis techniques (Live Coding), résolution de problèmes complexes et communication professionnelle pour le déploiement de solutions applicatives.",
-    difficulte: 1,
-    stack: [
-      "Professional Development",
-      "Software Engineering",
-      "Technical Interviewing",
-      "Problem Solving",
-      "Communication",
-      "Career Strategy",
-      "Technical Networking",
-      "Application Development",
-    ],
-    duration: "11 Hours",
-  },
+  // {
+  //   titre: "Software Developer Career Guide and Interview Preparation",
+  //   plateforme: "Coursera (IBM)",
+  //   cat: "COURSERA",
+  //   date: "04/2026",
+  //   image: Software_Career_Guide,
+  //   url: "https://www.coursera.org/account/accomplishments/verify/WGEQM8VRU3ER",
+  //   description:
+  //     "Validation des soft-skills et préparation avancée aux processus de recrutement en ingénierie logicielle. Maîtrise des stratégies de recherche ciblée, préparation aux défis techniques (Live Coding), résolution de problèmes complexes et communication professionnelle pour le déploiement de solutions applicatives.",
+  //   difficulte: 1,
+  //   stack: [
+  //     "Professional Development",
+  //     "Software Engineering",
+  //     "Technical Interviewing",
+  //     "Problem Solving",
+  //     "Communication",
+  //     "Career Strategy",
+  //     "Technical Networking",
+  //     "Application Development",
+  //   ],
+  //   duration: "11 Hours",
+  // },
   {
     titre: "AI Developer Professional Certificate",
     plateforme: "Coursera (IBM)",
@@ -310,18 +247,22 @@ const certifs = [
     image: IBM_AI_Developer,
     url: "https://www.coursera.org/account/accomplishments/professional-cert/NLPNAKCP7EFK",
     description:
-      "Cursus complet d'ingénierie logicielle spécialisée en IA. Maîtrise du cycle de vie complet (SDLC) : de la conception d'architectures web avec Flask à l'intégration avancée de modèles LLM, gestion d'inférence, NLP et déploiement de solutions d'IA générative.",
-    difficulte: 6,
+      "Cursus orienté développement d’applications IA avec Python, Data Science et IA générative : manipulation de données, intégration de LLMs, pipelines NLP/RAG et orchestration de modèles IA.",
+    difficulte: 3,
     stack: [
       "AI Engineering",
+      "Data Science",
       "Python",
       "Flask",
-      "Generative AI",
+      "Pandas",
+      "NumPy",
+      "PyTorch",
+      "LangChain",
       "LLMs",
+      "RAG",
       "NLP",
       "Prompt Engineering",
       "SDLC",
-      "IBM WatsonX",
       "Unit Testing",
     ],
     duration: "160 Hours",
@@ -389,6 +330,9 @@ const Certifications = () => {
       let result = 0;
       if (sortBy === "difficulte") {
         result = b.difficulte - a.difficulte;
+        if (result === 0) {
+          result = Number(Boolean(b.isPro)) - Number(Boolean(a.isPro));
+        }
       } else if (sortBy === "duration") {
         const getHours = (s) => parseInt(s) || 0;
         result = getHours(b.duration) - getHours(a.duration);
@@ -497,7 +441,10 @@ const Certifications = () => {
                         </span>
 
                         <span className="leading-none">
-                          {isActive && (type === "date" || type === "diff" || type === "duration")
+                          {isActive &&
+                          (type === "date" ||
+                            type === "diff" ||
+                            type === "duration")
                             ? `[ ${type} ]`
                             : type}
                         </span>
@@ -589,7 +536,7 @@ const Certifications = () => {
                           Difficulty_Level
                         </h4>
                         <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5, 6].map((level) => (
+                          {[1, 2, 3, 4, 5].map((level) => (
                             <div
                               key={level}
                               className={`w-5 h-2 ${level <= selectedCert.difficulte ? Difficulty_Level.bg : "bg-zinc-800"}`}
@@ -708,6 +655,7 @@ const CertifCard = ({
   index,
   difficulte,
   duration,
+  isPro,
 }) => {
   const Difficulty_Level = DIFFICULTY_CONFIG[difficulte] || {
     text: "text-zinc-400",
@@ -736,11 +684,22 @@ const CertifCard = ({
 
         {/* DIFFICULTY LEVEL */}
         <div className="relative flex flex-col items-end gap-1">
-          <span
-            className={`text-[9px] font-mono font-black tracking-widest ${Difficulty_Level.text} ${difficulte === 5 ? "animate-pulse" : ""}`}
-          >
-            {Difficulty_Level.label}
-          </span>
+          <div className="flex items-center gap-2">
+            {isPro && (
+              <span className="text-[8px] font-mono font-black tracking-widest px-1.5 py-0.5 border border-zinc-300/40 text-zinc-100 bg-white/10">
+                PRO
+              </span>
+            )}
+
+            <span
+              className={`text-[9px] font-mono font-black tracking-widest ${Difficulty_Level.text} ${
+                difficulte === 5 ? "animate-pulse" : ""
+              }`}
+            >
+              {Difficulty_Level.label}
+            </span>
+          </div>
+
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((step) => (
               <div
@@ -748,7 +707,7 @@ const CertifCard = ({
                 className={`w-4 h-1 ${
                   step <= difficulte ? Difficulty_Level.bg : "bg-zinc-800"
                 }`}
-              ></div>
+              />
             ))}
           </div>
         </div>
