@@ -161,7 +161,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSending}
-                className="inline-flex items-center justify-center gap-3 rounded-sm border border-cyber/50 bg-cyber/10 px-6 py-3 text-sm uppercase tracking-[0.22em] text-cyber transition hover:bg-cyber/15 disabled:cursor-not-allowed disabled:opacity-55"
+                className="inline-flex cursor-pointer items-center justify-center gap-3 rounded-sm border border-cyber/50 bg-cyber/10 px-6 py-3 text-sm uppercase tracking-[0.22em] text-cyber transition hover:bg-cyber/15 disabled:cursor-not-allowed disabled:opacity-55"
               >
                 <Send size={17} />
                 {isSending ? "Envoi..." : "Envoyer"}
