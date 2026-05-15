@@ -464,33 +464,72 @@ const ProjectSection = () => {
             ))}
           </div>
 
-          {totalPages > 1 && (
-            <div className="mt-10 flex items-center justify-center gap-5 font-mono text-sm uppercase tracking-[0.18em]">
-              <button
-                type="button"
-                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-                disabled={currentPage === 1}
-                className="text-cyber/80 transition hover:text-cyber disabled:cursor-not-allowed disabled:text-white/20"
-              >
-                [ PREV ]
-              </button>
+{totalPages > 1 && (
+  <div className="mt-14 flex items-center justify-center gap-6 font-mono uppercase tracking-[0.18em]">
 
-              <span className="text-white/65">
-                PAGE {formattedPage} / {formattedTotalPages}
-              </span>
+    {/* PRECEDENT */}
+    <button
+      type="button"
+      onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+      disabled={currentPage === 1}
+      className="
+        text-cyber/60 hover:text-cyber
+        transition-all duration-300
+        disabled:opacity-20
+        disabled:cursor-not-allowed
+      "
+    >
+      [ PREV ]
+    </button>
 
-              <button
-                type="button"
-                onClick={() =>
-                  setCurrentPage((page) => Math.min(totalPages, page + 1))
-                }
-                disabled={currentPage === totalPages}
-                className="text-cyber/80 transition hover:text-cyber disabled:cursor-not-allowed disabled:text-white/20"
-              >
-                [ NEXT ]
-              </button>
-            </div>
-          )}
+    {/* NUMEROS */}
+    <div className="flex items-center gap-4">
+      {Array.from({ length: totalPages }, (_, i) => {
+        const page = i + 1;
+        const isActive = currentPage === page;
+
+        return (
+          <button
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`
+              relative transition-all duration-300
+              ${
+                isActive
+                  ? "text-cyber text-xl scale-125"
+                  : "text-white/25 hover:text-white/70 text-sm"
+              }
+            `}
+          >
+            {String(page).padStart(2, "0")}
+
+            {/* underline active */}
+            {isActive && (
+              <div className="absolute -bottom-1 left-0 w-full h-px bg-cyber shadow-[0_0_10px_#4ade80]" />
+            )}
+          </button>
+        );
+      })}
+    </div>
+
+    {/* SUIVANT */}
+    <button
+      type="button"
+      onClick={() =>
+        setCurrentPage((page) => Math.min(totalPages, page + 1))
+      }
+      disabled={currentPage === totalPages}
+      className="
+        text-cyber/60 hover:text-cyber
+        transition-all duration-300
+        disabled:opacity-20
+        disabled:cursor-not-allowed
+      "
+    >
+      [ NEXT ]
+    </button>
+  </div>
+)}
         </div>
       </div>
 

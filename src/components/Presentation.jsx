@@ -19,7 +19,7 @@ const Presentation = () => {
 
             <div className="items-center gap-2 border-l-2 border-cyber/90 pl-4 py-1">
               <span className="font-mono text-xl text-cyber/70 uppercase tracking-tight">
-                Recherche Alternance Cybersécurité & IA
+                Recherche Alternance Cybersécurité & IA CONVENTION CLIC + BG + PROJETS CV A RAJOUTER DANS LES CERTIFS + DIFFICULTY LELVE INTERIEUR MODALE
               </span>
             </div>
           </div>
