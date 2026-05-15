@@ -229,9 +229,9 @@ export default function Competences() {
               return (
                 <div
                   key={i}
-                  className="absolute left-1/2 top-1/2 cursor-pointer"
+                  className="absolute left-1/2 top-1/2 cursor-crosshair"
                   style={{
-                    cursor: "pointer",
+                    cursor: "crosshair",
                     width: `${cardSize.width}px`,
                     height: `${cardSize.height}px`,
                     pointerEvents: "none",
@@ -248,7 +248,7 @@ export default function Competences() {
                         : "shadow-[0_18px_45px_rgba(0,0,0,0.45)]"
                     }`}
                     style={{
-                      cursor: "pointer",
+                      cursor: "crosshair",
                       borderColor: isActiveCard
                         ? `${skillAccent}77`
                         : "rgba(255,255,255,0.25)",
@@ -304,7 +304,7 @@ export default function Competences() {
                     type="button"
                     key={skill.name}
                     onClick={() => selectSkill(i)}
-                    className="pointer-events-auto absolute left-1/2 top-1/2 cursor-pointer bg-transparent"
+                    className="pointer-events-auto absolute left-1/2 top-1/2 cursor-crosshair bg-transparent"
                     style={getCardHitboxStyle(i)}
                     aria-label={`Afficher la compétence ${skill.name}`}
                   />
@@ -322,6 +322,7 @@ export default function Competences() {
               h-14 w-14 -translate-y-1/2 rounded-full
               border border-white/25
               bg-black/85
+              cursor-pointer
               text-[36px] text-white
               transition-all duration-300
               hover:border-white/45
@@ -338,6 +339,7 @@ export default function Competences() {
               h-14 w-14 -translate-y-1/2 rounded-full
               border border-white/25
               bg-black/85
+              cursor-pointer
               text-[36px] text-white
               transition-all duration-300
               hover:border-white/45

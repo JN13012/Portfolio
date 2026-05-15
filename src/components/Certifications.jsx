@@ -367,7 +367,7 @@ const Certifications = () => {
                 <button
                   key={node.id}
                   onClick={() => setActiveNode(node.id)}
-                  className={`relative px-6 py-3 font-mono text-xs tracking-widest uppercase transition-all duration-300 overflow-hidden flex-1 md:flex-none text-left md:text-center border ${
+                  className={`relative cursor-pointer px-6 py-3 font-mono text-xs tracking-widest uppercase transition-all duration-300 overflow-hidden flex-1 md:flex-none text-left md:text-center border ${
                     isActive
                       ? `${node.theme.border} ${node.theme.activeBg} text-white`
                       : "border-white/10 text-zinc-500 hover:border-white/30 hover:text-zinc-300 bg-black/50"
@@ -412,7 +412,7 @@ const Certifications = () => {
                     <button
                       key={type}
                       onClick={() => handleSort(internalKey)}
-                      className={`group relative overflow-hidden h-8 min-w-[150px] font-mono text-sm uppercase tracking-tighter transition-all duration-300 border ${
+                      className={`group relative cursor-pointer overflow-hidden h-8 min-w-[150px] font-mono text-sm uppercase tracking-tighter transition-all duration-300 border ${
                         isActive
                           ? `bg-black ${activeConfig.theme.sort.active} scale-105`
                           : `bg-black text-zinc-200 border-white/10 hover:text-zinc-300 hover:border-white/30 hover:scale-105`
@@ -664,7 +664,7 @@ const CertifCard = ({
   };
   return (
     <div
-      className="relative group bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col justify-between min-h-[160px] animate-[fadeIn_0.5s_ease-out_forwards] cursor-pointer hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-1 hover:scale-[1.03]"
+      className="relative group bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col justify-between min-h-[160px] animate-[fadeIn_0.5s_ease-out_forwards] cursor-crosshair hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-1 hover:scale-[1.03]"
       style={{ animationDelay: `${index * 100}ms`, opacity: 0 }}
     >
       {/* Barre de thème en haut */}

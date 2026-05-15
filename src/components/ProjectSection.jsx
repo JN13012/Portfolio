@@ -362,8 +362,6 @@ const ProjectSection = () => {
     (currentPage - 1) * PROJECTS_PER_PAGE,
     currentPage * PROJECTS_PER_PAGE,
   );
-  const formattedPage = String(currentPage).padStart(2, "0");
-  const formattedTotalPages = String(totalPages).padStart(2, "0");
 
   const changeFilter = (category) => {
     setActiveFilter(category);
@@ -404,7 +402,7 @@ const ProjectSection = () => {
                 <button
                   key={cat}
                   onClick={() => changeFilter(cat)}
-                  className={`px-4 py-1.5 font-mono text-xs uppercase tracking-widest transition-all border ${
+                  className={`cursor-pointer px-4 py-1.5 font-mono text-xs uppercase tracking-widest transition-all border ${
                     isActive
                       ? "bg-cyber text-black border-cyber shadow-[0_0_15px_rgba(var(--cyber-rgb),0.4)] scale-105"
                       : `${theme.badge} opacity-70 hover:opacity-100 hover:scale-105`
@@ -419,7 +417,7 @@ const ProjectSection = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={toggleSortOrder}
-              className={`font-mono text-xs transition-colors flex items-center gap-2 uppercase ${
+              className={`cursor-pointer font-mono text-xs transition-colors flex items-center gap-2 uppercase ${
                 sortBy === "date"
                   ? "text-cyber"
                   : "text-cyber/55 hover:text-cyber"
@@ -437,7 +435,7 @@ const ProjectSection = () => {
 
             <button
               onClick={sortByComplexity}
-              className={`font-mono text-xs transition-colors flex items-center gap-2 uppercase ${
+              className={`cursor-pointer font-mono text-xs transition-colors flex items-center gap-2 uppercase ${
                 sortBy === "complexity"
                   ? "text-cyber"
                   : "text-cyber/55 hover:text-cyber"
@@ -475,6 +473,7 @@ const ProjectSection = () => {
       className="
         text-cyber/60 hover:text-cyber
         transition-all duration-300
+        cursor-pointer
         disabled:opacity-20
         disabled:cursor-not-allowed
       "
@@ -494,6 +493,7 @@ const ProjectSection = () => {
             onClick={() => setCurrentPage(page)}
             className={`
               relative transition-all duration-300
+              cursor-pointer
               ${
                 isActive
                   ? "text-cyber text-xl scale-125"
@@ -522,6 +522,7 @@ const ProjectSection = () => {
       className="
         text-cyber/60 hover:text-cyber
         transition-all duration-300
+        cursor-pointer
         disabled:opacity-20
         disabled:cursor-not-allowed
       "

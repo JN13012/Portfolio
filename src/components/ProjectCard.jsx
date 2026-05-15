@@ -16,7 +16,7 @@ const ProjectCard = ({
   return (
     <div
       onClick={onClick}
-      className={`group relative bg-black/40 border border-white/20 px-5 py-4 transition-all duration-500 overflow-hidden cursor-pointer h-full flex flex-col ${theme.card}`}
+      className={`group relative bg-black/40 border border-white/20 px-5 py-4 transition-all duration-500 overflow-hidden cursor-crosshair h-full flex flex-col ${theme.card}`}
       // BG IMAGE
       style={{
         backgroundImage: `url(${image})`,
