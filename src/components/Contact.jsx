@@ -55,7 +55,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="py-24 bg-[#020202] text-white relative overflow-hidden border-t border-cyber/10"
+      className="py-24 bg-black/45 text-white relative overflow-hidden border-t border-cyber/10"
     >
       <div className="pointer-events-none absolute inset-x-20 top-1/2 h-px bg-gradient-to-r from-transparent via-cyber/35 to-transparent blur-[1px]" />
 

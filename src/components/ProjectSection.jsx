@@ -385,7 +385,7 @@ const ProjectSection = () => {
   return (
     <section
       id="projects"
-      className="py-24 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
+      className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2 relative z-10">
         {/* 1. SECTION TITRE */}

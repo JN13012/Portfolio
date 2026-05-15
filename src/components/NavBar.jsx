@@ -13,7 +13,7 @@ const NavBar = () => {
   ];
 
   return (
-    <header className="fixed top-0 w-full z-50 flex flex-col">
+    <header className="fixed top-0 z-[1000] flex w-full flex-col">
       {/* --- BANDE D'AVERTISSEMENT --- 
       <div className="bg-yellow-500/20 border-b border-yellow-400/40 text-yellow-400 text-center py-2 px-4 font-mono text-[9px] md:text-xs uppercase animate-pulse tracking-[0.4em]">
         🚧 Ce portfolio est en cours de construction 🚧
@@ -35,7 +35,7 @@ const NavBar = () => {
               <a
                 key={link.name}
                 href={link.href}
-                className="text-gray-400 hover:text-cyber transition-colors"
+                className="cursor-pointer text-gray-400 transition-colors hover:text-cyber"
               >
                 {link.name}
               </a>
