@@ -664,7 +664,7 @@ const CertifCard = ({
   };
   return (
     <div
-      className="relative group bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col justify-between min-h-[160px] animate-[fadeIn_0.5s_ease-out_forwards] cursor-crosshair hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-1 hover:scale-[1.03]"
+      className="relative group bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col justify-between min-h-[160px] animate-[fadeIn_0.5s_ease-out_forwards] cursor-pointer hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-1 hover:scale-[1.03]"
       style={{ animationDelay: `${index * 100}ms`, opacity: 0 }}
     >
       {/* Barre de thème en haut */}
