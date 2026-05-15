@@ -24,9 +24,7 @@ const SectionTitle = ({
   duration = 700,
   Animate = false,
 }) => (
-  <div
-    className="group/title relative mb-5 inline-block"
-  >
+  <div className="group/title relative mb-5 inline-block">
     <div className="absolute inset-0 translate-x-[5px] translate-y-[5px] border border-black/80 bg-zinc-950" />
     {Animate && (
       <div
@@ -147,7 +145,7 @@ const Profile = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-20 gap-12">
           {/* COL 1 */}
-          <div className="lg:col-span-5 flex flex-col justify-center space-y-14 min-h-full">
+          <div className="lg:col-span-4 flex flex-col justify-start space-y-14 min-h-full">
             {/* PHOTO */}
             <div className="relative group mx-auto w-full max-w-[240px] lg:max-w-[500px]">
               <div className="absolute -top-1 -left-1 w-8 h-8 border-t-2 border-l-2 border-cyber z-20"></div>
@@ -181,20 +179,24 @@ const Profile = () => {
           </div>
 
           {/* COL 2 */}
-          <div className="lg:col-span-8 space-y-14">
+          <div className="lg:col-span-9 space-y-14">
             {/* TOOLKIT */}
             <div className="group/profile-block">
               <SectionTitle icon={Shield} title="Liens professionnels" />
-              <div className="flex flex-wrap justify-center gap-5">
+              <div className="flex flex-wrap justify-center gap-4 xl:flex-nowrap">
                 {socTools.map((tool) => (
                   <a
                     key={tool.name}
                     href={tool.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cursor-pointer text-base font-mono border border-cyber/20 px-3 py-2 text-zinc-100/80 hover:border-cyber hover:text-cyber hover:bg-cyber/5 transition-all"
+                    className="group/link relative inline-flex cursor-pointer items-center gap-2 overflow-hidden border border-white/10 bg-zinc-950/70 px-4 py-2.5 font-mono text-sm uppercase tracking-[0.12em] text-zinc-200/85 shadow-[0_10px_24px_rgba(0,0,0,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-cyber/50 hover:bg-cyber/5 hover:text-cyber hover:shadow-[0_0_22px_rgba(74,222,128,0.09),0_12px_26px_rgba(0,0,0,0.32)]"
                   >
-                    {tool.name}
+                    <span className="absolute inset-y-0 left-0 w-px bg-cyber/50 opacity-0 transition-opacity duration-300 group-hover/link:opacity-100" />
+                    <span>{tool.name}</span>
+                    <span className="text-[11px] text-cyber/70 transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">
+                      ↗
+                    </span>
                   </a>
                 ))}
               </div>
@@ -253,8 +255,8 @@ const Profile = () => {
               <div className="space-y-2 px-2">
                 <SkillBar label="Esprit critique" progress={90} />
                 <SkillBar label="Autonomie" progress={85} />
-                <SkillBar label="Communication" progress={80} />
-                <SkillBar label="Polyvalence" progress={75} />
+                <SkillBar label="Polyvalence" progress={80} />
+                <SkillBar label="Communication" progress={75} />
               </div>
             </div>
             {/* LANGUAGE */}
