@@ -208,7 +208,7 @@ const Formations = () => {
   ];
 
   return (
-    <section id="formations" className="py-24 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10">
+    <section id="formations" className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10">
       <div className="mx-auto px-2 relative z-10">
         <SectionHeader index="03" title="Formation" />
 

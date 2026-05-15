@@ -351,7 +351,7 @@ const Certifications = () => {
   return (
     <section
       id="certifications"
-      className="py-24 bg-[#020202] text-white relative overflow-hidden border-y border-cyber/10"
+      className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2 relative z-10">
         <SectionHeader index="04" title="Certifications" />

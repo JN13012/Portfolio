@@ -152,7 +152,7 @@ export const DOMAINS = [
   },
   {
     category: "Intelligence Artificielle",
-    label: "IA",
+    label: "Intelligence Artificielle",
     index: "02",
     hue: "#22d3ee",
 

@@ -6,7 +6,7 @@ const Presentation = () => {
   return (
     <section id="acceuil" className="relative flex min-h-screen w-full items-center justify-center bg-transparent overflow-hidden">
       {/* Background Decor */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#1a1a1a_0%,#000_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(26,26,26,0.34)_0%,rgba(0,0,0,0.72)_100%)]" />
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 w-full max-w-[1600px] gap-12 px-6 lg:px-12 items-center">
         {/* --- PARTIE GAUCHE : IDENTITÉ + CTF --- */}
