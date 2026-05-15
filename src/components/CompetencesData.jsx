@@ -67,6 +67,42 @@ export const TOOL_ICONS = {
   Jenkins: Jenkins,
 };
 
+export const TOOL_DESCRIPTIONS = {
+  "Active Directory": "Identités & accès",
+  "TCP/IP": "Réseaux",
+  Nmap: "Scan réseau",
+  BurpSuite: "Proxy web",
+  Wireshark: "Analyse trafic",
+  Metasploit: "Exploitation",
+  SQLMap: "Injection SQL",
+  Splunk: "SIEM & logs",
+  Fail2ban: "Anti brute-force",
+  Firewall: "Règles réseau",
+  FlareVM: "Forensic Windows",
+  REMnux: "Analyse malware",
+  Snort: "IDS / IPS",
+  CyberChef: "Décodage data",
+  Gobuster: "Fuzzing web",
+  Hashcat: "Cracking hash",
+  Hydra: "Audit auth",
+  JavaScript: "Front-end",
+  "Node.js": "Runtime JS",
+  "Linux (CLI)": "Terminal",
+  Python: "Scripts & API",
+  Docker: "Conteneurs",
+  "Docker Compose": "Stack locale",
+  Flask: "API Python",
+  PyTorch: "Deep learning",
+  Pandas: "Dataframes",
+  NumPy: "Calcul data",
+  LangChain: "RAG & LLM",
+  Java: "POO",
+  Nodejs: "Back-end JS",
+  React: "Interface web",
+  SQL: "Base données",
+  Jenkins: "CI/CD",
+};
+
 export const DOMAINS = [
   {
     category: "Cybersécurité",
@@ -152,7 +188,7 @@ export const DOMAINS = [
         tag: "Conteuneurisation -  Automatisation - CI/CD",
         tools: ["Docker", "Jenkins"],
         details:
-          "Conteneurisation d’applications avec Docker et mise en place de pipelines CI/CD afin d’automatiser l’intégration, les tests et le déploiement des applications.",
+          "Conteneurisation d’applications avec Docker et mise en place de pipelines CI/CD afin d’automatiser le déploiement et les tests.",
       },
     ],
   },

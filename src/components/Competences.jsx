@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import SectionHeader from "./SectionHeader";
-import { DOMAINS, TOOL_ICONS } from "./CompetencesData";
+import { DOMAINS, TOOL_DESCRIPTIONS, TOOL_ICONS } from "./CompetencesData";
 
 const ALL = DOMAINS.flatMap((d) =>
   d.items.map((it) => ({
@@ -18,6 +18,31 @@ const MIN_CARD_SCALE = 0.72;
 const ACTIVE_CARD_SIZE = { width: 380, height: 120 };
 const INACTIVE_CARD_SIZE = { width: 260, height: 110 };
 const HITBOX_PADDING = 22;
+
+const LevelBadge = ({ color }) => (
+  <div className="absolute right-6 top-0 z-20 -translate-y-1/2">
+    <div className="absolute -left-3 -right-3 top-1/2 h-[3px] -translate-y-1/2 bg-[#080808]" />
+    <div
+      className="relative inline-flex items-center gap-2 rounded-[3px] border bg-[#080808] px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em]"
+      style={{
+        borderColor: `${color}66`,
+        color,
+        boxShadow: `0 0 18px ${color}1f, 0 12px 28px rgba(0,0,0,0.5)`,
+      }}
+    >
+      <span
+        className="h-1.5 w-1.5"
+        style={{
+          background: color,
+          boxShadow: `0 0 12px ${color}`,
+        }}
+      />
+      <span className="text-white/55">Niveau</span>
+      <span className="text-white/25">—</span>
+      <span>Étudiant / Junior</span>
+    </div>
+  </div>
+);
 
 export default function Competences() {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -204,9 +229,9 @@ export default function Competences() {
               return (
                 <div
                   key={i}
-                  className="absolute left-1/2 top-1/2 cursor-crosshair"
+                  className="absolute left-1/2 top-1/2 cursor-pointer"
                   style={{
-                    cursor: "crosshair",
+                    cursor: "pointer",
                     width: `${cardSize.width}px`,
                     height: `${cardSize.height}px`,
                     pointerEvents: "none",
@@ -223,7 +248,7 @@ export default function Competences() {
                         : "shadow-[0_18px_45px_rgba(0,0,0,0.45)]"
                     }`}
                     style={{
-                      cursor: "crosshair",
+                      cursor: "pointer",
                       borderColor: isActiveCard
                         ? `${skillAccent}77`
                         : "rgba(255,255,255,0.25)",
@@ -279,7 +304,7 @@ export default function Competences() {
                     type="button"
                     key={skill.name}
                     onClick={() => selectSkill(i)}
-                    className="pointer-events-auto absolute left-1/2 top-1/2 cursor-crosshair bg-transparent"
+                    className="pointer-events-auto absolute left-1/2 top-1/2 cursor-pointer bg-transparent"
                     style={getCardHitboxStyle(i)}
                     aria-label={`Afficher la compétence ${skill.name}`}
                   />
@@ -323,7 +348,7 @@ export default function Competences() {
           </button>
 
           {/* Icons */}
-          <div className="relative mt-6 min-h-[15.5rem]">
+          <div className="relative mt-16 min-h-[16rem]">
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40 blur-2xl transition-all duration-500"
               style={{
@@ -332,16 +357,41 @@ export default function Competences() {
                 background: `linear-gradient(180deg, transparent 0%, ${iconGlowColor}26 24%, ${iconGlowColor}cc 50%, ${iconGlowColor}26 76%, transparent 100%)`,
               }}
             />
-            <div className="relative z-10 flex min-h-[15.5rem] flex-wrap content-center items-center justify-center gap-x-6 gap-y-3">
+            <div className="relative z-10 flex min-h-[16rem] flex-wrap content-center items-center justify-center gap-x-6 gap-y-2">
               {active.tools.map((tool) => {
                 const iconUrl = TOOL_ICONS?.[tool];
+                const toolDescription = TOOL_DESCRIPTIONS?.[tool];
 
                 return (
                   <div
                     key={tool}
-                    className="group flex h-28 w-32 items-center justify-center"
-                    title={tool}
+                    className="group relative flex h-32 w-32 items-center justify-center"
                   >
+                    <div
+                      className="pointer-events-none absolute -top-16 left-1/2 z-20 flex -translate-x-1/2 translate-y-2 flex-col items-center whitespace-nowrap opacity-0 transition-all duration-300 ease-out group-hover:-translate-y-1.5 group-hover:scale-105 group-hover:opacity-100"
+                      style={{
+                        color: iconGlowColor,
+                      }}
+                    >
+                      <span
+                        className="font-mono text-[23px] font-semibold uppercase tracking-[0.2em]"
+                        style={{
+                          textShadow: `0 0 8px ${iconGlowColor}, 0 0 22px ${iconGlowColor}99, 0 0 36px ${iconGlowColor}40`,
+                        }}
+                      >
+                        {tool}
+                      </span>
+                      {toolDescription && (
+                        <span
+                          className="mt-0.5 font-mono text-[12px] font-semibold uppercase tracking-[0.18em] text-white/85"
+                          style={{
+                            textShadow: `0 0 10px ${iconGlowColor}80`,
+                          }}
+                        >
+                          {toolDescription}
+                        </span>
+                      )}
+                    </div>
                     {iconUrl ? (
                       <img
                         src={iconUrl}
@@ -365,7 +415,7 @@ export default function Competences() {
             className={`
     min-h-[205px]
     grid grid-cols-[0.95fr_1px_2.35fr]
-    overflow-hidden rounded-md
+    relative overflow-visible rounded-md
     border border-white/15
     bg-[#080808]
     shadow-[0_22px_70px_rgba(0,0,0,0.46)]
@@ -409,6 +459,7 @@ export default function Competences() {
 
             {/* Description */}
             <div className="p-6">
+              <LevelBadge color={active.accent ?? dom.hue} />
               <div className="mb-3 text-xl uppercase tracking-[0.26em] text-white/90">
                 Description
               </div>

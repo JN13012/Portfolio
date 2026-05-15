@@ -22,24 +22,26 @@ const SectionTitle = ({
   icon: Icon,
   title,
   duration = 700,
-  Animate = true,
+  Animate = false,
 }) => (
   <div
-    className={`relative inline-block overflow-hidden mb-5 border border-cyber/20 ${Animate ? "group/title cursor-cell" : ""}`}
+    className="group/title relative mb-5 inline-block"
   >
+    <div className="absolute inset-0 translate-x-[5px] translate-y-[5px] border border-black/80 bg-zinc-950" />
     {Animate && (
       <div
-        className="absolute inset-y-0 left-0 w-0 bg-cyber group-hover/title:w-full transition-all ease-in-out z-0"
+        className="absolute inset-y-0 left-0 z-0 w-0 bg-cyber transition-all ease-in-out group-hover/title:w-full"
         style={{ transitionDuration: `${duration}ms` }}
       />
     )}
-    <div className="relative z-10 flex items-center gap-3 px-4 py-2">
+    <div className="relative z-10 flex items-center gap-3 border border-zinc-600/70 bg-gradient-to-br from-zinc-700/70 via-zinc-850 to-zinc-950 px-4 py-2 shadow-[inset_2px_2px_0_rgba(255,255,255,0.08),inset_-2px_-2px_0_rgba(0,0,0,0.55),0_10px_0_rgba(0,0,0,0.28)] transition-all duration-300 group-hover/title:-translate-y-0.5 group-hover/title:border-cyber/45 group-hover/title:shadow-[inset_2px_2px_0_rgba(255,255,255,0.1),inset_-2px_-2px_0_rgba(0,0,0,0.5),0_12px_0_rgba(0,0,0,0.28),0_0_20px_rgba(74,222,128,0.08)] group-hover/profile-block:-translate-y-0.5 group-hover/profile-block:border-cyber/45 group-hover/profile-block:shadow-[inset_2px_2px_0_rgba(255,255,255,0.1),inset_-2px_-2px_0_rgba(0,0,0,0.5),0_12px_0_rgba(0,0,0,0.28),0_0_20px_rgba(74,222,128,0.08)]">
+      <div className="absolute inset-x-1 top-0 h-px bg-white/15" />
       <Icon
         size={18}
-        className={`transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
+        className={`relative drop-shadow-[0_2px_0_rgba(0,0,0,0.45)] transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
       />
       <h3
-        className={`text-base font-mono uppercase tracking-[0.25em] transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
+        className={`relative text-base font-mono uppercase tracking-[0.25em] drop-shadow-[0_2px_0_rgba(0,0,0,0.55)] transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
       >
         {title}
       </h3>
@@ -141,18 +143,7 @@ const Profile = () => {
       className="py-24 bg-transparent text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2 relative z-10">
-        <SectionHeader
-          index="01"
-          title="Profil"
-          action={
-            <div className="hidden sm:flex items-center gap-3 border border-green-500/30 px-4 py-1.5 bg-red-500/5">
-              <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></span>
-              <span className="text-green-500 font-mono text-sm uppercase tracking-tighter">
-                Niveau : Junior
-              </span>
-            </div>
-          }
-        />
+        <SectionHeader index="01" title="Profil" />
 
         <div className="grid grid-cols-1 lg:grid-cols-20 gap-12">
           {/* COL 1 */}
@@ -174,15 +165,16 @@ const Profile = () => {
             <a
               href={CV}
               download="CV_Jérémie_Nagi.pdf"
-              className="group w-full relative px-6 py-4 bg-zinc-800/30 border-l-2 border-cyber font-mono text-xs tracking-[0.2em] transition-all hover:bg-cyber/90 hover:text-black flex items-center justify-between"
+              className="group relative flex w-full items-center justify-between overflow-hidden border-l-2 border-cyber bg-zinc-800/30 px-6 py-4 font-mono text-xs tracking-[0.2em] transition-all hover:text-black"
             >
-              <span className="flex items-center gap-2">
+              <div className="absolute inset-y-0 left-0 z-0 w-0 bg-cyber transition-all duration-700 ease-in-out group-hover:w-full" />
+              <span className="relative z-10 flex items-center gap-2">
                 <span className="group-hover:text-black inline-block animate-pulse">
                   {">"}
                 </span>
                 Download_CV
               </span>
-              <span className="text-[10px] opacity-90 group-hover:opacity-100 italic">
+              <span className="relative z-10 text-[10px] italic opacity-90 group-hover:opacity-100">
                 (.pdf)
               </span>
             </a>
@@ -191,22 +183,24 @@ const Profile = () => {
           {/* COL 2 */}
           <div className="lg:col-span-8 space-y-14">
             {/* TOOLKIT */}
-            <SectionTitle icon={Shield} title="Liens professionnels" />
-            <div className="flex flex-wrap justify-center gap-5">
-              {socTools.map((tool) => (
-                <a
-                  key={tool.name}
-                  href={tool.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-base font-mono border border-cyber/20 px-3 py-2 text-zinc-100/80 hover:border-cyber hover:text-cyber hover:bg-cyber/5 transition-all cursor-crosshair"
-                >
-                  {tool.name}
-                </a>
-              ))}
+            <div className="group/profile-block">
+              <SectionTitle icon={Shield} title="Liens professionnels" />
+              <div className="flex flex-wrap justify-center gap-5">
+                {socTools.map((tool) => (
+                  <a
+                    key={tool.name}
+                    href={tool.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-base font-mono border border-cyber/20 px-3 py-2 text-zinc-100/80 hover:border-cyber hover:text-cyber hover:bg-cyber/5 transition-all"
+                  >
+                    {tool.name}
+                  </a>
+                ))}
+              </div>
             </div>
             {/* ORIENTATION PROFESSIONNELLE */}
-            <div>
+            <div className="group/profile-block">
               <SectionTitle
                 icon={Terminal}
                 title="Orientation professionnelle"
@@ -224,12 +218,12 @@ const Profile = () => {
                 <p className="text-zinc-200">Disponible immédiatement.</p>
                 <p className="text-zinc-250">
                   Objectifs : évoluer vers des postes d’ingénieur en
-                  cybersécurité, pentester, analyste SOC ou ingénieur IA.
+                  cybersécurité et/ou IA.
                 </p>
               </div>
             </div>
             {/* PERSONNAL DATA */}
-            <div>
+            <div className="group/profile-block">
               <SectionTitle icon={Database} title="Informations personnelles" />
               <ul className="space-y-2 font-mono px-2">
                 {personalData.map((item, i) => (
@@ -254,7 +248,7 @@ const Profile = () => {
           {/* COL 3 */}
           <div className="lg:col-span-7 space-y-14">
             {/* SOFT SKILL */}
-            <div>
+            <div className="group/profile-block">
               <SectionTitle icon={Cpu} title="Soft skills" />
               <div className="space-y-2 px-2">
                 <SkillBar label="Esprit critique" progress={90} />
@@ -264,7 +258,7 @@ const Profile = () => {
               </div>
             </div>
             {/* LANGUAGE */}
-            <div>
+            <div className="group/profile-block">
               <SectionTitle
                 icon={MessageSquare}
                 title="Langues"
@@ -274,7 +268,7 @@ const Profile = () => {
                 {languages.map((l) => (
                   <div
                     key={l.id}
-                    className="p-4 border border-white/5 bg-zinc-900/10 hover:border-cyber/40 transition-all group cursor-crosshair"
+                    className="p-4 border border-white/5 bg-zinc-900/10 hover:border-cyber/40 transition-all group"
                   >
                     <div className="flex justify-between text-sm font-mono mb-3">
                       <span className="text-zinc-100 group-hover:text-white">
@@ -294,11 +288,11 @@ const Profile = () => {
             </div>
 
             {/* CENTRE INTERET */}
-            <div>
+            <div className="group/profile-block">
               <div>
                 <SectionTitle icon={User} title="Centres d'intérêts" />
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 cursor-crosshair">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {interests.map((item) => (
                     <InterestCell key={item.id} {...item} />
                   ))}

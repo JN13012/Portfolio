@@ -53,7 +53,7 @@ const FormationStep = ({
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block font-mono cursor-crosshair group/item p-4 md:p-6 -m-4 md:-m-6 rounded-xl transition-all duration-500 hover:bg-zinc-900/30 border border-transparent hover:border-white/5"
+      className="block font-mono cursor-pointer group/item p-4 md:p-6 -m-4 md:-m-6 rounded-xl transition-all duration-500 hover:bg-zinc-900/30 border border-transparent hover:border-white/5"
     >
       {/* Grid : texte 9/12 + image 3/12 */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
