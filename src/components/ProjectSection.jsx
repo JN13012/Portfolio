@@ -393,7 +393,7 @@ const ProjectSection = () => {
 
         {/* --- 1. BARRE DE FILTRES ET TRI --- */}
         <div className="mb-12 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-4">
             {categories.map((cat) => {
               const theme = categoryThemes[cat] || categoryThemes.Default;
               const isActive = activeFilter === cat;
@@ -402,7 +402,7 @@ const ProjectSection = () => {
                 <button
                   key={cat}
                   onClick={() => changeFilter(cat)}
-                  className={`cursor-pointer px-4 py-1.5 font-mono text-xs uppercase tracking-widest transition-all border ${
+                  className={`cursor-pointer px-4 py-2 font-mono text-sm uppercase tracking-widest transition-all border ${
                     isActive
                       ? "bg-cyber text-black border-cyber shadow-[0_0_15px_rgba(var(--cyber-rgb),0.4)] scale-105"
                       : `${theme.badge} opacity-70 hover:opacity-100 hover:scale-105`
@@ -414,10 +414,10 @@ const ProjectSection = () => {
             })}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <button
               onClick={toggleSortOrder}
-              className={`cursor-pointer font-mono text-xs transition-colors flex items-center gap-2 uppercase ${
+              className={`cursor-pointer font-mono text-sm transition-colors flex items-center gap-2 uppercase ${
                 sortBy === "date"
                   ? "text-cyber"
                   : "text-cyber/55 hover:text-cyber"
@@ -428,21 +428,21 @@ const ProjectSection = () => {
                   ? "SORT: Plus récent"
                   : "SORT: Plus ancien"}
               </span>
-              <span className="text-sm">
+              <span className="text-base">
                 {sortOrder === "desc" ? "▼" : "▲"}
               </span>
             </button>
 
             <button
               onClick={sortByComplexity}
-              className={`cursor-pointer font-mono text-xs transition-colors flex items-center gap-2 uppercase ${
+              className={`cursor-pointer font-mono text-sm transition-colors flex items-center gap-2 uppercase ${
                 sortBy === "complexity"
                   ? "text-cyber"
                   : "text-cyber/55 hover:text-cyber"
               }`}
             >
               <span>SORT: Complexité</span>
-              <span className="text-sm">
+              <span className="text-base">
                 {complexityOrder === "desc" ? "▼" : "▲"}
               </span>
             </button>

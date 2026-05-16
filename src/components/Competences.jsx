@@ -23,7 +23,7 @@ const LevelBadge = ({ color }) => (
   <div className="absolute right-6 top-0 z-20 -translate-y-1/2">
     <div className="absolute -left-3 -right-3 top-1/2 h-[3px] -translate-y-1/2 bg-[#080808]" />
     <div
-      className="relative inline-flex items-center gap-2 rounded-[3px] border bg-[#080808] px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em]"
+      className="relative inline-flex items-center gap-2 rounded-[3px] border bg-[#080808] px-4 py-1.5 font-mono text-base uppercase tracking-[0.12em]"
       style={{
         borderColor: `${color}66`,
         color,
@@ -39,7 +39,7 @@ const LevelBadge = ({ color }) => (
       />
       <span className="text-white/55">Niveau</span>
       <span className="text-white/25">—</span>
-      <span>Étudiant / Junior</span>
+      <span>Junior</span>
     </div>
   </div>
 );
@@ -416,7 +416,7 @@ export default function Competences() {
           <div
             className={`
     min-h-[205px]
-    grid grid-cols-[0.95fr_1px_2.35fr]
+    grid grid-cols-[1.01fr_1px_2.35fr]
     relative overflow-visible rounded-md
     border border-white/15
     bg-[#080808]
@@ -433,13 +433,13 @@ export default function Competences() {
                   style={{ background: active.accent ?? dom.hue }}
                 />
 
-                <div className="text-[32px] leading-[1.04] text-white">
+                <div className="text-2xl md:text-3xl leading-[1.04] text-white">
                   {active.name}
                 </div>
 
                 {/* Tags */}
                 <div className="mt-6">
-                  <div className="mb-3 text-[13px] uppercase leading-[1.7] tracking-[0.16em] text-zinc-300">
+                  <div className="mb-3 text-base uppercase leading-[1.7] tracking-[0.16em] text-zinc-300">
                     {active.tag}
                   </div>
 
@@ -462,7 +462,7 @@ export default function Competences() {
             {/* Description */}
             <div className="p-6">
               <LevelBadge color={active.accent ?? dom.hue} />
-              <div className="mb-3 text-xl uppercase tracking-[0.26em] text-white/90">
+              <div className="mb-3 text-sm md:text-base uppercase tracking-[0.26em] text-white/90">
                 Description
               </div>
 

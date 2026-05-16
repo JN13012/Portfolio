@@ -2,7 +2,7 @@ import React from "react";
 import SectionHeader from "./SectionHeader";
 import Epitech from "../assets/Formations/Epitech.png";
 import EcoleDeLaPerformance from "../assets/Formations/ECOLE-PERFORMANCE-10.jpg";
-import bts from "../assets/Formations/Bts.png";
+//import bts from "../assets/Formations/Bts.png";
 
 const FormationStep = ({
   id,
@@ -15,11 +15,11 @@ const FormationStep = ({
   url,
   imgSrc,
 }) => (
-  <div className="relative pl-10 md:pl-16 pb-10 md:pb-14 group">
+  <div className="relative pl-14 md:pl-16 pb-12 md:pb-16 group">
     {/* Ligne verticale */}
-    <div className="absolute left-[19px] md:left-[23px] top-0 h-full w-[2px] bg-zinc-800 group-last:bg-transparent">
+    <div className="absolute left-5 top-10 h-full w-px -translate-x-1/2 bg-zinc-800 group-last:bg-transparent">
       <div
-        className={`absolute top-0 left-0 w-full h-full bg-gradient-to-b from-cyber via-cyber/40 to-transparent transition-opacity duration-500 ${
+        className={`absolute left-0 top-0 h-full w-full bg-gradient-to-b from-cyber via-cyber/40 to-transparent transition-opacity duration-500 ${
           status === "current"
             ? "opacity-100"
             : "opacity-0 group-hover:opacity-100"
@@ -28,9 +28,9 @@ const FormationStep = ({
     </div>
 
     {/* Losange index haute visibilité */}
-    <div className="absolute left-0 top-1 z-20">
+    <div className="absolute left-5 top-10 z-20 -translate-x-1/2 -translate-y-1/2">
       <div
-        className={`relative w-10 h-10 flex items-center justify-center border-2 transition-all duration-700 ease-in-out bg-zinc-900 rotate-45 group-hover:rotate-[225deg] ${
+        className={`relative flex h-10 w-10 rotate-45 items-center justify-center border-2 bg-zinc-900 transition-all duration-700 ease-in-out group-hover:rotate-[225deg] ${
           status === "current"
             ? "border-cyber shadow-[0_0_20px_rgba(74,222,128,0.4)]"
             : "border-zinc-500 group-hover:border-cyber group-hover:shadow-[0_0_15px_rgba(74,222,128,0.2)]"
@@ -53,16 +53,16 @@ const FormationStep = ({
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block font-mono cursor-pointer group/item p-4 md:p-6 -m-4 md:-m-6 rounded-xl transition-all duration-500 hover:bg-zinc-900/30 border border-transparent hover:border-white/5"
+      className="block font-mono cursor-pointer group/item p-4 md:p-6 -m-4 md:-m-6 transition-all duration-500"
     >
       {/* Grid : texte 9/12 + image 3/12 */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-7 items-stretch border border-white/10 bg-black/35 p-5 md:p-6 backdrop-blur-sm transition-all duration-500 hover:border-cyber/30 hover:bg-black/45 hover:shadow-[0_0_24px_rgba(74,222,128,0.07)]">
         {/* ── Colonne texte (9/12) ── */}
         <div className="md:col-span-9">
           {/* Diplôme & date */}
-          <div className="flex flex-col sm:flex-row sm:items-baseline gap-x-4 mb-1 ml-4 md:ml-6">
+          <div className="flex flex-col sm:flex-row sm:items-baseline gap-x-4 mb-2">
             <h3
-              className={`text-sm md:text-lg font-bold uppercase tracking-wide leading-tight transition-colors duration-300 ${
+              className={`text-2xl md:text-3xl font-bold uppercase tracking-wide leading-tight transition-colors duration-300 ${
                 status === "current"
                   ? "text-cyber"
                   : "text-zinc-100 group-hover/item:text-cyber"
@@ -70,26 +70,26 @@ const FormationStep = ({
             >
               {diplome}
             </h3>
-            <span className="text-zinc-400 text-[10px] md:text-base font-medium whitespace-nowrap shrink-0">
+            <span className="text-zinc-400 text-xs md:text-sm font-medium whitespace-nowrap shrink-0">
               // {date}
             </span>
           </div>
 
           {/* École */}
-        <div className="text-zinc-400 text-[10px] md:text-base mb-4 uppercase tracking-[0.2em] ml-4 md:ml-6 font-semibold">
-          <span className="opacity-50 text-cyber pr-2">▶</span> {ecole}
-        </div>
+          <div className="mb-5 inline-flex items-center bg-cyber/5 px-3 py-1.5 text-base md:text-lg font-semibold uppercase tracking-[0.18em] text-zinc-100 transition-all duration-300 group-hover/item:border-cyber group-hover/item:bg-cyber/10">
+            <span className="pr-2 text-cyber/80">▶</span> {ecole}
+          </div>
 
           {/* Barre de progression */}
 
           {/* Bloc objectifs */}
-          <div className="ml-4 md:ml-6 relative">
+          <div className="relative">
             <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-cyber/40 group-hover/item:border-cyber transition-colors" />
             <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-cyber/40 group-hover/item:border-cyber transition-colors" />
-            <div className="bg-zinc-900/80 border border-white/5 p-3 md:p-4 shadow-inner group-hover/item:bg-zinc-900 transition-colors">
+            <div className="bg-zinc-950/70 border border-white/10 p-4 md:p-5 shadow-inner group-hover/item:bg-zinc-950/90 transition-colors">
               <div className="flex items-center mb-2 border-b border-white/5 pb-2">
-                <span className="text-sm md:text-lg text-emerald-500 uppercase tracking-tighter">
-                  OBJECTIFS DE FORMATION : {status}
+                <span className="text-sm md:text-base text-emerald-500 uppercase tracking-tighter">
+                  OBJECTIFS DE FORMATION
                 </span>
                 <div className="ml-auto flex gap-1.5">
                   <div className="w-2 h-2 rounded-full bg-red-500/50" />
@@ -97,7 +97,7 @@ const FormationStep = ({
                   <div className="w-2 h-2 rounded-full bg-cyber/50" />
                 </div>
               </div>
-              <div className="text-[11px] md:text-sm font-mono text-zinc-300 leading-relaxed italic">
+              <div className="text-sm md:text-base font-mono text-zinc-300 leading-relaxed italic">
                 {Array.isArray(details) ? (
                   <ul className="space-y-1.5">
                     {details.map((ligne, idx) => (
@@ -123,7 +123,7 @@ const FormationStep = ({
         </div>
 
         {/* ── Colonne image  ── */}
-        <div className="md:col-span-3 hidden sm:flex items-start justify-center pt-1">
+        <div className="md:col-span-3 hidden sm:flex items-stretch justify-center">
           <div
             className="relative w-full group/photo overflow-hidden border border-zinc-800 group-hover/item:border-cyber/40 transition-all duration-500 shadow-xl"
             style={{ aspectRatio: "1/1" }}
@@ -136,20 +136,6 @@ const FormationStep = ({
 
             {/* Overlay cyber */}
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-            {/* Badge status en bas de l'image */}
-            <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 flex items-center justify-between">
-              <span
-                className={`text-xs font-mono uppercase tracking-widest ${
-                  status === "current" ? "text-cyber" : "text-zinc-200"
-                }`}
-              >
-                {status === "current" ? "● ACTUEL" : "✓ TERMINÉ"}
-              </span>
-              <span className="text-xs font-mono text-zinc-600 tracking-wider">
-                {date}
-              </span>
-            </div>
 
             {/* Coin décoratif */}
             <div className="absolute top-1.5 right-1.5 w-3 h-3 border-t border-r border-cyber/40 group-hover/item:border-cyber transition-colors" />
@@ -172,11 +158,12 @@ const Formations = () => {
       date: "2025 – 2028",
       percent: 20,
       details: [
-        "Analyse et gestion des risques, conformité ISO 2700x et RGPD",
-        "Gestion des accès et infrastructures Cloud sécurisées",
-        "Sécurité réseaux et systèmes",
-        "Développement sécurisé (DevSecOps)",
+        "Architecture systèmes et réseaux",
+        "Ingénierie logicielle",
+        "DevSecOps et cloud",
+        "Sécurité réseau : firewall, segmentation, VPN, IDS/IPS",
         "Audits et tests d'intrusion (Pentest)",
+        "Analyse et gestion des risques, conformité ISO 2700x et RGPD",
       ],
       status: "current",
       imgSrc: Epitech,
@@ -208,7 +195,10 @@ const Formations = () => {
   ];
 
   return (
-    <section id="formations" className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10">
+    <section
+      id="formations"
+      className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10"
+    >
       <div className="mx-auto px-2 relative z-10">
         <SectionHeader index="03" title="Formation" />
 

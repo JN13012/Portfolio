@@ -114,7 +114,7 @@ export const DOMAINS = [
       {
         name: "Red Team",
         accent: "#ef4444",
-        tag: "Reconnaissance - Énumération - Exploitation - Post-exploitation",
+        tag: "Reconnaissance - Énumération - Exploitation & Post-exploitation",
         tools: [
           "Linux (CLI)",
           "TCP/IP",
@@ -146,7 +146,7 @@ export const DOMAINS = [
           "CyberChef",
         ],
         details:
-          "Analyse de logs via search queries SPL sur le SIEM Splunk. Analyse Forensics et malwares en environnements isolés (FlareVM/REMnux). Mise en œuvre de mesures de durcissement (Hardening) incluant la configuration de WAF, Firewall et d'IDS/IPS.",
+          "Analyse de logs via search queries SPL sur le SIEM Splunk. Analyse Forensics et malwares en environnements isolés (FlareVM/REMnux). Mise en œuvre de mesures de Durcissement incluant la configuration de WAF, Firewall et d'IDS/IPS.",
       },
     ],
   },
@@ -163,7 +163,7 @@ export const DOMAINS = [
         tag: "LLM - RAG - NLP - Pipeline - Data analysis",
         tools: ["Flask", "PyTorch", "LangChain", "Pandas", "NumPy"],
         details:
-          "Conception d’API backend avec Flask pour des applications d’intelligence artificielle. Développement de pipelines RAG, de systèmes NLP et d’assistants vocaux temps réel (STT/TTS) via LangChain et intégration de modèles de deep learning avec PyTorch. Traitement et analyse de données avec Pandas et NumPy.",
+          "Développement d’API backend pour applications IA avec Flask : intégration de LLM, pipelines RAG, NLP, orchestration de modèles génératifs. Analayse et traitement de données avec Pandas et NumPy.",
       },
     ],
   },
@@ -180,7 +180,7 @@ export const DOMAINS = [
         tag: "Back-end - API REST - POO - Base de données",
         tools: ["Python", "Java", "JavaScript", "Nodejs", "React", "SQL"],
         details:
-          "Développement de logiciels et de jeux en Java/Python en appliquant les principes de POO. Développement d’applications back-end et de composants web Salesforce (LWC), conception d’API REST et manipulation de bases de données.",
+          "Développement de logiciels et de jeux en Java/Python en appliquant les principes de POO. Développement d’applications back-end et de composants web Salesforce, conception d’API REST et manipulation de bases de données.",
       },
       {
         name: "DevOps",

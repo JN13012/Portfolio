@@ -367,7 +367,7 @@ const Certifications = () => {
                 <button
                   key={node.id}
                   onClick={() => setActiveNode(node.id)}
-                  className={`relative cursor-pointer px-6 py-3 font-mono text-xs tracking-widest uppercase transition-all duration-300 overflow-hidden flex-1 md:flex-none text-left md:text-center border ${
+                  className={`relative cursor-pointer px-6 py-3 font-mono text-sm tracking-widest uppercase transition-all duration-300 overflow-hidden flex-1 md:flex-none text-left md:text-center border ${
                     isActive
                       ? `${node.theme.border} ${node.theme.activeBg} text-white`
                       : "border-white/10 text-zinc-500 hover:border-white/30 hover:text-zinc-300 bg-black/50"
@@ -396,7 +396,7 @@ const Certifications = () => {
           {/* HEADER DE LA GRILLE */}
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-10 border-b border-white/10 pb-6 gap-4">
             <h3
-              className={`font-mono text-base tracking-[0.3em] uppercase ${activeConfig.theme.text}`}
+              className={`font-mono text-xl md:text-2xl tracking-[0.22em] uppercase ${activeConfig.theme.text}`}
             >
               QUERY_RESULTS: {activeConfig.id}
             </h3>
@@ -418,7 +418,7 @@ const Certifications = () => {
                           : `bg-black text-zinc-200 border-white/10 hover:text-zinc-300 hover:border-white/30 hover:scale-105`
                       }`}
                     >
-                      {/* Halo derrière (Aura Externe Diffuse) */}
+                      {/* Halo derrière */}
                       {isActive && (
                         <div
                           className={`absolute -inset-1 blur-xl opacity-40 ${activeConfig.theme.bg} z-0`}
@@ -450,7 +450,7 @@ const Certifications = () => {
                         </span>
 
                         {/* Flèche de tri stable */}
-                        <div className="w-2 flex justify-center text-[8px]">
+                        <div className="w-2 flex justify-center text-xs">
                           {isActive && (
                             <span className="animate-pulse">
                               {sortOrder === "desc" ? "▼" : "▲"}
@@ -664,7 +664,7 @@ const CertifCard = ({
   };
   return (
     <div
-      className="relative group bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col justify-between min-h-[160px] animate-[fadeIn_0.5s_ease-out_forwards] cursor-crosshair hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-1 hover:scale-[1.03]"
+      className="relative group bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col justify-between min-h-[160px] animate-[fadeIn_0.5s_ease-out_forwards] cursor-crosshair hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-2 hover:scale-[1.03]"
       style={{ animationDelay: `${index * 100}ms`, opacity: 0 }}
     >
       {/* Barre de thème en haut */}
@@ -683,16 +683,16 @@ const CertifCard = ({
         </div>
 
         {/* DIFFICULTY LEVEL */}
-        <div className="relative flex flex-col items-end gap-1">
-          <div className="flex items-center gap-2">
+        <div className="relative flex flex-col items-end gap-2">
+          <div className="flex items-center gap-2.5">
             {isPro && (
-              <span className="text-[8px] font-mono font-black tracking-widest px-1.5 py-0.5 border border-zinc-300/40 text-zinc-100 bg-white/10">
+              <span className="text-[12px] font-mono font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white from-50% to-zinc-400 to-50% uppercase drop-shadow-[0_2px_6px_rgba(255,255,255,0.5)] select-none">
                 PRO
               </span>
             )}
 
             <span
-              className={`text-[9px] font-mono font-black tracking-widest ${Difficulty_Level.text} ${
+              className={`text-[12px] font-mono font-black tracking-widest ${Difficulty_Level.text} ${
                 difficulte === 5 ? "animate-pulse" : ""
               }`}
             >
@@ -713,19 +713,19 @@ const CertifCard = ({
         </div>
       </div>
 
-      <h3 className="text-sm md:text-base text-zinc-300 font-bold leading-snug group-hover:text-white transition-colors z-10">
+      <h3 className="text-xl md:text-2xltext-zinc-300 font-bold leading-snug group-hover:text-white transition-colors z-10">
         {titre}
       </h3>
 
       <div className="mt-8 flex justify-between items-baseline border-t border-white/5 pt-3 z-10 group-hover:border-white/20 transition-colors">
         {/* LEFT BLOCK */}
         <div className="flex items-center gap-3 font-mono uppercase">
-          <span className="text-xs text-green-500 animate-pulse flex items-center gap-1.5">
+          <span className="text-sm text-green-500 animate-pulse flex items-center gap-1.5">
             <span className="w-1 h-1 bg-green-500 rounded-full"></span>
             Completed
           </span>
 
-          <span className="text-xs text-zinc-400 group-hover:text-white/70 border-l border-white/10 pl-3">
+          <span className="text-sm text-zinc-400 group-hover:text-white/70 border-l border-white/10 pl-3">
             {duration || "12 Hours"}
           </span>
         </div>
