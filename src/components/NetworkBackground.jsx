@@ -19,7 +19,7 @@ const TOPOLOGY = [
   { id: "fw-core", type: "firewall", x: 0.92, y: 0.17, label: "FW" },
   { id: "rt-core-a", type: "router", x: 0.17, y: 0.18, label: "R1" },
   { id: "rt-core-b", type: "router", x: 0.58, y: 0.38, label: "R2" },
-  { id: "sw-dmz", type: "switch", x: 0.58, y: 0.18, label: "DMZ" },
+  { id: "sw-dmz", type: "switch", x: 0.55, y: 0.22, label: "DMZ" },
   { id: "top-sensor", type: "endpoint", x: 0.44, y: 0.12, label: "IDS" },
   { id: "top-relay", type: "router", x: 0.86, y: 0.08, label: "IX" },
   { id: "sw-east", type: "switch", x: 0.25, y: 0.63, label: "SW" },

@@ -46,7 +46,7 @@ const BlocExperience = ({
       <div className="md:col-span-7 space-y-5">
         <div>
           {/* META */}
-          <div className="mb-3 flex flex-wrap items-center gap-3 font-mono text-sm uppercase tracking-[0.18em]">
+          <div className="mb-3 flex flex-wrap items-center gap-3 font-mono text-base uppercase tracking-[0.18em]">
             <span className="text-cyber">{date}</span>
 
             <span className="text-zinc-600">@</span>
@@ -81,7 +81,7 @@ const BlocExperience = ({
                 className="
                   border border-white/10 bg-white/[0.03]
                   px-3 py-1
-                  font-mono text-[11px]
+                  font-mono text-[12px]
                   uppercase tracking-[0.14em]
                   text-zinc-400
                   transition-all duration-300
@@ -133,11 +133,9 @@ const Experiences = () => {
       titre: "Alternant Développeur Salesforce",
       entreprises: ["ULIT"],
       tags: [
-        "Salesforce",
-        "Apex",
-        "JavaScript",
-        "LWC",
-        "Tests unitaires",
+        "Autonomie",
+        "Adaptabilité",
+        "Communication",
       ],
       isCurrent: true,
       imgSrc: Salesforce_dev,
@@ -152,13 +150,7 @@ const Experiences = () => {
       date: "4 ans",
       titre: "Sécurisation Blockchain",
       entreprises: ["Indépendant"],
-      tags: [
-        "HiveOS",
-        "Monitoring",
-        "Hardware",
-        "Optimisation",
-        "Maintenance",
-      ],
+      tags: ["Architecture Systèmes & Réseaux", "Organisation", "Responsabilité", "Gestion de stratégie"],
       isCurrent: false,
       imgSrc: Mining,
       imgAlt: "HiveOS RIG Monitoring",
@@ -172,13 +164,7 @@ const Experiences = () => {
       date: "5 ans",
       titre: "Technicien Mécanicien",
       entreprises: ["Renault", "G-Drive Racing", "Wärtsilä"],
-      tags: [
-        "Diagnostic",
-        "Mécanique",
-        "Performance",
-        "Endurance",
-        "Équipe",
-      ],
+      tags: ["Précision", "Travail d'équipe", "Fiabilité"],
       isCurrent: false,
       imgSrc: Wec2017,
       imgAlt: "WEC 2017",
@@ -192,13 +178,7 @@ const Experiences = () => {
       date: "2 ans",
       titre: "Combattant de l’Infanterie",
       entreprises: ["2e RIMa"],
-      tags: [
-        "Discipline",
-        "Résilience",
-        "Cohésion",
-        "Décision",
-        "Terrain",
-      ],
+      tags: ["Discipline", "Résilience", "Cohésion", "Décision"],
       isCurrent: false,
       imgSrc: RIMA,
       imgAlt: "2e RIMa",
