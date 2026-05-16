@@ -306,6 +306,13 @@ const nodes = [
   },
 ];
 
+const getMonthKey = (dateStr) => {
+  if (!dateStr || typeof dateStr !== "string") return -Infinity;
+  const [m, y] = dateStr.split("/").map(Number);
+  if (!Number.isFinite(m) || !Number.isFinite(y)) return -Infinity;
+  return y * 12 + m;
+};
+
 const Certifications = () => {
   const [activeNode, setActiveNode] = useState("TryHackMe");
   const [selectedCert, setSelectedCert] = useState(null);
@@ -332,14 +339,15 @@ const Certifications = () => {
         result = b.difficulte - a.difficulte;
         if (result === 0) {
           result = Number(Boolean(b.isPro)) - Number(Boolean(a.isPro));
+          if (result === 0) {
+            result = getMonthKey(b.date) - getMonthKey(a.date);
+          }
         }
       } else if (sortBy === "duration") {
         const getHours = (s) => parseInt(s) || 0;
         result = getHours(b.duration) - getHours(a.duration);
       } else {
-        const [m1, y1] = a.date.split("/").map(Number);
-        const [m2, y2] = b.date.split("/").map(Number);
-        result = y2 - y1 || m2 - m1;
+        result = getMonthKey(b.date) - getMonthKey(a.date);
       }
 
       return result * modifier;
@@ -494,6 +502,7 @@ const Certifications = () => {
             ] || {
               text: "text-zinc-400",
               bg: "bg-zinc-800",
+              label: "N/A",
             };
 
             return (
@@ -529,12 +538,24 @@ const Certifications = () => {
                       </div>
 
                       {/* --- SECTION DIFFICULTÉ --- */}
-                      <div>
-                        <h4
-                          className={`font-mono text-sm uppercase mb-1 ${Difficulty_Level.text}`}
-                        >
-                          Difficulty_Level
-                        </h4>
+                      <div className="flex flex-col items-end gap-2">
+                        <div className="flex items-center gap-3">
+                          {selectedCert.isPro && (
+                            <span className="text-xs font-mono font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white from-50% to-zinc-400 to-50% uppercase drop-shadow-[0_2px_6px_rgba(255,255,255,0.5)] select-none">
+                              PRO
+                            </span>
+                          )}
+
+                          <h4
+                            className={`font-mono text-sm font-black tracking-widest uppercase ${Difficulty_Level.text} ${
+                              selectedCert.difficulte === 5
+                                ? "animate-pulse"
+                                : ""
+                            }`}
+                          >
+                            {Difficulty_Level.label}
+                          </h4>
+                        </div>
                         <div className="flex gap-1">
                           {[1, 2, 3, 4, 5].map((level) => (
                             <div
