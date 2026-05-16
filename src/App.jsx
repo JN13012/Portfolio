@@ -10,28 +10,12 @@ import ProjectSection from "./components/ProjectSection";
 import Certifications from "./components/Certifications";
 import Competences from "./components/Competences";
 import Contact from "./components/Contact";
-import BgVideo from "./assets/Bg_video.mp4";
+import NetworkBackground from "./components/NetworkBackground";
 
 function App() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-black font-mono">
-      <video
-        className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover opacity-45"
-        src={BgVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none fixed inset-0 z-0 bg-black/38"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.28)_72%,rgba(0,0,0,0.82)_100%)]"
-        aria-hidden="true"
-      />
+      <NetworkBackground />
 
       <div className="relative z-[1000]">
         <NavBar />

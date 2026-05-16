@@ -64,7 +64,7 @@ export const CTF_LEVELS = {
     },
 
     4: {
-        label: "WEB EXPLOITATION (SQLi) NOPAIN NOGAIN",
+        label: "WEB EXPLOITATION (SQLi) NOPAIN NOGAIN CRYPTO BTC TRY HARDER WORKHARD",
         flag: "4",
         unlocks: [
             "gobuster",
