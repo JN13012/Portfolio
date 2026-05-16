@@ -36,7 +36,7 @@ const ProjectCard = ({
       <div className="relative z-10 flex flex-col h-full flex-grow rounded-sm border border-white/10 bg-black/38 p-4 backdrop-blur-[1px] transition-colors duration-500 group-hover:bg-black/46">
         {/* CARD HEADER */}
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-base md:text-lg text-zinc-100 font-mono font-bold tracking-tighter group-hover:text-cyber transition-colors uppercase mb-2">
+          <h3 className="text-xl md:text-2xl text-zinc-100 font-mono font-bold tracking-tighter group-hover:text-cyber transition-colors uppercase mb-2">
             {titre}
           </h3>
 

@@ -33,8 +33,7 @@ const Presentation = () => {
             </div>
 
             <p className="text-zinc-100 font-mono text-sm leading-relaxed">
-              Ce portfolio représente mes aspirations professionnelles, mon parcours, mes projets, mes formations et
-              mes certifications.
+              Ce portfolio représente mes aspirations professionnelles, mon parcours, mes projets et mes formations.
             </p>
 
             {/* SPACE / SEPARATION VISUELLE */}

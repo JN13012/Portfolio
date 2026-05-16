@@ -39,7 +39,7 @@ const SectionTitle = ({
         className={`relative drop-shadow-[0_2px_0_rgba(0,0,0,0.45)] transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
       />
       <h3
-        className={`relative text-base font-mono uppercase tracking-[0.25em] drop-shadow-[0_2px_0_rgba(0,0,0,0.55)] transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
+        className={`relative text-sm md:text-base font-mono uppercase tracking-[0.25em] drop-shadow-[0_2px_0_rgba(0,0,0,0.55)] transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
       >
         {title}
       </h3>
@@ -49,7 +49,7 @@ const SectionTitle = ({
 
 const SkillBar = memo(({ label, progress }) => (
   <div className="space-y-2 group cursor-default">
-    <div className="flex justify-between text-sm font-mono text-zinc-300 uppercase group-hover:text-zinc-100 transition-colors">
+    <div className="flex justify-between text-base font-mono text-zinc-300 uppercase group-hover:text-zinc-100 transition-colors">
       <span>{label}</span>
       <span className="text-cyber">{progress}%</span>
     </div>
@@ -68,7 +68,7 @@ const InterestCell = memo(({ icon: Icon, label }) => (
       size={27}
       className="text-zinc-400 group-hover:text-cyber transition-all group-hover:scale-110"
     />
-    <div className="text-xs font-mono text-zinc-200 group-hover:text-zinc-100 uppercase text-center">
+    <div className="text-base font-mono text-zinc-200 group-hover:text-zinc-100 uppercase text-center">
       {label}
     </div>
     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyber/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000"></div>
@@ -163,7 +163,7 @@ const Profile = () => {
             <a
               href={CV}
               download="CV_Jérémie_Nagi.pdf"
-              className="group relative flex w-full items-center justify-between overflow-hidden border-l-2 border-cyber bg-zinc-800/30 px-6 py-4 font-mono text-xs tracking-[0.2em] transition-all hover:text-black"
+              className="group relative flex w-full items-center justify-between overflow-hidden border-l-2 border-cyber bg-zinc-800/30 px-6 py-4 font-mono text-base tracking-[0.2em] transition-all hover:text-black"
             >
               <div className="absolute inset-y-0 left-0 z-0 w-0 bg-cyber transition-all duration-700 ease-in-out group-hover:w-full" />
               <span className="relative z-10 flex items-center gap-2">
@@ -172,7 +172,7 @@ const Profile = () => {
                 </span>
                 Download_CV
               </span>
-              <span className="relative z-10 text-[10px] italic opacity-90 group-hover:opacity-100">
+              <span className="relative z-10 text-base italic opacity-90 group-hover:opacity-100">
                 (.pdf)
               </span>
             </a>
@@ -190,11 +190,11 @@ const Profile = () => {
                     href={tool.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group/link relative inline-flex cursor-pointer items-center gap-2 overflow-hidden border border-white/10 bg-zinc-950/70 px-4 py-2.5 font-mono text-sm uppercase tracking-[0.12em] text-zinc-200/85 shadow-[0_10px_24px_rgba(0,0,0,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-cyber/50 hover:bg-cyber/5 hover:text-cyber hover:shadow-[0_0_22px_rgba(74,222,128,0.09),0_12px_26px_rgba(0,0,0,0.32)]"
+                    className="group/link relative inline-flex cursor-pointer items-center gap-2 overflow-hidden border border-white/10 bg-zinc-950/70 px-4 py-2.5 font-mono text-base uppercase tracking-[0.12em] text-zinc-200/85 shadow-[0_10px_24px_rgba(0,0,0,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-cyber/50 hover:bg-cyber/5 hover:text-cyber hover:shadow-[0_0_22px_rgba(74,222,128,0.09),0_12px_26px_rgba(0,0,0,0.32)]"
                   >
                     <span className="absolute inset-y-0 left-0 w-px bg-cyber/50 opacity-0 transition-opacity duration-300 group-hover/link:opacity-100" />
                     <span>{tool.name}</span>
-                    <span className="text-[11px] text-cyber/70 transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">
+                    <span className="text-base text-cyber/70 transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">
                       ↗
                     </span>
                   </a>
@@ -208,20 +208,25 @@ const Profile = () => {
                 title="Orientation professionnelle"
               />
 
-              <div className="space-y-3 px-2 text-sm font-mono text-zinc-100 leading-relaxed">
+              <div className="space-y-3 px-2 text-base font-mono text-zinc-100 leading-relaxed">
                 <p>
-                  Étudiant passionné par les systèmes informatiques, la
-                  cybersécurité et l’intelligence artificielle.
+                  Étudiant en reconversion professionnelle, passionné par les
+                  systèmes informatiques, la cybersécurité et l’intelligence
+                  artificielle.
                 </p>
+
                 <p className="text-zinc-150">
-                  Actuellement en recherche d’une alternance en lien avec ces
-                  domaines.
+                  Je m’investis pleinement dans ma montée
+                  en compétences à travers l’apprentissage continu, les
+                  projets personnels et les certifications complémentaires.
                 </p>
-                <p className="text-zinc-200">Disponible immédiatement.</p>
-                <p className="text-zinc-250">
-                  Objectifs : évoluer vers des postes d’ingénieur en
-                  cybersécurité et/ou IA.
+
+                <p className="text-zinc-200">
+                  Actuellement en recherche d’une alternance en cybersécurité,
+                  DevSecOps ou IA appliquée.
                 </p>
+
+                <p className="text-zinc-250">Disponible immédiatement.</p>
               </div>
             </div>
             {/* PERSONNAL DATA */}
@@ -233,11 +238,11 @@ const Profile = () => {
                     key={i}
                     className="flex justify-between border-b border-white/5 pb-3 group/item relative z-10"
                   >
-                    <span className="text-sm text-zinc-100 uppercase group-hover/item:text-cyber transition-colors">
+                    <span className="text-base text-zinc-100 uppercase group-hover/item:text-cyber transition-colors">
                       {item.label}
                     </span>
                     <span
-                      className={`text-sm uppercase font-semibold ${item.color}`}
+                      className={`text-base uppercase font-semibold ${item.color}`}
                     >
                       {item.value}
                     </span>
@@ -254,8 +259,8 @@ const Profile = () => {
               <SectionTitle icon={Cpu} title="Soft skills" />
               <div className="space-y-2 px-2">
                 <SkillBar label="Esprit critique" progress={90} />
-                <SkillBar label="Autonomie" progress={85} />
-                <SkillBar label="Polyvalence" progress={80} />
+                <SkillBar label="Rigueur" progress={85} />
+                <SkillBar label="Autonomie" progress={80} />
                 <SkillBar label="Communication" progress={75} />
               </div>
             </div>
@@ -272,7 +277,7 @@ const Profile = () => {
                     key={l.id}
                     className="p-4 border border-white/5 bg-zinc-900/10 hover:border-cyber/40 transition-all group"
                   >
-                    <div className="flex justify-between text-sm font-mono mb-3">
+                    <div className="flex justify-between text-base font-mono mb-3">
                       <span className="text-zinc-100 group-hover:text-white">
                         {l.lang}
                       </span>
