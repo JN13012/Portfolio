@@ -14,6 +14,7 @@ import {
   MessageSquare,
   Shield,
   Database,
+  Download,
 } from "lucide-react";
 
 /* ===================== SUB-COMPONENTS ===================== */
@@ -77,6 +78,9 @@ const InterestCell = memo(({ icon: Icon, label }) => (
 
 /* ===================== DATA ===================== */
 
+const contentPanelClass =
+  "rounded-sm border border-white/10 bg-zinc-950/60 px-2 py-1 backdrop-blur-sm shadow-[0_14px_36px_rgba(0,0,0,0.26)] transition-all duration-500 group-hover/profile-block:border-cyber/20 group-hover/profile-block:bg-zinc-950/70";
+
 const personalData = [
   {
     id: "loc",
@@ -138,7 +142,7 @@ const Profile = () => {
   return (
     <section
       id="profile"
-      className="py-24 bg-transparent text-white relative overflow-hidden border-y border-cyber/10"
+      className="py-22 bg-transparent text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2 relative z-10">
         <SectionHeader index="01" title="Profil" />
@@ -147,7 +151,7 @@ const Profile = () => {
           {/* COL 1 */}
           <div className="lg:col-span-4 flex flex-col justify-start space-y-14 min-h-full">
             {/* PHOTO */}
-            <div className="relative group mx-auto w-full max-w-[240px] lg:max-w-[500px]">
+            <div className="relative group mx-auto w-full max-w-[220px] lg:max-w-[420px]">
               <div className="absolute -top-1 -left-1 w-8 h-8 border-t-2 border-l-2 border-cyber z-20"></div>
               <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-2 border-r-2 border-cyber z-20"></div>
               <div className="absolute inset-0 w-full h-[3px] bg-cyber/60 z-30 shadow-[0_0_15px_#4ade80] animate-scan opacity-0 group-hover:opacity-100"></div>
@@ -163,23 +167,21 @@ const Profile = () => {
             <a
               href={CV}
               download="CV_Jérémie_Nagi.pdf"
-              className="group relative flex w-full items-center justify-between overflow-hidden border-l-2 border-cyber bg-zinc-800/30 px-6 py-4 font-mono text-base tracking-[0.2em] transition-all hover:text-black"
+              className="group/cv relative flex w-full items-center justify-between overflow-hidden border border-cyber/25 bg-black/65 px-5 py-3 font-mono uppercase tracking-[0.18em] text-cyber transition-all duration-300 hover:border-cyber/60 hover:bg-cyber/10 hover:shadow-[0_0_22px_rgba(74,222,128,0.12)]"
             >
-              <div className="absolute inset-y-0 left-0 z-0 w-0 bg-cyber transition-all duration-700 ease-in-out group-hover:w-full" />
-              <span className="relative z-10 flex items-center gap-2">
-                <span className="group-hover:text-black inline-block animate-pulse">
-                  {">"}
-                </span>
-                Download_CV
+              <div className="absolute inset-y-0 left-0 z-0 w-1 bg-cyber/70 transition-all duration-500 group-hover/cv:w-full group-hover/cv:bg-cyber/20" />
+              <span className="relative z-10 flex items-center gap-3">
+                <Download size={18} className="text-cyber" />
+                <span className="text-base">Download_CV</span>
               </span>
-              <span className="relative z-10 text-base italic opacity-90 group-hover:opacity-100">
+              <span className="relative z-10 text-base italic text-cyber/70">
                 (.pdf)
               </span>
             </a>
           </div>
 
           {/* COL 2 */}
-          <div className="lg:col-span-9 space-y-14">
+          <div className="lg:col-span-9 space-y-10">
             {/* TOOLKIT */}
             <div className="group/profile-block">
               <SectionTitle icon={Shield} title="Liens professionnels" />
@@ -208,7 +210,9 @@ const Profile = () => {
                 title="Orientation professionnelle"
               />
 
-              <div className="space-y-3 px-2 text-base font-mono text-zinc-100 leading-relaxed">
+              <div
+                className={`${contentPanelClass} space-y-3 text-base font-mono text-zinc-100 leading-relaxed`}
+              >
                 <p>
                   Étudiant en reconversion professionnelle, passionné par les
                   systèmes informatiques, la cybersécurité et l’intelligence
@@ -232,7 +236,7 @@ const Profile = () => {
             {/* PERSONNAL DATA */}
             <div className="group/profile-block">
               <SectionTitle icon={Database} title="Informations personnelles" />
-              <ul className="space-y-2 font-mono px-2">
+              <ul className={`${contentPanelClass} space-y-2 font-mono`}>
                 {personalData.map((item, i) => (
                   <li
                     key={i}
@@ -257,7 +261,7 @@ const Profile = () => {
             {/* SOFT SKILL */}
             <div className="group/profile-block">
               <SectionTitle icon={Cpu} title="Soft skills" />
-              <div className="space-y-2 px-2">
+              <div className={`${contentPanelClass} space-y-2`}>
                 <SkillBar label="Esprit critique" progress={90} />
                 <SkillBar label="Rigueur" progress={85} />
                 <SkillBar label="Autonomie" progress={80} />
@@ -271,7 +275,7 @@ const Profile = () => {
                 title="Langues"
                 duration={500}
               />
-              <div className="grid grid-cols-2 gap-5 px-2">
+              <div className={`${contentPanelClass} grid grid-cols-2 gap-5`}>
                 {languages.map((l) => (
                   <div
                     key={l.id}
@@ -299,7 +303,9 @@ const Profile = () => {
               <div>
                 <SectionTitle icon={User} title="Centres d'intérêts" />
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div
+                  className={`${contentPanelClass} grid grid-cols-2 sm:grid-cols-4 gap-3`}
+                >
                   {interests.map((item) => (
                     <InterestCell key={item.id} {...item} />
                   ))}
