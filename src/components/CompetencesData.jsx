@@ -125,7 +125,6 @@ export const DOMAINS = [
           "Metasploit",
           "Hashcat",
           "Hydra",
-          "Wireshark",
         ],
         details:
           "Réalisation de tests d'intrusion sur environnements Web et réseaux par l'exploitation de vulnérabilités (OWASP Top 10). Exploitation de failles CVE avec Metasploit pour le déploiement de payloads, gestion de sessions Meterpreter et escalade de privilèges. Capacité à intercepter et analyser le trafic HTTP via l'utilisation du Proxy Burp Suite. Audit d'authentification et cassage de hahs: attaques par dictionnaire et brute force.",
@@ -146,7 +145,7 @@ export const DOMAINS = [
           "CyberChef",
         ],
         details:
-          "Analyse de logs via search queries SPL sur le SIEM Splunk. Analyse Forensics et malwares en environnements isolés (FlareVM/REMnux). Mise en œuvre de mesures de Durcissement incluant la configuration de WAF, Firewall et d'IDS/IPS.",
+          "Investigation de logs et de trafic réseau via requêtes SPL sur le SIEM Splunk et inspection de paquets avec Wireshark. Analyse Forensics et malwares en environnements isolés (FlareVM/REMnux). Mise en œuvre de mesures de Durcissement incluant la configuration de WAF, Firewall et d'IDS/IPS.",
       },
     ],
   },

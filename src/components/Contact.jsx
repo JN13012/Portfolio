@@ -62,14 +62,14 @@ export default function Contact() {
       <div className="relative z-10">
         <SectionHeader index="07" title="Contact" />
 
-        <div className="grid grid-cols-1 gap-8 rounded-md border border-white/15 bg-[#080808] p-6 shadow-[0_22px_70px_rgba(0,0,0,0.46)] md:grid-cols-[0.9fr_1.35fr] md:p-8">
+        <div className="grid grid-cols-1 gap-8 rounded-md border border-white/30 bg-[#0b0b0b] p-6 shadow-[0_22px_70px_rgba(0,0,0,0.46)] md:grid-cols-[0.9fr_1.35fr] md:p-8">
           <div className="flex flex-col justify-between gap-10 border-b border-white/10 pb-8 md:border-b-0 md:border-r md:pb-0 md:pr-8">
             <div>
               <div className="mb-5 h-px w-20 bg-cyber" />
               <h3 className="text-[30px] leading-[1.05] text-white md:text-[38px]">
                 Échangeons sur une opportunité.
               </h3>
-              <p className="mt-5 text-base leading-[1.85] text-white/70">
+              <p className="mt-5 text-base leading-[1.85] text-white">
                 Vous êtes recruteur, RH ou porteur de projet ? Envoyez-moi un
                 message directement depuis le site pour en discuter.
               </p>
@@ -77,7 +77,7 @@ export default function Contact() {
 
             <a
               href="mailto:jeremie.nagi@epitech.eu"
-              className="group inline-flex w-fit items-center gap-3 border border-white/15 bg-white/[0.03] px-4 py-3 text-sm text-white/80 transition hover:border-cyber/45 hover:text-cyber"
+              className="group inline-flex w-fit items-center gap-3 border border-white/30 bg-white/[0.08] px-4 py-3 text-sm text-white transition hover:border-cyber/55 hover:text-cyber"
             >
               <Mail size={18} />
               <span>jeremie.nagi@epitech.eu</span>
@@ -97,7 +97,7 @@ export default function Contact() {
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <label className="block">
-                <span className="mb-2 block text-[12px] uppercase tracking-[0.22em] text-white/45">
+                <span className="mb-2 block text-[13px] font-bold uppercase tracking-[0.22em] text-white">
                   Nom
                 </span>
                 <input
@@ -106,13 +106,13 @@ export default function Contact() {
                   name="name"
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full rounded-sm border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyber/60"
+                  className="w-full rounded-sm border border-white/25 bg-black/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-400 focus:border-cyber/70"
                   placeholder="Votre nom"
                 />
               </label>
 
               <label className="block">
-                <span className="mb-2 block text-[12px] uppercase tracking-[0.22em] text-white/45">
+                <span className="mb-2 block text-[13px] font-bold uppercase tracking-[0.22em] text-white">
                   Email
                 </span>
                 <input
@@ -121,14 +121,14 @@ export default function Contact() {
                   name="email"
                   value={form.email}
                   onChange={handleChange}
-                  className="w-full rounded-sm border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyber/60"
+                  className="w-full rounded-sm border border-white/25 bg-black/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-400 focus:border-cyber/70"
                   placeholder="prenom.nom@entreprise.com"
                 />
               </label>
             </div>
 
             <label className="block">
-              <span className="mb-2 block text-[12px] uppercase tracking-[0.22em] text-white/45">
+              <span className="mb-2 block text-[13px] font-bold uppercase tracking-[0.22em] text-white">
                 Sujet
               </span>
               <input
@@ -137,13 +137,13 @@ export default function Contact() {
                 name="subject"
                 value={form.subject}
                 onChange={handleChange}
-                className="w-full rounded-sm border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyber/60"
+                className="w-full rounded-sm border border-white/25 bg-black/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-zinc-400 focus:border-cyber/70"
                 placeholder="Opportunité, alternance, projet..."
               />
             </label>
 
             <label className="block">
-              <span className="mb-2 block text-[12px] uppercase tracking-[0.22em] text-white/45">
+              <span className="mb-2 block text-[13px] font-bold uppercase tracking-[0.22em] text-white">
                 Message
               </span>
               <textarea
@@ -152,7 +152,7 @@ export default function Contact() {
                 value={form.message}
                 onChange={handleChange}
                 rows={6}
-                className="w-full resize-none rounded-sm border border-white/10 bg-black/35 px-4 py-3 text-sm leading-relaxed text-white outline-none transition placeholder:text-white/25 focus:border-cyber/60"
+                className="w-full resize-none rounded-sm border border-white/25 bg-black/70 px-4 py-3 text-sm leading-relaxed text-white outline-none transition placeholder:text-zinc-400 focus:border-cyber/70"
                 placeholder="Décrivez votre besoin ou l'opportunité..."
               />
             </label>

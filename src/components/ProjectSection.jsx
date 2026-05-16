@@ -290,16 +290,16 @@ const projets = [
 
     tags: [
       "Hardware",
+      "Administration Systèmes",
       "Blockchain",
       "Monitoring",
       "Performance Tunning",
-      "Administration Systèmes",
       "Analyse de Marché",
     ],
 
     lien: "#",
     image: Btc,
-    date: "01/2018 - 09/2022",
+    date: "09/2022",
     categorie: "Gestion de Projet",
     complexity: 4,
   },
@@ -462,36 +462,35 @@ const ProjectSection = () => {
             ))}
           </div>
 
-{totalPages > 1 && (
-  <div className="mt-14 flex items-center justify-center gap-6 font-mono uppercase tracking-[0.18em]">
-
-    {/* PRECEDENT */}
-    <button
-      type="button"
-      onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-      disabled={currentPage === 1}
-      className="
+          {totalPages > 1 && (
+            <div className="mt-14 flex items-center justify-center gap-6 font-mono uppercase tracking-[0.18em]">
+              {/* PRECEDENT */}
+              <button
+                type="button"
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                disabled={currentPage === 1}
+                className="
         text-cyber/60 hover:text-cyber
         transition-all duration-300
         cursor-pointer
         disabled:opacity-20
         disabled:cursor-not-allowed
       "
-    >
-      [ PREV ]
-    </button>
+              >
+                [ PREV ]
+              </button>
 
-    {/* NUMEROS */}
-    <div className="flex items-center gap-4">
-      {Array.from({ length: totalPages }, (_, i) => {
-        const page = i + 1;
-        const isActive = currentPage === page;
+              {/* NUMEROS */}
+              <div className="flex items-center gap-4">
+                {Array.from({ length: totalPages }, (_, i) => {
+                  const page = i + 1;
+                  const isActive = currentPage === page;
 
-        return (
-          <button
-            key={page}
-            onClick={() => setCurrentPage(page)}
-            className={`
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`
               relative transition-all duration-300
               cursor-pointer
               ${
@@ -500,37 +499,37 @@ const ProjectSection = () => {
                   : "text-white/25 hover:text-white/70 text-sm"
               }
             `}
-          >
-            {String(page).padStart(2, "0")}
+                    >
+                      {String(page).padStart(2, "0")}
 
-            {/* underline active */}
-            {isActive && (
-              <div className="absolute -bottom-1 left-0 w-full h-px bg-cyber shadow-[0_0_10px_#4ade80]" />
-            )}
-          </button>
-        );
-      })}
-    </div>
+                      {/* underline active */}
+                      {isActive && (
+                        <div className="absolute -bottom-1 left-0 w-full h-px bg-cyber shadow-[0_0_10px_#4ade80]" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
 
-    {/* SUIVANT */}
-    <button
-      type="button"
-      onClick={() =>
-        setCurrentPage((page) => Math.min(totalPages, page + 1))
-      }
-      disabled={currentPage === totalPages}
-      className="
+              {/* SUIVANT */}
+              <button
+                type="button"
+                onClick={() =>
+                  setCurrentPage((page) => Math.min(totalPages, page + 1))
+                }
+                disabled={currentPage === totalPages}
+                className="
         text-cyber/60 hover:text-cyber
         transition-all duration-300
         cursor-pointer
         disabled:opacity-20
         disabled:cursor-not-allowed
       "
-    >
-      [ NEXT ]
-    </button>
-  </div>
-)}
+              >
+                [ NEXT ]
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
