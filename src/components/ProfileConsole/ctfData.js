@@ -1,7 +1,7 @@
 export const CTF_LEVELS = {
     1: {
         label: "FOOTPRINTING",
-        flag: "1",
+        flag: "Welcome_User",
         unlocks: [],
         hint: "'Ctrl + U' or 'F12' or right click => inspect the page => source code => index.html. (refresh page if needed)",
         files: {
@@ -11,7 +11,7 @@ export const CTF_LEVELS = {
     },
     2: {
         label: "LINUX COMMANDS",
-        flag: "2",
+        flag: "Grep_Is_Magic",
         unlocks: [
             "Find",
             "grep",
@@ -34,7 +34,7 @@ export const CTF_LEVELS = {
             ".psswrd.txt": "Log file: 2026-04-23",
             ".P@55w0rd.txt": "File is empty.",
             ".passw0rd.txt": "Password : 123456 (trop facile)",
-            ".Password4.txt": "FLAG{grep_is_magic}",
+            ".Password4.txt": "FLAG{Grep_Is_Magic}",
             ".Flag": "File is empty.",
             ".flag": "File is empty.",
             ".flagO": "File is empty.",
@@ -44,7 +44,7 @@ export const CTF_LEVELS = {
     },
     3: {
         label: "SERVICE SCANNING",
-        flag: "3",
+        flag: "TRY_HARD",
         unlocks: [
             "nmap",
             "nc",
@@ -58,14 +58,14 @@ export const CTF_LEVELS = {
             { port: "5000", state: "open", service: "http", version: "Flask API (DEBUG MODE ENABLED -- DANGER)" }
         ],
         files: {
-            "readme.txt": "You are now acting as a penetration tester. Your objective is to enumerate exposed services on the target host. Identify potential attack surfaces and misconfigurations.",
-            "network.txt": "Target IP : 10.0.2.15.",
+            "readme.txt": "You are now acting as a penetration tester. Your objective is to enumerate exposed services on the target host. Identify potential attack surfaces and misconfigurations. Use nmap on target host.",
+            "network.txt": "Target host IP : 10.0.2.15.",
         }
     },
 
     4: {
-        label: "WEB EXPLOITATION (SQLi) NOPAIN NOGAIN CRYPTO BTC TRY HARDER WORKHARD",
-        flag: "4",
+        label: "WEB EXPLOITATION (SQLi)",
+        flag: "NO_PAIN_NO_GAIN",
         unlocks: [
             "gobuster",
             "curl",
@@ -83,7 +83,7 @@ export const CTF_LEVELS = {
 
         files: {
             "readme.txt": "Continue the security audit. A Flask API is exposed on 10.0.2.15 with debug mode enabled.",
-            ".web_config": `
+            ".web_config.txt": `
                             DEBUG=True
                             DB_ENGINE=SQLite
                             DB_PATH=/var/www/app.db
@@ -93,8 +93,8 @@ export const CTF_LEVELS = {
     },
 
     5: {
-        label: "BRUTE FORCE - M0tivation2026!",
-        flag: "5",
+        label: "BRUTE FORCE",
+        flag: "M0tivation2026!",
         unlocks: [
             "john",
             "hashcat",
@@ -119,7 +119,7 @@ export const CTF_LEVELS = {
 
     6: {
         label: "METASPLOIT",
-        flag: "6",
+        flag: "MS17_010",
         unlocks: ["msfconsole", "meterpreter"],
         hint: "Exploit SMB on 10.0.2.25 and escalate privilege to get acces to the flag.",
         targetIp: "10.0.2.25",
@@ -141,7 +141,7 @@ export const CTF_LEVELS = {
     7: {
         label: "SIEM - LOG ANALYSIS",
         unlocks: ["SPLUNK SIEM"],
-        flag: "7",
+        flag: "WORM_ILOVEYOU",
 
         hint: "Expected workflow : siem => search statistic query => search meterpreter realted events",
 
@@ -154,7 +154,7 @@ export const CTF_LEVELS = {
     8: {
         label: "FORENSIC",
 
-        flag: "8",
+        flag: "NotPetya",
 
         unlocks: [
             "strings",
@@ -167,14 +167,14 @@ export const CTF_LEVELS = {
 
         files: {
             "readme.txt": "SOC analysis confirms system compromise. A malicious binary has been detected. You're responsible for incident response and containment of the threat.",
-            "forensic.txt": "A suspicious binary (updater.exe) was recovered from the compromised machine. Begin forensic workflow using strings [file to analyse].",
+            "forensic.txt": "Updater.exe was recovered from the compromised machine. Begin forensic workflow using strings [file to analyse]. Find the right ps to kill.",
             "updater.exe": "Binary flagged as suspicious (PE32 executable, packed).",
             "netstat.txt": " ",
         },
     },
     9: {
         label: "HARDENING - FINAL",
-        flag: "9",
+        flag: "LockBit",
         unlocks: [
             "waf",
             "firewall",
