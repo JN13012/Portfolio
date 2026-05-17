@@ -386,7 +386,7 @@ const ProfileConsole = () => {
             );
             addLog(`${shellPrefix} --- SPLUNK GOBUSTER ANALYSIS ---`, "out");
             addLog(`${shellPrefix} 220 events (directory enumeration)`, "out");
-            addLog(`${shellPrefix} /admin /uploads /backup discovered`, "out");
+            addLog(`${shellPrefix} /admin /dev discovered`, "out");
             return;
           }
 
@@ -438,11 +438,14 @@ const ProfileConsole = () => {
                 "out",
               );
 
-              addLog(`${shellPrefix} ATTACKER_IP = 45.83.122.91`, "err");
-              addLog(`${shellPrefix} FLAG{45.83.122.91}`, "sys");
-              addLog(`${shellPrefix} exit siem before submit`, "out");
-            }, 900);
+              setTimeout(() => {
+                addLog(`${shellPrefix} ATTACKER_IP = 45.83.122.91`, "err");
 
+                setTimeout(() => {
+                  addLog(`${shellPrefix} FLAG{WORM_ILOVEYOU}`, "sys");
+                }, 1400);
+              }, 1000);
+            }, 100);
             return;
           }
 
@@ -730,23 +733,11 @@ const ProfileConsole = () => {
       const shellPrefix = `flask-debug@${remoteSession.host}`;
 
       if (command === "ls") {
-        addLog(`${shellPrefix} : app.py  config.py  flag.txt`, "out");
+        addLog(`${shellPrefix} : flag.txt`, "out");
       } else if (command === "cat") {
         const file = args[1];
         if (file === "flag.txt") {
           addLog(`${shellPrefix} : FLAG{${currentData.flag}}`, "out");
-        } else if (file === "app.py") {
-          addLog(`${shellPrefix} : # Flask Application Server`, "out");
-          addLog(`${shellPrefix} : @app.route('/dev_admin_portal')`, "out");
-          addLog(
-            `${shellPrefix} : def admin(): return render_template('admin.html')`,
-            "out",
-          );
-        } else if (file === "config.py") {
-          addLog(`${shellPrefix} : DB_ENGINE=SQLite`, "out");
-          addLog(`${shellPrefix} : DB_PATH=/var/www/app.db`, "out");
-          addLog(`${shellPrefix} : DEBUG=True`, "out");
-          addLog(`${shellPrefix} : ADMIN_PANEL_URL=/dev_admin_portal`, "out");
         } else if (!file) {
           addLog(`${shellPrefix} : usage: cat [file]`, "err");
         } else {
@@ -785,7 +776,7 @@ const ProfileConsole = () => {
           const file = args[1];
 
           if (file === "flag.txt") {
-            addLog(`${shellPrefix} : FLAG{HONEY_POT}`, "out");
+            addLog(`${shellPrefix} : Flag is not here...`, "out");
             addLog(
               `${shellPrefix} : [!] A big honey pot. Bees loves it...`,
               "sys",
@@ -812,7 +803,7 @@ const ProfileConsole = () => {
           //
         } else if (command === "ls") {
           addLog(
-            `${shellPrefix} : .secrets.txt .hashcat.txt notes.log intership.txt`,
+            `${shellPrefix} : .secrets.txt .hashcat.txt internship.txt`,
             "out",
           );
         } else if (command === "cat") {
@@ -830,15 +821,15 @@ const ProfileConsole = () => {
 
             addLog(`${shellPrefix} : [!] hashes use advanced format`, "sys");
             addLog(`${shellPrefix} : [!] recommended tool: hashcat`, "sys");
-          } else if (file === "intership.txt") {
+          } else if (file === "internship.txt") {
             addLog(`${shellPrefix} : ====================`, "out");
-            addLog(`${shellPrefix} : INTERSHIP PROFILE DATA`, "out");
+            addLog(`${shellPrefix} : INTERNSHIP PROFILE DATA`, "out");
             addLog(`${shellPrefix} : ====================`, "out");
             addLog(`${shellPrefix} :`, "out");
 
             addLog(`${shellPrefix} : NAME: Jérémie Nagi`, "out");
             addLog(
-              `${shellPrefix} : ROLE: Intership Cybersecurity / IA`,
+              `${shellPrefix} : ROLE: Intership Cybersecurity AND/OR IA`,
               "out",
             );
             addLog(`${shellPrefix} : EMAIL: jeremie.nagi@epitech.eu`, "out");
@@ -855,7 +846,7 @@ const ProfileConsole = () => {
               "out",
             );
             addLog(
-              `${shellPrefix} : EXAMPLE: hashcat -m 1000 -a 3 .secrets.txt ?l?l?l?l -O -w 4`,
+              `${shellPrefix} : EXAMPLE: hashcat -m 0 -a 3 .secrets.txt ?l?l?l?l -O -w 4`,
               "out",
             );
 
@@ -900,7 +891,6 @@ const ProfileConsole = () => {
               `${shellPrefix} : -w 4       maximum workload profile`,
               "out",
             );
-            addLog(`${shellPrefix} : -D 1,2    select compute devices`, "out");
 
             addLog(`${shellPrefix} :`, "out");
 
@@ -918,27 +908,6 @@ const ProfileConsole = () => {
 
             addLog(
               `${shellPrefix} : Use optimized GPU acceleration and maximum worload for better performance`,
-              "out",
-            );
-          } else if (file === "notes.log") {
-            addLog(
-              `${shellPrefix} : security notice - hash recovery update`,
-              "out",
-            );
-
-            addLog(`${shellPrefix} : hash mode detected: NTLM`, "out");
-            addLog(`${shellPrefix} : dictionary attack ineffective`, "out");
-            addLog(`${shellPrefix} : recommended approach: brute-force`, "out");
-            addLog(
-              `${shellPrefix} : hint: use mask-based attack strategy`,
-              "out",
-            );
-            addLog(
-              `${shellPrefix} : enable GPU optimized kernels for performance`,
-              "out",
-            );
-            addLog(
-              `${shellPrefix} : use maximum workload profile for cracking efficiency`,
               "out",
             );
           } else if (!file) {
@@ -986,7 +955,7 @@ const ProfileConsole = () => {
       }
       if (level == 8) {
         baseCmds =
-          "ls, cat [file], strings, netstat [IP], ps, kill [PID] hint, submit [flag], clear";
+          "ls, cat [file], strings, netstat [IP], ps, kill [PID], hint, submit [flag], clear";
       }
       if (level == 9) {
         baseCmds =
@@ -1066,7 +1035,7 @@ const ProfileConsole = () => {
         addLog("Balanced speed / success rate", "out");
         addLog("---", "out");
         addLog("/usr/share/wordlists/rockyou.txt", "out");
-        addLog("Slow execution / high coverage", "out");
+        addLog("High coverage / slow execution", "out");
         addLog("---", "out");
 
         addLog("STRATEGY:", "out");
@@ -1121,8 +1090,8 @@ const ProfileConsole = () => {
         );
         addLog("---", "out");
 
-        addLog("[+] EXAMPLE (CTF TARGET):", "out");
-        addLog("  use exploit/windows/smb/ms17_010_eternalblue", "out");
+        addLog("[+] EXAMPLE:", "out");
+        addLog("  use exploit/windows/smb/ms08_067_netapi", "out");
         addLog("  set RHOSTS 10.0.2.25", "out");
         addLog("  run", "out");
         addLog("---", "out");
@@ -1132,10 +1101,6 @@ const ProfileConsole = () => {
         addLog("  Attacker IP : 45.83.122.91", "out");
         addLog(
           "[!] NOTE: Incorrect module or parameters will result in failed session",
-          "sys",
-        );
-        addLog(
-          "[*] Expected result: Meterpreter session on successful exploitation",
           "sys",
         );
 
@@ -1539,7 +1504,7 @@ const ProfileConsole = () => {
               setTimeout(() => {
                 setTimeout(() => {
                   addLog("[+] Dump successful", "sys");
-                  addLog(`[+] FLAG FOUND: ${currentData.flag}`, "out");
+                  addLog(`[+] FLAG{${currentData.flag}}`, "out");
                 }, 900);
               }, 900);
             }, 900);
@@ -1837,7 +1802,6 @@ const ProfileConsole = () => {
                   addLog("[+] hash successfully cracked", "out");
 
                   addLog(`FLAG{${currentData.flag}}`, "out");
-                  addLog("(exit ssh session before submit flag)", "out");
                 }, 1200);
               }, 800);
             }, 600);
