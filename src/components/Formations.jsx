@@ -11,7 +11,6 @@ const FormationStep = ({
   date,
   details,
   status,
-  percent,
   url,
   imgSrc,
 }) => (
@@ -70,8 +69,8 @@ const FormationStep = ({
             >
               {diplome}
             </h3>
-            <span className="text-zinc-400 text-xs md:text-sm font-medium whitespace-nowrap shrink-0">
-              // {date}
+            <span className="text-zinc-300 text-xs md:text-xl font-medium whitespace-nowrap shrink-0">
+              / {date}
             </span>
           </div>
 
@@ -91,11 +90,6 @@ const FormationStep = ({
                 <span className="text-sm md:text-base text-emerald-500 uppercase tracking-tighter">
                   OBJECTIFS DE FORMATION
                 </span>
-                <div className="ml-auto flex gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-red-500/50" />
-                  <div className="w-2 h-2 rounded-full bg-orange-500/50" />
-                  <div className="w-2 h-2 rounded-full bg-cyber/50" />
-                </div>
               </div>
               <div className="text-sm md:text-base font-mono text-zinc-300 leading-relaxed italic">
                 {Array.isArray(details) ? (
@@ -156,7 +150,6 @@ const Formations = () => {
       url: "https://www.epitech.eu/formation-alternance/master-of-science-cybersecurite/",
       ecole: "EPITECH — MARSEILLE (13)",
       date: "2025 – 2028",
-      percent: 20,
       details: [
         "Architecture systèmes et réseaux",
         "Ingénierie logicielle",
@@ -173,8 +166,7 @@ const Formations = () => {
       diplome: "Préparateur et Développeur de Véhicules de Compétition",
       url: "https://www.ecoleperformance.com/",
       ecole: "École de la Performance — NOGARO (32)",
-      date: "2016 – 2017",
-      percent: 100,
+      date: "2017",
       details:
         "Formation Bac+2 préparant aux métiers de technicien motoriste dans le sport automobile.",
       status: "completed",
@@ -186,7 +178,7 @@ const Formations = () => {
     //   url: "https://claveille.org/bts/",
     //   ecole: "Lycée Albert Claveille — Périgueux (24)",
     //   date: "2011 – 2013",
-    //   percent: 100,
+
     //   details:
     //     "Enseignements en développement moteur, dépollution thermodynamique et construction mécanique.",
     //   status: "completed",

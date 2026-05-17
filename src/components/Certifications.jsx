@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import SectionHeader from "./SectionHeader";
 import THM_BG from "../assets/THM.jpg";
-import COURSERA_BG from "../assets/COURSERA.jpg";
+import COURSERA_BG from "../assets/COURSERA.png";
 import PRE_SECURITY_IMG from "../assets/THM/PreSecutiry.jpg";
 import CYBERSECYRITY_101 from "../assets/THM/Cybersecurity_101.jpg";
 import Introduction_to_AI from "../assets/Coursera/Introduction_to_Artificial_Intelligence.jpg";
@@ -180,7 +180,7 @@ const certifs = [
     image: Building_Generative_AI_Powered_Applications_with_Python,
     url: "https://www.coursera.org/account/accomplishments/verify/OM4ZXGM73HG4",
     description:
-      "Développement d'application IA Speech-To-Text/Text-To-Speech. Mise en place de pipelines RAG et orchestration de modèles d’IA générative via Hugging Face et WatsonX.",
+      "Conception d’applications d’IA : assistants IA, transcription STT/TTS, traduction contextuelle, parsing documentaire et analyse sémantique. Mise en place de pipelines RAG et orchestration de modèles d’IA générative.",
     difficulte: 3,
     stack: [
       "Python",
@@ -208,8 +208,6 @@ const certifs = [
     stack: [
       "IA Générative",
       "Agents IA",
-      "DevSecOps",
-      "LLM",
       "Architecture Logicielle",
       "Debugging",
       "Tests Unitaires",
@@ -247,7 +245,7 @@ const certifs = [
     image: IBM_AI_Developer,
     url: "https://www.coursera.org/account/accomplishments/professional-cert/NLPNAKCP7EFK",
     description:
-      "Cursus orienté développement d’applications IA avec Python, Data Science et IA générative : manipulation de données, intégration de LLMs, pipelines NLP/RAG et orchestration de modèles IA.",
+      "Cursus orienté développement d’applications IA avec Python, Data Science et IA générative : intégration de LLM et orchestration de modèles IA, pipelines NLP/RAG et manipulation de données.",
     difficulte: 3,
     stack: [
       "AI Engineering",
@@ -258,7 +256,7 @@ const certifs = [
       "NumPy",
       "PyTorch",
       "LangChain",
-      "LLMs",
+      "LLM",
       "RAG",
       "NLP",
       "Prompt Engineering",
@@ -397,7 +395,7 @@ const Certifications = () => {
         <div className="bg-black/40 border border-white/5 p-6 md:p-10 backdrop-blur-sm min-h-[400px] relative">
           {/* BG Image */}
           <div
-            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.45] transition-all duration-1000"
+            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.45]"
             style={{ backgroundImage: `url(${activeConfig.image})` }}
           ></div>
 
@@ -513,9 +511,9 @@ const Certifications = () => {
                   {/* HEADER */}
                   <div className="p-6 text-center relative">
                     <p
-                      className={`text-sm font-mono tracking-[0.3em] uppercase mb-3 ${activeConfig.theme.text}`}
+                      className={`text-base font-mono tracking-[0.3em] uppercase mb-3 ${activeConfig.theme.text}`}
                     >
-                      {selectedCert.plateforme}_DATABASE_RECORD
+                      {selectedCert.plateforme}
                     </p>
                     <h3 className="text-xl md:text-3xl font-bold text-white uppercase font-mono pb-5">
                       {selectedCert.titre}
@@ -646,9 +644,9 @@ const Certifications = () => {
                         className={`absolute inset-0 w-0 group-hover:w-full transition-all duration-500 ${activeConfig.theme.bg} opacity-10`}
                       ></div>
                       <span
-                        className={`relative font-mono text-xs font-bold uppercase tracking-[0.3em] ${activeConfig.theme.text}`}
+                        className={`relative font-mono text-base font-bold uppercase tracking-[0.3em] ${activeConfig.theme.text}`}
                       >
-                        [ Access_Verified_Credential_Link ]
+                        [ ACCEDER_AU_DIPLOME ]
                       </span>
                     </a>
                   </div>

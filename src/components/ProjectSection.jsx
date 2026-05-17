@@ -48,7 +48,7 @@ const projets = [
   {
     titre: "CTF",
     description:
-      "Environnement CTF intégré à la page d'accueil du portfolio. Le projet simule une chaîne d'apprentissage cybersécurité en 9 niveaux progressifs : footprinting, commandes Linux, énumération réseau, exploitation web, cracking, Metasploit, analyse SIEM, forensic et hardening final. Le terminal gère des sessions simulées SSH, Netcat, Meterpreter et SIEM dans des workflows proches d’un audit réel.",
+      "Environnement CTF intégré à la page d'accueil. Le projet simule une chaîne d'apprentissage cybersécurité en 9 niveaux progressifs : footprinting, commandes Linux, énumération réseau, exploitation web, cracking, Metasploit, analyse SIEM, forensic et hardening. Le terminal gère des sessions simulées SSH, Netcat, Meterpreter et SIEM dans des workflows proches d’un audit réel.",
     tags: [
       "Linux",
       "Nmap",
@@ -93,7 +93,7 @@ const projets = [
   {
     titre: "AI_Career_Coach",
     description:
-      "Solution d'accompagnement RH automatisée pilotée par Llama 3.2 via l'infrastructure IBM Watsonx.ai. Le système orchestre l'extraction de données PDF, l'optimisation contextuelle de CV, la génération de lettres de motivation personnalisées et l'analyse stratégique de profils.",
+      "Solution d'accompagnement RH automatisée pilotée par Llama 3.2 via l'infrastructure IBM Watsonx.ai. Le système orchestre l'extraction de données PDF, l'optimisation de CV, la génération de lettres de motivation personnalisées et l'analyse de profils.",
     tags: [
       "Python",
       "Gradio",
@@ -111,7 +111,7 @@ const projets = [
   {
     titre: "AI_Assistant_Translator",
     description:
-      "Solution de traduction vocale universelle pilotée par l'architecture LPU de Groq. Le système orchestre Llama 3.3 pour le raffinement contextuel des traductions, couplé aux services IBM Watson pour la transcription (STT) et la synthèse vocale (TTS).",
+      "Solution de traduction vocale universelle. Le système orchestre Llama 3.3 pour les traductions, couplé aux services IBM Watson pour la transcription (STT) et la synthèse vocale (TTS).",
     tags: [
       "Python",
       "Flask",
@@ -131,7 +131,7 @@ const projets = [
   {
     titre: "RAG_pdf_Chatbot",
     description:
-      "Assistant IA d'analyse de CV exploitant l'architecture RAG (Retrieval-Augmented Generation). Le système segmente les PDF, génère des embeddings sémantiques stockés via FAISS et interroge Llama 3 pour identifier les avantages et axes d'amélioration de chaque profil.",
+      "Assistant IA d'analyse de CV exploitant l'architecture RAG. Le système parse les PDF, génère des embeddings sémantiques stockés via FAISS et interroge Llama 3 pour identifier les avantages et axes d'amélioration de chaque profil.",
     tags: [
       "Python",
       "Flask",
@@ -213,7 +213,7 @@ const projets = [
   {
     titre: "Vaultborn",
     description:
-      "Jeux Action-RPG 2D en Java mettant en œuvre les piliers de la POO (Héritage, Polymorphisme) et des Design Patterns (Factory). Système de combat en temps réel, gestion d'inventaire/équipements lootables, progression d'expérience dans différents univers.",
+      "Jeux Action-RPG 2D en Java mettant en œuvre les piliers de la POO (Héritage, Polymorphisme) et des Design Patterns (Factory). Système de combat en temps réel, gestion d'inventaire/équipements lootables, progression d'expérience et niveaux dans différents univers.",
     tags: ["Java", "LibGDX", "POO"],
     lien: "https://github.com/ton-username/Vaultborn",
     image: Vaultborn,
@@ -235,7 +235,7 @@ const projets = [
   {
     titre: "LLM_Context_Wrapper",
     description:
-      "Interface Python (Wrapper) optimisant l'usage de la bibliothèque Transformers (Hugging Face). Développement d'un système de gestion d'historique d'états pour maintenir le contexte conversationnel du modèle Blenderbot.",
+      "Interface Python (Wrapper) optimisant l'usage de la bibliothèque Transformers (Hugging Face). Développement d'un système de gestion d'historique pour maintenir le contexte conversationnel du modèle Blenderbot.",
     tags: ["Python", "PyTorch", "Transformers", "NLP", "LLM", "Hugging_Face"],
     lien: "https://github.com/ton-username/LLM-Context-Wrapper",
     image: LLM_Context_Wrapper,
@@ -246,7 +246,7 @@ const projets = [
   {
     titre: "CyberPong",
     description:
-      "Action-Game en Python simulant une intrusion système via des mécaniques de jeu. Inclut une gestion dynamique de 'virus' (debuffs) modifiant la physique en temps réel (trajectoires, obstacles, effets visuels) avec une introduction scénarisée en piratage informatique.",
+      "Jeu en Python simulant une compromission système via des mécaniques de jeu inspirées du domaine de la cybersécurité. Inclut une gestion dynamique de 'virus' (debuffs) modifiant la physique en temps réel (trajectoires, obstacles, effets visuels) et une introduction scénarisée en piratage informatique.",
     tags: ["Python", "Pygame", "Turtle"],
     lien: "https://github.com/ton-username/CyberPong",
     image: Cyberpong,
@@ -257,7 +257,7 @@ const projets = [
   {
     titre: "Salesforce_Executor",
     description:
-      "Outil d'exécution de scripts et de traçage de logs pour l'écosystème Salesforce.",
+      "Editeur de scripts permettant l'exécution de scripts, la planification, le chainage, la sauvegarde et le traçage de logs pour l'écosystème Salesforce.",
     tags: [
       "JavaScript",
       "Java",
