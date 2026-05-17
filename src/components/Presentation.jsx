@@ -77,7 +77,7 @@ const Presentation = () => {
                 <span className="text-cyber">[07]</span> Réponse incident
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[87]</span> Durcissement
+                <span className="text-cyber">[08]</span> Durcissement
               </li>
             </ul>
           </div>

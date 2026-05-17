@@ -103,7 +103,7 @@ const personalData = [
   {
     id: "level",
     label: "Niveau",
-    value: "Master of Science",
+    value: "RNCP Niveau 7",
     color: "text-white",
   },
 ];
@@ -181,7 +181,7 @@ const Profile = () => {
           </div>
 
           {/* COL 2 */}
-          <div className="lg:col-span-9 space-y-10">
+          <div className="lg:col-span-10 space-y-10">
             {/* TOOLKIT */}
             <div className="group/profile-block">
               <SectionTitle icon={Shield} title="Liens professionnels" />
@@ -215,7 +215,7 @@ const Profile = () => {
               >
                 <p>
                   Étudiant en reconversion professionnelle, passionné par les
-                  systèmes informatiques, la cybersécurité et l’intelligence
+                  systèmes informatiques, la Cybersécurité et l’intelligence
                   artificielle.
                 </p>
 
@@ -257,7 +257,7 @@ const Profile = () => {
           </div>
 
           {/* COL 3 */}
-          <div className="lg:col-span-7 space-y-14">
+          <div className="lg:col-span-6 space-y-14">
             {/* SOFT SKILL */}
             <div className="group/profile-block">
               <SectionTitle icon={Cpu} title="Soft skills" />
