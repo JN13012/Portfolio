@@ -602,7 +602,7 @@ export default function NetworkBackground() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[1] overflow-hidden bg-black">
+    <div className="intro-background pointer-events-none fixed inset-0 z-[1] overflow-hidden bg-black">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 h-full w-full opacity-80"
