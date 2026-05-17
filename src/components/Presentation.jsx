@@ -4,7 +4,7 @@ import { Terminal, ShieldAlert, Binary } from "lucide-react";
 
 const Presentation = () => {
   return (
-    <section id="acceuil" className="relative flex min-h-screen w-full items-center justify-center bg-transparent overflow-hidden">
+    <section id="acceuil" className="intro-content relative flex min-h-screen w-full items-center justify-center bg-transparent overflow-hidden">
       {/* Background Decor */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(26,26,26,0.34)_0%,rgba(0,0,0,0.72)_100%)]" />
 
@@ -28,7 +28,7 @@ const Presentation = () => {
           <div className="bg-zinc-900/50 border border-white/5 p-6 space-y-4 rounded-sm backdrop-blur-sm">
             <div className="flex items-center gap-2 text-cyber">
               <span className="font-mono text-sm font-bold uppercase tracking-[0.2em]">
-                Portfolio intéractif
+                Portfolio interactif
               </span>
             </div>
 
@@ -41,14 +41,14 @@ const Presentation = () => {
 
             <div className="flex items-center gap-2 text-cyber">
               <span className="font-mono text-xs font-bold uppercase tracking-[0.2em]">
-                LABOIRATOIRE CTF
+                LABORATOIRE CTF
               </span>
             </div>
 
             <p className="text-zinc-100 font-mono text-sm leading-relaxed mt-2">
-              Testez et améliorer vos compétences grâce à l'environnement
+              Testez et améliorez vos compétences grâce à l'environnement
               d’entraînement cybersécurité intégré sur la partie droite de
-              l'ecran. <br />
+              l’écran. <br />
               <br />
               Compétences développées :
             </p>
@@ -84,7 +84,7 @@ const Presentation = () => {
         </div>
 
         {/* --- PARTIE DROITE : TERMINAL CTF --- */}
-        <div className="order-1 lg:order-2 flex flex-col justify-center w-full">
+        <div className="intro-console order-1 lg:order-2 flex flex-col justify-center w-full">
           <div className="relative group w-full">
             {/* Effet de lueur derrière la console */}
             <div className="absolute -inset-2 bg-cyber/10 rounded-lg blur-2xl group-hover:bg-cyber/20 transition-all duration-700"></div>
