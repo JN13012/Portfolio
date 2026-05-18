@@ -5,7 +5,7 @@ export const CTF_LEVELS = {
         unlocks: [],
         hint: "'Ctrl + U' or 'F12' or right click => inspect the page => source code => index.html. (refresh page if needed)",
         files: {
-            "readme.txt": "Welcome to this CTF. Search, find, and validate. Exit any session before submit flag.",
+            "readme.txt": "Welcome user. Search, find, and validate. Exit any session before submit flag.",
             ".flag.txt": "Did you think it would be that easy? The flag is hidden within the source code of the index.html page."
         }
     },

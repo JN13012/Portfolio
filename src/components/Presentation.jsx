@@ -46,8 +46,7 @@ const Presentation = () => {
             </div>
 
             <p className="text-zinc-100 font-mono text-sm leading-relaxed mt-2">
-              Testez et améliorez vos compétences grâce à l'environnement
-              d’entraînement cybersécurité intégré sur la partie droite de
+              Découvrez l'environnement d’entraînement cybersécurité intégré sur la partie droite de
               l’écran. <br />
               <br />
               Compétences développées :
