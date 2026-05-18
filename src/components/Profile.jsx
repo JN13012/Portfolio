@@ -221,13 +221,13 @@ const Profile = () => {
 
                 <p className="text-zinc-150">
                   Je m’investis dans ma montée
-                  en compétences à travers l’apprentissage continu, les
-                  projets personnels et les certifications complémentaires.
+                  en compétences à travers des
+                  projets techniques, la veille technologique et les certifications complémentaires.
                 </p>
 
                 <p className="text-zinc-200">
                   Actuellement en recherche d’une alternance en cybersécurité,
-                  DevSecOps ou IA appliquée.
+                  DevSecOps ou IA.
                 </p>
 
                 <p className="text-zinc-250">Disponible immédiatement.</p>

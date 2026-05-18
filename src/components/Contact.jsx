@@ -26,13 +26,16 @@ export default function Contact() {
     setFeedback("");
 
     try {
-      const response = await fetch("/.netlify/functions/contact", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get("Content-Type") || "";
+      const data = contentType.includes("application/json")
+        ? await response.json()
+        : { message: await response.text() };
 
       if (!response.ok) {
         throw new Error(data?.message || "Impossible d'envoyer le message.");
