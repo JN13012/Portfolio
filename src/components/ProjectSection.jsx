@@ -14,6 +14,7 @@ import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.jpg";
 import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.jpg";
 import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.jpg";
 import Tor from "../assets/Projets/Tor.png";
+import Chatflow from "../assets/Projets/Chatflow.png";
 import Btc from "../assets/Experiences/Mining_rig.png";
 
 const PROJECTS_PER_PAGE = 6;
@@ -89,6 +90,34 @@ const projets = [
     date: "04/2026",
     categorie: "Cyber-securité",
     complexity: 5,
+  },
+  {
+    titre: "ChatFlow",
+    description:
+      "Application de chat temps réel inspirée des plateformes communautaires modernes. Le projet couvre l’authentification JWT, la gestion de serveurs, salons, membres, rôles, invitations, messages, réactions, pièces jointes, vocaux, amis, conversations privées et notifications système. L’architecture combine une API Express documentée avec Swagger, une interface Next.js internationalisée, Socket.IO pour le temps réel, MinIO pour le stockage et une application desktop Electron distribuable sur macOS, Linux et Windows.",
+    tags: [
+      "Node.js",
+      "Express",
+      "Prisma",
+      "MySQL",
+      "Socket.IO",
+      "JWT",
+      "Zod",
+      "MinIO",
+      "Next.js 16",
+      "React 19",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Electron",
+      "Docker",
+      "Jest",
+      "Swagger",
+    ],
+    lien: "#",
+    image: Chatflow,
+    date: "04/2026",
+    categorie: "Ingénierie logicielle",
+    complexity: 4,
   },
   {
     titre: "AI_Career_Coach",
