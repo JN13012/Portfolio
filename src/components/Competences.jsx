@@ -19,27 +19,11 @@ const ACTIVE_CARD_SIZE = { width: 380, height: 120 };
 const INACTIVE_CARD_SIZE = { width: 260, height: 110 };
 const HITBOX_PADDING = 22;
 
-const LevelBadge = ({ color }) => (
+const LevelBadge = () => (
   <div className="absolute right-6 top-0 z-20 -translate-y-1/2">
     <div className="absolute -left-3 -right-3 top-1/2 h-[3px] -translate-y-1/2 bg-[#080808]" />
-    <div
-      className="relative inline-flex items-center gap-2 rounded-[3px] border bg-[#080808] px-4 py-1.5 font-mono text-base uppercase tracking-[0.12em]"
-      style={{
-        borderColor: `${color}66`,
-        color,
-        boxShadow: `0 0 18px ${color}1f, 0 12px 28px rgba(0,0,0,0.5)`,
-      }}
-    >
-      <span
-        className="h-1.5 w-1.5"
-        style={{
-          background: color,
-          boxShadow: `0 0 12px ${color}`,
-        }}
-      />
-      <span className="text-white/55">Niveau</span>
-      <span className="text-white/25">—</span>
-      <span>Junior</span>
+    <div className="relative inline-flex items-center rounded-sm border border-cyber/30 bg-black/40 px-3 py-1 font-mono text-xs uppercase tracking-[0.16em] text-cyber/80 shadow-[0_10px_24px_rgba(0,0,0,0.42)]">
+      Niveau : Junior
     </div>
   </div>
 );
@@ -461,7 +445,7 @@ export default function Competences() {
 
             {/* Description */}
             <div className="p-6">
-              <LevelBadge color={active.accent ?? dom.hue} />
+              <LevelBadge />
               <div className="mb-3 text-sm md:text-base uppercase tracking-[0.26em] text-white/90">
                 Description
               </div>
