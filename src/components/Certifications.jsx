@@ -17,6 +17,8 @@ import Generative_AI_Elevate_Career from "../assets/Coursera/Generative_AI_Eleva
 import Software_Career_Guide from "../assets/Coursera/Software_Career_Guide.jpg";
 import THM_PreSecurity1 from "../assets/THM/THM_PreSecurity1.png";
 
+const CERTIFICATIONS_PER_PAGE = 8;
+
 const DIFFICULTY_CONFIG = {
   1: { text: "text-green-300", bg: "bg-green-300/90", label: "INTRO" },
   2: { text: "text-green-600", bg: "bg-green-600/90", label: "EASY" },
@@ -57,9 +59,6 @@ const certifs = [
       "Administration Linux/Windows, analyse réseau, cryptographie et exploitation de vulnérabilités web et systèmes, ainsi que principes de réponse à incident, d’analyse forensique et de configuration de firewall et IDS/IPS.",
     difficulte: 3,
     stack: [
-      "Linux",
-      "TCP/IP",
-      "Active Directory",
       "Nmap",
       "Wireshark",
       "Burp Suite",
@@ -71,6 +70,9 @@ const certifs = [
       "Firewall",
       "IDS/IPS",
       "Forensic",
+      "TCP/IP",
+      "Linux",
+      "Active Directory",
     ],
     duration: "46 Hours",
   },
@@ -88,7 +90,7 @@ const certifs = [
     duration: "12 Hours",
   },
   {
-    titre: "GenAI - Introduction and Applications",
+    titre: "Introduction to GenAI",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "12/2025",
@@ -101,7 +103,7 @@ const certifs = [
     duration: "8 Hours",
   },
   {
-    titre: "Prompt Engineering Basics",
+    titre: "Prompt Engineering",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "12/2025",
@@ -114,7 +116,7 @@ const certifs = [
     duration: "9 Hours",
   },
   {
-    titre: "Introduction to Software Engineering",
+    titre: "Software Engineering",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "12/2025",
@@ -127,7 +129,7 @@ const certifs = [
     duration: "14 Hours",
   },
   {
-    titre: "Introduction to HTML, CSS & JavaScript",
+    titre: "Frontend Basics",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "12/2025",
@@ -140,7 +142,7 @@ const certifs = [
     duration: "14 Hours",
   },
   {
-    titre: "Python for Data Science, AI & Development",
+    titre: "Python for AI & Data Science",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "12/2025",
@@ -160,7 +162,7 @@ const certifs = [
     duration: "25 Hours",
   },
   {
-    titre: "Developing AI Applications with Python and Flask",
+    titre: "AI Apps with Flask",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "01/2026",
@@ -173,7 +175,7 @@ const certifs = [
     duration: "11 Hours",
   },
   {
-    titre: "AI Powered Applications with Python",
+    titre: "AI Powered Apps",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "03/2026",
@@ -196,7 +198,7 @@ const certifs = [
     duration: "14 Hours",
   },
   {
-    titre: "Elevate your Software Development Career",
+    titre: "AI for Developers",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "04/2026",
@@ -238,7 +240,7 @@ const certifs = [
   //   duration: "11 Hours",
   // },
   {
-    titre: "AI Developer Professional Certificate",
+    titre: "AI Developer Professional",
     plateforme: "Coursera (IBM)",
     cat: "COURSERA",
     date: "04/2026",
@@ -316,6 +318,7 @@ const Certifications = () => {
   const [selectedCert, setSelectedCert] = useState(null);
   const [sortBy, setSortBy] = useState("difficulte");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSort = (type) => {
     if (sortBy === type) {
@@ -324,6 +327,7 @@ const Certifications = () => {
       setSortBy(type);
       setSortOrder("desc");
     }
+    setCurrentPage(1);
   };
 
   const sortedCertifs = useMemo(() => {
@@ -352,6 +356,15 @@ const Certifications = () => {
     });
   }, [activeNode, sortBy, sortOrder]);
 
+  const totalPages = Math.max(
+    1,
+    Math.ceil(sortedCertifs.length / CERTIFICATIONS_PER_PAGE),
+  );
+  const paginatedCertifs = sortedCertifs.slice(
+    (currentPage - 1) * CERTIFICATIONS_PER_PAGE,
+    currentPage * CERTIFICATIONS_PER_PAGE,
+  );
+
   const activeConfig = nodes.find((n) => n.id === activeNode);
 
   return (
@@ -372,7 +385,10 @@ const Certifications = () => {
               return (
                 <button
                   key={node.id}
-                  onClick={() => setActiveNode(node.id)}
+                  onClick={() => {
+                    setActiveNode(node.id);
+                    setCurrentPage(1);
+                  }}
                   className={`relative cursor-pointer px-6 py-3 font-mono text-sm tracking-widest uppercase transition-all duration-300 overflow-hidden flex-1 md:flex-none text-left md:text-center border ${
                     isActive
                       ? `${node.theme.border} ${node.theme.activeBg} text-white`
@@ -481,16 +497,86 @@ const Certifications = () => {
 
           {/* RENDU DE LA GRILLE */}
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {sortedCertifs.map((c, i) => (
+            {paginatedCertifs.map((c, i) => (
               <div
-                key={`${activeNode}-${i}`}
+                key={`${activeNode}-${c.titre}`}
                 onClick={() => setSelectedCert(c)}
               >
-                <CertifCard {...c} themeColor={activeConfig.theme} index={i} />
+                <CertifCard
+                  {...c}
+                  themeColor={activeConfig.theme}
+                  index={(currentPage - 1) * CERTIFICATIONS_PER_PAGE + i}
+                />
               </div>
             ))}
           </div>
+
         </div>
+
+        {totalPages > 1 && (
+          <div className="mt-14 flex items-center justify-center gap-6 font-mono uppercase tracking-[0.18em]">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              disabled={currentPage === 1}
+              className="
+        text-cyber/60 hover:text-cyber
+        transition-all duration-300
+        cursor-pointer
+        disabled:opacity-20
+        disabled:cursor-not-allowed
+      "
+            >
+              [ PREV ]
+            </button>
+
+            <div className="flex items-center gap-4">
+              {Array.from({ length: totalPages }, (_, i) => {
+                const page = i + 1;
+                const isActive = currentPage === page;
+
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`
+              relative transition-all duration-300
+              cursor-pointer
+              ${
+                isActive
+                  ? "text-cyber text-xl scale-125"
+                  : "text-white/25 hover:text-white/70 text-sm"
+              }
+            `}
+                  >
+                    {String(page).padStart(2, "0")}
+
+                    {isActive && (
+                      <div className="absolute -bottom-1 left-0 w-full h-px bg-cyber shadow-[0_0_10px_#4ade80]" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                setCurrentPage((page) => Math.min(totalPages, page + 1))
+              }
+              disabled={currentPage === totalPages}
+              className="
+        text-cyber/60 hover:text-cyber
+        transition-all duration-300
+        cursor-pointer
+        disabled:opacity-20
+        disabled:cursor-not-allowed
+      "
+            >
+              [ NEXT ]
+            </button>
+          </div>
+        )}
 
         {/* --- MODALE --- */}
         {selectedCert &&
@@ -528,10 +614,19 @@ const Certifications = () => {
                     <div className="mt-auto p-4 border-b border-t border-white/10 flex justify-between items-center">
                       <div className="flex justify-end items-center gap-2">
                         <span className="text-green-400 font-mono text-base uppercase">
-                          Acquisition_Date:
+                          Date:
                         </span>
                         <span className="text-white font-mono text-base">
                           {selectedCert.date}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <span className="text-green-400 font-mono text-base uppercase">
+                          Duration:
+                        </span>
+                        <span className="text-white font-mono text-base uppercase">
+                          {selectedCert.duration || "12 Hours"}
                         </span>
                       </div>
 
@@ -605,17 +700,16 @@ const Certifications = () => {
                       </div>
 
                       {/* SECTION 2 : TECH STACK */}
-                      <div className="p-4 bg-black/40 border border-white/5">
-                        <h4 className="text-zinc-500 font-mono text-lg uppercase mb-2">
+                      <div className="p-4 bg-black/40 border border-white/5 mt-15">
+                        <h4 className="text-zinc-100 font-mono text-base uppercase mb-3">
                           Technical_Stack
                         </h4>
                         <div className="flex flex-wrap gap-2">
-                          {/* Exemple de tag si tu rajoutes "stack" dans ton objet plus tard */}
                           {selectedCert.stack ? (
                             selectedCert.stack.map((tech) => (
                               <span
                                 key={tech}
-                                className="text-sm font-mono text-zinc-400 bg-white/5 px-2 py-1"
+                                className="text-base font-mono text-cyber bg-cyber/5 border border-cyber/20 px-3 py-1.5"
                               >
                                 {tech}
                               </span>
@@ -675,15 +769,19 @@ const CertifCard = ({
   difficulte,
   duration,
   isPro,
+  stack = [],
 }) => {
   const Difficulty_Level = DIFFICULTY_CONFIG[difficulte] || {
     text: "text-zinc-400",
     bg: "bg-zinc-800",
     label: "N/A",
   };
+  const visibleStacks = stack.slice(0, 5);
+  const hasMoreStacks = stack.length > visibleStacks.length;
+
   return (
     <div
-      className="relative group bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col justify-between min-h-[160px] animate-[fadeIn_0.5s_ease-out_forwards] cursor-crosshair hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-2 hover:scale-[1.03]"
+      className="relative group h-full min-h-[260px] bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col animate-[fadeIn_0.5s_ease-out_forwards] cursor-crosshair hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-2 hover:scale-[1.03]"
       style={{ animationDelay: `${index * 100}ms`, opacity: 0 }}
     >
       {/* Barre de thème en haut */}
@@ -732,19 +830,30 @@ const CertifCard = ({
         </div>
       </div>
 
-      <h3 className="text-xl md:text-2xltext-zinc-300 font-bold leading-snug group-hover:text-white transition-colors z-10">
+      <h3 className="min-h-[3.35rem] text-xl md:text-2xl text-zinc-300 font-bold leading-snug group-hover:text-white transition-colors z-10">
         {titre}
       </h3>
 
-      <div className="mt-8 flex justify-between items-baseline border-t border-white/5 pt-3 z-10 group-hover:border-white/20 transition-colors">
+      <div className="z-10 mt-5 flex min-h-[4.95rem] max-h-[4.95rem] flex-wrap content-start items-start gap-1.5 overflow-hidden pb-0.5">
+        {visibleStacks.map((tech) => (
+          <span
+            key={tech}
+            className="text-base font-mono px-2.5 py-1 bg-black/50 border border-cyber/20 text-zinc-400 group-hover:border-cyber/80 group-hover:text-cyber/80 transition-all"
+          >
+            {tech}
+          </span>
+        ))}
+        {hasMoreStacks && (
+          <span className="border border-cyber/20 bg-black/70 px-2.5 py-1 font-mono text-base text-cyber/80 transition-all group-hover:border-cyber/80">
+            ...
+          </span>
+        )}
+      </div>
+
+      <div className="mt-auto flex justify-between items-baseline border-t border-white/5 pt-3 z-10 group-hover:border-white/20 transition-colors">
         {/* LEFT BLOCK */}
         <div className="flex items-center gap-3 font-mono uppercase">
-          <span className="text-sm text-green-500 animate-pulse flex items-center gap-1.5">
-            <span className="w-1 h-1 bg-green-500 rounded-full"></span>
-            Completed
-          </span>
-
-          <span className="text-sm text-zinc-400 group-hover:text-white/70 border-l border-white/10 pl-3">
+          <span className="bg-cyber/5 px-2.5 py-1 text-sm font-semibold tracking-[0.12em] text-cyber/80 transition-all group-hover:bg-cyber/10 group-hover:text-cyber">
             {duration || "12 Hours"}
           </span>
         </div>

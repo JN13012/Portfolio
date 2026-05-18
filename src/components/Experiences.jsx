@@ -132,25 +132,26 @@ const Experiences = () => {
       date: "6 mois",
       titre: "Alternant Développeur Salesforce",
       entreprises: ["ULIT"],
-      tags: [
-        "Autonomie",
-        "Adaptabilité",
-        "Communication",
-      ],
+      tags: ["Autonomie", "Adaptabilité", "Communication"],
       isCurrent: true,
       imgSrc: Salesforce_dev,
       imgAlt: "Salesforce Developer",
       imgCaption: "Salesforce Developer",
-      details: `> Développement d’applications et de composants web Salesforce en Apex et JavaScript.
-> Création de composants LWC from scratch et reprise de composants existants nécessitant analyse et reverse engineering.
-> Mise en place de tests unitaires et traitement de tickets techniques dans un contexte professionnel.`,
+      details: `> Développement de composants Salesforce en Apex et JavaScript, incluant interfaces utilisateurs, logique métier et automatisation de processus.
+       > Conception d’un éditeur de scripts interne permettant l’exécution, la planification, l’enchaînement de scripts ainsi que la gestion des logs et des sauvegardes.
+       > Mise en place de tests unitaires.`,
     },
 
     {
       date: "4 ans",
       titre: "Sécurisation Blockchain",
       entreprises: ["Indépendant"],
-      tags: ["Architecture Systèmes & Réseaux", "Organisation", "Responsabilité", "Gestion de stratégie"],
+      tags: [
+        "Architecture Systèmes & Réseaux",
+        "Organisation",
+        "Responsabilité",
+        "Gestion de stratégie",
+      ],
       isCurrent: false,
       imgSrc: Mining,
       imgAlt: "HiveOS RIG Monitoring",
@@ -168,8 +169,8 @@ const Experiences = () => {
       isCurrent: false,
       imgSrc: Wec2017,
       imgAlt: "WEC 2017",
-      imgCaption: "G-Drive LMP2 #26 - WEC 2017",
-      details: `> Opérateur ravitaillement/pneumatiques en Championnat du Monde d’Endurance.
+      imgCaption: "G-Drive LMP2 #26 - ENTRAÎNEMENT WEC 2017",
+      details: `> Opérateur ravitaillement/pneumatiques au Championnat du Monde d’Endurance 2017.
 > Diagnostic, entretien et réparation automobile.
 > Contrôle, entretien et remise en service de pièces moteurs marins et groupes électrogènes.`,
     },
@@ -183,9 +184,9 @@ const Experiences = () => {
       imgSrc: RIMA,
       imgAlt: "2e RIMa",
       imgCaption: "2e Régiment d’Infanterie de Marine",
-      details: `> Développement de la rigueur et de la résilience en conditions exigeantes.
-> Travail d’équipe, cohésion et capacité de décision sous pression.
-> Stage commando au CNEC Mont-Louis : autonomie, dépassement de soi et adaptation terrain.`,
+      details: `> Développement de la rigueur et de la résilience.
+> Travail d’équipe, cohésion et capacité de décision.
+> Stage commando au CNEC Mont-Louis : autonomie, dépassement de soi et adaptation.`,
     },
   ];
 
