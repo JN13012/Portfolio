@@ -166,7 +166,7 @@ export const CTF_LEVELS = {
         hint: "Track the process associated to the attacker IP address and kill it.",
 
         files: {
-            "readme.txt": "SOC analysis confirms system compromise. A malicious binary has been detected. You're responsible for incident response and containment of the threat.",
+            "readme.txt": "SOC analysis confirms system compromise. ATACKER_IP = 45.83.122.91. You're responsible for incident response and containment of the threat.",
             "forensic.txt": "Updater.exe was recovered from the compromised machine. Begin forensic workflow using strings [file to analyse]. Find the right ps to kill.",
             "updater.exe": "Binary flagged as suspicious (PE32 executable, packed).",
             "netstat.txt": " ",
