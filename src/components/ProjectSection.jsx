@@ -18,6 +18,8 @@ import Chatflow from "../assets/Projets/Chatflow.png";
 import CTF_Metasploit from "../assets/Projets/CTF_Metasploit.png";
 import CTF_John from "../assets/Projets/CTF_John.png";
 import CTF_Snort from "../assets/Projets/CTF_Snort.png";
+import CTF_Hashcat from "../assets/Projets/CTF_Hashcat.png";
+import CTF_Forensic from "../assets/Projets/CTF_Forensic.png";
 import Btc from "../assets/Experiences/Mining_rig.png";
 
 const PROJECTS_PER_PAGE = 6;
@@ -68,7 +70,7 @@ const projets = [
     lien: "#acceuil",
     lienLabel: "OUVRIR_LE_CTF",
     image: CTF_Metasploit,
-    images: [CTF_Metasploit, CTF_John, CTF_Snort],
+    images: [CTF_John, CTF_Hashcat, CTF_Metasploit, CTF_Forensic, CTF_Snort],
     date: "05/2026",
     categorie: "Cyber-securité",
     complexity: 5,
