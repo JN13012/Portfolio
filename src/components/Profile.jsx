@@ -69,7 +69,7 @@ const InterestCell = memo(({ icon: Icon, label }) => (
       size={27}
       className="text-zinc-400 group-hover:text-cyber transition-all group-hover:scale-110"
     />
-    <div className="text-base font-mono text-zinc-200 group-hover:text-zinc-100 uppercase text-center">
+    <div className="text-[15px] font-mono text-zinc-200 group-hover:text-zinc-100 uppercase text-center">
       {label}
     </div>
     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyber/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000"></div>

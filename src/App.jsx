@@ -11,11 +11,13 @@ import Certifications from "./components/Certifications";
 import Competences from "./components/Competences";
 import Contact from "./components/Contact";
 import NetworkBackground from "./components/NetworkBackground";
+import SoundToggle from "./components/SoundToggle";
 
 function App() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-black font-mono">
       <NetworkBackground />
+      {/* <SoundToggle /> */}
 
       <div className="relative z-[1000]">
         <NavBar />

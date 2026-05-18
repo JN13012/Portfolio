@@ -15,6 +15,9 @@ import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.j
 import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.jpg";
 import Tor from "../assets/Projets/Tor.png";
 import Chatflow from "../assets/Projets/Chatflow.png";
+import CTF_Metasploit from "../assets/Projets/CTF_Metasploit.png";
+import CTF_John from "../assets/Projets/CTF_John.png";
+import CTF_Snort from "../assets/Projets/CTF_Snort.png";
 import Btc from "../assets/Experiences/Mining_rig.png";
 
 const PROJECTS_PER_PAGE = 6;
@@ -64,7 +67,8 @@ const projets = [
     ],
     lien: "#acceuil",
     lienLabel: "OUVRIR_LE_CTF",
-    image: Tor,
+    image: CTF_Metasploit,
+    images: [CTF_Metasploit, CTF_John, CTF_Snort],
     date: "05/2026",
     categorie: "Cyber-securité",
     complexity: 5,
@@ -85,7 +89,7 @@ const projets = [
       "SQL Injection",
       "Tor Proxy",
     ],
-    lien: "https://github.com/votre-repo-audit",
+    lien: null,
     image: Tor,
     date: "04/2026",
     categorie: "Cyber-securité",
@@ -336,6 +340,7 @@ const projets = [
 
 const ProjectSection = () => {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [projectImageIndex, setProjectImageIndex] = useState(0);
   const [activeFilter, setActiveFilter] = useState("Tous");
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
@@ -410,6 +415,25 @@ const ProjectSection = () => {
     setSortBy("complexity");
     setCurrentPage(1);
   };
+
+  const closeModal = () => {
+    setSelectedProject(null);
+    setProjectImageIndex(0);
+  };
+
+  const openProject = (project) => {
+    setSelectedProject(project);
+    setProjectImageIndex(0);
+  };
+
+  const selectedProjectImages =
+    selectedProject?.images?.length && selectedProject.images.length > 0
+      ? selectedProject.images
+      : selectedProject?.image
+        ? [selectedProject.image]
+        : [];
+  const selectedProjectImage =
+    selectedProjectImages[projectImageIndex] || selectedProject?.image;
 
   return (
     <section
@@ -486,7 +510,7 @@ const ProjectSection = () => {
                 key={p.titre}
                 {...p}
                 theme={categoryThemes[p.categorie] || categoryThemes.Default}
-                onClick={() => setSelectedProject(p)}
+                onClick={() => openProject(p)}
               />
             ))}
           </div>
@@ -565,7 +589,7 @@ const ProjectSection = () => {
       {/* MODALE */}
       {selectedProject && (
         <div
-          onClick={() => setSelectedProject(null)}
+          onClick={closeModal}
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl"
         >
           <div
@@ -582,7 +606,7 @@ const ProjectSection = () => {
               </h3>
 
               <button
-                onClick={() => setSelectedProject(null)}
+                onClick={closeModal}
                 className="absolute top-6 right-6 text-zinc-500 hover:text-white font-mono text-xl transition-colors"
               >
                 [ESC_EXIT]
@@ -612,13 +636,47 @@ const ProjectSection = () => {
             {/* BODY */}
             <div className="flex flex-col md:flex-row flex-grow overflow-hidden">
               {/* VISUEL */}
-              <div className="w-full md:w-1/2 bg-black/40 flex items-center justify-center p-6 border-r border-white/5 relative">
+              <div className="w-full md:w-1/2 bg-black/40 flex items-center justify-center p-3 border-r border-white/5 relative">
                 <div className="absolute inset-0 bg-cyber opacity-10 blur-3xl"></div>
-                <img
-                  src={selectedProject.image}
-                  alt={selectedProject.titre}
-                  className="relative z-10 max-w-full max-h-[45vh] object-contain shadow-2xl border border-white/10"
-                />
+                <div className="relative z-10 flex w-full items-center justify-center">
+                  {selectedProjectImages.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setProjectImageIndex(
+                          (index) =>
+                            (index - 1 + selectedProjectImages.length) %
+                            selectedProjectImages.length,
+                        )
+                      }
+                      className="absolute left-0 z-20 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
+                      aria-label="Image précédente"
+                    >
+                      ‹
+                    </button>
+                  )}
+
+                  <img
+                    src={selectedProjectImage}
+                    alt={selectedProject.titre}
+                    className="max-w-full max-h-[62vh] object-contain shadow-2xl border border-white/10"
+                  />
+
+                  {selectedProjectImages.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setProjectImageIndex(
+                          (index) => (index + 1) % selectedProjectImages.length,
+                        )
+                      }
+                      className="absolute right-0 z-20 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
+                      aria-label="Image suivante"
+                    >
+                      ›
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* DÉTAILS */}
@@ -651,21 +709,23 @@ const ProjectSection = () => {
             </div>
 
             {/* LINK FOOTER */}
-            <a
-              href={selectedProject.lien}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative flex items-center justify-center w-full py-4 overflow-hidden border border-cyber/20 bg-cyber/5 hover:border-cyber transition-all duration-300"
-            >
-              {/* Barre de scan */}
-              <div className="absolute inset-0 w-[20%] h-full bg-cyber/20 skew-x-[45deg] -translate-x-[150%] group-hover:translate-x-[600%] transition-transform duration-1000 ease-in-out"></div>
+            {selectedProject.lien && (
+              <a
+                href={selectedProject.lien}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative flex items-center justify-center w-full py-4 overflow-hidden border border-cyber/20 bg-cyber/5 hover:border-cyber transition-all duration-300"
+              >
+                {/* Barre de scan */}
+                <div className="absolute inset-0 w-[20%] h-full bg-cyber/20 skew-x-[45deg] -translate-x-[150%] group-hover:translate-x-[600%] transition-transform duration-1000 ease-in-out"></div>
 
-              <span className="relative font-mono text-base font-bold uppercase tracking-[0.2em] text-cyber flex items-center gap-3">
-                <span className="opacity-50">--</span>[
-                {selectedProject.lienLabel || "VOIR_LE_PROJET_SUR_GITHUB"} ]
-                <span className="opacity-50">--</span>
-              </span>
-            </a>
+                <span className="relative font-mono text-base font-bold uppercase tracking-[0.2em] text-cyber flex items-center gap-3">
+                  <span className="opacity-50">--</span>[
+                  {selectedProject.lienLabel || "VOIR_LE_PROJET_SUR_GITHUB"} ]
+                  <span className="opacity-50">--</span>
+                </span>
+              </a>
+            )}
           </div>
         </div>
       )}
