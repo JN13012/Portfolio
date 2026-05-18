@@ -5,8 +5,6 @@ const TOPOLOGY = [
   { id: "edge-left-switch", type: "switch", x: 0.1, y: 0.48, label: "EDGE" },
   { id: "edge-left-fw", type: "firewall", x: 0.14, y: 0.68, label: "FW" },
   { id: "edge-left-log", type: "server", x: 0.08, y: 0.86, label: "LOG" },
-  { id: "edge-left-host-a", type: "host", x: 0.03, y: 0.38, label: "P1" },
-  { id: "edge-left-host-b", type: "host", x: 0.04, y: 0.62, label: "P2" },
   { id: "edge-left-host-c", type: "host", x: 0.16, y: 0.9, label: "P3" },
   { id: "gw-west", type: "router", x: 0.18, y: 0.7, label: "GW" },
   { id: "sw-west", type: "switch", x: 0.69, y: 0.52, label: "SW" },
@@ -26,45 +24,37 @@ const TOPOLOGY = [
   { id: "srv-api", type: "server", x: 0.76, y: 0.26, label: "API" },
   { id: "edge-right-switch", type: "switch", x: 0.94, y: 0.46, label: "EDGE" },
   { id: "edge-right-router", type: "router", x: 0.9, y: 0.22, label: "ER" },
-  { id: "edge-right-host-a", type: "host", x: 0.96, y: 0.66, label: "P4" },
   { id: "srv-db", type: "server", x: 0.82, y: 0.66, label: "DB" },
   { id: "srv-web", type: "server", x: 0.68, y: 0.12, label: "WEB" },
   { id: "srv-cache", type: "server", x: 0.7, y: 0.82, label: "REDIS" },
   { id: "ai-llm", type: "endpoint", x: 0.56, y: 0.3, label: "LLM" },
   { id: "ai-rag", type: "endpoint", x: 0.54, y: 0.52, label: "RAG" },
-  { id: "ai-vec", type: "endpoint", x: 0.64, y: 0.56, label: "VEC" },
+  { id: "ai-vec", type: "endpoint", x: 0.64, y: 0.56, label: "AGENT_AI" },
   { id: "ai-gpu", type: "endpoint", x: 0.5, y: 0.18, label: "GPU" },
   { id: "ai-agent", type: "endpoint", x: 0.78, y: 0.44, label: "AGENT" },
   { id: "ai-stt", type: "host", x: 0.74, y: 0.1, label: "STT" },
   { id: "ai-tts", type: "host", x: 0.66, y: 0.34, label: "TTS" },
   { id: "host-d", type: "host", x: 0.66, y: 0.72, label: "H4" },
-  { id: "host-e", type: "host", x: 0.92, y: 0.56, label: "H5" },
   { id: "host-h", type: "host", x: 0.88, y: 0.84, label: "H8" },
   { id: "host-i", type: "host", x: 0.82, y: 0.4, label: "H9" },
   { id: "iot-a", type: "host", x: 0.38, y: 0.88, label: "IoT" },
   { id: "iot-b", type: "host", x: 0.56, y: 0.72, label: "IoT" },
   { id: "siem", type: "endpoint", x: 0.48, y: 0.84, label: "SIEM" },
   { id: "bottom-switch", type: "switch", x: 0.42, y: 0.96, label: "OT" },
-  { id: "bottom-host-a", type: "host", x: 0.28, y: 0.95, label: "CAM" },
-  { id: "bottom-host-b", type: "host", x: 0.62, y: 0.95, label: "NAS" },
-  { id: "crypto-btc", type: "endpoint", x: 0.82, y: 0.92, label: "BTC" },
-  { id: "crypto-eth", type: "endpoint", x: 0.92, y: 0.92, label: "ETH" },
-  { id: "crypto-wallet", type: "endpoint", x: 0.94, y: 0.76, label: "WALLET" },
-  { id: "crypto-miner", type: "host", x: 0.5, y: 0.96, label: "MINER" },
-  { id: "crypto-rpc", type: "server", x: 0.82, y: 0.8, label: "RPC" },
-  { id: "crypto-dex", type: "server", x: 0.72, y: 0.94, label: "DEX" },
+  { id: "crypto-btc", type: "endpoint", x: 0.82, y: 0.90, label: "BTC-Miner1" },
+  { id: "crypto-eth", type: "endpoint", x: 0.9, y: 0.9, label: "ETH-Node" },
+  { id: "crypto-wallet", type: "endpoint", x: 0.92, y: 0.76, label: "BTC-WALLET" },
+  { id: "crypto-miner", type: "host", x: 0.5, y: 0.91, label: "BTC-Miner2" },
+  { id: "crypto-rpc", type: "server", x: 0.82, y: 0.8, label: "AntPool" },
 ];
 
 const LINKS = [
   ["edge-left-router", "gw-west"],
   ["edge-left-router", "edge-left-switch"],
-  ["edge-left-switch", "edge-left-host-a"],
-  ["edge-left-switch", "edge-left-host-b"],
   ["edge-left-switch", "edge-left-fw"],
   ["edge-left-fw", "edge-left-log"],
   ["edge-left-fw", "host-f"],
   ["edge-left-log", "bottom-switch"],
-  ["edge-left-host-b", "host-a"],
   ["edge-left-host-c", "edge-left-fw"],
   ["gw-west", "sw-west"],
   ["sw-west", "host-a"],
@@ -102,13 +92,9 @@ const LINKS = [
   ["ai-gpu", "ai-llm"],
   ["edge-right-router", "srv-api"],
   ["edge-right-router", "edge-right-switch"],
-  ["edge-right-switch", "host-e"],
-  ["edge-right-switch", "edge-right-host-a"],
-  ["edge-right-host-a", "srv-db"],
   ["sw-east", "srv-db"],
   ["sw-east", "srv-cache"],
   ["sw-east", "host-d"],
-  ["sw-east", "host-e"],
   ["sw-east", "host-h"],
   ["sw-east", "host-i"],
   ["rt-core-a", "iot-a"],
@@ -125,74 +111,64 @@ const LINKS = [
   ["host-c", "printer-a"],
   ["host-f", "iot-a"],
   ["host-g", "fw-core"],
-  ["host-d", "host-e"],
-  ["host-e", "host-h"],
   ["host-d", "host-i"],
   ["host-h", "srv-cache"],
   ["bottom-switch", "iot-a"],
   ["bottom-switch", "siem"],
-  ["bottom-switch", "bottom-host-a"],
-  ["bottom-switch", "bottom-host-b"],
-  ["bottom-host-b", "srv-cache"],
   ["bottom-switch", "crypto-miner"],
-  ["bottom-host-b", "crypto-dex"],
-  ["srv-cache", "crypto-dex"],
-  ["crypto-dex", "crypto-rpc"],
   ["crypto-rpc", "crypto-btc"],
   ["crypto-rpc", "crypto-eth"],
   ["crypto-btc", "crypto-eth"],
   ["crypto-wallet", "crypto-rpc"],
-  ["crypto-wallet", "edge-right-host-a"],
   ["crypto-miner", "crypto-btc"],
 ];
 
 const ROUTES = [
-  ["edge-left-host-a", "edge-left-switch", "edge-left-router", "gw-west", "sw-west", "fw-core", "rt-core-a", "siem"],
-  ["edge-left-host-b", "edge-left-switch", "edge-left-fw", "edge-left-log"],
-  ["edge-left-log", "edge-left-fw", "host-f", "iot-a", "bottom-switch", "bottom-host-a"],
-  ["edge-left-host-c", "edge-left-fw", "host-f", "host-b"],
+  ["edge-left-router", "gw-west", "sw-west", "fw-core", "rt-core-a", "siem"],
+  ["edge-left-switch", "edge-left-fw", "edge-left-log", "bottom-switch", "crypto-miner"],
+  ["edge-left-host-c", "edge-left-fw", "host-f", "host-b", "host-c"],
   ["host-a", "sw-west", "fw-core", "rt-core-a", "rt-core-b", "srv-api"],
   ["srv-api", "rt-core-b", "rt-core-a", "fw-core", "sw-west", "host-a"],
   ["host-b", "sw-west", "fw-core", "rt-core-a", "sw-east", "srv-db"],
   ["srv-db", "sw-east", "rt-core-a", "fw-core", "sw-west", "host-b"],
   ["host-c", "sw-west", "fw-core", "rt-core-a", "siem"],
+  ["siem", "rt-core-a", "iot-a", "printer-a", "host-c"],
   ["host-d", "sw-east", "rt-core-a", "siem"],
   ["host-g", "sw-west", "fw-core", "rt-core-a", "rt-core-b", "sw-dmz", "srv-web"],
   ["srv-web", "sw-dmz", "rt-core-b", "rt-core-a", "fw-core", "sw-west", "host-g"],
+  ["top-sensor", "sw-dmz", "rt-core-b", "top-relay", "edge-right-router", "edge-right-switch", "srv-api"],
+  ["edge-right-switch", "edge-right-router", "top-relay", "srv-web"],
   ["ai-agent", "srv-api", "ai-llm", "ai-rag", "ai-vec", "srv-db"],
   ["ai-stt", "srv-web", "sw-dmz", "ai-gpu", "ai-llm", "ai-tts"],
   ["ai-llm", "ai-rag", "srv-cache", "srv-api", "ai-agent"],
   ["ai-rag", "ai-vec", "srv-db", "siem"],
-  ["top-sensor", "sw-dmz", "rt-core-b", "top-relay", "edge-right-router", "edge-right-switch", "edge-right-host-a"],
-  ["edge-right-host-a", "edge-right-switch", "edge-right-router", "top-relay", "srv-web"],
+  ["ai-gpu", "ai-llm", "ai-rag", "srv-cache"],
+  ["ai-tts", "srv-api", "ai-agent", "ai-llm"],
   ["host-a", "sw-west", "host-b"],
   ["host-b", "host-c", "iot-a"],
   ["host-b", "host-f"],
   ["host-c", "printer-a", "iot-a"],
   ["host-f", "iot-a", "rt-core-a", "iot-b", "host-d"],
-  ["host-d", "host-e"],
-  ["host-e", "host-h"],
+  ["iot-a", "bottom-switch", "siem"],
+  ["iot-b", "host-d", "host-i", "sw-east"],
   ["host-d", "host-i"],
   ["host-h", "srv-cache", "srv-db"],
   ["host-i", "sw-east", "srv-api"],
-  ["bottom-host-a", "bottom-switch", "iot-a", "host-f", "edge-left-fw", "edge-left-log"],
-  ["bottom-host-b", "bottom-switch", "siem", "srv-db", "srv-cache"],
-  ["crypto-miner", "bottom-switch", "bottom-host-b", "crypto-dex", "crypto-rpc", "crypto-btc"],
+  ["crypto-miner", "bottom-switch", "siem", "srv-db", "crypto-rpc", "crypto-btc"],
   ["crypto-btc", "crypto-rpc", "crypto-eth"],
-  ["crypto-wallet", "crypto-rpc", "crypto-dex", "srv-cache"],
-  ["crypto-eth", "crypto-rpc", "crypto-wallet", "edge-right-host-a"],
-  ["iot-b", "host-d", "host-e"],
+  ["crypto-wallet", "crypto-rpc", "srv-cache"],
+  ["crypto-eth", "crypto-rpc", "crypto-wallet", "srv-api"],
+  ["crypto-wallet", "srv-api", "ai-agent"],
   ["printer-a", "host-c", "host-b", "host-f"],
   ["host-c", "sw-west", "fw-core", "rt-core-a", "sw-east", "host-d"],
-  ["gw-west", "sw-west", "fw-core", "rt-core-a", "rt-core-b", "sw-east", "host-e"],
+  ["gw-west", "sw-west", "fw-core", "rt-core-a", "rt-core-b", "sw-east", "host-i"],
   ["host-a", "sw-west", "fw-core", "rt-core-a", "sw-east", "host-h"],
-  ["host-h", "host-e", "sw-east", "rt-core-a", "fw-core", "sw-west", "host-a"],
+  ["host-h", "sw-east", "rt-core-a", "fw-core", "sw-west", "host-a"],
   ["srv-cache", "sw-east", "rt-core-a", "siem"],
-  ["edge-left-host-a", "edge-left-switch", "edge-left-host-b"],
-  ["edge-left-host-b", "host-a", "sw-west", "host-c", "printer-a"],
-  ["edge-right-host-a", "srv-db", "srv-cache", "bottom-host-b"],
-  ["crypto-dex", "srv-cache", "ai-rag", "ai-vec"],
+  ["srv-api", "srv-db", "srv-cache", "crypto-rpc"],
   ["ai-agent", "srv-api", "crypto-wallet", "crypto-rpc"],
+  ["fw-core", "host-g", "sw-west", "host-c", "printer-a"],
+  ["edge-right-router", "srv-api", "srv-db", "siem"],
 ];
 
 const ROLE_STYLE = {
@@ -205,6 +181,8 @@ const ROLE_STYLE = {
 };
 
 const VIEWPORT_BLEED = 0.07;
+const TARGET_FPS = 30;
+const FRAME_INTERVAL = 1000 / TARGET_FPS;
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -552,6 +530,7 @@ export default function NetworkBackground() {
     let packets = createPackets();
     let animationFrame = 0;
     let previousTimestamp = 0;
+    let lastRenderTimestamp = 0;
 
     const resizeCanvas = () => {
       width = window.innerWidth;
@@ -571,11 +550,17 @@ export default function NetworkBackground() {
     };
 
     const renderFrame = (timestamp = 0) => {
+      if (!reduceMotion && timestamp - lastRenderTimestamp < FRAME_INTERVAL) {
+        animationFrame = requestAnimationFrame(renderFrame);
+        return;
+      }
+
       const elapsed = reduceMotion ? 2400 : timestamp;
       const delta = reduceMotion ? 0 : Math.min(40, timestamp - previousTimestamp || 16);
       const activeLinks = {};
       const nodeActivity = {};
 
+      lastRenderTimestamp = timestamp;
       previousTimestamp = timestamp;
       context.clearRect(0, 0, width, height);
 
