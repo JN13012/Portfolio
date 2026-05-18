@@ -220,7 +220,7 @@ const Profile = () => {
                 </p>
 
                 <p className="text-zinc-150">
-                  Je m’investis intensivement dans ma montée
+                  Je m’investis dans ma montée
                   en compétences à travers l’apprentissage continu, les
                   projets personnels et les certifications complémentaires.
                 </p>
