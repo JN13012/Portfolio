@@ -6,7 +6,7 @@ const ProfileConsole = () => {
   const [level, setLevel] = useState(1);
   const [remoteSession, setRemoteSession] = useState(null);
   const [history, setHistory] = useState([
-    { msg: "CAPTURE THE FLAG", type: "sys" },
+    { msg: "CYBERSECURITY TRAINNING LAB - CAPTURE THE FLAG", type: "sys" },
     { msg: "TYPE 'help' TO START THE CHALLENGE.", type: "sys" },
   ]);
   const [inputValue, setInputValue] = useState("");

@@ -137,8 +137,8 @@ const Experiences = () => {
       imgSrc: Salesforce_dev,
       imgAlt: "Salesforce Developer",
       imgCaption: "Salesforce Developer",
-      details: `> Développement de composants Salesforce en Apex et JavaScript, incluant interfaces utilisateurs, logique métier et automatisation de processus.
-       > Conception d’un éditeur de scripts interne permettant l’exécution, la planification, l’enchaînement de scripts ainsi que la gestion des logs et des sauvegardes.
+      details: `> Développement de composants Salesforce en Apex et JavaScript, incluant interfaces utilisateurs, logique métier.
+       > Conception d’un éditeur de scripts interne permettant l’exécution, la planification, l’enchaînement de scripts ainsi que la gestion des logs et les sauvegardes.
        > Mise en place de tests unitaires.`,
     },
 
