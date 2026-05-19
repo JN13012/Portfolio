@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import SectionHeader from "./SectionHeader";
 import THM_BG from "../assets/THM.jpg";
 import COURSERA_BG from "../assets/COURSERA.png";
-import PRE_SECURITY_IMG from "../assets/THM/PreSecutiry.jpg";
 import CYBERSECYRITY_101 from "../assets/THM/Cybersecurity_101.jpg";
+import THM_SEC0 from "../assets/THM/THM - SEC0.png";
+import RESULT_SEC0 from "../assets/THM/Result - SEC0.png";
 import Introduction_to_AI from "../assets/Coursera/Introduction_to_Artificial_Intelligence.jpg";
 import Generative_AI_Introduction from "../assets/Coursera/Generative_AI_Introduction_and_Applications.jpg";
 import Prompt_Engineering from "../assets/Coursera/Generative_AI_Prompt_Engineering_Basics.jpg";
@@ -47,6 +48,27 @@ const certifs = [
       "Sécurité Défensive",
     ],
     duration: "19 Hours",
+  },
+  {
+    titre: "SEC0",
+    plateforme: "TryHackMe",
+    cat: "TryHackMe",
+    date: "05/2026",
+    image: THM_SEC0,
+    resultImage: RESULT_SEC0,
+    url: "https://assets.tryhackme.com/certification-certificate/6a0cbce9a1880079284577a7.pdf",
+    description:
+      "Examen validant les bases techniques d’entrée en cybersécurité : systèmes, réseaux, web et concepts de sécurité. Elle confirme une compréhension solide des prérequis avant une poursuite du cursus.",
+    difficulte: 1,
+    isPro: true,
+    stack: [
+      "Computer Fundamentals",
+      "OS Basics",
+      "Networking",
+      "Web Fundamentals",
+      "Security Concepts",
+    ],
+    duration: "2 Hours",
   },
   {
     titre: "Cyber Security 101",
@@ -316,9 +338,14 @@ const getMonthKey = (dateStr) => {
 const Certifications = () => {
   const [activeNode, setActiveNode] = useState("TryHackMe");
   const [selectedCert, setSelectedCert] = useState(null);
+  const [certImageIndex, setCertImageIndex] = useState(0);
   const [sortBy, setSortBy] = useState("difficulte");
   const [sortOrder, setSortOrder] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCertImageIndex(0);
+  }, [selectedCert]);
 
   const handleSort = (type) => {
     if (sortBy === type) {
@@ -510,7 +537,6 @@ const Certifications = () => {
               </div>
             ))}
           </div>
-
         </div>
 
         {totalPages > 1 && (
@@ -665,25 +691,84 @@ const Certifications = () => {
                   <div className="flex flex-col md:flex-row flex-grow overflow-hidden">
                     {/* COLONNE GAUCHE : VISUEL */}
                     <div className="w-full md:w-1/2 bg-transparent flex items-center justify-center p-6 border-r border-white/5">
-                      <div
-                        className="relative group cursor-zoom-in"
-                        onClick={() =>
-                          window.open(selectedCert.image, "_blank")
-                        }
-                      >
-                        {/* Effet de lueur derrière l'image */}
-                        <div
-                          className={`absolute inset-0 ${activeConfig.theme.bg} opacity-10 blur-3xl group-hover:opacity-20 transition-opacity`}
-                        ></div>
-                        <img
-                          src={selectedCert.image}
-                          alt={selectedCert.titre}
-                          className="relative z-10 max-w-full max-h-[50vh] object-contain shadow-2xl border border-white/10"
-                        />
-                        <p className="absolute bottom-2 right-2 text-[8px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                          CLICK_TO_ENLARGE
-                        </p>
-                      </div>
+                      {(() => {
+                        const selectedCertImages = selectedCert
+                          ? selectedCert.images?.length > 0
+                            ? selectedCert.images
+                            : [
+                                selectedCert.image,
+                                ...(selectedCert.resultImage
+                                  ? [selectedCert.resultImage]
+                                  : []),
+                              ]
+                          : [];
+
+                        const selectedCertImage =
+                          selectedCertImages[certImageIndex] ||
+                          selectedCert?.image;
+
+                        return (
+                          <div className="relative w-full max-w-[48rem]">
+                            {selectedCertImages.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setCertImageIndex(
+                                    (index) =>
+                                      (index - 1 + selectedCertImages.length) %
+                                      selectedCertImages.length,
+                                  )
+                                }
+                                className="absolute left-0 top-1/2 z-20 -translate-y-1/2 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
+                                aria-label="Image précédente"
+                              >
+                                ‹
+                              </button>
+                            )}
+
+                            <div
+                              className="relative group cursor-zoom-in"
+                              onClick={() =>
+                                window.open(selectedCertImage, "_blank")
+                              }
+                            >
+                              <div
+                                className={`absolute inset-0 ${activeConfig.theme.bg} opacity-10 blur-3xl group-hover:opacity-20 transition-opacity`}
+                              ></div>
+                              <img
+                                src={selectedCertImage}
+                                alt={`${selectedCert.titre} screenshot`}
+                                className="relative z-10 w-full max-h-[80vh] object-contain shadow-2xl border border-white/10"
+                              />
+                              <p className="absolute bottom-2 right-2 text-[8px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                CLICK_TO_ENLARGE
+                              </p>
+                            </div>
+
+                            {selectedCertImages.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setCertImageIndex(
+                                    (index) =>
+                                      (index + 1) % selectedCertImages.length,
+                                  )
+                                }
+                                className="absolute right-0 top-1/2 z-20 -translate-y-1/2 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
+                                aria-label="Image suivante"
+                              >
+                                ›
+                              </button>
+                            )}
+
+                            {selectedCertImages.length > 1 && (
+                              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/70 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-zinc-300 border border-white/10">
+                                {`${certImageIndex + 1}/${selectedCertImages.length}`}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     {/* COLONNE DROITE : DATA & DETAILS */}

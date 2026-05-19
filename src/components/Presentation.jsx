@@ -59,7 +59,7 @@ const Presentation = () => {
                 <span className="text-cyber">[02]</span> Réseaux TCP/IP
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[03]</span> Reconnaissance réseau &
+                <span className="text-cyber">[03]</span> Scan &
                 énumération de services
               </li>
               <li className="flex gap-2">

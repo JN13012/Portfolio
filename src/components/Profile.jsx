@@ -91,7 +91,7 @@ const personalData = [
   {
     id: "status",
     label: "Statut",
-    value: "Alternance Recherche",
+    value: "Disponible Alternance",
     color: "text-white",
   },
   {
