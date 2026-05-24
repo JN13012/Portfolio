@@ -23,7 +23,7 @@ const LevelBadge = () => (
   <div className="absolute right-6 top-0 z-20 -translate-y-1/2">
     <div className="absolute -left-3 -right-3 top-1/2 h-[3px] -translate-y-1/2 bg-[#080808]" />
     <div className="relative inline-flex items-center rounded-sm border border-cyber/30 bg-black/40 px-3 py-1 font-mono text-xs uppercase tracking-[0.16em] text-cyber/80 shadow-[0_10px_24px_rgba(0,0,0,0.42)]">
-      Niveau : Junior
+      Niveau : Junior EN PROGRESSION
     </div>
   </div>
 );

@@ -5,6 +5,8 @@ import COURSERA_BG from "../assets/COURSERA.png";
 import CYBERSECYRITY_101 from "../assets/THM/Cybersecurity_101.jpg";
 import THM_SEC0 from "../assets/THM/THM - SEC0.png";
 import RESULT_SEC0 from "../assets/THM/Result - SEC0.png";
+import THM_SEC1 from "../assets/THM/THM - SEC1.png";
+import RESULT_SEC1 from "../assets/THM/Result - SEC1.png";
 import Introduction_to_AI from "../assets/Coursera/Introduction_to_Artificial_Intelligence.jpg";
 import Generative_AI_Introduction from "../assets/Coursera/Generative_AI_Introduction_and_Applications.jpg";
 import Prompt_Engineering from "../assets/Coursera/Generative_AI_Prompt_Engineering_Basics.jpg";
@@ -69,6 +71,29 @@ const certifs = [
       "Security Concepts",
     ],
     duration: "2 Hours",
+  },
+  {
+    titre: "SEC1",
+    plateforme: "TryHackMe",
+    cat: "TryHackMe",
+    date: "05/2026",
+    image: THM_SEC1,
+    resultImage: RESULT_SEC1,
+    url: "https://assets.tryhackme.com/certification-certificate/6a0cbce9a1880079284577a7.pdf",
+    description:
+      "Examen confirmant la maîtrise pratique de compétences en analyse réseau (PCAP/Wireshark), administration et hardening Windows/Linux (audit services, logs), pentest web (recon, Burp, SQLi), opérations SOC (monitoring et triage d'alertes), ainsi que Bruteforce & Cracking et analyse statique de malware (exécution de processus, écriture...).",
+    difficulte: 3,
+    isPro: true,
+    stack: [
+      "Windows",
+      "Linux",
+      "Network",
+      "Web Pentesting",
+      "SOC",
+      "Bruteforce & Cracking",
+      "Malware Analysis",
+    ],
+    duration: "10 Hours",
   },
   {
     titre: "Cyber Security 101",
