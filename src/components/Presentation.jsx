@@ -100,7 +100,7 @@ const Presentation = () => {
 
             {/* Label flottant */}
             <div className="absolute -top-4 right-8 bg-cyber text-black text-[10px] font-bold px-3 py-1 z-30 uppercase tracking-tighter">
-              CTF v 1.0
+              CTF v 1.1
             </div>
 
             {/* HAUTEUR AUGMENTÉE : h-[500px] sur mobile, 75vh sur desktop */}
