@@ -803,7 +803,7 @@ const ProfileConsole = () => {
           //
         } else if (command === "ls") {
           addLog(
-            `${shellPrefix} : .secrets.txt .hashcat.txt internship.txt`,
+            `${shellPrefix} : .secrets.txt .hashcat.txt`,
             "out",
           );
         } else if (command === "cat") {
@@ -821,20 +821,6 @@ const ProfileConsole = () => {
 
             addLog(`${shellPrefix} : [!] hashes use advanced format`, "sys");
             addLog(`${shellPrefix} : [!] recommended tool: hashcat`, "sys");
-          } else if (file === "internship.txt") {
-            addLog(`${shellPrefix} : ====================`, "out");
-            addLog(`${shellPrefix} : INTERNSHIP PROFILE DATA`, "out");
-            addLog(`${shellPrefix} : ====================`, "out");
-            addLog(`${shellPrefix} :`, "out");
-
-            addLog(`${shellPrefix} : NAME: Jérémie Nagi`, "out");
-            addLog(
-              `${shellPrefix} : ROLE: Intership Cybersecurity AND/OR IA`,
-              "out",
-            );
-            addLog(`${shellPrefix} : EMAIL: jeremie.nagi@epitech.eu`, "out");
-            addLog(`${shellPrefix} : ====================`, "out");
-            addLog(`${shellPrefix} : IP : 10.0.2.25`, "out");
           } else if (file === ".hashcat.txt") {
             addLog(`${shellPrefix} : Hashcat reference guide`, "out");
 
@@ -874,7 +860,6 @@ const ProfileConsole = () => {
             addLog(`${shellPrefix} : rockyou.txt`, "out");
             addLog(`${shellPrefix} :`, "out");
 
-            addLog(`${shellPrefix} :`, "out");
             addLog(`${shellPrefix} : MASK EXAMPLES:`, "out");
             addLog(`${shellPrefix} : ?l?l?l?l   (4 lowercase letters)`, "out");
             addLog(
@@ -894,7 +879,6 @@ const ProfileConsole = () => {
 
             addLog(`${shellPrefix} :`, "out");
 
-            addLog(`${shellPrefix} :`, "out");
 
             addLog(
               `${shellPrefix} : NOTE: choose correct mode and attack type carefully`,
@@ -1014,9 +998,6 @@ const ProfileConsole = () => {
         addLog("AVAILABLE COMMANDS:", "out");
         addLog("------------", "out");
 
-        addLog("Display hashes file:", "out");
-        addLog("cat .hashes.txt", "out");
-        addLog("---", "out");
 
         addLog("Crack hashes using wordlist attack:", "out");
         addLog("john --wordlist <wordlist_path> <hash_file>", "out");

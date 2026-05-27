@@ -6,7 +6,7 @@ export const CTF_LEVELS = {
         hint: "'Ctrl + U' or 'F12' or right click => inspect the page => source code => index.html. (refresh page if needed)",
         files: {
             "readme.txt": "Welcome user. Search, find, and validate. Exit any session before submit flag.",
-            ".flag.txt": "Did you think it would be that easy? The flag is hidden within the source code of the index.html page."
+            ".flag.txt": "Did you think it would be that easy? The flag is hidden within the source code of the index.html page. Type 'hint' for more help."
         }
     },
     2: {
@@ -58,8 +58,8 @@ export const CTF_LEVELS = {
             { port: "5000", state: "open", service: "http", version: "Flask API (DEBUG MODE ENABLED -- DANGER)" }
         ],
         files: {
-            "readme.txt": "You are now acting as a penetration tester. Your objective is to enumerate exposed services on the target host. Identify potential attack surfaces and misconfigurations. Use nmap on target host.",
-            "network.txt": "Target host IP : 10.0.2.15.",
+            "readme.txt": "You are now acting as a penetration tester. Your objective is to enumerate exposed services on the target host. Identify potential attack surfaces and misconfigurations.",
+            "network.txt": "Use nmap with the service version detection option on target IP : '10.0.2.15'. Type 'hint' for more help.",
         }
     },
 
