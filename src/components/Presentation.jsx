@@ -53,30 +53,40 @@ const Presentation = () => {
             </p>
             <ul className="space-y-2 font-mono text-sm text-zinc-100/90">
               <li className="flex gap-2">
-                <span className="text-cyber">[01]</span> Commandes Linux
+                <span className="text-cyber">[01]</span> Système Linux &
+                recherche de fichiers
               </li>{" "}
               <li className="flex gap-2">
-                <span className="text-cyber">[02]</span> Réseaux TCP/IP
+                <span className="text-cyber">[02]</span> Réseaux TCP/IP &
+                services exposés
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[03]</span> Scan &
-                énumération de services
+                <span className="text-cyber">[03]</span> Scan, énumération &
+                reconnaissance
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[04]</span> Hashs Cracking
+                <span className="text-cyber">[04]</span> Exploitation web &
+                SQL injection
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[05]</span> Exploitation &
+                <span className="text-cyber">[05]</span> Hash cracking & accès
+                SSH
+              </li>
+              <li className="flex gap-2">
+                <span className="text-cyber">[06]</span> Exploitation système &
                 élévation de privilèges
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[06]</span> Analyse de logs
+                <span className="text-cyber">[07]</span> Analyse SIEM &
+                corrélation de logs
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[07]</span> Réponse incident
+                <span className="text-cyber">[08]</span> Forensic, threat
+                hunting & containment
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[08]</span> Durcissement
+                <span className="text-cyber">[09]</span> Durcissement
+                : WAF, firewall & IDS
               </li>
             </ul>
           </div>
