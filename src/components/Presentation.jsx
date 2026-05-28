@@ -81,8 +81,7 @@ const Presentation = () => {
                 corrélation de logs
               </li>
               <li className="flex gap-2">
-                <span className="text-cyber">[08]</span> Forensic, threat
-                hunting & containment
+                <span className="text-cyber">[08]</span> Forensic, investigation & confinement
               </li>
               <li className="flex gap-2">
                 <span className="text-cyber">[09]</span> Durcissement
