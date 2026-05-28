@@ -154,7 +154,6 @@ const Profile = () => {
             <div className="relative group mx-auto w-full max-w-[220px] lg:max-w-[420px]">
               <div className="absolute -top-1 -left-1 w-8 h-8 border-t-2 border-l-2 border-cyber z-20"></div>
               <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-2 border-r-2 border-cyber z-20"></div>
-              <div className="absolute inset-0 w-full h-[3px] bg-cyber/60 z-30 shadow-[0_0_15px_#4ade80] animate-scan opacity-0 group-hover:opacity-100"></div>
               <div className="relative border border-cyber/20 p-2.5 bg-zinc-900/50 overflow-hidden">
                 <img
                   src={ProfilImg}
