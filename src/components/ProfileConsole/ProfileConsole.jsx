@@ -1329,7 +1329,7 @@ const ProfileConsole = () => {
                     "err",
                   );
                   addLog(
-                    "[!] SUGGESTION: USE 'nc' TO INTERACT WITH THE UNSECURED CONSOLE.",
+                    "[!] SUGGESTION: USE 'nc' TO INTERACT WITH THE EXPOSED DEBUG SERVICE ON PORT 5000.",
                     "sys",
                   );
                 }
