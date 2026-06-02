@@ -91,7 +91,7 @@ const personalData = [
   {
     id: "status",
     label: "Statut",
-    value: "Disponible Alternance",
+    value: "Recherche Alternance",
     color: "text-white",
   },
   {
@@ -180,10 +180,10 @@ const Profile = () => {
           </div>
 
           {/* COL 2 */}
-          <div className="lg:col-span-10 space-y-10">
+          <div className="lg:col-span-10 space-y-12">
             {/* TOOLKIT */}
             <div className="group/profile-block">
-              <SectionTitle icon={Shield} title="Liens professionnels" />
+              <SectionTitle icon={Shield} title="Réseaux & Plateformes" />
               <div className="flex flex-wrap justify-center gap-4 xl:flex-nowrap">
                 {socTools.map((tool) => (
                   <a
@@ -206,14 +206,14 @@ const Profile = () => {
             <div className="group/profile-block">
               <SectionTitle
                 icon={Terminal}
-                title="Orientation professionnelle"
+                title="Profil professionnel"
               />
 
               <div
                 className={`${contentPanelClass} space-y-3 text-base font-mono text-zinc-100 leading-relaxed`}
               >
                 <p>
-                  Étudiant en reconversion professionnelle, passionné par les
+                  Étudiant en reconversion, passionné par les
                   systèmes informatiques, la Cybersécurité et l’intelligence
                   artificielle.
                 </p>
@@ -225,21 +225,20 @@ const Profile = () => {
                 </p>
 
                 <p className="text-zinc-200">
-                  Actuellement en recherche d’une alternance en cybersécurité,
-                  DevSecOps ou IA.
+                  Actuellement en recherche d’une alternance.
                 </p>
 
-                <p className="text-zinc-250">Disponible immédiatement.</p>
+               {/*  <p className="text-zinc-250">Disponible immédiatement.</p>*/}
               </div>
             </div>
             {/* PERSONNAL DATA */}
             <div className="group/profile-block">
               <SectionTitle icon={Database} title="Informations personnelles" />
-              <ul className={`${contentPanelClass} space-y-2 font-mono`}>
+              <ul className={`${contentPanelClass} px-5 py-4 font-mono`}>
                 {personalData.map((item, i) => (
                   <li
                     key={i}
-                    className="flex justify-between border-b border-white/5 pb-3 group/item relative z-10"
+                    className="flex justify-between gap-4 border-b border-white/5 py-3 first:pt-0 last:border-b-0 last:pb-0 group/item relative z-10"
                   >
                     <span className="text-base text-zinc-100 uppercase group-hover/item:text-cyber transition-colors">
                       {item.label}
@@ -261,9 +260,9 @@ const Profile = () => {
             <div className="group/profile-block">
               <SectionTitle icon={Cpu} title="Soft skills" />
               <div className={`${contentPanelClass} space-y-2`}>
-                <SkillBar label="Esprit critique" progress={90} />
-                <SkillBar label="Rigueur" progress={85} />
-                <SkillBar label="Autonomie" progress={80} />
+                <SkillBar label="Esprit critique" progress={85} />
+                <SkillBar label="Rigueur" progress={80} />
+                <SkillBar label="Autonomie" progress={75} />
                 <SkillBar label="Communication" progress={75} />
               </div>
             </div>
