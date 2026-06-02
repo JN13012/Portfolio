@@ -90,10 +90,10 @@ export const TOOL_DESCRIPTIONS = {
   CyberChef: "Décodage & transformation données",
   //IA
   Flask: "API Python",
-  PyTorch: "Modèles deep learning",
+  PyTorch: "Machine Learning",
   LangChain: "Pipelines RAG & Orchestration LLM",
   Pandas: "Manipulation Dataframes & Datasets",
-  NumPy: "Calcul data",
+  NumPy: "Calcul Numérique & Opérations Vectorielles",
   // FULL STACK
   Python: "Scripts & API",
   Java: "Programmation orientée objet",
@@ -165,7 +165,7 @@ export const DOMAINS = [
         tag: "LLM - RAG - NLP - Pipeline - Data analysis",
         tools: ["Flask", "PyTorch", "LangChain", "Pandas", "NumPy"],
         details:
-          "Développement d’API backend pour applications IA avec Flask : intégration de LLM, pipelines RAG, NLP, orchestration de modèles génératifs. Analayse et traitement de données avec Pandas et NumPy.",
+          "Développement d’API backend pour applications IA avec Flask : intégration de LLM, pipelines RAG & NLP, orchestration de modèles génératifs. Analayse et traitement de données avec Pandas et NumPy.",
       },
     ],
   },
