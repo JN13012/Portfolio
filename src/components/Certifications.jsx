@@ -294,7 +294,7 @@ const certifs = [
     image: IBM_AI_Developer,
     url: "https://www.coursera.org/account/accomplishments/professional-cert/NLPNAKCP7EFK",
     description:
-      "Cursus orienté développement d’applications IA avec Python, Data Science et IA générative : intégration de LLM et orchestration de modèles IA, pipelines NLP/RAG et manipulation de données.",
+      "Cursus orienté développement d’applications IA avec Python, Data Science et IA générative : Orchestration de modèles IA, pipelines NLP/RAG et manipulation de données.",
     difficulte: 3,
     stack: [
       "AI Engineering",
