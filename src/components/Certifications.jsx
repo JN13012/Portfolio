@@ -197,7 +197,7 @@ const certifs = [
     url: "https://coursera.org/share/12ef6d1161ebabe8bd0bc270f208d8f3",
     description:
       "Développement en Python pour la Data Science : manipulation et traitement de datasets et DataFrames (filtrage, nettoyage, transformation de données). Web scraping, parsing HTML et extraction automatisée de données.",
-    difficulte: 3,
+    difficulte: 2,
     stack: [
       "Python",
       "Pandas",
@@ -217,7 +217,7 @@ const certifs = [
     url: "https://coursera.org/share/9e097eac39d7c42bdb4fa1826f485bc5",
     description:
       "Développement d’applications IA, incluant un chatbot conversationnel avec gestion de contexte. Mise en place de pipelines NLP et orchestration backend des modèles IA.",
-    difficulte: 3,
+    difficulte: 2,
     stack: ["Python", "Flask", "REST API", "NLP"],
     duration: "11 Hours",
   },
@@ -230,7 +230,7 @@ const certifs = [
     url: "https://www.coursera.org/account/accomplishments/verify/OM4ZXGM73HG4",
     description:
       "Conception d’applications d’IA : assistants IA, transcription STT/TTS, traduction contextuelle, parsing documentaire et analyse sémantique. Mise en place de pipelines RAG et orchestration de modèles d’IA générative.",
-    difficulte: 3,
+    difficulte: 2,
     stack: [
       "Python",
       "Flask",
