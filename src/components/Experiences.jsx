@@ -17,7 +17,7 @@ const BlocExperience = ({
   imgAlt,
   imgCaption,
 }) => (
-  <div className="relative mx-auto max-w-7xl pb-16 pl-10 group">
+  <div className="relative mx-auto max-w-[1500px] pb-16 pl-10 group">
     {/* TIMELINE */}
     <div className="absolute left-0 top-3 h-full w-px bg-white/10 group-hover:bg-cyber/30 transition-colors duration-500" />
 
@@ -43,7 +43,7 @@ const BlocExperience = ({
       "
     >
       {/* TEXTE */}
-      <div className="md:col-span-7 space-y-5">
+      <div className="md:col-span-7 lg:col-span-8 space-y-5">
         <div>
           {/* META */}
           <div className="mb-3 flex flex-wrap items-center gap-3 font-mono text-base uppercase tracking-[0.18em]">
@@ -105,7 +105,7 @@ const BlocExperience = ({
       </div>
 
       {/* IMAGE */}
-      <div className="md:col-span-5">
+      <div className="md:col-span-5 lg:col-span-4">
         <div className="relative max-w-[450px] mx-auto md:ml-auto">
           <div className="overflow-hidden rounded-sm border border-zinc-800 group-hover:border-cyber/40 transition-all duration-500 shadow-xl">
             <img
@@ -132,47 +132,67 @@ const Experiences = () => {
       date: "6 mois",
       titre: "Alternant Développeur Salesforce",
       entreprises: ["ULIT"],
-      tags: ["Autonomie", "Adaptabilité", "Communication"],
+      tags: ["FullStack", "Autonomie", "Adaptabilité", "Communication"],
       isCurrent: true,
       imgSrc: Salesforce_dev,
       imgAlt: "Salesforce Developer",
       imgCaption: "Salesforce Developer",
       details: `> Développement de composants Salesforce en Apex et JavaScript, incluant interfaces utilisateurs, logique métier.
-       > Conception d’un éditeur de scripts interne permettant l’exécution, la planification, l’enchaînement de scripts ainsi que la gestion des logs et les sauvegardes.
-       > Mise en place de tests unitaires.`,
+       > Conception d'un éditeur de scripts interne permettant l'exécution, la planification, l'enchaînement de scripts, la gestion des logs et les sauvegardes.
+> Mise en place de tests unitaires.
+> Travail en autonomie sur des problématiques de tooling, d'automatisation et d'intégration dans un environnement professionnel.
+       `,
+       
     },
 
     {
-      date: "4 ans",
-      titre: "Sécurisation Blockchain",
+      date: "2018 - Aujourd'hui",
+      titre: "Entrepreneur Blockchain",
       entreprises: ["Indépendant"],
       tags: [
-        "Architecture Systèmes & Réseaux",
-        "Organisation",
-        "Responsabilité",
-        "Gestion de stratégie",
+        "Blockchain",
+        "Mining",
+        "HiveOS",
+        "Braiins OS",
+        "Linux",
+        "Hardware",
+        "Monitoring",
+        "Tunning",
+        "MEV",
       ],
-      isCurrent: false,
+      isCurrent: true,
       imgSrc: Mining,
       imgAlt: "HiveOS RIG Monitoring",
-      imgCaption: "Monitoring de fermes GPU",
-      details: `> Conception et assemblage de fermes de minage GPU.
-> Optimisation hardware/software : performances, consommation énergétique et refroidissement.
-> Monitoring et automatisation des opérations de maintenance via HiveOS.`,
+      imgCaption: "Exploitation et monitoring blockchain",
+      details: `> Conception, assemblage et exploitation de fermes de minage.
+> Optimisation performances, consommation et refroidissement via overclocking, undervolting et tuning.
+> Administration et monitoring des infrastructures via HiveOS, Braiins OS, Linux et Windows.
+> Automatisation : gestion des erreurs, mises à jour, redémarrages.
+> Maintenance matérielle : diagnostic des pannes, remplacement de composants, pads thermiques, ventilateurs...
+> Analyse de rentabilité, suivi des marchés et optimisation des stratégies, incluant Maximum Extractable Value et Flashbots.
+> Veille technologique et financière.`,
     },
 
     {
       date: "5 ans",
-      titre: "Technicien Mécanicien",
+      titre: "Technicien Mécanique - Compétition & Maintenance",
       entreprises: ["Renault", "G-Drive Racing", "Wärtsilä"],
-      tags: ["Précision", "Travail d'équipe", "Fiabilité"],
+      tags: [
+        "Sport Automobile",
+        "LMP2",
+        "Diagnostic",
+        "Maintenance",
+        "Fiabilité",
+      ],
       isCurrent: false,
       imgSrc: Wec2017,
       imgAlt: "WEC 2017",
       imgCaption: "G-Drive LMP2 #26 - ENTRAÎNEMENT WEC 2017",
-      details: `> Opérateur ravitaillement/pneumatiques au Championnat du Monde d’Endurance 2017.
-> Diagnostic, entretien et réparation automobile.
-> Contrôle, entretien et remise en service de pièces moteurs marins et groupes électrogènes.`,
+      details: `> Participation au Championnat du Monde d'Endurance 2017 avec G-Drive Racing, incluant les 24 Heures du Mans.
+> Responsable des pneumatiques sur prototypes LMP2 : contrôle des pressions, préchauffage, préparation et acheminement des trains lors des arrêts aux stands.
+> Participation aux opérations de ravitaillement en carburant et coordination avec les mécaniciens et ingénieurs pour optimiser les pit-stops.
+> Diagnostic, entretien et réparation automobile chez Renault : recherche de pannes, interventions mécaniques courantes.
+> Contrôle, maintenance et remise en service de pièces moteurs marins et groupes électrogènes chez Wärtsilä.`,
     },
 
     {
@@ -184,9 +204,11 @@ const Experiences = () => {
       imgSrc: RIMA,
       imgAlt: "2e RIMa",
       imgCaption: "2e Régiment d’Infanterie de Marine",
-      details: `> Développement de la rigueur et de la résilience.
-> Travail d’équipe, cohésion et capacité de décision.
-> Stage commando au CNEC Mont-Louis : autonomie, dépassement de soi et adaptation.`,
+      details: `
+> Formation militaire initiale et développement des fondamentaux : rigueur, condition physique, et travail collectif.
+> Passage au CPIS de Perpignan, avec immersion dans un environnement sélectif demandant adaptation, endurance mentale et maîtrise de soi.
+> Stage au CNEC de Mont-Louis : franchissement, rusticité, autonomie, dépassement de soi.
+> Renforcement de compétences transverses utiles en environnement technique : sang-froid, prise de décision, sens des responsabilités.`,
     },
   ];
 
