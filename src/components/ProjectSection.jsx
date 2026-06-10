@@ -20,6 +20,7 @@ import CTF_John from "../assets/Projets/CTF_John.png";
 import CTF_Snort from "../assets/Projets/CTF_Snort.png";
 import CTF_Hashcat from "../assets/Projets/CTF_Hashcat.png";
 import CTF_Forensic from "../assets/Projets/CTF_Forensic.png";
+import OTP_RCS from "../assets/Projets/OTP_RCS.png";
 import Btc from "../assets/Experiences/Mining_rig.png";
 
 const PROJECTS_PER_PAGE = 6;
@@ -74,6 +75,26 @@ const projets = [
     date: "05/2026",
     categorie: "Cyber-securité",
     complexity: 5,
+  },
+  {
+    titre: "Générateur_OTP_RCS",
+    description:
+      "Backend de sécurité applicative réalisé dans le cadre d'un hackathon. Le service génère, envoie et vérifie des codes OTP à 6 chiffres via l'API RCS smsMode pour sécuriser une authentification ou la validation d'une action sensible. L'architecture NestJS expose une API documentée avec Swagger, stocke uniquement le hash SHA-256 des codes dans MongoDB et applique une approche aligné avec les bonens pratiques ISO 27001 : expiration du code, suppression après validation, limitation par numéro, limitation par IP, blocage temporaire et nombre maximal de tentatives de vérification.",
+    tags: [
+      "ISO 27001",
+      "TypeScript",
+      "NestJS",
+      "MongoDB",
+      "API RCS",
+      "OTP",
+      "RCS",
+    ],
+    lien: "https://github.com/JN13012/Generateur_Code_OTP",
+    lienLabel: "VOIR_LE_BACKEND",
+    image: OTP_RCS,
+    date: "06/2026",
+    categorie: "Cyber-securité",
+    complexity: 4,
   },
   {
     titre: "Audit - 1",
