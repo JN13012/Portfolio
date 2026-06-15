@@ -79,7 +79,7 @@ const projets = [
   {
     titre: "CTF",
     description:
-      "Environnement CTF intégré à la page d'accueil. Le projet simule une chaîne d'apprentissage cybersécurité en 9 niveaux progressifs : footprinting, commandes Linux, énumération réseau, exploitation web, cracking, Metasploit, analyse SIEM, forensic et hardening. Le terminal gère des sessions simulées SSH, Netcat, Meterpreter et SIEM dans des workflows proches d’un audit réel.",
+      "Environnement d'entrainement cyberséurité - CTF intégré à la page d'accueil. Le projet simule une chaîne d'apprentissage cybersécurité en 9 niveaux progressifs : footprinting, commandes Linux, énumération réseau, exploitation web, cracking, Metasploit, analyse SIEM, forensic et hardening. Le terminal gère des sessions simulées SSH, Netcat, Meterpreter et SIEM dans des workflows proches d’un audit réel.",
     tags: [
       "Linux",
       "Nmap",
@@ -103,13 +103,12 @@ const projets = [
   {
     titre: "Générateur_OTP_RCS",
     description:
-      "Backend de sécurité applicative réalisé dans le cadre d'un hackathon. Le service génère, envoie et vérifie des codes OTP à 6 chiffres via l'API RCS smsMode pour sécuriser une authentification ou la validation d'une action sensible. L'architecture NestJS expose une API documentée avec Swagger, stocke uniquement le hash SHA-256 des codes dans MongoDB et applique une approche aligné avec les bonens pratiques ISO 27001 : expiration du code, suppression après validation, limitation par numéro, limitation par IP, blocage temporaire et nombre maximal de tentatives de vérification.",
+      "Service Backend Multi-Factor-Authentication réalisé dans le cadre d'un hackathon. Le service génère, envoie et vérifie des codes OTP à 6 chiffres via l'API RCS smsMode. L'architecture NestJS expose une API documentée avec Swagger, stocke uniquement le hash SHA-256 des codes dans MongoDB et applique une approche aligné avec les bonens pratiques ISO 27001 : expiration du code, suppression après validation, limitation par numéro, limitation par IP, blocage temporaire et nombre maximal de tentatives de vérification.",
     tags: [
       "ISO 27001",
       "TypeScript",
       "NestJS",
       "MongoDB",
-      "API RCS",
       "OTP",
       "RCS",
     ],
@@ -389,9 +388,7 @@ const ProjectSection = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [projectImageIndex, setProjectImageIndex] = useState(0);
   const [activeFilter, setActiveFilter] = useState("Tous");
-  const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [complexityOrder, setComplexityOrder] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
 
   const ordrePriorite = [
@@ -425,15 +422,10 @@ const ProjectSection = () => {
           : new Date(parts[0], 0);
       };
 
-      if (sortBy === "complexity") {
-        const diff = (b.complexity || 0) - (a.complexity || 0);
-        return complexityOrder === "desc" ? diff : -diff;
-      }
-
       const diff = parseDate(b.date) - parseDate(a.date);
       return sortOrder === "desc" ? diff : -diff;
     });
-  }, [activeFilter, sortBy, sortOrder, complexityOrder]);
+  }, [activeFilter, sortOrder]);
 
   const totalPages = Math.max(
     1,
@@ -450,16 +442,7 @@ const ProjectSection = () => {
   };
 
   const toggleSortOrder = () => {
-    setSortBy("date");
     setSortOrder((current) => (current === "desc" ? "asc" : "desc"));
-    setCurrentPage(1);
-  };
-
-  const sortByComplexity = () => {
-    if (sortBy === "complexity") {
-      setComplexityOrder((current) => (current === "desc" ? "asc" : "desc"));
-    }
-    setSortBy("complexity");
     setCurrentPage(1);
   };
 
@@ -517,11 +500,7 @@ const ProjectSection = () => {
           <div className="flex items-center gap-5">
             <button
               onClick={toggleSortOrder}
-              className={`cursor-pointer font-mono text-sm transition-colors flex items-center gap-2 uppercase ${
-                sortBy === "date"
-                  ? "text-cyber"
-                  : "text-cyber/55 hover:text-cyber"
-              }`}
+              className="cursor-pointer font-mono text-sm transition-colors flex items-center gap-2 uppercase text-cyber"
             >
               <span>
                 {sortOrder === "desc"
@@ -530,20 +509,6 @@ const ProjectSection = () => {
               </span>
               <span className="text-base">
                 {sortOrder === "desc" ? "▼" : "▲"}
-              </span>
-            </button>
-
-            <button
-              onClick={sortByComplexity}
-              className={`cursor-pointer font-mono text-sm transition-colors flex items-center gap-2 uppercase ${
-                sortBy === "complexity"
-                  ? "text-cyber"
-                  : "text-cyber/55 hover:text-cyber"
-              }`}
-            >
-              <span>SORT: Complexité</span>
-              <span className="text-base">
-                {complexityOrder === "desc" ? "▼" : "▲"}
               </span>
             </button>
           </div>

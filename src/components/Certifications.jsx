@@ -397,9 +397,6 @@ const Certifications = () => {
             result = getMonthKey(b.date) - getMonthKey(a.date);
           }
         }
-      } else if (sortBy === "duration") {
-        const getHours = (s) => parseInt(s) || 0;
-        result = getHours(b.duration) - getHours(a.duration);
       } else {
         result = getMonthKey(b.date) - getMonthKey(a.date);
       }
@@ -478,7 +475,7 @@ const Certifications = () => {
             {/* CONTROLES DE TRI */}
             <div className="flex items-center gap-5 text-sm font-mono tracking-tight">
               <div className="flex items-center gap-3">
-                {["date", "diff", "duration"].map((type) => {
+                {["date", "diff"].map((type) => {
                   const internalKey = type === "diff" ? "difficulte" : type;
                   const isActive = sortBy === internalKey;
 
@@ -515,10 +512,7 @@ const Certifications = () => {
                         </span>
 
                         <span className="leading-none">
-                          {isActive &&
-                          (type === "date" ||
-                            type === "diff" ||
-                            type === "duration")
+                          {isActive && (type === "date" || type === "diff")
                             ? `[ ${type} ]`
                             : type}
                         </span>
