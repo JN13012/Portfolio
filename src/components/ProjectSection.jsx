@@ -22,6 +22,9 @@ import CTF_Hashcat from "../assets/Projets/CTF_Hashcat.png";
 import CTF_Forensic from "../assets/Projets/CTF_Forensic.png";
 import OTP_RCS from "../assets/Projets/OTP_RCS.png";
 import Btc from "../assets/Experiences/Mining_rig.png";
+import Obsidian from "../assets/Obsidian.png";
+import Obsidian0 from "../assets/Obsidian0.png";
+import Obsidian1 from "../assets/obsidian1.png";
 
 const PROJECTS_PER_PAGE = 6;
 
@@ -52,6 +55,27 @@ const categoryThemes = {
   },
 };
 const projets = [
+  {
+    titre: "Base_de_connaissance",
+    description:
+      "Base de connaissances personnelle développée sous Obsidian et enrichie quotidiennement, centralisant l'ensemble des connaissances IT (cybersécurité, IA, langages de programmation, DevOps...). Elle regroupe plus de 200 notes Markdown représentant environ 200 000 mots, organisées en workflows, procédures, cheatsheets, résumés et retours d'expérience. L'objectif est de constituer un référentiel technique, facilitant l'apprentissage et l'exploitation rapide dans un contexte opérationnel.",
+    tags: [
+      "IA",
+      "Cybersécurité",
+      "Pentest",
+      "TryHackMe",
+      "Workflow",
+      "Cheatsheet",
+      "DevOps",
+      "Salesforce",
+    ],
+    lien: null,
+    image: Obsidian,
+    images: [Obsidian, Obsidian0, Obsidian1],
+    date: "06/2026",
+    categorie: "Gestion de Projet",
+    complexity: 3,
+  },
   {
     titre: "CTF",
     description:
