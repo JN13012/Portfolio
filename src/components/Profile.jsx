@@ -212,7 +212,7 @@ const Profile = () => {
               <div
                 className={`${contentPanelClass} space-y-3 text-base font-mono text-zinc-100 leading-relaxed`}
               >
-                <p>
+                <p className="py-3">
                   Étudiant en reconversion, passionné par les
                   systèmes informatiques, la Cybersécurité et l’intelligence
                   artificielle.
@@ -224,7 +224,7 @@ const Profile = () => {
                   projets techniques, la veille technologique et les certifications complémentaires.
                 </p>
 
-                <p className="text-zinc-200">
+                <p className="text-zinc-200 mb-3">
                   Actuellement en recherche d’une alternance.
                 </p>
 

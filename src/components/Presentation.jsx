@@ -26,32 +26,20 @@ const Presentation = () => {
 
           {/* ================= CTF ================= */}
           <div className="bg-zinc-900/50 border border-white/5 p-6 space-y-4 rounded-sm backdrop-blur-sm">
-            <div className="flex items-center gap-2 text-cyber">
-              <span className="font-mono text-sm font-bold uppercase tracking-[0.2em]">
-                Portfolio interactif
-              </span>
-            </div>
-
-            <p className="text-zinc-100 font-mono text-sm leading-relaxed">
-              Ce portfolio représente mes aspirations professionnelles, mon parcours, mes projets et mes formations.
-            </p>
-
-            {/* SPACE / SEPARATION VISUELLE */}
-            <div className="my-6 h-px w-full bg-white/10" />
 
             <div className="flex items-center gap-2 text-cyber">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.2em]">
+              <span className="font-mono text-xl font-bold uppercase tracking-[0.2em]">
                 LABORATOIRE CTF
               </span>
             </div>
 
-            <p className="text-zinc-100 font-mono text-sm leading-relaxed mt-2">
+            <p className="text-zinc-100 font-mono text-base leading-relaxed mt-2">
               Découvrez l'environnement d’entraînement cybersécurité intégré sur la partie droite de
               l’écran. <br />
               <br />
               Compétences développées :
             </p>
-            <ul className="space-y-2 font-mono text-sm text-zinc-100/90">
+            <ul className="space-y-2 font-mono text-base text-zinc-100/90">
               <li className="flex gap-2">
                 <span className="text-cyber">[01]</span> Système Linux &
                 recherche de fichiers
