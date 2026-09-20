@@ -27,6 +27,7 @@ const NavBar = () => {
             <span className="text-zinc-500">.</span>
             <span className="text-cyber">CYBERSÉCURITÉ</span>
             <span className="text-sky-500">.IA</span>
+            <span className="text-violet-400">.WEB3</span>
           </div>
 
           {/* LIENS à droite*/}
