@@ -137,10 +137,11 @@ const Experiences = () => {
       imgSrc: Salesforce_dev,
       imgAlt: "Salesforce Developer",
       imgCaption: "Salesforce Developer",
-      details: `> Développement de composants Salesforce en Apex et JavaScript, incluant interfaces utilisateurs, logique métier.
-       > Conception d'un éditeur de scripts interne permettant l'exécution, la planification, l'enchaînement de scripts, la gestion des logs et les sauvegardes.
+      details: `> Développement d’un editeur de code interne pour la gestion de scripts : exécution, historique, sauvegarde, versioning, planification et suivi de logs.
+       > Développement d’applications Salesforce en Apex, Lightning Web Components (LWC) et JavaScript - Front + Backend.
+      > Résolution de tickets : corrections de bugs, évolution de fonctionnalités, améliorations du traitement des données et des processus métier.
 > Mise en place de tests unitaires.
-> Travail en autonomie sur des problématiques de tooling, d'automatisation et d'intégration dans un environnement professionnel.
+> Travail en autonomie.
        `,
        
     },
@@ -164,15 +165,15 @@ const Experiences = () => {
       imgSrc: Mining,
       imgAlt: "HiveOS RIG Monitoring",
       imgCaption: "Exploitation et monitoring blockchain",
-      details: `> Conception, assemblage et exploitation de fermes de minage.
+      details: `> Conception, assemblage et exploitation de fermes de minage (Ethereum, Bitcoin, Raptoreum, Chia et autres cryptoactifs)
 > Optimisation performances, consommation et refroidissement via overclocking, undervolting et tuning.
 > Administration et monitoring des infrastructures via HiveOS, Braiins OS, Linux et Windows.
 > Automatisation : gestion des erreurs, mises à jour, redémarrages.
-> Maintenance matérielle : diagnostic des pannes, remplacement de composants, pads thermiques, ventilateurs...
-> Analyse de rentabilité, suivi des marchés et optimisation des stratégies, incluant Maximum Extractable Value et Flashbots.
-> Veille technologique et financière.`,
+> Maintenance des équipements : diagnostic des pannes, remplacement de composants.
+> Optimisation des stratégies (Flashbots et Maximum Extractable Value).
+> Veille technologique et financière + Trading.`,
     },
-
+    
     {
       date: "5 ans",
       titre: "Technicien Mécanique - Compétition & Maintenance",
