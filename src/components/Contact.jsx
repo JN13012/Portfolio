@@ -63,7 +63,7 @@ export default function Contact() {
       <div className="pointer-events-none absolute inset-x-20 top-1/2 h-px bg-gradient-to-r from-transparent via-cyber/35 to-transparent blur-[1px]" />
 
       <div className="relative z-10">
-        <SectionHeader index="07" title="Contact" />
+        <SectionHeader index="08" title="Contact" />
 
         <div className="grid grid-cols-1 gap-8 rounded-md border border-white/30 bg-[#0b0b0b] p-6 shadow-[0_22px_70px_rgba(0,0,0,0.46)] md:grid-cols-[0.9fr_1.35fr] md:p-8">
           <div className="flex flex-col justify-between gap-10 border-b border-white/10 pb-8 md:border-b-0 md:border-r md:pb-0 md:pr-8">

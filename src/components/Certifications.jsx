@@ -1,24 +1,28 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import SectionHeader from "./SectionHeader";
+import { inProgress } from "../content/certifications";
 import THM_BG from "../assets/THM.jpg";
-import COURSERA_BG from "../assets/COURSERA.png";
-import CYBERSECYRITY_101 from "../assets/THM/Cybersecurity_101.jpg";
+import COURSERA_BG from "../assets/COURSERA.webp";
+import CYBERSECYRITY_101 from "../assets/THM/Cybersecurity_101.webp";
 import THM_SEC0 from "../assets/THM/THM - SEC0.png";
-import RESULT_SEC0 from "../assets/THM/Result - SEC0.png";
+import RESULT_SEC0 from "../assets/THM/Result - SEC0.webp";
 import THM_SEC1 from "../assets/THM/THM - SEC1.png";
-import RESULT_SEC1 from "../assets/THM/Result - SEC1.png";
-import Introduction_to_AI from "../assets/Coursera/Introduction_to_Artificial_Intelligence.jpg";
-import Generative_AI_Introduction from "../assets/Coursera/Generative_AI_Introduction_and_Applications.jpg";
-import Prompt_Engineering from "../assets/Coursera/Generative_AI_Prompt_Engineering_Basics.jpg";
-import Software_Engineering from "../assets/Coursera/Introduction_to_Software_Engineering.jpg";
-import Intro_HTML_CSS_JavaScript from "../assets/Coursera/Introduction_to_HTML_CSS_JavaScript.jpg";
-import Python_Data_Science from "../assets/Coursera/Python_for_Data_Science_AI_Development.jpg";
-import Developing_AI_With_Python_Flask from "../assets/Coursera/Developing_AI_Applications_with_Python_and_Flask.jpg";
-import Building_Generative_AI_Powered_Applications_with_Python from "../assets/Coursera/Building_Generative_AI_Powered_Applications_with_Python.jpg";
-import IBM_AI_Developer from "../assets/Coursera/IBM_AI_Developer.jpg";
-import Generative_AI_Elevate_Career from "../assets/Coursera/Generative_AI_Elevate_Career.jpg";
-import Software_Career_Guide from "../assets/Coursera/Software_Career_Guide.jpg";
-import THM_PreSecurity1 from "../assets/THM/THM_PreSecurity1.png";
+import RESULT_SEC1 from "../assets/THM/Result - SEC1.webp";
+import Introduction_to_AI from "../assets/Coursera/Introduction_to_Artificial_Intelligence.webp";
+import Generative_AI_Introduction from "../assets/Coursera/Generative_AI_Introduction_and_Applications.webp";
+import Prompt_Engineering from "../assets/Coursera/Generative_AI_Prompt_Engineering_Basics.webp";
+import Software_Engineering from "../assets/Coursera/Introduction_to_Software_Engineering.webp";
+import Intro_HTML_CSS_JavaScript from "../assets/Coursera/Introduction_to_HTML_CSS_JavaScript.webp";
+import Python_Data_Science from "../assets/Coursera/Python_for_Data_Science_AI_Development.webp";
+import Developing_AI_With_Python_Flask from "../assets/Coursera/Developing_AI_Applications_with_Python_and_Flask.webp";
+import Building_Generative_AI_Powered_Applications_with_Python from "../assets/Coursera/Building_Generative_AI_Powered_Applications_with_Python.webp";
+import IBM_AI_Developer from "../assets/Coursera/IBM_AI_Developer.webp";
+import Generative_AI_Elevate_Career from "../assets/Coursera/Generative_AI_Elevate_Career.webp";
+import Software_Career_Guide from "../assets/Coursera/Software_Career_Guide.webp";
+import THM_PreSecurity1 from "../assets/THM/THM_PreSecurity1.webp";
+import THM_JR_PENTESTER from "../assets/THM/THM_Jr_Pentester.png";
+import THM_SUPERCHARGING_AI from "../assets/THM/THM_Supercharging_AI.webp";
 
 const CERTIFICATIONS_PER_PAGE = 8;
 
@@ -31,6 +35,31 @@ const DIFFICULTY_CONFIG = {
 };
 
 const certifs = [
+  {
+    titre: "Jr Penetration Tester",
+    plateforme: "TryHackMe",
+    cat: "TryHackMe",
+    date: "10/2026",
+    image: THM_JR_PENTESTER,
+    url: "https://tryhackme.com/certificate/THM-VKWDW1TVUB",
+    description:
+      "Parcours pentest complet : reconnaissance, énumération, exploitation web (OWASP Top 10), Burp Suite, Metasploit, élévation de privilèges Linux et Windows.",
+    difficulte: 3,
+    isPro: true,
+    stack: ["Nmap", "Burp Suite", "OWASP Top 10", "Metasploit", "Privilege Escalation", "Linux", "Windows"],
+    duration: "95 Hours",
+  },
+  {
+    titre: "Supercharging Your Pentesting With AI",
+    plateforme: "TryHackMe",
+    cat: "TryHackMe",
+    date: "10/2026",
+    image: THM_SUPERCHARGING_AI,
+    description:
+      "Atelier pratique (5 crédits CPE) : pentest assisté par IA, workflows agentiques, accès aux outils et construction de harness, durcissement de prompts, CTF.",
+    difficulte: 2,
+    stack: ["AI Pentesting", "Agentic workflows", "Harness", "Prompt hardening", "CTF"],
+  },
   {
     titre: "Pre-Security",
     plateforme: "TryHackMe",
@@ -60,7 +89,7 @@ const certifs = [
     resultImage: RESULT_SEC0,
     url: "https://assets.tryhackme.com/certification-certificate/6a0cbce9a1880079284577a7.pdf",
     description:
-      "Examen validant les bases techniques d’entrée en cybersécurité : systèmes, réseaux, web et concepts de sécurité. Elle confirme une compréhension solide des prérequis avant une poursuite du cursus.",
+      "Examen validant les bases techniques d’entrée en cybersécurité : systèmes, réseaux, web et concepts de sécurité. Il confirme une compréhension solide des prérequis avant une poursuite du cursus.",
     difficulte: 1,
     isPro: true,
     stack: [
@@ -79,7 +108,7 @@ const certifs = [
     date: "05/2026",
     image: THM_SEC1,
     resultImage: RESULT_SEC1,
-    url: "https://assets.tryhackme.com/certification-certificate/6a0cbce9a1880079284577a7.pdf",
+    url: "https://assets.tryhackme.com/certification-certificate/6a11ccd3e4df8e0742e97cf5.pdf",
     description:
       "Examen confirmant la maîtrise pratique de compétences en analyse réseau (PCAP/Wireshark), administration et hardening Windows/Linux (audit services, logs), pentest web (recon, Burp, SQLi), opérations SOC (monitoring et triage d'alertes), ainsi que Bruteforce & Cracking et analyse statique de malware (exécution de processus, écriture...).",
     difficulte: 3,
@@ -131,7 +160,7 @@ const certifs = [
     image: Introduction_to_AI,
     url: "https://coursera.org/share/466abca0568c44dd7e3d3258a47e99ee",
     description:
-      "Introduction des fondamentaux de l’IA générative incluant les notions de machine learning, deep learning, réseaux de neurones, ainsi que ses application à des cas métiers et aux enjeux de gouvernance.",
+      "Introduction des fondamentaux de l’IA générative incluant les notions de machine learning, deep learning, réseaux de neurones, ainsi que ses applications à des cas métiers et aux enjeux de gouvernance.",
     difficulte: 1,
     stack: ["GenAI", "Architecture IA", "Gouvernance IA"],
     duration: "12 Hours",
@@ -144,7 +173,7 @@ const certifs = [
     image: Generative_AI_Introduction,
     url: "https://coursera.org/share/7a06aa71ef5a258e81ad1af7c66a6f80",
     description:
-      "Introduction aux concepts fondammentaux de l’IA générative. Modèles, outils et cas d’usage dans différents secteurs.",
+      "Introduction aux concepts fondamentaux de l’IA générative. Modèles, outils et cas d’usage dans différents secteurs.",
     difficulte: 1,
     stack: ["GenAI", "LLM", "Prompt Engineering"],
     duration: "8 Hours",
@@ -159,7 +188,7 @@ const certifs = [
     description:
       "Introduction aux techniques de prompt engineering pour l’IA générative : structuration de prompts, gestion du contexte et optimisation des réponses.",
     difficulte: 1,
-    stack: ["Prompt Patterns", "Gestion du Context", "Workflows IA"],
+    stack: ["Prompt Patterns", "Gestion du contexte", "Workflows IA"],
     duration: "9 Hours",
   },
   {
@@ -252,7 +281,7 @@ const certifs = [
     image: Generative_AI_Elevate_Career,
     url: "https://www.coursera.org/account/accomplishments/verify/KGTVEZVG1XYB",
     description:
-      "Utilisation d’outils d’IA générative pour le développement logiciel : assistance au code, debugging, refactoring tests et automatisation de workflows.",
+      "Utilisation d’outils d’IA générative pour le développement logiciel : assistance au code, debugging, refactoring, tests et automatisation de workflows.",
     difficulte: 1,
     stack: [
       "IA Générative",
@@ -328,7 +357,7 @@ const nodes = [
       border: "border-red-500/30",
       activeBg: "bg-red-500/10",
       sort: {
-        active: "bg-black border-red-500/40 text-red-400",
+        active: "bg-black border-red-500/40 text-red-200",
         indicator: "text-red-400",
         hover: "hover:text-red-300 hover:border-red-400/60",
       },
@@ -345,7 +374,7 @@ const nodes = [
       border: "border-blue-500/30",
       activeBg: "bg-blue-500/10",
       sort: {
-        active: "bg-black border-blue-500/40 text-blue-400",
+        active: "bg-black border-blue-500/40 text-blue-200",
         indicator: "text-blue-400",
         hover: "hover:text-blue-300 hover:border-blue-400/60",
       },
@@ -422,7 +451,40 @@ const Certifications = () => {
       className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2 relative z-10">
-        <SectionHeader index="04" title="Certifications" />
+        <SectionHeader index="07" title="Certifications" />
+
+        {/* Paths in progress: dated, never mixed with obtained certifications. */}
+        {inProgress.map((item) => (
+          <div key={item.id} className="mb-10 flex flex-col gap-3 border border-dashed border-cyber/40 bg-black/50 p-5 font-mono md:flex-row md:items-center md:gap-8">
+            <span className="text-sm uppercase tracking-[0.3em] text-cyber">En cours</span>
+            <div className="flex-1">
+              <p className="text-lg text-zinc-100">
+                {item.title} <span className="text-zinc-500">· {item.issuer}</span>
+              </p>
+              <div
+                role="progressbar"
+                aria-label={item.title}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round(item.progress * 100)}
+                className="mt-2 h-1.5 w-full bg-white/10"
+              >
+                <div className="h-full bg-cyber shadow-[0_0_10px_#4ade80]" style={{ width: `${item.progress * 100}%` }} />
+              </div>
+            </div>
+            <span className="text-sm text-zinc-400">
+              {Math.round(item.progress * 100)} % au {item.measuredAt.split("-").reverse().join("/")}
+              {item.verifyUrl && (
+                <>
+                  {" · "}
+                  <a href={item.verifyUrl} target="_blank" rel="noreferrer" className="text-cyber underline underline-offset-2 hover:no-underline">
+                    profil TryHackMe ↗
+                  </a>
+                </>
+              )}
+            </span>
+          </div>
+        ))}
         {/* SELECTEUR DE PLATEFORME DE FORMATION */}
         <div className="mb-12 flex flex-col md:flex-row gap-4 justify-start items-start md:items-center">
           <span className="text-base text-zinc-500 font-mono tracking-widest uppercase">
@@ -634,8 +696,9 @@ const Certifications = () => {
               label: "N/A",
             };
 
-            return (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 pt-20 bg-black/95 backdrop-blur-xl">
+            // Portal: the modal must sit above the fixed navbar.
+            return createPortal(
+              <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl">
                 <div
                   className={`bg-zinc-950 border ${activeConfig.theme.border} w-[95vw] md:w-[85vw] lg:w-[75vw] max-h-[90vh] relative overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]`}
                 >
@@ -671,7 +734,7 @@ const Certifications = () => {
                           Duration:
                         </span>
                         <span className="text-white font-mono text-base uppercase">
-                          {selectedCert.duration || "12 Hours"}
+                          {selectedCert.duration || "—"}
                         </span>
                       </div>
 
@@ -754,7 +817,7 @@ const Certifications = () => {
                               <div
                                 className={`absolute inset-0 ${activeConfig.theme.bg} opacity-10 blur-3xl group-hover:opacity-20 transition-opacity`}
                               ></div>
-                              <img
+                              <img loading="lazy" decoding="async"
                                 src={selectedCertImage}
                                 alt={`${selectedCert.titre} screenshot`}
                                 className="relative z-10 w-full max-h-[80vh] object-contain shadow-2xl border border-white/10"
@@ -831,6 +894,7 @@ const Certifications = () => {
                   </div>
 
                   {/* FOOTER : ACTION */}
+                  {selectedCert.url && (
                   <div className="p-4 bg-black/60 border-t border-white/5">
                     <a
                       href={selectedCert.url}
@@ -848,8 +912,10 @@ const Certifications = () => {
                       </span>
                     </a>
                   </div>
+                  )}
                 </div>
-              </div>
+              </div>,
+              document.body,
             );
           })()}
       </div>
@@ -958,7 +1024,7 @@ const CertifCard = ({
         {/* LEFT BLOCK */}
         <div className="flex items-center gap-3 font-mono uppercase">
           <span className="bg-cyber/5 px-2.5 py-1 text-sm font-semibold tracking-[0.12em] text-cyber/80 transition-all group-hover:bg-cyber/10 group-hover:text-cyber">
-            {duration || "12 Hours"}
+            {duration || "—"}
           </span>
         </div>
 

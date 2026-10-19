@@ -1,10 +1,10 @@
 import React from "react";
 import SectionHeader from "./SectionHeader";
 
-import Salesforce_dev from "../assets/Experiences/Salesforce_dev.png";
+import Salesforce_dev from "../assets/Experiences/Salesforce_dev.webp";
 import Wec2017 from "../assets/Experiences/wec2017_1.jpg";
-import Mining from "../assets/Experiences/HiveOs_monitoring.png";
-import RIMA from "../assets/Formations/RIMA.png";
+import Mining from "../assets/Experiences/HiveOs_monitoring.webp";
+import RIMA from "../assets/Formations/RIMA.webp";
 
 const BlocExperience = ({
   date,
@@ -108,7 +108,7 @@ const BlocExperience = ({
       <div className="md:col-span-5 lg:col-span-4">
         <div className="relative max-w-[450px] mx-auto md:ml-auto">
           <div className="overflow-hidden rounded-sm border border-zinc-800 group-hover:border-cyber/40 transition-all duration-500 shadow-xl">
-            <img
+            <img loading="lazy" decoding="async"
               src={imgSrc || "/api/placeholder/400/250"}
               alt={imgAlt}
               className="w-full h-auto object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105"
@@ -129,15 +129,15 @@ const BlocExperience = ({
 const Experiences = () => {
   const experiences = [
     {
-      date: "6 mois",
-      titre: "Alternant Développeur Salesforce",
+      date: "01/2026 – 06/2026",
+      titre: "Développeur Full-stack (alternance)",
       entreprises: ["ULIT"],
       tags: ["FullStack", "Autonomie", "Adaptabilité", "Communication"],
-      isCurrent: true,
+      isCurrent: false,
       imgSrc: Salesforce_dev,
       imgAlt: "Salesforce Developer",
       imgCaption: "Salesforce Developer",
-      details: `> Développement d’un editeur de code interne pour la gestion de scripts : exécution, historique, sauvegarde, versioning, planification et suivi de logs.
+      details: `> Développement d’un éditeur de code interne pour la gestion de scripts : exécution, historique, sauvegarde, versioning, planification et suivi de logs.
        > Développement d’applications Salesforce en Apex, Lightning Web Components (LWC) et JavaScript - Front + Backend.
       > Résolution de tickets : corrections de bugs, évolution de fonctionnalités, améliorations du traitement des données et des processus métier.
 > Mise en place de tests unitaires.
@@ -158,7 +158,7 @@ const Experiences = () => {
         "Linux",
         "Hardware",
         "Monitoring",
-        "Tunning",
+        "Tuning",
         "MEV",
       ],
       isCurrent: true,
@@ -219,7 +219,7 @@ const Experiences = () => {
       className="py-24 bg-transparent text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2 relative z-10">
-        <SectionHeader index="06" title="Expériences" />
+        <SectionHeader index="05" title="Parcours" />
 
         <div className="space-y-4">
           {experiences.map((exp, index) => (

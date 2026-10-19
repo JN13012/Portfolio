@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import ProfilImg from "../assets/Profil.png";
+import ProfilImg from "../assets/Profil.webp";
 import ProfileConsole from "./ProfileConsole/ProfileConsole";
 import SectionHeader from "./SectionHeader";
 import CV from "../assets/CV.pdf";

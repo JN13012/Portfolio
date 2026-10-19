@@ -1,8 +1,8 @@
 import React from "react";
 import SectionHeader from "./SectionHeader";
-import Epitech from "../assets/Formations/Epitech.png";
-import EcoleDeLaPerformance from "../assets/Formations/ECOLE-PERFORMANCE-10.jpg";
-//import bts from "../assets/Formations/Bts.png";
+import Epitech from "../assets/Formations/Epitech.webp";
+import EcoleDeLaPerformance from "../assets/Formations/ECOLE-PERFORMANCE-10.webp";
+//import bts from "../assets/Formations/Bts.webp";
 
 const FormationStep = ({
   id,
@@ -122,7 +122,7 @@ const FormationStep = ({
             className="relative w-full group/photo overflow-hidden border border-zinc-800 group-hover/item:border-cyber/40 transition-all duration-500 shadow-xl"
             style={{ aspectRatio: "1/1" }}
           >
-            <img
+            <img loading="lazy" decoding="async"
               src={imgSrc || "/api/placeholder/300/300"}
               alt={diplome}
               className="w-full h-full object-cover grayscale opacity-35 group-hover/item:grayscale-0 group-hover/item:opacity-90 group-hover/item:scale-105 transition-all duration-700"
@@ -192,7 +192,7 @@ const Formations = () => {
       className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2 relative z-10">
-        <SectionHeader index="03" title="Formation" />
+        <SectionHeader index="06" title="Formation" />
 
         <div className="max-w-screen-2xl mx-auto">
           {etudes.map((item, index) => (

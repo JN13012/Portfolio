@@ -1,0 +1,218 @@
+/* Astrolabe core. Rotations and reactions; tokens from src/styles/tokens.css. */
+
+.astrolabe svg {
+  fill: none;
+}
+
+.astro-line {
+  stroke: rgb(231 236 239 / 0.22);
+  stroke-width: 1.2;
+}
+.astro-faint line,
+.astro-faint circle,
+.astro-faint-stroke {
+  stroke: rgb(231 236 239 / 0.1);
+  stroke-width: 1;
+}
+.astro-tick {
+  stroke: rgb(231 236 239 / 0.28);
+  stroke-width: 1;
+}
+.astro-tick--long {
+  stroke: rgb(231 236 239 / 0.5);
+}
+.astro-label {
+  fill: var(--color-ink-muted);
+  stroke: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.astro-label--accent {
+  fill: var(--color-ai);
+}
+.astro-arc {
+  stroke: var(--color-ai);
+  stroke-opacity: 0.55;
+  stroke-width: 3;
+}
+.astro-marker {
+  fill: var(--color-ai);
+}
+
+/* Layers stacked in the square; rotors spin as whole HTML boxes (compositor, no SVG repaint). */
+.astro-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.astro-rotor {
+  will-change: transform;
+  animation: astro-spin 160s linear infinite;
+}
+.astro-rotor--ringb {
+  animation-duration: 110s;
+  animation-direction: reverse;
+}
+.astro-rotor--orbits {
+  animation-duration: 240s;
+}
+@keyframes astro-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Guardrail shell: lights up on impact, then cools down. */
+.astro-shield {
+  stroke: rgb(74 222 128 / 0.28);
+  stroke-width: 7;
+  transition:
+    stroke 1.2s var(--ease-out),
+    stroke-width 1.2s var(--ease-out),
+    filter 1.2s var(--ease-out);
+}
+.astro-shield.is-hit {
+  stroke: var(--color-threat);
+  stroke-width: 12;
+  filter: drop-shadow(0 0 16px var(--color-threat));
+  transition: none;
+}
+.astro-shield.is-hit-near {
+  stroke: rgb(255 106 43 / 0.55);
+  filter: drop-shadow(0 0 6px var(--color-threat));
+  transition: none;
+}
+
+.astro-impact,
+.astro-shockwave {
+  opacity: 0;
+  pointer-events: none;
+}
+.astro-impact-core {
+  fill: #fff4ec;
+}
+.astro-impact-ring {
+  stroke: var(--color-threat);
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.astro-impact-flash {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.astro-impact.is-active {
+  animation: astro-flash 1.1s var(--ease-out) forwards;
+}
+.astro-impact.is-active .astro-impact-ring {
+  animation: astro-burst 1.1s var(--ease-out) forwards;
+}
+.astro-impact.is-active .astro-impact-flash {
+  animation: astro-bloom 0.8s var(--ease-out) forwards;
+}
+.astro-shockwave {
+  stroke: var(--color-threat);
+  stroke-width: 4;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.astro-shockwave.is-active {
+  animation: astro-shockwave 1.3s var(--ease-out) forwards;
+}
+.astro-shockwave--echo {
+  stroke-width: 1.5;
+}
+.astro-shockwave--echo.is-active {
+  animation: astro-shockwave-echo 1.6s var(--ease-out) 0.12s forwards;
+}
+@keyframes astro-flash {
+  0% { opacity: 1; filter: drop-shadow(0 0 18px var(--color-threat)); }
+  100% { opacity: 0; }
+}
+@keyframes astro-burst {
+  from { transform: scale(0.3); }
+  to { transform: scale(3.4); }
+}
+@keyframes astro-bloom {
+  0% { transform: scale(0.4); }
+  25% { transform: scale(1.3); }
+  100% { transform: scale(1.8); }
+}
+@keyframes astro-shockwave {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.55); }
+}
+@keyframes astro-shockwave-echo {
+  0% { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+
+/* Armoured iris blades. */
+.astro-blade {
+  fill: url(#astro-blade);
+  stroke: rgb(74 222 128 / 0.3);
+  stroke-width: 1.2;
+}
+
+/* Beam towards the hovered node. */
+.astro-beam {
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+.astro-beam.is-on {
+  opacity: 1;
+}
+
+/* Ring B unlocked by CTF flags. */
+.astro-ringb.is-unlocked .astro-faint-stroke {
+  stroke: var(--color-ai);
+  stroke-opacity: 0.6;
+  stroke-dasharray: none;
+}
+.astro-ringb.is-unlocked .astro-arc {
+  stroke-opacity: 1;
+  filter: drop-shadow(0 0 6px var(--color-ai));
+}
+.astro-ringb.is-pulsing {
+  animation:
+    astro-spin 110s linear infinite reverse,
+    astro-pulse 1.2s var(--ease-out);
+}
+/* The assembling fade must not replace the rotor animation on the orbits layer. */
+.is-assembling .astro-rotor.fade {
+  animation:
+    astro-fade 0.9s var(--ease-out) forwards,
+    astro-spin 240s linear infinite;
+  animation-delay: var(--d, 0s), 0s;
+}
+@keyframes astro-pulse {
+  0% { filter: drop-shadow(0 0 0 var(--color-ai)); }
+  30% { filter: drop-shadow(0 0 18px var(--color-ai)); }
+  100% { filter: drop-shadow(0 0 0 var(--color-ai)); }
+}
+
+/* Gate: the astrolabe draws itself. */
+.is-assembling .draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: astro-draw 1.3s var(--ease-out) forwards;
+  animation-delay: var(--d, 0s);
+}
+.is-assembling .fade {
+  opacity: 0;
+  animation: astro-fade 0.9s var(--ease-out) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes astro-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes astro-fade {
+  to { opacity: 1; }
+}

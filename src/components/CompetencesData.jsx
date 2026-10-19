@@ -4,20 +4,20 @@ import Css from "../assets/Icon/Css.png";
 import Docker from "../assets/Icon/Docker.png";
 import Fail2ban from "../assets/Icon/Fail2ban.png";
 import Firewall from "../assets/Icon/Firewall.png";
-import Flarevm from "../assets/Icon/Flarevm.png";
-import Gobuster from "../assets/Icon/Gobuster.png";
+import Flarevm from "../assets/Icon/Flarevm.webp";
+import Gobuster from "../assets/Icon/Gobuster.webp";
 import Hashcat from "../assets/Icon/Hashcat.png";
 import Hydra from "../assets/Icon/Hydra.svg";
 import Javascript from "../assets/Icon/Javascript.png";
 import Linux from "../assets/Icon/Linux.png";
-import Metasploit from "../assets/Icon/Metasploit.png";
+import Metasploit from "../assets/Icon/Metasploit.webp";
 import Nmap from "../assets/Icon/Nmap.webp";
 import Python from "../assets/Icon/Python.png";
 import Remnux from "../assets/Icon/Remnux.png";
-import Sqlmap from "../assets/Icon/Sqlmap.png";
+import Sqlmap from "../assets/Icon/Sqlmap.webp";
 import Snort from "../assets/Icon/Snort.png";
-import TCP from "../assets/Icon/TCP.png";
-import Wireshark from "../assets/Icon/Wireshark.png";
+import TCP from "../assets/Icon/TCP.webp";
+import Wireshark from "../assets/Icon/Wireshark.webp";
 import Splunk from "../assets/Icon/Splunk.png";
 import Cyberchef from "../assets/Icon/Cyberchef.png";
 import Flask from "../assets/Icon/Flask.png";
@@ -27,9 +27,9 @@ import Numpy from "../assets/Icon/Numpy.png";
 import Langchain from "../assets/Icon/Langchain.png";
 import Java from "../assets/Icon/Java.png";
 import Nodejs from "../assets/Icon/Nodejs.png";
-import React from "../assets/Icon/React.png";
-import Sql from "../assets/Icon/Sql.png";
-import Jenkins from "../assets/Icon/Jenkins.png";
+import React from "../assets/Icon/React.webp";
+import Sql from "../assets/Icon/Sql.webp";
+import Jenkins from "../assets/Icon/Jenkins.webp";
 
 export const TOOL_ICONS = {
   "Active Directory": ActiveDirectory,
@@ -69,7 +69,7 @@ export const TOOL_ICONS = {
 
 export const TOOL_DESCRIPTIONS = {
   //RED TEAM
-  "Linux (CLI)": "Maitrise des commandes",
+  "Linux (CLI)": "Maîtrise des commandes",
   "TCP/IP": "Protocoles & modèle OSI",
   Nmap: "Scan & énumération réseau",
   Gobuster: "Fuzzing web",
@@ -130,7 +130,7 @@ export const DOMAINS = [
           "Hydra",
         ],
         details:
-          "Réalisation de tests d'intrusion sur environnements Web et réseaux par l'exploitation de vulnérabilités (OWASP Top 10). Exploitation de failles CVE avec Metasploit et génération de payloads personnalisés via msfvenom, gestion de sessions Meterpreter et escalade de privilèges. Capacité à intercepter et analyser le trafic HTTP via l'utilisation du Proxy Burp Suite. Audit d'authentification et cassage de hahs: attaques par dictionnaire et brute force.",
+          "Réalisation de tests d'intrusion sur environnements Web et réseaux par l'exploitation de vulnérabilités (OWASP Top 10). Exploitation de failles CVE avec Metasploit et génération de payloads personnalisés via msfvenom, gestion de sessions Meterpreter et escalade de privilèges. Capacité à intercepter et analyser le trafic HTTP via l'utilisation du Proxy Burp Suite. Audit d'authentification et cassage de hashs: attaques par dictionnaire et brute force.",
       },
       {
         name: "Blue Team",
@@ -165,7 +165,7 @@ export const DOMAINS = [
         tag: "LLM - RAG - NLP - Pipeline - Data analysis",
         tools: ["Flask", "PyTorch", "LangChain", "Pandas", "NumPy"],
         details:
-          "Développement d’API backend pour applications IA avec Flask : intégration de LLM, pipelines RAG & NLP, orchestration de modèles génératifs. Analayse et traitement de données avec Pandas et NumPy.",
+          "Développement d’API backend pour applications IA avec Flask : intégration de LLM, pipelines RAG & NLP, orchestration de modèles génératifs. Analyse et traitement de données avec Pandas et NumPy.",
       },
     ],
   },
@@ -180,14 +180,14 @@ export const DOMAINS = [
         name: "Full Stack",
         accent: "#22c55e",
         tag: "Back-end - API REST - POO - Base de données",
-        tools: ["Python", "Java", "JavaScript", "Nodejs", "React", "SQL"],
+        tools: ["Python", "Java", "JavaScript", "Node.js", "React", "SQL"],
         details:
           "Développement de logiciels et de jeux en Java/Python en appliquant les principes de POO. Développement d’applications back-end et de composants web Salesforce, conception d’API REST et manipulation de bases de données.",
       },
       {
         name: "DevOps",
         accent: "#f59e0b",
-        tag: "Conteuneurisation -  Automatisation - CI/CD",
+        tag: "Conteneurisation - Automatisation - CI/CD",
         tools: ["Docker", "Jenkins"],
         details:
           "Conteneurisation d’applications avec Docker et mise en place de pipelines CI/CD afin d’automatiser le déploiement et les tests.",

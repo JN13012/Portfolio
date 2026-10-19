@@ -9,7 +9,24 @@
   --color-cyber-light: #86efac;
   --color-background: #000000;
 
-  --font-mono: "JetBrains Mono", "Figma Mono", "ui-monospace", monospace;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", "ui-monospace", monospace;
+
+  /* Tokens used by the hero core (green palette). */
+  --color-ai: #4ade80;
+  --color-threat: #f43f5e;
+  --color-ink: #f4f4f5;
+  --color-ink-muted: #a1a1aa;
+  --color-canvas: #000000;
+  --color-line-strong: rgb(255 255 255 / 0.18);
+  --shadow-focus: 0 0 0 2px #000, 0 0 0 4px #4ade80;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --duration-base: 220ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration-base: 0ms; }
 }
 
 /* ─────────────────────────────────────────────

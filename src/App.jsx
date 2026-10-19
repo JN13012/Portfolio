@@ -1,40 +1,91 @@
+import { lazy, Suspense, useState } from "react";
 import "./App.css";
 
-// Composants
 import NavBar from "./components/NavBar";
-import Presentation from "./components/Presentation";
-import Profile from "./components/Profile";
-import Formations from "./components/Formations";
-import Experiences from "./components/Experiences";
-import ProjectSection from "./components/ProjectSection";
-import Certifications from "./components/Certifications";
 import Competences from "./components/Competences";
+import ProjectSection from "./components/ProjectSection";
+import Experiences from "./components/Experiences";
+import Formations from "./components/Formations";
+import Certifications from "./components/Certifications";
 import Contact from "./components/Contact";
-import NetworkBackground from "./components/NetworkBackground";
-import SoundToggle from "./components/SoundToggle";
+import { NetworkBackground2 } from "./components/NetworkBackground2";
+import { Hero } from "./sections/Hero/Hero";
+import { Profile } from "./sections/Profile/Profile";
+import { Lab } from "./sections/Lab/Lab";
+import { profile } from "./content/profile";
+
+// three.js intro, loaded only when it is shown.
+const GlobeGate = lazy(() => import("./sections/Gate/GlobeGate"));
+
+const GATE_KEY = "gate-seen";
+
+/**
+ * The globe intro opens once per session, on wide screens only (a 3D scene is
+ * too heavy for a phone's first seconds), never under reduced motion or Save-Data.
+ */
+function shouldOpenGate() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  if (!window.matchMedia("(min-width: 1024px)").matches) return false;
+  if (navigator.connection?.saveData) return false;
+  try {
+    return sessionStorage.getItem(GATE_KEY) !== "1";
+  } catch {
+    return true;
+  }
+}
 
 function App() {
-  return (
-    <div className="relative min-h-screen overflow-x-hidden bg-black font-mono">
-      <NetworkBackground />
+  const [gateOpen, setGateOpen] = useState(shouldOpenGate);
 
-      <div className="relative z-[1000]">
+  const closeGate = () => {
+    try {
+      sessionStorage.setItem(GATE_KEY, "1");
+    } catch {
+      // Private mode: the intro may show again, which is harmless.
+    }
+    setGateOpen(false);
+  };
+
+  const [, month, ] = profile.updatedAt.split("-");
+  const updated = `${month}/${profile.updatedAt.slice(0, 4)}`;
+
+  return (
+    <div
+      className="relative min-h-screen overflow-x-hidden font-mono"
+      style={{ background: "radial-gradient(ellipse at 70% 0%, #0f1720 0%, #080b10 55%, #05070a 100%)" }}
+    >
+      {gateOpen && (
+        <Suspense fallback={<div className="fixed inset-0 z-[2000] bg-black" />}>
+          <GlobeGate onClose={closeGate} />
+        </Suspense>
+      )}
+
+      <NetworkBackground2 />
+
+      <div className="relative z-[1000]" inert={gateOpen || undefined}>
         <NavBar />
       </div>
 
-      <div className="relative z-10 w-[95%] max-w-[1800px] mx-auto px-6 py-10">
-        <Presentation />
+      <main className="relative z-10 mx-auto w-[90%] max-w-[2400px]" inert={gateOpen || undefined}>
+        <Hero />
         <Profile />
         <Competences />
+        <ProjectSection />
+        <Lab />
+        <Experiences />
         <Formations />
         <Certifications />
-        <ProjectSection />
-        <Experiences />
         <Contact />
-      </div>
-      <div className="fixed bottom-4 right-6 z-[1000] hidden md:block rounded-md border border-white/10 bg-black/70 px-3 py-2 font-mono text-[14px] tracking-widest text-zinc-600 backdrop-blur-md">
-        LAST_UPDATE: <span className="text-zinc-400">06/2026</span>
-      </div>
+      </main>
+
+      <footer className="relative z-10 mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center justify-between gap-4 border-t border-white/10 py-8 font-mono text-sm text-zinc-500" inert={gateOpen || undefined}>
+        <span>
+          © {new Date().getFullYear()} {profile.firstName} {profile.lastName}
+        </span>
+        <span className="tracking-widest">
+          LAST_UPDATE: <span className="text-zinc-300">{updated}</span>
+        </span>
+      </footer>
     </div>
   );
 }
