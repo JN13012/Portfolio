@@ -1,748 +1,361 @@
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import SectionHeader from "./SectionHeader";
 import ProjectCard from "./ProjectCard";
+import { projects } from "../content/projects";
+import { statusLabels } from "../content/ui";
+import { envergure, filterProjects, sortProjects, tracksFromSearch } from "../lib/projects";
 import Smartfridge from "../assets/Projets/Smartfridge.png";
 import Cyberpong from "../assets/Projets/Cyberpong.png";
 import My_marvin from "../assets/Projets/My_marvin.png";
 import Popeye from "../assets/Projets/Popeye.png";
-import Vaultborn from "../assets/Projets/Vaultborn.png";
+import Vaultborn from "../assets/Projets/Vaultborn.webp";
 import Vocal_assistant_AI from "../assets/Projets/Vocal_assistant_AI.png";
 import LLM_Context_Wrapper from "../assets/Projets/LLM-Context-Wrapper.png";
 import Unit_converter from "../assets/Projets/Unit_converter.png";
-import Business_AI_Meeting from "../assets/Projets/Business_AI_Meeting_Companion_STT.jpg";
-import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.jpg";
+import Business_AI_Meeting from "../assets/Projets/Business_AI_Meeting_Companion_STT.webp";
+import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.webp";
 import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.jpg";
-import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.jpg";
-import Tor from "../assets/Projets/Tor.png";
-import Chatflow from "../assets/Projets/Chatflow.png";
-import CTF_Metasploit from "../assets/Projets/CTF_Metasploit.png";
-import CTF_John from "../assets/Projets/CTF_John.png";
-import CTF_Snort from "../assets/Projets/CTF_Snort.png";
-import CTF_Hashcat from "../assets/Projets/CTF_Hashcat.png";
+import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.webp";
+import Tor from "../assets/Projets/Tor.webp";
+import Chatflow from "../assets/Projets/Chatflow.webp";
+import CTF_Metasploit from "../assets/Projets/CTF_Metasploit.webp";
+import CTF_John from "../assets/Projets/CTF_John.webp";
+import CTF_Snort from "../assets/Projets/CTF_Snort.webp";
+import CTF_Hashcat from "../assets/Projets/CTF_Hashcat.webp";
 import CTF_Forensic from "../assets/Projets/CTF_Forensic.png";
-import OTP_RCS from "../assets/Projets/OTP_RCS.png";
-import Btc from "../assets/Experiences/Mining_rig.png";
-import Obsidian from "../assets/Obsidian.png";
+import OTP_RCS from "../assets/Projets/OTP_RCS.webp";
+import Salesforce from "../assets/Experiences/Salesforce_dev.webp";
+import Obsidian from "../assets/Obsidian.webp";
 import Obsidian0 from "../assets/Obsidian0.png";
 import Obsidian1 from "../assets/obsidian1.png";
 
 const PROJECTS_PER_PAGE = 6;
 
-const categoryThemes = {
-  IA: {
-    card: "hover:border-cyber/40",
-    badge: "text-blue-300 border-blue-500/30 bg-blue-500/10",
-  },
-  "Cyber-securité": {
-    card: "hover:border-cyber/40",
-    badge: "text-red-400 border-red-500/30 bg-red-500/10",
-  },
-  DevOps: {
-    card: "hover:border-cyber/40",
-    badge: "text-emerald-300 border-emerald-500/30 bg-emerald-500/10",
-  },
-  "Ingénierie logicielle": {
-    card: "hover:border-cyber/40",
-    badge: "text-lime-400 border-lime-500/30 bg-lime-500/10",
-  },
-  "Gestion de Projet": {
-    card: "hover:border-cyber/40",
-    badge: "text-yellow-300 border-yellow-500/30 bg-yellow-500/10",
-  },
-  Default: {
-    card: "hover:border-cyber/40",
-    badge: "text-zinc-400 border-white/10 bg-white/5",
-  },
+/** Visuals per project slug (first image = card background). Projects without one get a pattern. */
+const IMAGES = {
+  pentest: [Tor],
+  "applications-llm": [RAG_pdf_Chatbot, Business_AI_Meeting, AI_Career_Coach, AI_Assistant_Translator],
+  "generateur-otp-rcs": [OTP_RCS],
+  chatflow: [Chatflow],
+  "salesforce-executor": [Salesforce],
+  "base-de-connaissance": [Obsidian, Obsidian0, Obsidian1],
+  "ctf-du-site": [CTF_John, CTF_Hashcat, CTF_Metasploit, CTF_Forensic, CTF_Snort],
+  "smart-fridge": [Smartfridge],
+  popeye: [Popeye],
+  "my-marvin": [My_marvin],
+  vaultborn: [Vaultborn],
+  cyberpong: [Cyberpong],
+  "unit-converter": [Unit_converter],
+  "ai-voice-assistant": [Vocal_assistant_AI],
+  "llm-context-wrapper": [LLM_Context_Wrapper],
 };
-const projets = [
-  {
-    titre: "Base_de_connaissance",
-    description:
-      "Base de connaissances personnelle développée sous Obsidian et enrichie quotidiennement, centralisant l'ensemble des connaissances IT (cybersécurité, IA, langages de programmation, DevOps...). Elle regroupe plus de 200 notes Markdown représentant environ 200 000 mots, organisées en workflows, procédures, cheatsheets, résumés et retours d'expérience. L'objectif est de constituer un référentiel technique, facilitant l'apprentissage et l'exploitation rapide dans un contexte opérationnel.",
-    tags: [
-      "IA",
-      "Cybersécurité",
-      "Pentest",
-      "TryHackMe",
-      "Workflow",
-      "Cheatsheet",
-      "DevOps",
-      "Salesforce",
-    ],
-    lien: null,
-    image: Obsidian,
-    images: [Obsidian, Obsidian0, Obsidian1],
-    date: "06/2026",
-    categorie: "Gestion de Projet",
-    complexity: 3,
-  },
-  {
-    titre: "CTF",
-    description:
-      "Environnement d'entrainement cyberséurité - CTF intégré à la page d'accueil. Le projet simule une chaîne d'apprentissage cybersécurité en 9 niveaux progressifs : footprinting, commandes Linux, énumération réseau, exploitation web, cracking, Metasploit, analyse SIEM, forensic et hardening. Le terminal gère des sessions simulées SSH, Netcat, Meterpreter et SIEM dans des workflows proches d’un audit réel.",
-    tags: [
-      "Linux",
-      "Nmap",
-      "Gobuster",
-      "SQLMap",
-      "John",
-      "Hashcat",
-      "Metasploit",
-      "Splunk",
-      "Forensic",
-      "Hardening",
-    ],
-    lien: "#acceuil",
-    lienLabel: "OUVRIR_LE_CTF",
-    image: CTF_Metasploit,
-    images: [CTF_John, CTF_Hashcat, CTF_Metasploit, CTF_Forensic, CTF_Snort],
-    date: "05/2026",
-    categorie: "Cyber-securité",
-    complexity: 5,
-  },
-  {
-    titre: "Générateur_OTP_RCS",
-    description:
-      "Service Backend Multi-Factor-Authentication réalisé dans le cadre d'un hackathon. Le service génère, envoie et vérifie des codes OTP à 6 chiffres via l'API RCS smsMode. L'architecture NestJS expose une API documentée avec Swagger, stocke uniquement le hash SHA-256 des codes dans MongoDB et applique une approche aligné avec les bonens pratiques ISO 27001 : expiration du code, suppression après validation, limitation par numéro, limitation par IP, blocage temporaire et nombre maximal de tentatives de vérification.",
-    tags: [
-      "ISO 27001",
-      "TypeScript",
-      "NestJS",
-      "MongoDB",
-      "OTP",
-      "RCS",
-    ],
-    lien: "https://github.com/JN13012/Generateur_Code_OTP",
-    lienLabel: "VOIR_LE_BACKEND",
-    image: OTP_RCS,
-    date: "06/2026",
-    categorie: "Cyber-securité",
-    complexity: 4,
-  },
-  {
-    titre: "Audit - 1",
-    description:
-      "Premier audit de sécurité web réalisé dans un cadre autorisé sur une infrastructure réelle. Environ 20 heures consacrées à la réalisation des phases de reconnaissance, fingerprinting, énumération de ressources, détection de mécanismes WAF. Utilisation de techniques d’anonymisation via proxy Tor, interception et analyse du trafic HTTP avec Burp Suite ainsi que recherche de vulnérabilités web basées sur l’OWASP Top 10 afin d’évaluer l’exposition de l’application. Rédaction d’un rapport technique détaillant les observations et résultats de l’analyse.",
 
-    tags: [
-      "Pentest Web",
-      "Reconnaissance",
-      "Fingerprinting",
-      "Énumération",
-      "Burp Suite",
-      "WAF",
-      "OWASP Top 10",
-      "SQL Injection",
-      "Tor Proxy",
-    ],
-    lien: null,
-    image: Tor,
-    date: "04/2026",
-    categorie: "Cyber-securité",
-    complexity: 5,
-  },
-  {
-    titre: "ChatFlow",
-    description:
-      "Application de chat temps réel inspirée des plateformes communautaires modernes. Le projet couvre l’authentification JWT, la gestion de serveurs, salons, membres, rôles, invitations, messages, réactions, pièces jointes, vocaux, amis, conversations privées et notifications système. L’architecture combine une API Express documentée avec Swagger, une interface Next.js internationalisée, Socket.IO pour le temps réel, MinIO pour le stockage et une application desktop Electron distribuable sur macOS, Linux et Windows.",
-    tags: [
-      "Node.js",
-      "Express",
-      "Prisma",
-      "MySQL",
-      "Socket.IO",
-      "JWT",
-      "Zod",
-      "MinIO",
-      "Next.js 16",
-      "React 19",
-      "Tailwind CSS",
-      "shadcn/ui",
-      "Electron",
-      "Docker",
-      "Jest",
-      "Swagger",
-    ],
-    lien: "#",
-    image: Chatflow,
-    date: "04/2026",
-    categorie: "Ingénierie logicielle",
-    complexity: 4,
-  },
-  {
-    titre: "AI_Career_Coach",
-    description:
-      "Solution d'accompagnement RH automatisée pilotée par Llama 3.2 via l'infrastructure IBM Watsonx.ai. Le système orchestre l'extraction de données PDF, l'optimisation de CV, la génération de lettres de motivation personnalisées et l'analyse de profils.",
-    tags: [
-      "Python",
-      "Gradio",
-      "Llama 3.2",
-      "IBM Watsonx",
-      "NLP",
-      "PDF Parsing",
-    ],
-    lien: "https://github.com/JN13012/AI-Career-Coach",
-    image: AI_Career_Coach,
-    date: "04/2026",
-    categorie: "IA",
-    complexity: 3,
-  },
-  {
-    titre: "AI_Assistant_Translator",
-    description:
-      "Solution de traduction vocale universelle. Le système orchestre Llama 3.3 pour les traductions, couplé aux services IBM Watson pour la transcription (STT) et la synthèse vocale (TTS).",
-    tags: [
-      "Python",
-      "Flask",
-      "Groq",
-      "Llama 3.3",
-      "IBM Watson",
-      "NLP",
-      "STT/TTS",
-      "JavaScript",
-    ],
-    lien: "https://github.com/JN13012/AI-Assistant-Translator",
-    image: AI_Assistant_Translator,
-    date: "03/2026",
-    categorie: "IA",
-    complexity: 3,
-  },
-  {
-    titre: "RAG_pdf_Chatbot",
-    description:
-      "Assistant IA d'analyse de CV exploitant l'architecture RAG. Le système parse les PDF, génère des embeddings sémantiques stockés via FAISS et interroge Llama 3 pour identifier les avantages et axes d'amélioration de chaque profil.",
-    tags: [
-      "Python",
-      "Flask",
-      "LLM",
-      "NLP",
-      "LangChain",
-      "RAG",
-      "FAISS",
-      "Llama 3",
-      "IBM Watsonx",
-    ],
-    lien: "https://github.com/JN13012/RAG-pdf-Chatbot",
-    image: RAG_pdf_Chatbot,
-    date: "03/2026",
-    categorie: "IA",
-    complexity: 3,
-  },
+const TRACK_LABEL = { ia: "IA", cyber: "Cyber", dev: "Dev" };
 
-  {
-    titre: "Business_AI_Companion_STT",
-    description:
-      "Application de transcription STT et d'analyse IA exploitant Whisper (OpenAI) et Granite (IBM) via un pipeline LangChain. L'outil segmente l'audio pour un traitement GPU par lots (CUDA) afin de générer des  résumés, des plans d'action et une analyse de la tonalité.",
-    tags: [
-      "Python",
-      "PyTorch",
-      "LLM",
-      "NLP",
-      "LangChain",
-      "IBM WatsonX",
-      "Whisper",
-      "CUDA",
-    ],
-    lien: "https://github.com/JN13012/Business_AI_Meeting_Companion_STT",
-    image: Business_AI_Meeting,
-    date: "03/2026",
-    categorie: "IA",
-    complexity: 3,
-  },
-  {
-    titre: "Smart_Fridge",
-    description:
-      "Pilotage complet d'une phase de conception : de l'analyse de marché (SWOT/PESTEL) à la planification opérationnelle. Inclut la définition des personas (Client/Équipe), la cartographie des risques (RiskMap/KPI) et la structuration budgétaire via diagrammes de Gantt.",
-    tags: [
-      "Management",
-      "Stratégie",
-      "Gestion de Budget",
-      "Analyse de Risques",
-      "Gantt",
-      "KPI",
-    ],
-    lien: "https://github.com/ton-username/Smart-Fridge",
-    image: Smartfridge,
-    date: "12/2025",
-    categorie: "Gestion de Projet",
-    complexity: 1,
-  },
-  {
-    titre: "My_Marvin",
-    description:
-      "Déploiement d'une instance Jenkins conteneurisée (Docker) et configurée entièrement par code (JCasC). Utilisation de scripts Groovy et Job DSL pour automatiser la génération de pipelines CI/CD reproductibles.",
-    tags: ["Docker", "Jenkins", "Groovy", "JCasC"],
-    lien: "https://github.com/ton-username/My_Marvin",
-    image: My_marvin,
-    date: "11/2025",
-    categorie: "DevOps",
-    complexity: 2,
-  },
-  {
-    titre: "POPEYE",
-    description:
-      "Orchestration d'une application web distribuée en micro-services isolés utilisant Docker et Docker Compose.",
-    tags: ["Docker", "Compose"],
-    lien: "https://github.com/ton-username/POPEYE",
-    image: Popeye,
-    date: "11/2025",
-    categorie: "DevOps",
-    complexity: 2,
-  },
-  {
-    titre: "Vaultborn",
-    description:
-      "Jeux Action-RPG 2D en Java mettant en œuvre les piliers de la POO (Héritage, Polymorphisme) et des Design Patterns (Factory). Système de combat en temps réel, gestion d'inventaire/équipements lootables, progression d'expérience et niveaux dans différents univers.",
-    tags: ["Java", "LibGDX", "POO"],
-    lien: "https://github.com/ton-username/Vaultborn",
-    image: Vaultborn,
-    date: "10/2025",
-    categorie: "Ingénierie logicielle",
-    complexity: 3,
-  },
-  {
-    titre: "AI_Voice_Assistant",
-    description:
-      "Pipeline complet d'assistant vocal orchestrant Llama 3 (via Groq) pour le raisonnement, couplé aux services IBM Watson pour la reconnaissance (STT) et synthèse vocale (TTS). Interface de gestion développée sous Flask.",
-    tags: ["Python", "Flask", "NLP", "LLM", "Llama 3", "IBM Watson"],
-    lien: "https://github.com/ton-username/AI-Voice-Assistant",
-    image: Vocal_assistant_AI,
-    date: "03/2026",
-    categorie: "IA",
-    complexity: 3,
-  },
-  {
-    titre: "LLM_Context_Wrapper",
-    description:
-      "Interface Python (Wrapper) optimisant l'usage de la bibliothèque Transformers (Hugging Face). Développement d'un système de gestion d'historique pour maintenir le contexte conversationnel du modèle Blenderbot.",
-    tags: ["Python", "PyTorch", "Transformers", "NLP", "LLM", "Hugging_Face"],
-    lien: "https://github.com/ton-username/LLM-Context-Wrapper",
-    image: LLM_Context_Wrapper,
-    date: "03/2026",
-    categorie: "IA",
-    complexity: 3,
-  },
-  {
-    titre: "CyberPong",
-    description:
-      "Jeu en Python simulant une compromission système via des mécaniques de jeu inspirées du domaine de la cybersécurité. Inclut une gestion dynamique de 'virus' (debuffs) modifiant la physique en temps réel (trajectoires, obstacles, effets visuels) et une introduction scénarisée en piratage informatique.",
-    tags: ["Python", "Pygame", "Turtle"],
-    lien: "https://github.com/ton-username/CyberPong",
-    image: Cyberpong,
-    date: "09/2025",
-    categorie: "Ingénierie logicielle",
-    complexity: 3,
-  },
-  {
-    titre: "Salesforce_Executor",
-    description:
-      "Editeur de scripts permettant l'exécution de scripts, la planification, le chainage, la sauvegarde et le traçage de logs pour l'écosystème Salesforce.",
-    tags: [
-      "JavaScript",
-      "Java",
-      "Apex",
-      "HTML",
-      "XML",
-      "Testing",
-      "Salesforce",
-    ],
-    lien: "#",
-    date: "02/2026",
-    categorie: "Ingénierie logicielle",
-    complexity: 5,
-  },
-  {
-    titre: "Unit_Converter",
-    description:
-      "Convertisseur universel d'unités : Masses, Longeurs, Temps, Volumes, Surfaces, Vitesses, Stockage",
-    tags: ["Python", "Algorithmie", "GUI"],
-    lien: "https://github.com/JN13012/Unit_converter",
-    image: Unit_converter,
-    date: "08/2025",
-    categorie: "Ingénierie logicielle",
-    complexity: 1,
-  },
-  {
-    titre: "Blockchain_Mining",
-    description:
-      "Conception, assemblage et exploitation de fermes de minage GPU dédiées à Ethereum (avant transition vers Proof-of-Stake). Mise en place complète de l'infrastructure hardware et logicielle incluant l'optimisation des performances, la gestion énergétique et la gestion du refroidissement des rigs. Analyse des marchés crypto et optimisation des stratégies de rendement.",
+const trackThemes = {
+  ia: { card: "hover:border-cyber/40", badge: "text-blue-300 border-blue-500/30 bg-blue-500/10" },
+  cyber: { card: "hover:border-cyber/40", badge: "text-red-400 border-red-500/30 bg-red-500/10" },
+  dev: { card: "hover:border-cyber/40", badge: "text-emerald-300 border-emerald-500/30 bg-emerald-500/10" },
+  Default: { card: "hover:border-cyber/40", badge: "text-zinc-400 border-white/10 bg-white/5" },
+};
 
-    tags: [
-      "Hardware",
-      "Administration Systèmes",
-      "Blockchain",
-      "Monitoring",
-      "Performance Tunning",
-      "Analyse de Marché",
-    ],
+const statusStyles = {
+  production: "text-cyber border-cyber/50 bg-cyber/10",
+  test: "text-yellow-300 border-yellow-500/40 bg-yellow-500/10",
+  delivered: "text-zinc-200 border-white/25 bg-white/5",
+  development: "text-sky-300 border-sky-500/40 bg-sky-500/10",
+  designed: "text-zinc-400 border-white/15 bg-white/5",
+};
 
-    lien: "#",
-    image: Btc,
-    date: "09/2022",
-    categorie: "Gestion de Projet",
-    complexity: 4,
-  },
-];
+const CONTEXT_LABEL = {
+  personal: "Projet personnel",
+  epitech: "Epitech",
+  ibm: "Certificat IBM",
+  hackathon: "Hackathon",
+  work: "Entreprise",
+};
+
+const formatPeriod = (period) => {
+  const f = (ym) => ym.split("-").reverse().join("/");
+  return period.end ? (period.end === period.start ? f(period.start) : `${f(period.start)} – ${f(period.end)}`) : `depuis ${f(period.start)}`;
+};
+
+const STATUS_FILTERS = ["production", "test", "delivered", "development"];
 
 const ProjectSection = () => {
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [projectImageIndex, setProjectImageIndex] = useState(0);
-  const [activeFilter, setActiveFilter] = useState("Tous");
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [selected, setSelected] = useState(null);
+  const [imageIndex, setImageIndex] = useState(0);
+  const [tracks, setTracks] = useState(() => tracksFromSearch(window.location.search));
+  const [statuses, setStatuses] = useState([]);
+  const [sort, setSort] = useState("date");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const ordrePriorite = [
-    "Tous",
-    "DevOps",
-    "IA",
-    "Ingénierie logicielle",
-    "Gestion de Projet",
-  ];
+  // Keep ?metier= in the URL so a filtered view can be linked in an application.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (tracks.length) url.searchParams.set("metier", tracks.join(","));
+    else url.searchParams.delete("metier");
+    window.history.replaceState(null, "", url);
+  }, [tracks]);
 
-  const categoriesExistantes = [...new Set(projets.map((p) => p.categorie))];
+  useEffect(() => {
+    if (!selected) return;
+    const onKey = (e) => e.key === "Escape" && setSelected(null);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selected]);
 
-  const categories = [
-    "Tous",
-    ...categoriesExistantes.sort((a, b) => {
-      return ordrePriorite.indexOf(a) - ordrePriorite.indexOf(b);
-    }),
-  ];
+  const visible = useMemo(() => sortProjects(filterProjects(projects, { tracks, statuses }), sort), [tracks, statuses, sort]);
+  const totalPages = Math.max(1, Math.ceil(visible.length / PROJECTS_PER_PAGE));
+  const page = visible.slice((currentPage - 1) * PROJECTS_PER_PAGE, currentPage * PROJECTS_PER_PAGE);
 
-  const filteredAndSorted = useMemo(() => {
-    let result =
-      activeFilter === "Tous"
-        ? [...projets]
-        : projets.filter((p) => p.categorie === activeFilter);
-
-    return result.sort((a, b) => {
-      const parseDate = (d) => {
-        const parts = d.split("/");
-        return parts.length === 2
-          ? new Date(parts[1], parts[0] - 1)
-          : new Date(parts[0], 0);
-      };
-
-      const diff = parseDate(b.date) - parseDate(a.date);
-      return sortOrder === "desc" ? diff : -diff;
-    });
-  }, [activeFilter, sortOrder]);
-
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredAndSorted.length / PROJECTS_PER_PAGE),
-  );
-  const paginatedProjects = filteredAndSorted.slice(
-    (currentPage - 1) * PROJECTS_PER_PAGE,
-    currentPage * PROJECTS_PER_PAGE,
-  );
-
-  const changeFilter = (category) => {
-    setActiveFilter(category);
+  const toggle = (list, value) => (list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
+  const updateTracks = (next) => {
+    setTracks(next);
+    setCurrentPage(1);
+  };
+  const updateStatuses = (next) => {
+    setStatuses(next);
     setCurrentPage(1);
   };
 
-  const toggleSortOrder = () => {
-    setSortOrder((current) => (current === "desc" ? "asc" : "desc"));
-    setCurrentPage(1);
+  const open = (p) => {
+    setSelected(p);
+    setImageIndex(0);
   };
 
-  const closeModal = () => {
-    setSelectedProject(null);
-    setProjectImageIndex(0);
-  };
+  const images = selected ? IMAGES[selected.slug] ?? [] : [];
 
-  const openProject = (project) => {
-    setSelectedProject(project);
-    setProjectImageIndex(0);
-  };
-
-  const selectedProjectImages =
-    selectedProject?.images?.length && selectedProject.images.length > 0
-      ? selectedProject.images
-      : selectedProject?.image
-        ? [selectedProject.image]
-        : [];
-  const selectedProjectImage =
-    selectedProjectImages[projectImageIndex] || selectedProject?.image;
+  const chip = (active, extra = "") =>
+    `cursor-pointer px-4 py-2 font-mono text-sm uppercase tracking-widest transition-all border active:scale-95 ${
+      active ? "bg-cyber text-black border-cyber scale-105" : `${extra || "text-zinc-400 border-white/15 bg-white/5"} opacity-80 hover:opacity-100 hover:scale-105`
+    }`;
 
   return (
-    <section
-      id="projects"
-      className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10"
-    >
-      <div className="mx-auto px-2 relative z-10">
-        {/* 1. SECTION TITRE */}
-        <SectionHeader index="05" title="Réalisations" />
+    <section id="projects" className="relative overflow-hidden border-y border-cyber/10 bg-black/45 py-24 text-white">
+      <div className="relative z-10 mx-auto px-2">
+        <SectionHeader index="03" title="Projets" />
 
-        {/* --- 1. BARRE DE FILTRES ET TRI --- */}
-        <div className="mb-12 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex flex-wrap gap-4">
-            {categories.map((cat) => {
-              const theme = categoryThemes[cat] || categoryThemes.Default;
-              const isActive = activeFilter === cat;
-
-              return (
-                <button
-                  key={cat}
-                  onClick={() => changeFilter(cat)}
-                  className={`cursor-pointer px-4 py-2 font-mono text-sm uppercase tracking-widest transition-all border ${
-                    isActive
-                      ? "bg-cyber text-black border-cyber shadow-[0_0_15px_rgba(var(--cyber-rgb),0.4)] scale-105"
-                      : `${theme.badge} opacity-70 hover:opacity-100 hover:scale-105`
-                  } active:scale-95`}
-                >
-                  {`[ ${cat} ]`}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center gap-5">
-            <button
-              onClick={toggleSortOrder}
-              className="cursor-pointer font-mono text-sm transition-colors flex items-center gap-2 uppercase text-cyber"
-            >
-              <span>
-                {sortOrder === "desc"
-                  ? "SORT: Plus récent"
-                  : "SORT: Plus ancien"}
-              </span>
-              <span className="text-base">
-                {sortOrder === "desc" ? "▼" : "▲"}
-              </span>
+        {/* FILTERS */}
+        <div className="mb-12 flex flex-col gap-5">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="w-24 font-mono text-xs uppercase tracking-[0.3em] text-zinc-500">Métier</span>
+            <button type="button" aria-pressed={tracks.length === 0} onClick={() => updateTracks([])} className={chip(tracks.length === 0)}>
+              [ Tous ]
             </button>
+            {["ia", "cyber", "dev"].map((t) => (
+              <button key={t} type="button" aria-pressed={tracks.includes(t)} onClick={() => updateTracks(toggle(tracks, t))} className={chip(tracks.includes(t), trackThemes[t].badge)}>
+                {`[ ${TRACK_LABEL[t]} ]`}
+              </button>
+            ))}
           </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="w-24 font-mono text-xs uppercase tracking-[0.3em] text-zinc-500">Statut</span>
+            <button type="button" aria-pressed={statuses.length === 0} onClick={() => updateStatuses([])} className={chip(statuses.length === 0)}>
+              [ Tous ]
+            </button>
+            {STATUS_FILTERS.map((s) => (
+              <button key={s} type="button" aria-pressed={statuses.includes(s)} onClick={() => updateStatuses(toggle(statuses, s))} className={chip(statuses.includes(s), statusStyles[s])}>
+                {`[ ${statusLabels[s].fr} ]`}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="w-24 font-mono text-xs uppercase tracking-[0.3em] text-zinc-500">Trier</span>
+            {[
+              ["date", "Plus récent"],
+              ["envergure", "Envergure"],
+            ].map(([key, label]) => (
+              <button key={key} type="button" aria-pressed={sort === key} onClick={() => { setSort(key); setCurrentPage(1); }} className={chip(sort === key)}>
+                {`[ ${label} ]`}
+              </button>
+            ))}
+            <span className="font-mono text-sm text-zinc-500">{visible.length} projets</span>
+          </div>
+          {sort === "envergure" && (
+            <p className="font-mono text-xs text-zinc-500">
+              Envergure = durée (mois, plafonnée à 12) + taille de l’équipe (plafonnée à 7) + tests (échelle logarithmique).
+            </p>
+          )}
         </div>
 
-        {/* 2. GRILLE DE PROJETS */}
-        <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {paginatedProjects.map((p) => (
+        {/* GRID */}
+        {page.length === 0 ? (
+          <p className="font-mono text-zinc-400">Aucun projet ne correspond à ces filtres.</p>
+        ) : (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {page.map((p) => (
               <ProjectCard
-                key={p.titre}
-                {...p}
-                theme={categoryThemes[p.categorie] || categoryThemes.Default}
-                onClick={() => openProject(p)}
+                key={p.slug}
+                titre={p.title}
+                description={p.summary.fr}
+                tags={p.stack}
+                image={IMAGES[p.slug]?.[0]}
+                categorie={TRACK_LABEL[p.tracks[0]] ?? "Projet"}
+                date={formatPeriod(p.period)}
+                status={statusLabels[p.status].fr}
+                statusClass={statusStyles[p.status]}
+                isDossier={p.tier === "dossier"}
+                theme={trackThemes[p.tracks[0]] || trackThemes.Default}
+                onClick={() => open(p)}
               />
             ))}
           </div>
+        )}
 
-          {totalPages > 1 && (
-            <div className="mt-14 flex items-center justify-center gap-6 font-mono uppercase tracking-[0.18em]">
-              {/* PRECEDENT */}
-              <button
-                type="button"
-                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-                disabled={currentPage === 1}
-                className="
-        text-cyber/60 hover:text-cyber
-        transition-all duration-300
-        cursor-pointer
-        disabled:opacity-20
-        disabled:cursor-not-allowed
-      "
-              >
-                [ PREV ]
-              </button>
-
-              {/* NUMEROS */}
-              <div className="flex items-center gap-4">
-                {Array.from({ length: totalPages }, (_, i) => {
-                  const page = i + 1;
-                  const isActive = currentPage === page;
-
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`
-              relative transition-all duration-300
-              cursor-pointer
-              ${
-                isActive
-                  ? "text-cyber text-xl scale-125"
-                  : "text-white/25 hover:text-white/70 text-sm"
-              }
-            `}
-                    >
-                      {String(page).padStart(2, "0")}
-
-                      {/* underline active */}
-                      {isActive && (
-                        <div className="absolute -bottom-1 left-0 w-full h-px bg-cyber shadow-[0_0_10px_#4ade80]" />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* SUIVANT */}
-              <button
-                type="button"
-                onClick={() =>
-                  setCurrentPage((page) => Math.min(totalPages, page + 1))
-                }
-                disabled={currentPage === totalPages}
-                className="
-        text-cyber/60 hover:text-cyber
-        transition-all duration-300
-        cursor-pointer
-        disabled:opacity-20
-        disabled:cursor-not-allowed
-      "
-              >
-                [ NEXT ]
-              </button>
+        {totalPages > 1 && (
+          <div className="mt-14 flex items-center justify-center gap-6 font-mono uppercase tracking-[0.18em]">
+            <button type="button" onClick={() => setCurrentPage((n) => Math.max(1, n - 1))} disabled={currentPage === 1} className="cursor-pointer text-cyber/60 transition-all duration-300 hover:text-cyber disabled:cursor-not-allowed disabled:opacity-20">
+              [ PREV ]
+            </button>
+            <div className="flex items-center gap-4">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                <button key={n} type="button" aria-current={currentPage === n ? "page" : undefined} onClick={() => setCurrentPage(n)} className={`relative cursor-pointer transition-all duration-300 ${currentPage === n ? "scale-125 text-xl text-cyber" : "text-sm text-white/40 hover:text-white/70"}`}>
+                  {String(n).padStart(2, "0")}
+                  {currentPage === n && <div className="absolute -bottom-1 left-0 h-px w-full bg-cyber shadow-[0_0_10px_#4ade80]" />}
+                </button>
+              ))}
             </div>
-          )}
-        </div>
+            <button type="button" onClick={() => setCurrentPage((n) => Math.min(totalPages, n + 1))} disabled={currentPage === totalPages} className="cursor-pointer text-cyber/60 transition-all duration-300 hover:text-cyber disabled:cursor-not-allowed disabled:opacity-20">
+              [ NEXT ]
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* MODALE */}
-      {selectedProject && (
-        <div
-          onClick={closeModal}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl"
-        >
+      {/* MODAL (portal: above the fixed navbar) */}
+      {selected && createPortal(
+        <div onClick={() => setSelected(null)} className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/95 p-4 backdrop-blur-xl">
           <div
-            onClick={(event) => event.stopPropagation()}
-            className="bg-zinc-950 border border-white/10 w-[95vw] md:w-[85vw] lg:w-[75vw] h-[90vh] relative overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+            role="dialog"
+            aria-modal="true"
+            aria-label={selected.title}
+            onClick={(e) => e.stopPropagation()}
+            className="relative flex h-[90vh] w-[95vw] flex-col overflow-hidden border border-white/10 bg-zinc-950 shadow-[0_0_50px_rgba(0,0,0,0.5)] md:w-[85vw] lg:w-[75vw]"
           >
-            {/* HEADER MODALE */}
-            <div className="p-6 text-center relative">
-              <p className="text-base font-mono tracking-[0.3em] uppercase mb-3 text-cyber opacity-80">
-                PROJECT_OVERVIEW
+            <div className="relative p-6 text-center">
+              <p className="mb-3 font-mono text-base uppercase tracking-[0.3em] text-cyber opacity-80">
+                {selected.tier === "dossier" ? "DOSSIER" : "PROJECT_OVERVIEW"}
               </p>
-              <h3 className="text-xl md:text-3xl font-bold text-white uppercase font-mono pb-5">
-                {selectedProject.titre}
-              </h3>
-
-              <button
-                onClick={closeModal}
-                className="absolute top-6 right-6 text-zinc-500 hover:text-white font-mono text-xl transition-colors"
-              >
+              <h3 className="pb-5 font-mono text-xl font-bold uppercase text-white md:text-3xl">{selected.title}</h3>
+              <button type="button" onClick={() => setSelected(null)} className="absolute top-6 right-6 font-mono text-xl text-zinc-500 transition-colors hover:text-white">
                 [ESC_EXIT]
               </button>
-
-              <div className="mt-auto p-4 border-b border-t border-white/10 flex justify-between items-center bg-white/5">
-                <div className="flex items-center gap-2">
-                  <span className="text-cyber font-mono text-base uppercase">
-                    DATE:
-                  </span>
-                  <span className="text-white font-mono text-base uppercase">
-                    {selectedProject.date}
-                  </span>
-                </div>
-                {/* CATEGORIE */}
-                <div className="flex items-center gap-2">
-                  <span className="text-cyber font-mono text-base uppercase">
-                    Catégorie:
-                  </span>
-                  <span className="text-zinc-100 font-mono text-base uppercase tracking-widest">
-                    {selectedProject.categorie}
-                  </span>
-                </div>
+              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 border-y border-white/10 bg-white/5 p-4 font-mono text-sm uppercase md:justify-between">
+                <span><span className="text-cyber">Période :</span> <span className="text-white">{formatPeriod(selected.period)}</span></span>
+                <span><span className="text-cyber">Équipe :</span> <span className="text-white">{selected.team.size > 1 ? (selected.team.label?.fr ?? `${selected.team.size} personnes`) : "Solo"}</span></span>
+                <span><span className="text-cyber">Contexte :</span> <span className="text-white">{CONTEXT_LABEL[selected.context]}</span></span>
+                <span className={`border px-2.5 py-1 ${statusStyles[selected.status]}`}>{statusLabels[selected.status].fr}</span>
               </div>
             </div>
 
-            {/* BODY */}
-            <div className="flex flex-col md:flex-row flex-grow overflow-hidden">
-              {/* VISUEL */}
-              <div className="w-full md:w-1/2 bg-black/40 flex items-center justify-center p-3 border-r border-white/5 relative">
-                <div className="absolute inset-0 bg-cyber opacity-10 blur-3xl"></div>
-                <div className="relative z-10 flex w-full items-center justify-center">
-                  {selectedProjectImages.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setProjectImageIndex(
-                          (index) =>
-                            (index - 1 + selectedProjectImages.length) %
-                            selectedProjectImages.length,
-                        )
-                      }
-                      className="absolute left-0 z-20 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
-                      aria-label="Image précédente"
-                    >
-                      ‹
-                    </button>
-                  )}
-
-                  <img
-                    src={selectedProjectImage}
-                    alt={selectedProject.titre}
-                    className="max-w-full max-h-[62vh] object-contain shadow-2xl border border-white/10"
-                  />
-
-                  {selectedProjectImages.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setProjectImageIndex(
-                          (index) => (index + 1) % selectedProjectImages.length,
-                        )
-                      }
-                      className="absolute right-0 z-20 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
-                      aria-label="Image suivante"
-                    >
-                      ›
-                    </button>
-                  )}
+            <div className="flex flex-grow flex-col overflow-hidden md:flex-row">
+              {images.length > 0 && (
+                <div className="relative flex w-full items-center justify-center border-r border-white/5 bg-black/40 p-3 md:w-1/2">
+                  <div className="absolute inset-0 bg-cyber opacity-10 blur-3xl" />
+                  <div className="relative z-10 flex w-full items-center justify-center">
+                    {images.length > 1 && (
+                      <button type="button" onClick={() => setImageIndex((i) => (i - 1 + images.length) % images.length)} aria-label="Image précédente" className="absolute left-0 z-20 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
+                        ‹
+                      </button>
+                    )}
+                    <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className="max-h-[62vh] max-w-full border border-white/10 object-contain shadow-2xl" />
+                    {images.length > 1 && (
+                      <button type="button" onClick={() => setImageIndex((i) => (i + 1) % images.length)} aria-label="Image suivante" className="absolute right-0 z-20 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
+                        ›
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* DÉTAILS */}
-              <div className="w-full md:w-1/2 p-8 overflow-y-auto bg-zinc-900/20 flex flex-col gap-8">
+              <div className={`flex w-full flex-col gap-8 overflow-y-auto bg-zinc-900/20 p-8 ${images.length ? "md:w-1/2" : ""}`}>
                 <div className="flex flex-col gap-4">
-                  <h4 className="text-zinc-100 font-mono text-lg uppercase tracking-[0.2em] flex items-center gap-3">
-                    <span className="text-cyber">⬢</span> DESCRIPTION
+                  <h4 className="flex items-center gap-3 font-mono text-lg uppercase tracking-[0.2em] text-zinc-100">
+                    <span className="text-cyber">⬢</span> Résumé
                   </h4>
-                  <p className="text-zinc-200 text-base font-mono leading-relaxed border-l-2 border-cyber/30 pl-4">
-                    {selectedProject.description}
-                  </p>
+                  <p className="border-l-2 border-cyber/30 pl-4 font-mono text-base leading-relaxed text-zinc-200">{selected.summary.fr}</p>
                 </div>
 
-                <div className="p-4 bg-black/40 border border-white/5 mt-15">
-                  <h4 className="text-zinc-100 font-mono text-base uppercase mb-3">
-                    Expertise Technique
-                  </h4>
+                {selected.facts.length > 0 && (
+                  <dl className="flex flex-wrap gap-x-10 gap-y-4">
+                    {selected.facts.map((f) => (
+                      <div key={f.label.fr} className="border-t border-cyber/30 pt-2 font-mono">
+                        <dt className="sr-only">{f.label.fr}</dt>
+                        <dd>
+                          <span className="block text-3xl font-bold text-cyber">{f.value}</span>
+                          <span className="text-xs uppercase tracking-widest text-zinc-400">{f.label.fr}</span>
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+
+                {selected.sections?.map((s) => (
+                  <div key={s.kind} className="flex flex-col gap-3">
+                    <h4 className="flex items-center gap-3 font-mono text-base uppercase tracking-[0.2em] text-zinc-100">
+                      <span className="text-cyber">▸</span> {s.title.fr}
+                    </h4>
+                    <p className="font-mono text-[15px] leading-relaxed text-zinc-300">{s.body.fr}</p>
+                  </div>
+                ))}
+
+                <div className="border border-white/5 bg-black/40 p-4">
+                  <h4 className="mb-3 font-mono text-base uppercase text-zinc-100">Expertise technique</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedProject.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="text-base font-mono text-cyber bg-cyber/5 border border-cyber/20 px-3 py-1.5"
-                      >
+                    {selected.stack.map((t) => (
+                      <span key={t} className="border border-cyber/20 bg-cyber/5 px-3 py-1.5 font-mono text-base text-cyber">
                         {t}
                       </span>
                     ))}
                   </div>
                 </div>
+
+                {sort === "envergure" && (
+                  <p className="font-mono text-xs text-zinc-500">Envergure : {envergure(selected)}</p>
+                )}
               </div>
             </div>
 
-            {/* LINK FOOTER */}
-            {selectedProject.lien && (
-              <a
-                href={selectedProject.lien}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative flex items-center justify-center w-full py-4 overflow-hidden border border-cyber/20 bg-cyber/5 hover:border-cyber transition-all duration-300"
-              >
-                {/* Barre de scan */}
-                <div className="absolute inset-0 w-[20%] h-full bg-cyber/20 skew-x-[45deg] -translate-x-[150%] group-hover:translate-x-[600%] transition-transform duration-1000 ease-in-out"></div>
-
-                <span className="relative font-mono text-base font-bold uppercase tracking-[0.2em] text-cyber flex items-center gap-3">
-                  <span className="opacity-50">--</span>[
-                  {selectedProject.lienLabel || "VOIR_LE_PROJET_SUR_GITHUB"} ]
-                  <span className="opacity-50">--</span>
-                </span>
-              </a>
-            )}
+            <ProjectLinks project={selected} onInternal={() => setSelected(null)} />
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </section>
   );
 };
+
+function ProjectLinks({ project, onInternal }) {
+  const links = [
+    project.links.github && { url: project.links.github, label: "VOIR_LE_CODE_SUR_GITHUB" },
+    project.links.writeup && { url: project.links.writeup, label: "LIRE_LES_WRITE-UPS_SUR_GITHUB" },
+    project.links.demo && { url: project.links.demo, label: "OUVRIR", internal: true },
+    ...(project.links.repos ?? []).map((r) => ({ url: r.url, label: r.label })),
+  ].filter(Boolean);
+
+  if (links.length === 0) {
+    return project.links.privateRepo ? (
+      <p className="border-t border-white/10 py-4 text-center font-mono text-sm uppercase tracking-[0.2em] text-zinc-500">Dépôt privé · code non public</p>
+    ) : null;
+  }
+  return (
+    <div className="flex flex-wrap border-t border-cyber/20">
+      {links.map((l) => (
+        <a
+          key={l.url}
+          href={l.url}
+          target={l.internal ? undefined : "_blank"}
+          rel={l.internal ? undefined : "noopener noreferrer"}
+          onClick={l.internal ? onInternal : undefined}
+          className="group relative flex flex-1 items-center justify-center overflow-hidden border-r border-cyber/20 bg-cyber/5 px-4 py-4 transition-all duration-300 last:border-r-0 hover:bg-cyber/10"
+        >
+          <span className="relative font-mono text-sm font-bold uppercase tracking-[0.2em] text-cyber">[ {l.label} ]</span>
+        </a>
+      ))}
+    </div>
+  );
+}
 
 export default ProjectSection;

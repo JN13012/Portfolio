@@ -3182,7 +3182,6 @@ const ProfileConsole = () => {
           }}
           disabled={solved}
           className="bg-transparent border-none outline-none text-white font-mono text-[11px] w-full"
-          autoFocus
         />
         {!solved && <Lock size={10} className="text-zinc-700" />}
       </div>

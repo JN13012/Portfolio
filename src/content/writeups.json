@@ -1,0 +1,781 @@
+{
+  "generatedAt": "2026-10-17",
+  "repo": "JN13012/Cyber-Write-ups",
+  "writeups": [
+    {
+      "slug": "epitech-01-h4ck3rz",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "H4ck3rz",
+      "focus": "Fuzz - Web RCE & SUID Privilege Escalation",
+      "os": "Linux",
+      "environment": "Web Application / Linux Privilege Escalation",
+      "techniques": [
+        "web-enumeration",
+        "credential-disclosure",
+        "authenticated-command-execution",
+        "sudo-abuse",
+        "command-filter-bypass",
+        "suid-enumeration",
+        "binary-analysis",
+        "suid-abuse"
+      ],
+      "tools": [
+        "nmap",
+        "curl",
+        "gobuster",
+        "sudo",
+        "findmnt",
+        "objdump",
+        "strings"
+      ],
+      "lastVerified": null,
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/01%20-%20H4ck3rz%20-%20Fuzz%20-%20Web%20RCE%20&%20SUID%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "epitech-02-toss-a-coin",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "Toss a Coin",
+      "focus": "Fuzz - Web Enumeration & Privilege Escalation",
+      "os": "Linux",
+      "environment": "Web Application / Linux Privilege Escalation",
+      "techniques": [
+        "web-enumeration",
+        "recursive-path-discovery",
+        "credential-disclosure",
+        "ssh-access",
+        "sudo-abuse",
+        "writable-directory",
+        "script-replacement",
+        "suid-enumeration",
+        "binary-analysis",
+        "path-hijacking",
+        "interpreter-abuse"
+      ],
+      "tools": [
+        "nmap",
+        "gobuster",
+        "curl",
+        "ssh",
+        "sudo",
+        "strings",
+        "perl"
+      ],
+      "lastVerified": null,
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/02%20-%20Toss%20a%20Coin%20-%20Fuzz%20-%20Web%20Enumeration%20&%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "epitech-03-silence",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "Silence",
+      "focus": "Fuzz - GPG Credential Recovery & Cron Privilege Escalation",
+      "os": "Linux",
+      "environment": "Web Application / Linux Privilege Escalation",
+      "techniques": [
+        "web-enumeration",
+        "directory-listing",
+        "sensitive-file-disclosure",
+        "private-key-disclosure",
+        "gpg-decryption",
+        "credential-discovery",
+        "ssh-access",
+        "local-service-enumeration",
+        "ssh-port-forwarding",
+        "anonymous-smb-access",
+        "writable-smb-share",
+        "cron-abuse",
+        "suid-abuse"
+      ],
+      "tools": [
+        "nmap",
+        "curl",
+        "gobuster",
+        "unzip",
+        "gpg",
+        "hydra",
+        "ssh",
+        "smbclient",
+        "testparm"
+      ],
+      "lastVerified": null,
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/03%20-%20Silence%20-%20Fuzz%20-%20GPG%20Credential%20Recovery%20&%20Cron%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "epitech-04-batman-s-secret",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "Batman's Secret",
+      "focus": "Command Injection & Privilege Escalation",
+      "os": "Linux",
+      "environment": "Custom Service / Linux Privilege Escalation",
+      "techniques": [
+        "anonymous-ftp",
+        "source-code-disclosure",
+        "hardcoded-secret",
+        "command-injection",
+        "sudo-abuse",
+        "python-module-hijacking"
+      ],
+      "tools": [
+        "nmap",
+        "ftp",
+        "netcat",
+        "sudo",
+        "base64",
+        "python3"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/04%20-%20Batman's%20Secret%20-%20Command%20Injection%20&%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "epitech-05-yer-a-wizard",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "Yer a Wizard",
+      "focus": "Command Injection - FTP Enumeration & SSH Access",
+      "os": "Linux",
+      "environment": "FTP / SSH",
+      "techniques": [
+        "anonymous-ftp",
+        "hidden-file-enumeration",
+        "credential-discovery",
+        "credential-validation",
+        "ssh-access",
+        "data-decoding"
+      ],
+      "tools": [
+        "nmap",
+        "ftp",
+        "ssh"
+      ],
+      "lastVerified": null,
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/05%20-%20Yer%20a%20Wizard%20-%20Command%20Injection%20-%20FTP%20Enumeration%20&%20SSH%20Access.md"
+    },
+    {
+      "slug": "epitech-06-fun-with-functional",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "Fun With Functional",
+      "focus": "Command Injection - Haskell RCE & Flask Privilege Escalation",
+      "os": "Linux",
+      "environment": "Web Application / Linux Privilege Escalation",
+      "techniques": [
+        "server-side-code-execution",
+        "command-execution",
+        "credential-discovery",
+        "ssh-private-key-exposure",
+        "sudo-abuse",
+        "python-code-execution",
+        "suid-abuse"
+      ],
+      "tools": [
+        "nmap",
+        "ssh",
+        "sudo",
+        "python3",
+        "flask"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/06%20-%20Fun%20With%20Functional%20-%20Command%20Injection%20-%20Haskell%20RCE%20&%20Flask%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "epitech-07-meffert",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "Le Meffert",
+      "focus": "Cracking - Command Injection & SUID File Read",
+      "os": "Linux",
+      "environment": "Web Application / Linux Privilege Escalation",
+      "techniques": [
+        "information-disclosure",
+        "data-decoding",
+        "steganography",
+        "credential-discovery",
+        "command-injection",
+        "remote-code-execution",
+        "suid-enumeration",
+        "suid-abuse",
+        "arbitrary-file-read"
+      ],
+      "tools": [
+        "nmap",
+        "curl",
+        "wget",
+        "base64",
+        "base32",
+        "xxd",
+        "exiftool",
+        "strings",
+        "steghide",
+        "find"
+      ],
+      "lastVerified": null,
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/07%20-%20Meffert%20-%20Cracking%20-%20Command%20Injection%20&%20SUID%20File%20Read.md"
+    },
+    {
+      "slug": "epitech-08-daemon-slayer",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "Daemon Slayer",
+      "focus": "Command Injection - Web Exploitation & Privilege Escalation",
+      "os": "Linux",
+      "environment": "Web Application / Linux Privilege Escalation",
+      "techniques": [
+        "web-enumeration",
+        "time-based-blind-sql-injection",
+        "credential-recovery",
+        "unrestricted-file-upload",
+        "remote-code-execution",
+        "writable-directory",
+        "cron-abuse",
+        "suid-abuse",
+        "doas-misconfiguration",
+        "arbitrary-file-read"
+      ],
+      "tools": [
+        "nmap",
+        "gobuster",
+        "curl",
+        "sqlmap",
+        "python3",
+        "doas",
+        "openssl",
+        "base64"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/08%20-%20Daemon%20Slayer%20-%20Command%20Injection%20-%20Web%20Exploitation%20&%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "epitech-09-musa-troglodytarum",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "Le Bananier des Montagnes",
+      "focus": "Cracking - Sudo Privilege Escalation",
+      "os": "Linux",
+      "environment": "Web / Linux Privilege Escalation",
+      "techniques": [
+        "web-enumeration",
+        "data-decoding",
+        "png-trailer-analysis",
+        "password-attack",
+        "ftp-enumeration",
+        "whitespace-decoding",
+        "credential-discovery",
+        "ssh-access",
+        "lateral-movement",
+        "sudo-abuse",
+        "sudo-user-id-bypass",
+        "vi-shell-escape"
+      ],
+      "tools": [
+        "nmap",
+        "curl",
+        "exiftool",
+        "python3",
+        "hydra",
+        "ftp",
+        "ssh",
+        "sudo",
+        "vi"
+      ],
+      "lastVerified": null,
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/09%20-%20Musa%20Troglodytarum%20-%20Cracking%20-%20Sudo%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "epitech-10-jormungandr",
+      "source": "epitech",
+      "platform": "Exegol",
+      "room": "Jormungandr",
+      "focus": "Reverse Engineering",
+      "os": "Linux",
+      "environment": "Custom Service / Reverse Engineering",
+      "techniques": [
+        "anonymous-ftp",
+        "hidden-file-enumeration",
+        "data-decoding",
+        "pickle-analysis",
+        "credential-recovery",
+        "ssh-access",
+        "python-bytecode-decompilation",
+        "source-code-analysis",
+        "authenticated-command-execution"
+      ],
+      "tools": [
+        "nmap",
+        "ftp",
+        "ssh",
+        "netcat",
+        "python3",
+        "pickletools",
+        "uncompyle6"
+      ],
+      "lastVerified": null,
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/Exegol/10%20-%20Jormungandr%20-%20Reverse%20Engineering.md"
+    },
+    {
+      "slug": "tryhackme-01-recruit",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Recruit",
+      "focus": "Web Exploitation",
+      "os": "Linux",
+      "environment": "Web Application",
+      "techniques": [
+        "web-enumeration",
+        "password-brute-force",
+        "arbitrary-file-read",
+        "credential-disclosure",
+        "sql-injection"
+      ],
+      "tools": [
+        "nmap",
+        "curl",
+        "gobuster",
+        "burp-suite",
+        "hydra"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/01%20-%20Recruit%20-%20Web%20Exploitation.md"
+    },
+    {
+      "slug": "tryhackme-02-support",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Support",
+      "focus": "Web Exploitation",
+      "os": "Linux",
+      "environment": "Web Application",
+      "techniques": [
+        "brute-force",
+        "cookie-tampering",
+        "idor",
+        "path-traversal",
+        "arbitrary-file-read",
+        "command-injection",
+        "remote-code-execution"
+      ],
+      "tools": [
+        "nmap",
+        "gobuster",
+        "curl",
+        "burp-suite",
+        "hydra"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/02%20-%20Support%20-%20Web%20Exploitation.md"
+    },
+    {
+      "slug": "tryhackme-03-checkmate",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Checkmate",
+      "focus": "Password Attacks",
+      "os": "Linux",
+      "environment": "Password Attacks",
+      "techniques": [
+        "password-brute-force",
+        "targeted-wordlists",
+        "osint",
+        "password-profiling",
+        "hash-cracking",
+        "password-pattern-analysis",
+        "ssh-brute-force"
+      ],
+      "tools": [
+        "nmap",
+        "curl",
+        "hydra",
+        "cupp",
+        "wget",
+        "exiftool",
+        "hashcat",
+        "crunch"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/03%20-%20Checkmate%20-%20Password%20Attacks.md"
+    },
+    {
+      "slug": "tryhackme-04-metasploit",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Metasploit",
+      "focus": "Payload & Post-Exploitation",
+      "os": "Windows",
+      "environment": "Windows / SMB",
+      "techniques": [
+        "payload-generation",
+        "reverse-tcp",
+        "smb-enumeration",
+        "smb-file-upload",
+        "meterpreter",
+        "credential-dumping",
+        "post-exploitation"
+      ],
+      "tools": [
+        "msfvenom",
+        "metasploit",
+        "meterpreter"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/04%20-%20Metasploit%20-%20Payload%20&%20Post-Exploitation.md"
+    },
+    {
+      "slug": "tryhackme-05-jump",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Jump",
+      "focus": "Linux Privilege Escalation",
+      "os": "Linux",
+      "environment": "Linux Privilege Escalation",
+      "techniques": [
+        "anonymous-ftp",
+        "writable-script",
+        "scheduled-execution",
+        "path-hijacking",
+        "sudo-abuse",
+        "writable-helper",
+        "tty-upgrade",
+        "shell-escape"
+      ],
+      "tools": [
+        "nmap",
+        "ftp",
+        "netcat",
+        "systemctl",
+        "sudo",
+        "python3",
+        "less"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/05%20-%20Jump%20-%20Linux%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "tryhackme-06-jump",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Jump",
+      "focus": "Windows Privilege Escalation",
+      "os": "Windows",
+      "environment": "Windows Privilege Escalation",
+      "techniques": [
+        "smb-enumeration",
+        "credential-disclosure",
+        "registry-credential-discovery",
+        "service-binary-hijacking",
+        "scheduled-task-abuse",
+        "privilege-escalation"
+      ],
+      "tools": [
+        "nmap",
+        "smbclient",
+        "netexec",
+        "xfreerdp",
+        "powershell",
+        "msfvenom",
+        "netcat"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/06%20-%20Jump%20-%20Windows%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "tryhackme-07-proxy",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Proxy",
+      "focus": "Active Directory",
+      "os": "Windows",
+      "environment": "Active Directory",
+      "techniques": [
+        "active-directory-enumeration",
+        "anonymous-smb-access",
+        "forced-authentication",
+        "netntlmv2-capture",
+        "offline-password-cracking",
+        "ldap-enumeration",
+        "kerberos-constrained-delegation",
+        "s4u",
+        "kerberos-ticket-abuse",
+        "remote-execution"
+      ],
+      "tools": [
+        "nmap",
+        "ldapsearch",
+        "rpcclient",
+        "smbclient",
+        "responder",
+        "hashcat",
+        "netexec",
+        "impacket-getST",
+        "impacket-psexec"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/07%20-%20Proxy%20-%20Active%20Directory.md"
+    },
+    {
+      "slug": "tryhackme-08-forward",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Forward",
+      "focus": "Active Directory",
+      "os": "Windows",
+      "environment": "Active Directory",
+      "techniques": [
+        "active-directory-enumeration",
+        "kerberoasting",
+        "credential-discovery",
+        "password-spraying",
+        "password-reuse",
+        "acl-abuse",
+        "machine-account-creation",
+        "resource-based-constrained-delegation",
+        "s4u",
+        "kerberos-ticket-abuse",
+        "remote-execution"
+      ],
+      "tools": [
+        "nmap",
+        "netexec",
+        "smbclient",
+        "impacket-GetUserSPNs",
+        "hashcat",
+        "xfreerdp",
+        "keepass2john",
+        "john",
+        "ldapsearch",
+        "impacket-dacledit",
+        "impacket-addcomputer",
+        "impacket-rbcd",
+        "impacket-getST",
+        "impacket-smbexec"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/08%20-%20Forward%20-%20Active%20Directory.md"
+    },
+    {
+      "slug": "tryhackme-09-domino",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Domino",
+      "focus": "Web & Linux",
+      "os": "Linux",
+      "environment": "Web Application / Linux",
+      "techniques": [
+        "username-enumeration",
+        "password-brute-force",
+        "idor",
+        "jwt-forgery",
+        "broken-jwt-verification",
+        "arbitrary-file-read",
+        "remote-code-execution",
+        "credential-reuse",
+        "cron-abuse",
+        "suid-abuse"
+      ],
+      "tools": [
+        "curl",
+        "hydra",
+        "openssl",
+        "hashcat",
+        "ssh",
+        "pspy",
+        "python3"
+      ],
+      "lastVerified": "2026-09-28",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/09%20-%20Domino%20-%20Web%20&%20Linux.md"
+    },
+    {
+      "slug": "tryhackme-10-silent-monitor",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Silent Monitor",
+      "focus": "Web Exploitation & Command Injection",
+      "os": "Linux",
+      "environment": "Web Application / Linux Host",
+      "techniques": [
+        "service-enumeration",
+        "content-discovery",
+        "sql-injection",
+        "authentication-bypass",
+        "command-injection",
+        "remote-code-execution",
+        "credential-disclosure",
+        "credential-reuse",
+        "password-cracking",
+        "keepass-cracking",
+        "privilege-escalation"
+      ],
+      "tools": [
+        "nmap",
+        "gobuster",
+        "curl",
+        "ssh",
+        "scp",
+        "keepass2john",
+        "john",
+        "keepassxc-cli"
+      ],
+      "lastVerified": "2026-09-29",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/10%20-%20Silent%20Monitor%20-%20Web%20Exploitation%20&%20Command%20Injection.md"
+    },
+    {
+      "slug": "tryhackme-11-dead-drop",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Dead Drop",
+      "focus": "Web & Active Directory",
+      "os": "Linux / Windows",
+      "environment": "Web Application / Active Directory",
+      "techniques": [
+        "service-enumeration",
+        "sql-injection",
+        "authentication-bypass",
+        "file-upload",
+        "remote-code-execution",
+        "credential-discovery",
+        "password-cracking",
+        "android-reverse-engineering",
+        "credential-reuse",
+        "pivoting",
+        "active-directory-enumeration",
+        "acl-abuse",
+        "remote-execution"
+      ],
+      "tools": [
+        "nmap",
+        "gobuster",
+        "curl",
+        "netcat",
+        "john",
+        "ssh",
+        "scp",
+        "jadx",
+        "proxychains",
+        "netexec",
+        "bloodhound-python",
+        "bloodhound"
+      ],
+      "lastVerified": "2026-10-02",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/11%20-%20Dead%20Drop%20-%20Web%20&%20Active%20Directory.md"
+    },
+    {
+      "slug": "tryhackme-12-operation-promotion",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Operation Promotion",
+      "focus": "Web Exploitation & Linux Privilege Escalation",
+      "os": "Linux",
+      "environment": "Web Application",
+      "techniques": [
+        "smb-enumeration",
+        "web-enumeration",
+        "sql-injection",
+        "authentication-bypass",
+        "command-injection",
+        "remote-code-execution",
+        "credential-discovery",
+        "targeted-password-cracking",
+        "ssh",
+        "sudo-misconfiguration",
+        "privilege-escalation"
+      ],
+      "tools": [
+        "nmap",
+        "smbclient",
+        "netexec",
+        "curl",
+        "gobuster",
+        "ffuf",
+        "john",
+        "netcat",
+        "sqlite3",
+        "ssh"
+      ],
+      "lastVerified": "2026-10-04",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/12%20-%20Operation%20Promotion%20-%20Web%20Exploitation%20&%20Linux%20Privilege%20Escalation.md"
+    },
+    {
+      "slug": "tryhackme-13-operation-coldstart",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Operation Coldstart",
+      "focus": "Web & Linux",
+      "os": "Linux",
+      "environment": "Web Application",
+      "techniques": [
+        "service-enumeration",
+        "anonymous-ftp",
+        "source-code-disclosure",
+        "ssrf",
+        "access-control-bypass",
+        "credential-discovery",
+        "credential-reuse",
+        "cron-enumeration",
+        "wildcard-injection",
+        "suid",
+        "privilege-escalation"
+      ],
+      "tools": [
+        "nmap",
+        "ftp",
+        "tar",
+        "curl",
+        "ssh"
+      ],
+      "lastVerified": "2026-10-05",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/13%20-%20Operation%20Coldstart%20-%20Web%20&%20Linux.md"
+    },
+    {
+      "slug": "tryhackme-14-net-sec-challenge",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Net Sec Challenge",
+      "focus": "Network Enumeration",
+      "os": "Linux",
+      "environment": "Network Services",
+      "techniques": [
+        "tcp-port-scanning",
+        "service-enumeration",
+        "banner-grabbing",
+        "password-brute-force",
+        "ftp-enumeration",
+        "null-scan"
+      ],
+      "tools": [
+        "nmap",
+        "ftp",
+        "hydra"
+      ],
+      "lastVerified": "2026-10-06",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/14%20-%20Net%20Sec%20Challenge%20-%20Network%20Enumeration.md"
+    },
+    {
+      "slug": "tryhackme-15-interceptor",
+      "source": "tryhackme",
+      "platform": "TryHackMe",
+      "room": "Interceptor",
+      "focus": "Web Exploitation",
+      "os": "Linux",
+      "environment": "Web Application",
+      "techniques": [
+        "service-enumeration",
+        "source-code-disclosure",
+        "credential-disclosure",
+        "mfa-bypass",
+        "client-side-validation-bypass",
+        "curl-argument-injection",
+        "arbitrary-file-read"
+      ],
+      "tools": [
+        "nmap",
+        "gobuster",
+        "curl",
+        "burp-suite",
+        "netcat"
+      ],
+      "lastVerified": "2026-10-07",
+      "url": "https://github.com/JN13012/Cyber-Write-ups/blob/main/THM/15%20-%20Interceptor%20-%20Web%20Exploitation.md"
+    }
+  ]
+}

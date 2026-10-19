@@ -190,7 +190,7 @@ export default function Competences() {
       className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2 relative z-10">
-        <SectionHeader index="02" title="Expertise Technique" />
+        <SectionHeader index="02" title="Expertise" />
 
         {/* Carousel */}
         <div
@@ -379,7 +379,7 @@ export default function Competences() {
                       )}
                     </div>
                     {iconUrl ? (
-                      <img
+                      <img loading="lazy" decoding="async"
                         src={iconUrl}
                         alt={tool}
                         className="h-28 w-28 object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)] transition duration-300 group-hover:scale-110"

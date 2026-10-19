@@ -9,17 +9,23 @@ const ProjectCard = ({
   date,
   onClick,
   theme,
+  status,
+  statusClass,
+  isDossier,
 }) => {
   const visibleTags = tags.slice(0, 8);
   const hasMoreTags = tags.length > visibleTags.length;
 
   return (
-    <div
+    <button
+      type="button"
       onClick={onClick}
-      className={`group relative bg-black/40 border border-white/20 px-5 py-4 transition-all duration-500 overflow-hidden cursor-crosshair h-full flex flex-col ${theme.card}`}
-      // BG IMAGE
+      className={`group relative bg-black/40 border border-white/20 px-5 py-4 text-left transition-all duration-500 overflow-hidden cursor-crosshair h-full flex flex-col focus-visible:outline-2 focus-visible:outline-cyber ${theme.card}`}
+      // BG IMAGE (or a fine pattern when the project has no visual yet)
       style={{
-        backgroundImage: `url(${image})`,
+        backgroundImage: image
+          ? `url(${image})`
+          : "repeating-linear-gradient(135deg, rgba(74,222,128,0.06) 0 2px, transparent 2px 14px), radial-gradient(circle at 30% 20%, rgba(74,222,128,0.14), transparent 60%)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -34,6 +40,14 @@ const ProjectCard = ({
 
       {/* CARD CONTENT */}
       <div className="relative z-10 flex flex-col h-full flex-grow rounded-sm border border-white/10 bg-black/38 p-4 backdrop-blur-[1px] transition-colors duration-500 group-hover:bg-black/46">
+        {/* STATUS */}
+        <div className="mb-3 flex flex-wrap gap-2">
+          {isDossier && (
+            <span className="border border-cyber/60 bg-cyber/15 px-2 py-0.5 font-mono text-xs uppercase tracking-widest text-cyber">Dossier</span>
+          )}
+          {status && <span className={`border px-2 py-0.5 font-mono text-xs uppercase tracking-widest ${statusClass}`}>{status}</span>}
+        </div>
+
         {/* CARD HEADER */}
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-xl md:text-2xl text-zinc-100 font-mono font-bold tracking-tighter group-hover:text-cyber transition-colors uppercase mb-2">
@@ -83,7 +97,7 @@ const ProjectCard = ({
           <div className="absolute top-0 left-0 h-full w-full bg-cyber -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 
