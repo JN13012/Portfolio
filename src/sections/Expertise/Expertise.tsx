@@ -71,7 +71,7 @@ const readable = (hex: string) => {
 
 export function Logo({ name, size, className, tone = '#a1a1aa' }: { name: string; size: number; className?: string; tone?: string }) {
   const k = key(name)
-  if (PNG[k]) return <img src={PNG[k]} alt="" loading="lazy" draggable={false} className={cx('object-contain', className)} style={{ width: size, height: size }} />
+  if (PNG[k]) return <img src={PNG[k]} alt="" loading="lazy" decoding="async" draggable={false} className={cx('object-contain', className)} style={{ width: size, height: size }} />
   const icon = SVG[k]
   if (icon)
     return (

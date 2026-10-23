@@ -18,14 +18,14 @@ import Profil from "../assets/Profil.webp";
 import THM from "../assets/THM.jpg";
 import Coursera from "../assets/COURSERA.webp";
 import Epitech from "../assets/Formations/Epitech.webp";
-import Python from "../assets/Icon/Python.png";
-import Langchain from "../assets/Icon/Langchain.png";
-import Burp from "../assets/Icon/Burpsuite.png";
+import Python from "../assets/Icon/Python.webp";
+import Langchain from "../assets/Icon/Langchain.webp";
+import Burp from "../assets/Icon/Burpsuite.webp";
 import Nmap from "../assets/Icon/Nmap.webp";
 import Metasploit from "../assets/Icon/Metasploit.webp";
 import ReactIcon from "../assets/Icon/React.webp";
-import Docker from "../assets/Icon/Docker.png";
-import Splunk from "../assets/Icon/Splunk.png";
+import Docker from "../assets/Icon/Docker.webp";
+import Splunk from "../assets/Icon/Splunk.webp";
 
 const PALETTES = {
   green: { "--color-cyber": "#4ade80", "--color-cyber-dark": "#166534", "--color-cyber-light": "#86efac", "--acc-ia": "#22d3ee", "--acc-cy": "#f43f5e" },
