@@ -329,12 +329,28 @@ function ToolCarousel({ domain }: { domain: ExpertiseDomain }) {
         </div>
       </div>
 
-      {/* Position in the list. */}
-      <div aria-hidden="true" className="relative mx-auto mt-2 h-0.5 w-40 rounded-full bg-white/10">
-        <span
-          className="absolute inset-y-0 rounded-full"
-          style={{ width: `${100 / n}%`, left: `${(active / n) * 100}%`, background: accent, transition: reduced ? 'none' : 'left 400ms ease' }}
-        />
+      {/* Where we are in the loop: one dot per tool (clickable), and a counter. */}
+      <div className="mt-3 flex items-center justify-center gap-4">
+        <div className="flex items-center gap-1.5">
+          {tools.map((t, i) => (
+            <button
+              key={t.name}
+              type="button"
+              tabIndex={-1}
+              aria-hidden="true"
+              onClick={() => go(i)}
+              className="grid h-4 cursor-pointer place-items-center"
+            >
+              <span
+                className={cx('block h-1.5 rounded-full', i === active ? 'w-5' : 'w-1.5 bg-white/20 hover:bg-white/45')}
+                style={{ background: i === active ? accent : undefined, transition: reduced ? 'none' : 'width 300ms ease, background-color 300ms ease' }}
+              />
+            </button>
+          ))}
+        </div>
+        <span className="text-xs text-zinc-500 tabular-nums">
+          {String(active + 1).padStart(2, '0')} / {String(n).padStart(2, '0')}
+        </span>
       </div>
       {/* The full list, for screen readers. */}
       <ul className="sr-only">
