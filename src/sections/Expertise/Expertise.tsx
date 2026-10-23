@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useState } from 'react'
 import {
   siExpress,
   siGithubactions,
@@ -25,7 +24,6 @@ import { TOOL_ICONS } from './toolIcons'
 import { expertise, type ExpertiseDomain } from '../../content/expertise'
 import { emblem } from './emblems'
 import { cx } from '../../lib/cx'
-import { useReducedMotion } from '../../lib/useReducedMotion'
 
 const key = (name: string) => name.toLowerCase().replace(/[^a-z0-9]/g, '')
 
@@ -60,8 +58,6 @@ const HUE: Record<ExpertiseDomain['id'], { accent: string; text: string }> = {
   dev: { accent: '#22c55e', text: '#4ade80' },
 }
 
-const PERSPECTIVE = 1100
-
 /** Brand colours too dark for a dark card are drawn light instead. */
 const readable = (hex: string) => {
   const n = parseInt(hex, 16)
@@ -95,8 +91,7 @@ export function Logo({ name, size, className, tone = '#a1a1aa' }: { name: string
 }
 
 /**
- * Expertise: the domain list on the left chooses the domain; its tools sit on a carousel on the
- * right, turned by hand. Nothing moves by itself.
+ * Expertise: the domain list on the left chooses the domain; all its tools show in a grid on the right.
  */
 export function Expertise() {
   const [active, setActive] = useState(0)
@@ -107,7 +102,7 @@ export function Expertise() {
       <div className="grid gap-8 lg:grid-cols-[17rem_1fr] lg:items-center">
         <RailHeaders active={active} onSelect={setActive} />
         <div className="min-w-0">
-          <ToolCarousel key={domain.id} domain={domain} />
+          <ToolGrid key={domain.id} domain={domain} />
         </div>
       </div>
     </section>
@@ -155,210 +150,49 @@ function RailHeaders({ active, onSelect }: HeaderProps) {
 }
 
 /**
- * Tool carousel: one tool is selected in the centre, larger, with its name and use above it.
- * The arrows, the mouse wheel (captured over the carousel), the keyboard, a drag or a click on a
- * neighbour move the selection one tool at a time, in a loop. Neighbours carry on
- * round a cylinder, smaller, turned away and fading.
+ * Tool grid: every tool of the domain at once (fastest to scan). Hovering, focusing or clicking a
+ * tile selects it; the selected tool's name and use show above the grid.
  */
-function ToolCarousel({ domain }: { domain: ExpertiseDomain }) {
-  const reduced = useReducedMotion()
-  const lane = useRef<HTMLDivElement>(null)
-  const [width, setWidth] = useState(0)
-  // The selected tool, and the one before the last move (to spot tools jumping across the loop).
-  const [pos, setPos] = useState({ active: 0, prev: 0 })
-  const active = pos.active
+function ToolGrid({ domain }: { domain: ExpertiseDomain }) {
+  const [active, setActive] = useState(0)
   const { accent } = HUE[domain.id]
-  const tools = domain.tools
-  const n = tools.length
-  const tool = tools[active]!
-
-  const phone = width > 0 && width < 520
-  // Logos on each side of the selected one before they fade out.
-  const reach = phone ? 1 : 3
-  // Spread the neighbours so the outermost one ends just inside the arrows: its centre sits at
-  // reach (1 - 0.8^reach) / 0.2 + 0.28 steps from the middle (see the layout below).
-  const arrowRoom = phone ? 56 : 72
-  const outer = (1 - 0.8 ** reach) / 0.2 + 0.28
-  const step = width ? Math.max(70, (width / 2 - arrowRoom - (phone ? 26 : 36)) / outer) : 110
-  const base = Math.min(phone ? 64 : 96, step * 0.78)
-
-  // The carousel loops: past the last tool comes the first again.
-  const wrap = (i: number) => ((i % n) + n) % n
-  const setActive = (next: (i: number) => number) => setPos((p) => ({ active: wrap(next(p.active)), prev: p.active }))
-  const go = (i: number) => setActive(() => i)
-  // Offset of a tool from the selected one on the loop, in -n/2..n/2.
-  const offset = (i: number, from: number) => {
-    const o = wrap(i - from)
-    return o > n / 2 ? o - n : o
-  }
-
-  useEffect(() => {
-    const el = lane.current
-    if (!el) return
-    const ro = new ResizeObserver(([e]) => e && setWidth(e.contentRect.width))
-    ro.observe(el)
-    // One wheel notch = one tool; small trackpad deltas add up first. The page never scrolls from here.
-    let acc = 0
-    let last = 0
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault()
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
-      acc += delta
-      const now = performance.now()
-      if (Math.abs(acc) < 40 || now - last < 90) return
-      last = now
-      // Read the direction now: the updater may run later, after acc is reset.
-      const dir = Math.sign(acc)
-      setPos((p) => ({ active: (((p.active + dir) % n) + n) % n, prev: p.active }))
-      acc = 0
-    }
-    el.addEventListener('wheel', onWheel, { passive: false })
-    return () => {
-      ro.disconnect()
-      el.removeEventListener('wheel', onWheel)
-    }
-  }, [n])
-
-  // Drag: every 60 px moves one tool (vertical swipes still scroll the page on touch screens).
-  const drag = useRef<{ x: number; from: number } | null>(null)
-  const onDown = (e: PointerEvent) => {
-    drag.current = { x: e.clientX, from: active }
-  }
-  const onMove = (e: PointerEvent) => {
-    if (drag.current) go(drag.current.from - Math.round((e.clientX - drag.current.x) / 60))
-  }
-  const onUp = () => {
-    drag.current = null
-  }
-  const onKey = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowRight') go(active + 1)
-    else if (e.key === 'ArrowLeft') go(active - 1)
-    else return
-    e.preventDefault()
-  }
-
-  const arrow = 'absolute top-1/2 z-[200] grid size-12 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-white/25 bg-black/85 text-white transition-all duration-300 hover:border-white/45 hover:bg-white/15 disabled:cursor-default disabled:opacity-25 sm:size-14'
-  const ease = reduced ? 'none' : 'transform 520ms cubic-bezier(0.22,1,0.36,1), opacity 420ms ease'
-
+  const tool = domain.tools[active]!
   return (
-    <div className="relative mt-4">
-      <button type="button" onClick={() => go(active - 1)} aria-label="Outil précédent" className={cx(arrow, 'left-0')}>
-        <ChevronLeft size={26} aria-hidden="true" />
-      </button>
-      <button type="button" onClick={() => go(active + 1)} aria-label="Outil suivant" className={cx(arrow, 'right-0')}>
-        <ChevronRight size={26} aria-hidden="true" />
-      </button>
-
-      <div className="relative animate-[fadeIn_400ms_ease-out_both]">
-        {/* Glow behind the selected tool. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-[62%] left-1/2 h-48 w-[64%] -translate-x-1/2 -translate-y-1/2 opacity-40"
-          style={{ background: `radial-gradient(closest-side, ${accent}cc, ${accent}26 60%, transparent)` }}
-        />
-
-        {/* Name and use of the selected tool, always shown. */}
-        <div aria-live="polite" className="relative z-10 flex h-16 flex-col items-center justify-end text-center">
-          <p key={tool.name} className="motion-safe:animate-[fadeIn_300ms_ease-out_both]">
-            <span className="block text-lg font-semibold tracking-[0.16em] uppercase sm:text-[20px]" style={{ color: accent, textShadow: `0 0 8px ${accent}, 0 0 22px ${accent}99` }}>
-              {tool.name}
-            </span>
-            <span className="mt-0.5 block text-[11px] font-semibold tracking-[0.14em] text-white/85 uppercase sm:text-[12px]">{tool.note.fr}</span>
-          </p>
-        </div>
-
-        <div
-          ref={lane}
-          role="region"
-          aria-roledescription="carrousel"
-          aria-label={`Outils · ${domain.label.fr}`}
-          tabIndex={0}
-          onKeyDown={onKey}
-          onPointerDown={onDown}
-          onPointerMove={onMove}
-          onPointerUp={onUp}
-          onPointerCancel={onUp}
-          onPointerLeave={onUp}
-          className="relative z-10 cursor-grab touch-pan-y select-none focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-cyber/60 active:cursor-grabbing"
-          style={{ height: base * 1.45 + 40 }}
-        >
-          <ul className="absolute inset-0" style={{ perspective: PERSPECTIVE }}>
-            {tools.map((t, i) => {
-              const o = offset(i, active)
-              // A tool jumping from one end of the loop to the other moves without animation (out of sight).
-              const jumped = Math.abs(o - offset(i, pos.prev)) > 1
-              const a = Math.abs(o)
-              // Only the visible logos (and one more each side, to fade in) are in the page.
-              if (a > reach + 1) return null
-              const side = Math.sign(o)
-              // Each step out sits a little closer than the previous one, shrinks, turns away and fades.
-              const decay = 0.8
-              const z = -a * step * 0.35
-              // Pushed back, a logo also drifts towards the middle (perspective): widen x to compensate.
-              const x = (side * ((step * (1 - decay ** a)) / (1 - decay)) + (a ? side * step * 0.28 : 0)) * ((PERSPECTIVE - z) / PERSPECTIVE)
-              const scale = a === 0 ? 1.45 : decay ** (a - 1)
-              const shown = a <= reach + 1
-              return (
-                <li
-                  key={t.name}
-                  className="absolute top-1/2 left-1/2 flex items-center justify-center"
-                  style={{
-                    width: base,
-                    height: base,
-                    transform: `translate(-50%, -50%) translate3d(${x}px, 0, ${z}px) rotateY(${-side * Math.min(60, a * 24)}deg) scale(${scale})`,
-                    opacity: a > reach ? 0 : a === 0 ? 1 : Math.max(0.25, 1 - a * 0.24),
-                    zIndex: 100 - a,
-                    pointerEvents: shown && a <= reach ? 'auto' : 'none',
-                    transition: jumped ? 'none' : ease,
-                  }}
-                >
-                  <button
-                    type="button"
-                    tabIndex={-1}
-                    // Mouse shortcut only: screen readers get the list below, keyboards the arrow keys.
-                    aria-hidden="true"
-                    onClick={() => go(i)}
-                    className="grid size-full cursor-pointer place-items-center"
-                  >
-                    <Logo name={t.name} size={base} tone={accent} className="drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)]" />
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
+    <div className="animate-[fadeIn_400ms_ease-out_both]">
+      <div aria-live="polite" className="mb-6 flex h-14 flex-col items-center justify-end text-center">
+        <p key={tool.name} className="motion-safe:animate-[fadeIn_250ms_ease-out_both]">
+          <span className="block text-lg font-semibold tracking-[0.16em] uppercase sm:text-[20px]" style={{ color: accent, textShadow: `0 0 8px ${accent}, 0 0 22px ${accent}99` }}>
+            {tool.name}
+          </span>
+          <span className="mt-0.5 block text-[11px] font-semibold tracking-[0.14em] text-white/85 uppercase sm:text-[12px]">{tool.note.fr}</span>
+        </p>
       </div>
-
-      {/* Where we are in the loop: one dot per tool (clickable), and a counter. */}
-      <div className="mt-3 flex items-center justify-center gap-4">
-        <div className="flex items-center gap-1.5">
-          {tools.map((t, i) => (
-            <button
-              key={t.name}
-              type="button"
-              tabIndex={-1}
-              aria-hidden="true"
-              onClick={() => go(i)}
-              className="grid h-4 cursor-pointer place-items-center"
-            >
-              <span
-                className={cx('block h-1.5 rounded-full', i === active ? 'w-5' : 'w-1.5 bg-white/20 hover:bg-white/45')}
-                style={{ background: i === active ? accent : undefined, transition: reduced ? 'none' : 'width 300ms ease, background-color 300ms ease' }}
-              />
-            </button>
-          ))}
-        </div>
-        <span className="text-xs text-zinc-500 tabular-nums">
-          {String(active + 1).padStart(2, '0')} / {String(n).padStart(2, '0')}
-        </span>
-      </div>
-      {/* The full list, for screen readers. */}
-      <ul className="sr-only">
-        {tools.map((t) => (
-          <li key={t.name}>
-            {t.name} : {t.note.fr}
-          </li>
-        ))}
+      <ul aria-label={`Outils · ${domain.label.fr}`} className="mx-auto grid max-w-4xl grid-cols-3 gap-3 sm:grid-cols-5 lg:grid-cols-7">
+        {domain.tools.map((t, i) => {
+          const on = i === active
+          return (
+            <li key={t.name}>
+              <button
+                type="button"
+                aria-pressed={on}
+                aria-label={`${t.name} : ${t.note.fr}`}
+                onMouseEnter={() => setActive(i)}
+                onFocus={() => setActive(i)}
+                onClick={() => setActive(i)}
+                className="flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-xl border transition-all duration-300 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-cyber/60"
+                style={{
+                  borderColor: on ? `${accent}99` : 'rgba(255,255,255,0.07)',
+                  background: on ? `radial-gradient(circle at 50% 40%, ${accent}33, rgba(9,9,11,0.7) 70%)` : 'rgba(9,9,11,0.45)',
+                  boxShadow: on ? `0 0 30px -8px ${accent}` : 'none',
+                  transform: on ? 'translateY(-3px)' : 'none',
+                }}
+              >
+                <Logo name={t.name} size={56} tone={accent} />
+                <span className={cx('px-1 text-center text-[11px] leading-tight', on ? 'text-white' : 'text-zinc-400')}>{t.name}</span>
+              </button>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )
