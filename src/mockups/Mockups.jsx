@@ -9,6 +9,10 @@ import { NeuralHero } from "../sections/Hero/core/NeuralHero";
 import { CircuitBackground } from "../components/CircuitBackground";
 import { NetworkBackground2 } from "../components/NetworkBackground2";
 const GlobeGate = lazy(() => import("../sections/Gate/GlobeGate"));
+const ArgosGate = lazy(() => import("../sections/Gate/ArgosGate"));
+const GlobeStill = lazy(() => import("./GlobeStill"));
+const V3 = lazy(() => import("./V3"));
+const ExpertiseTweaks = lazy(() => import("./ExpertiseTweaks"));
 import { emitCore } from "../lib/coreBus";
 import Profil from "../assets/Profil.webp";
 import THM from "../assets/THM.jpg";
@@ -383,7 +387,26 @@ const VIEWS = { "hero-a2": HeroA2, "hero-a": HeroA, "hero-b": HeroB, "hero-c": H
 
 export default function Mockups() {
   const params = new URLSearchParams(window.location.search);
-  const [gate, setGate] = useState(params.get("gate") === "globe");
+  const [gate, setGate] = useState(["globe", "argos"].includes(params.get("gate")));
+  const Gate = params.get("gate") === "argos" ? ArgosGate : GlobeGate;
+  if (params.get("view") === "tweaks")
+    return (
+      <Suspense fallback={null}>
+        <ExpertiseTweaks />
+      </Suspense>
+    );
+  if (params.get("view") === "v3")
+    return (
+      <Suspense fallback={null}>
+        <V3 palette={params.get("palette")} />
+      </Suspense>
+    );
+  if (params.get("still"))
+    return (
+      <Suspense fallback={null}>
+        <GlobeStill variant={params.get("still")} />
+      </Suspense>
+    );
   const palette = PALETTES[params.get("palette")] ? params.get("palette") : "green";
   const View = VIEWS[params.get("view")] ?? HeroA2;
   const core = ["neural", "neural3d"].includes(params.get("core")) ? params.get("core") : "astrolabe";
@@ -406,7 +429,7 @@ export default function Mockups() {
     <div className="relative min-h-screen overflow-x-hidden font-mono" style={{ ...PALETTES[palette], background: canvasBg }}>
       {gate && (
         <Suspense fallback={<div className="fixed inset-0 z-[2000] bg-black" />}>
-          <GlobeGate onClose={() => setGate(false)} />
+          <Gate onClose={() => setGate(false)} visitorTz={params.get("tz") ?? undefined} />
         </Suspense>
       )}
       {background}

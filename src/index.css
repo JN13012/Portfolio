@@ -9,7 +9,9 @@
   --color-cyber-light: #86efac;
   --color-background: #000000;
 
-  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", "ui-monospace", monospace;
+  /* Inter everywhere; Fira Code (the Kali Linux terminal font) only for the CTF console. */
+  --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-mono: "Fira Code Variable", "Fira Code", "ui-monospace", monospace;
 
   /* Tokens used by the hero core (green palette). */
   --color-ai: #4ade80;
@@ -217,4 +219,35 @@ body {
   margin: 0;
   background-color: #080808;
   color: #e8e4df;
+  font-family: var(--font-sans);
+}
+
+/* Argos intro: log lines type in, country cards pop. */
+@keyframes argos-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.4;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes argos-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Expertise: the logo row slides by one copy of the list, then loops. */
+@keyframes expertise-marquee {
+  to {
+    transform: translateX(calc(-1 * var(--marquee-shift)));
+  }
 }

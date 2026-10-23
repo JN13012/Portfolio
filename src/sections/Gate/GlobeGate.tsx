@@ -258,23 +258,23 @@ export default function GlobeGate({ onClose }: GlobeGateProps) {
           aria-hidden="true"
           className="pointer-events-none absolute top-0 left-0 opacity-0 transition-opacity duration-500"
         >
-          <span className="ml-3 block -translate-y-1/2 font-mono text-xs tracking-[0.2em] whitespace-nowrap text-cyber uppercase">{c.name}</span>
+          <span className="ml-3 block -translate-y-1/2 text-xs tracking-[0.2em] whitespace-nowrap text-cyber uppercase">{c.name}</span>
         </span>
       ))}
 
       <button
         type="button"
         onClick={() => onCloseRef.current()}
-        className="absolute top-6 right-6 font-mono text-xs tracking-[0.2em] text-zinc-500 uppercase hover:text-zinc-200"
+        className="absolute top-6 right-6 text-xs tracking-[0.2em] text-zinc-500 uppercase hover:text-zinc-200"
       >
         Passer l’introduction
       </button>
 
       <div className={cx('pointer-events-none absolute inset-x-0 bottom-[8vh] flex flex-col items-center gap-5 px-6 text-center transition-opacity duration-500', exiting && 'opacity-0')}>
-        <p className="font-mono text-4xl font-black tracking-tighter text-white uppercase md:text-6xl">
+        <p className="text-4xl font-black tracking-tighter text-white uppercase md:text-6xl">
           Nagi <span className="text-cyber">Jérémie</span>
         </p>
-        <p className="font-mono text-sm tracking-[0.3em] text-zinc-400 uppercase">
+        <p className="text-sm tracking-[0.3em] text-zinc-400 uppercase">
           {shown} / {COUNTRIES.length} pays · 5 langues · base : Marseille
         </p>
         <button
@@ -282,7 +282,7 @@ export default function GlobeGate({ onClose }: GlobeGateProps) {
           type="button"
           onClick={enter}
           className={cx(
-            'pointer-events-auto mt-2 h-12 border px-12 font-mono text-sm tracking-[0.4em] uppercase transition-[opacity,box-shadow,border-color] duration-500 focus-visible:outline-none focus-visible:shadow-focus',
+            'pointer-events-auto mt-2 h-12 border px-12 text-sm tracking-[0.4em] uppercase transition-[opacity,box-shadow,border-color] duration-500 focus-visible:outline-none focus-visible:shadow-focus',
             ready ? 'border-cyber text-cyber shadow-[0_0_32px_-8px_var(--color-cyber)] hover:bg-cyber/10' : 'border-white/15 text-zinc-500',
           )}
         >

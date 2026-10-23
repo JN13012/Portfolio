@@ -127,6 +127,8 @@ export type TimelineEntry = {
   summary: Localized
   highlights?: Localized[]
   tracks: Track[]
+  /** Still going on (shown as « En cours »). */
+  current?: boolean
 }
 
 // ── Skills ──────────────────────────────────────────────────────────────────

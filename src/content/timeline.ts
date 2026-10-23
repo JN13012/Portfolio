@@ -16,6 +16,7 @@ export const timeline: TimelineEntry[] = [
     place: { fr: 'Marseille', en: 'Marseille' },
     country: 'FR',
     period: { approx: { fr: '2025 – 2028', en: '2025 – 2028' } },
+    current: true,
     summary: {
       fr: 'Cursus en alternance : architecture systèmes et réseaux, ingénierie logicielle, DevSecOps et cloud, sécurité réseau, audits et tests d’intrusion, gestion des risques et conformité (ISO 2700x, RGPD).',
       en: 'Work-study programme: systems and network architecture, software engineering, DevSecOps and cloud, network security, audits and penetration testing, risk management and compliance (ISO 2700x, GDPR).',
@@ -55,6 +56,7 @@ export const timeline: TimelineEntry[] = [
     place: { fr: 'France', en: 'France' },
     country: 'FR',
     period: { approx: { fr: 'Depuis 2018', en: 'Since 2018' } },
+    current: true,
     summary: {
       fr: 'Conception, assemblage et exploitation de fermes de minage (Ethereum avant le passage au Proof-of-Stake, Bitcoin, Raptoreum, Chia).',
       en: 'Design, assembly and operation of mining farms (Ethereum before Proof-of-Stake, Bitcoin, Raptoreum, Chia).',

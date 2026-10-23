@@ -451,11 +451,11 @@ const Certifications = () => {
       className="py-24 bg-black/45 text-white relative overflow-hidden border-y border-cyber/10"
     >
       <div className="mx-auto px-2 relative z-10">
-        <SectionHeader index="07" title="Certifications" />
+        <SectionHeader index="06" title="Certifications" />
 
         {/* Paths in progress: dated, never mixed with obtained certifications. */}
         {inProgress.map((item) => (
-          <div key={item.id} className="mb-10 flex flex-col gap-3 border border-dashed border-cyber/40 bg-black/50 p-5 font-mono md:flex-row md:items-center md:gap-8">
+          <div key={item.id} className="mb-10 flex flex-col gap-3 border border-dashed border-cyber/40 bg-black/50 p-5 md:flex-row md:items-center md:gap-8">
             <span className="text-sm uppercase tracking-[0.3em] text-cyber">En cours</span>
             <div className="flex-1">
               <p className="text-lg text-zinc-100">
@@ -485,36 +485,44 @@ const Certifications = () => {
             </span>
           </div>
         ))}
-        {/* SELECTEUR DE PLATEFORME DE FORMATION */}
-        <div className="mb-12 flex flex-col md:flex-row gap-4 justify-start items-start md:items-center">
-          <span className="text-base text-zinc-500 font-mono tracking-widest uppercase">
-            {">"} Select_Database :
-          </span>
-          <div className="flex gap-4 w-full md:w-auto">
+        {/* CONTROLS: platform on the left, sort and count on the right (one line). */}
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-b border-white/10 pb-5">
+          <div role="group" aria-label="Plateforme" className="flex flex-wrap items-center gap-1">
             {nodes.map((node) => {
-              const isActive = activeNode === node.id;
+              const active = activeNode === node.id;
               return (
                 <button
                   key={node.id}
+                  type="button"
+                  aria-pressed={active}
                   onClick={() => {
                     setActiveNode(node.id);
                     setCurrentPage(1);
                   }}
-                  className={`relative cursor-pointer px-6 py-3 font-mono text-sm tracking-widest uppercase transition-all duration-300 overflow-hidden flex-1 md:flex-none text-left md:text-center border ${
-                    isActive
-                      ? `${node.theme.border} ${node.theme.activeBg} text-white`
-                      : "border-white/10 text-zinc-500 hover:border-white/30 hover:text-zinc-300 bg-black/50"
-                  }`}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm transition-colors ${active ? "bg-white/10 text-white ring-1 ring-white/20" : "text-zinc-400 hover:text-white"}`}
                 >
-                  {isActive && (
-                    <div
-                      className={`absolute top-0 left-0 w-1 h-full ${node.theme.bg} shadow-[0_0_10px_currentColor] ${node.theme.text}`}
-                    ></div>
-                  )}
                   {node.label}
                 </button>
               );
             })}
+          </div>
+          <div className="flex flex-wrap items-center gap-1 text-sm">
+            <span className="mr-1 text-zinc-500">Trier</span>
+            {[
+              ["date", "Date"],
+              ["difficulte", "Difficulté"],
+            ].map(([key, label]) => {
+              const active = sortBy === key;
+              return (
+                <button key={key} type="button" aria-pressed={active} onClick={() => handleSort(key)} className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm transition-colors ${active ? "bg-white/10 text-white ring-1 ring-white/20" : "text-zinc-400 hover:text-white"}`}>
+                  {label}
+                  {active && <span aria-hidden="true" className="text-xs text-zinc-400">{sortOrder === "desc" ? "↓" : "↑"}</span>}
+                </button>
+              );
+            })}
+            <span className="ml-3 text-zinc-500 tabular-nums">
+              {sortedCertifs.length} certification{sortedCertifs.length > 1 ? "s" : ""}
+            </span>
           </div>
         </div>
 
@@ -525,83 +533,6 @@ const Certifications = () => {
             className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-[0.45]"
             style={{ backgroundImage: `url(${activeConfig.image})` }}
           ></div>
-
-          {/* HEADER DE LA GRILLE */}
-          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center mb-10 border-b border-white/10 pb-6 gap-4">
-            <h3
-              className={`font-mono text-xl md:text-2xl tracking-[0.22em] uppercase ${activeConfig.theme.text}`}
-            >
-              QUERY_RESULTS: {activeConfig.id}
-            </h3>
-
-            {/* CONTROLES DE TRI */}
-            <div className="flex items-center gap-5 text-sm font-mono tracking-tight">
-              <div className="flex items-center gap-3">
-                {["date", "diff"].map((type) => {
-                  const internalKey = type === "diff" ? "difficulte" : type;
-                  const isActive = sortBy === internalKey;
-
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => handleSort(internalKey)}
-                      className={`group relative cursor-pointer overflow-hidden h-8 min-w-[150px] font-mono text-sm uppercase tracking-tighter transition-all duration-300 border ${
-                        isActive
-                          ? `bg-black ${activeConfig.theme.sort.active} scale-105`
-                          : `bg-black text-zinc-200 border-white/10 hover:text-zinc-300 hover:border-white/30 hover:scale-105`
-                      }`}
-                    >
-                      {/* Halo derrière */}
-                      {isActive && (
-                        <div
-                          className={`absolute -inset-1 blur-xl opacity-40 ${activeConfig.theme.bg} z-0`}
-                        />
-                      )}
-
-                      {/* Aura de survol interne */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_90%)] transition-opacity" />
-
-                      <div className="relative z-10 flex items-center justify-center gap-2">
-                        {/* Indicateur dynamique */}
-                        <span
-                          className={`mb-1 font-bold transition-all ${
-                            isActive
-                              ? activeConfig.theme.sort.indicator
-                              : "text-zinc-400"
-                          }`}
-                        >
-                          {isActive ? ">" : "::"}
-                        </span>
-
-                        <span className="leading-none">
-                          {isActive && (type === "date" || type === "diff")
-                            ? `[ ${type} ]`
-                            : type}
-                        </span>
-
-                        {/* Flèche de tri stable */}
-                        <div className="w-2 flex justify-center text-xs">
-                          {isActive && (
-                            <span className="animate-pulse">
-                              {sortOrder === "desc" ? "▼" : "▲"}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="flex items-center gap-2 bg-zinc-900/80 px-3 py-1 border border-white/5 italic">
-                <span className={activeConfig.theme.text}>●</span>
-                <span className="text-zinc-400">FOUND:</span>
-                <span className="text-white font-mono">
-                  {`{ ${sortedCertifs.length} ${sortedCertifs.length > 1 ? "Records" : "Record"} }`}
-                </span>
-              </div>
-            </div>
-          </div>
 
           {/* RENDU DE LA GRILLE */}
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -621,7 +552,7 @@ const Certifications = () => {
         </div>
 
         {totalPages > 1 && (
-          <div className="mt-14 flex items-center justify-center gap-6 font-mono uppercase tracking-[0.18em]">
+          <div className="mt-14 flex items-center justify-center gap-6 uppercase tracking-[0.18em]">
             <button
               type="button"
               onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
@@ -705,35 +636,35 @@ const Certifications = () => {
                   {/* HEADER */}
                   <div className="p-6 text-center relative">
                     <p
-                      className={`text-base font-mono tracking-[0.3em] uppercase mb-3 ${activeConfig.theme.text}`}
+                      className={`text-base tracking-[0.3em] uppercase mb-3 ${activeConfig.theme.text}`}
                     >
                       {selectedCert.plateforme}
                     </p>
-                    <h3 className="text-xl md:text-3xl font-bold text-white uppercase font-mono pb-5">
+                    <h3 className="text-xl md:text-3xl font-bold text-white uppercase pb-5">
                       {selectedCert.titre}
                     </h3>
                     <button
                       onClick={() => setSelectedCert(null)}
-                      className="absolute top-6 right-6 text-zinc-300 hover:text-white font-mono text-xl"
+                      className="absolute top-6 right-6 text-zinc-300 hover:text-white text-xl"
                     >
                       [ESC_EXIT]
                     </button>
 
                     <div className="mt-auto p-4 border-b border-t border-white/10 flex justify-between items-center">
                       <div className="flex justify-end items-center gap-2">
-                        <span className="text-green-400 font-mono text-base uppercase">
+                        <span className="text-green-400 text-base uppercase">
                           Date:
                         </span>
-                        <span className="text-white font-mono text-base">
+                        <span className="text-white text-base">
                           {selectedCert.date}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <span className="text-green-400 font-mono text-base uppercase">
+                        <span className="text-green-400 text-base uppercase">
                           Duration:
                         </span>
-                        <span className="text-white font-mono text-base uppercase">
+                        <span className="text-white text-base uppercase">
                           {selectedCert.duration || "—"}
                         </span>
                       </div>
@@ -742,13 +673,13 @@ const Certifications = () => {
                       <div className="flex flex-col items-end gap-2">
                         <div className="flex items-center gap-3">
                           {selectedCert.isPro && (
-                            <span className="text-xs font-mono font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white from-50% to-zinc-400 to-50% uppercase drop-shadow-[0_2px_6px_rgba(255,255,255,0.5)] select-none">
+                            <span className="text-xs font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white from-50% to-zinc-400 to-50% uppercase drop-shadow-[0_2px_6px_rgba(255,255,255,0.5)] select-none">
                               PRO
                             </span>
                           )}
 
                           <h4
-                            className={`font-mono text-sm font-black tracking-widest uppercase ${Difficulty_Level.text} ${
+                            className={`text-sm font-black tracking-widest uppercase ${Difficulty_Level.text} ${
                               selectedCert.difficulte === 5
                                 ? "animate-pulse"
                                 : ""
@@ -801,7 +732,7 @@ const Certifications = () => {
                                       selectedCertImages.length,
                                   )
                                 }
-                                className="absolute left-0 top-1/2 z-20 -translate-y-1/2 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
+                                className="absolute left-0 top-1/2 z-20 -translate-y-1/2 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
                                 aria-label="Image précédente"
                               >
                                 ‹
@@ -822,7 +753,7 @@ const Certifications = () => {
                                 alt={`${selectedCert.titre} screenshot`}
                                 className="relative z-10 w-full max-h-[80vh] object-contain shadow-2xl border border-white/10"
                               />
-                              <p className="absolute bottom-2 right-2 text-[8px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <p className="absolute bottom-2 right-2 text-[8px] text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
                                 CLICK_TO_ENLARGE
                               </p>
                             </div>
@@ -836,7 +767,7 @@ const Certifications = () => {
                                       (index + 1) % selectedCertImages.length,
                                   )
                                 }
-                                className="absolute right-0 top-1/2 z-20 -translate-y-1/2 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
+                                className="absolute right-0 top-1/2 z-20 -translate-y-1/2 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber"
                                 aria-label="Image suivante"
                               >
                                 ›
@@ -857,18 +788,18 @@ const Certifications = () => {
                     <div className="w-full md:w-1/2 p-8 overflow-y-auto bg-zinc-900/20 flex flex-col gap-8">
                       {/* SECTION 1 : DESCRIPTION */}
                       <div>
-                        <h4 className="text-zinc-500 font-mono text-lg uppercase tracking-[0.2em] mb-3 flex items-center gap-3">
+                        <h4 className="text-zinc-500 text-lg uppercase tracking-[0.2em] mb-3 flex items-center gap-3">
                           <span className={activeConfig.theme.text}>⬢</span>{" "}
                           Certification_Details
                         </h4>
-                        <p className="text-zinc-300 text-base font-mono leading-relaxed border-l border-white/20 pl-4">
+                        <p className="text-zinc-300 text-base leading-relaxed border-l border-white/20 pl-4">
                           {selectedCert.description}
                         </p>
                       </div>
 
                       {/* SECTION 2 : TECH STACK */}
                       <div className="p-4 bg-black/40 border border-white/5 mt-15">
-                        <h4 className="text-zinc-100 font-mono text-base uppercase mb-3">
+                        <h4 className="text-zinc-100 text-base uppercase mb-3">
                           Technical_Stack
                         </h4>
                         <div className="flex flex-wrap gap-2">
@@ -876,13 +807,13 @@ const Certifications = () => {
                             selectedCert.stack.map((tech) => (
                               <span
                                 key={tech}
-                                className="text-base font-mono text-cyber bg-cyber/5 border border-cyber/20 px-3 py-1.5"
+                                className="text-base text-cyber bg-cyber/5 border border-cyber/20 px-3 py-1.5"
                               >
                                 {tech}
                               </span>
                             ))
                           ) : (
-                            <span className="text-lg font-mono text-zinc-600 italic">
+                            <span className="text-lg text-zinc-600 italic">
                               Not_Specified
                             </span>
                           )}
@@ -906,7 +837,7 @@ const Certifications = () => {
                         className={`absolute inset-0 w-0 group-hover:w-full transition-all duration-500 ${activeConfig.theme.bg} opacity-10`}
                       ></div>
                       <span
-                        className={`relative font-mono text-base font-bold uppercase tracking-[0.3em] ${activeConfig.theme.text}`}
+                        className={`relative text-base font-bold uppercase tracking-[0.3em] ${activeConfig.theme.text}`}
                       >
                         [ ACCEDER_AU_DIPLOME ]
                       </span>
@@ -939,19 +870,16 @@ const CertifCard = ({
   difficulte,
   duration,
   isPro,
-  stack = [],
 }) => {
   const Difficulty_Level = DIFFICULTY_CONFIG[difficulte] || {
     text: "text-zinc-400",
     bg: "bg-zinc-800",
     label: "N/A",
   };
-  const visibleStacks = stack.slice(0, 5);
-  const hasMoreStacks = stack.length > visibleStacks.length;
 
   return (
     <div
-      className="relative group h-full min-h-[260px] bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col animate-[fadeIn_0.5s_ease-out_forwards] cursor-crosshair hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-2 hover:scale-[1.03]"
+      className="relative group h-full min-h-[200px] bg-zinc-950/80 border border-white/5 p-5 transition-all duration-500 hover:bg-black overflow-hidden flex flex-col animate-[fadeIn_0.5s_ease-out_forwards] cursor-crosshair hover:shadow-[0_0_5px_rgba(34,211,238,0.6)] transition hover:-translate-y-2 hover:scale-[1.03]"
       style={{ animationDelay: `${index * 100}ms`, opacity: 0 }}
     >
       {/* Barre de thème en haut */}
@@ -963,7 +891,7 @@ const CertifCard = ({
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 border border-white/40 group-hover:border-white/80 rotate-45 transition-colors"></div>
           <span
-            className={`text-sm font-mono tracking-[0.2em] uppercase ${themeColor.text}`}
+            className={`text-sm tracking-[0.2em] uppercase ${themeColor.text}`}
           >
             {plateforme}{" "}
           </span>
@@ -973,13 +901,13 @@ const CertifCard = ({
         <div className="relative flex flex-col items-end gap-2">
           <div className="flex items-center gap-2.5">
             {isPro && (
-              <span className="text-[12px] font-mono font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white from-50% to-zinc-400 to-50% uppercase drop-shadow-[0_2px_6px_rgba(255,255,255,0.5)] select-none">
+              <span className="text-[12px] font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white from-50% to-zinc-400 to-50% uppercase drop-shadow-[0_2px_6px_rgba(255,255,255,0.5)] select-none">
                 PRO
               </span>
             )}
 
             <span
-              className={`text-[12px] font-mono font-black tracking-widest ${Difficulty_Level.text} ${
+              className={`text-[12px] font-black tracking-widest ${Difficulty_Level.text} ${
                 difficulte === 5 ? "animate-pulse" : ""
               }`}
             >
@@ -1000,36 +928,20 @@ const CertifCard = ({
         </div>
       </div>
 
-      <h3 className="min-h-[3.35rem] text-xl md:text-2xl text-zinc-300 font-bold leading-snug group-hover:text-white transition-colors z-10">
+      <h3 className="mb-5 min-h-[3.35rem] text-xl md:text-2xl text-zinc-300 font-bold leading-snug group-hover:text-white transition-colors z-10">
         {titre}
       </h3>
 
-      <div className="z-10 mt-5 flex min-h-[4.95rem] max-h-[4.95rem] flex-wrap content-start items-start gap-1.5 overflow-hidden pb-0.5">
-        {visibleStacks.map((tech) => (
-          <span
-            key={tech}
-            className="text-base font-mono px-2.5 py-1 bg-black/50 border border-cyber/20 text-zinc-400 group-hover:border-cyber/80 group-hover:text-cyber/80 transition-all"
-          >
-            {tech}
-          </span>
-        ))}
-        {hasMoreStacks && (
-          <span className="border border-cyber/20 bg-black/70 px-2.5 py-1 font-mono text-base text-cyber/80 transition-all group-hover:border-cyber/80">
-            ...
-          </span>
-        )}
-      </div>
-
       <div className="mt-auto flex justify-between items-baseline border-t border-white/5 pt-3 z-10 group-hover:border-white/20 transition-colors">
         {/* LEFT BLOCK */}
-        <div className="flex items-center gap-3 font-mono uppercase">
+        <div className="flex items-center gap-3 uppercase">
           <span className="bg-cyber/5 px-2.5 py-1 text-sm font-semibold tracking-[0.12em] text-cyber/80 transition-all group-hover:bg-cyber/10 group-hover:text-cyber">
             {duration || "—"}
           </span>
         </div>
 
         {/* RIGHT BLOCK */}
-        <div className="text-base font-mono font-bold text-white/50 group-hover:text-white/90 transition-colors">
+        <div className="text-base font-bold text-white/50 group-hover:text-white/90 transition-colors">
           {date}
         </div>
       </div>

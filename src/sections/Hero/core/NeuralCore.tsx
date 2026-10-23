@@ -234,7 +234,7 @@ export function NeuralCore({ nodes = defaultNeuralNodes, className }: NeuralCore
                   >
                     <Icon aria-hidden="true" size={20} strokeWidth={1.6} />
                   </span>
-                  <span className="hidden font-mono sm:block">
+                  <span className="hidden sm:block">
                     <span className="block text-sm tracking-[0.15em] text-zinc-100 uppercase">{node.label}</span>
                     <span className={cx('block text-xs text-zinc-400 transition-opacity', isActive ? 'opacity-100' : 'opacity-0')}>
                       {node.hint}

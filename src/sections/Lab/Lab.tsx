@@ -61,11 +61,11 @@ export function Lab() {
       <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr]">
         <div className="space-y-5">
           <div className="space-y-4 border border-white/5 bg-zinc-900/50 p-6 backdrop-blur-sm">
-            <p className="font-mono text-xl font-bold tracking-[0.2em] text-cyber uppercase">CTF en 9 niveaux</p>
-            <p className="font-mono text-base text-zinc-100">
+            <p className="text-xl font-bold tracking-[0.2em] text-cyber uppercase">CTF en 9 niveaux</p>
+            <p className="text-base text-zinc-100">
               Un environnement d’entraînement jouable ici même. Tapez <span className="text-cyber">help</span> pour commencer ; le premier indice se cache dans le code source de la page.
             </p>
-            <ol className="grid gap-1.5 font-mono text-sm text-zinc-300 sm:grid-cols-2">
+            <ol className="grid gap-1.5 text-sm text-zinc-300 sm:grid-cols-2">
               {CTF_SKILLS.map((s, i) => (
                 <li key={s} className="flex gap-2">
                   <span className="text-cyber">[{String(i + 1).padStart(2, '0')}]</span> {s}
@@ -83,13 +83,13 @@ export function Lab() {
         </div>
 
         <div className="space-y-4">
-          <p className="font-mono text-xl font-bold tracking-[0.2em] text-cyber uppercase">
+          <p className="text-xl font-bold tracking-[0.2em] text-cyber uppercase">
             Write-ups <span className="text-zinc-500">· {visible.length}</span>
           </p>
-          <p className="font-mono text-sm text-zinc-400">
+          <p className="text-sm text-zinc-400">
             Rapports de tests d’intrusion publiés sur GitHub : méthode complète, de la reconnaissance au résultat, et enseignements.
           </p>
-          <div role="group" aria-label="Filtrer les write-ups" className="flex flex-wrap gap-2">
+          <div role="group" aria-label="Filtrer les write-ups" className="flex flex-wrap gap-1">
             {[null, ...TOPIC_KEYS].map((k) => (
               <button
                 key={k ?? 'all'}
@@ -97,8 +97,8 @@ export function Lab() {
                 aria-pressed={topic === k}
                 onClick={() => setTopic(k)}
                 className={cx(
-                  'border px-3 py-1.5 font-mono text-xs tracking-widest uppercase transition-all',
-                  topic === k ? 'border-cyber bg-cyber text-black' : 'border-white/15 bg-white/5 text-zinc-400 hover:text-zinc-100',
+                  'rounded-full px-3.5 py-1.5 text-sm transition-colors',
+                  topic === k ? 'bg-white/10 text-white ring-1 ring-white/20' : 'text-zinc-400 hover:text-white',
                 )}
               >
                 {k ? TOPICS[k].label : 'Tous'}
@@ -109,9 +109,9 @@ export function Lab() {
             {visible.map((w) => (
               <li key={w.slug}>
                 <a href={w.url} target="_blank" rel="noreferrer" className="group grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 px-4 py-3 transition-colors hover:bg-cyber/5">
-                  <span className="font-mono text-base text-zinc-100 group-hover:text-cyber">{w.room}</span>
-                  <span className="font-mono text-xs text-zinc-500">{SOURCE_LABEL[w.source] ?? w.source}</span>
-                  <span className="col-span-2 font-mono text-xs text-zinc-400">{w.focus}</span>
+                  <span className="text-base text-zinc-100 group-hover:text-cyber">{w.room}</span>
+                  <span className="text-xs text-zinc-500">{SOURCE_LABEL[w.source] ?? w.source}</span>
+                  <span className="col-span-2 text-xs text-zinc-400">{w.focus}</span>
                 </a>
               </li>
             ))}
@@ -120,7 +120,7 @@ export function Lab() {
             href={`https://github.com/${writeupsIndex.repo}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-block border border-cyber/30 bg-cyber/5 px-4 py-2 font-mono text-sm tracking-[0.2em] text-cyber uppercase hover:bg-cyber/10"
+            className="inline-block border border-cyber/30 bg-cyber/5 px-4 py-2 text-sm tracking-[0.2em] text-cyber uppercase hover:bg-cyber/10"
           >
             [ Tous les write-ups sur GitHub ↗ ]
           </a>

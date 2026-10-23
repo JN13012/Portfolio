@@ -2,16 +2,15 @@ import { lazy, Suspense, useState } from "react";
 import "./App.css";
 
 import NavBar from "./components/NavBar";
-import Competences from "./components/Competences";
 import ProjectSection from "./components/ProjectSection";
-import Experiences from "./components/Experiences";
-import Formations from "./components/Formations";
 import Certifications from "./components/Certifications";
 import Contact from "./components/Contact";
 import { NetworkBackground2 } from "./components/NetworkBackground2";
 import { Hero } from "./sections/Hero/Hero";
 import { Profile } from "./sections/Profile/Profile";
 import { Lab } from "./sections/Lab/Lab";
+import { Expertise } from "./sections/Expertise/Expertise";
+import { Parcours } from "./sections/Parcours/Parcours";
 import { profile } from "./content/profile";
 
 // three.js intro, loaded only when it is shown.
@@ -51,7 +50,7 @@ function App() {
 
   return (
     <div
-      className="relative min-h-screen overflow-x-hidden font-mono"
+      className="relative min-h-screen overflow-x-hidden font-sans"
       style={{ background: "radial-gradient(ellipse at 70% 0%, #0f1720 0%, #080b10 55%, #05070a 100%)" }}
     >
       {gateOpen && (
@@ -69,16 +68,15 @@ function App() {
       <main className="relative z-10 mx-auto w-[90%] max-w-[2400px]" inert={gateOpen || undefined}>
         <Hero />
         <Profile />
-        <Competences />
+        <Expertise />
         <ProjectSection />
         <Lab />
-        <Experiences />
-        <Formations />
+        <Parcours />
         <Certifications />
         <Contact />
       </main>
 
-      <footer className="relative z-10 mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center justify-between gap-4 border-t border-white/10 py-8 font-mono text-sm text-zinc-500" inert={gateOpen || undefined}>
+      <footer className="relative z-10 mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center justify-between gap-4 border-t border-white/10 py-8 text-sm text-zinc-500" inert={gateOpen || undefined}>
         <span>
           © {new Date().getFullYear()} {profile.firstName} {profile.lastName}
         </span>

@@ -43,7 +43,7 @@ export default function SoundToggle() {
         onClick={toggleSound}
         aria-label={isPlaying ? "Désactiver la musique" : "Activer la musique"}
         aria-pressed={isPlaying}
-className={`group fixed bottom-6 right-6 z-[1001] flex items-center gap-2 overflow-hidden rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-all duration-300 ${
+className={`group fixed bottom-6 right-6 z-[1001] flex items-center gap-2 overflow-hidden rounded-full border px-4 py-2 text-xs uppercase tracking-[0.14em] transition-all duration-300 ${
   isPlaying
     ? "border-cyber/50 bg-cyber/10 text-cyber shadow-[0_0_22px_rgba(74,222,128,0.14)]"
     : "border-white/15 bg-black/70 text-zinc-400 hover:border-cyber/35 hover:text-cyber"

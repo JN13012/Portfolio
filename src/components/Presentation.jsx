@@ -18,7 +18,7 @@ const Presentation = () => {
             </h1>
 
             <div className="items-center gap-2 border-l-2 border-cyber/90 pl-4 py-1">
-              <span className="font-mono text-xl text-cyber/70 uppercase tracking-tight">
+              <span className="text-xl text-cyber/70 uppercase tracking-tight">
                 Recherche Alternance Cybersécurité / IA
               </span>
             </div>
@@ -28,18 +28,18 @@ const Presentation = () => {
           <div className="bg-zinc-900/50 border border-white/5 p-6 space-y-4 rounded-sm backdrop-blur-sm">
 
             <div className="flex items-center gap-2 text-cyber">
-              <span className="font-mono text-xl font-bold uppercase tracking-[0.2em]">
+              <span className="text-xl font-bold uppercase tracking-[0.2em]">
                 LABORATOIRE CTF
               </span>
             </div>
 
-            <p className="text-zinc-100 font-mono text-base leading-relaxed mt-2">
+            <p className="text-zinc-100 text-base leading-relaxed mt-2">
               Découvrez l'environnement d’entraînement cybersécurité intégré sur la partie droite de
               l’écran. <br />
               <br />
               Compétences développées :
             </p>
-            <ul className="space-y-2 font-mono text-base text-zinc-100/90">
+            <ul className="space-y-2 text-base text-zinc-100/90">
               <li className="flex gap-2">
                 <span className="text-cyber">[01]</span> Système Linux &
                 recherche de fichiers
@@ -102,7 +102,7 @@ const Presentation = () => {
       </div>
 
       {/* Binary Rain Background Decor (Subtil) */}
-      <div className="absolute right-0 top-0 h-full w-1/3 opacity-[0.03] pointer-events-none font-mono text-[10px] overflow-hidden leading-none break-all select-none">
+      <div className="absolute right-0 top-0 h-full w-1/3 opacity-[0.03] pointer-events-none text-[10px] overflow-hidden leading-none break-all select-none">
         {Array(50).fill("01101110 01100001 01100111 01101001 ").join("")}
       </div>
     </section>

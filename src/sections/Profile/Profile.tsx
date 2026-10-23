@@ -22,7 +22,7 @@ function Block({ icon: Icon, title, children }: { icon: LucideIcon; title: strin
     <div>
       <h3 className="mb-3 inline-flex items-center gap-3 border border-white/10 bg-zinc-900/60 px-4 py-2">
         <Icon size={16} aria-hidden="true" className="text-cyber" />
-        <span className="font-mono text-sm tracking-[0.3em] text-cyber uppercase">{title}</span>
+        <span className="text-sm tracking-[0.3em] text-cyber uppercase">{title}</span>
       </h3>
       <div className={`${panel} p-5`}>{children}</div>
     </div>
@@ -42,14 +42,14 @@ export function Profile() {
             <div className="absolute -right-2 -bottom-2 size-5 border-r-2 border-b-2 border-cyber" />
             <img loading="lazy" decoding="async" src={Portrait} alt={`${profile.firstName} ${profile.lastName}`} className="relative w-full" />
           </div>
-          <ul className="grid grid-cols-5 gap-2">
+          <ul className="grid grid-cols-5 gap-1.5">
             {LINKS.map((l) => (
               <li key={l.label}>
                 <a
                   href={l.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="grid aspect-square place-items-center border border-white/10 bg-zinc-950/60 px-1 text-center font-mono text-[10px] text-zinc-300 uppercase transition-colors hover:border-cyber/50 hover:text-cyber"
+                  className="grid aspect-square place-items-center border border-white/10 bg-zinc-950/60 px-0.5 text-center text-[9.5px] tracking-tight text-zinc-300 transition-colors hover:border-cyber/50 hover:text-cyber"
                 >
                   {l.label}
                 </a>
@@ -59,7 +59,7 @@ export function Profile() {
           <a
             href={profile.cv.url}
             download={profile.cv.fileName}
-            className="flex items-center justify-center gap-2 border border-cyber/60 bg-cyber/10 py-3 font-mono tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
+            className="flex items-center justify-center gap-2 border border-cyber/60 bg-cyber/10 py-3 tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
           >
             <Download size={16} aria-hidden="true" /> CV (.pdf)
           </a>
@@ -67,14 +67,14 @@ export function Profile() {
 
         <div className="space-y-8">
           <Block icon={Terminal} title="Présentation">
-            <div className="space-y-3 font-mono text-[15px] leading-relaxed text-zinc-200">
+            <div className="space-y-3 text-[15px] leading-relaxed text-zinc-200">
               {profile.about.map((p) => (
                 <p key={p.fr}>{p.fr}</p>
               ))}
             </div>
           </Block>
           <Block icon={BadgeCheck} title="En bref">
-            <dl className="grid gap-x-6 gap-y-3 font-mono text-[15px] sm:grid-cols-2">
+            <dl className="grid gap-x-6 gap-y-3 text-[15px] sm:grid-cols-2">
               {profile.facts.map((f) => (
                 <div key={f.label.fr} className="border-b border-white/5 pb-2">
                   <dt className="text-xs tracking-widest text-zinc-500 uppercase">{f.label.fr}</dt>
@@ -87,7 +87,7 @@ export function Profile() {
 
         <div className="space-y-8">
           <Block icon={Globe} title="Langues">
-            <ul className="space-y-2.5 font-mono text-[15px]">
+            <ul className="space-y-2.5 text-[15px]">
               {profile.languages.map((l) => (
                 <li key={l.code} className="flex items-center justify-between gap-3 border-b border-white/5 pb-2 last:border-0">
                   <span className="text-zinc-100">
@@ -111,7 +111,7 @@ export function Profile() {
                 return (
                   <li key={i.id} className="flex flex-col items-center gap-1.5 border border-white/5 py-3 text-zinc-400 transition-colors hover:text-cyber">
                     <Icon size={22} aria-hidden="true" />
-                    <span className="font-mono text-[11px] text-zinc-200 uppercase">{i.label.fr}</span>
+                    <span className="text-[11px] text-zinc-200 uppercase">{i.label.fr}</span>
                   </li>
                 )
               })}
