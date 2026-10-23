@@ -150,50 +150,27 @@ function RailHeaders({ active, onSelect }: HeaderProps) {
 }
 
 /**
- * Tool grid: every tool of the domain at once (fastest to scan). Hovering, focusing or clicking a
- * tile selects it; the selected tool's name and use show above the grid.
+ * Tool grid: every tool of the domain at once, each tile with its logo, name and use, so nothing
+ * depends on hovering (and nothing floats away from its tile). Incomplete rows are centred.
  */
 function ToolGrid({ domain }: { domain: ExpertiseDomain }) {
-  const [active, setActive] = useState(0)
   const { accent } = HUE[domain.id]
-  const tool = domain.tools[active]!
   return (
-    <div className="animate-[fadeIn_400ms_ease-out_both]">
-      <div aria-live="polite" className="mb-6 flex h-14 flex-col items-center justify-end text-center">
-        <p key={tool.name} className="motion-safe:animate-[fadeIn_250ms_ease-out_both]">
-          <span className="block text-lg font-semibold tracking-[0.16em] uppercase sm:text-[20px]" style={{ color: accent, textShadow: `0 0 8px ${accent}, 0 0 22px ${accent}99` }}>
-            {tool.name}
+    <ul aria-label={`Outils · ${domain.label.fr}`} className="flex animate-[fadeIn_400ms_ease-out_both] flex-wrap justify-center gap-3">
+      {domain.tools.map((t) => (
+        <li
+          key={t.name}
+          className="group flex w-[calc((100%-1.5rem)/3)] flex-col items-center gap-2 rounded-xl border border-white/[0.07] bg-zinc-950/45 px-3 pt-5 pb-4 text-center transition-all duration-300 hover:-translate-y-0.5 sm:w-[calc((100%-3rem)/5)]"
+          style={{ ['--accent' as string]: accent }}
+        >
+          <span className="grid h-14 place-items-center transition-transform duration-300 group-hover:scale-110">
+            <Logo name={t.name} size={56} tone={accent} />
           </span>
-          <span className="mt-0.5 block text-[11px] font-semibold tracking-[0.14em] text-white/85 uppercase sm:text-[12px]">{tool.note.fr}</span>
-        </p>
-      </div>
-      <ul aria-label={`Outils · ${domain.label.fr}`} className="mx-auto grid max-w-4xl grid-cols-3 gap-3 sm:grid-cols-5 lg:grid-cols-7">
-        {domain.tools.map((t, i) => {
-          const on = i === active
-          return (
-            <li key={t.name}>
-              <button
-                type="button"
-                aria-pressed={on}
-                aria-label={`${t.name} : ${t.note.fr}`}
-                onMouseEnter={() => setActive(i)}
-                onFocus={() => setActive(i)}
-                onClick={() => setActive(i)}
-                className="flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-xl border transition-all duration-300 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-cyber/60"
-                style={{
-                  borderColor: on ? `${accent}99` : 'rgba(255,255,255,0.07)',
-                  background: on ? `radial-gradient(circle at 50% 40%, ${accent}33, rgba(9,9,11,0.7) 70%)` : 'rgba(9,9,11,0.45)',
-                  boxShadow: on ? `0 0 30px -8px ${accent}` : 'none',
-                  transform: on ? 'translateY(-3px)' : 'none',
-                }}
-              >
-                <Logo name={t.name} size={56} tone={accent} />
-                <span className={cx('px-1 text-center text-[11px] leading-tight', on ? 'text-white' : 'text-zinc-400')}>{t.name}</span>
-              </button>
-            </li>
-          )
-        })}
-      </ul>
-    </div>
+          <span className="text-sm font-semibold text-zinc-100">{t.name}</span>
+          <span className="text-xs leading-snug text-zinc-400">{t.note.fr}</span>
+          <span aria-hidden="true" className="mt-auto h-0.5 w-6 rounded-full opacity-40 transition-all duration-300 group-hover:w-10 group-hover:opacity-100" style={{ background: accent }} />
+        </li>
+      ))}
+    </ul>
   )
 }
