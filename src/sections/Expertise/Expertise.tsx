@@ -157,14 +157,16 @@ function RailHeaders({ active, onSelect }: HeaderProps) {
 /**
  * Tool carousel: one tool is selected in the centre, larger, with its name and use above it.
  * The arrows, the mouse wheel (captured over the carousel), the keyboard, a drag or a click on a
- * neighbour move the selection one tool at a time; it stops at both ends. Neighbours carry on
+ * neighbour move the selection one tool at a time, in a loop. Neighbours carry on
  * round a cylinder, smaller, turned away and fading.
  */
 function ToolCarousel({ domain }: { domain: ExpertiseDomain }) {
   const reduced = useReducedMotion()
   const lane = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
-  const [active, setActive] = useState(0)
+  // The selected tool, and the one before the last move (to spot tools jumping across the loop).
+  const [pos, setPos] = useState({ active: 0, prev: 0 })
+  const active = pos.active
   const { accent } = HUE[domain.id]
   const tools = domain.tools
   const n = tools.length
@@ -180,7 +182,15 @@ function ToolCarousel({ domain }: { domain: ExpertiseDomain }) {
   const step = width ? Math.max(70, (width / 2 - arrowRoom - (phone ? 26 : 36)) / outer) : 110
   const base = Math.min(phone ? 64 : 96, step * 0.78)
 
-  const go = (i: number) => setActive(Math.min(n - 1, Math.max(0, i)))
+  // The carousel loops: past the last tool comes the first again.
+  const wrap = (i: number) => ((i % n) + n) % n
+  const setActive = (next: (i: number) => number) => setPos((p) => ({ active: wrap(next(p.active)), prev: p.active }))
+  const go = (i: number) => setActive(() => i)
+  // Offset of a tool from the selected one on the loop, in -n/2..n/2.
+  const offset = (i: number, from: number) => {
+    const o = wrap(i - from)
+    return o > n / 2 ? o - n : o
+  }
 
   useEffect(() => {
     const el = lane.current
@@ -199,7 +209,7 @@ function ToolCarousel({ domain }: { domain: ExpertiseDomain }) {
       last = now
       // Read the direction now: the updater may run later, after acc is reset.
       const dir = Math.sign(acc)
-      setActive((i) => Math.min(n - 1, Math.max(0, i + dir)))
+      setPos((p) => ({ active: (((p.active + dir) % n) + n) % n, prev: p.active }))
       acc = 0
     }
     el.addEventListener('wheel', onWheel, { passive: false })
@@ -232,10 +242,10 @@ function ToolCarousel({ domain }: { domain: ExpertiseDomain }) {
 
   return (
     <div className="relative mt-4">
-      <button type="button" onClick={() => go(active - 1)} disabled={active === 0} aria-label="Outil précédent" className={cx(arrow, 'left-0')}>
+      <button type="button" onClick={() => go(active - 1)} aria-label="Outil précédent" className={cx(arrow, 'left-0')}>
         <ChevronLeft size={26} aria-hidden="true" />
       </button>
-      <button type="button" onClick={() => go(active + 1)} disabled={active === n - 1} aria-label="Outil suivant" className={cx(arrow, 'right-0')}>
+      <button type="button" onClick={() => go(active + 1)} aria-label="Outil suivant" className={cx(arrow, 'right-0')}>
         <ChevronRight size={26} aria-hidden="true" />
       </button>
 
@@ -274,7 +284,9 @@ function ToolCarousel({ domain }: { domain: ExpertiseDomain }) {
         >
           <ul className="absolute inset-0" style={{ perspective: PERSPECTIVE }}>
             {tools.map((t, i) => {
-              const o = i - active
+              const o = offset(i, active)
+              // A tool jumping from one end of the loop to the other moves without animation (out of sight).
+              const jumped = Math.abs(o - offset(i, pos.prev)) > 1
               const a = Math.abs(o)
               // Only the visible logos (and one more each side, to fade in) are in the page.
               if (a > reach + 1) return null
@@ -297,7 +309,7 @@ function ToolCarousel({ domain }: { domain: ExpertiseDomain }) {
                     opacity: a > reach ? 0 : a === 0 ? 1 : Math.max(0.25, 1 - a * 0.24),
                     zIndex: 100 - a,
                     pointerEvents: shown && a <= reach ? 'auto' : 'none',
-                    transition: ease,
+                    transition: jumped ? 'none' : ease,
                   }}
                 >
                   <button
