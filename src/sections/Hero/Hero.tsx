@@ -17,11 +17,11 @@ export function Hero() {
     <section id="acceuil" aria-labelledby="hero-title" className="relative flex min-h-screen flex-col justify-center gap-10 pt-28 pb-10 lg:pb-32">
       <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
         <div className="space-y-6">
-          <p className="font-mono text-sm tracking-[0.3em] text-cyber uppercase">&gt; whoami</p>
-          <h1 id="hero-title" className="font-mono text-6xl leading-none font-black tracking-tighter text-white uppercase md:text-8xl">
+          <p className="text-sm tracking-[0.3em] text-cyber uppercase">&gt; whoami</p>
+          <h1 id="hero-title" className="text-6xl leading-none font-bold tracking-tight text-white uppercase md:text-8xl">
             {profile.lastName} <span className="text-cyber">{profile.firstName}</span>
           </h1>
-          <p className="font-mono text-2xl font-bold tracking-tight uppercase md:text-3xl">
+          <p className="text-2xl font-bold tracking-tight uppercase md:text-3xl">
             {hero.title.map((part, i) => (
               <span key={part.text.fr}>
                 {i > 0 && <span className="text-zinc-600"> · </span>}
@@ -29,13 +29,13 @@ export function Hero() {
               </span>
             ))}
           </p>
-          <p className="max-w-2xl border-l-2 border-cyber/80 pl-4 font-mono text-xl text-zinc-200">{hero.pitch.fr}</p>
+          <p className="max-w-2xl border-l-2 border-cyber/80 pl-4 text-xl text-zinc-200">{hero.pitch.fr}</p>
 
           <ul className="flex flex-wrap gap-3">
             {hero.certificates.map((c) => (
               <li key={c.id} className={`${panel} flex items-center gap-3 px-3 py-2.5`}>
                 <img src={LOGOS[c.id]} alt="" className="size-10 rounded-sm object-cover" />
-                <div className="font-mono">
+                <div>
                   <p className="text-[15px] text-zinc-100">{c.title}</p>
                   <p className="text-xs text-zinc-400">{c.sub.fr}</p>
                 </div>
@@ -43,7 +43,7 @@ export function Hero() {
             ))}
           </ul>
 
-          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[15px] text-zinc-300">
+          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[15px] text-zinc-300">
             <li className="inline-flex items-center gap-2 text-zinc-100">
               <span aria-hidden="true" className="size-2.5 animate-pulse rounded-full bg-cyber shadow-[0_0_12px_var(--color-cyber)]" />
               {profile.availability.fr}
@@ -60,13 +60,13 @@ export function Hero() {
             <a
               href={profile.cv.url}
               download={profile.cv.fileName}
-              className="inline-flex items-center gap-3 border border-cyber/60 bg-cyber/10 px-6 py-3.5 font-mono text-base tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
+              className="inline-flex items-center gap-3 border border-cyber/60 bg-cyber/10 px-6 py-3.5 text-base tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
             >
               <Download size={18} aria-hidden="true" /> {hero.ctaCv.fr}
             </a>
             <a
               href="#contact"
-              className="inline-flex items-center gap-3 border border-white/20 px-6 py-3.5 font-mono text-base tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
+              className="inline-flex items-center gap-3 border border-white/20 px-6 py-3.5 text-base tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
             >
               <Mail size={18} aria-hidden="true" /> {hero.ctaContact.fr}
             </a>
@@ -76,7 +76,7 @@ export function Hero() {
           <button
             type="button"
             disabled
-            className="inline-flex cursor-not-allowed items-center gap-3 border border-white/10 px-4 py-2.5 font-mono text-sm tracking-[0.2em] text-zinc-500 uppercase"
+            className="inline-flex cursor-not-allowed items-center gap-3 border border-white/10 px-4 py-2.5 text-sm tracking-[0.2em] text-zinc-500 uppercase"
           >
             <AudioLines size={16} aria-hidden="true" /> {hero.voice.fr} <span className="text-[10px] text-zinc-600">· {hero.voiceSoon.fr}</span>
           </button>
@@ -90,7 +90,7 @@ export function Hero() {
         {hero.strip.map((f) => {
           const Icon = STRIP_ICONS[f.icon] ?? Globe
           return (
-            <li key={f.text.fr} className="inline-flex items-center gap-2.5 font-mono text-[15px] text-zinc-200">
+            <li key={f.text.fr} className="inline-flex items-center gap-2.5 text-[15px] text-zinc-200">
               <Icon size={18} aria-hidden="true" className="text-cyber" /> {f.text.fr}
             </li>
           )

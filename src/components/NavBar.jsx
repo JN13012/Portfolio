@@ -5,7 +5,7 @@ const navLinks = [
   { name: "EXPERTISE", href: "#competences" },
   { name: "PROJETS", href: "#projects" },
   { name: "LAB", href: "#lab" },
-  { name: "PARCOURS", href: "#experiences" },
+  { name: "PARCOURS", href: "#parcours" },
   { name: "CERTIFICATIONS", href: "#certifications" },
   { name: "CONTACT", href: "#contact" },
 ];
@@ -29,7 +29,7 @@ const NavBar = () => {
     <header className="fixed top-0 z-[1000] flex w-full flex-col">
       <nav aria-label="Navigation principale" className="border-b border-cyber/35 bg-black/85 py-4 backdrop-blur-md">
         <div className="mx-auto flex w-[90%] max-w-[2400px] items-center justify-between gap-6">
-          <a href="#acceuil" className="font-mono text-base leading-tight font-bold text-white sm:text-lg">
+          <a href="#acceuil" className="text-base leading-tight font-bold text-white sm:text-lg">
             NAGI_JÉRÉMIE
             <span className="text-zinc-500">.</span>
             <span className="text-sky-400">IA</span>
@@ -37,7 +37,7 @@ const NavBar = () => {
             <span className="text-cyber">CYBER</span>
           </a>
 
-          <ul className="hidden items-center gap-7 font-mono text-base xl:flex">
+          <ul className="hidden items-center gap-7 text-base xl:flex">
             {navLinks.map((link) => (
               <li key={link.name}>
                 <a
@@ -56,14 +56,14 @@ const NavBar = () => {
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((o) => !o)}
-            className="shrink-0 border border-cyber/40 px-3 py-1.5 font-mono text-sm tracking-widest whitespace-nowrap text-cyber xl:hidden"
+            className="shrink-0 border border-cyber/40 px-3 py-1.5 text-sm tracking-widest whitespace-nowrap text-cyber xl:hidden"
           >
             {open ? "[ FERMER ]" : "[ MENU ]"}
           </button>
         </div>
 
         {open && (
-          <ul id="mobile-menu" className="mx-auto mt-4 grid w-[90%] gap-1 border-t border-cyber/20 pt-3 font-mono xl:hidden">
+          <ul id="mobile-menu" className="mx-auto mt-4 grid w-[90%] gap-1 border-t border-cyber/20 pt-3 xl:hidden">
             {navLinks.map((link) => (
               <li key={link.name}>
                 <a href={link.href} onClick={() => setOpen(false)} className="block py-2 text-gray-300 hover:text-cyber">

@@ -43,19 +43,19 @@ const ProjectCard = ({
         {/* STATUS */}
         <div className="mb-3 flex flex-wrap gap-2">
           {isDossier && (
-            <span className="border border-cyber/60 bg-cyber/15 px-2 py-0.5 font-mono text-xs uppercase tracking-widest text-cyber">Dossier</span>
+            <span className="border border-cyber/60 bg-cyber/15 px-2 py-0.5 text-xs uppercase tracking-widest text-cyber">Dossier</span>
           )}
-          {status && <span className={`border px-2 py-0.5 font-mono text-xs uppercase tracking-widest ${statusClass}`}>{status}</span>}
+          {status && <span className={`border px-2 py-0.5 text-xs uppercase tracking-widest ${statusClass}`}>{status}</span>}
         </div>
 
         {/* CARD HEADER */}
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-xl md:text-2xl text-zinc-100 font-mono font-bold tracking-tighter group-hover:text-cyber transition-colors uppercase mb-2">
+          <h3 className="text-xl md:text-2xl text-zinc-100 font-bold tracking-normal group-hover:text-cyber transition-colors uppercase mb-2">
             {titre}
           </h3>
 
           <span
-            className={`text-sm font-mono border px-2.5 py-1 uppercase transition-all duration-300 ${theme.badge}`}
+            className={`text-sm border px-2.5 py-1 uppercase transition-all duration-300 ${theme.badge}`}
           >
             {categorie}
           </span>
@@ -63,7 +63,7 @@ const ProjectCard = ({
 
         {/* Description */}
         <div className="flex-grow overflow-hidden mb-4">
-          <p className="text-zinc-200 text-sm md:text-base leading-relaxed font-mono tracking-tight line-clamp-3">
+          <p className="text-zinc-200 text-sm md:text-base leading-relaxed line-clamp-3">
             {description}
           </p>
         </div>
@@ -73,13 +73,13 @@ const ProjectCard = ({
           {visibleTags.map((tag, index) => (
             <span
               key={index}
-              className="text-base font-mono px-2.5 py-1 bg-black/50 border border-cyber/20 text-zinc-400 group-hover:border-cyber/80 group-hover:text-cyber/80 transition-all"
+              className="text-base px-2.5 py-1 bg-black/50 border border-cyber/20 text-zinc-400 group-hover:border-cyber/80 group-hover:text-cyber/80 transition-all"
             >
               {tag}
             </span>
           ))}
           {hasMoreTags && (
-            <span className="border border-cyber/20 bg-black/70 px-2.5 py-1 font-mono text-base text-cyber/80 transition-all group-hover:border-cyber/80">
+            <span className="border border-cyber/20 bg-black/70 px-2.5 py-1 text-base text-cyber/80 transition-all group-hover:border-cyber/80">
               ...
             </span>
           )}
@@ -87,7 +87,7 @@ const ProjectCard = ({
 
         {/* BLOC DATE */}
         <div className="flex justify-end">
-          <span className="text-sm font-mono text-zinc-400 group-hover:text-cyber/80 transition-colors uppercase tracking-widest">
+          <span className="text-sm text-zinc-400 group-hover:text-cyber/80 transition-colors uppercase tracking-widest">
             [{date}]
           </span>
         </div>

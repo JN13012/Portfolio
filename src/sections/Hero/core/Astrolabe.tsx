@@ -323,11 +323,11 @@ export function Astrolabe({ mode = 'live', iris, locale = 'fr', className }: Ast
                     >
                       <Icon aria-hidden="true" strokeWidth={1.5} className="size-5 sm:size-6" />
                     </span>
-                    <span className="font-mono text-[0.6875rem] tracking-[0.12em] text-ink uppercase">{node.label[locale]}</span>
+                    <span className="text-[0.6875rem] tracking-[0.12em] text-ink uppercase">{node.label[locale]}</span>
                     <span
                       aria-hidden="true"
                       className={cx(
-                        'pointer-events-none absolute top-full mt-0.5 font-mono text-[0.625rem] whitespace-nowrap text-ink-muted transition-opacity duration-(--duration-base)',
+                        'pointer-events-none absolute top-full mt-0.5 text-[0.625rem] whitespace-nowrap text-ink-muted transition-opacity duration-(--duration-base)',
                         isActive ? 'opacity-100' : 'opacity-0',
                       )}
                     >

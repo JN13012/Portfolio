@@ -96,7 +96,7 @@ export function NetworkBackground2({ density = 1, packets: withPackets = false }
         g.lineTo(l.b.x, l.b.y)
       }
       g.stroke()
-      g.font = '9px "JetBrains Mono Variable", "JetBrains Mono", monospace'
+      g.font = '9px "Inter Variable", "Inter", sans-serif'
       g.textAlign = 'center'
       for (const n of nodes) {
         g.fillStyle = withAlpha(SLATE, n.hub ? 0.4 : 0.22)

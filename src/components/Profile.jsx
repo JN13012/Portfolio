@@ -40,7 +40,7 @@ const SectionTitle = ({
         className={`relative drop-shadow-[0_2px_0_rgba(0,0,0,0.45)] transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
       />
       <h3
-        className={`relative text-sm md:text-base font-mono uppercase tracking-[0.25em] drop-shadow-[0_2px_0_rgba(0,0,0,0.55)] transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
+        className={`relative text-sm md:text-base uppercase tracking-[0.25em] drop-shadow-[0_2px_0_rgba(0,0,0,0.55)] transition-colors duration-300 ${Animate ? "text-cyber group-hover/title:text-black" : "text-cyber"}`}
       >
         {title}
       </h3>
@@ -50,7 +50,7 @@ const SectionTitle = ({
 
 const SkillBar = memo(({ label, progress }) => (
   <div className="space-y-2 group cursor-default">
-    <div className="flex justify-between text-base font-mono text-zinc-300 uppercase group-hover:text-zinc-100 transition-colors">
+    <div className="flex justify-between text-base text-zinc-300 uppercase group-hover:text-zinc-100 transition-colors">
       <span>{label}</span>
       <span className="text-cyber">{progress}%</span>
     </div>
@@ -69,7 +69,7 @@ const InterestCell = memo(({ icon: Icon, label }) => (
       size={27}
       className="text-zinc-400 group-hover:text-cyber transition-all group-hover:scale-110"
     />
-    <div className="text-[15px] font-mono text-zinc-200 group-hover:text-zinc-100 uppercase text-center">
+    <div className="text-[15px] text-zinc-200 group-hover:text-zinc-100 uppercase text-center">
       {label}
     </div>
     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyber/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000"></div>
@@ -166,7 +166,7 @@ const Profile = () => {
             <a
               href={CV}
               download="CV_Jérémie_Nagi.pdf"
-              className="group/cv relative flex w-full items-center justify-between overflow-hidden border border-cyber/25 bg-black/65 px-5 py-3 font-mono uppercase tracking-[0.18em] text-cyber transition-all duration-300 hover:border-cyber/60 hover:bg-cyber/10 hover:shadow-[0_0_22px_rgba(74,222,128,0.12)]"
+              className="group/cv relative flex w-full items-center justify-between overflow-hidden border border-cyber/25 bg-black/65 px-5 py-3 uppercase tracking-[0.18em] text-cyber transition-all duration-300 hover:border-cyber/60 hover:bg-cyber/10 hover:shadow-[0_0_22px_rgba(74,222,128,0.12)]"
             >
               <div className="absolute inset-y-0 left-0 z-0 w-1 bg-cyber/70 transition-all duration-500 group-hover/cv:w-full group-hover/cv:bg-cyber/20" />
               <span className="relative z-10 flex items-center gap-3">
@@ -191,7 +191,7 @@ const Profile = () => {
                     href={tool.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group/link relative inline-flex cursor-pointer items-center gap-2 overflow-hidden border border-white/10 bg-zinc-950/70 px-4 py-2.5 font-mono text-base uppercase tracking-[0.12em] text-zinc-200/85 shadow-[0_10px_24px_rgba(0,0,0,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-cyber/50 hover:bg-cyber/5 hover:text-cyber hover:shadow-[0_0_22px_rgba(74,222,128,0.09),0_12px_26px_rgba(0,0,0,0.32)]"
+                    className="group/link relative inline-flex cursor-pointer items-center gap-2 overflow-hidden border border-white/10 bg-zinc-950/70 px-4 py-2.5 text-base uppercase tracking-[0.12em] text-zinc-200/85 shadow-[0_10px_24px_rgba(0,0,0,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-cyber/50 hover:bg-cyber/5 hover:text-cyber hover:shadow-[0_0_22px_rgba(74,222,128,0.09),0_12px_26px_rgba(0,0,0,0.32)]"
                   >
                     <span className="absolute inset-y-0 left-0 w-px bg-cyber/50 opacity-0 transition-opacity duration-300 group-hover/link:opacity-100" />
                     <span>{tool.name}</span>
@@ -210,7 +210,7 @@ const Profile = () => {
               />
 
               <div
-                className={`${contentPanelClass} space-y-3 text-base font-mono text-zinc-100 leading-relaxed`}
+                className={`${contentPanelClass} space-y-3 text-base text-zinc-100 leading-relaxed`}
               >
                 <p className="py-3">
                   Étudiant en reconversion, passionné par les
@@ -234,7 +234,7 @@ const Profile = () => {
             {/* PERSONNAL DATA */}
             <div className="group/profile-block">
               <SectionTitle icon={Database} title="Informations personnelles" />
-              <ul className={`${contentPanelClass} px-5 py-4 font-mono`}>
+              <ul className={`${contentPanelClass} px-5 py-4`}>
                 {personalData.map((item, i) => (
                   <li
                     key={i}
@@ -279,7 +279,7 @@ const Profile = () => {
                     key={l.id}
                     className="p-4 border border-white/5 bg-zinc-900/10 hover:border-cyber/40 transition-all group"
                   >
-                    <div className="flex justify-between text-base font-mono mb-3">
+                    <div className="flex justify-between text-base mb-3">
                       <span className="text-zinc-100 group-hover:text-white">
                         {l.lang}
                       </span>

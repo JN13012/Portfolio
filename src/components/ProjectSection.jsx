@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
+import { ChevronDown } from "lucide-react";
 import SectionHeader from "./SectionHeader";
 import ProjectCard from "./ProjectCard";
 import { projects } from "../content/projects";
@@ -52,6 +53,7 @@ const IMAGES = {
 };
 
 const TRACK_LABEL = { ia: "IA", cyber: "Cyber", dev: "Dev" };
+const TRACK_DOT = { ia: "bg-sky-400", cyber: "bg-rose-500", dev: "bg-emerald-400" };
 
 const trackThemes = {
   ia: { card: "hover:border-cyber/40", badge: "text-blue-300 border-blue-500/30 bg-blue-500/10" },
@@ -127,54 +129,64 @@ const ProjectSection = () => {
 
   const images = selected ? IMAGES[selected.slug] ?? [] : [];
 
-  const chip = (active, extra = "") =>
-    `cursor-pointer px-4 py-2 font-mono text-sm uppercase tracking-widest transition-all border active:scale-95 ${
-      active ? "bg-cyber text-black border-cyber scale-105" : `${extra || "text-zinc-400 border-white/15 bg-white/5"} opacity-80 hover:opacity-100 hover:scale-105`
+  const pill = (active) =>
+    `inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm transition-colors ${
+      active ? "bg-white/10 text-white ring-1 ring-white/20" : "text-zinc-400 hover:text-white"
     }`;
+  const select =
+    "appearance-none rounded-md border border-white/10 bg-zinc-950/70 py-1.5 pr-8 pl-3 text-sm text-zinc-200 transition-colors hover:border-white/25 focus-visible:border-cyber/60 focus-visible:outline-none [&>option]:bg-zinc-900";
 
   return (
     <section id="projects" className="relative overflow-hidden border-y border-cyber/10 bg-black/45 py-24 text-white">
       <div className="relative z-10 mx-auto px-2">
         <SectionHeader index="03" title="Projets" />
 
-        {/* FILTERS */}
-        <div className="mb-12 flex flex-col gap-5">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="w-24 font-mono text-xs uppercase tracking-[0.3em] text-zinc-500">Métier</span>
-            <button type="button" aria-pressed={tracks.length === 0} onClick={() => updateTracks([])} className={chip(tracks.length === 0)}>
-              [ Tous ]
+        {/* FILTERS: one line — job pills on the left, status and sort menus on the right. */}
+        <div className="mb-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-b border-white/10 pb-5">
+          <div role="group" aria-label="Filtrer par métier" className="flex flex-wrap items-center gap-1">
+            <button type="button" aria-pressed={tracks.length === 0} onClick={() => updateTracks([])} className={pill(tracks.length === 0)}>
+              Tous
             </button>
             {["ia", "cyber", "dev"].map((t) => (
-              <button key={t} type="button" aria-pressed={tracks.includes(t)} onClick={() => updateTracks(toggle(tracks, t))} className={chip(tracks.includes(t), trackThemes[t].badge)}>
-                {`[ ${TRACK_LABEL[t]} ]`}
+              <button key={t} type="button" aria-pressed={tracks.includes(t)} onClick={() => updateTracks(toggle(tracks, t))} className={pill(tracks.includes(t))}>
+                <span aria-hidden="true" className={`size-1.5 rounded-full ${TRACK_DOT[t]}`} />
+                {TRACK_LABEL[t]}
               </button>
             ))}
           </div>
+
           <div className="flex flex-wrap items-center gap-3">
-            <span className="w-24 font-mono text-xs uppercase tracking-[0.3em] text-zinc-500">Statut</span>
-            <button type="button" aria-pressed={statuses.length === 0} onClick={() => updateStatuses([])} className={chip(statuses.length === 0)}>
-              [ Tous ]
-            </button>
-            {STATUS_FILTERS.map((s) => (
-              <button key={s} type="button" aria-pressed={statuses.includes(s)} onClick={() => updateStatuses(toggle(statuses, s))} className={chip(statuses.includes(s), statusStyles[s])}>
-                {`[ ${statusLabels[s].fr} ]`}
-              </button>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="w-24 font-mono text-xs uppercase tracking-[0.3em] text-zinc-500">Trier</span>
-            {[
-              ["date", "Plus récent"],
-              ["envergure", "Envergure"],
-            ].map(([key, label]) => (
-              <button key={key} type="button" aria-pressed={sort === key} onClick={() => { setSort(key); setCurrentPage(1); }} className={chip(sort === key)}>
-                {`[ ${label} ]`}
-              </button>
-            ))}
-            <span className="font-mono text-sm text-zinc-500">{visible.length} projets</span>
+            <label className="relative">
+              <span className="sr-only">Statut</span>
+              <select value={statuses[0] ?? ""} onChange={(e) => updateStatuses(e.target.value ? [e.target.value] : [])} className={select}>
+                <option value="">Tous les statuts</option>
+                {STATUS_FILTERS.map((st) => (
+                  <option key={st} value={st}>
+                    {statusLabels[st].fr}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown aria-hidden="true" size={14} className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 text-zinc-500" />
+            </label>
+            <label className="relative">
+              <span className="sr-only">Trier</span>
+              <select
+                value={sort}
+                onChange={(e) => {
+                  setSort(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className={select}
+              >
+                <option value="date">Plus récents</option>
+                <option value="envergure">Envergure</option>
+              </select>
+              <ChevronDown aria-hidden="true" size={14} className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 text-zinc-500" />
+            </label>
+            <span className="text-sm text-zinc-500 tabular-nums">{visible.length} projets</span>
           </div>
           {sort === "envergure" && (
-            <p className="font-mono text-xs text-zinc-500">
+            <p className="w-full text-xs text-zinc-500">
               Envergure = durée (mois, plafonnée à 12) + taille de l’équipe (plafonnée à 7) + tests (échelle logarithmique).
             </p>
           )}
@@ -182,7 +194,7 @@ const ProjectSection = () => {
 
         {/* GRID */}
         {page.length === 0 ? (
-          <p className="font-mono text-zinc-400">Aucun projet ne correspond à ces filtres.</p>
+          <p className="text-zinc-400">Aucun projet ne correspond à ces filtres.</p>
         ) : (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {page.map((p) => (
@@ -205,22 +217,25 @@ const ProjectSection = () => {
         )}
 
         {totalPages > 1 && (
-          <div className="mt-14 flex items-center justify-center gap-6 font-mono uppercase tracking-[0.18em]">
-            <button type="button" onClick={() => setCurrentPage((n) => Math.max(1, n - 1))} disabled={currentPage === 1} className="cursor-pointer text-cyber/60 transition-all duration-300 hover:text-cyber disabled:cursor-not-allowed disabled:opacity-20">
-              [ PREV ]
+          <nav aria-label="Pages des projets" className="mt-12 flex items-center justify-center gap-2 text-sm">
+            <button type="button" onClick={() => setCurrentPage((n) => Math.max(1, n - 1))} disabled={currentPage === 1} className="rounded-md px-3 py-1.5 text-zinc-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30">
+              ← Précédent
             </button>
-            <div className="flex items-center gap-4">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-                <button key={n} type="button" aria-current={currentPage === n ? "page" : undefined} onClick={() => setCurrentPage(n)} className={`relative cursor-pointer transition-all duration-300 ${currentPage === n ? "scale-125 text-xl text-cyber" : "text-sm text-white/40 hover:text-white/70"}`}>
-                  {String(n).padStart(2, "0")}
-                  {currentPage === n && <div className="absolute -bottom-1 left-0 h-px w-full bg-cyber shadow-[0_0_10px_#4ade80]" />}
-                </button>
-              ))}
-            </div>
-            <button type="button" onClick={() => setCurrentPage((n) => Math.min(totalPages, n + 1))} disabled={currentPage === totalPages} className="cursor-pointer text-cyber/60 transition-all duration-300 hover:text-cyber disabled:cursor-not-allowed disabled:opacity-20">
-              [ NEXT ]
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+              <button
+                key={n}
+                type="button"
+                aria-current={currentPage === n ? "page" : undefined}
+                onClick={() => setCurrentPage(n)}
+                className={`size-8 rounded-md tabular-nums transition-colors ${currentPage === n ? "bg-white/10 text-white ring-1 ring-white/20" : "text-zinc-500 hover:text-white"}`}
+              >
+                {n}
+              </button>
+            ))}
+            <button type="button" onClick={() => setCurrentPage((n) => Math.min(totalPages, n + 1))} disabled={currentPage === totalPages} className="rounded-md px-3 py-1.5 text-zinc-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30">
+              Suivant →
             </button>
-          </div>
+          </nav>
         )}
       </div>
 
@@ -235,14 +250,14 @@ const ProjectSection = () => {
             className="relative flex h-[90vh] w-[95vw] flex-col overflow-hidden border border-white/10 bg-zinc-950 shadow-[0_0_50px_rgba(0,0,0,0.5)] md:w-[85vw] lg:w-[75vw]"
           >
             <div className="relative p-6 text-center">
-              <p className="mb-3 font-mono text-base uppercase tracking-[0.3em] text-cyber opacity-80">
+              <p className="mb-3 text-base uppercase tracking-[0.3em] text-cyber opacity-80">
                 {selected.tier === "dossier" ? "DOSSIER" : "PROJECT_OVERVIEW"}
               </p>
-              <h3 className="pb-5 font-mono text-xl font-bold uppercase text-white md:text-3xl">{selected.title}</h3>
-              <button type="button" onClick={() => setSelected(null)} className="absolute top-6 right-6 font-mono text-xl text-zinc-500 transition-colors hover:text-white">
+              <h3 className="pb-5 text-xl font-bold uppercase text-white md:text-3xl">{selected.title}</h3>
+              <button type="button" onClick={() => setSelected(null)} className="absolute top-6 right-6 text-xl text-zinc-500 transition-colors hover:text-white">
                 [ESC_EXIT]
               </button>
-              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 border-y border-white/10 bg-white/5 p-4 font-mono text-sm uppercase md:justify-between">
+              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 border-y border-white/10 bg-white/5 p-4 text-sm uppercase md:justify-between">
                 <span><span className="text-cyber">Période :</span> <span className="text-white">{formatPeriod(selected.period)}</span></span>
                 <span><span className="text-cyber">Équipe :</span> <span className="text-white">{selected.team.size > 1 ? (selected.team.label?.fr ?? `${selected.team.size} personnes`) : "Solo"}</span></span>
                 <span><span className="text-cyber">Contexte :</span> <span className="text-white">{CONTEXT_LABEL[selected.context]}</span></span>
@@ -256,13 +271,13 @@ const ProjectSection = () => {
                   <div className="absolute inset-0 bg-cyber opacity-10 blur-3xl" />
                   <div className="relative z-10 flex w-full items-center justify-center">
                     {images.length > 1 && (
-                      <button type="button" onClick={() => setImageIndex((i) => (i - 1 + images.length) % images.length)} aria-label="Image précédente" className="absolute left-0 z-20 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
+                      <button type="button" onClick={() => setImageIndex((i) => (i - 1 + images.length) % images.length)} aria-label="Image précédente" className="absolute left-0 z-20 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
                         ‹
                       </button>
                     )}
                     <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className="max-h-[62vh] max-w-full border border-white/10 object-contain shadow-2xl" />
                     {images.length > 1 && (
-                      <button type="button" onClick={() => setImageIndex((i) => (i + 1) % images.length)} aria-label="Image suivante" className="absolute right-0 z-20 cursor-pointer bg-black/55 px-3 py-2 font-mono text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
+                      <button type="button" onClick={() => setImageIndex((i) => (i + 1) % images.length)} aria-label="Image suivante" className="absolute right-0 z-20 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
                         ›
                       </button>
                     )}
@@ -272,16 +287,16 @@ const ProjectSection = () => {
 
               <div className={`flex w-full flex-col gap-8 overflow-y-auto bg-zinc-900/20 p-8 ${images.length ? "md:w-1/2" : ""}`}>
                 <div className="flex flex-col gap-4">
-                  <h4 className="flex items-center gap-3 font-mono text-lg uppercase tracking-[0.2em] text-zinc-100">
+                  <h4 className="flex items-center gap-3 text-lg uppercase tracking-[0.2em] text-zinc-100">
                     <span className="text-cyber">⬢</span> Résumé
                   </h4>
-                  <p className="border-l-2 border-cyber/30 pl-4 font-mono text-base leading-relaxed text-zinc-200">{selected.summary.fr}</p>
+                  <p className="border-l-2 border-cyber/30 pl-4 text-base leading-relaxed text-zinc-200">{selected.summary.fr}</p>
                 </div>
 
                 {selected.facts.length > 0 && (
                   <dl className="flex flex-wrap gap-x-10 gap-y-4">
                     {selected.facts.map((f) => (
-                      <div key={f.label.fr} className="border-t border-cyber/30 pt-2 font-mono">
+                      <div key={f.label.fr} className="border-t border-cyber/30 pt-2">
                         <dt className="sr-only">{f.label.fr}</dt>
                         <dd>
                           <span className="block text-3xl font-bold text-cyber">{f.value}</span>
@@ -294,18 +309,18 @@ const ProjectSection = () => {
 
                 {selected.sections?.map((s) => (
                   <div key={s.kind} className="flex flex-col gap-3">
-                    <h4 className="flex items-center gap-3 font-mono text-base uppercase tracking-[0.2em] text-zinc-100">
+                    <h4 className="flex items-center gap-3 text-base uppercase tracking-[0.2em] text-zinc-100">
                       <span className="text-cyber">▸</span> {s.title.fr}
                     </h4>
-                    <p className="font-mono text-[15px] leading-relaxed text-zinc-300">{s.body.fr}</p>
+                    <p className="text-[15px] leading-relaxed text-zinc-300">{s.body.fr}</p>
                   </div>
                 ))}
 
                 <div className="border border-white/5 bg-black/40 p-4">
-                  <h4 className="mb-3 font-mono text-base uppercase text-zinc-100">Expertise technique</h4>
+                  <h4 className="mb-3 text-base uppercase text-zinc-100">Expertise technique</h4>
                   <div className="flex flex-wrap gap-2">
                     {selected.stack.map((t) => (
-                      <span key={t} className="border border-cyber/20 bg-cyber/5 px-3 py-1.5 font-mono text-base text-cyber">
+                      <span key={t} className="border border-cyber/20 bg-cyber/5 px-3 py-1.5 text-base text-cyber">
                         {t}
                       </span>
                     ))}
@@ -313,7 +328,7 @@ const ProjectSection = () => {
                 </div>
 
                 {sort === "envergure" && (
-                  <p className="font-mono text-xs text-zinc-500">Envergure : {envergure(selected)}</p>
+                  <p className="text-xs text-zinc-500">Envergure : {envergure(selected)}</p>
                 )}
               </div>
             </div>
@@ -337,7 +352,7 @@ function ProjectLinks({ project, onInternal }) {
 
   if (links.length === 0) {
     return project.links.privateRepo ? (
-      <p className="border-t border-white/10 py-4 text-center font-mono text-sm uppercase tracking-[0.2em] text-zinc-500">Dépôt privé · code non public</p>
+      <p className="border-t border-white/10 py-4 text-center text-sm uppercase tracking-[0.2em] text-zinc-500">Dépôt privé · code non public</p>
     ) : null;
   }
   return (
@@ -351,7 +366,7 @@ function ProjectLinks({ project, onInternal }) {
           onClick={l.internal ? onInternal : undefined}
           className="group relative flex flex-1 items-center justify-center overflow-hidden border-r border-cyber/20 bg-cyber/5 px-4 py-4 transition-all duration-300 last:border-r-0 hover:bg-cyber/10"
         >
-          <span className="relative font-mono text-sm font-bold uppercase tracking-[0.2em] text-cyber">[ {l.label} ]</span>
+          <span className="relative text-sm font-bold uppercase tracking-[0.2em] text-cyber">[ {l.label} ]</span>
         </a>
       ))}
     </div>

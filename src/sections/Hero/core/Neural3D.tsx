@@ -398,7 +398,7 @@ export default function Neural3D({ nodes, onReady }: Neural3DProps) {
           >
             <span
               className={cx(
-                'block -translate-x-full pr-3 font-mono text-xs tracking-wider transition-colors',
+                'block -translate-x-full pr-3 text-xs tracking-wider transition-colors',
                 alert?.input === i ? 'text-[var(--color-threat)]' : 'text-zinc-400',
               )}
             >
@@ -416,7 +416,7 @@ export default function Neural3D({ nodes, onReady }: Neural3DProps) {
           >
             <span
               className={cx(
-                'block -translate-x-1/2 font-mono text-[10px] tracking-[0.25em] uppercase',
+                'block -translate-x-1/2 text-[10px] tracking-[0.25em] uppercase',
                 i === 2 ? 'text-cyber' : 'text-zinc-500',
               )}
             >
@@ -456,7 +456,7 @@ export default function Neural3D({ nodes, onReady }: Neural3DProps) {
                   >
                     <Icon aria-hidden="true" size={18} strokeWidth={1.6} />
                   </span>
-                  <span className="font-mono">
+                  <span>
                     <span className="block text-xs tracking-[0.15em] whitespace-nowrap text-zinc-100 uppercase">{node.label}</span>
                     <span className={cx('block text-[11px] whitespace-nowrap text-zinc-400 transition-opacity', isActive ? 'opacity-100' : 'opacity-0')}>
                       {node.hint}
@@ -469,7 +469,7 @@ export default function Neural3D({ nodes, onReady }: Neural3DProps) {
         </ul>
       </nav>
 
-      <p ref={counter} aria-hidden="true" className="absolute top-0 right-0 font-mono text-[11px] tracking-widest text-zinc-500 uppercase" />
+      <p ref={counter} aria-hidden="true" className="absolute top-0 right-0 text-[11px] tracking-widest text-zinc-500 uppercase" />
     </div>
   )
 }
