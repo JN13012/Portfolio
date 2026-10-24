@@ -160,21 +160,17 @@ export const expertise: ExpertiseDomain[] = [
 ]
 
 /**
- * Domain order when the visitor arrives through a targeted link (?metier=ia|cyber|dev, see
- * src/lib/projects.ts): the job's domains first, the rest keeps the default order.
+ * Full domain order when the visitor arrives through a targeted link (?metier=ia|cyber|dev, see
+ * src/lib/projects.ts). One job per link: only the first value is used.
  */
 export const domainOrderFor: Record<Track, ExpertiseDomain['id'][]> = {
-  ia: ['ia', 'dev'],
-  cyber: ['offensive', 'defensive'],
-  dev: ['dev', 'devops'],
+  ia: ['ia', 'offensive', 'defensive', 'devops', 'dev'],
+  cyber: ['offensive', 'defensive', 'ia', 'devops', 'dev'],
+  dev: ['dev', 'ia', 'offensive', 'defensive', 'devops'],
 }
 
-/** The domains in display order for the given jobs (none = default order). */
+/** The domains in display order for the job of the link (none = default order). */
 export function orderedDomains(tracks: Track[]): ExpertiseDomain[] {
-  const first = [...new Set(tracks.flatMap((t) => domainOrderFor[t]))]
-  const rank = (d: ExpertiseDomain) => {
-    const i = first.indexOf(d.id)
-    return i === -1 ? first.length + expertise.indexOf(d) : i
-  }
-  return [...expertise].sort((a, b) => rank(a) - rank(b))
+  const order = tracks[0] ? domainOrderFor[tracks[0]] : expertise.map((d) => d.id)
+  return order.map((id) => expertise.find((d) => d.id === id)!)
 }
