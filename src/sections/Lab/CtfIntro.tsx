@@ -126,12 +126,12 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
   const done = (n: number) => progress.solved || n < progress.level
   const typing = chars < total
 
-  // On click, we dive into the screen (it zooms towards the viewer and fades), then the console opens.
+  // On click, the screen switches off like an old CRT (collapses to a bright line), then the console opens.
   const [leaving, setLeaving] = useState(false)
   const go = () => {
     if (reduced) return onStart()
     setLeaving(true)
-    window.setTimeout(onStart, 560)
+    window.setTimeout(onStart, 520)
   }
   const restart = () => {
     try {
@@ -145,7 +145,7 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
   return (
     <div
       ref={root}
-      className={cx('relative flex flex-1 flex-col items-center overflow-y-auto px-6 py-8 text-center font-mono', leaving && 'pointer-events-none animate-[dive-out_560ms_cubic-bezier(0.55,0,0.85,0.35)_forwards]')}
+      className={cx('relative flex flex-1 flex-col items-center overflow-y-auto px-6 py-8 text-center font-mono', leaving && 'pointer-events-none animate-[crt-off_520ms_ease-in_forwards]')}
       style={{
         backgroundImage:
           'radial-gradient(ellipse 70% 45% at 50% 0%, rgba(74,222,128,0.13), transparent 70%), linear-gradient(rgba(74,222,128,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.045) 1px, transparent 1px)',
