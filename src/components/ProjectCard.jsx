@@ -1,5 +1,5 @@
 import React from "react";
-import { Star } from "lucide-react";
+import { Lock } from "lucide-react";
 
 const ProjectCard = ({
   titre,
@@ -13,6 +13,8 @@ const ProjectCard = ({
   isDossier,
   inProduction,
   ongoing,
+  complexity,
+  privateCode,
 }) => {
   const visibleTags = tags.slice(0, 8);
   const hasMoreTags = tags.length > visibleTags.length;
@@ -38,14 +40,6 @@ const ProjectCard = ({
 
       {/* EFFET BRILLANCE GLOW */}
       <div className="absolute -top-24 -left-24 w-48 h-48 bg-cyber/10 rounded-full blur-3xl group-hover:bg-cyber/40 transition-all duration-5000 z-0"></div>
-
-      {/* Featured project: a small star in the top-right corner, explained on hover and to screen readers. */}
-      {isDossier && (
-        <span title="Projet phare" className="absolute top-2.5 right-2.5 z-20">
-          <Star size={15} aria-hidden="true" className="fill-amber-300 text-amber-300 drop-shadow-[0_0_6px_rgba(252,211,77,0.5)]" />
-          <span className="sr-only">Projet phare</span>
-        </span>
-      )}
 
       {/* CARD CONTENT */}
       <div className="relative z-10 flex flex-col h-full flex-grow rounded-sm border border-white/10 bg-black/38 p-4 backdrop-blur-[1px] transition-colors duration-500 group-hover:bg-black/46">
@@ -101,11 +95,24 @@ const ProjectCard = ({
           )}
         </div>
 
-        {/* BLOC DATE (and, for featured projects, the hint that a full case study opens) */}
-        <div className={`flex items-center ${isDossier ? "justify-between" : "justify-end"}`}>
-          {isDossier && <span className="text-sm text-amber-300/90 transition-colors group-hover:text-amber-200">Lire l’étude →</span>}
-          <span className={`text-sm tracking-wide transition-colors ${ongoing ? "text-sky-300" : "text-zinc-400 group-hover:text-cyber/80"}`}>
-            {date}
+        {/* Footer: complexity dots, private-code note, case-study hint, date. */}
+        <div className="flex items-center justify-between gap-3 text-sm">
+          <span className="flex items-center gap-3">
+            <span title={`Complexité ${complexity}/5`} className="flex gap-1">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <span key={n} aria-hidden="true" className={`size-1.5 rounded-full ${n <= complexity ? "bg-cyber shadow-[0_0_6px_var(--color-cyber)]" : "bg-white/15"}`} />
+              ))}
+              <span className="sr-only">Complexité {complexity} sur 5</span>
+            </span>
+            {privateCode && (
+              <span className="inline-flex items-center gap-1 text-xs text-zinc-500">
+                <Lock size={12} aria-hidden="true" /> Code privé
+              </span>
+            )}
+          </span>
+          <span className="flex items-center gap-3">
+            {isDossier && <span className="text-amber-300/90 transition-colors group-hover:text-amber-200">Lire l’étude →</span>}
+            <span className={`tracking-wide transition-colors ${ongoing ? "text-sky-300" : "text-zinc-400 group-hover:text-cyber/80"}`}>{date}</span>
           </span>
         </div>
 

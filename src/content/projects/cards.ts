@@ -137,7 +137,7 @@ export const cards: Project[] = [
     status: 'delivered',
     tracks: ['cyber'],
     title: 'CTF du portfolio',
-    period: { start: '2026-05' },
+    period: { start: '2026-05', end: '2026-06' },
     team: { size: 1 },
     context: 'personal',
     summary: {

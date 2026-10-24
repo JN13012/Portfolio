@@ -5,7 +5,7 @@ import SectionHeader from "./SectionHeader";
 import ProjectCard from "./ProjectCard";
 import { projects } from "../content/projects";
 import { statusLabels } from "../content/ui";
-import { envergure, filterProjects, sortProjects, tracksFromSearch } from "../lib/projects";
+import { complexityOf, filterProjects, sortProjects, tracksFromSearch } from "../lib/projects";
 import Smartfridge from "../assets/Projets/Smartfridge.png";
 import Cyberpong from "../assets/Projets/Cyberpong.png";
 import My_marvin from "../assets/Projets/My_marvin.png";
@@ -85,14 +85,12 @@ const formatPeriod = (period) => {
 // On the card: just when it was finished, or « En cours ». The modal keeps the full period.
 const cardDate = (period) => (period.end ? period.end.split("-").reverse().join("/") : "En cours");
 
-const STATUS_FILTERS = ["development", "delivered"];
 
 const ProjectSection = () => {
   const [selected, setSelected] = useState(null);
   const [imageIndex, setImageIndex] = useState(0);
   const [tracks, setTracks] = useState(() => tracksFromSearch(window.location.search));
-  const [statuses, setStatuses] = useState([]);
-  const [sort, setSort] = useState("date");
+  const [sort, setSort] = useState("selection");
   const [currentPage, setCurrentPage] = useState(1);
 
   // Keep ?metier= in the URL so a filtered view can be linked in an application.
@@ -110,9 +108,8 @@ const ProjectSection = () => {
     return () => window.removeEventListener("keydown", onKey);
   }, [selected]);
 
-  const visible = useMemo(() => sortProjects(filterProjects(projects, { tracks, statuses }), sort), [tracks, statuses, sort]);
-  // Featured projects (full case study) come first; every card has the same size.
-  const ordered = [...visible.filter((p) => p.tier === "dossier"), ...visible.filter((p) => p.tier !== "dossier")];
+  const visible = useMemo(() => sortProjects(filterProjects(projects, { tracks }), sort), [tracks, sort]);
+  const ordered = visible;
   const totalPages = Math.max(1, Math.ceil(ordered.length / PROJECTS_PER_PAGE));
   const page = ordered.slice((currentPage - 1) * PROJECTS_PER_PAGE, currentPage * PROJECTS_PER_PAGE);
   const card = (p) => (
@@ -122,9 +119,11 @@ const ProjectSection = () => {
       description={p.summary.fr}
       tags={p.stack}
       image={IMAGES[p.slug]?.[0]}
-      categorie={TRACK_LABEL[p.tracks[0]] ?? "Projet"}
+      categorie={TRACK_LABEL[p.tracks[0]] ?? p.stack[0] ?? "Projet"}
       date={cardDate(p.period)}
       ongoing={!p.period.end}
+      complexity={complexityOf(p)}
+      privateCode={!p.links.github && !p.links.repos?.length && !p.links.writeup && !p.links.demo}
       inProduction={p.inProduction?.fr}
       isDossier={p.tier === "dossier"}
       theme={trackThemes[p.tracks[0]] || trackThemes.Default}
@@ -134,10 +133,6 @@ const ProjectSection = () => {
 
   const updateTracks = (next) => {
     setTracks(next);
-    setCurrentPage(1);
-  };
-  const updateStatuses = (next) => {
-    setStatuses(next);
     setCurrentPage(1);
   };
 
@@ -163,7 +158,7 @@ const ProjectSection = () => {
             {[null, "ia", "cyber", "dev"].map((t) => {
               const on = t ? tracks.length === 1 && tracks[0] === t : tracks.length === 0;
               const color = t ? TRACK_COLOR[t] : "#e4e4e7";
-              const count = filterProjects(projects, { tracks: t ? [t] : [], statuses }).length;
+              const count = filterProjects(projects, { tracks: t ? [t] : [] }).length;
               return (
                 <button key={t ?? "all"} type="button" aria-pressed={on} onClick={() => updateTracks(t ? [t] : [])} className="group relative inline-flex items-center gap-2 pb-2.5 text-lg">
                   <span
@@ -183,18 +178,6 @@ const ProjectSection = () => {
 
           <div className="flex flex-wrap items-center gap-3">
             <label className="relative">
-              <span className="sr-only">Statut</span>
-              <select value={statuses[0] ?? ""} onChange={(e) => updateStatuses(e.target.value ? [e.target.value] : [])} className={select}>
-                <option value="">Tous les statuts</option>
-                {STATUS_FILTERS.map((st) => (
-                  <option key={st} value={st}>
-                    {statusLabels[st].fr}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown aria-hidden="true" size={14} className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 text-zinc-500" />
-            </label>
-            <label className="relative">
               <span className="sr-only">Trier</span>
               <select
                 value={sort}
@@ -204,18 +187,14 @@ const ProjectSection = () => {
                 }}
                 className={select}
               >
+                <option value="selection">Sélection</option>
                 <option value="date">Plus récents</option>
-                <option value="envergure">Envergure</option>
+                <option value="complexity">Plus complexes</option>
               </select>
               <ChevronDown aria-hidden="true" size={14} className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 text-zinc-500" />
             </label>
             <span className="text-sm text-zinc-500 tabular-nums">{visible.length} projets</span>
           </div>
-          {sort === "envergure" && (
-            <p className="w-full text-xs text-zinc-500">
-              Envergure = durée (mois, plafonnée à 12) + taille de l’équipe (plafonnée à 7) + tests (échelle logarithmique).
-            </p>
-          )}
         </div>
 
         {/* GRID */}
@@ -337,9 +316,6 @@ const ProjectSection = () => {
                   </div>
                 </div>
 
-                {sort === "envergure" && (
-                  <p className="text-xs text-zinc-500">Envergure : {envergure(selected)}</p>
-                )}
               </div>
             </div>
 

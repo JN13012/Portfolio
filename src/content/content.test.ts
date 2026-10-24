@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { envergure, filterProjects, sortProjects, tracksFromSearch } from '../lib/projects'
+import { complexityOf, filterProjects, sortProjects, tracksFromSearch } from '../lib/projects'
+import { complexity } from './complexity'
 import { credentials, inProgress } from './certifications'
 import { hero } from './hero'
 import { profile } from './profile'
@@ -88,12 +89,16 @@ describe('project filters', () => {
     expect(filterProjects(projects, { statuses: ['development'] }).every((p) => p.status === 'development')).toBe(true)
   })
 
-  it('sorts by date with ongoing projects first, and by envergure', () => {
+  it('rates every project and sorts by date, complexity and selection', () => {
+    for (const p of projects) expect(complexity[p.slug], p.slug).toBeDefined()
     const byDate = sortProjects(projects, 'date')
-    expect(byDate[0]?.period.end).toBeUndefined()
-    const byScale = sortProjects(projects, 'envergure')
-    for (let i = 1; i < byScale.length; i++) expect(envergure(byScale[i - 1]!)).toBeGreaterThanOrEqual(envergure(byScale[i]!))
+    expect(byDate[0]!.period.end).toBeUndefined()
+    const byNote = sortProjects(projects, 'complexity')
+    for (let i = 1; i < byNote.length; i++) expect(complexityOf(byNote[i - 1]!)).toBeGreaterThanOrEqual(complexityOf(byNote[i]!))
+    const selection = sortProjects(projects, 'selection')
+    expect(selection.slice(0, dossiers.length).every((p) => p.tier === 'dossier')).toBe(true)
   })
+
 
   it('reads ?metier= from the URL and ignores unknown values', () => {
     expect(tracksFromSearch('?metier=cyber,ia,foo')).toEqual(['cyber', 'ia'])
