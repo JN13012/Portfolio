@@ -72,7 +72,7 @@ function Typed({ text, from, chars }: { text: string; from: number; chars: numbe
   )
 }
 
-export function CtfIntro({ onStart, button = 'cap' }: { onStart: () => void; button?: StartButtonStyle }) {
+export function CtfIntro({ onStart, button = 'tilt' }: { onStart: () => void; button?: StartButtonStyle }) {
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
   const [progress] = useState(readProgress)
