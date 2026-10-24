@@ -115,7 +115,7 @@ export const expertise: ExpertiseDomain[] = [
     },
     proofs: [
       { fr: '46 tests et CI durcie sur BlockTrader', en: '46 tests and hardened CI on BlockTrader' },
-      { fr: 'Déploiement Kubernetes (projet Gandalf)', en: 'Kubernetes deployment (Gandalf project)' },
+      { fr: 'Déploiement Kubernetes (projet Bernstein)', en: 'Kubernetes deployment (Bernstein project)' },
     ],
     tools: [
       t('Docker', 'Conteneurisation des projets (Compose)', 'Containerising the projects (Compose)'),
