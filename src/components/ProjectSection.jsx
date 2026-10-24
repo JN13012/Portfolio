@@ -79,6 +79,8 @@ const formatPeriod = (period) => {
   const f = (ym) => ym.split("-").reverse().join("/");
   return period.end ? (period.end === period.start ? f(period.start) : `${f(period.start)} – ${f(period.end)}`) : f(period.start);
 };
+// On the card: just when it was finished, or « En cours ». The modal keeps the full period.
+const cardDate = (period) => (period.end ? period.end.split("-").reverse().join("/") : "En cours");
 
 const STATUS_FILTERS = ["development", "delivered"];
 
@@ -118,7 +120,8 @@ const ProjectSection = () => {
       tags={p.stack}
       image={IMAGES[p.slug]?.[0]}
       categorie={TRACK_LABEL[p.tracks[0]] ?? "Projet"}
-      date={formatPeriod(p.period)}
+      date={cardDate(p.period)}
+      ongoing={!p.period.end}
       status={statusLabels[p.status].fr}
       inProduction={p.inProduction?.fr}
       statusClass={statusStyles[p.status]}
