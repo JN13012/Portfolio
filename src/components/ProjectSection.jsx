@@ -36,7 +36,10 @@ const PROJECTS_PER_PAGE = 6;
 /** Visuals per project slug (first image = card background). Projects without one get a pattern. */
 const IMAGES = {
   pentest: [Tor],
-  "applications-llm": [RAG_pdf_Chatbot, Business_AI_Meeting, AI_Career_Coach, AI_Assistant_Translator],
+  "rag-pdf-chatbot": [RAG_pdf_Chatbot],
+  "meeting-companion": [Business_AI_Meeting],
+  "career-coach": [AI_Career_Coach],
+  "assistant-translator": [AI_Assistant_Translator],
   "generateur-otp-rcs": [OTP_RCS],
   chatflow: [Chatflow],
   "salesforce-executor": [Salesforce],

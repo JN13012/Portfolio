@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-10-17 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-10-24 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Hero
@@ -41,7 +41,7 @@ Preuves : Alternance full-stack Salesforce (ULIT) · Un outil interne en product
 
 ## Dossiers
 
-### BlockTrader — En test (2026-07 → en cours)
+### BlockTrader — En développement (2026-07 → en cours)
 
 Banc de recherche pour stratégies de trading crypto, conçu pour ne pas se mentir : protocoles écrits avant les calculs, chaque essai enregistré, garde-fous contre le surapprentissage. En paper trading uniquement.
 
@@ -85,7 +85,7 @@ Chiffres : 62 tests
 
 Stack : Python, httpx, SQLite, pytest
 
-### Pentest — write-ups et audit — Livré (2026-04 → 2026-10)
+### Pentest — write-ups et audit — Terminé (2026-04 → 2026-10)
 
 25 rapports de tests d’intrusion publiés sur des environnements d’entraînement, et un premier audit web dans un cadre autorisé, accompagnés du parcours TryHackMe Jr Penetration Tester.
 
@@ -115,41 +115,29 @@ Chiffres : ≈ 141 000 mots de game design · 78 capacités dans les arbres · 5
 
 Stack : Unity 6.3, C#, HTML, CSS, JavaScript, Markdown
 
-### Applications LLM — Livré (2026-03 → 2026-05)
-
-Quatre applications d’IA générative réalisées pendant le certificat IBM AI Developer : un chatbot RAG sur des CV, un compagnon de réunion, un coach de carrière et un traducteur vocal.
-
-**Les quatre applications.** RAG PDF Chatbot : analyse de CV, découpage des PDF, embeddings stockés dans FAISS et interrogation de Llama 3 via LangChain, conteneurisé avec Docker. Meeting Companion : transcription avec Whisper puis résumé, plan d’action et analyse de tonalité avec Granite (IBM), traitement par lots sur GPU. Career Coach : optimisation de CV et lettres de motivation avec Llama 3.2 sur watsonx.ai, interface Gradio. Assistant Translator : traduction vocale avec Llama 3.3 (Groq) et les services Watson de transcription et de synthèse.
-
-**Le contexte.** Projets encadrés du parcours IBM, réalisés seul. Ils montrent la maîtrise des briques (RAG, voix, orchestration) ; l’agent RAG du portfolio prendra le relais en V2.
-
-Chiffres : 4 applications publiées
-
-Stack : Python, LangChain, FAISS, Llama 3, IBM watsonx, Whisper, Granite, Groq, Flask, Gradio, Docker
-
 ## Autres réalisations
 
-### Générateur OTP RCS — Livré · équipe de 6, hackathon
+### Générateur OTP RCS — Terminé · équipe de 6, hackathon
 
 Backend d’authentification à deux facteurs : génération, envoi par RCS (API smsmode) et vérification de codes à 6 chiffres. Seule l’empreinte SHA-256 des codes est stockée ; expiration, nombre d’essais limité et limitation par numéro et par IP.
 
-### ChatFlow — Livré · équipe de 4, Epitech
+### ChatFlow — Terminé · équipe de 4, Epitech
 
 Messagerie temps réel façon plateforme communautaire : serveurs, salons, rôles, messages privés, pièces jointes. API Express documentée, client Next.js et application desktop Electron.
 
-### Time Manager — Livré · binôme, Epitech
+### Time Manager — Terminé · binôme, Epitech
 
 Application de gestion du temps de travail : API NestJS typée avec Drizzle et Swagger, front React, tests unitaires et de bout en bout avec Vitest.
 
-### Salesforce Executor — En production · alternance chez ULIT
+### Salesforce Executor — Terminé · alternance chez ULIT
 
 Éditeur interne pour l’écosystème Salesforce, utilisé en production chez ULIT : exécution, planification et chaînage de scripts, sauvegarde et suivi des logs.
 
-### Gandalf — Kubernetes — Livré
+### Gandalf — Kubernetes — Terminé
 
 Déploiement d’une application de vote en microservices sur un cluster k3d multi-nœuds : ingress Traefik, secrets, volumes persistants, RBAC et supervision cAdvisor.
 
-### Bookworm — Livré
+### Bookworm — Terminé
 
 Outil en ligne de commande d’analyse de livres du projet Gutenberg avec spaCy : diversité lexicale, thèmes par section, entités nommées, résumé et fiche de lecture.
 
@@ -157,7 +145,7 @@ Outil en ligne de commande d’analyse de livres du projet Gutenberg avec spaCy 
 
 Base de connaissances personnelle sous Obsidian : procédures, cheatsheets, workflows et retours d’expérience en cybersécurité, IA, développement et DevOps.
 
-### CTF du portfolio — En production
+### CTF du portfolio — Terminé
 
 Parcours d’entraînement en 9 niveaux intégré au site, dans un terminal simulé : de la reconnaissance à l’analyse SIEM, la forensique et le durcissement.
 
@@ -165,7 +153,7 @@ Parcours d’entraînement en 9 niveaux intégré au site, dans un terminal simu
 
 Plateforme d’apprentissage cybersécurité et IA (parcours, modules, salles, progression), en pause : son moteur servira aux salles du Lab.
 
-### Smart Fridge — Livré
+### Smart Fridge — Terminé
 
 Pilotage de la phase de conception d’un produit : analyse de marché (SWOT, PESTEL), personas, cartographie des risques, indicateurs, budget et planning Gantt.
 
