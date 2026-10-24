@@ -258,3 +258,50 @@ body {
     opacity: 0;
   }
 }
+
+/* CTF intro: a screen that jumps now and then (still most of the time). */
+@keyframes crt-glitch {
+  0%,
+  89%,
+  100% {
+    transform: none;
+    opacity: 1;
+    text-shadow: none;
+  }
+  90% {
+    transform: translate(-2px, 1px) skewX(-4deg);
+    opacity: 0.75;
+    text-shadow: 2px 0 rgba(244, 63, 94, 0.7), -2px 0 rgba(56, 189, 248, 0.7);
+  }
+  91% {
+    transform: translate(2px, -1px);
+    opacity: 1;
+  }
+  92% {
+    transform: translate(0, 2px) skewX(3deg);
+    opacity: 0.6;
+    text-shadow: -2px 0 rgba(244, 63, 94, 0.6), 2px 0 rgba(56, 189, 248, 0.6);
+  }
+  93% {
+    transform: none;
+    opacity: 1;
+    text-shadow: none;
+  }
+  96% {
+    opacity: 0.85;
+  }
+  97% {
+    opacity: 1;
+  }
+}
+
+/* CTF start button: blinks slowly to invite the click. */
+@keyframes start-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
