@@ -212,7 +212,7 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
 
       <div className={cx('relative z-20 mt-auto flex flex-col items-center gap-3 pt-6 transition-opacity duration-500', typing ? 'opacity-0' : 'opacity-100')}>
         {/* Slow blink, with the same occasional screen jump as the text. */}
-        <span className="motion-safe:animate-[start-blink_1.6s_ease-in-out_infinite]">
+        <span className="motion-safe:animate-[start-blink_2.8s_ease-in-out_infinite]">
           <span className="inline-block motion-safe:animate-[crt-glitch_3.7s_steps(1)_1.7s_infinite]">
             <StartButton style={button} onClick={onStart}>
               {label}
