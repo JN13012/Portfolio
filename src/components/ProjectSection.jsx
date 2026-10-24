@@ -157,7 +157,7 @@ const ProjectSection = () => {
         <SectionHeader index="03" title="Projets" />
 
         {/* FILTERS: one line — job pills on the left, status and sort menus on the right. */}
-        <div className="mb-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-b border-white/10 pb-5">
+        <div className="mb-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pb-2">
           {/* Job tabs: underlined like the Expertise list, with the number of projects in a coloured badge. */}
           <div role="group" aria-label="Filtrer par métier" className="flex flex-wrap items-center gap-x-8 gap-y-3">
             {[null, "ia", "cyber", "dev"].map((t) => {
