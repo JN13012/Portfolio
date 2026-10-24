@@ -17,7 +17,8 @@ const TOPICS = {
 type Topic = keyof typeof TOPICS
 const TOPIC_KEYS = Object.keys(TOPICS) as Topic[]
 
-const SOURCE_LABEL: Record<string, string> = { epitech: 'Epitech', tryhackme: 'TryHackMe' }
+// Epitech labs were run from Exegol (the pentest environment), TryHackMe rooms on the platform.
+const SOURCE_LABEL: Record<string, string> = { epitech: 'Epitech · Exegol', tryhackme: 'TryHackMe' }
 
 const writeups = writeupsIndex.writeups.map((w) => ({
   ...w,
@@ -61,10 +62,10 @@ export function Lab() {
       <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr]">
         <div className="space-y-5">
           <div className="space-y-4 border border-white/5 bg-zinc-900/50 p-6 backdrop-blur-sm">
-            <p className="text-xl font-bold tracking-[0.2em] text-cyber uppercase">CTF en 9 niveaux</p>
-            <p className="text-base text-zinc-100">
-              Un environnement d’entraînement jouable ici même. Tapez <span className="text-cyber">help</span> pour commencer ; le premier indice se cache dans le code source de la page.
-            </p>
+            <div>
+              <p className="text-xl font-bold tracking-[0.2em] text-cyber uppercase">Laboratoire cybersécurité</p>
+              <p className="mt-1 text-base text-zinc-300">CTF en 9 niveaux. Compétences travaillées :</p>
+            </div>
             <ol className="grid gap-1.5 text-sm text-zinc-300 sm:grid-cols-2">
               {CTF_SKILLS.map((s, i) => (
                 <li key={s} className="flex gap-2">
@@ -73,7 +74,8 @@ export function Lab() {
               ))}
             </ol>
           </div>
-          <div ref={consoleRef} className="min-h-[34rem] overflow-hidden border border-cyber/20 bg-black">
+          {/* Fixed height: the console scrolls inside instead of growing with its output. */}
+          <div ref={consoleRef} className="h-[34rem] overflow-hidden border border-cyber/20 bg-black">
             {showConsole && (
               <Suspense fallback={null}>
                 <ProfileConsole />
@@ -85,9 +87,6 @@ export function Lab() {
         <div className="space-y-4">
           <p className="text-xl font-bold tracking-[0.2em] text-cyber uppercase">
             Write-ups <span className="text-zinc-500">· {visible.length}</span>
-          </p>
-          <p className="text-sm text-zinc-400">
-            Rapports de tests d’intrusion publiés sur GitHub : méthode complète, de la reconnaissance au résultat, et enseignements.
           </p>
           <div role="group" aria-label="Filtrer les write-ups" className="flex flex-wrap gap-1">
             {[null, ...TOPIC_KEYS].map((k) => (
