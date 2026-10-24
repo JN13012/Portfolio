@@ -46,7 +46,7 @@ const PIECES = (() => {
   })
 })()
 
-export type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 'bracket' | 'loader' | 'split' | 'card' | 'cap' | 'tilt'
+export type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 'bracket' | 'loader' | 'split' | 'card' | 'cap' | 'tilt' | 'brick'
 
 type Progress = { level: number; solved: boolean }
 function readProgress(): Progress {
@@ -72,7 +72,7 @@ function Typed({ text, from, chars }: { text: string; from: number; chars: numbe
   )
 }
 
-export function CtfIntro({ onStart, button = 'tilt' }: { onStart: () => void; button?: StartButtonStyle }) {
+export function CtfIntro({ onStart, button = 'brick' }: { onStart: () => void; button?: StartButtonStyle }) {
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
   const [progress] = useState(readProgress)
@@ -230,6 +230,7 @@ export function StartButton({ style, onClick, children }: { style: StartButtonSt
   const focus = 'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyber'
   if (style === 'cap') return <KeycapButton onClick={onClick}>{children}</KeycapButton>
   if (style === 'tilt') return <TiltButton onClick={onClick}>{children}</TiltButton>
+  if (style === 'brick') return <BrickButton onClick={onClick}>{children}</BrickButton>
   if (style === 'solid')
     return (
       <button type="button" onClick={onClick} className={cx('inline-flex items-center gap-2.5 bg-cyber px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-black uppercase shadow-[0_8px_30px_-8px_var(--color-cyber)] transition-transform hover:-translate-y-0.5', focus)}>
@@ -374,6 +375,54 @@ function TiltButton({ onClick, children }: { onClick: () => void; children: Reac
         <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.22),transparent_55%)]" />
         <span className="relative inline-block [transform:translateZ(20px)]">▶ {children}</span>
       </button>
+    </span>
+  )
+}
+
+/**
+ * Brick: the tilting glass face of « tilt » set on a thick block. The block's side (green, darker at
+ * the ends) shows under the face; the whole brick leans towards the pointer, the face rises on hover
+ * and sinks into the block when pressed. Flat under reduced motion and on touch screens.
+ */
+function BrickButton({ onClick, children }: { onClick: () => void; children: ReactNode }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const reduced = useReducedMotion()
+  const move = (e: ReactPointerEvent) => {
+    const el = ref.current
+    if (!el || reduced || e.pointerType !== 'mouse') return
+    const r = el.getBoundingClientRect()
+    const x = (e.clientX - r.left) / r.width - 0.5
+    const y = (e.clientY - r.top) / r.height - 0.5
+    el.style.transform = `rotateX(${-y * 14}deg) rotateY(${x * 18}deg)`
+    el.style.setProperty('--gx', `${(x + 0.5) * 100}%`)
+    el.style.setProperty('--gy', `${(y + 0.5) * 100}%`)
+  }
+  const leave = () => {
+    const el = ref.current
+    if (el) el.style.transform = ''
+  }
+  return (
+    <span className="inline-block pt-2 [perspective:700px]">
+      <span ref={ref} className="block transition-transform duration-150 ease-out [transform-style:preserve-3d]">
+        <button
+          type="button"
+          onClick={onClick}
+          onPointerMove={move}
+          onPointerLeave={leave}
+          className="group relative block cursor-pointer rounded-lg focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyber"
+        >
+          {/* Soft shadow and glow on the surface under the brick. */}
+          <span aria-hidden="true" className="absolute inset-x-1 -bottom-3 h-6 rounded-[50%] bg-cyber/35 blur-xl transition-opacity group-hover:opacity-100 sm:opacity-70" />
+          <span aria-hidden="true" className="absolute inset-0 translate-y-[5px] rounded-lg bg-black/70 blur-[5px]" />
+          {/* The block's side, visible under the face. */}
+          <span aria-hidden="true" className="absolute inset-0 rounded-lg bg-[linear-gradient(90deg,#062314,#15803d_10%,#16a34a_50%,#15803d_90%,#062314)]" />
+          {/* The face: dark glass with a lit top edge and a reflection following the pointer. */}
+          <span className="relative block -translate-y-[9px] overflow-hidden rounded-lg border border-cyber/80 bg-[linear-gradient(180deg,#14402a,#0a2416)] px-11 py-4 text-[15px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-2px_0_rgba(0,0,0,0.35)] transition-transform duration-300 [text-shadow:0_0_12px_rgba(74,222,128,0.9)] [transition-timing-function:cubic-bezier(0.3,0.7,0.4,1.4)] group-hover:-translate-y-[12px] group-active:-translate-y-[2px] group-active:duration-75">
+            <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.2),transparent_55%)]" />
+            <span className="relative">▶ {children}</span>
+          </span>
+        </button>
+      </span>
     </span>
   )
 }
