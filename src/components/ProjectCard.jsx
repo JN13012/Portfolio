@@ -30,7 +30,7 @@ const ProjectCard = ({ titre, description, tags, image, categorie, date, onClick
       <div className="absolute inset-0 bg-black/45 transition-colors duration-500 group-hover:bg-black/20" />
 
       {/* Readable panel behind the text, inset from the card edges so the image frames it. */}
-      <div className="relative z-10 m-1.5 flex h-[calc(100%-0.75rem)] flex-col rounded-sm border border-white/10 bg-black/75 p-4 backdrop-blur-[2px] transition-colors duration-500 group-hover:bg-black/65">
+      <div className="relative z-10 m-2.5 flex h-[calc(100%-1.25rem)] flex-col rounded-sm border border-white/10 bg-black/75 p-4 backdrop-blur-[2px] transition-colors duration-500 group-hover:bg-black/65">
         <div className="mb-3 flex min-h-[1.375rem] flex-wrap gap-1.5">
           {context && <span className="border border-white/15 bg-white/5 px-1.5 py-0.5 text-[10px] tracking-widest text-zinc-300 uppercase">{context}</span>}
           {inProduction && (
