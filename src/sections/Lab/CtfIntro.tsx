@@ -145,22 +145,28 @@ export function CtfIntro({ onStart, button = 'hud' }: { onStart: () => void; but
         backgroundSize: '100% 100%, 28px 28px, 28px 28px',
       }}
     >
-      {/* Scanlines, like an old CRT screen (very faint). */}
+      {/* Scanlines, like an old CRT screen: they crawl down, and a faint refresh band sweeps by every few seconds. */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-10"
+        className="pointer-events-none absolute inset-0 z-10 motion-safe:animate-[scan-crawl_0.35s_linear_infinite]"
         style={{ backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.28) 0 1px, transparent 1px 3px)' }}
       />
+      <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
+        <span
+          className="absolute inset-x-0 top-0 block h-1/4 motion-safe:animate-[scan-sweep_6s_linear_infinite] motion-reduce:hidden"
+          style={{ background: 'linear-gradient(180deg, transparent, rgba(74,222,128,0.06) 50%, transparent)' }}
+        />
+      </span>
 
-      <p className="text-2xl font-bold tracking-[0.25em] text-cyber uppercase [text-shadow:0_0_18px_rgba(74,222,128,0.45)] motion-safe:animate-[crt-glitch_5s_steps(1)_infinite]">
+      <p className="text-2xl font-bold tracking-[0.25em] text-cyber uppercase [text-shadow:0_0_18px_rgba(74,222,128,0.45)] motion-safe:animate-[crt-glitch_3s_steps(1)_infinite]">
         <Typed text={TITLE} from={0} chars={chars} />
       </p>
-      <p className="mt-2 text-[15px] text-zinc-300 motion-safe:animate-[crt-glitch_7s_steps(1)_1.3s_infinite]">
+      <p className="mt-2 text-[15px] text-zinc-300 motion-safe:animate-[crt-glitch_4.2s_steps(1)_1.1s_infinite]">
         <Typed text={SUBTITLE} from={TITLE.length} chars={chars} />
       </p>
 
       {/* The 9 levels as one centred path, in three phases; finished levels get a tick. */}
-      <ol className="mt-8 w-full max-w-lg text-left motion-safe:animate-[crt-glitch_9s_steps(1)_3.1s_infinite]">
+      <ol className="mt-8 w-full max-w-lg text-left motion-safe:animate-[crt-glitch_5.5s_steps(1)_2.4s_infinite]">
         {PIECES.map((phase) => (
           <li key={phase.title} className="mb-4 last:mb-0">
             <p className="mb-2.5 flex items-center gap-3 text-[11px] tracking-[0.3em] text-zinc-400 uppercase">
@@ -202,7 +208,7 @@ export function CtfIntro({ onStart, button = 'hud' }: { onStart: () => void; but
       <div className={cx('mt-auto flex flex-col items-center gap-3 pt-6 transition-opacity duration-500', typing ? 'opacity-0' : 'opacity-100')}>
         {/* Slow blink, with the same occasional screen jump as the text. */}
         <span className="motion-safe:animate-[start-blink_1.6s_ease-in-out_infinite]">
-          <span className="inline-block motion-safe:animate-[crt-glitch_6s_steps(1)_2.2s_infinite]">
+          <span className="inline-block motion-safe:animate-[crt-glitch_3.7s_steps(1)_1.7s_infinite]">
             <StartButton style={button} onClick={onStart}>
               {label}
             </StartButton>
