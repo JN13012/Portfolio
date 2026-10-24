@@ -72,7 +72,7 @@ function Typed({ text, from, chars }: { text: string; from: number; chars: numbe
   )
 }
 
-export function CtfIntro({ onStart, button = 'hud' }: { onStart: () => void; button?: StartButtonStyle }) {
+export function CtfIntro({ onStart, button = 'neon' }: { onStart: () => void; button?: StartButtonStyle }) {
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
   const [progress] = useState(readProgress)
@@ -166,7 +166,7 @@ export function CtfIntro({ onStart, button = 'hud' }: { onStart: () => void; but
       </p>
 
       {/* The 9 levels as one centred path, in three phases; finished levels get a tick. */}
-      <ol className="mt-8 w-full max-w-lg text-left motion-safe:animate-[crt-glitch_5.5s_steps(1)_2.4s_infinite]">
+      <ol className="mt-8 w-full max-w-lg text-left">
         {PIECES.map((phase) => (
           <li key={phase.title} className="mb-4 last:mb-0">
             <p className="mb-2.5 flex items-center gap-3 text-[11px] tracking-[0.3em] text-zinc-400 uppercase">
