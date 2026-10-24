@@ -4,7 +4,7 @@ import type { Project } from '../types'
 export const blocktrader: Project = {
   slug: 'blocktrader',
   tier: 'dossier',
-  status: 'test',
+  status: 'development',
   tracks: ['dev', 'cyber', 'ia'],
   title: 'BlockTrader',
   period: { start: '2026-07' },

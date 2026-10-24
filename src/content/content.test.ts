@@ -85,7 +85,7 @@ describe('project filters', () => {
     const cyber = filterProjects(projects, { tracks: ['cyber'] })
     expect(cyber.length).toBeGreaterThan(0)
     expect(cyber.every((p) => p.tracks.includes('cyber'))).toBe(true)
-    expect(filterProjects(projects, { statuses: ['production'] }).every((p) => p.status === 'production')).toBe(true)
+    expect(filterProjects(projects, { statuses: ['development'] }).every((p) => p.status === 'development')).toBe(true)
   })
 
   it('sorts by date with ongoing projects first, and by envergure', () => {

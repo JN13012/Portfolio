@@ -12,6 +12,7 @@ const ProjectCard = ({
   status,
   statusClass,
   isDossier,
+  inProduction,
 }) => {
   const visibleTags = tags.slice(0, 8);
   const hasMoreTags = tags.length > visibleTags.length;
@@ -46,6 +47,7 @@ const ProjectCard = ({
             <span className="border border-cyber/60 bg-cyber/15 px-2 py-0.5 text-xs uppercase tracking-widest text-cyber">Dossier</span>
           )}
           {status && <span className={`border px-2 py-0.5 text-xs uppercase tracking-widest ${statusClass}`}>{status}</span>}
+          {inProduction && <span className="border border-cyber/50 bg-cyber/10 px-2 py-0.5 text-xs uppercase tracking-widest text-cyber">{inProduction}</span>}
         </div>
 
         {/* CARD HEADER */}

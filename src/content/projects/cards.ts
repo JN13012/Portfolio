@@ -61,7 +61,8 @@ export const cards: Project[] = [
   {
     slug: 'salesforce-executor',
     tier: 'card',
-    status: 'production',
+    status: 'delivered',
+    inProduction: { fr: 'En production chez ULIT', en: 'In production at ULIT' },
     tracks: ['dev'],
     title: 'Salesforce Executor',
     period: { start: '2026-01', end: '2026-06' },
@@ -133,7 +134,7 @@ export const cards: Project[] = [
   {
     slug: 'ctf-du-site',
     tier: 'card',
-    status: 'production',
+    status: 'delivered',
     tracks: ['cyber'],
     title: 'CTF du portfolio',
     period: { start: '2026-05' },
