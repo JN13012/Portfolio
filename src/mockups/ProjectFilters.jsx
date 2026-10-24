@@ -104,11 +104,33 @@ function Terminal() {
   );
 }
 
+/** A + C — underline tabs with the count in a small coloured badge (C's count, A's style). */
+function UnderlineCount() {
+  const [a, setA] = useState("all");
+  return (
+    <div className="flex gap-8">
+      {JOBS.map((j) => {
+        const on = a === j.id;
+        return (
+          <button key={j.id} onClick={() => setA(j.id)} className="group relative inline-flex items-center gap-2 pb-2.5 text-lg">
+            <span className={on ? "font-semibold" : "text-zinc-400 group-hover:text-zinc-200"} style={on ? { backgroundImage: `linear-gradient(90deg, ${j.color} 10%, #fff 115%)`, WebkitBackgroundClip: "text", color: "transparent" } : undefined}>
+              {j.label}
+            </span>
+            <span className="rounded px-1.5 text-xs tabular-nums transition-colors" style={{ color: on ? "#fff" : j.color, background: on ? `${j.color}40` : `${j.color}14` }}>{j.count}</span>
+            <span className="absolute bottom-0 left-0 h-0.5 rounded-full transition-all duration-300" style={{ width: on ? "100%" : "0%", background: j.color }} />
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function ProjectFilters() {
   return (
     <div className="relative min-h-screen overflow-x-hidden text-white" style={{ background: "radial-gradient(ellipse at 70% 0%, #0f1720 0%, #080b10 55%, #05070a 100%)" }}>
       <NetworkBackground2 />
       <div className="relative z-10 mx-auto w-[90%] max-w-[1400px] py-10">
+        <Row letter="A+C" title="Mélange : onglets soulignés de A, nombre de projets en badge coloré de C"><UnderlineCount /></Row>
         <Row letter="A" title="Onglets soulignés, dans le style de la liste Expertise (texte en dégradé, trait de couleur)"><Underline /></Row>
         <Row letter="B" title="Barre segmentée : une pastille vitrée teintée glisse sous le métier choisi, avec icône"><Segmented /></Row>
         <Row letter="C" title="Étiquettes colorées : chaque métier garde sa couleur, l’actif se remplit, avec le nombre de projets"><Chips /></Row>
