@@ -329,20 +329,21 @@ body {
   }
 }
 
-/* CTF intro: diving into the screen — it rushes towards the viewer and fades out... */
-@keyframes dive-out {
-  to {
-    transform: scale(2.6);
-    filter: blur(6px) brightness(1.6);
-    opacity: 0;
+/* CTF intro: the screen switches off like an old CRT before the console opens. */
+@keyframes crt-off {
+  0% {
+    transform: scale(1, 1);
+    filter: brightness(1);
+    opacity: 1;
   }
-}
-
-/* ...and the console comes up from the depth. */
-@keyframes dive-in {
-  from {
-    transform: scale(0.82);
-    filter: blur(4px);
+  55% {
+    transform: scale(1, 0.012);
+    filter: brightness(2.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0, 0.012);
+    filter: brightness(3);
     opacity: 0;
   }
 }
