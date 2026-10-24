@@ -2,6 +2,8 @@
 import { StartButton } from "../sections/Lab/CtfIntro";
 
 const STYLES = [
+  ["cap", "K · Touche 3D : une touche épaisse, qui se soulève au survol et s'enfonce au clic"],
+  ["tilt", "L · Panneau incliné : il s'oriente vers la souris, avec un reflet qui la suit"],
   ["hud", "A · Viseur : coins qui se resserrent au survol"],
   ["solid", "B · Plein : bouton vert, le plus évident"],
   ["prompt", "C · Invite de commande : root@lab:~$ ./commencer, curseur qui clignote"],
