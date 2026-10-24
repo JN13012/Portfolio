@@ -106,11 +106,10 @@ const ProjectSection = () => {
   }, [selected]);
 
   const visible = useMemo(() => sortProjects(filterProjects(projects, { tracks, statuses }), sort), [tracks, statuses, sort]);
-  // Featured projects (full case study) come first, two per row; the others are paginated below.
-  const featured = visible.filter((p) => p.tier === "dossier");
-  const others = visible.filter((p) => p.tier !== "dossier");
-  const totalPages = Math.max(1, Math.ceil(others.length / PROJECTS_PER_PAGE));
-  const page = others.slice((currentPage - 1) * PROJECTS_PER_PAGE, currentPage * PROJECTS_PER_PAGE);
+  // Featured projects (full case study) come first; every card has the same size.
+  const ordered = [...visible.filter((p) => p.tier === "dossier"), ...visible.filter((p) => p.tier !== "dossier")];
+  const totalPages = Math.max(1, Math.ceil(ordered.length / PROJECTS_PER_PAGE));
+  const page = ordered.slice((currentPage - 1) * PROJECTS_PER_PAGE, currentPage * PROJECTS_PER_PAGE);
   const card = (p) => (
     <ProjectCard
       key={p.slug}
@@ -219,10 +218,7 @@ const ProjectSection = () => {
         {visible.length === 0 ? (
           <p className="text-zinc-400">Aucun projet ne correspond à ces filtres.</p>
         ) : (
-          <div className="space-y-8">
-            {featured.length > 0 && currentPage === 1 && <div className="grid grid-cols-1 gap-8 md:grid-cols-2">{featured.map(card)}</div>}
-            {page.length > 0 && <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">{page.map(card)}</div>}
-          </div>
+          <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">{page.map(card)}</div>
         )}
 
         {totalPages > 1 && (
