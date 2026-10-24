@@ -2,6 +2,7 @@
 import { StartButton } from "../sections/Lab/CtfIntro";
 
 const STYLES = [
+  ["socket", "N · Bouton dans son socle : la touche s'enfonce dans un boîtier fixe"],
   ["brick", "M · Brique : le panneau incliné de L posé sur un bloc épais, qui s'enfonce au clic"],
   ["cap", "K · Touche 3D : une touche épaisse, qui se soulève au survol et s'enfonce au clic"],
   ["tilt", "L · Panneau incliné : il s'oriente vers la souris, avec un reflet qui la suit"],
