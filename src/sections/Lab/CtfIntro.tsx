@@ -145,11 +145,12 @@ export function CtfIntro({ onStart, button = 'neon' }: { onStart: () => void; bu
         backgroundSize: '100% 100%, 28px 28px, 28px 28px',
       }}
     >
-      {/* Scanlines, like an old CRT screen: they crawl down, and a faint refresh band sweeps by every few seconds. */}
+      {/* Scanlines, like an old CRT screen: very faint and still (moving lines hurt reading),
+          plus a faint refresh band that sweeps by every few seconds. */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-10 motion-safe:animate-[scan-crawl_0.35s_linear_infinite]"
-        style={{ backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.28) 0 1px, transparent 1px 3px)' }}
+        className="pointer-events-none absolute inset-0 z-10"
+        style={{ backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0 1px, transparent 1px 4px)' }}
       />
       <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
         <span

@@ -308,12 +308,7 @@ body {
   }
 }
 
-/* CTF intro scanlines: they crawl down, and a brighter refresh band sweeps the screen. */
-@keyframes scan-crawl {
-  to {
-    background-position: 0 3px;
-  }
-}
+/* CTF intro: a brighter refresh band sweeps the screen. */
 @keyframes scan-sweep {
   0% {
     transform: translateY(-30%);
