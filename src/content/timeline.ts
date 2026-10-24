@@ -9,8 +9,8 @@ export const timeline: TimelineEntry[] = [
     id: 'epitech-msc',
     kind: 'education',
     title: {
-      fr: 'Master of Science — Architecte des systèmes d’information, spécialité cybersécurité',
-      en: 'Master of Science — Information Systems Architect, cybersecurity track',
+      fr: 'Master of Science - Architecte des systèmes d’information, spécialité cybersécurité',
+      en: 'Master of Science - Information Systems Architect, cybersecurity track',
     },
     organisation: 'Epitech',
     place: { fr: 'Marseille', en: 'Marseille' },
@@ -51,7 +51,7 @@ export const timeline: TimelineEntry[] = [
   {
     id: 'blockchain',
     kind: 'experience',
-    title: { fr: 'Entrepreneur — infrastructure blockchain', en: 'Entrepreneur — blockchain infrastructure' },
+    title: { fr: 'Entrepreneur - infrastructure blockchain', en: 'Entrepreneur - blockchain infrastructure' },
     organisation: 'Indépendant',
     place: { fr: 'France', en: 'France' },
     country: 'FR',
@@ -80,7 +80,7 @@ export const timeline: TimelineEntry[] = [
   {
     id: 'motorsport',
     kind: 'experience',
-    title: { fr: 'Technicien mécanique — compétition et maintenance', en: 'Mechanical technician — racing and maintenance' },
+    title: { fr: 'Technicien mécanique - compétition et maintenance', en: 'Mechanical technician - racing and maintenance' },
     organisation: 'G-Drive Racing · Renault · Wärtsilä',
     place: { fr: 'France et international', en: 'France and abroad' },
     country: 'FR',
