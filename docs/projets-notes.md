@@ -1,4 +1,6 @@
-# Projets : vérification et notes de complexité (proposition, 2026-10-24)
+# Projets : vérification et notes de complexité (2026-10-24)
+
+**Notes validées** : elles sont appliquées dans `src/content/complexity.ts`, qui fait foi. Changements de Jérémie par rapport à la proposition ci-dessous : Argos 5 et ZeroDay 5 (notés sur leur ambition), RAG PDF Chatbot 3, Career Coach 2. Le CTF est terminé (06/2026), Smart Fridge reste en « Gestion de projet », tous les projets sont gardés, et les projets sans lien public affichent « Code privé ».
 
 Ce tableau est à valider ou corriger par Jérémie. Une fois validé, chaque note va dans `src/content/projects`, avec sa justification en champ éditorial non affiché.
 

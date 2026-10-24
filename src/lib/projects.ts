@@ -1,25 +1,17 @@
 import type { Project, ProjectStatus, Track } from '../content/types'
+import { complexity } from '../content/complexity'
 
-export type ProjectSort = 'date' | 'envergure'
+export type ProjectSort = 'selection' | 'date' | 'complexity'
 
 export type ProjectFilter = {
   tracks?: Track[]
   statuses?: ProjectStatus[]
 }
 
-/**
- * « Envergure »: a transparent score from verifiable inputs only, shown with
- * its formula on the site. Duration (months, capped at 12) + team size
- * (capped at 7) + tests (log scale, so 46 and 470 tests stay comparable).
- */
-export function envergure(p: Project) {
-  const months = Math.min(12, p.scale.months)
-  const team = Math.min(7, p.team.size)
-  const tests = p.scale.tests ? Math.log10(1 + p.scale.tests) * 4 : 0
-  return Math.round((months + team + tests) * 10) / 10
-}
+/** Complexity note 1–5 (src/content/complexity.ts); 1 if a project has none yet. */
+export const complexityOf = (p: Project) => complexity[p.slug]?.note ?? 1
 
-const startKey = (p: Project) => p.period.end ?? p.period.start
+const recency = (p: Project) => (p.period.end ? p.period.end : '9999-99')
 
 export function filterProjects(projects: Project[], filter: ProjectFilter) {
   return projects.filter(
@@ -29,16 +21,19 @@ export function filterProjects(projects: Project[], filter: ProjectFilter) {
   )
 }
 
+/**
+ * selection (default): projects with a full case study first, then by complexity.
+ * date: ongoing first, then by end month. complexity: highest note first.
+ * Ties always go to the most recent project.
+ */
 export function sortProjects(projects: Project[], sort: ProjectSort) {
+  const byRecency = (a: Project, b: Project) => recency(b).localeCompare(recency(a))
+  const byComplexity = (a: Project, b: Project) => complexityOf(b) - complexityOf(a) || byRecency(a, b)
   const copy = [...projects]
-  if (sort === 'envergure') return copy.sort((a, b) => envergure(b) - envergure(a))
-  // Most recent first: by end month (or start when ongoing… ongoing first).
-  return copy.sort((a, b) => {
-    const ongoingA = a.period.end ? 0 : 1
-    const ongoingB = b.period.end ? 0 : 1
-    if (ongoingA !== ongoingB) return ongoingB - ongoingA
-    return startKey(b).localeCompare(startKey(a))
-  })
+  if (sort === 'date') return copy.sort(byRecency)
+  if (sort === 'complexity') return copy.sort(byComplexity)
+  const study = (p: Project) => (p.tier === 'dossier' ? 0 : 1)
+  return copy.sort((a, b) => study(a) - study(b) || byComplexity(a, b))
 }
 
 /** Reads `?metier=cyber,ia` from the URL (targeted application links). */
