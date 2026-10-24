@@ -10,8 +10,6 @@ const ProjectCard = ({
   date,
   onClick,
   theme,
-  status,
-  statusClass,
   isDossier,
   inProduction,
   ongoing,
@@ -52,8 +50,8 @@ const ProjectCard = ({
       {/* CARD CONTENT */}
       <div className="relative z-10 flex flex-col h-full flex-grow rounded-sm border border-white/10 bg-black/38 p-4 backdrop-blur-[1px] transition-colors duration-500 group-hover:bg-black/46">
         {/* STATUS */}
-        <div className="mb-3 flex flex-wrap gap-2">
-          {status && <span className={`border px-2 py-0.5 text-xs uppercase tracking-widest ${statusClass}`}>{status}</span>}
+        {/* Only real company use is flagged here; the date says whether the project is ongoing. */}
+        <div className="mb-3 flex min-h-[1.375rem] flex-wrap gap-2">
           {inProduction && (
             <span className="inline-flex items-center gap-2 border border-cyber/50 bg-cyber/10 px-2 py-0.5 text-xs uppercase tracking-widest text-cyber">
               {/* "Live" light: pulses softly, still under reduced motion. */}
