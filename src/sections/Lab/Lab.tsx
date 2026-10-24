@@ -25,6 +25,12 @@ const writeups = writeupsIndex.writeups.map((w) => ({
   topics: TOPIC_KEYS.filter((k) => TOPICS[k].rule.test(`${w.focus} ${w.environment ?? ''}`)),
 }))
 
+const CTF_PHASES = [
+  { title: 'Reconnaissance', levels: [1, 2, 3] },
+  { title: 'Exploitation', levels: [4, 5, 6] },
+  { title: 'Défense', levels: [7, 8, 9] },
+]
+
 const CTF_SKILLS = [
   'Système Linux & recherche de fichiers',
   'Réseaux TCP/IP & services exposés',
@@ -89,21 +95,37 @@ export function Lab() {
                 <div className="flex items-center gap-2 border-b border-white/10 bg-zinc-900 px-3 py-2 font-mono text-[10px] tracking-widest text-white uppercase">
                   <span className="text-cyber">&gt;_</span> ctf@lab:~
                 </div>
-                <div className="flex flex-1 flex-col overflow-y-auto p-6 font-mono">
-                  <p className="text-sm text-zinc-400">$ cat README</p>
-                  <p className="mt-3 text-xl font-bold tracking-[0.2em] text-cyber uppercase">Laboratoire cybersécurité</p>
-                  <p className="mt-1 text-sm text-zinc-300">CTF en 9 niveaux. Compétences travaillées :</p>
-                  <ol className="mt-4 grid gap-1.5 text-[13px] text-zinc-300 sm:grid-cols-2">
-                    {CTF_SKILLS.map((s, i) => (
-                      <li key={s} className="flex gap-2">
-                        <span className="text-cyber">[{String(i + 1).padStart(2, '0')}]</span> {s}
+                <div className="flex flex-1 flex-col items-center overflow-y-auto px-6 py-8 text-center font-mono">
+                  <p className="text-xs text-zinc-400">$ cat README</p>
+                  <p className="mt-4 text-xl font-bold tracking-[0.25em] text-cyber uppercase">Laboratoire cybersécurité</p>
+                  <p className="mt-1 text-sm text-zinc-400">CTF en 9 niveaux · de la reconnaissance à la défense</p>
+
+                  {/* The 9 levels as one centred path, in three phases. */}
+                  <ol className="mt-7 w-full max-w-md text-left">
+                    {CTF_PHASES.map((phase) => (
+                      <li key={phase.title} className="mb-4 last:mb-0">
+                        <p className="mb-2 flex items-center gap-3 text-[10px] tracking-[0.3em] text-zinc-400 uppercase">
+                          <span className="h-px flex-1 bg-white/10" />
+                          {phase.title}
+                          <span className="h-px flex-1 bg-white/10" />
+                        </p>
+                        <ol className="relative space-y-1.5 border-l border-cyber/25 pl-5">
+                          {phase.levels.map((n) => (
+                            <li key={n} className="relative text-[13px] text-zinc-200">
+                              <span aria-hidden="true" className="absolute top-1/2 -left-[1.4rem] size-1.5 -translate-y-1/2 rounded-full bg-cyber shadow-[0_0_6px_var(--color-cyber)]" />
+                              <span className="mr-3 text-cyber tabular-nums">{String(n).padStart(2, '0')}</span>
+                              {CTF_SKILLS[n - 1]}
+                            </li>
+                          ))}
+                        </ol>
                       </li>
                     ))}
                   </ol>
+
                   <button
                     type="button"
                     onClick={() => setStarted(true)}
-                    className="mt-auto self-start border border-cyber/60 bg-cyber/10 px-6 py-3 text-sm tracking-[0.25em] text-cyber uppercase transition-colors hover:bg-cyber/20 focus-visible:outline-2 focus-visible:outline-cyber"
+                    className="mt-auto inline-flex items-center gap-3 border border-cyber/60 bg-cyber/10 px-8 py-3 text-sm tracking-[0.3em] text-cyber uppercase shadow-[0_0_24px_-8px_var(--color-cyber)] transition-colors hover:bg-cyber/20 focus-visible:outline-2 focus-visible:outline-cyber"
                   >
                     ▶ Commencer
                   </button>
