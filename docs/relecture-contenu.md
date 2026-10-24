@@ -85,7 +85,7 @@ Chiffres : 62 tests
 
 Stack : Python, httpx, SQLite, pytest
 
-### Pentest — write-ups et audit — Terminé (2026-04 → 2026-10)
+### Pentest - write-ups et audit — Terminé (2026-04 → 2026-10)
 
 25 rapports de tests d’intrusion publiés sur des environnements d’entraînement, et un premier audit web dans un cadre autorisé, accompagnés du parcours TryHackMe Jr Penetration Tester.
 
@@ -133,7 +133,7 @@ Application de gestion du temps de travail : API NestJS typée avec Drizzle et S
 
 Éditeur interne pour l’écosystème Salesforce, utilisé en production chez ULIT : exécution, planification et chaînage de scripts, sauvegarde et suivi des logs.
 
-### Bernstein — Kubernetes — Terminé
+### Bernstein - Kubernetes — Terminé
 
 Déploiement d’une application de vote en microservices sur un cluster k3d multi-nœuds : ingress Traefik, secrets, volumes persistants, RBAC et supervision cAdvisor.
 
@@ -174,7 +174,7 @@ Pilotage de la phase de conception d’un produit : analyse de marché (SWOT, PE
 
 ## Parcours
 
-### Master of Science — Architecte des systèmes d’information, spécialité cybersécurité — Epitech (2025 – 2028)
+### Master of Science - Architecte des systèmes d’information, spécialité cybersécurité — Epitech (2025 – 2028)
 
 Cursus en alternance : architecture systèmes et réseaux, ingénierie logicielle, DevSecOps et cloud, sécurité réseau, audits et tests d’intrusion, gestion des risques et conformité (ISO 2700x, RGPD).
 
@@ -186,7 +186,7 @@ Développement sur Salesforce : applications Apex, Lightning Web Components et J
 - Résolution de tickets : corrections, évolutions fonctionnelles, traitement des données et des processus métier.
 - Mise en place de tests unitaires.
 
-### Entrepreneur — infrastructure blockchain — Indépendant (Depuis 2018)
+### Entrepreneur - infrastructure blockchain — Indépendant (Depuis 2018)
 
 Conception, assemblage et exploitation de fermes de minage (Ethereum avant le passage au Proof-of-Stake, Bitcoin, Raptoreum, Chia).
 
@@ -194,7 +194,7 @@ Conception, assemblage et exploitation de fermes de minage (Ethereum avant le pa
 - Optimisation des performances, de la consommation et du refroidissement (overclocking, undervolting).
 - Diagnostic des pannes et maintenance du matériel.
 
-### Technicien mécanique — compétition et maintenance — G-Drive Racing · Renault · Wärtsilä (5 ans, dont la saison WEC 2017)
+### Technicien mécanique - compétition et maintenance — G-Drive Racing · Renault · Wärtsilä (5 ans, dont la saison WEC 2017)
 
 Championnat du monde d’endurance 2017 avec G-Drive Racing, dont les 24 Heures du Mans : responsable des pneumatiques sur prototype LMP2.
 

@@ -679,7 +679,7 @@ export default function ArgosGate({ onClose, visitorTz }: ArgosGateProps) {
       ref={wrap}
       role="dialog"
       aria-modal="true"
-      aria-label="Jérémie Nagi — introduction"
+      aria-label="Jérémie Nagi - introduction"
       className={cx('fixed inset-0 z-[2000] overflow-hidden bg-[#03060a] transition-opacity duration-700', exiting && 'opacity-0 delay-200')}
     >
       <p className="sr-only">

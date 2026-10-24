@@ -82,7 +82,7 @@ export const cards: Project[] = [
     tier: 'card',
     status: 'delivered',
     tracks: ['dev'],
-    title: 'Bernstein — Kubernetes',
+    title: 'Bernstein - Kubernetes',
     period: { start: '2026-06', end: '2026-06' },
     team: { size: 1 },
     context: 'personal',

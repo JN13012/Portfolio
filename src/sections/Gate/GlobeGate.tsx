@@ -246,7 +246,7 @@ export default function GlobeGate({ onClose }: GlobeGateProps) {
       ref={wrap}
       role="dialog"
       aria-modal="true"
-      aria-label="Jérémie Nagi — introduction"
+      aria-label="Jérémie Nagi - introduction"
       className="fixed inset-0 z-[2000] overflow-hidden bg-black"
     >
       {COUNTRIES.map((c, i) => (
