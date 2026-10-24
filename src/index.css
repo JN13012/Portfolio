@@ -251,3 +251,10 @@ body {
     transform: translateX(calc(-1 * var(--marquee-shift)));
   }
 }
+
+/* Terminal cursor. */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
