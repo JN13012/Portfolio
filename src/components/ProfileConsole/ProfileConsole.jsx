@@ -2,15 +2,38 @@ import React, { useState, useRef, useEffect } from "react";
 import { Terminal, ShieldCheck, Lock } from "lucide-react";
 import { CTF_LEVELS } from "./ctfData";
 
+// Progress is kept in this browser only (localStorage), so a visitor can come back to the same level.
+// Same key as src/sections/Lab/CtfIntro.tsx (the intro shows this progress).
+const CTF_PROGRESS_KEY = "ctf-progress";
+const readProgress = () => {
+  try {
+    const p = JSON.parse(localStorage.getItem(CTF_PROGRESS_KEY) || "null");
+    return p && CTF_LEVELS[p.level] ? p : { level: 1, solved: false };
+  } catch {
+    return { level: 1, solved: false };
+  }
+};
+
 const ProfileConsole = () => {
-  const [level, setLevel] = useState(1);
+  const [level, setLevel] = useState(() => readProgress().level);
   const [remoteSession, setRemoteSession] = useState(null);
-  const [history, setHistory] = useState([
-    { msg: "CYBERSECURITY TRAINNING LAB - CAPTURE THE FLAG", type: "sys" },
-    { msg: "TYPE 'help' TO START THE CHALLENGE.", type: "sys" },
-  ]);
+  const [history, setHistory] = useState(() => {
+    const start = readProgress().level;
+    return [
+      { msg: "CYBERSECURITY TRAINING LAB - CAPTURE THE FLAG", type: "sys" },
+      ...(start > 1 ? [{ msg: `RESUMING AT LEVEL ${start} : ${CTF_LEVELS[start].label}`, type: "sys" }] : []),
+      { msg: "TYPE 'help' TO START THE CHALLENGE.", type: "sys" },
+    ];
+  });
   const [inputValue, setInputValue] = useState("");
-  const [solved, setSolved] = useState(false);
+  const [solved, setSolved] = useState(() => readProgress().solved);
+  useEffect(() => {
+    try {
+      localStorage.setItem(CTF_PROGRESS_KEY, JSON.stringify({ level, solved }));
+    } catch {
+      // Private mode: progress is simply not kept.
+    }
+  }, [level, solved]);
   const scrollRef = useRef(null);
   const [crackedPasswords, setCrackedPasswords] = useState({});
   const [level5State, setLevel5State] = useState({
