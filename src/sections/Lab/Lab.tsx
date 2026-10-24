@@ -104,7 +104,7 @@ export function Lab() {
               </button>
             ))}
           </div>
-          <ul className="max-h-[clamp(20rem,calc(100svh-17rem),40rem)] divide-y divide-white/5 overflow-y-auto border border-white/10 bg-zinc-950/60">
+          <ul className="max-h-[clamp(14rem,calc(100svh-22.6rem),38rem)] divide-y divide-white/5 overflow-y-auto border border-white/10 bg-zinc-950/60">
             {visible.map((w) => (
               <li key={w.slug}>
                 <a href={w.url} target="_blank" rel="noreferrer" className="group grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 px-4 py-3 transition-colors hover:bg-cyber/5">
