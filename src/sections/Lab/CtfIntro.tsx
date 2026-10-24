@@ -212,7 +212,7 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
 
       <div className={cx('relative z-20 mt-auto flex flex-col items-center gap-3 pt-6 transition-opacity duration-500', typing ? 'opacity-0' : 'opacity-100')}>
         {/* Slow blink, with the same occasional screen jump as the text. */}
-        <span className="motion-safe:animate-[start-blink_1.6s_ease-in-out_infinite]">
+        <span className="motion-safe:animate-[start-glow_2s_ease-in-out_infinite]">
           <span className="inline-block motion-safe:animate-[crt-glitch_3.7s_steps(1)_1.7s_infinite]">
             <StartButton style={button} onClick={onStart}>
               {label}
@@ -511,7 +511,7 @@ function SocketButton({ onClick, children }: { onClick: () => void; children: Re
           {/* A dark recessed well the key sits in. */}
           <span className="block rounded-[13px] bg-[#040607] px-2.5 pt-3 pb-2.5 shadow-[inset_0_4px_8px_rgba(0,0,0,0.95),inset_0_-1px_0_rgba(255,255,255,0.06)]">
             {/* The key: stands out of the well; pressed, it shrinks back into it, away from the viewer, and darkens. */}
-            <span className="relative block overflow-hidden rounded-lg border border-cyber/60 bg-[linear-gradient(180deg,#1f6b40,#0e3a22)] px-11 py-3.5 text-[15px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase shadow-[0_0_0_2px_#0b3a1f,0_6px_14px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-100 ease-out [text-shadow:0_0_6px_rgba(74,222,128,0.45)] group-hover:brightness-110 group-active:scale-[0.94] group-active:bg-[linear-gradient(180deg,#123e26,#0a2818)] group-active:shadow-[0_0_0_0_#0b3a1f,inset_0_3px_10px_rgba(0,0,0,0.75)] group-active:brightness-90">
+            <span className="relative block overflow-hidden rounded-lg border border-cyber/60 bg-[linear-gradient(180deg,#1f6b40,#0e3a22)] px-11 py-3.5 text-[15px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase shadow-[0_0_0_2px_#0b3a1f,0_6px_14px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-100 ease-out [text-shadow:0_0_5px_rgba(74,222,128,0.3)] group-hover:brightness-110 group-active:scale-[0.94] group-active:bg-[linear-gradient(180deg,#123e26,#0a2818)] group-active:shadow-[0_0_0_0_#0b3a1f,inset_0_3px_10px_rgba(0,0,0,0.75)] group-active:brightness-90">
               <span
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.18),transparent_55%)]"
