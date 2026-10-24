@@ -95,7 +95,7 @@ Stack : Python, httpx, SQLite, pytest
 
 Chiffres : 25 write-ups publiés · 95 h parcours Jr Penetration Tester · ≈ 20 h premier audit autorisé
 
-Stack : Exegol, Nmap, Burp Suite, Metasploit, Hashcat
+Stack : TryHackMe, Exegol, Nmap, Burp Suite, Metasploit, Hashcat
 
 ### ZeroDay — En développement (2026-08 → en cours)
 
@@ -133,7 +133,7 @@ Application de gestion du temps de travail : API NestJS typée avec Drizzle et S
 
 Éditeur interne pour l’écosystème Salesforce, utilisé en production chez ULIT : exécution, planification et chaînage de scripts, sauvegarde et suivi des logs.
 
-### Gandalf — Kubernetes — Terminé
+### Bernstein — Kubernetes — Terminé
 
 Déploiement d’une application de vote en microservices sur un cluster k3d multi-nœuds : ingress Traefik, secrets, volumes persistants, RBAC et supervision cAdvisor.
 

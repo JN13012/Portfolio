@@ -145,7 +145,7 @@ Nom · titre de la lentille · accroche · **Disponible immédiatement** · Mars
 
 ### Autres réalisations (cartes)
 
-Générateur OTP RCS (sécurité dès la conception, hackathon, équipe) · ChatFlow (**équipe de 4**) · Kubernetes « Gandalf » · Bookworm NLP · Salesforce Executor (ULIT) · Base de connaissance Obsidian · CTF du site · Smart Fridge.
+Générateur OTP RCS (sécurité dès la conception, hackathon, équipe) · ChatFlow (**équipe de 4**) · Kubernetes « Bernstein » · Bookworm NLP · Salesforce Executor (ULIT) · Base de connaissance Obsidian · CTF du site · Smart Fridge.
 
 ### Archives (liste repliée par année)
 

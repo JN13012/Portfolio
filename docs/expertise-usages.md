@@ -65,7 +65,7 @@ Aucun write-up ni projet ne les utilise : ces outils viennent des parcours TryHa
 | Outil | Aujourd'hui | Proposé | Source |
 |---|---|---|---|
 | Docker | Conteneurs et environnements multi-services (Compose) | Conteneurisation de 6 projets avec Compose | P (6) |
-| Kubernetes | Orchestration de conteneurs | Cluster k3d multi-nœuds : ingress, RBAC, volumes | P kubernetes (Gandalf) |
+| Kubernetes | Orchestration de conteneurs | Cluster k3d multi-nœuds : ingress, RBAC, volumes | P kubernetes (Bernstein) |
 | GitHub Actions | CI et vérifications automatiques | CI durcie de BlockTrader | P blocktrader, atlas-academy |
 | Jenkins | Pipelines CI/CD | Instance configurée entièrement par le code (JCasC) | P my-marvin |
 | Vitest | Tests unitaires (TypeScript) | Tests de Time Manager et d'Atlas Academy | P |
