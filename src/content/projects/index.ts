@@ -8,9 +8,9 @@ import { pentest } from './pentest'
 import { zeroday } from './zeroday'
 
 /** Case studies, in default display order. */
-export const dossiers: Project[] = [blocktrader, argos, pentest, zeroday, llmApps]
+export const dossiers: Project[] = [blocktrader, argos, pentest, zeroday]
 
-export const projects: Project[] = [...dossiers, ...cards, ...archive]
+export const projects: Project[] = [...dossiers, ...llmApps, ...cards, ...archive]
 
 export function projectBySlug(slug: string) {
   return projects.find((p) => p.slug === slug)

@@ -26,7 +26,7 @@ export const tracks: TrackContent[] = [
       { fr: '4 applications LLM publiées', en: '4 published LLM applications' },
       { fr: 'Atelier « Supercharging Your Pentesting With AI »', en: '“Supercharging Your Pentesting With AI” workshop' },
     ],
-    featured: ['applications-llm', 'argos'],
+    featured: ['rag-pdf-chatbot', 'argos'],
   },
   {
     id: 'cyber',
