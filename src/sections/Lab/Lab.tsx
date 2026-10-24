@@ -70,7 +70,9 @@ export function Lab() {
             {started ? (
               showConsole && (
                 <Suspense fallback={null}>
-                  <ProfileConsole />
+                  <div className="flex h-full flex-col motion-safe:animate-[dive-in_420ms_cubic-bezier(0.2,0.8,0.3,1)]">
+                    <ProfileConsole />
+                  </div>
                 </Suspense>
               )
             ) : (
