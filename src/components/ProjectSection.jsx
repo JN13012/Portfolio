@@ -130,7 +130,6 @@ const ProjectSection = () => {
       categorie={TRACK_LABEL[p.tracks[0]] ?? p.stack[0] ?? "Projet"}
       date={cardDate(p.period)}
       ongoing={!p.period.end}
-      complexity={complexityOf(p)}
       context={CONTEXT_PILL[p.context]}
       inProduction={p.inProduction?.fr}
       theme={trackThemes[p.tracks[0]] || trackThemes.Default}
@@ -260,6 +259,15 @@ const ProjectSection = () => {
                 <span><span className="text-cyber">Période :</span> <span className="text-white">{formatPeriod(selected.period)}</span></span>
                 <span><span className="text-cyber">Équipe :</span> <span className="text-white">{selected.team.size > 1 ? (selected.team.label?.fr ?? `${selected.team.size} personnes`) : "Solo"}</span></span>
                 <span><span className="text-cyber">Contexte :</span> <span className="text-white">{CONTEXT_LABEL[selected.context]}</span></span>
+                <span className="inline-flex items-center gap-2">
+                  <span className="text-cyber">Complexité :</span>
+                  <span aria-hidden="true" className="flex gap-1">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <span key={n} className={`size-2 rounded-full ${n <= complexityOf(selected) ? "bg-cyber shadow-[0_0_6px_var(--color-cyber)]" : "bg-white/15"}`} />
+                    ))}
+                  </span>
+                  <span className="text-white">{complexityOf(selected)}/5</span>
+                </span>
                 <span className={`border px-2.5 py-1 ${statusStyles[selected.status]}`}>{statusLabels[selected.status].fr}</span>
                 {selected.inProduction && <span className="border border-cyber/50 bg-cyber/10 px-2.5 py-1 text-cyber">{selected.inProduction.fr}</span>}
               </div>
