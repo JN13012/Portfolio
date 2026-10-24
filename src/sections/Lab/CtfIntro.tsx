@@ -509,14 +509,21 @@ function SocketButton({ onClick, children }: { onClick: () => void; children: Re
           className="group block cursor-pointer rounded-2xl focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyber"
         >
           {/* A dark recessed well the key sits in. */}
-          <span className="block rounded-[13px] border border-cyber/10 bg-[#040607] transition-colors duration-100 group-active:border-cyber/45 px-2.5 pt-3 pb-2.5 shadow-[inset_0_4px_8px_rgba(0,0,0,0.95),inset_0_-1px_0_rgba(255,255,255,0.06)]">
-            {/* The key: stands out of the well; pressed, it shrinks back into it, away from the viewer, and darkens. */}
-            <span className="relative block overflow-hidden rounded-lg border border-cyber/60 bg-[linear-gradient(180deg,#1f6b40,#0e3a22)] px-11 py-3.5 text-[15px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase shadow-[0_0_0_2px_#0b3a1f,0_6px_14px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-100 ease-out [text-shadow:0_0_5px_rgba(74,222,128,0.3)] group-hover:brightness-110 group-active:scale-[0.94] group-active:bg-[linear-gradient(180deg,#123e26,#0a2818)] group-active:shadow-[0_0_0_0_#0b3a1f,inset_0_3px_10px_rgba(0,0,0,0.75)] group-active:brightness-90">
+          <span className="block rounded-[13px] bg-[#040607] px-2.5 pt-3 pb-2.5 shadow-[inset_0_4px_8px_rgba(0,0,0,0.95),inset_0_-1px_0_rgba(255,255,255,0.06)]">
+            <span className="relative block">
+              {/* Fixed outline at the key's resting size (1px out): it stays put while the key sinks. */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.18),transparent_55%)]"
+                className="pointer-events-none absolute -inset-[3px] rounded-[10px] border border-cyber/15 transition-colors duration-100 group-active:border-cyber/60"
               />
-              <span className="relative">▶ {children}</span>
+              {/* The key: stands out of the well; pressed, it shrinks back into it, away from the viewer, and darkens. */}
+              <span className="relative block overflow-hidden rounded-lg border border-cyber/60 bg-[linear-gradient(180deg,#1f6b40,#0e3a22)] px-11 py-3.5 text-[15px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase shadow-[0_0_0_2px_#0b3a1f,0_6px_14px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-100 ease-out [text-shadow:0_0_5px_rgba(74,222,128,0.3)] group-hover:brightness-110 group-active:scale-[0.94] group-active:bg-[linear-gradient(180deg,#123e26,#0a2818)] group-active:shadow-[0_0_0_0_#0b3a1f,inset_0_3px_10px_rgba(0,0,0,0.75)] group-active:brightness-90">
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.18),transparent_55%)]"
+                />
+                <span className="relative">▶ {children}</span>
+              </span>
             </span>
           </span>
         </button>
