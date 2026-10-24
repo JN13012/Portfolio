@@ -261,7 +261,14 @@ export function StartButton({ style, onClick, children }: { style: StartButtonSt
       <button
         type="button"
         onClick={onClick}
-        className={cx('rounded-sm border-2 border-cyber px-9 py-3 text-[15px] font-bold tracking-[0.3em] text-cyber uppercase shadow-[0_0_14px_var(--color-cyber),inset_0_0_14px_rgba(74,222,128,0.35)] [text-shadow:0_0_10px_var(--color-cyber)] transition-shadow hover:shadow-[0_0_28px_var(--color-cyber),inset_0_0_22px_rgba(74,222,128,0.5)]', focus)}
+        // 3D: a dark green edge underneath (the button's thickness); it lifts on hover and presses down on click.
+        className={cx(
+          'rounded-sm border-2 border-cyber bg-[linear-gradient(180deg,rgba(74,222,128,0.16),rgba(74,222,128,0.04))] px-9 py-3 text-[15px] font-bold tracking-[0.3em] text-cyber uppercase transition-all duration-150 [text-shadow:0_0_10px_var(--color-cyber)]',
+          'shadow-[0_7px_0_#15803d,0_8px_22px_-4px_rgba(74,222,128,0.55),inset_0_0_14px_rgba(74,222,128,0.3)]',
+          'hover:-translate-y-0.5 hover:shadow-[0_9px_0_#15803d,0_12px_30px_-4px_rgba(74,222,128,0.7),inset_0_0_20px_rgba(74,222,128,0.45)]',
+          'active:translate-y-1.5 active:shadow-[0_2px_0_#15803d,0_2px_10px_rgba(74,222,128,0.5),inset_0_0_20px_rgba(74,222,128,0.45)]',
+          focus,
+        )}
       >
         {children}
       </button>
