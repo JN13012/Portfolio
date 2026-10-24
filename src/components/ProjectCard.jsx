@@ -14,6 +14,7 @@ const ProjectCard = ({
   statusClass,
   isDossier,
   inProduction,
+  ongoing,
 }) => {
   const visibleTags = tags.slice(0, 8);
   const hasMoreTags = tags.length > visibleTags.length;
@@ -40,6 +41,14 @@ const ProjectCard = ({
       {/* EFFET BRILLANCE GLOW */}
       <div className="absolute -top-24 -left-24 w-48 h-48 bg-cyber/10 rounded-full blur-3xl group-hover:bg-cyber/40 transition-all duration-5000 z-0"></div>
 
+      {/* Featured project: a small star in the top-right corner, explained on hover and to screen readers. */}
+      {isDossier && (
+        <span title="Projet phare" className="absolute top-2.5 right-2.5 z-20">
+          <Star size={15} aria-hidden="true" className="fill-amber-300 text-amber-300 drop-shadow-[0_0_6px_rgba(252,211,77,0.5)]" />
+          <span className="sr-only">Projet phare</span>
+        </span>
+      )}
+
       {/* CARD CONTENT */}
       <div className="relative z-10 flex flex-col h-full flex-grow rounded-sm border border-white/10 bg-black/38 p-4 backdrop-blur-[1px] transition-colors duration-500 group-hover:bg-black/46">
         {/* STATUS */}
@@ -61,13 +70,6 @@ const ProjectCard = ({
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-xl md:text-2xl text-zinc-100 font-bold tracking-normal group-hover:text-cyber transition-colors uppercase mb-2">
             {titre}
-            {/* Featured project: just a small star, explained on hover and to screen readers. */}
-            {isDossier && (
-              <span title="Projet phare" className="ml-2 inline-block align-[0.1em]">
-                <Star size={16} aria-hidden="true" className="fill-amber-300 text-amber-300" />
-                <span className="sr-only">Projet phare</span>
-              </span>
-            )}
           </h3>
 
           <span
@@ -104,8 +106,8 @@ const ProjectCard = ({
         {/* BLOC DATE (and, for featured projects, the hint that a full case study opens) */}
         <div className={`flex items-center ${isDossier ? "justify-between" : "justify-end"}`}>
           {isDossier && <span className="text-sm text-amber-300/90 transition-colors group-hover:text-amber-200">Lire l’étude →</span>}
-          <span className="text-sm text-zinc-400 group-hover:text-cyber/80 transition-colors uppercase tracking-widest">
-            [{date}]
+          <span className={`text-sm tracking-wide transition-colors ${ongoing ? "text-sky-300" : "text-zinc-400 group-hover:text-cyber/80"}`}>
+            {date}
           </span>
         </div>
 
