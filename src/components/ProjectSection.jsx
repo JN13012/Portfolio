@@ -106,8 +106,28 @@ const ProjectSection = () => {
   }, [selected]);
 
   const visible = useMemo(() => sortProjects(filterProjects(projects, { tracks, statuses }), sort), [tracks, statuses, sort]);
-  const totalPages = Math.max(1, Math.ceil(visible.length / PROJECTS_PER_PAGE));
-  const page = visible.slice((currentPage - 1) * PROJECTS_PER_PAGE, currentPage * PROJECTS_PER_PAGE);
+  // Featured projects (full case study) come first, two per row; the others are paginated below.
+  const featured = visible.filter((p) => p.tier === "dossier");
+  const others = visible.filter((p) => p.tier !== "dossier");
+  const totalPages = Math.max(1, Math.ceil(others.length / PROJECTS_PER_PAGE));
+  const page = others.slice((currentPage - 1) * PROJECTS_PER_PAGE, currentPage * PROJECTS_PER_PAGE);
+  const card = (p) => (
+    <ProjectCard
+      key={p.slug}
+      titre={p.title}
+      description={p.summary.fr}
+      tags={p.stack}
+      image={IMAGES[p.slug]?.[0]}
+      categorie={TRACK_LABEL[p.tracks[0]] ?? "Projet"}
+      date={formatPeriod(p.period)}
+      status={statusLabels[p.status].fr}
+      inProduction={p.inProduction?.fr}
+      statusClass={statusStyles[p.status]}
+      isDossier={p.tier === "dossier"}
+      theme={trackThemes[p.tracks[0]] || trackThemes.Default}
+      onClick={() => open(p)}
+    />
+  );
 
   const updateTracks = (next) => {
     setTracks(next);
@@ -196,27 +216,12 @@ const ProjectSection = () => {
         </div>
 
         {/* GRID */}
-        {page.length === 0 ? (
+        {visible.length === 0 ? (
           <p className="text-zinc-400">Aucun projet ne correspond à ces filtres.</p>
         ) : (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {page.map((p) => (
-              <ProjectCard
-                key={p.slug}
-                titre={p.title}
-                description={p.summary.fr}
-                tags={p.stack}
-                image={IMAGES[p.slug]?.[0]}
-                categorie={TRACK_LABEL[p.tracks[0]] ?? "Projet"}
-                date={formatPeriod(p.period)}
-                status={statusLabels[p.status].fr}
-                inProduction={p.inProduction?.fr}
-                statusClass={statusStyles[p.status]}
-                isDossier={p.tier === "dossier"}
-                theme={trackThemes[p.tracks[0]] || trackThemes.Default}
-                onClick={() => open(p)}
-              />
-            ))}
+          <div className="space-y-8">
+            {featured.length > 0 && currentPage === 1 && <div className="grid grid-cols-1 gap-8 md:grid-cols-2">{featured.map(card)}</div>}
+            {page.length > 0 && <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">{page.map(card)}</div>}
           </div>
         )}
 
