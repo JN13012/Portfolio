@@ -137,8 +137,8 @@ const ProjectSection = () => {
     "appearance-none rounded-md border border-white/10 bg-zinc-950/70 py-1.5 pr-8 pl-3 text-sm text-zinc-200 transition-colors hover:border-white/25 focus-visible:border-cyber/60 focus-visible:outline-none [&>option]:bg-zinc-900";
 
   return (
-    <section id="projects" className="relative overflow-hidden border-y border-cyber/10 bg-black/45 py-24 text-white">
-      <div className="relative z-10 mx-auto px-2">
+    <section id="projects" className="relative scroll-mt-24 py-24 text-white">
+      <div className="relative z-10">
         <SectionHeader index="03" title="Projets" />
 
         {/* FILTERS: one line — job pills on the left, status and sort menus on the right. */}
