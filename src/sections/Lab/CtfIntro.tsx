@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
 import { Check, Play, RotateCcw } from 'lucide-react'
 import { cx } from '../../lib/cx'
 import { useReducedMotion } from '../../lib/useReducedMotion'
@@ -46,7 +46,7 @@ const PIECES = (() => {
   })
 })()
 
-export type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 'bracket' | 'loader' | 'split' | 'card'
+export type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 'bracket' | 'loader' | 'split' | 'card' | 'cap' | 'tilt'
 
 type Progress = { level: number; solved: boolean }
 function readProgress(): Progress {
@@ -72,7 +72,7 @@ function Typed({ text, from, chars }: { text: string; from: number; chars: numbe
   )
 }
 
-export function CtfIntro({ onStart, button = 'neon' }: { onStart: () => void; button?: StartButtonStyle }) {
+export function CtfIntro({ onStart, button = 'cap' }: { onStart: () => void; button?: StartButtonStyle }) {
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
   const [progress] = useState(readProgress)
@@ -228,6 +228,8 @@ export function CtfIntro({ onStart, button = 'neon' }: { onStart: () => void; bu
 /** The start button in one of the proposed styles (compared on /mockups.html?view=ctfbuttons). */
 export function StartButton({ style, onClick, children }: { style: StartButtonStyle; onClick: () => void; children: ReactNode }) {
   const focus = 'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyber'
+  if (style === 'cap') return <KeycapButton onClick={onClick}>{children}</KeycapButton>
+  if (style === 'tilt') return <TiltButton onClick={onClick}>{children}</TiltButton>
   if (style === 'solid')
     return (
       <button type="button" onClick={onClick} className={cx('inline-flex items-center gap-2.5 bg-cyber px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-black uppercase shadow-[0_8px_30px_-8px_var(--color-cyber)] transition-transform hover:-translate-y-0.5', focus)}>
@@ -312,5 +314,66 @@ export function StartButton({ style, onClick, children }: { style: StartButtonSt
       <span aria-hidden="true" className="absolute inset-0 bg-cyber/0 transition-colors group-hover:bg-cyber/10" />
       <span className="relative">▶ {children}</span>
     </button>
+  )
+}
+
+/**
+ * Keycap: a pushable 3D key in three layers (soft shadow, edge, front face). The face rises on
+ * hover and sinks into the edge on press; the edge is darker at both ends, like a rounded side.
+ */
+function KeycapButton({ onClick, children }: { onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group relative cursor-pointer border-none bg-transparent p-0 outline-offset-4 focus:outline-none focus-visible:outline-2 focus-visible:outline-cyber"
+    >
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 translate-y-[4px] rounded-lg bg-black/60 blur-[4px] transition-transform duration-500 group-hover:translate-y-[6px] group-hover:duration-200 group-active:translate-y-[1px] group-active:duration-75"
+      />
+      <span aria-hidden="true" className="absolute inset-0 rounded-lg bg-[linear-gradient(90deg,#0a2e18,#15803d_8%,#15803d_92%,#0a2e18)]" />
+      <span className="relative block -translate-y-[6px] rounded-lg border border-cyber/70 bg-[linear-gradient(180deg,#1b5e36,#0f3a22)] px-10 py-3.5 text-[15px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] [text-shadow:0_0_10px_rgba(74,222,128,0.8)] transition-transform duration-500 [transition-timing-function:cubic-bezier(0.3,0.7,0.4,1)] group-hover:-translate-y-[9px] group-hover:duration-200 group-hover:[transition-timing-function:cubic-bezier(0.3,0.7,0.4,1.5)] group-active:-translate-y-[2px] group-active:duration-75">
+        ▶ {children}
+      </span>
+    </button>
+  )
+}
+
+/**
+ * Tilt: a glass panel that leans towards the pointer, with a light reflection following it.
+ * Flat under reduced motion and on touch screens (no pointer to follow).
+ */
+function TiltButton({ onClick, children }: { onClick: () => void; children: ReactNode }) {
+  const ref = useRef<HTMLButtonElement>(null)
+  const reduced = useReducedMotion()
+  const move = (e: ReactPointerEvent) => {
+    const el = ref.current
+    if (!el || reduced || e.pointerType !== 'mouse') return
+    const r = el.getBoundingClientRect()
+    const x = (e.clientX - r.left) / r.width - 0.5
+    const y = (e.clientY - r.top) / r.height - 0.5
+    el.style.transform = `rotateX(${-y * 16}deg) rotateY(${x * 22}deg) translateZ(8px)`
+    el.style.setProperty('--gx', `${(x + 0.5) * 100}%`)
+    el.style.setProperty('--gy', `${(y + 0.5) * 100}%`)
+  }
+  const leave = () => {
+    const el = ref.current
+    if (el) el.style.transform = ''
+  }
+  return (
+    <span className="inline-block [perspective:600px]">
+      <button
+        ref={ref}
+        type="button"
+        onClick={onClick}
+        onPointerMove={move}
+        onPointerLeave={leave}
+        className="relative block overflow-hidden rounded-md border border-cyber/60 bg-cyber/10 px-11 py-4 whitespace-nowrap text-[15px] font-bold tracking-[0.3em] text-cyber uppercase shadow-[0_18px_40px_-14px_rgba(74,222,128,0.6)] backdrop-blur-sm transition-transform duration-150 ease-out [transform-style:preserve-3d] [text-shadow:0_0_10px_var(--color-cyber)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyber"
+      >
+        <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.22),transparent_55%)]" />
+        <span className="relative inline-block [transform:translateZ(20px)]">▶ {children}</span>
+      </button>
+    </span>
   )
 }
