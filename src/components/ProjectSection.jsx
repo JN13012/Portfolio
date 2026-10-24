@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Lock } from "lucide-react";
 import SectionHeader from "./SectionHeader";
 import ProjectCard from "./ProjectCard";
 import { projects } from "../content/projects";
@@ -32,7 +32,7 @@ import Obsidian0 from "../assets/Obsidian0.png";
 import Obsidian1 from "../assets/obsidian1.png";
 
 // Cards shown per group before « Voir les N autres ».
-const FIRST_CARDS = 6;
+const FIRST_CARDS = 8;
 
 const GROUPS = [
   { id: "perso-pro", title: "Projets perso & pro" },
@@ -132,9 +132,7 @@ const ProjectSection = () => {
       ongoing={!p.period.end}
       complexity={complexityOf(p)}
       context={CONTEXT_PILL[p.context]}
-      privateCode={!p.links.github && !p.links.repos?.length && !p.links.writeup && !p.links.demo}
       inProduction={p.inProduction?.fr}
-      isDossier={p.tier === "dossier"}
       theme={trackThemes[p.tracks[0]] || trackThemes.Default}
       onClick={() => open(p)}
     />
@@ -220,7 +218,7 @@ const ProjectSection = () => {
                     {g.title} <span className="text-zinc-600 tabular-nums">{g.items.length}</span>
                     <span className="h-px flex-1 bg-white/10" />
                   </h3>
-                  <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">{shown.map(card)}</div>
+                  <div className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{shown.map(card)}</div>
                   {rest > 0 && (
                     <div className="mt-8 text-center">
                       <button
@@ -350,9 +348,11 @@ function ProjectLinks({ project, onInternal }) {
   ].filter(Boolean);
 
   if (links.length === 0) {
-    return project.links.privateRepo ? (
-      <p className="border-t border-white/10 py-4 text-center text-sm uppercase tracking-[0.2em] text-zinc-500">Dépôt privé · code non public</p>
-    ) : null;
+    return (
+      <p className="flex items-center justify-center gap-2 border-t border-white/10 py-4 text-sm text-zinc-400">
+        <Lock size={15} aria-hidden="true" /> Code privé
+      </p>
+    );
   }
   return (
     <div className="flex flex-wrap border-t border-cyber/20">
