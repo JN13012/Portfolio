@@ -272,6 +272,7 @@ body {
     transform: translate(-2px, 1px) skewX(-4deg);
     opacity: 0.75;
     text-shadow: 2px 0 rgba(244, 63, 94, 0.7), -2px 0 rgba(56, 189, 248, 0.7);
+    filter: hue-rotate(35deg) brightness(1.25);
   }
   91% {
     transform: translate(2px, -1px);
@@ -286,6 +287,7 @@ body {
     transform: none;
     opacity: 1;
     text-shadow: none;
+    filter: none;
   }
   96% {
     opacity: 0.85;
@@ -303,5 +305,20 @@ body {
   }
   50% {
     opacity: 0.45;
+  }
+}
+
+/* CTF intro scanlines: they crawl down, and a brighter refresh band sweeps the screen. */
+@keyframes scan-crawl {
+  to {
+    background-position: 0 3px;
+  }
+}
+@keyframes scan-sweep {
+  0% {
+    transform: translateY(-30%);
+  }
+  100% {
+    transform: translateY(130%);
   }
 }
