@@ -46,7 +46,7 @@ const PIECES = (() => {
   })
 })()
 
-export type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow'
+export type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 'bracket' | 'loader' | 'split' | 'card'
 
 type Progress = { level: number; solved: boolean }
 function readProgress(): Progress {
@@ -253,6 +253,46 @@ export function StartButton({ style, onClick, children }: { style: StartButtonSt
       <button type="button" onClick={onClick} className={cx('group inline-flex items-center gap-3 rounded-full border border-cyber/50 py-2 pr-2 pl-6 text-sm tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-cyber', focus)}>
         {children}
         <span className="grid size-9 place-items-center rounded-full bg-cyber text-black transition-transform group-hover:translate-x-1">→</span>
+      </button>
+    )
+  if (style === 'neon')
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className={cx('rounded-sm border-2 border-cyber px-9 py-3 text-[15px] font-bold tracking-[0.3em] text-cyber uppercase shadow-[0_0_14px_var(--color-cyber),inset_0_0_14px_rgba(74,222,128,0.35)] [text-shadow:0_0_10px_var(--color-cyber)] transition-shadow hover:shadow-[0_0_28px_var(--color-cyber),inset_0_0_22px_rgba(74,222,128,0.5)]', focus)}
+      >
+        {children}
+      </button>
+    )
+  if (style === 'bracket')
+    return (
+      <button type="button" onClick={onClick} className={cx('group text-lg tracking-[0.25em] text-zinc-100 uppercase', focus)}>
+        <span className="text-cyber transition-all group-hover:mr-3">[</span>
+        <span className="px-3 transition-colors group-hover:text-cyber">{children}</span>
+        <span className="text-cyber transition-all group-hover:ml-3">]</span>
+      </button>
+    )
+  if (style === 'loader')
+    return (
+      <button type="button" onClick={onClick} className={cx('group relative overflow-hidden border border-cyber/60 px-10 py-3.5 text-sm tracking-[0.3em] text-cyber uppercase', focus)}>
+        {/* A bar fills the button on hover, like a loading progress. */}
+        <span aria-hidden="true" className="absolute inset-y-0 left-0 w-0 bg-cyber transition-all duration-500 ease-out group-hover:w-full" />
+        <span className="relative transition-colors duration-300 group-hover:text-black">{children} ▸▸</span>
+      </button>
+    )
+  if (style === 'split')
+    return (
+      <button type="button" onClick={onClick} className={cx('group relative border border-white/20 bg-black px-10 py-3.5 text-[15px] font-bold tracking-[0.3em] text-white uppercase', focus)}>
+        {/* Permanent RGB split, like a signal slightly out of phase. */}
+        <span className="[text-shadow:2px_0_rgba(244,63,94,0.8),-2px_0_rgba(56,189,248,0.8)] transition-[text-shadow] group-hover:[text-shadow:3px_0_rgba(244,63,94,0.9),-3px_0_rgba(56,189,248,0.9)]">{children}</span>
+      </button>
+    )
+  if (style === 'card')
+    return (
+      <button type="button" onClick={onClick} className={cx('group flex flex-col items-start gap-1 border-l-2 border-cyber bg-cyber/5 py-3 pr-10 pl-5 text-left transition-colors hover:bg-cyber/10', focus)}>
+        <span className="text-[15px] font-bold tracking-[0.2em] text-white uppercase">{children}</span>
+        <span className="text-xs text-cyber">&gt; ./start_ctf.sh</span>
       </button>
     )
   // hud: corner brackets that close in on hover.

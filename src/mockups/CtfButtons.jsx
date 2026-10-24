@@ -7,6 +7,11 @@ const STYLES = [
   ["prompt", "C · Invite de commande : root@lab:~$ ./commencer, curseur qui clignote"],
   ["key", "D · Touche Entrée : comme une touche de clavier"],
   ["arrow", "E · Pastille et flèche : la flèche avance au survol"],
+  ["neon", "F · Néon : contour et texte lumineux, s'intensifie au survol"],
+  ["bracket", "G · Crochets : [ COMMENCER ], les crochets s'écartent au survol"],
+  ["loader", "H · Chargement : une barre remplit le bouton au survol"],
+  ["split", "I · Signal déphasé : dédoublement rouge et bleu permanent"],
+  ["card", "J · Commande : libellé et ligne « > ./start_ctf.sh »"],
 ];
 
 export default function CtfButtons() {
