@@ -21,7 +21,7 @@ export const complexity: Record<string, { note: Complexity; why: string }> = {
   vaultborn: { note: 3, why: 'Complete 2D action RPG: 7 classes, worlds, saving, design patterns' },
   'meeting-companion': { note: 2, why: 'Speech-to-text then LLM pipeline; guided IBM project' },
   'assistant-translator': { note: 2, why: 'Speech, translation and synthesis pipeline; guided IBM project' },
-  'career-coach': { note: 2, why: 'LLM on watsonx with a Gradio interface; guided IBM project' },
+  'career-coach': { note: 3, why: 'LLM on watsonx with a Gradio interface; guided IBM project' },
   'ai-voice-assistant': { note: 2, why: 'Voice assistant (Watson, Groq); guided IBM project' },
   'llm-context-wrapper': { note: 2, why: 'Conversation memory around a Transformers model; guided IBM project' },
   bookworm: { note: 2, why: 'Book analysis with spaCy' },
