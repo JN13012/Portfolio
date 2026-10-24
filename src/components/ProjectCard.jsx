@@ -22,7 +22,7 @@ const ProjectCard = ({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative bg-black/40 border border-white/20 px-5 py-4 text-left transition-all duration-500 overflow-hidden cursor-crosshair h-full flex flex-col focus-visible:outline-2 focus-visible:outline-cyber ${theme.card}`}
+      className={`group relative min-h-[24.75rem] bg-black/40 border border-white/20 px-5 py-4 text-left transition-all duration-500 overflow-hidden cursor-crosshair h-full flex flex-col focus-visible:outline-2 focus-visible:outline-cyber ${theme.card}`}
       // BG IMAGE (or a fine pattern when the project has no visual yet)
       style={{
         backgroundImage: image
