@@ -4,7 +4,7 @@ import { credentials, inProgress } from './certifications'
 import { hero } from './hero'
 import { profile } from './profile'
 import { dossiers, projects } from './projects'
-import { expertise } from './expertise'
+import { expertise, orderedDomains } from './expertise'
 import { skills } from './skills'
 import { timeline } from './timeline'
 import { tracks } from './tracks'
@@ -98,5 +98,17 @@ describe('project filters', () => {
   it('reads ?metier= from the URL and ignores unknown values', () => {
     expect(tracksFromSearch('?metier=cyber,ia,foo')).toEqual(['cyber', 'ia'])
     expect(tracksFromSearch('')).toEqual([])
+  })
+})
+
+describe('expertise order', () => {
+  const ids = (t: Parameters<typeof orderedDomains>[0]) => orderedDomains(t).map((d) => d.id)
+  it('keeps the default order without ?metier=', () => {
+    expect(ids([])).toEqual(['ia', 'offensive', 'defensive', 'devops', 'dev'])
+  })
+  it('puts the job’s domains first and keeps every domain', () => {
+    expect(ids(['cyber'])).toEqual(['offensive', 'defensive', 'ia', 'devops', 'dev'])
+    expect(ids(['dev'])).toEqual(['dev', 'devops', 'ia', 'offensive', 'defensive'])
+    expect(ids(['ia', 'cyber'])).toEqual(['ia', 'dev', 'offensive', 'defensive', 'devops'])
   })
 })

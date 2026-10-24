@@ -105,6 +105,29 @@ export const expertise: ExpertiseDomain[] = [
     ],
   },
   {
+    id: 'devops',
+    track: 'dev',
+    category: { fr: 'Ingénierie logicielle', en: 'Software engineering' },
+    label: { fr: 'DevOps', en: 'DevOps' },
+    positioning: {
+      fr: 'Conteneurs, CI et tests automatisés, avec un pipeline durci sur BlockTrader.',
+      en: 'Containers, CI and automated tests, with a hardened pipeline on BlockTrader.',
+    },
+    proofs: [
+      { fr: '46 tests et CI durcie sur BlockTrader', en: '46 tests and hardened CI on BlockTrader' },
+      { fr: 'Déploiement Kubernetes (projet Gandalf)', en: 'Kubernetes deployment (Gandalf project)' },
+    ],
+    tools: [
+      t('Docker', 'Conteneurisation des projets (Compose)', 'Containerising the projects (Compose)'),
+      t('Kubernetes', 'Cluster k3d multi-nœuds : ingress, RBAC, volumes', 'Multi-node k3d cluster: ingress, RBAC, volumes'),
+      t('GitHub Actions', 'CI durcie de BlockTrader', 'Hardened CI of BlockTrader'),
+      t('Jenkins', 'Instance configurée par le code (JCasC)', 'Instance configured as code (JCasC)'),
+      t('Vitest', 'Tests de Time Manager et d’Atlas Academy', 'Tests of Time Manager and Atlas Academy'),
+      t('Jest', 'Tests de ChatFlow', 'Tests of ChatFlow'),
+      t('pytest', 'Tests du moteur Argos', 'Tests of the Argos engine'),
+    ],
+  },
+  {
     id: 'dev',
     track: 'dev',
     category: { fr: 'Ingénierie logicielle', en: 'Software engineering' },
@@ -134,27 +157,24 @@ export const expertise: ExpertiseDomain[] = [
       t('Redis', 'File de votes de l’application Kubernetes', 'Vote queue of the Kubernetes app'),
     ],
   },
-  {
-    id: 'devops',
-    track: 'dev',
-    category: { fr: 'Ingénierie logicielle', en: 'Software engineering' },
-    label: { fr: 'DevOps', en: 'DevOps' },
-    positioning: {
-      fr: 'Conteneurs, CI et tests automatisés, avec un pipeline durci sur BlockTrader.',
-      en: 'Containers, CI and automated tests, with a hardened pipeline on BlockTrader.',
-    },
-    proofs: [
-      { fr: '46 tests et CI durcie sur BlockTrader', en: '46 tests and hardened CI on BlockTrader' },
-      { fr: 'Déploiement Kubernetes (projet Gandalf)', en: 'Kubernetes deployment (Gandalf project)' },
-    ],
-    tools: [
-      t('Docker', 'Conteneurisation des projets (Compose)', 'Containerising the projects (Compose)'),
-      t('Kubernetes', 'Cluster k3d multi-nœuds : ingress, RBAC, volumes', 'Multi-node k3d cluster: ingress, RBAC, volumes'),
-      t('GitHub Actions', 'CI durcie de BlockTrader', 'Hardened CI of BlockTrader'),
-      t('Jenkins', 'Instance configurée par le code (JCasC)', 'Instance configured as code (JCasC)'),
-      t('Vitest', 'Tests de Time Manager et d’Atlas Academy', 'Tests of Time Manager and Atlas Academy'),
-      t('Jest', 'Tests de ChatFlow', 'Tests of ChatFlow'),
-      t('pytest', 'Tests du moteur Argos', 'Tests of the Argos engine'),
-    ],
-  },
 ]
+
+/**
+ * Domain order when the visitor arrives through a targeted link (?metier=ia|cyber|dev, see
+ * src/lib/projects.ts): the job's domains first, the rest keeps the default order.
+ */
+export const domainOrderFor: Record<Track, ExpertiseDomain['id'][]> = {
+  ia: ['ia', 'dev'],
+  cyber: ['offensive', 'defensive'],
+  dev: ['dev', 'devops'],
+}
+
+/** The domains in display order for the given jobs (none = default order). */
+export function orderedDomains(tracks: Track[]): ExpertiseDomain[] {
+  const first = [...new Set(tracks.flatMap((t) => domainOrderFor[t]))]
+  const rank = (d: ExpertiseDomain) => {
+    const i = first.indexOf(d.id)
+    return i === -1 ? first.length + expertise.indexOf(d) : i
+  }
+  return [...expertise].sort((a, b) => rank(a) - rank(b))
+}

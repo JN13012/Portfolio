@@ -21,7 +21,8 @@ import {
 } from 'simple-icons'
 import SectionHeader from '../../components/SectionHeader'
 import { TOOL_ICONS } from './toolIcons'
-import { expertise, type ExpertiseDomain } from '../../content/expertise'
+import { orderedDomains, type ExpertiseDomain } from '../../content/expertise'
+import { tracksFromSearch } from '../../lib/projects'
 import { emblem } from './emblems'
 import { cx } from '../../lib/cx'
 
@@ -107,13 +108,15 @@ export function Logo({ name, size, className, tone = '#a1a1aa' }: { name: string
  * Expertise: the domain list on the left chooses the domain; all its tools show in a grid on the right.
  */
 export function Expertise() {
+  // A targeted link (?metier=cyber…) puts that job's domains first and opens the first one.
+  const [domains] = useState(() => orderedDomains(tracksFromSearch(window.location.search)))
   const [active, setActive] = useState(0)
-  const domain = expertise[active]!
+  const domain = domains[active]!
   return (
     <section id="competences" className="scroll-mt-24 py-24">
       <SectionHeader index="02" title="Expertise" />
       <div className="grid gap-8 lg:grid-cols-[17rem_1fr] lg:items-center">
-        <RailHeaders active={active} onSelect={setActive} />
+        <RailHeaders domains={domains} active={active} onSelect={setActive} />
         <div className="min-w-0">
           <ToolGrid key={domain.id} domain={domain} />
         </div>
@@ -122,16 +125,16 @@ export function Expertise() {
   )
 }
 
-type HeaderProps = { active: number; onSelect: (i: number) => void }
+type HeaderProps = { domains: ExpertiseDomain[]; active: number; onSelect: (i: number) => void }
 
 /**
  * Rail: a vertical list on the left, the logos on the right. The active domain is tinted in its
  * colour: a coloured line, and the name in a gradient from a light tint of the colour to white.
  */
-function RailHeaders({ active, onSelect }: HeaderProps) {
+function RailHeaders({ domains, active, onSelect }: HeaderProps) {
   return (
     <div role="group" aria-label="Domaines" className="-mx-4 flex gap-1 overflow-x-auto px-4 [scrollbar-width:none] lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0">
-      {expertise.map((d, i) => {
+      {domains.map((d, i) => {
         const on = i === active
         const { accent, text } = HUE[d.id]
         return (
