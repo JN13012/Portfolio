@@ -1,8 +1,8 @@
 import React from "react";
 
 // Compact project card: context and production mention, title and job, two lines of summary,
-// one line of stack (then « +N »), complexity dots and date.
-const ProjectCard = ({ titre, description, tags, image, categorie, date, onClick, theme, inProduction, ongoing, complexity, context }) => {
+// one line of stack (then « +N ») and date, on a dark panel inset from the image edges.
+const ProjectCard = ({ titre, description, tags, image, categorie, date, onClick, theme, inProduction, ongoing, context }) => {
   // Whole tags only, as many as fit on one line (≈ 26 characters), then « +N ».
   const visibleTags = [];
   let used = 0;
@@ -27,9 +27,10 @@ const ProjectCard = ({ titre, description, tags, image, categorie, date, onClick
         backgroundPosition: "center",
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/80 to-black/92 transition-all duration-500 group-hover:from-black/60 group-hover:via-black/40 group-hover:to-black/70" />
+      <div className="absolute inset-0 bg-black/45 transition-colors duration-500 group-hover:bg-black/20" />
 
-      <div className="relative z-10 flex h-full flex-col p-5">
+      {/* Readable panel behind the text, inset from the card edges so the image frames it. */}
+      <div className="relative z-10 m-2.5 flex h-[calc(100%-1.25rem)] flex-col rounded-sm border border-white/10 bg-black/75 p-4 backdrop-blur-[2px] transition-colors duration-500 group-hover:bg-black/65">
         <div className="mb-3 flex min-h-[1.375rem] flex-wrap gap-1.5">
           {context && <span className="border border-white/15 bg-white/5 px-1.5 py-0.5 text-[10px] tracking-widest text-zinc-300 uppercase">{context}</span>}
           {inProduction && (
@@ -60,13 +61,7 @@ const ProjectCard = ({ titre, description, tags, image, categorie, date, onClick
           {more > 0 && <span className="shrink-0 border border-cyber/20 bg-black/50 px-2 py-0.5 text-xs text-cyber/80">+{more}</span>}
         </div>
 
-        <div className="flex items-center justify-between text-xs">
-          <span title={`Complexité ${complexity}/5`} className="flex gap-1">
-            {[1, 2, 3, 4, 5].map((n) => (
-              <span key={n} aria-hidden="true" className={`size-1.5 rounded-full ${n <= complexity ? "bg-cyber shadow-[0_0_6px_var(--color-cyber)]" : "bg-white/15"}`} />
-            ))}
-            <span className="sr-only">Complexité {complexity} sur 5</span>
-          </span>
+        <div className="flex justify-end text-xs">
           <span className={`tracking-wide transition-colors ${ongoing ? "text-sky-300" : "text-zinc-400 group-hover:text-cyber/80"}`}>{date}</span>
         </div>
       </div>
