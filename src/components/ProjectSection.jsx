@@ -122,9 +122,7 @@ const ProjectSection = () => {
       categorie={TRACK_LABEL[p.tracks[0]] ?? "Projet"}
       date={cardDate(p.period)}
       ongoing={!p.period.end}
-      status={statusLabels[p.status].fr}
       inProduction={p.inProduction?.fr}
-      statusClass={statusStyles[p.status]}
       isDossier={p.tier === "dossier"}
       theme={trackThemes[p.tracks[0]] || trackThemes.Default}
       onClick={() => open(p)}
