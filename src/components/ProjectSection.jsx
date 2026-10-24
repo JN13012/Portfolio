@@ -5,7 +5,7 @@ import SectionHeader from "./SectionHeader";
 import ProjectCard from "./ProjectCard";
 import { projects } from "../content/projects";
 import { statusLabels } from "../content/ui";
-import { complexityOf, filterProjects, sortProjects, tracksFromSearch } from "../lib/projects";
+import { complexityOf, filterProjects, groupOf, sortProjects, tracksFromSearch } from "../lib/projects";
 import Smartfridge from "../assets/Projets/Smartfridge.png";
 import Cyberpong from "../assets/Projets/Cyberpong.png";
 import My_marvin from "../assets/Projets/My_marvin.png";
@@ -31,7 +31,16 @@ import Obsidian from "../assets/Obsidian.webp";
 import Obsidian0 from "../assets/Obsidian0.png";
 import Obsidian1 from "../assets/obsidian1.png";
 
-const PROJECTS_PER_PAGE = 6;
+// Cards shown per group before « Voir les N autres ».
+const FIRST_CARDS = 6;
+
+const GROUPS = [
+  { id: "perso-pro", title: "Projets perso & pro" },
+  { id: "formation", title: "Projets de formation" },
+];
+
+// Short context pill on the card.
+const CONTEXT_PILL = { personal: "Perso", work: "ULIT", epitech: "Epitech", ibm: "IBM", hackathon: "Hackathon" };
 
 /** Visuals per project slug (first image = card background). Projects without one get a pattern. */
 const IMAGES = {
@@ -91,7 +100,7 @@ const ProjectSection = () => {
   const [imageIndex, setImageIndex] = useState(0);
   const [tracks, setTracks] = useState(() => tracksFromSearch(window.location.search));
   const [sort, setSort] = useState("selection");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [expanded, setExpanded] = useState({});
 
   // Keep ?metier= in the URL so a filtered view can be linked in an application.
   useEffect(() => {
@@ -110,8 +119,7 @@ const ProjectSection = () => {
 
   const visible = useMemo(() => sortProjects(filterProjects(projects, { tracks }), sort), [tracks, sort]);
   const ordered = visible;
-  const totalPages = Math.max(1, Math.ceil(ordered.length / PROJECTS_PER_PAGE));
-  const page = ordered.slice((currentPage - 1) * PROJECTS_PER_PAGE, currentPage * PROJECTS_PER_PAGE);
+  const groups = GROUPS.map((g) => ({ ...g, items: ordered.filter((p) => groupOf(p) === g.id) })).filter((g) => g.items.length);
   const card = (p) => (
     <ProjectCard
       key={p.slug}
@@ -123,6 +131,7 @@ const ProjectSection = () => {
       date={cardDate(p.period)}
       ongoing={!p.period.end}
       complexity={complexityOf(p)}
+      context={CONTEXT_PILL[p.context]}
       privateCode={!p.links.github && !p.links.repos?.length && !p.links.writeup && !p.links.demo}
       inProduction={p.inProduction?.fr}
       isDossier={p.tier === "dossier"}
@@ -133,7 +142,6 @@ const ProjectSection = () => {
 
   const updateTracks = (next) => {
     setTracks(next);
-    setCurrentPage(1);
   };
 
   const open = (p) => {
@@ -183,7 +191,6 @@ const ProjectSection = () => {
                 value={sort}
                 onChange={(e) => {
                   setSort(e.target.value);
-                  setCurrentPage(1);
                 }}
                 className={select}
               >
@@ -197,33 +204,39 @@ const ProjectSection = () => {
           </div>
         </div>
 
-        {/* GRID */}
+        {/* GROUPS: personal & work, then course projects, each under a titled line. */}
         {visible.length === 0 ? (
-          <p className="text-zinc-400">Aucun projet ne correspond à ces filtres.</p>
+          <p className="text-zinc-400">Aucun projet ne correspond à ce filtre.</p>
         ) : (
-          <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">{page.map(card)}</div>
-        )}
-
-        {totalPages > 1 && (
-          <nav aria-label="Pages des projets" className="mt-12 flex items-center justify-center gap-2 text-sm">
-            <button type="button" onClick={() => setCurrentPage((n) => Math.max(1, n - 1))} disabled={currentPage === 1} className="rounded-md px-3 py-1.5 text-zinc-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30">
-              ← Précédent
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <button
-                key={n}
-                type="button"
-                aria-current={currentPage === n ? "page" : undefined}
-                onClick={() => setCurrentPage(n)}
-                className={`size-8 rounded-md tabular-nums transition-colors ${currentPage === n ? "bg-white/10 text-white ring-1 ring-white/20" : "text-zinc-500 hover:text-white"}`}
-              >
-                {n}
-              </button>
-            ))}
-            <button type="button" onClick={() => setCurrentPage((n) => Math.min(totalPages, n + 1))} disabled={currentPage === totalPages} className="rounded-md px-3 py-1.5 text-zinc-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30">
-              Suivant →
-            </button>
-          </nav>
+          <div className="space-y-14">
+            {groups.map((g) => {
+              const open = expanded[g.id];
+              const shown = open ? g.items : g.items.slice(0, FIRST_CARDS);
+              const rest = g.items.length - FIRST_CARDS;
+              return (
+                <section key={g.id} aria-labelledby={`projects-${g.id}`}>
+                  <h3 id={`projects-${g.id}`} className="mb-8 flex items-center gap-5 text-xs tracking-[0.3em] text-zinc-400 uppercase">
+                    <span className="h-px flex-1 bg-white/10" />
+                    {g.title} <span className="text-zinc-600 tabular-nums">{g.items.length}</span>
+                    <span className="h-px flex-1 bg-white/10" />
+                  </h3>
+                  <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">{shown.map(card)}</div>
+                  {rest > 0 && (
+                    <div className="mt-8 text-center">
+                      <button
+                        type="button"
+                        aria-expanded={!!open}
+                        onClick={() => setExpanded((e) => ({ ...e, [g.id]: !open }))}
+                        className="rounded-full border border-white/15 px-5 py-2 text-sm text-zinc-300 transition-colors hover:border-white/35 hover:text-white"
+                      >
+                        {open ? "Réduire" : `Voir les ${rest} autres`}
+                      </button>
+                    </div>
+                  )}
+                </section>
+              );
+            })}
+          </div>
         )}
       </div>
 
