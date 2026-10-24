@@ -106,9 +106,10 @@ describe('expertise order', () => {
   it('keeps the default order without ?metier=', () => {
     expect(ids([])).toEqual(['ia', 'offensive', 'defensive', 'devops', 'dev'])
   })
-  it('puts the job’s domains first and keeps every domain', () => {
+  it('uses one order per job and keeps every domain', () => {
+    expect(ids(['ia'])).toEqual(['ia', 'offensive', 'defensive', 'devops', 'dev'])
     expect(ids(['cyber'])).toEqual(['offensive', 'defensive', 'ia', 'devops', 'dev'])
-    expect(ids(['dev'])).toEqual(['dev', 'devops', 'ia', 'offensive', 'defensive'])
-    expect(ids(['ia', 'cyber'])).toEqual(['ia', 'dev', 'offensive', 'defensive', 'devops'])
+    expect(ids(['dev'])).toEqual(['dev', 'ia', 'offensive', 'defensive', 'devops'])
+    expect(ids(['ia', 'cyber'])).toEqual(ids(['ia']))
   })
 })
