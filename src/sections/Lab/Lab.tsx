@@ -86,7 +86,7 @@ export function Lab() {
 
         <div className="space-y-4">
           <p className="text-xl font-bold tracking-[0.2em] text-cyber uppercase">
-            Write-ups <span className="text-zinc-500">· {visible.length}</span>
+            Write-ups
           </p>
           {/* Topic tabs, same style as the Projects job tabs: underline and count badge. */}
           <div role="group" aria-label="Filtrer les write-ups" className="flex flex-wrap gap-x-6 gap-y-2">
