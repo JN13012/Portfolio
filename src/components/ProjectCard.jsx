@@ -44,11 +44,6 @@ const ProjectCard = ({
       <div className="relative z-10 flex flex-col h-full flex-grow rounded-sm border border-white/10 bg-black/38 p-4 backdrop-blur-[1px] transition-colors duration-500 group-hover:bg-black/46">
         {/* STATUS */}
         <div className="mb-3 flex flex-wrap gap-2">
-          {isDossier && (
-            <span className="inline-flex items-center gap-1.5 border border-amber-400/50 bg-amber-400/10 px-2 py-0.5 text-xs uppercase tracking-widest text-amber-300">
-              <Star size={12} aria-hidden="true" className="fill-amber-300" /> Projet phare
-            </span>
-          )}
           {status && <span className={`border px-2 py-0.5 text-xs uppercase tracking-widest ${statusClass}`}>{status}</span>}
           {inProduction && (
             <span className="inline-flex items-center gap-2 border border-cyber/50 bg-cyber/10 px-2 py-0.5 text-xs uppercase tracking-widest text-cyber">
@@ -66,6 +61,13 @@ const ProjectCard = ({
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-xl md:text-2xl text-zinc-100 font-bold tracking-normal group-hover:text-cyber transition-colors uppercase mb-2">
             {titre}
+            {/* Featured project: just a small star, explained on hover and to screen readers. */}
+            {isDossier && (
+              <span title="Projet phare" className="ml-2 inline-block align-[0.1em]">
+                <Star size={16} aria-hidden="true" className="fill-amber-300 text-amber-300" />
+                <span className="sr-only">Projet phare</span>
+              </span>
+            )}
           </h3>
 
           <span
