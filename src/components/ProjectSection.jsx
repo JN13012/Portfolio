@@ -165,7 +165,7 @@ const ProjectSection = () => {
               const color = t ? TRACK_COLOR[t] : "#e4e4e7";
               const count = filterProjects(projects, { tracks: t ? [t] : [] }).length;
               return (
-                <button key={t ?? "all"} type="button" aria-pressed={on} onClick={() => updateTracks(t ? [t] : [])} className="group relative inline-flex items-center gap-2 pb-2.5 text-lg">
+                <button key={t ?? "all"} type="button" aria-pressed={on} onClick={() => updateTracks(t ? [t] : [])} className="group relative inline-flex cursor-pointer items-center gap-2 pb-2.5 text-lg">
                   <span
                     className={on ? "font-semibold" : "text-zinc-400 transition-colors group-hover:text-zinc-200"}
                     style={on ? { backgroundImage: `linear-gradient(90deg, ${color} 10%, #fff 115%)`, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" } : undefined}

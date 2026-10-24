@@ -126,19 +126,26 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
   const done = (n: number) => progress.solved || n < progress.level
   const typing = chars < total
 
+  // On click, the screen switches off like an old CRT (collapses to a bright line), then the console opens.
+  const [leaving, setLeaving] = useState(false)
+  const go = () => {
+    if (reduced) return onStart()
+    setLeaving(true)
+    window.setTimeout(onStart, 520)
+  }
   const restart = () => {
     try {
       localStorage.removeItem(CTF_PROGRESS_KEY)
     } catch {
       // Nothing stored.
     }
-    onStart()
+    go()
   }
 
   return (
     <div
       ref={root}
-      className="relative flex flex-1 flex-col items-center overflow-y-auto px-6 py-8 text-center font-mono"
+      className={cx('relative flex flex-1 flex-col items-center overflow-y-auto px-6 py-8 text-center font-mono', leaving && 'pointer-events-none animate-[crt-off_520ms_ease-in_forwards]')}
       style={{
         backgroundImage:
           'radial-gradient(ellipse 70% 45% at 50% 0%, rgba(74,222,128,0.13), transparent 70%), linear-gradient(rgba(74,222,128,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.045) 1px, transparent 1px)',
@@ -214,7 +221,7 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
         {/* Slow blink, with the same occasional screen jump as the text. */}
         <span className="motion-safe:animate-[start-blink_2.8s_ease-in-out_infinite]">
           <span className="inline-block motion-safe:animate-[crt-glitch_3.7s_steps(1)_1.7s_infinite]">
-            <StartButton style={button} onClick={onStart}>
+            <StartButton style={button} onClick={go}>
               {label}
             </StartButton>
           </span>
@@ -489,7 +496,7 @@ function SocketButton({ onClick, children }: { onClick: () => void; children: Re
     const r = el.getBoundingClientRect()
     const x = (e.clientX - r.left) / r.width - 0.5
     const y = (e.clientY - r.top) / r.height - 0.5
-    el.style.transform = `rotateX(${-y * 12}deg) rotateY(${x * 24}deg)`
+    el.style.transform = `rotateX(${-y * 12}deg) rotateY(${x * 16}deg)`
     el.style.setProperty('--gx', `${(x + 0.5) * 100}%`)
     el.style.setProperty('--gy', `${(y + 0.5) * 100}%`)
   }
@@ -510,20 +517,18 @@ function SocketButton({ onClick, children }: { onClick: () => void; children: Re
         >
           {/* A dark recessed well the key sits in. */}
           <span className="block rounded-[13px] bg-[#040607] px-2.5 pt-3 pb-2.5 shadow-[inset_0_4px_8px_rgba(0,0,0,0.95),inset_0_-1px_0_rgba(255,255,255,0.06)]">
-            <span className="relative block">
-              {/* Fixed outline at the key's resting size (1px out): it stays put while the key sinks. */}
+            {/* The key: stands out of the well; pressed, it shrinks back into it, away from the viewer, and darkens. */}
+            <span className="relative block overflow-hidden rounded-lg border border-cyber/60 bg-[linear-gradient(180deg,#1f6b40,#0e3a22)] px-11 py-3.5 text-[15px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase shadow-[0_0_0_2px_#0b3a1f,0_6px_14px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-100 ease-out [text-shadow:0_0_5px_rgba(74,222,128,0.3)] group-hover:brightness-110 group-active:scale-[0.94] group-active:bg-[linear-gradient(180deg,#123e26,#0a2818)] group-active:shadow-[0_0_0_0_#0b3a1f,inset_0_3px_10px_rgba(0,0,0,0.75)] group-active:brightness-90">
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute -inset-[3px] rounded-[10px] border border-cyber/15 transition-colors duration-100 group-active:border-cyber/60"
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.18),transparent_55%)]"
               />
-              {/* The key: stands out of the well; pressed, it shrinks back into it, away from the viewer, and darkens. */}
-              <span className="relative block overflow-hidden rounded-lg border border-cyber/60 bg-[linear-gradient(180deg,#1f6b40,#0e3a22)] px-3.5 py-3.5 text-[15px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase shadow-[0_0_0_2px_#0b3a1f,0_6px_14px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-100 ease-out [text-shadow:0_0_5px_rgba(74,222,128,0.3)] group-hover:brightness-110 group-active:scale-[0.94] group-active:bg-[linear-gradient(180deg,#123e26,#0a2818)] group-active:shadow-[0_0_0_0_#0b3a1f,inset_0_3px_10px_rgba(0,0,0,0.75)] group-active:brightness-90">
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.18),transparent_55%)]"
-                />
-                <span className="relative">▶ {children}</span>
-              </span>
+              {/* A light sweeps across the key from left to right, in time with the blink. */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)] motion-safe:animate-[key-sweep_2.8s_ease-in-out_infinite] motion-reduce:hidden"
+              />
+              <span className="relative">▶ {children}</span>
             </span>
           </span>
         </button>

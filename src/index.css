@@ -317,3 +317,33 @@ body {
     transform: translateY(130%);
   }
 }
+
+/* CTF start key: a light crosses it from left to right. */
+@keyframes key-sweep {
+  0% {
+    transform: translateX(-150%) skewX(-12deg);
+  }
+  60%,
+  100% {
+    transform: translateX(400%) skewX(-12deg);
+  }
+}
+
+/* CTF intro: the screen switches off like an old CRT before the console opens. */
+@keyframes crt-off {
+  0% {
+    transform: scale(1, 1);
+    filter: brightness(1);
+    opacity: 1;
+  }
+  55% {
+    transform: scale(1, 0.012);
+    filter: brightness(2.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0, 0.012);
+    filter: brightness(3);
+    opacity: 0;
+  }
+}

@@ -94,7 +94,7 @@ export function Lab() {
               const on = topic === k
               const count = k ? writeups.filter((w) => w.topics.includes(k)).length : writeups.length
               return (
-                <button key={k ?? 'all'} type="button" aria-pressed={on} title={k ? TOPICS[k].title : undefined} aria-label={k ? `${TOPICS[k].title} (${count})` : undefined} onClick={() => setTopic(k)} className="group relative inline-flex items-center gap-2 pb-2 text-[15px]">
+                <button key={k ?? 'all'} type="button" aria-pressed={on} title={k ? TOPICS[k].title : undefined} aria-label={k ? `${TOPICS[k].title} (${count})` : undefined} onClick={() => setTopic(k)} className="group relative inline-flex cursor-pointer items-center gap-2 pb-2 text-[15px]">
                   <span className={on ? 'font-semibold text-white' : 'text-zinc-400 transition-colors group-hover:text-zinc-200'}>{k ? TOPICS[k].label : 'Tous'}</span>
                   <span className={cx('rounded px-1.5 text-xs tabular-nums', on ? 'bg-cyber/25 text-white' : 'bg-cyber/10 text-cyber')}>{count}</span>
                   <span aria-hidden="true" className="absolute bottom-0 left-0 h-px bg-cyber transition-all duration-300" style={{ width: on ? '100%' : '0%' }} />
