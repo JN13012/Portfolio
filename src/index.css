@@ -301,10 +301,10 @@ body {
 @keyframes start-blink {
   0%,
   100% {
-    opacity: 0.8;
+    opacity: 0.9;
   }
   50% {
-    opacity: 0.25;
+    opacity: 0.3;
   }
 }
 
