@@ -1,4 +1,5 @@
 import React from "react";
+import { Star } from "lucide-react";
 
 const ProjectCard = ({
   titre,
@@ -44,10 +45,21 @@ const ProjectCard = ({
         {/* STATUS */}
         <div className="mb-3 flex flex-wrap gap-2">
           {isDossier && (
-            <span className="border border-cyber/60 bg-cyber/15 px-2 py-0.5 text-xs uppercase tracking-widest text-cyber">Dossier</span>
+            <span className="inline-flex items-center gap-1.5 border border-amber-400/50 bg-amber-400/10 px-2 py-0.5 text-xs uppercase tracking-widest text-amber-300">
+              <Star size={12} aria-hidden="true" className="fill-amber-300" /> Projet phare
+            </span>
           )}
           {status && <span className={`border px-2 py-0.5 text-xs uppercase tracking-widest ${statusClass}`}>{status}</span>}
-          {inProduction && <span className="border border-cyber/50 bg-cyber/10 px-2 py-0.5 text-xs uppercase tracking-widest text-cyber">{inProduction}</span>}
+          {inProduction && (
+            <span className="inline-flex items-center gap-2 border border-cyber/50 bg-cyber/10 px-2 py-0.5 text-xs uppercase tracking-widest text-cyber">
+              {/* "Live" light: pulses softly, still under reduced motion. */}
+              <span aria-hidden="true" className="relative flex size-2">
+                <span className="absolute inset-0 rounded-full bg-cyber motion-safe:animate-ping" />
+                <span className="relative size-2 rounded-full bg-cyber shadow-[0_0_8px_var(--color-cyber)]" />
+              </span>
+              {inProduction}
+            </span>
+          )}
         </div>
 
         {/* CARD HEADER */}
@@ -87,8 +99,9 @@ const ProjectCard = ({
           )}
         </div>
 
-        {/* BLOC DATE */}
-        <div className="flex justify-end">
+        {/* BLOC DATE (and, for featured projects, the hint that a full case study opens) */}
+        <div className={`flex items-center ${isDossier ? "justify-between" : "justify-end"}`}>
+          {isDossier && <span className="text-sm text-amber-300/90 transition-colors group-hover:text-amber-200">Lire l’étude →</span>}
           <span className="text-sm text-zinc-400 group-hover:text-cyber/80 transition-colors uppercase tracking-widest">
             [{date}]
           </span>
