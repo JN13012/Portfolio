@@ -45,6 +45,8 @@ export type Project = {
   slug: string
   tier: ProjectTier
   status: ProjectStatus
+  /** Shown with the personal & professional projects although made in a course (e.g. Argos, pursued beyond Epitech). */
+  showcase?: 'perso-pro'
   /** Where the project is used for real, e.g. « En production chez ULIT ». */
   inProduction?: Localized
   tracks: Track[]

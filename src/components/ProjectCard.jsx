@@ -15,6 +15,7 @@ const ProjectCard = ({
   ongoing,
   complexity,
   privateCode,
+  context,
 }) => {
   const visibleTags = tags.slice(0, 8);
   const hasMoreTags = tags.length > visibleTags.length;
@@ -46,6 +47,7 @@ const ProjectCard = ({
         {/* STATUS */}
         {/* Only real company use is flagged here; the date says whether the project is ongoing. */}
         <div className="mb-3 flex min-h-[1.375rem] flex-wrap gap-2">
+          {context && <span className="border border-white/15 bg-white/5 px-2 py-0.5 text-xs tracking-widest text-zinc-300 uppercase">{context}</span>}
           {inProduction && (
             <span className="inline-flex items-center gap-2 border border-cyber/50 bg-cyber/10 px-2 py-0.5 text-xs uppercase tracking-widest text-cyber">
               {/* "Live" light: pulses softly, still under reduced motion. */}

@@ -8,6 +8,12 @@ export type ProjectFilter = {
   statuses?: ProjectStatus[]
 }
 
+export type ProjectGroup = 'perso-pro' | 'formation'
+
+/** Personal and work projects first; course projects (Epitech, IBM, hackathon) second. */
+export const groupOf = (p: Project): ProjectGroup =>
+  p.showcase === 'perso-pro' || p.context === 'personal' || p.context === 'work' ? 'perso-pro' : 'formation'
+
 /** Complexity note 1–5 (src/content/complexity.ts); 1 if a project has none yet. */
 export const complexityOf = (p: Project) => complexity[p.slug]?.note ?? 1
 
