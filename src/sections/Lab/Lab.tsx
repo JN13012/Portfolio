@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import SectionHeader from '../../components/SectionHeader'
 import writeupsIndex from '../../content/writeups.json'
+import { CtfIntro } from './CtfIntro'
 import { cx } from '../../lib/cx'
 
 // The CTF console (3,000+ lines) is fetched only when the Lab comes near the viewport.
@@ -24,24 +25,6 @@ const writeups = writeupsIndex.writeups.map((w) => ({
   ...w,
   topics: TOPIC_KEYS.filter((k) => TOPICS[k].rule.test(`${w.focus} ${w.environment ?? ''}`)),
 }))
-
-const CTF_PHASES = [
-  { title: 'Reconnaissance', levels: [1, 2, 3] },
-  { title: 'Exploitation', levels: [4, 5, 6] },
-  { title: 'Défense', levels: [7, 8, 9] },
-]
-
-const CTF_SKILLS = [
-  'Système Linux & recherche de fichiers',
-  'Réseaux TCP/IP & services exposés',
-  'Scan, énumération & reconnaissance',
-  'Exploitation web & injection SQL',
-  'Cassage de hashs & accès SSH',
-  'Exploitation système & élévation de privilèges',
-  'Analyse SIEM & corrélation de logs',
-  'Forensique, investigation & confinement',
-  'Durcissement : WAF, firewall & IDS',
-]
 
 function useNearViewport<T extends Element>() {
   const ref = useRef<T>(null)
@@ -95,51 +78,7 @@ export function Lab() {
                 <div className="flex items-center gap-2 border-b border-white/10 bg-zinc-900 px-3 py-2 font-mono text-[10px] tracking-widest text-white uppercase">
                   <span className="text-cyber">&gt;_</span> ctf@lab:~
                 </div>
-                {/* Faint grid and a green glow behind the text: a lit screen rather than flat black. */}
-                <div
-                  className="flex flex-1 flex-col items-center overflow-y-auto px-6 py-8 text-center font-mono"
-                  style={{
-                    backgroundImage:
-                      'radial-gradient(ellipse 70% 45% at 50% 0%, rgba(74,222,128,0.13), transparent 70%), linear-gradient(rgba(74,222,128,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.045) 1px, transparent 1px)',
-                    backgroundSize: '100% 100%, 28px 28px, 28px 28px',
-                  }}
-                >
-                  <p className="text-2xl font-bold tracking-[0.25em] text-cyber uppercase [text-shadow:0_0_18px_rgba(74,222,128,0.45)]">Laboratoire cybersécurité</p>
-                  <p className="mt-2 text-[15px] text-zinc-300">CTF en 9 niveaux · de la reconnaissance à la défense</p>
-
-                  {/* The 9 levels as one centred path, in three phases. */}
-                  <ol className="mt-8 w-full max-w-lg text-left">
-                    {CTF_PHASES.map((phase) => (
-                      <li key={phase.title} className="mb-4 last:mb-0">
-                        <p className="mb-2.5 flex items-center gap-3 text-[11px] tracking-[0.3em] text-zinc-400 uppercase">
-                          <span className="h-px flex-1 bg-white/10" />
-                          {phase.title}
-                          <span className="h-px flex-1 bg-white/10" />
-                        </p>
-                        <ol className="relative space-y-2 border-l border-cyber/25 pl-5">
-                          {phase.levels.map((n) => (
-                            <li key={n} className="relative text-[15px] text-zinc-100">
-                              <span aria-hidden="true" className="absolute top-1/2 -left-[1.4rem] size-1.5 -translate-y-1/2 rounded-full bg-cyber shadow-[0_0_6px_var(--color-cyber)]" />
-                              <span className="mr-3 text-cyber tabular-nums">{String(n).padStart(2, '0')}</span>
-                              {CTF_SKILLS[n - 1]}
-                            </li>
-                          ))}
-                        </ol>
-                      </li>
-                    ))}
-                  </ol>
-
-                  <button
-                    type="button"
-                    onClick={() => setStarted(true)}
-                    className="group relative mt-auto inline-flex items-center gap-3 border border-cyber/70 bg-cyber/10 px-9 py-3.5 text-[15px] tracking-[0.3em] text-cyber uppercase transition-colors hover:bg-cyber/20 focus-visible:outline-2 focus-visible:outline-cyber"
-                  >
-                    {/* Soft breathing glow and a blinking cursor invite the click (still under reduced motion). */}
-                    <span aria-hidden="true" className="absolute -inset-1 rounded-sm border border-cyber/40 motion-safe:animate-[ping_2.2s_cubic-bezier(0,0,0.2,1)_infinite]" />
-                    ▶ Commencer
-                    <span aria-hidden="true" className="-ml-1 inline-block h-4 w-2 bg-cyber motion-safe:animate-[blink_1s_steps(1)_infinite]" />
-                  </button>
-                </div>
+                <CtfIntro onStart={() => setStarted(true)} />
               </>
             )}
           </div>
