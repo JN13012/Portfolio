@@ -297,14 +297,14 @@ body {
   }
 }
 
-/* CTF start button: a green glow that breathes, from barely visible to soft. */
-@keyframes start-glow {
+/* CTF start button: blinks to invite the click, softer at its brightest and nearly off at its dimmest. */
+@keyframes start-blink {
   0%,
   100% {
-    filter: drop-shadow(0 0 1px rgba(74, 222, 128, 0.06));
+    opacity: 0.8;
   }
   50% {
-    filter: drop-shadow(0 0 9px rgba(74, 222, 128, 0.28));
+    opacity: 0.12;
   }
 }
 
