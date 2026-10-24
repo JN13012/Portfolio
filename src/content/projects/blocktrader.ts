@@ -78,7 +78,7 @@ export const blocktrader: Project = {
       },
     },
   ],
-  stack: ['Python', 'numba', 'pandas', 'VectorBT', 'web3.py', 'GitHub Actions', 'Google Cloud Scheduler', 'React', 'TypeScript'],
+  stack: ['Python', 'NumPy', 'Numba', 'pandas', 'VectorBT', 'web3.py', 'GitHub Actions', 'Google Cloud Scheduler', 'React', 'TypeScript'],
   links: { privateRepo: true },
   facts: [
     { value: '46', label: { fr: 'tests', en: 'tests' }, source: "grep -rE '^\\s*def test_' tests/ (46 functions, 55 collected cases)" },
