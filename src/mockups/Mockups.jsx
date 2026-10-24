@@ -14,6 +14,7 @@ const GlobeStill = lazy(() => import("./GlobeStill"));
 const V3 = lazy(() => import("./V3"));
 const ExpertiseTweaks = lazy(() => import("./ExpertiseTweaks"));
 const ExpertiseGrid = lazy(() => import("./ExpertiseGrid"));
+const ProjectFilters = lazy(() => import("./ProjectFilters"));
 import { emitCore } from "../lib/coreBus";
 import Profil from "../assets/Profil.webp";
 import THM from "../assets/THM.jpg";
@@ -390,6 +391,12 @@ export default function Mockups() {
   const params = new URLSearchParams(window.location.search);
   const [gate, setGate] = useState(["globe", "argos"].includes(params.get("gate")));
   const Gate = params.get("gate") === "argos" ? ArgosGate : GlobeGate;
+  if (params.get("view") === "filters")
+    return (
+      <Suspense fallback={null}>
+        <ProjectFilters />
+      </Suspense>
+    );
   if (params.get("view") === "grid")
     return (
       <Suspense fallback={null}>

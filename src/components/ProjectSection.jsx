@@ -80,7 +80,7 @@ const CONTEXT_LABEL = {
 
 const formatPeriod = (period) => {
   const f = (ym) => ym.split("-").reverse().join("/");
-  return period.end ? (period.end === period.start ? f(period.start) : `${f(period.start)} – ${f(period.end)}`) : `depuis ${f(period.start)}`;
+  return period.end ? (period.end === period.start ? f(period.start) : `${f(period.start)} – ${f(period.end)}`) : f(period.start);
 };
 
 const STATUS_FILTERS = ["production", "test", "delivered", "development"];
