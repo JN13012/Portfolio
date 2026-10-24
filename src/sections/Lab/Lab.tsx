@@ -88,23 +88,22 @@ export function Lab() {
           <p className="text-xl font-bold tracking-[0.2em] text-cyber uppercase">
             Write-ups <span className="text-zinc-500">· {visible.length}</span>
           </p>
-          <div role="group" aria-label="Filtrer les write-ups" className="flex flex-wrap gap-1">
-            {[null, ...TOPIC_KEYS].map((k) => (
-              <button
-                key={k ?? 'all'}
-                type="button"
-                aria-pressed={topic === k}
-                onClick={() => setTopic(k)}
-                className={cx(
-                  'rounded-full px-3.5 py-1.5 text-sm transition-colors',
-                  topic === k ? 'bg-white/10 text-white ring-1 ring-white/20' : 'text-zinc-400 hover:text-white',
-                )}
-              >
-                {k ? TOPICS[k].label : 'Tous'}
-              </button>
-            ))}
+          {/* Topic tabs, same style as the Projects job tabs: underline and count badge. */}
+          <div role="group" aria-label="Filtrer les write-ups" className="flex flex-wrap gap-x-6 gap-y-2">
+            {[null, ...TOPIC_KEYS].map((k) => {
+              const on = topic === k
+              const count = k ? writeups.filter((w) => w.topics.includes(k)).length : writeups.length
+              return (
+                <button key={k ?? 'all'} type="button" aria-pressed={on} onClick={() => setTopic(k)} className="group relative inline-flex items-center gap-2 pb-2 text-[15px]">
+                  <span className={on ? 'font-semibold text-white' : 'text-zinc-400 transition-colors group-hover:text-zinc-200'}>{k ? TOPICS[k].label : 'Tous'}</span>
+                  <span className={cx('rounded px-1.5 text-xs tabular-nums', on ? 'bg-cyber/25 text-white' : 'bg-cyber/10 text-cyber')}>{count}</span>
+                  <span aria-hidden="true" className="absolute bottom-0 left-0 h-0.5 rounded-full bg-cyber transition-all duration-300" style={{ width: on ? '100%' : '0%' }} />
+                </button>
+              )
+            })}
           </div>
-          <ul className="max-h-[clamp(14rem,calc(100svh-22.6rem),38rem)] divide-y divide-white/5 overflow-y-auto border border-white/10 bg-zinc-950/60">
+          {/* Fixed height whatever the filter, so the layout does not jump; the list scrolls inside. */}
+          <ul className="h-[clamp(14rem,calc(100svh-25rem),36rem)] divide-y divide-white/5 overflow-y-auto border border-white/10 bg-zinc-950/60">
             {visible.map((w) => (
               <li key={w.slug}>
                 <a href={w.url} target="_blank" rel="noreferrer" className="group grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 px-4 py-3 transition-colors hover:bg-cyber/5">
