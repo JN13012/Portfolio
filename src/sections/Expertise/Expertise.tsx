@@ -163,8 +163,8 @@ function ToolGrid({ domain }: { domain: ExpertiseDomain }) {
           className="group flex w-[calc((100%-1.5rem)/3)] flex-col items-center gap-2 rounded-xl border border-white/[0.07] bg-zinc-950/45 px-3 pt-5 pb-4 text-center transition-all duration-300 hover:-translate-y-0.5 sm:w-[calc((100%-3rem)/5)]"
           style={{ ['--accent' as string]: accent }}
         >
-          <span className="grid h-14 place-items-center transition-transform duration-300 group-hover:scale-110">
-            <Logo name={t.name} size={56} tone={accent} />
+          <span className="grid h-[68px] place-items-center transition-transform duration-300 group-hover:scale-110">
+            <Logo name={t.name} size={68} tone={accent} />
           </span>
           <span className="text-sm font-semibold text-zinc-100">{t.name}</span>
           <span className="text-xs leading-snug text-zinc-400">{t.note.fr}</span>
