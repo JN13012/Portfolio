@@ -53,7 +53,7 @@ const IMAGES = {
 };
 
 const TRACK_LABEL = { ia: "IA", cyber: "Cyber", dev: "Dev" };
-const TRACK_DOT = { ia: "bg-sky-400", cyber: "bg-rose-500", dev: "bg-emerald-400" };
+const TRACK_COLOR = { ia: "#38bdf8", cyber: "#f43f5e", dev: "#34d399" };
 
 const trackThemes = {
   ia: { card: "hover:border-cyber/40", badge: "text-blue-300 border-blue-500/30 bg-blue-500/10" },
@@ -63,11 +63,8 @@ const trackThemes = {
 };
 
 const statusStyles = {
-  production: "text-cyber border-cyber/50 bg-cyber/10",
-  test: "text-yellow-300 border-yellow-500/40 bg-yellow-500/10",
   delivered: "text-zinc-200 border-white/25 bg-white/5",
   development: "text-sky-300 border-sky-500/40 bg-sky-500/10",
-  designed: "text-zinc-400 border-white/15 bg-white/5",
 };
 
 const CONTEXT_LABEL = {
@@ -83,7 +80,7 @@ const formatPeriod = (period) => {
   return period.end ? (period.end === period.start ? f(period.start) : `${f(period.start)} – ${f(period.end)}`) : f(period.start);
 };
 
-const STATUS_FILTERS = ["production", "test", "delivered", "development"];
+const STATUS_FILTERS = ["development", "delivered"];
 
 const ProjectSection = () => {
   const [selected, setSelected] = useState(null);
@@ -112,7 +109,6 @@ const ProjectSection = () => {
   const totalPages = Math.max(1, Math.ceil(visible.length / PROJECTS_PER_PAGE));
   const page = visible.slice((currentPage - 1) * PROJECTS_PER_PAGE, currentPage * PROJECTS_PER_PAGE);
 
-  const toggle = (list, value) => (list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
   const updateTracks = (next) => {
     setTracks(next);
     setCurrentPage(1);
@@ -129,10 +125,6 @@ const ProjectSection = () => {
 
   const images = selected ? IMAGES[selected.slug] ?? [] : [];
 
-  const pill = (active) =>
-    `inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm transition-colors ${
-      active ? "bg-white/10 text-white ring-1 ring-white/20" : "text-zinc-400 hover:text-white"
-    }`;
   const select =
     "appearance-none rounded-md border border-white/10 bg-zinc-950/70 py-1.5 pr-8 pl-3 text-sm text-zinc-200 transition-colors hover:border-white/25 focus-visible:border-cyber/60 focus-visible:outline-none [&>option]:bg-zinc-900";
 
@@ -143,16 +135,27 @@ const ProjectSection = () => {
 
         {/* FILTERS: one line — job pills on the left, status and sort menus on the right. */}
         <div className="mb-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-b border-white/10 pb-5">
-          <div role="group" aria-label="Filtrer par métier" className="flex flex-wrap items-center gap-1">
-            <button type="button" aria-pressed={tracks.length === 0} onClick={() => updateTracks([])} className={pill(tracks.length === 0)}>
-              Tous
-            </button>
-            {["ia", "cyber", "dev"].map((t) => (
-              <button key={t} type="button" aria-pressed={tracks.includes(t)} onClick={() => updateTracks(toggle(tracks, t))} className={pill(tracks.includes(t))}>
-                <span aria-hidden="true" className={`size-1.5 rounded-full ${TRACK_DOT[t]}`} />
-                {TRACK_LABEL[t]}
-              </button>
-            ))}
+          {/* Job tabs: underlined like the Expertise list, with the number of projects in a coloured badge. */}
+          <div role="group" aria-label="Filtrer par métier" className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            {[null, "ia", "cyber", "dev"].map((t) => {
+              const on = t ? tracks.length === 1 && tracks[0] === t : tracks.length === 0;
+              const color = t ? TRACK_COLOR[t] : "#e4e4e7";
+              const count = filterProjects(projects, { tracks: t ? [t] : [], statuses }).length;
+              return (
+                <button key={t ?? "all"} type="button" aria-pressed={on} onClick={() => updateTracks(t ? [t] : [])} className="group relative inline-flex items-center gap-2 pb-2.5 text-lg">
+                  <span
+                    className={on ? "font-semibold" : "text-zinc-400 transition-colors group-hover:text-zinc-200"}
+                    style={on ? { backgroundImage: `linear-gradient(90deg, ${color} 10%, #fff 115%)`, WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" } : undefined}
+                  >
+                    {t ? TRACK_LABEL[t] : "Tous"}
+                  </span>
+                  <span className="rounded px-1.5 text-xs tabular-nums transition-colors" style={{ color: on ? "#fff" : color, background: on ? `${color}40` : `${color}14` }}>
+                    {count}
+                  </span>
+                  <span aria-hidden="true" className="absolute bottom-0 left-0 h-0.5 rounded-full transition-all duration-300" style={{ width: on ? "100%" : "0%", background: color }} />
+                </button>
+              );
+            })}
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -207,6 +210,7 @@ const ProjectSection = () => {
                 categorie={TRACK_LABEL[p.tracks[0]] ?? "Projet"}
                 date={formatPeriod(p.period)}
                 status={statusLabels[p.status].fr}
+                inProduction={p.inProduction?.fr}
                 statusClass={statusStyles[p.status]}
                 isDossier={p.tier === "dossier"}
                 theme={trackThemes[p.tracks[0]] || trackThemes.Default}
@@ -262,6 +266,7 @@ const ProjectSection = () => {
                 <span><span className="text-cyber">Équipe :</span> <span className="text-white">{selected.team.size > 1 ? (selected.team.label?.fr ?? `${selected.team.size} personnes`) : "Solo"}</span></span>
                 <span><span className="text-cyber">Contexte :</span> <span className="text-white">{CONTEXT_LABEL[selected.context]}</span></span>
                 <span className={`border px-2.5 py-1 ${statusStyles[selected.status]}`}>{statusLabels[selected.status].fr}</span>
+                {selected.inProduction && <span className="border border-cyber/50 bg-cyber/10 px-2.5 py-1 text-cyber">{selected.inProduction.fr}</span>}
               </div>
             </div>
 

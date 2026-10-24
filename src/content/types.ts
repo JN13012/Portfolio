@@ -7,10 +7,10 @@ export type Localized = Record<Locale, string>
 export type Track = 'ia' | 'cyber' | 'dev'
 
 /**
- * Honest project status, always shown next to a project.
- * `delivered` = finished and handed in (school, hackathon, course), not running in production.
+ * Honest project status, always shown next to a project: still being built, or finished.
+ * Real use by a company is said with `inProduction` on the project, not with a status.
  */
-export type ProjectStatus = 'production' | 'test' | 'delivered' | 'development' | 'designed'
+export type ProjectStatus = 'development' | 'delivered'
 
 /** ISO month: '2026-04'. */
 export type YearMonth = `${number}-${number}`
@@ -45,6 +45,8 @@ export type Project = {
   slug: string
   tier: ProjectTier
   status: ProjectStatus
+  /** Where the project is used for real, e.g. « En production chez ULIT ». */
+  inProduction?: Localized
   tracks: Track[]
   title: string
   period: { start: YearMonth; end?: YearMonth }
