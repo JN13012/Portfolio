@@ -45,20 +45,27 @@ for (const t of tracks) {
   p(`Preuves : ${t.proofs.map((x) => x.fr).join(' · ')}`)
 }
 
+// Card line, then the modal: angles, sections (with their lists) and figures.
+const projectDetail = (x: Project) => {
+  if (x.tagline) p(`*Carte* : ${x.tagline.fr}`)
+  p(modalSummary(x, 'fr'))
+  for (const [track, text] of Object.entries(x.angles ?? {})) p(`*Angle ${track}* : ${text.fr}`)
+  for (const s of x.sections ?? [])
+    p(`**${s.title.fr}.**${s.body ? ` ${s.body.fr}` : ''}${(s.points ?? []).map((pt) => `\n- ${pt.label ? `${pt.label.fr} : ` : ''}${pt.text.fr}`).join('')}`)
+  if (x.facts.length) p(`Chiffres : ${x.facts.map((f) => `${f.value} ${f.label.fr}`).join(' · ')}`)
+}
+
 h(2, 'Dossiers')
 for (const d of dossiers) {
   h(3, `${d.title} — ${statusLabels[d.status].fr} (${period(d.period)})`)
-  p(modalSummary(d, 'fr'))
-  for (const [track, text] of Object.entries(d.angles ?? {})) p(`*Angle ${track}* : ${text.fr}`)
-  for (const s of d.sections ?? []) p(`**${s.title.fr}.** ${s.body.fr}`)
-  if (d.facts.length) p(`Chiffres : ${d.facts.map((f) => `${f.value} ${f.label.fr}`).join(' · ')}`)
+  projectDetail(d)
   p(`Stack : ${d.stack.join(', ')}`)
 }
 
 h(2, 'Autres réalisations')
 for (const c of cards) {
   h(3, `${c.title} — ${statusLabels[c.status].fr}${c.team.size > 1 || c.team.role ? ` · ${teamLabel(c.team, 'fr')}` : ''}`)
-  p(modalSummary(c, 'fr'))
+  projectDetail(c)
 }
 
 h(2, 'Applications LLM (certification IBM)')
@@ -68,7 +75,10 @@ for (const a of llmApps) {
 }
 
 h(2, 'Archives')
-p(archive.map((a) => `- **${a.title}** (${a.period.start.slice(0, 4)}) — ${modalSummary(a, 'fr')}`).join('\n'))
+for (const a of archive) {
+  h(3, `${a.title} (${a.period.start.slice(0, 4)})`)
+  projectDetail(a)
+}
 
 h(2, 'Lab')
 p(`${writeups.writeups.length} write-ups indexés depuis ${writeups.repo} (métadonnées seulement).`)
