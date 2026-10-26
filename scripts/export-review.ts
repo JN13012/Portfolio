@@ -3,14 +3,16 @@
 
 import { writeFileSync } from 'node:fs'
 import { credentials, inProgress } from '../src/content/certifications'
+import { contact } from '../src/content/contact'
 import { hero } from '../src/content/hero'
 import { profile } from '../src/content/profile'
 import { archive, cards, dossiers } from '../src/content/projects'
+import { llmApps } from '../src/content/projects/llm-apps'
 import { skills } from '../src/content/skills'
 import { timeline } from '../src/content/timeline'
 import { atAGlance, tracks } from '../src/content/tracks'
 import type { Period, Project } from '../src/content/types'
-import { statusLabels } from '../src/content/ui'
+import { credentialKindLabels, credentialLevelLabels, modalSummary, statusLabels, teamLabel } from '../src/content/ui'
 import writeups from '../src/content/writeups.json'
 
 const out: string[] = []
@@ -46,7 +48,7 @@ for (const t of tracks) {
 h(2, 'Dossiers')
 for (const d of dossiers) {
   h(3, `${d.title} — ${statusLabels[d.status].fr} (${period(d.period)})`)
-  p(d.summary.fr)
+  p(modalSummary(d, 'fr'))
   for (const [track, text] of Object.entries(d.angles ?? {})) p(`*Angle ${track}* : ${text.fr}`)
   for (const s of d.sections ?? []) p(`**${s.title.fr}.** ${s.body.fr}`)
   if (d.facts.length) p(`Chiffres : ${d.facts.map((f) => `${f.value} ${f.label.fr}`).join(' · ')}`)
@@ -55,19 +57,26 @@ for (const d of dossiers) {
 
 h(2, 'Autres réalisations')
 for (const c of cards) {
-  h(3, `${c.title} — ${statusLabels[c.status].fr}${c.team.label ? ` · ${c.team.label.fr}` : ''}`)
-  p(c.summary.fr)
+  h(3, `${c.title} — ${statusLabels[c.status].fr}${c.team.size > 1 || c.team.role ? ` · ${teamLabel(c.team, 'fr')}` : ''}`)
+  p(modalSummary(c, 'fr'))
+}
+
+h(2, 'Applications LLM (certification IBM)')
+for (const a of llmApps) {
+  h(3, a.title)
+  p(modalSummary(a, 'fr'))
 }
 
 h(2, 'Archives')
-p(archive.map((a) => `- **${a.title}** (${a.period.start.slice(0, 4)}) — ${a.summary.fr}`).join('\n'))
+p(archive.map((a) => `- **${a.title}** (${a.period.start.slice(0, 4)}) — ${modalSummary(a, 'fr')}`).join('\n'))
 
 h(2, 'Lab')
 p(`${writeups.writeups.length} write-ups indexés depuis ${writeups.repo} (métadonnées seulement).`)
 
 h(2, 'Parcours')
 for (const e of timeline) {
-  h(3, `${e.title.fr} — ${e.organisation} (${period(e.period)})`)
+  h(3, `${e.title.fr} — ${e.organisations.map((o) => o.name).join(' · ')} (${e.periodLabel.fr})`)
+  if (e.badge) p(e.badge.fr)
   p(e.summary.fr)
   if (e.highlights) p(e.highlights.map((x) => `- ${x.fr}`).join('\n'))
 }
@@ -81,10 +90,16 @@ for (const [track, groups] of Object.entries(skills)) {
 h(2, 'Certifications')
 p(
   credentials
-    .map((c) => `- ${c.featured ? '**' : ''}${c.title}${c.featured ? '**' : ''} — ${c.issuer}, ${c.date}${c.note ? ` — ${c.note.fr}` : ''}`)
+    .map(
+      (c) =>
+        `- **${c.title}** — ${c.issuer}, ${c.date} · ${credentialKindLabels[c.kind].fr} · ${credentialLevelLabels[c.level]}${c.hours ? ` · ${c.hours} h` : ''} — ${c.note.fr}${c.previous ? ` ${c.previous.fr}` : ''}`,
+    )
     .join('\n'),
 )
-p(`En cours : ${inProgress.map((i) => `${i.title} (${Math.round(i.progress * 100)} % au ${i.measuredAt})`).join(' · ')}`)
+p(`En cours : ${inProgress.map((i) => `${i.title} (${Math.round(i.progress * 100)} % au ${i.measuredAt}) — ${i.note.fr}`).join(' · ')}`)
+
+h(2, 'Contact')
+p(Object.values(contact).map((x) => `- ${x.fr}`).join('\n'))
 
 h(2, 'Langues')
 p(profile.languages.map((l) => `${l.name.fr} (${l.level === 'native' ? 'langue maternelle' : l.level}${l.note ? `, ${l.note.fr}` : ''})`).join(' · '))

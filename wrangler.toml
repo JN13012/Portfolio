@@ -6,3 +6,12 @@ compatibility_date = "2026-05-18"
 directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
+
+# Contact form: at most 3 messages per minute per IP (Workers rate-limiting binding, read in src/contactEmail.js).
+[[ratelimits]]
+name = "CONTACT_LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 3
+  period = 60

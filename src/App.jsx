@@ -4,13 +4,13 @@ import "./App.css";
 import NavBar from "./components/NavBar";
 import ProjectSection from "./components/ProjectSection";
 import Certifications from "./components/Certifications";
-import Contact from "./components/Contact";
 import { NetworkBackground2 } from "./components/NetworkBackground2";
 import { Hero } from "./sections/Hero/Hero";
 import { Profile } from "./sections/Profile/Profile";
 import { Lab } from "./sections/Lab/Lab";
 import { Expertise } from "./sections/Expertise/Expertise";
 import { Parcours } from "./sections/Parcours/Parcours";
+import { Contact } from "./sections/Contact/Contact";
 import { profile } from "./content/profile";
 
 // three.js intro, loaded only when it is shown.
@@ -71,7 +71,7 @@ function App() {
         <Expertise />
         <ProjectSection />
         <Lab />
-        <Parcours />
+        <Parcours effects />
         <Certifications />
         <Contact />
       </main>

@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-10-24 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-10-26 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Hero
@@ -27,45 +27,57 @@ Des applications LLM de bout en bout (RAG, voix, orchestration), avec des garde-
 
 Preuves : IBM AI Developer Professional · 4 applications LLM publiées · Atelier « Supercharging Your Pentesting With AI »
 
+### Data
+
+Des données publiques à la décision : nettoyage, géotraitement, cartes et indicateurs sourcés.
+
+Preuves : 2e place au hackathon Microsoft × Citiz · Réseau piéton de 16,6 M nœuds
+
 ### Cyber
 
 Pentest web et Active Directory avec une méthode documentée de bout en bout, et une montée en compétence côté SOC.
 
-Preuves : Jr Penetration Tester (95 h) · 25 write-ups publiés · Un audit web autorisé · SOC Level 1 en cours
+Preuves : Jr Penetration Tester (96 h) · 25 write-ups publiés · Un audit web autorisé · SOC Level 1 en cours
 
 ### Dev
 
 Du code testé et automatisé, du prototype à la production.
 
-Preuves : Alternance full-stack Salesforce (ULIT) · Un outil interne en production · 46 tests et CI durcie sur BlockTrader
+Preuves : Stage full-stack Salesforce (ULIT) · Un outil interne en production · 56 tests et CI durcie sur BlockTrader
+
+### DevOps
+
+Conteneurs, orchestration et intégration continue, avec un pipeline durci sur BlockTrader.
+
+Preuves : Déploiement Kubernetes multi-nœuds (Bernstein) · Jenkins configuré par le code (My_Marvin) · 56 tests et CI durcie sur BlockTrader
 
 ## Dossiers
 
 ### BlockTrader — En développement (2026-07 → en cours)
 
-Banc de recherche pour stratégies de trading crypto, conçu pour ne pas se mentir : protocoles écrits avant les calculs, chaque essai enregistré, garde-fous contre le surapprentissage. En paper trading uniquement.
+Bot de trading crypto sécurisé, actuellement en phase de test : il conçoit et teste des stratégies sur BTC et ETH, étudie le marché à partir d’une dizaine de sources de données publiques, et vise à être piloté ensuite par une IA qui choisira les stratégies à suivre en fonction du marché.
 
-*Angle dev* : Moteur Python compilé (numba), vérifié contre VectorBT et une boucle de référence, 46 tests, CI durcie, exécution serverless.
+*Angle ia* : Pensé pour être piloté par une IA : stratégies validées et lecture du marché lui fourniront des conclusions vérifiables, et une règle de sûreté borne déjà ce qu’elle pourra faire.
 
-*Angle cyber* : Aucune clé ni signature, CI au moindre privilège avec actions épinglées par SHA, architecture de garde conçue pour le passage au réel.
+*Angle data* : Un observatoire du marché qui historise une dizaine de sources publiques, et une méthodologie statistique contre le surapprentissage (Sharpe dégonflé, holdout scellé).
 
-*Angle ia* : Méthodologie statistique contre le surapprentissage (Sharpe dégonflé, holdout scellé) et une règle de sûreté : l’IA ne pourra que réduire l’exposition.
+*Angle dev* : Moteur Python compilé (numba), vérifié contre VectorBT et une boucle de référence, 56 tests, CI durcie, exécution serverless.
 
-**Le problème.** La plupart des backtests sont trop beaux pour être vrais : à force d’essayer des variantes, on finit par trouver une stratégie qui a « marché » par hasard, ou qui utilise sans le savoir des informations du futur.
+**Le problème.** Un bot de trading ne vaut que par ses stratégies. Or la plupart des backtests sont trop beaux pour être vrais : à force d’essayer des variantes, on finit par trouver une stratégie qui a « marché » par hasard, ou qui utilise sans le savoir des informations du futur. Et une IA branchée sur de mauvaises stratégies ne ferait qu’amplifier l’erreur.
 
-**La méthode.** Chaque protocole est figé par écrit avant le moindre calcul (13 pré-enregistrements, commités avant leurs résultats). Chaque essai, échecs compris, est inscrit dans un registre (3 349 lignes). Le Sharpe est corrigé du nombre d’essais (Bailey et López de Prado, 2014), et une période de test scellée ne peut être consommée qu’une fois.
+**Les stratégies.** Le bot fait tourner 40 stratégies en parallèle, réparties en 6 familles : suivre la tendance, choisir entre BTC et ETH, diversifier, racheter dans les chutes, grilles, et des chefs d’orchestre qui répartissent le capital entre stratégies. Chaque protocole est figé par écrit avant le moindre calcul et chaque essai, échecs compris, est inscrit dans un registre (3 349 lignes). Les résultats sont corrigés du nombre d’essais, pour ne pas confondre chance et vraie performance, et une période de test mise de côté ne sert qu’une seule fois.
 
-**L’architecture.** Moteur de backtest en Python 3.12 compilé avec numba, dont les résultats sont recoupés avec VectorBT et avec une boucle de référence. Le paper trading tourne toutes les 4 heures sans serveur : Google Cloud Scheduler déclenche un workflow GitHub Actions, qui lit des cotations on-chain en lecture seule (Uniswap v3) sur Ethereum et Arbitrum. Un tableau de bord React suit le journal.
+**La data et l’architecture.** À chaque passage, un observatoire du marché note une dizaine de données publiques, sans clé ni compte : financement et positions ouvertes des contrats perpétuels, volatilité implicite des options, indice Fear & Greed, stablecoins en circulation, réserves des bourses, rapport COT du CME. Il se constitue ainsi un historique daté pour étudier le marché sans regarder dans le futur. Le moteur de backtest, en Python compilé avec numba, est recoupé avec VectorBT et une boucle de référence. Le paper trading tourne toutes les 4 heures sans serveur (Google Cloud Scheduler déclenche GitHub Actions) sur des cotations Uniswap v3 lues on-chain, sur Ethereum et Arbitrum, et un tableau de bord React suit le tout.
 
-**La sécurité.** Aucune clé privée, aucune signature, aucun fonds. La CI est au moindre privilège : lecture seule par défaut, actions épinglées par empreinte SHA, et le seul job autorisé à écrire n’exécute aucun code du projet. Un test injecte volontairement une stratégie qui « triche » avec le futur et vérifie qu’elle est détectée. Pour un éventuel passage au réel, l’architecture de garde est conçue (fonds dans un Safe, permissions Zodiac, clé dans un HSM Cloud KMS, coupe-circuit Ledger) mais pas implémentée.
+**La sécurité.** Aucune clé privée, aucune signature, aucun fonds. La CI est au moindre privilège : lecture seule par défaut, actions épinglées par empreinte SHA, et le seul job autorisé à écrire n’exécute aucun code du projet. Une donnée manquante ou incohérente met le bot en pause, jamais en position. Un test injecte volontairement une stratégie qui « triche » avec le futur et vérifie qu’elle est détectée. Pour un éventuel passage au réel, l’architecture de garde est conçue (fonds dans un Safe, permissions Zodiac, clé dans un HSM Cloud KMS, coupe-circuit Ledger) mais pas implémentée.
 
-**Le résultat.** Le banc a fait son travail : il a montré qu’aucune des stratégies testées n’est statistiquement prouvée sur l’historique. Le paper trading tourne depuis le 8 octobre 2026 ; un verdict sur l’exécution est prévu à trois mois, aucun verdict de performance avant un an.
+**Où en est le projet.** Le banc d’essai a fait son travail : il a montré qu’aucune des stratégies testées n’est statistiquement prouvée sur l’historique, ce qui évite de confier de mauvaises stratégies à une IA. La phase de test tourne depuis le 8 octobre 2026 : un premier verdict sur l’exécution (coûts, signaux, délais) est prévu en janvier 2027 ; la performance, elle, se jugera sur au moins un an de marché.
 
-**Les limites.** Paper trading uniquement. Aucun module d’IA n’est encore branché : la règle « l’IA ne peut que freiner » est une contrainte de conception. Dépôt privé.
+**La suite : le pilotage par IA.** L’IA n’est pas encore branchée. Elle s’appuiera sur les conclusions de l’observatoire pour choisir parmi les stratégies validées, avec une règle de sûreté déjà écrite : l’IA pourra réduire l’exposition ou mettre en pause, jamais déclencher un achat ni relever une limite. Paper trading uniquement, dépôt privé.
 
-Chiffres : 46 tests · 3 349 essais enregistrés · 13 protocoles pré-enregistrés · 0 € de fonds réels engagés
+Chiffres : 56 tests · 3 349 essais enregistrés · 13 protocoles pré-enregistrés · 0 € de fonds réels engagés
 
-Stack : Python, numba, pandas, VectorBT, web3.py, GitHub Actions, Google Cloud Scheduler, React, TypeScript
+Stack : Python, NumPy, Numba, pandas, VectorBT, web3.py, GitHub Actions, Google Cloud Scheduler, React, TypeScript
 
 ### Argos — En développement (2026-07 → en cours)
 
@@ -93,7 +105,7 @@ Stack : Python, httpx, SQLite, pytest
 
 **Le premier audit.** Audit de sécurité web mené dans un cadre autorisé sur une infrastructure réelle, environ 20 heures, conclu par un rapport technique. Le client et les résultats restent confidentiels.
 
-Chiffres : 25 write-ups publiés · 95 h parcours Jr Penetration Tester · ≈ 20 h premier audit autorisé
+Chiffres : 25 write-ups publiés · 96 h parcours Jr Penetration Tester · ≈ 20 h premier audit autorisé
 
 Stack : TryHackMe, Exegol, Nmap, Burp Suite, Metasploit, Hashcat
 
@@ -102,8 +114,6 @@ Stack : TryHackMe, Exegol, Nmap, Burp Suite, Metasploit, Hashcat
 Jeu de stratégie sur le thème de la cybersécurité, en phase de conception : un corpus de game design versionné, une banque de termes alignée sur MITRE ATT&CK et une première fondation technique sous Unity.
 
 *Angle dev* : Cœur de simulation déterministe testé, et un éditeur d’arbres de progression écrit à la main, sans framework.
-
-*Angle cyber* : Un vocabulaire de jeu calé sur MITRE ATT&CK, mais pensé pour rester compréhensible sans connaissances en cybersécurité.
 
 **La conception d’abord.** Avant de coder le jeu, tout est écrit et versionné : une vision canonique figée, un registre des décisions de design, une boussole de gameplay et 22 documents de segments, soit environ 141 000 mots hors archives.
 
@@ -117,19 +127,23 @@ Stack : Unity 6.3, C#, HTML, CSS, JavaScript, Markdown
 
 ## Autres réalisations
 
-### Générateur OTP RCS — Terminé · équipe de 6, hackathon
+### Générateur OTP RCS — Terminé · Équipe de 6 · backend et sécurité applicative
 
-Backend d’authentification à deux facteurs : génération, envoi par RCS (API smsmode) et vérification de codes à 6 chiffres. Seule l’empreinte SHA-256 des codes est stockée ; expiration, nombre d’essais limité et limitation par numéro et par IP.
+Hackathon inter-écoles : backend d’authentification à deux facteurs qui génère, envoie par RCS (API smsmode) et vérifie des codes à 6 chiffres. Seule l’empreinte SHA-256 des codes est stockée ; expiration, nombre d’essais limité et limitation par numéro et par IP. 3e place.
 
-### ChatFlow — Terminé · équipe de 4, Epitech
+### Hackathon Microsoft × Citiz — Terminé · Équipe de 5 · data engineer géospatial
+
+Hackathon Epitech : outil d’aide à la décision qui indique où ouvrir une station d’autopartage Citiz pour toucher le plus d’habitants au moindre coût. Réseau piéton, isochrones à 5 minutes, carte d’accès aux transports, modèle de prédiction et liste priorisée sous budget. 2e place.
+
+### ChatFlow — Terminé · Équipe de 4 · backend
 
 Messagerie temps réel façon plateforme communautaire : serveurs, salons, rôles, messages privés, pièces jointes. API Express documentée, client Next.js et application desktop Electron.
 
-### Time Manager — Terminé · binôme, Epitech
+### Time Manager — En développement · Équipe de 4 · backend
 
 Application de gestion du temps de travail : API NestJS typée avec Drizzle et Swagger, front React, tests unitaires et de bout en bout avec Vitest.
 
-### Salesforce Executor — Terminé · alternance chez ULIT
+### Code Executor — Terminé
 
 Éditeur interne pour l’écosystème Salesforce, utilisé en production chez ULIT : exécution, planification et chaînage de scripts, sauvegarde et suivi des logs.
 
@@ -149,13 +163,31 @@ Base de connaissances personnelle sous Obsidian : procédures, cheatsheets, work
 
 Parcours d’entraînement en 9 niveaux intégré au site, dans un terminal simulé : de la reconnaissance à l’analyse SIEM, la forensique et le durcissement.
 
-### Atlas Academy — En développement
+### Argos Security Arena — En développement
 
-Plateforme d’apprentissage cybersécurité et IA (parcours, modules, salles, progression), en pause : son moteur servira aux salles du Lab.
+Plateforme d’entraînement cyber (parcours, modules, salles, progression), en pause : elle deviendra l’arène d’entraînement d’Argos, un lab où s’exercer à l’attaque et à la défense.
 
 ### Smart Fridge — Terminé
 
 Pilotage de la phase de conception d’un produit : analyse de marché (SWOT, PESTEL), personas, cartographie des risques, indicateurs, budget et planning Gantt.
+
+## Applications LLM (certification IBM)
+
+### RAG PDF Chatbot
+
+Projet de certification IBM AI Developer : un chatbot répond aux questions sur des CV en PDF (découpage des documents, embeddings stockés dans FAISS, Llama 3 interrogé via LangChain), conteneurisé avec Docker.
+
+### Meeting Companion
+
+Projet de certification IBM AI Developer : un assistant de réunion transcrit l’audio avec Whisper, puis en tire résumé, plan d’action et analyse de tonalité avec le modèle Granite d’IBM.
+
+### Career Coach
+
+Projet de certification IBM AI Developer : un coach de carrière optimise le CV et rédige des lettres de motivation adaptées à une offre, avec Llama 3.2 sur IBM watsonx.ai.
+
+### Assistant Translator
+
+Projet de certification IBM AI Developer : un traducteur vocal transcrit la parole, la traduit avec Llama 3.3 via Groq, puis la relit à voix haute avec les services Watson.
 
 ## Archives
 
@@ -165,8 +197,8 @@ Pilotage de la phase de conception d’un produit : analyse de marché (SWOT, PE
 - **Vaultborn** (2025) — Action-RPG 2D en Java : 7 classes jouables, mondes interconnectés, inventaire et sauvegarde, architecture en patterns (Factory, World, Screen).
 - **CyberPong** (2025) — Pong futuriste en Python : niveaux progressifs, « virus » qui modifient la physique et introduction scénarisée.
 - **Unit Converter** (2025) — Convertisseur d’unités en terminal et en interface graphique Tkinter.
-- **AI Voice Assistant** (2026) — Assistant vocal : Llama 3 via Groq pour le raisonnement, IBM Watson pour la reconnaissance et la synthèse vocales, interface Flask.
-- **LLM Context Wrapper** (2026) — Surcouche Python à Hugging Face Transformers qui garde l’historique de conversation du modèle Blenderbot.
+- **AI Voice Assistant** (2026) — Projet de certification IBM AI Developer : un assistant vocal qui raisonne avec Llama 3 via Groq, reconnaît et synthétise la voix avec IBM Watson, dans une interface Flask.
+- **LLM Context Wrapper** (2026) — Projet de certification IBM AI Developer : une surcouche Python à Hugging Face Transformers qui garde l’historique de conversation du modèle Blenderbot.
 
 ## Lab
 
@@ -174,19 +206,43 @@ Pilotage de la phase de conception d’un produit : analyse de marché (SWOT, PE
 
 ## Parcours
 
-### Master of Science - Architecte des systèmes d’information, spécialité cybersécurité — Epitech (2025 – 2028)
+### Master of Science - Architecte des systèmes d’information — Epitech (2026 – 2028 · diplôme prévu en 2028)
 
-Cursus en alternance : architecture systèmes et réseaux, ingénierie logicielle, DevSecOps et cloud, sécurité réseau, audits et tests d’intrusion, gestion des risques et conformité (ISO 2700x, RGPD).
+En cours · 1re année de master
 
-### Développeur full-stack (alternance) — ULIT (2026-01 → 2026-06)
+Master informatique Bac+5 : une pédagogie par projets, au plus près des conditions de l’entreprise, pour devenir expert de sa spécialité.
 
-Développement sur Salesforce : applications Apex, Lightning Web Components et JavaScript, et un éditeur de scripts interne.
+- En alternance : 4 jours en entreprise, 1 jour à l’école. Entreprise d’accueil recherchée.
+- Concevoir, déployer et piloter des projets techniques : gestion de projet, qualité, méthodes Agile.
+- Projet de fin d’études sur un an et demi : de l’analyse du besoin et du design thinking jusqu’à la production.
+- Anglais technique, pour travailler dans un environnement international.
+- Spécialisation à choisir en janvier 2027.
+
+### Développeur full-stack Salesforce — ULIT (01/2026 – 06/2026)
+
+Stage · 6 mois
+
+Développement sur Salesforce : applications Apex, Lightning Web Components et JavaScript, et un éditeur de scripts interne utilisé en production.
 
 - Éditeur de scripts interne : exécution, historique, sauvegarde, versioning, planification et suivi des logs.
 - Résolution de tickets : corrections, évolutions fonctionnelles, traitement des données et des processus métier.
 - Mise en place de tests unitaires.
 
-### Entrepreneur - infrastructure blockchain — Indépendant (Depuis 2018)
+### Pré-MSc — Epitech (09/2025 – 2026)
+
+Année préparatoire au Master of Science.
+
+- La « piscine » : quatre mois d’immersion intensive dans le code pour poser les bases de la programmation.
+- Développement en Python et en Java, développement web.
+- Initiation au DevOps, à l’IA, la data et à la cybersécurité.
+
+### Investissement et veille crypto — Personnel (Depuis 2022)
+
+Activité personnelle
+
+Après le minage, je reste investi à titre personnel et je suis de près l’écosystème crypto : évolutions des protocoles, sécurité, régulation et trading.
+
+### Infrastructure de minage — Indépendant (2018 – 09/2022)
 
 Conception, assemblage et exploitation de fermes de minage (Ethereum avant le passage au Proof-of-Stake, Bitcoin, Raptoreum, Chia).
 
@@ -194,23 +250,32 @@ Conception, assemblage et exploitation de fermes de minage (Ethereum avant le pa
 - Optimisation des performances, de la consommation et du refroidissement (overclocking, undervolting).
 - Diagnostic des pannes et maintenance du matériel.
 
-### Technicien mécanique - compétition et maintenance — G-Drive Racing · Renault · Wärtsilä (5 ans, dont la saison WEC 2017)
+### Technicien mécanique - compétition et maintenance — G-Drive Racing · Wärtsilä · Renault (2017 – 07/2025)
 
-Championnat du monde d’endurance 2017 avec G-Drive Racing, dont les 24 Heures du Mans : responsable des pneumatiques sur prototype LMP2.
+Mécanique en compétition, puis en maintenance industrielle et en atelier automobile.
 
-- Pressions, préchauffage et préparation des trains de pneus ; ravitaillement et coordination des arrêts aux stands.
-- Diagnostic et réparation automobile chez Renault.
-- Contrôle et remise en service de pièces de moteurs marins et de groupes électrogènes chez Wärtsilä.
+- G-Drive Racing : championnat du monde d’endurance 2017, 1re place en LMP2 aux 6 Heures de Spa-Francorchamps (Belgique, 6 mai 2017) et participation aux 24 Heures du Mans. Responsable des pneumatiques sur prototype LMP2 (pressions, préchauffage, préparation des trains de pneus) et ravitaillement en carburant lors des arrêts aux stands.
+- Wärtsilä : contrôle et remise en service de pièces de moteurs marins et de groupes électrogènes.
+- Renault : diagnostic et réparation automobile.
 
 ### Préparateur et développeur de véhicules de compétition (Bac+2) — École de la Performance (2017)
 
-Formation aux métiers de technicien motoriste en sport automobile.
+Alternance
 
-### Combattant de l’infanterie — 2e Régiment d’Infanterie de Marine (2 ans)
+Formation en alternance de technicien de compétition : préparer, optimiser et régler une voiture de course, de l’atelier jusqu’au circuit.
 
-Formation militaire initiale, CPIS de Perpignan, stage au CNEC de Mont-Louis (franchissement, rusticité, autonomie).
+- Moteur et boîte de vitesses : préparation et optimisation pour la performance.
+- Cartographie : temps d’injection, richesse, avance à l’allumage.
+- Châssis et suspensions : réglages pour adapter la voiture au circuit et au pilote.
+- Mise en pratique en entreprise et en conditions de course.
 
-- Sang-froid, prise de décision et sens des responsabilités, utiles en environnement technique sous pression.
+### Formation militaire — Armée de terre (2014 – 2016)
+
+De la préparation commando à l’engagement comme militaire du rang : rigueur, endurance et esprit d’équipe en conditions exigeantes.
+
+- Préparation militaire commando au Centre parachutiste d’instruction spécialisée (CPIS) de Perpignan.
+- Stage au Centre national d’entraînement commando (CNEC) de Mont-Louis : franchissement, rusticité, autonomie.
+- Engagement et formation initiale de militaire du rang au 2e Régiment d’infanterie de marine (2e RIMa).
 
 ## Compétences
 
@@ -219,6 +284,11 @@ Formation militaire initiale, CPIS de Perpignan, stage au CNEC de Mont-Louis (fr
 - **Applications LLM** : LangChain, RAG, FAISS, IBM watsonx, Llama 3, Groq, Hugging Face Transformers, Gradio
 - **Voix et langage** : Whisper, IBM Watson STT / TTS, spaCy, NLP
 - **Python et données** : Python, Flask, PyTorch, Pandas, NumPy
+
+### data
+
+- **Traitement de données** : Python, Pandas, NumPy, SciPy, Parquet
+- **Géodonnées** : GeoPandas, Shapely, OSMnx, NetworkX
 
 ### cyber
 
@@ -230,22 +300,62 @@ Formation militaire initiale, CPIS de Perpignan, stage au CNEC de Mont-Louis (fr
 
 ### dev
 
-- **Langages** : TypeScript, JavaScript, Python, Java, Apex, SQL
+- **Langages** : TypeScript, JavaScript, Python, Java, C#, Apex, SQL
 - **Web et back-end** : React, Next.js, NestJS, Express, Prisma, Drizzle, Socket.IO, Electron, Lightning Web Components
 - **Données** : PostgreSQL, MySQL, MongoDB, SQLite, Redis
-- **Tests, CI et déploiement** : Vitest, Jest, pytest, GitHub Actions, Docker, Docker Compose, Kubernetes, Jenkins
+- **Tests** : Vitest, Jest, pytest
+
+### devops
+
+- **Conteneurs et orchestration** : Docker, Docker Compose, Kubernetes, k3d, Traefik
+- **Intégration continue** : GitHub Actions, Jenkins, Groovy
 
 ## Certifications
 
-- **Jr Penetration Tester** — TryHackMe, 2026-10-07 — Parcours pentest : reconnaissance, web (OWASP), exploitation, élévation de privilèges, Metasploit, Burp Suite.
-- **IBM AI Developer** — IBM · Coursera, 2026-04-08 — 10 cours : IA générative, prompt engineering, applications Python et Flask, chatbots et applications LLM.
-- **Cyber Security 101 (SEC1)** — TryHackMe, 2026-05-24 — Certification à examen : réseau, Linux et Windows, outils offensifs et défensifs, cryptographie, sécurité web.
-- **Supercharging Your Pentesting With AI** — TryHackMe, 2026-10-05 — Atelier de 5 crédits CPE : pentest assisté par IA, workflows agentiques, construction de harness, durcissement de prompts, CTF.
-- Cyber Security 101 — TryHackMe, 2025-10-14
-- Pre Security (SEC0) — TryHackMe, 2026-05-19
-- Pre Security — TryHackMe, 2026-04-14
+- **Jr Penetration Tester** — TryHackMe, 2026-10-07 · Parcours · HARD · 96 h — Le parcours pentest le plus complet de TryHackMe, dans sa version refaite en 2026 (89 salles, 17 modules). Toute la méthodologie d’un test d’intrusion : reconnaissance passive et active, scan Nmap, sécurité web avec Burp Suite (SQLi, XSS, CSRF, SSRF, IDOR, authentification, inclusion de fichiers, injection de commandes, API, OWASP Top 10 2025), recherche et exploitation de CVE, attaques de mots de passe, Metasploit et shells, élévation de privilèges Linux et Windows, Active Directory (énumération, collecte d’identifiants, mouvement latéral, pivot), pentest de LLM, scripts Python et rédaction de rapport. Il se termine par des challenges complets, de la reconnaissance à la compromission. C’est le parcours de préparation à la certification PT1.
+- **Security Engineer** — TryHackMe, 2026-10-18 · Parcours · EASY · 65 h — Parcours d’ingénierie sécurité, côté défense : sécurité des réseaux et des systèmes, durcissement, développement sécurisé (SSDLC, tests SAST et DAST, sécurité des API), modélisation des menaces, gestion des vulnérabilités et des risques, réponse à incident.
+- **Supercharging Your Pentesting With AI** — TryHackMe, 2026-10-05 · Atelier · MEDIUM — Atelier pratique de 5 crédits CPE : pentest assisté par IA, workflows agentiques, accès aux outils et construction de harness, durcissement de prompts, CTF.
+- **Cyber Security 101 (SEC1)** — TryHackMe, 2026-05-24 · Examen · MEDIUM — Examen pratique : analyse réseau (PCAP, Wireshark), administration et durcissement Windows et Linux (services, journaux), pentest web (reconnaissance, Burp Suite, SQLi), opérations SOC (surveillance et tri d’alertes), brute force et cassage de mots de passe, analyse statique de malware.
+- **Pre Security (SEC0)** — TryHackMe, 2026-05-19 · Examen · INTRO — Examen d’entrée en cybersécurité : fonctionnement d’un ordinateur, systèmes d’exploitation, réseaux, web et concepts de sécurité.
+- **Pre Security** — TryHackMe, 2026-04-14 · Parcours · INTRO · 20 h — Les fondamentaux avant la sécurité : réseaux, fonctionnement du web, systèmes Linux et Windows, principes de sécurité offensive et défensive. Première version du parcours terminée en 09/2025 (8 h). Refait en entier après sa refonte par TryHackMe : nouvelle version terminée le 14/04/2026.
+- **Cyber Security 101** — TryHackMe, 2025-10-14 · Parcours · EASY · 46 h — Administration Linux et Windows, analyse réseau, cryptographie, exploitation de vulnérabilités web et système, principes de réponse à incident et d’analyse forensique, configuration de pare-feu et d’IDS/IPS.
+- **IBM AI Developer** — IBM · Coursera, 2026-04-08 · Certificat professionnel · MEDIUM · 160 h — Certificat professionnel de 10 cours, orienté développement d’applications d’IA avec Python : data science, IA générative, orchestration de modèles, pipelines NLP et RAG.
+- **AI for Developers** — IBM · Coursera, 2026-04 · Cours · INTRO · 25 h — L’IA générative au service du développement logiciel : assistance au code, débogage, refactoring, tests et automatisation des workflows.
+- **AI Powered Apps** — IBM · Coursera, 2026-03 · Cours · EASY · 14 h — Conception d’applications d’IA : assistants, transcription et synthèse vocale, traduction contextuelle, analyse de documents, pipelines RAG et orchestration de modèles génératifs.
+- **AI Apps with Flask** — IBM · Coursera, 2026-01 · Cours · EASY · 11 h — Développement d’applications d’IA avec Flask, dont un chatbot qui garde le contexte de la conversation : pipelines NLP et orchestration des modèles côté serveur.
+- **Python for AI & Data Science** — IBM · Coursera, 2025-12 · Cours · EASY · 25 h — Python pour la data science : manipulation de datasets et de DataFrames (filtrage, nettoyage, transformation), web scraping et extraction automatisée de données.
+- **Frontend Basics** — IBM · Coursera, 2025-12 · Cours · INTRO · 14 h — Introduction au développement web : pages en HTML et CSS, interactivité en JavaScript.
+- **Software Engineering** — IBM · Coursera, 2025-12 · Cours · INTRO · 14 h — Principes de l’ingénierie logicielle : cycle de vie (SDLC), architectures et bases du développement en Python.
+- **Prompt Engineering** — IBM · Coursera, 2025-12 · Cours · INTRO · 9 h — Techniques de prompt engineering : structuration des prompts, gestion du contexte et amélioration des réponses.
+- **Introduction to GenAI** — IBM · Coursera, 2025-12 · Cours · INTRO · 8 h — Les concepts de l’IA générative : modèles, outils et cas d’usage dans différents secteurs.
+- **Introduction to AI** — IBM · Coursera, 2025-12 · Cours · INTRO · 12 h — Les fondamentaux de l’IA : machine learning, deep learning, réseaux de neurones, applications métier et enjeux de gouvernance.
 
-En cours : SOC Level 1 (50 % au 2026-10-17)
+En cours : SOC Level 1 (50 % au 2026-10-17) — Parcours d’analyste SOC de niveau 1 : tri d’alertes, analyse de phishing, analyse du trafic réseau, surveillance des postes Windows et Linux, SIEM et réponse à incident.
+
+## Contact
+
+- Échangeons sur une opportunité.
+- Recruteur, RH ou porteur de projet : écrivez-moi ici, ou directement par email.
+- Marseille · mobile dans toute la France
+- Disponible
+- Télécharger le CV
+- Copier l’adresse
+- Copiée
+- Nom
+- Votre nom
+- Email
+- prenom.nom@entreprise.com
+- Sujet
+- Opportunité, alternance, projet…
+- Message
+- Décrivez votre besoin ou l’opportunité…
+- Envoyer
+- Envoi…
+- Message reçu.
+- Merci, je vous réponds par email dès que possible.
+- Envoyer un autre message
+- Le message n’a pas pu partir.
+- Écrire directement par email
 
 ## Langues
 

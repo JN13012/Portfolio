@@ -29,6 +29,19 @@ export const tracks: TrackContent[] = [
     featured: ['rag-pdf-chatbot', 'argos'],
   },
   {
+    id: 'data',
+    label: { fr: 'Data', en: 'Data' },
+    positioning: {
+      fr: 'Des données publiques à la décision : nettoyage, géotraitement, cartes et indicateurs sourcés.',
+      en: 'From open data to decisions: cleaning, geoprocessing, maps and sourced indicators.',
+    },
+    proofs: [
+      { fr: '2e place au hackathon Microsoft × Citiz', en: '2nd place at the Microsoft × Citiz hackathon' },
+      { fr: 'Réseau piéton de 16,6 M nœuds', en: '16.6 M-node pedestrian network' },
+    ],
+    featured: ['hackathon-citiz', 'bookworm'],
+  },
+  {
     id: 'cyber',
     label: { fr: 'Cyber', en: 'Cyber' },
     positioning: {
@@ -36,7 +49,7 @@ export const tracks: TrackContent[] = [
       en: 'Web and Active Directory pentesting with an end-to-end documented method, and growing SOC skills.',
     },
     proofs: [
-      { fr: 'Jr Penetration Tester (95 h)', en: 'Jr Penetration Tester (95 h)' },
+      { fr: 'Jr Penetration Tester (96 h)', en: 'Jr Penetration Tester (96 h)' },
       { fr: '25 write-ups publiés', en: '25 published write-ups' },
       { fr: 'Un audit web autorisé', en: 'One authorised web audit' },
       { fr: 'SOC Level 1 en cours', en: 'SOC Level 1 in progress' },
@@ -51,11 +64,25 @@ export const tracks: TrackContent[] = [
       en: 'Tested, automated code, from prototype to production.',
     },
     proofs: [
-      { fr: 'Alternance full-stack Salesforce (ULIT)', en: 'Full-stack Salesforce work-study (ULIT)' },
+      { fr: 'Stage full-stack Salesforce (ULIT)', en: 'Full-stack Salesforce internship (ULIT)' },
       { fr: 'Un outil interne en production', en: 'One internal tool in production' },
-      { fr: '46 tests et CI durcie sur BlockTrader', en: '46 tests and hardened CI on BlockTrader' },
+      { fr: '56 tests et CI durcie sur BlockTrader', en: '56 tests and hardened CI on BlockTrader' },
     ],
     featured: ['blocktrader', 'zeroday'],
+  },
+  {
+    id: 'devops',
+    label: { fr: 'DevOps', en: 'DevOps' },
+    positioning: {
+      fr: 'Conteneurs, orchestration et intégration continue, avec un pipeline durci sur BlockTrader.',
+      en: 'Containers, orchestration and continuous integration, with a hardened pipeline on BlockTrader.',
+    },
+    proofs: [
+      { fr: 'Déploiement Kubernetes multi-nœuds (Bernstein)', en: 'Multi-node Kubernetes deployment (Bernstein)' },
+      { fr: 'Jenkins configuré par le code (My_Marvin)', en: 'Jenkins configured as code (My_Marvin)' },
+      { fr: '56 tests et CI durcie sur BlockTrader', en: '56 tests and hardened CI on BlockTrader' },
+    ],
+    featured: ['kubernetes', 'my-marvin'],
   },
 ]
 

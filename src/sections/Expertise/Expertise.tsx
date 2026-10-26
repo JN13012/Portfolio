@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import {
+  siApacheparquet,
   siExpress,
   siGithubactions,
   siGradio,
@@ -9,11 +10,13 @@ import {
   siMongodb,
   siNestjs,
   siNextdotjs,
+  siOpenstreetmap,
   siPostgresql,
   siPrisma,
   siPytest,
   siRedis,
   siSalesforce,
+  siScipy,
   siSpacy,
   siTypescript,
   siVitest,
@@ -48,6 +51,9 @@ const SVG: Record<string, SimpleIcon> = {
   postgresql: siPostgresql,
   mongodb: siMongodb,
   redis: siRedis,
+  scipy: siScipy,
+  parquet: siApacheparquet,
+  osmnx: siOpenstreetmap,
 }
 
 /** Logos drawn small inside their image (wide wordmarks, padding) are scaled up to match the others. */
@@ -66,9 +72,10 @@ const ICON_SCALE: Record<string, number> = {
 /** accent: lines, glows; text: a brighter shade of the accent, readable as text on the dark page. */
 const HUE: Record<ExpertiseDomain['id'], { accent: string; text: string }> = {
   ia: { accent: '#818cf8', text: '#a5b4fc' },
+  data: { accent: '#eab308', text: '#fde047' },
   offensive: { accent: '#ef4444', text: '#f87171' },
   defensive: { accent: '#2563eb', text: '#60a5fa' },
-  devops: { accent: '#f59e0b', text: '#fbbf24' },
+  devops: { accent: '#f97316', text: '#fb923c' },
   dev: { accent: '#22c55e', text: '#4ade80' },
 }
 
@@ -79,7 +86,8 @@ const readable = (hex: string) => {
   return l < 0.32 ? '#e4e4e7' : `#${hex}`
 }
 
-export function Logo({ name, size, className, tone = '#a1a1aa' }: { name: string; size: number; className?: string; tone?: string }) {
+/** `onlyReal`: nothing when the tool has no real logo (no drawn emblem, no monogram). */
+export function Logo({ name, size, className, tone = '#a1a1aa', onlyReal }: { name: string; size: number; className?: string; tone?: string; onlyReal?: boolean }) {
   const k = key(name)
   if (PNG[k]) return <img src={PNG[k]} alt="" loading="lazy" decoding="async" draggable={false} className={cx('object-contain', className)} style={{ width: size, height: size }} />
   const icon = SVG[k]
@@ -89,6 +97,7 @@ export function Logo({ name, size, className, tone = '#a1a1aa' }: { name: string
         <path d={icon.path} fill={readable(icon.hex)} />
       </svg>
     )
+  if (onlyReal) return null
   const drawn = emblem(name, size, tone, className)
   if (drawn) return drawn
   const letters = name.replace(/[^A-Za-z0-9 ]/g, '').split(' ').filter(Boolean)
