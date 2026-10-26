@@ -37,7 +37,7 @@ export const tracks: TrackContent[] = [
     },
     proofs: [
       { fr: '2e place au hackathon Microsoft × Citiz', en: '2nd place at the Microsoft × Citiz hackathon' },
-      { fr: 'Réseau piéton de 16,6 M nœuds', en: '16.6 M-node pedestrian network' },
+      { fr: 'Réseau piéton de 16,6 M de nœuds', en: '16.6 M-node pedestrian network' },
     ],
     featured: ['hackathon-citiz', 'bookworm'],
   },

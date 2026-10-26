@@ -31,7 +31,7 @@ Preuves : IBM AI Developer Professional · 4 applications LLM publiées · Ateli
 
 Des données publiques à la décision : nettoyage, géotraitement, cartes et indicateurs sourcés.
 
-Preuves : 2e place au hackathon Microsoft × Citiz · Réseau piéton de 16,6 M nœuds
+Preuves : 2e place au hackathon Microsoft × Citiz · Réseau piéton de 16,6 M de nœuds
 
 ### Cyber
 
@@ -97,11 +97,11 @@ Stack : Python, NumPy, Numba, pandas, VectorBT, web3.py, GitHub Actions, Google 
 
 *Carte* : Plateforme de cybersécurité pilotée par IA pour les PME, du web à l’industrie.
 
-Une plateforme de cybersécurité pilotée par IA, pensée pour les PME sans équipe cyber : auditer, surveiller et faire corriger leur sécurité, avec une validation humaine à chaque étape. Le moteur OSINT est en développement ; les agents IA sont conçus, pas encore codés.
+Une plateforme de cybersécurité pilotée par IA, pensée pour les PME sans équipe cyber : auditer, surveiller et faire corriger leur sécurité, avec une validation humaine à chaque étape. Le moteur OSINT est en développement ; les agents IA restent à développer.
 
 *Angle cyber* : Six domaines d’audit prévus, du web à l’industrie, et un cadre écrit avant le code : mandat et périmètre non contournables, sources publiques, respect du RGPD.
 
-*Angle ia* : Des agents IA prévus pour planifier, analyser et rapprocher les données, avec une règle : l’IA assiste, les capacités essentielles fonctionnent sans elle. Conçus, pas encore codés.
+*Angle ia* : Des agents IA prévus pour planifier, analyser et rapprocher les données, avec une règle : l’IA assiste, les capacités essentielles fonctionnent sans elle. Encore à développer.
 
 **La vision.** Beaucoup de PME dépendent de leur informatique sans avoir les moyens d’un pentest régulier ni d’une équipe sécurité. Argos veut leur apporter une démarche professionnelle et continue : trouver les failles, prouver leur impact, faire corriger, puis vérifier.
 
@@ -119,7 +119,7 @@ Une plateforme de cybersécurité pilotée par IA, pensée pour les PME sans éq
 - IA et NLP : comprendre les textes collectés, classer et rapprocher les organisations.
 - Usages : cartographier ce qu’une organisation expose avant un audit, et trouver les entreprises qui ont besoin d’un service (pentest, site à refaire, agent vocal), dans le respect du RGPD.
 
-**Où en est le projet.** La première brique du moteur OSINT est codée : elle recherche des entreprises dans la base publique SIRENE de l’INSEE, garde la source et la date de chaque donnée et produit un rapport lisible. Le crawling, l’analyse, les agents IA et les étapes V1 à V6 sont conçus, pas encore développés.
+**Où en est le projet.** La première brique du moteur OSINT est codée : elle recherche des entreprises dans la base publique SIRENE de l’INSEE, garde la source et la date de chaque donnée et produit un rapport lisible. Le crawling, l’analyse, les agents IA et les étapes V1 à V6 restent à développer.
 
 Chiffres : 6 domaines de sécurité prévus · OSINT premier module en développement
 
@@ -161,7 +161,7 @@ Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se pr
 - 9 classes de malware : Ver, Trojan, Virus polymorphe, RAT, Rootkit, Botnet, Ransomware, Wiper, IA rogue.
 - 3 arbres d’évolution : Propagation, Adaptation, Impact.
 - 3 difficultés : Facile, Normal, Brutal.
-- Une carte du monde : 28 types de cibles : PC, smartphones, objets connectés, véhicules, data centers…
+- Une carte du monde : 28 types de cibles, des PC aux data centers, en passant par les smartphones, les objets connectés et les véhicules.
 - Progression : des déblocages permanents d’une partie à l’autre.
 - Prévu ensuite : un multijoueur avec classement, et une V2 où l’on joue l’humanité qui se défend.
 
@@ -211,13 +211,13 @@ Chiffres : 3e place · 4 jours de hackathon
 - Accessibilité : cartographier, pour chaque habitant, le nombre de transports accessibles à 5 minutes à pied.
 - Desserte : recenser les arrêts et les stations par type, avec la population qu’ils desservent.
 - Décision : estimer le potentiel de chaque site, chiffrer les coûts et classer les sites selon un budget.
-- Territoire : Auvergne-Rhône-Alpes, puis une simulation sur toute la France.
 
 **Ma part.**
-- Nettoyage : contrôle qualité des données géographiques : doublons, géométries invalides, valeurs manquantes.
-- Réseau piéton : construit depuis OpenStreetMap : 16,6 millions de nœuds, découpés en 835 tuiles.
-- Croisement : arrêts et stations raccordés au réseau, croisés avec la population.
-- Zones atteignables : calcul des zones à 5 minutes à pied autour de chaque arrêt.
+- Extraction : téléchargement et archivage des extraits OpenStreetMap, avec contrôle d’intégrité.
+- Nettoyage : contrôle qualité des données géographiques (doublons, géométries invalides, valeurs manquantes).
+- Réseau piéton : construit depuis OpenStreetMap, 16,6 millions de nœuds découpés en 835 tuiles.
+- Croisement : population, arrêts, stations et routes, pour relier chaque habitant au réseau.
+- Zones desservies : calcul des zones à 5 minutes à pied autour de chaque arrêt.
 - Accès et couverture : la carte d’accès et la population desservie, qui alimentent le modèle ; chaque étape testée.
 
 **Résultat.**
@@ -244,8 +244,9 @@ Une messagerie temps réel façon plateforme communautaire, sur le web et en app
 
 **Ma part.**
 - Membres : statut en ligne, exclusion, messages épinglés.
-- Invitations : une par personne, avec pagination.
-- Notifications et CI : les notifications et l’intégration continue.
+- Invitations : une invitation unique par personne, et une liste paginée.
+- Notifications : l’envoi des notifications aux membres.
+- CI : la mise en place de l’intégration continue.
 
 ### Time Manager — En développement · Équipe de 4 · Rôle : backend
 
@@ -540,7 +541,7 @@ Année préparatoire au Master of Science.
 
 - La « piscine » : quatre mois d’immersion intensive dans le code pour poser les bases de la programmation.
 - Développement en Python et en Java, développement web.
-- Initiation au DevOps, à l’IA, la data et à la cybersécurité.
+- Initiation au DevOps, à l’IA, à la data et à la cybersécurité.
 
 ### Investissement et veille crypto — Personnel (Depuis 2022)
 
@@ -554,6 +555,7 @@ Conception, assemblage et exploitation de fermes de minage (Ethereum avant le pa
 
 - Administration et supervision sous HiveOS, Braiins OS, Linux et Windows ; automatisation des redémarrages, mises à jour et gestion d’erreurs.
 - Optimisation des performances, de la consommation et du refroidissement (overclocking, undervolting).
+- Optimisation des stratégies de minage sur Ethereum : Flashbots et Maximal Extractable Value (MEV).
 - Diagnostic des pannes et maintenance du matériel.
 
 ### Technicien mécanique - compétition et maintenance — G-Drive Racing · Wärtsilä · Renault (2017 – 07/2025)
@@ -638,7 +640,7 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
   - Tests dans le pipeline : gestion des dépendances, tests SAST et DAST
   - Conteneurs : fonctionnement, failles et durcissement
   - Infrastructure as Code : sur site et dans le cloud
-- **Supercharging Your Pentesting With AI** — TryHackMe, 2026-09-30 · Atelier · MEDIUM · 5 h — Workshop animé par Lucas Romano : responsable SOC chez Cequence, chercheur de la Synack Red Team, ancien analyste à la NSA. Objectif : construire un agent IA capable de mener un test d’intrusion, de la reconnaissance à l’exploitation.
+- **Supercharging Your Pentesting With AI** — TryHackMe, 2026-09-30 · Atelier · MEDIUM · 5 h — Atelier animé par Lucas Romano : responsable SOC chez Cequence, chercheur de la Synack Red Team, ancien analyste à la NSA. Objectif : construire un agent IA capable de mener un test d’intrusion, de la reconnaissance à l’exploitation.
   - Donner à l’agent des outils de pentest : sqlmap, serveur MCP de Kali…
   - Répartir le travail entre sous-agents pour préserver le contexte
   - Choisir le modèle selon la tâche et son coût
@@ -647,7 +649,7 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
   - Mettre en pratique dans des labs, puis un CTF
 - **Cyber Security 101 (SEC1)** — TryHackMe, 2026-05-24 · Examen · MEDIUM — Examen pratique en scénarios sur 7 domaines, à mener sur une fenêtre de 24 h. 630 / 700 (90 %) · terminé en 9 h 55.
   - Réseau : analyse de captures (DNS, FTP, IMAP, TCP), identifiants en clair
-  - Systèmes : audit de configuration Linux et Windows : droits, services, tâches planifiées, journaux
+  - Systèmes : audit de configuration Linux et Windows (droits, services, tâches planifiées, journaux)
   - Pentest web : énumération, injection SQL, API exposées, upload de fichiers
   - Mots de passe : brute force et cassage (Hydra, John the Ripper, Hashcat)
   - SOC : journaux de pare-feu, alertes et règle Snort, réponse à incident
@@ -677,10 +679,10 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
   - Projet final : CodeCraftHub, une plateforme d’apprentissage pour développeurs
 - **Building Generative AI-Powered Applications with Python** — IBM · Coursera, 2026-03-29 · Cours · MEDIUM · 14 h — Une application d’IA générative par module, en Python. Six sont publiées sur GitHub et présentées dans les projets.
   - Chatbot : conversation avec mémoire sur un LLM open source (Blenderbot, Hugging Face)
-  - Voix : assistant vocal : reconnaissance et synthèse avec IBM Watson, réponses de Llama 3 via Groq
+  - Voix : un assistant vocal, avec la reconnaissance et la synthèse d’IBM Watson et les réponses de Llama 3 via Groq
   - Réunions : transcription avec Whisper, résumé et actions par un LLM sur watsonx
   - Documents : questions sur des CV en PDF avec le RAG (LangChain, FAISS, Llama 3)
-  - Traduction : traducteur vocal : parole, traduction par LLM, synthèse
+  - Traduction : un traducteur vocal qui écoute, traduit avec un LLM puis lit la traduction
   - Coach : CV adapté, lettre de motivation et conseils (Llama 3.2 sur watsonx, Gradio)
   - Image : légendes de photos générées (BLIP, Gradio)
 - **Developing AI Applications with Python and Flask** — IBM · Coursera, 2026-01-18 · Cours · MEDIUM · 13 h — Développer, tester et déployer des applications d’IA avec Python et Flask.

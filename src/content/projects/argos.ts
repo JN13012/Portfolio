@@ -17,8 +17,8 @@ export const argos: Project = {
     en: 'An AI-driven cybersecurity platform for SMEs, from web apps to industry.',
   },
   summary: {
-    fr: 'Une plateforme de cybersécurité pilotée par IA, pensée pour les PME sans équipe cyber : auditer, surveiller et faire corriger leur sécurité, avec une validation humaine à chaque étape. Le moteur OSINT est en développement ; les agents IA sont conçus, pas encore codés.',
-    en: 'An AI-driven cybersecurity platform for SMEs with no security team: audit, monitor and get their security fixed, with human validation at every step. The OSINT engine is in development; the AI agents are designed, not built yet.',
+    fr: 'Une plateforme de cybersécurité pilotée par IA, pensée pour les PME sans équipe cyber : auditer, surveiller et faire corriger leur sécurité, avec une validation humaine à chaque étape. Le moteur OSINT est en développement ; les agents IA restent à développer.',
+    en: 'An AI-driven cybersecurity platform for SMEs with no security team: audit, monitor and get their security fixed, with human validation at every step. The OSINT engine is in development; the AI agents are still to be built.',
   },
   angles: {
     cyber: {
@@ -26,8 +26,8 @@ export const argos: Project = {
       en: 'Six planned audit domains, from web apps to industry, and a framework written before the code: mandate and scope that cannot be bypassed, public sources, GDPR compliance.',
     },
     ia: {
-      fr: 'Des agents IA prévus pour planifier, analyser et rapprocher les données, avec une règle : l’IA assiste, les capacités essentielles fonctionnent sans elle. Conçus, pas encore codés.',
-      en: 'AI agents planned to plan, analyse and link data, under one rule: the AI assists, core capabilities work without it. Designed, not built yet.',
+      fr: 'Des agents IA prévus pour planifier, analyser et rapprocher les données, avec une règle : l’IA assiste, les capacités essentielles fonctionnent sans elle. Encore à développer.',
+      en: 'AI agents planned to plan, analyse and link data, under one rule: the AI assists, core capabilities work without it. Still to be built.',
     },
   },
   sections: [
@@ -91,8 +91,8 @@ export const argos: Project = {
       kind: 'result',
       title: { fr: 'Où en est le projet', en: 'Where it stands' },
       body: {
-        fr: 'La première brique du moteur OSINT est codée : elle recherche des entreprises dans la base publique SIRENE de l’INSEE, garde la source et la date de chaque donnée et produit un rapport lisible. Le crawling, l’analyse, les agents IA et les étapes V1 à V6 sont conçus, pas encore développés.',
-        en: 'The first brick of the OSINT engine is built: it searches companies in INSEE’s public SIRENE database, keeps the source and date of every data point and produces a readable report. Crawling, analysis, the AI agents and stages V1 to V6 are designed, not developed yet.',
+        fr: 'La première brique du moteur OSINT est codée : elle recherche des entreprises dans la base publique SIRENE de l’INSEE, garde la source et la date de chaque donnée et produit un rapport lisible. Le crawling, l’analyse, les agents IA et les étapes V1 à V6 restent à développer.',
+        en: 'The first brick of the OSINT engine is built: it searches companies in INSEE’s public SIRENE database, keeps the source and date of every data point and produces a readable report. Crawling, analysis, the AI agents and stages V1 to V6 are still to be built.',
       },
     },
   ],

@@ -110,7 +110,7 @@ export const timeline: TimelineEntry[] = [
         en: 'Python and Java development, web development.',
       },
       {
-        fr: 'Initiation au DevOps, à l’IA, la data et à la cybersécurité.',
+        fr: 'Initiation au DevOps, à l’IA, à la data et à la cybersécurité.',
         en: 'Introduction to DevOps, AI, data and cybersecurity.',
       },
     ],
@@ -159,6 +159,11 @@ export const timeline: TimelineEntry[] = [
       {
         fr: 'Optimisation des performances, de la consommation et du refroidissement (overclocking, undervolting).',
         en: 'Performance, power and cooling optimisation (overclocking, undervolting).',
+      },
+      // Told by Jérémie on 2026-10-26.
+      {
+        fr: 'Optimisation des stratégies de minage sur Ethereum : Flashbots et Maximal Extractable Value (MEV).',
+        en: 'Optimising mining strategies on Ethereum: Flashbots and Maximal Extractable Value (MEV).',
       },
       { fr: 'Diagnostic des pannes et maintenance du matériel.', en: 'Hardware fault diagnosis and maintenance.' },
     ],

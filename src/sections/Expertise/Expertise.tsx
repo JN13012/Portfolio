@@ -10,6 +10,7 @@ import {
   siEthereum,
   siExpress,
   siGeopandas,
+  siGnubash,
   siGit,
   siGithubactions,
   siGooglecloud,
@@ -31,6 +32,7 @@ import {
   siNextdotjs,
   siNodedotjs,
   siNumba,
+  siNvidia,
   siObsidian,
   siOpenai,
   siOpenstreetmap,
@@ -40,6 +42,7 @@ import {
   siPytest,
   siRedis,
   siSalesforce,
+  siScikitlearn,
   siScipy,
   siSocketdotio,
   siSpacy,
@@ -86,6 +89,10 @@ const SVG: Record<string, SimpleIcon> = {
   redis: siRedis,
   scipy: siScipy,
   geopandas: siGeopandas,
+  scikitlearn: siScikitlearn,
+  bash: siGnubash,
+  // garak's own mark is a plain wordmark: it shows NVIDIA's, which publishes it.
+  garak: siNvidia,
   numba: siNumba,
   parquet: siApacheparquet,
   osmnx: siOpenstreetmap,
@@ -131,8 +138,9 @@ const SVG: Record<string, SimpleIcon> = {
   toolingapi: siSalesforce,
 }
 
-/** Brand colours too dim on the dark page: Kali's slate mark takes its brighter brand blue. */
-const HEX: Record<string, string> = { kalilinux: '#4c8dff' }
+/** Brand colours that read wrong on the dark page: Kali's slate mark takes its brighter brand blue; Bash, whose
+ * Simple Icons green is not its logo's, is drawn in the light grey of the official monochrome mark. */
+const HEX: Record<string, string> = { kalilinux: '#4c8dff', bash: '#e4e4e7' }
 
 /** Logos drawn small inside their image (wide wordmarks, padding) are scaled up to match the others. */
 const ICON_SCALE: Record<string, number> = {
@@ -142,7 +150,9 @@ const ICON_SCALE: Record<string, number> = {
   remnux: 1.25,
   sqlmap: 1.15,
   spacy: 1.3,
-  pyproj: 1.3,
+  scikitlearn: 1.3,
+  ffuf: 1.35,
+  evilwinrm: 1.45,
   // Thin drawn emblems.
   faiss: 1.2,
   shapely: 1.35,
