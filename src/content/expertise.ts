@@ -94,6 +94,10 @@ export const expertise: ExpertiseDomain[] = [
       t('ffuf', 'Fuzzing web et énumération d’identifiants', 'Web fuzzing and username enumeration'),
       t('Burp Suite', 'Tests d’applications web', 'Web application testing'),
       t('SQLMap', 'Tests d’injection SQL', 'SQL injection testing'),
+      // AI security tools, used in the Jr Penetration Tester « LLM Pentesting » room (Jérémie, 2026-10-26).
+      t('Promptfoo', 'Pentest de LLM : tests d’attaque répétables', 'LLM pentesting: repeatable attack tests'),
+      t('garak', 'Scan de vulnérabilités d’un LLM', 'LLM vulnerability scanning'),
+      t('PyRIT', 'Campagnes de red teaming sur un LLM', 'Red-teaming campaigns on an LLM'),
       t('Metasploit', 'Exploitation en environnement de lab', 'Exploitation in lab environments'),
       t('Netcat', 'Reverse shells et écoute de ports', 'Reverse shells and port listeners'),
       t('linPEAS', 'Recherche automatique d’élévation de privilèges Linux', 'Automated Linux privilege-escalation checks'),
@@ -110,10 +114,6 @@ export const expertise: ExpertiseDomain[] = [
       t('Hashcat', 'Audit de robustesse des mots de passe', 'Password strength auditing'),
       t('John the Ripper', 'Audit de robustesse des mots de passe', 'Password strength auditing'),
       t('Hydra', 'Audit des authentifications', 'Authentication auditing'),
-      // AI security tools, used in the Jr Penetration Tester « LLM Pentesting » room (Jérémie, 2026-10-26).
-      t('Promptfoo', 'Pentest de LLM : tests d’attaque répétables', 'LLM pentesting: repeatable attack tests'),
-      t('garak', 'Scan de vulnérabilités d’un LLM', 'LLM vulnerability scanning'),
-      t('PyRIT', 'Campagnes de red teaming sur un LLM', 'Red-teaming campaigns on an LLM'),
     ],
   },
   {
