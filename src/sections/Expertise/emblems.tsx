@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react'
 
 // Emblems for tools that publish no logo, drawn in one style: a light glyph on a transparent
-// background, like the real logos. Mimikatz and pypykatz show mimikatz's start-up banner;
+// background, like the real logos. Mimikatz shows its start-up banner;
 // Responder (LLMNR/NBT-NS/mDNS poisoner) is broadcast waves and a hook; FAISS (vector
 // similarity search) is a point cloud with a query linked to its nearest neighbours; Shapely
-// (planar geometry) is two overlapping polygons with their intersection filled.
+// (planar geometry) is two overlapping polygons with their intersection filled. Netcat is two
+// hosts joined by a raw two-way pipe, CeWL (a crawler that builds wordlists) a spider web, and
+// Kerbrute a Kerberos ticket with its key.
 
 const LIGHT = '#f4f4f5'
 
@@ -32,8 +34,6 @@ function banner(colours: string[]) {
 
 const EMBLEMS: Record<string, (tone: string) => ReactNode> = {
   mimikatz: (tone) => tile(tone, 'mimikatz', banner([LIGHT])),
-  // pypykatz is the Python port: the same banner in Python's blue and yellow.
-  pypykatz: (tone) => tile(tone, 'pypykatz', banner(['#4b8bbe', '#4b8bbe', '#4b8bbe', '#ffd43b', '#ffd43b', '#ffd43b'])),
   responder: (tone) => (
     tile(tone, 'responder', <>
       <path d="M22 26 A14 14 0 0 1 42 26" fill="none" stroke={LIGHT} strokeWidth="2.2" strokeLinecap="round" opacity="0.55" />
@@ -65,6 +65,44 @@ const EMBLEMS: Record<string, (tone: string) => ReactNode> = {
       <path d="M32 33 L27 26 M32 33 L38 24 M32 33 L26 40 M32 33 L41 41" stroke={tone} strokeWidth="1.6" />
       <circle cx="32" cy="33" r="4.2" fill="none" stroke={LIGHT} strokeWidth="2" />
       <circle cx="32" cy="33" r="1.6" fill={LIGHT} />
+    </>)
+  ),
+  netcat: (tone) => (
+    tile(tone, 'netcat', <>
+      <rect x="6" y="22" width="18" height="14" rx="2" fill="none" stroke={LIGHT} strokeWidth="2.2" />
+      <rect x="40" y="22" width="18" height="14" rx="2" fill="none" stroke={LIGHT} strokeWidth="2.2" />
+      <path d="M11 40 H19 M45 40 H53" stroke={LIGHT} strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M10 27 L13 29 L10 31 M14.5 31.5 H19" fill="none" stroke={tone} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M27 26 H37 M34 23 L37 26 L34 29 M37 32 H27 M30 29 L27 32 L30 35" fill="none" stroke={LIGHT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <text x="32" y="54" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="11" fontWeight="700" fill={LIGHT}>nc</text>
+    </>)
+  ),
+  cewl: (tone) => (
+    tile(tone, 'cewl', <>
+      {[0, 45, 90, 135].map((d) => (
+        <path key={d} d="M32 8 V56" stroke={LIGHT} strokeWidth="1.6" opacity="0.7" transform={`rotate(${d} 32 32)`} />
+      ))}
+      {[8, 15, 22].map((r) => (
+        <polygon
+          key={r}
+          points={Array.from({ length: 8 }, (_, i) => `${32 + r * Math.sin((i * Math.PI) / 4)},${32 - r * Math.cos((i * Math.PI) / 4)}`).join(' ')}
+          fill="none"
+          stroke={LIGHT}
+          strokeWidth="1.6"
+          opacity="0.8"
+        />
+      ))}
+      <path d="M44 20 V26" stroke={LIGHT} strokeWidth="1.2" />
+      <circle cx="44" cy="28.5" r="3.2" fill={tone} />
+    </>)
+  ),
+  kerbrute: (tone) => (
+    tile(tone, 'kerbrute', <>
+      <path d="M8 20 H50 V27 A5 5 0 0 0 50 37 V44 H8 V37 A5 5 0 0 0 8 27 Z" fill="none" stroke={LIGHT} strokeWidth="2.2" strokeLinejoin="round" />
+      <path d="M38 20 V44" stroke={LIGHT} strokeWidth="1.6" strokeDasharray="2.5 2.5" opacity="0.7" />
+      <circle cx="20" cy="32" r="5" fill="none" stroke={tone} strokeWidth="2.2" />
+      <path d="M25 32 H33 M30 32 V36 M33 32 V35" fill="none" stroke={tone} strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M43 28 H46 M43 32 H46 M43 36 H46" stroke={LIGHT} strokeWidth="1.6" strokeLinecap="round" opacity="0.7" />
     </>)
   ),
   shapely: (tone) => (

@@ -3,6 +3,7 @@ import type { Localized, Track } from './types'
 // Expertise carousel: six domains, each a list of tools that scrolls by.
 // Only real technical stack (libraries, frameworks, languages, tools): no models or hosted
 // services (Llama 3, watsonx, Groq, Whisper) and no standards (OWASP Top 10, ISO 27001, RGPD).
+// Each domain's tools are grouped by sub-domain, in the order they are used (no group titles shown).
 // Tools come from skills.ts (backed by projects, write-ups or certificate syllabuses);
 // proofs from tracks.ts and certifications.ts (verified 2026-10-17).
 
@@ -40,9 +41,9 @@ export const expertise: ExpertiseDomain[] = [
       t('LangChain', 'Chatbot RAG sur des CV et des PDF', 'RAG chatbot over CVs and PDFs'),
       t('FAISS', 'Index vectoriel du chatbot RAG', 'Vector index of the RAG chatbot'),
       t('Hugging Face Transformers', 'Mémoire de conversation, embeddings du RAG', 'Conversation memory, RAG embeddings'),
-      t('Gradio', 'Interfaces de démo des applications IBM', 'Demo interfaces of the IBM applications'),
-      t('spaCy', 'Analyse de livres : entités, thèmes, style', 'Book analysis: entities, themes, style'),
       t('PyTorch', 'Exécution d’un modèle conversationnel', 'Running a conversational model'),
+      t('spaCy', 'Analyse de livres : entités, thèmes, style', 'Book analysis: entities, themes, style'),
+      t('Gradio', 'Interfaces de démo des applications IBM', 'Demo interfaces of the IBM applications'),
       t('Flask', 'Back-end des applications IA', 'Back end of the AI applications'),
     ],
   },
@@ -57,19 +58,17 @@ export const expertise: ExpertiseDomain[] = [
     },
     proofs: [
       { fr: '2e place au hackathon Microsoft × Citiz', en: '2nd place at the Microsoft × Citiz hackathon' },
-      { fr: 'Réseau piéton de 16,6 M nœuds', en: '16.6 M-node pedestrian network' },
+      { fr: 'Réseau piéton de 16,6 M de nœuds', en: '16.6 M-node pedestrian network' },
     ],
     tools: [
+      // « Python for Data Science, AI & Development » (IBM AI Developer): notebooks, Pandas and NumPy.
+      t('Jupyter', 'Notebooks d’analyse (certification IBM)', 'Analysis notebooks (IBM certification)'),
       t('Pandas', 'Hackathon Citiz, backtests crypto', 'Citiz hackathon, crypto backtests'),
       t('NumPy', 'Hackathon Citiz, études BlockTrader', 'Citiz hackathon, BlockTrader studies'),
       t('GeoPandas', 'Contours, isochrones et couverture (Citiz)', 'Boundaries, isochrones and coverage (Citiz)'),
-      t('Shapely', 'Géométries des isochrones (Citiz)', 'Isochrone geometries (Citiz)'),
-      t('OSMnx', 'Réseau piéton OpenStreetMap (Citiz)', 'OpenStreetMap pedestrian network (Citiz)'),
-      t('NetworkX', 'Plus courts chemins à pied (Citiz)', 'Walking shortest paths (Citiz)'),
-      t('SciPy', 'Graphes creux du réseau régional (Citiz)', 'Sparse graphs of the regional network (Citiz)'),
       t('Parquet', 'Tables bronze, silver et gold (Citiz)', 'Bronze, silver and gold tables (Citiz)'),
-      // Jérémie's Citiz scripts (geo/build_isochrones.py…) work in Lambert-93 (EPSG:2154); checked 2026-10-26.
-      t('pyproj', 'Projection Lambert-93 du réseau (Citiz)', 'Lambert-93 projection of the network (Citiz)'),
+      // Alice_In_Wonderland (Bookworm) modules/topics.py and similarity.py, all Jérémie's commits.
+      t('scikit-learn', 'TF-IDF et similarité cosinus (Bookworm)', 'TF-IDF and cosine similarity (Bookworm)'),
       // blocktrader/engine/fast.py: compiled copy of the reference engine, about 25x faster.
       t('Numba', 'Moteur de backtest compilé, ≈ 25× plus rapide (BlockTrader)', 'Compiled backtest engine, ≈ 25× faster (BlockTrader)'),
     ],
@@ -89,22 +88,32 @@ export const expertise: ExpertiseDomain[] = [
       { fr: 'Un audit web autorisé', en: 'One authorised web audit' },
     ],
     tools: [
-      t('Nmap', 'Reconnaissance de chaque machine des write-ups', 'Reconnaissance on every write-up machine'),
+      // ffuf, CeWL, Kerbrute, Evil-WinRM, linPEAS: Jr Penetration Tester rooms (Jérémie's Obsidian notes, 2026-10-26).
+      t('Nmap', 'Reconnaissance de chaque machine', 'Reconnaissance of every machine'),
       t('Gobuster', 'Découverte de contenu web caché', 'Hidden web content discovery'),
+      t('ffuf', 'Fuzzing web et énumération d’identifiants', 'Web fuzzing and username enumeration'),
       t('Burp Suite', 'Tests d’applications web', 'Web application testing'),
       t('SQLMap', 'Tests d’injection SQL', 'SQL injection testing'),
       t('Metasploit', 'Exploitation en environnement de lab', 'Exploitation in lab environments'),
-      t('NetExec', 'Énumération SMB et Active Directory', 'SMB and Active Directory enumeration'),
-      t('Impacket', 'Tests Active Directory (write-ups)', 'Active Directory testing (write-ups)'),
-      t('BloodHound', 'Cartographie Active Directory', 'Active Directory mapping'),
+      t('Netcat', 'Reverse shells et écoute de ports', 'Reverse shells and port listeners'),
+      t('linPEAS', 'Recherche automatique d’élévation de privilèges Linux', 'Automated Linux privilege-escalation checks'),
+      t('Bash', 'Ligne de commande et scripts d’automatisation', 'Command line and automation scripts'),
+      t('Kerbrute', 'Énumération d’utilisateurs par Kerberos', 'User enumeration through Kerberos'),
       t('Responder', 'Tests réseau en lab Active Directory', 'Network testing in an Active Directory lab'),
+      t('NetExec', 'Énumération SMB et Active Directory', 'SMB and Active Directory enumeration'),
+      t('BloodHound', 'Cartographie Active Directory', 'Active Directory mapping'),
+      t('Impacket', 'Attaques Kerberos et Active Directory', 'Kerberos and Active Directory attacks'),
+      t('Evil-WinRM', 'Mouvement latéral en Active Directory', 'Lateral movement in Active Directory'),
       // Used in an Active Directory lab (Jérémie, 2026-10-23); not in the public write-ups.
-      t('Mimikatz', 'Utilisé en lab Active Directory', 'Used in an Active Directory lab'),
-      t('pypykatz', 'Utilisé en lab Active Directory', 'Used in an Active Directory lab'),
+      t('Mimikatz', 'Extraction d’identifiants en lab Active Directory', 'Credential extraction in an Active Directory lab'),
+      t('CeWL', 'Listes de mots tirées du site cible', 'Wordlists built from the target site'),
       t('Hashcat', 'Audit de robustesse des mots de passe', 'Password strength auditing'),
       t('John the Ripper', 'Audit de robustesse des mots de passe', 'Password strength auditing'),
       t('Hydra', 'Audit des authentifications', 'Authentication auditing'),
-      t('Linux', 'Élévation de privilèges dans les write-ups', 'Privilege escalation in the write-ups'),
+      // AI security tools, used in the Jr Penetration Tester « LLM Pentesting » room (Jérémie, 2026-10-26).
+      t('Promptfoo', 'Pentest de LLM : tests d’attaque répétables', 'LLM pentesting: repeatable attack tests'),
+      t('garak', 'Scan de vulnérabilités d’un LLM', 'LLM vulnerability scanning'),
+      t('PyRIT', 'Campagnes de red teaming sur un LLM', 'Red-teaming campaigns on an LLM'),
     ],
   },
   {
@@ -121,13 +130,13 @@ export const expertise: ExpertiseDomain[] = [
       { fr: 'SOC Level 1 en cours', en: 'SOC Level 1 in progress' },
     ],
     tools: [
-      t('Splunk', 'Investigation de logs (TryHackMe)', 'Log investigation (TryHackMe)'),
-      t('Wireshark', 'Analyse de captures réseau (TryHackMe)', 'Network capture analysis (TryHackMe)'),
-      t('Snort', 'Règles de détection (TryHackMe)', 'Detection rules (TryHackMe)'),
-      t('Fail2ban', 'Protection contre le brute force (TryHackMe)', 'Brute-force protection (TryHackMe)'),
-      t('FlareVM', 'Analyse de malwares Windows (TryHackMe)', 'Windows malware analysis (TryHackMe)'),
-      t('REMnux', 'Analyse de malwares (TryHackMe)', 'Malware analysis (TryHackMe)'),
-      t('CyberChef', 'Décodage de données (TryHackMe)', 'Data decoding (TryHackMe)'),
+      t('Splunk', 'Investigation de logs', 'Log investigation'),
+      t('Wireshark', 'Analyse de captures réseau', 'Network capture analysis'),
+      t('Snort', 'Règles de détection', 'Detection rules'),
+      t('Fail2ban', 'Protection contre le brute force', 'Brute-force protection'),
+      t('FlareVM', 'Analyse de malwares Windows', 'Windows malware analysis'),
+      t('REMnux', 'Analyse de malwares', 'Malware analysis'),
+      t('CyberChef', 'Décodage de données', 'Data decoding'),
     ],
   },
   {
@@ -179,9 +188,9 @@ export const expertise: ExpertiseDomain[] = [
       t('Express', 'API de ChatFlow', 'ChatFlow API'),
       t('Prisma', 'Modèle de données de ChatFlow', 'ChatFlow data model'),
       t('SQL', 'Modélisation et requêtes', 'Modelling and queries'),
-      t('PostgreSQL', 'Bases des projets Kubernetes et Popeye', 'Databases of the Kubernetes and Popeye projects'),
+      t('PostgreSQL', 'Bases de données de Time Manager, Bernstein et POPEYE', 'Databases of Time Manager, Bernstein and POPEYE'),
       t('MongoDB', 'Base du générateur OTP', 'OTP generator database'),
-      t('Redis', 'File de votes de l’application Kubernetes', 'Vote queue of the Kubernetes app'),
+      t('Redis', 'File de votes de Bernstein (Kubernetes)', 'Vote queue of Bernstein (Kubernetes)'),
     ],
   },
 ]

@@ -94,7 +94,7 @@ export const credentials: Credential[] = [
     level: 3,
     hours: 5,
     note: {
-      fr: 'Workshop animé par Lucas Romano : responsable SOC chez Cequence, chercheur de la Synack Red Team, ancien analyste à la NSA.',
+      fr: 'Atelier animé par Lucas Romano : responsable SOC chez Cequence, chercheur de la Synack Red Team, ancien analyste à la NSA.',
       en: 'Workshop led by Lucas Romano: SOC manager at Cequence, Synack Red Team researcher, former NSA analyst.',
     },
     goal: {
@@ -132,7 +132,7 @@ export const credentials: Credential[] = [
     result: { fr: '630\u00a0/\u00a0700 (90\u00a0%) · terminé en 9\u00a0h\u00a055', en: '630\u00a0/\u00a0700 (90%) · completed in 9\u00a0h\u00a055' },
     points: [
       { label: { fr: 'Réseau', en: 'Network' }, text: { fr: 'analyse de captures (DNS, FTP, IMAP, TCP), identifiants en clair', en: 'capture analysis (DNS, FTP, IMAP, TCP), cleartext credentials' } },
-      { label: { fr: 'Systèmes', en: 'Systems' }, text: { fr: 'audit de configuration Linux et Windows : droits, services, tâches planifiées, journaux', en: 'Linux and Windows configuration audit: permissions, services, scheduled tasks, logs' } },
+      { label: { fr: 'Systèmes', en: 'Systems' }, text: { fr: 'audit de configuration Linux et Windows (droits, services, tâches planifiées, journaux)', en: 'Linux and Windows configuration audit (permissions, services, scheduled tasks, logs)' } },
       { label: { fr: 'Pentest web', en: 'Web pentesting' }, text: { fr: 'énumération, injection SQL, API exposées, upload de fichiers', en: 'enumeration, SQL injection, exposed APIs, file upload' } },
       { label: { fr: 'Mots de passe', en: 'Passwords' }, text: { fr: 'brute force et cassage (Hydra, John the Ripper, Hashcat)', en: 'brute force and cracking (Hydra, John the Ripper, Hashcat)' } },
       { label: { fr: 'SOC', en: 'SOC' }, text: { fr: 'journaux de pare-feu, alertes et règle Snort, réponse à incident', en: 'firewall logs, Snort alerts and rule, incident response' } },
@@ -293,10 +293,10 @@ export const credentials: Credential[] = [
     },
     points: [
       { label: { fr: 'Chatbot', en: 'Chatbot' }, text: { fr: 'conversation avec mémoire sur un LLM open source (Blenderbot, Hugging Face)', en: 'a conversation with memory on an open-source LLM (Blenderbot, Hugging Face)' } },
-      { label: { fr: 'Voix', en: 'Voice' }, text: { fr: 'assistant vocal : reconnaissance et synthèse avec IBM Watson, réponses de Llama 3 via Groq', en: 'voice assistant: IBM Watson speech recognition and synthesis, answers from Llama 3 through Groq' } },
+      { label: { fr: 'Voix', en: 'Voice' }, text: { fr: 'un assistant vocal, avec la reconnaissance et la synthèse d’IBM Watson et les réponses de Llama 3 via Groq', en: 'a voice assistant, with IBM Watson speech recognition and synthesis and answers from Llama 3 through Groq' } },
       { label: { fr: 'Réunions', en: 'Meetings' }, text: { fr: 'transcription avec Whisper, résumé et actions par un LLM sur watsonx', en: 'transcription with Whisper, summary and action items from an LLM on watsonx' } },
       { label: { fr: 'Documents', en: 'Documents' }, text: { fr: 'questions sur des CV en PDF avec le RAG (LangChain, FAISS, Llama 3)', en: 'questions on PDF CVs with RAG (LangChain, FAISS, Llama 3)' } },
-      { label: { fr: 'Traduction', en: 'Translation' }, text: { fr: 'traducteur vocal : parole, traduction par LLM, synthèse', en: 'voice translator: speech, LLM translation, synthesis' } },
+      { label: { fr: 'Traduction', en: 'Translation' }, text: { fr: 'un traducteur vocal qui écoute, traduit avec un LLM puis lit la traduction', en: 'a voice translator that listens, translates with an LLM, then reads the translation aloud' } },
       { label: { fr: 'Coach', en: 'Coach' }, text: { fr: 'CV adapté, lettre de motivation et conseils (Llama 3.2 sur watsonx, Gradio)', en: 'tailored CV, cover letter and advice (Llama 3.2 on watsonx, Gradio)' } },
       { label: { fr: 'Image', en: 'Image' }, text: { fr: 'légendes de photos générées (BLIP, Gradio)', en: 'generated photo captions (BLIP, Gradio)' } },
     ],

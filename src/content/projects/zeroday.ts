@@ -48,7 +48,7 @@ export const zeroday: Project = {
         { label: { fr: '3 difficultés', en: '3 difficulty levels' }, text: { fr: 'Facile, Normal, Brutal.', en: 'Easy, Normal, Brutal.' } },
         {
           label: { fr: 'Une carte du monde', en: 'A world map' },
-          text: { fr: '28 types de cibles : PC, smartphones, objets connectés, véhicules, data centers…', en: '28 kinds of targets: PCs, smartphones, connected devices, vehicles, data centres…' },
+          text: { fr: '28 types de cibles, des PC aux data centers, en passant par les smartphones, les objets connectés et les véhicules.', en: '28 kinds of targets, from PCs to data centres, through smartphones, connected devices and vehicles.' },
         },
         { label: { fr: 'Progression', en: 'Progression' }, text: { fr: 'des déblocages permanents d’une partie à l’autre.', en: 'permanent unlocks from one game to the next.' } },
         {

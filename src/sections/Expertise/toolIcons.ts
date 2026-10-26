@@ -5,7 +5,9 @@ import BloodHound from '../../assets/Icon/BloodHound.webp'
 import Burpsuite from '../../assets/Icon/Burpsuite.webp'
 import Cyberchef from '../../assets/Icon/Cyberchef.webp'
 import Docker from '../../assets/Icon/Docker.webp'
+import EvilWinrm from '../../assets/Icon/EvilWinrm.webp' // resources/evil-winrm_logo.png (Hackplayers/evil-winrm), cropped to the title
 import Fail2ban from '../../assets/Icon/Fail2ban.webp'
+import Ffuf from '../../assets/Icon/Ffuf.webp' // _img/ffuf_run_logo_600.png (ffuf/ffuf, MIT)
 import Flarevm from '../../assets/Icon/Flarevm.webp'
 import Flask from '../../assets/Icon/Flask.webp'
 import Gobuster from '../../assets/Icon/Gobuster.webp'
@@ -18,6 +20,7 @@ import Javascript from '../../assets/Icon/Javascript.webp'
 import Jenkins from '../../assets/Icon/Jenkins.webp'
 import JohnTheRipper from '../../assets/Icon/JohnTheRipper.webp'
 import Langchain from '../../assets/Icon/Langchain.webp'
+import Linpeas from '../../assets/Icon/Linpeas.webp' // linPEAS/images/linpeas.png (peass-ng/PEASS-ng), white made transparent
 import Linux from '../../assets/Icon/Linux.webp'
 import Metasploit from '../../assets/Icon/Metasploit.webp'
 import NetExec from '../../assets/Icon/NetExec.webp'
@@ -26,7 +29,8 @@ import Nmap from '../../assets/Icon/Nmap.webp'
 import Numpy from '../../assets/Icon/Numpy.webp'
 import Pandas from '../../assets/Icon/Pandas.webp'
 import Python from '../../assets/Icon/Python.webp'
-import Pyproj from '../../assets/Icon/Pyproj.webp' // docs/media/logo.png (pyproj repo, MIT)
+import Promptfoo from '../../assets/Icon/Promptfoo.webp' // site/static/apple-touch-icon.png (promptfoo/promptfoo, MIT)
+import Pyrit from '../../assets/Icon/Pyrit.webp' // doc/roakey.png, PyRIT's mascot (Azure/PyRIT, MIT)
 import Pytorch from '../../assets/Icon/Pytorch.webp'
 import React from '../../assets/Icon/React.webp'
 import Remnux from '../../assets/Icon/Remnux.webp'
@@ -53,6 +57,11 @@ export const TOOL_ICONS: Record<string, string> = {
   Snort: Snort,
   CyberChef: Cyberchef,
   Gobuster: Gobuster,
+  ffuf: Ffuf,
+  'Evil-WinRM': EvilWinrm,
+  linPEAS: Linpeas,
+  Promptfoo: Promptfoo,
+  PyRIT: Pyrit,
   Hashcat: Hashcat,
   Hydra: Hydra,
   JavaScript: Javascript,
@@ -65,7 +74,6 @@ export const TOOL_ICONS: Record<string, string> = {
   Pandas: Pandas,
   NumPy: Numpy,
   NetworkX: NetworkX,
-  pyproj: Pyproj,
   LangChain: Langchain,
   Java: Java,
   'C#': Csharp,
