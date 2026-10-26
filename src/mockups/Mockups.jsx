@@ -1,5 +1,5 @@
 // Dev-only mockups (mockups.html): hero and profile proposals on top of the legacy site style.
-// ?palette=green|cyan  ?view=hero-a|hero-b|hero-c|profile
+// ?palette=green|cyan  ?view=hero-a|hero-b|hero-c|profile|parcours|parcours-fx
 import { AudioLines, BadgeCheck, BrainCircuit, Crosshair, Download, Dumbbell, Globe, Landmark, Mail, MapPin, Plane, ShieldCheck, Terminal } from "lucide-react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import NetworkBackground from "../components/NetworkBackground";
@@ -16,6 +16,8 @@ const ExpertiseTweaks = lazy(() => import("./ExpertiseTweaks"));
 const ExpertiseGrid = lazy(() => import("./ExpertiseGrid"));
 const ProjectFilters = lazy(() => import("./ProjectFilters"));
 const CtfButtons = lazy(() => import("./CtfButtons"));
+const ParcoursMock = lazy(() => import("./ParcoursMock"));
+const ParcoursEffects = lazy(() => import("./ParcoursEffects"));
 import { emitCore } from "../lib/coreBus";
 import Profil from "../assets/Profil.webp";
 import THM from "../assets/THM.jpg";
@@ -392,6 +394,18 @@ export default function Mockups() {
   const params = new URLSearchParams(window.location.search);
   const [gate, setGate] = useState(["globe", "argos"].includes(params.get("gate")));
   const Gate = params.get("gate") === "argos" ? ArgosGate : GlobeGate;
+  if (params.get("view") === "parcours")
+    return (
+      <Suspense fallback={null}>
+        <ParcoursMock />
+      </Suspense>
+    );
+  if (params.get("view") === "parcours-fx")
+    return (
+      <Suspense fallback={null}>
+        <ParcoursEffects />
+      </Suspense>
+    );
   if (params.get("view") === "ctfbuttons")
     return (
       <Suspense fallback={null}>

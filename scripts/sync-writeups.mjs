@@ -87,7 +87,7 @@ for (const path of files) {
   writeups.push({
     slug: `${source}-${String(number).padStart(2, '0')}-${slugify(room)}`,
     source,
-    platform: meta.platform ?? (source === 'epitech' ? 'Epitech (Exegol)' : 'TryHackMe'),
+    platform: meta.platform ?? (source === 'epitech' ? 'Exegol' : 'TryHackMe'),
     room: meta.room ?? room,
     focus,
     os: meta.os ?? null,

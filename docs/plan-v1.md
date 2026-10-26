@@ -137,7 +137,7 @@ Nom · titre de la lentille · accroche · **Disponible immédiatement** · Mars
 
 | Dossier | Lentilles | Mettre en avant | Ne pas prétendre |
 |---|---|---|---|
-| **BlockTrader** | IA, Dev, Cyber | Pré-enregistrement des stratégies, ~3 350 essais tracés, Sharpe dégonflé, anti-look-ahead, parité VectorBT, 46 tests, CI durcie, serverless (Cloud Scheduler → Actions), règle « l'IA ne peut que réduire l'exposition », design Safe/KMS/coupe-circuit | Aucun rendement. Pas de « live », pas de « piloté par IA ». |
+| **BlockTrader** | IA, Data, Dev | Pré-enregistrement des stratégies, ~3 350 essais tracés, Sharpe dégonflé, anti-look-ahead, parité VectorBT, 46 tests, CI durcie, serverless (Cloud Scheduler → Actions), règle « l'IA ne peut que réduire l'exposition », design Safe/KMS/coupe-circuit | Aucun rendement. Pas de « live ». Le pilotage par IA est l'objectif, toujours dit « pas encore branché » (mise à jour 2026-10-24). |
 | **Argos** | Cyber, IA | Moteur OSINT réel sur l'API INSEE SIRENE, provenance, SQLite, rapports, tests, architecture Capability → Workflow → Harness, cadre légal documenté | Red team / antivirus / pentest LLM = feuille de route. |
 | **Pentest — write-ups & audit** | Cyber | Jr Penetration Tester (95 h), 25 write-ups (web, AD, élévation de privilèges, cracking, RE), Audit-1 sur infra réelle autorisée, T-SEC-600 | — |
 | **ZeroDay** | Dev, Cyber | Corpus de game design versionné (~140 k mots), banque de termes alignée MITRE ATT&CK, cœur déterministe testé, éditeur d'arbres maison | Statut *En développement*, pas jouable. |

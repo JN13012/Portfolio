@@ -12,6 +12,7 @@ import Gobuster from '../../assets/Icon/Gobuster.webp'
 import Hashcat from '../../assets/Icon/Hashcat.webp'
 import Hydra from '../../assets/Icon/Hydra.webp'
 import Impacket from '../../assets/Icon/Impacket.webp'
+import Csharp from '../../assets/Icon/Csharp.webp' // devicon csharp-original (MIT), the official C# mark
 import Java from '../../assets/Icon/Java.webp'
 import Javascript from '../../assets/Icon/Javascript.webp'
 import Jenkins from '../../assets/Icon/Jenkins.webp'
@@ -62,6 +63,7 @@ export const TOOL_ICONS: Record<string, string> = {
   NumPy: Numpy,
   LangChain: Langchain,
   Java: Java,
+  'C#': Csharp,
   React: React,
   SQL: Sql,
   Jenkins: Jenkins,

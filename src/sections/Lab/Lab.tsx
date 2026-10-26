@@ -19,7 +19,7 @@ type Topic = keyof typeof TOPICS
 const TOPIC_KEYS = Object.keys(TOPICS) as Topic[]
 
 // Epitech labs were run from Exegol (the pentest environment), TryHackMe rooms on the platform.
-const SOURCE_LABEL: Record<string, string> = { epitech: 'Epitech · Exegol', tryhackme: 'TryHackMe' }
+const SOURCE_LABEL: Record<string, string> = { epitech: 'Exegol', tryhackme: 'TryHackMe' }
 
 const writeups = writeupsIndex.writeups.map((w) => ({
   ...w,

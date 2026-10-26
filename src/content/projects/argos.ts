@@ -6,12 +6,11 @@ export const argos: Project = {
   slug: 'argos',
   tier: 'dossier',
   status: 'development',
-  showcase: 'perso-pro',
   tracks: ['cyber', 'ia'],
   title: 'Argos',
   period: { start: '2026-07' },
   team: { size: 1 },
-  context: 'epitech',
+  context: 'personal',
   summary: {
     fr: 'Projet de fin d’études Epitech en cybersécurité. Le premier module collecte des informations publiques sur les entreprises en gardant la source de chaque donnée ; une couche d’agents IA est en conception.',
     en: 'Epitech cybersecurity capstone. The first module collects public information about companies and keeps the source of every data point; an AI agent layer is being designed.',
@@ -52,6 +51,10 @@ export const argos: Project = {
       },
     },
   ],
+  imageNote: {
+    fr: 'Maquette de l’interface cible, pas encore développée.',
+    en: 'Mock-up of the target interface, not built yet.',
+  },
   stack: ['Python', 'httpx', 'SQLite', 'pytest'],
   links: { github: 'https://github.com/JN13012/Argos' },
   facts: [

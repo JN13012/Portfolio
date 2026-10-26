@@ -15,7 +15,8 @@ export const archive: Project[] = [
     tracks: ['dev'],
     title: 'Platino',
     period: { start: '2025-10', end: '2025-10' },
-    team: { size: 4, label: { fr: 'équipe de 4, Epitech', en: 'team of 4, Epitech' } },
+    // Jérémie's commits: src/models, src/controllers, src/routes.
+    team: { size: 4, role: { fr: 'backend', en: 'back end' } },
     context: 'epitech',
     summary: {
       fr: 'Plateforme d’offres d’emploi pour étudiants : comptes, profils, candidatures et favoris, API Express et PostgreSQL.',
@@ -28,10 +29,10 @@ export const archive: Project[] = [
   archived({
     slug: 'popeye',
     status: 'delivered',
-    tracks: ['dev'],
+    tracks: ['devops'],
     title: 'POPEYE',
     period: { start: '2025-11', end: '2025-11' },
-    context: 'personal',
+    context: 'epitech',
     summary: {
       fr: 'Application web distribuée en microservices, orchestrée avec Docker Compose.',
       en: 'A distributed microservice web app orchestrated with Docker Compose.',
@@ -43,7 +44,7 @@ export const archive: Project[] = [
   archived({
     slug: 'my-marvin',
     status: 'delivered',
-    tracks: ['dev'],
+    tracks: ['devops'],
     title: 'My_Marvin',
     period: { start: '2025-11', end: '2025-11' },
     context: 'epitech',
@@ -61,7 +62,7 @@ export const archive: Project[] = [
     tracks: ['dev'],
     title: 'Vaultborn',
     period: { start: '2025-10', end: '2025-10' },
-    context: 'personal',
+    context: 'epitech',
     summary: {
       fr: 'Action-RPG 2D en Java : 7 classes jouables, mondes interconnectés, inventaire et sauvegarde, architecture en patterns (Factory, World, Screen).',
       en: '2D action RPG in Java: 7 playable classes, connected worlds, inventory and saves, pattern-based architecture (Factory, World, Screen).',
@@ -108,8 +109,8 @@ export const archive: Project[] = [
     period: { start: '2026-03', end: '2026-03' },
     context: 'ibm',
     summary: {
-      fr: 'Assistant vocal : Llama 3 via Groq pour le raisonnement, IBM Watson pour la reconnaissance et la synthèse vocales, interface Flask.',
-      en: 'Voice assistant: Llama 3 via Groq for reasoning, IBM Watson for speech recognition and synthesis, Flask interface.',
+      fr: 'Un assistant vocal qui raisonne avec Llama 3 via Groq, reconnaît et synthétise la voix avec IBM Watson, dans une interface Flask.',
+      en: 'A voice assistant reasoning with Llama 3 through Groq, with IBM Watson speech recognition and synthesis, in a Flask interface.',
     },
     stack: ['Python', 'Flask', 'Groq', 'IBM Watson'],
     links: { github: 'https://github.com/JN13012/AI-Voice-Assistant' },
@@ -123,7 +124,7 @@ export const archive: Project[] = [
     period: { start: '2026-03', end: '2026-03' },
     context: 'ibm',
     summary: {
-      fr: 'Surcouche Python à Hugging Face Transformers qui garde l’historique de conversation du modèle Blenderbot.',
+      fr: 'Une surcouche Python à Hugging Face Transformers qui garde l’historique de conversation du modèle Blenderbot.',
       en: 'A Python wrapper around Hugging Face Transformers that keeps the Blenderbot model’s conversation history.',
     },
     stack: ['Python', 'Transformers', 'PyTorch'],
