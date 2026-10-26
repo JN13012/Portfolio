@@ -68,6 +68,10 @@ export const expertise: ExpertiseDomain[] = [
       t('NetworkX', 'Plus courts chemins à pied (Citiz)', 'Walking shortest paths (Citiz)'),
       t('SciPy', 'Graphes creux du réseau régional (Citiz)', 'Sparse graphs of the regional network (Citiz)'),
       t('Parquet', 'Tables bronze, silver et gold (Citiz)', 'Bronze, silver and gold tables (Citiz)'),
+      // Jérémie's Citiz scripts (geo/build_isochrones.py…) work in Lambert-93 (EPSG:2154); checked 2026-10-26.
+      t('pyproj', 'Projection Lambert-93 du réseau (Citiz)', 'Lambert-93 projection of the network (Citiz)'),
+      // blocktrader/engine/fast.py: compiled copy of the reference engine, about 25x faster.
+      t('Numba', 'Moteur de backtest compilé, ≈ 25× plus rapide (BlockTrader)', 'Compiled backtest engine, ≈ 25× faster (BlockTrader)'),
     ],
   },
   {
