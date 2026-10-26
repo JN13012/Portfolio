@@ -3,7 +3,8 @@ import type { ReactNode } from 'react'
 // Emblems for tools that publish no logo, drawn in one style: a light glyph on a transparent
 // background, like the real logos. Mimikatz and pypykatz show mimikatz's start-up banner;
 // Responder (LLMNR/NBT-NS/mDNS poisoner) is broadcast waves and a hook; FAISS (vector
-// similarity search) is a point cloud with a query linked to its nearest neighbours.
+// similarity search) is a point cloud with a query linked to its nearest neighbours; Shapely
+// (planar geometry) is two overlapping polygons with their intersection filled.
 
 const LIGHT = '#f4f4f5'
 
@@ -64,6 +65,17 @@ const EMBLEMS: Record<string, (tone: string) => ReactNode> = {
       <path d="M32 33 L27 26 M32 33 L38 24 M32 33 L26 40 M32 33 L41 41" stroke={tone} strokeWidth="1.6" />
       <circle cx="32" cy="33" r="4.2" fill="none" stroke={LIGHT} strokeWidth="2" />
       <circle cx="32" cy="33" r="1.6" fill={LIGHT} />
+    </>)
+  ),
+  shapely: (tone) => (
+    tile(tone, 'shapely', <>
+      <path d="M30 24 L41 30 L37 44 L24 46 L21 32 Z" fill={tone} opacity="0.55" />
+      <path d="M12 18 L41 14 L41 30 L30 24 L21 32 L24 46 L10 40 Z" fill={LIGHT} opacity="0.12" />
+      <path d="M12 18 L41 14 L37 44 L10 40 Z" fill="none" stroke={LIGHT} strokeWidth="2.2" strokeLinejoin="round" />
+      <path d="M30 24 L52 36 L44 54 L24 46 L21 32 Z" fill="none" stroke={LIGHT} strokeWidth="2.2" strokeLinejoin="round" opacity="0.8" />
+      {[[12, 18], [41, 14], [37, 44], [10, 40], [30, 24], [52, 36], [44, 54], [24, 46], [21, 32]].map(([x, y]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r="2" fill={LIGHT} />
+      ))}
     </>)
   ),
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import SectionHeader from "./SectionHeader";
+import TopicIcon from "./TopicIcon";
 import ProjectCard from "./ProjectCard";
 import { projects } from "../content/projects";
 import { modalSummary, statusLabels, teamLabel } from "../content/ui";
@@ -390,7 +391,8 @@ const ProjectSection = () => {
                   <h4 className="mb-3 text-base uppercase text-zinc-100">Expertise technique</h4>
                   <div className="flex flex-wrap gap-2">
                     {selected.stack.map((t) => (
-                      <span key={t} className="border border-cyber/20 bg-cyber/5 px-3 py-1.5 text-base text-cyber">
+                      <span key={t} className="inline-flex items-center gap-2 border border-cyber/20 bg-cyber/5 px-3 py-1.5 text-base text-cyber">
+                        <TopicIcon name={t} />
                         {t}
                       </span>
                     ))}

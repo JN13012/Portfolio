@@ -21,10 +21,12 @@ import Langchain from '../../assets/Icon/Langchain.webp'
 import Linux from '../../assets/Icon/Linux.webp'
 import Metasploit from '../../assets/Icon/Metasploit.webp'
 import NetExec from '../../assets/Icon/NetExec.webp'
+import NetworkX from '../../assets/Icon/NetworkX.webp' // the graph mark of networkx_banner.svg (networkx repo, BSD)
 import Nmap from '../../assets/Icon/Nmap.webp'
 import Numpy from '../../assets/Icon/Numpy.webp'
 import Pandas from '../../assets/Icon/Pandas.webp'
 import Python from '../../assets/Icon/Python.webp'
+import Pyproj from '../../assets/Icon/Pyproj.webp' // docs/media/logo.png (pyproj repo, MIT)
 import Pytorch from '../../assets/Icon/Pytorch.webp'
 import React from '../../assets/Icon/React.webp'
 import Remnux from '../../assets/Icon/Remnux.webp'
@@ -57,10 +59,13 @@ export const TOOL_ICONS: Record<string, string> = {
   Linux: Linux,
   Python: Python,
   Docker: Docker,
+  'Docker Compose': Docker,
   Flask: Flask,
   PyTorch: Pytorch,
   Pandas: Pandas,
   NumPy: Numpy,
+  NetworkX: NetworkX,
+  pyproj: Pyproj,
   LangChain: Langchain,
   Java: Java,
   'C#': Csharp,
