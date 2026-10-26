@@ -31,7 +31,7 @@ export const hero = {
   /** Certificates shown as cards under the pitch (logo resolved in the component). */
   certificates: [
     { id: 'ibm', title: 'IBM AI Developer', sub: { fr: 'Professional Certificate', en: 'Professional Certificate' } },
-    { id: 'thm', title: 'Jr Penetration Tester', sub: { fr: 'TryHackMe · 95 h', en: 'TryHackMe · 95 h' } },
+    { id: 'thm', title: 'Jr Penetration Tester', sub: { fr: 'TryHackMe · 96 h', en: 'TryHackMe · 96 h' } },
     { id: 'epitech', title: 'MSc Cybersécurité', sub: { fr: 'Epitech Marseille', en: 'Epitech Marseille' } },
   ],
   /** Facts strip at the bottom of the hero. */

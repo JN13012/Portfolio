@@ -3,8 +3,8 @@ export type Locale = 'fr' | 'en'
 /** Every user-facing string exists in both languages (EN is reviewed in step 6). */
 export type Localized = Record<Locale, string>
 
-/** The three jobs the site targets. Also used for project filters (`?metier=`). */
-export type Track = 'ia' | 'cyber' | 'dev'
+/** The jobs the site targets. Also used for project filters (`?metier=`). */
+export type Track = 'ia' | 'data' | 'cyber' | 'dev' | 'devops'
 
 /**
  * Honest project status, always shown next to a project: still being built, or finished.
@@ -47,12 +47,15 @@ export type Project = {
   status: ProjectStatus
   /** Shown with the personal & professional projects although made in a course (e.g. Argos, pursued beyond Epitech). */
   showcase?: 'perso-pro'
+  /** Result of a competition, shown in the hackathon badge, e.g. « 2e place ». */
+  award?: Localized
   /** Where the project is used for real, e.g. « En production chez ULIT ». */
   inProduction?: Localized
   tracks: Track[]
   title: string
   period: { start: YearMonth; end?: YearMonth }
-  team: { size: number; label?: Localized }
+  /** `role`: what Jérémie did in a group (shown next to the team size). */
+  team: { size: number; role?: Localized }
   context: ProjectContext
   /** 2–3 lines, recruiter level. */
   summary: Localized
@@ -60,6 +63,8 @@ export type Project = {
   angles?: Partial<Record<Track, Localized>>
   /** Dossiers only: problem → approach → architecture → security → result → limits. */
   sections?: DossierSection[]
+  /** Shown under the visuals when they are not the real product (e.g. a design mock-up). */
+  imageNote?: Localized
   stack: string[]
   links: {
     github?: string
@@ -82,25 +87,43 @@ export type Project = {
 
 export type CredentialKind = 'certification' | 'learning-path' | 'professional-certificate' | 'course' | 'workshop'
 
+/**
+ * Difficulty 1–5 (Intro → Insane), from the grid validated by Jérémie on 2026-10-25:
+ * 1 introductions · 2 applied courses and first paths (Security Engineer) · 3 practical exam,
+ * long certificate or AI pentesting workshop · 4 Jr Penetration Tester · 5 kept for a proctored
+ * professional exam (PT1, OSCP…).
+ */
+export type CredentialLevel = 1 | 2 | 3 | 4 | 5
+
 export type Credential = {
   id: string
   title: string
   issuer: string
   kind: CredentialKind
+  /** Tabs of the section: cyber, or IA & dev. */
   tracks: Track[]
-  date: IsoDate
+  /** Day from the certificate, or month when only that is known. */
+  date: IsoDate | YearMonth
+  level: CredentialLevel
   credentialId?: string
   verifyUrl?: string
+  /** Course duration from the certificate, rounded up to the hour. */
   hours?: number
-  /** Shown first; the rest is grouped and folded. */
-  featured: boolean
-  /** Short description of what it proves. */
-  note?: Localized
+  /** Exam duration, for exam-based certifications. */
+  examHours?: number
+  /** What it covers, recruiter level. */
+  note: Localized
+  /** Tools and topics, tool names as in expertise.ts so their logos show. */
+  stack: string[]
   /** Courses bundled in a professional certificate. */
   includes?: string[]
+  /** An earlier completion of the same path, said in the modal. */
+  previous?: Localized
+  /** « PRO » badge: exam-based certification or professional certificate (choice of Jérémie). */
+  pro?: boolean
 }
 
-/** A path still in progress: shown in its own block, never with the obtained credentials. */
+/** A path still in progress: a card marked « En cours », never counted with the obtained credentials. */
 export type InProgress = {
   id: string
   title: string
@@ -111,6 +134,8 @@ export type InProgress = {
   /** Date of the measurement: an undated progress ages badly. */
   measuredAt: IsoDate
   verifyUrl?: string
+  note: Localized
+  stack: string[]
 }
 
 // ── Journey ─────────────────────────────────────────────────────────────────
@@ -118,18 +143,37 @@ export type InProgress = {
 /** Exact months when known; otherwise a text shown as is, until the dates are confirmed. */
 export type Period = { start: YearMonth; end?: YearMonth } | { approx: Localized }
 
+/** How an entry is drawn on the Parcours axis: the tech path, before the reconversion, or a personal activity. */
+export type TimelineTone = 'tech' | 'before' | 'personal'
+
 export type TimelineEntry = {
   id: string
+  /** The lane on the axis. */
   kind: 'experience' | 'education'
   title: Localized
-  organisation: string
-  place: Localized
+  /** Label inside the bar on the axis. */
+  short: Localized
+  /** Several for a block grouping jobs; `url` = the school's or company's site. */
+  organisations: { name: string; url?: string; place?: Localized }[]
   /** ISO 3166-1 alpha-2, for the V1.1 globe. */
   country: string
-  /** Entries are listed most recent first; the array order is the display order. */
-  period: Period
+  /** Position on the axis, months inclusive; no end = still going on (drawn up to today). */
+  span: { start: YearMonth; end?: YearMonth }
+  /** Planned end of an ongoing course, drawn hatched after today. */
+  expectedEnd?: YearMonth
+  /** Shown as is: what we actually know of the dates. */
+  periodLabel: Localized
+  /** Dates still to be confirmed by Jérémie. */
+  datesToConfirm?: boolean
+  badge?: Localized
+  tone: TimelineTone
+  /** Sub-row inside the lane, for entries that overlap (0 = top). */
+  row?: number
   summary: Localized
   highlights?: Localized[]
+  /** Small print under the details (e.g. confidentiality). */
+  note?: Localized
+  tags?: string[]
   tracks: Track[]
   /** Still going on (shown as « En cours »). */
   current?: boolean

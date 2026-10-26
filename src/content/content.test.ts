@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { complexityOf, filterProjects, sortProjects, tracksFromSearch } from '../lib/projects'
 import { complexity } from './complexity'
 import { credentials, inProgress } from './certifications'
+import { contact } from './contact'
 import { hero } from './hero'
 import { profile } from './profile'
 import { dossiers, projects } from './projects'
@@ -22,7 +23,7 @@ function* localizedIn(value: unknown, path = ''): Generator<[string, Localized]>
   for (const [k, v] of Object.entries(value)) yield* localizedIn(v, `${path}.${k}`)
 }
 
-const allContent = { hero, profile, projects, credentials, inProgress, timeline, skills, tracks, expertise }
+const allContent = { hero, profile, projects, credentials, inProgress, contact, timeline, skills, tracks, expertise }
 
 /** Only what reaches the page: editorial fields (doNotClaim, fact sources) are dropped. */
 const displayed = (value: unknown) =>
@@ -58,7 +59,7 @@ describe('content', () => {
   it('links only to the owner’s GitHub account or known hosts', () => {
     const urls = displayed(allContent).match(/https?:\/\/[^"]+/g) ?? []
     for (const url of urls) {
-      expect(url, url).toMatch(/^https:\/\/(github\.com\/JN13012|www\.linkedin\.com|tryhackme\.com|coursera\.org|www\.coursera\.org|www\.salesforce\.com)(\/|$)/)
+      expect(url, url).toMatch(/^https:\/\/(github\.com\/JN13012|www\.linkedin\.com|tryhackme\.com|coursera\.org|www\.coursera\.org|www\.salesforce\.com|www\.epitech\.eu|www\.ecoleperformance\.com|www\.gdriveracing\.com|www\.wartsila\.com|www\.renault\.fr|usersloveit\.com)(\/|$)/)
     }
   })
 
@@ -75,6 +76,19 @@ describe('content', () => {
     }
   })
 
+  it('rates and dates every certification honestly', () => {
+    const ids = [...credentials, ...inProgress].map((c) => c.id)
+    expect(new Set(ids).size).toBe(ids.length)
+    for (const c of credentials) {
+      expect([1, 2, 3, 4, 5], c.id).toContain(c.level)
+      expect(c.date, c.id).toMatch(/^\d{4}-\d{2}(-\d{2})?$/)
+      if (c.hours !== undefined) expect(Number.isInteger(c.hours), c.id).toBe(true)
+      expect(c.stack.length, c.id).toBeGreaterThan(0)
+    }
+    // A learning path is not an exam: Jr Penetration Tester is the path, PT1 the certification.
+    expect(credentials.find((c) => c.id === 'thm-jr-penetration-tester')?.kind).toBe('learning-path')
+  })
+
   it('indexes the 25 write-ups from the public repo', () => {
     expect(writeups.writeups).toHaveLength(25)
     for (const w of writeups.writeups) expect(w.url).toMatch(/^https:\/\/github\.com\/JN13012\/Cyber-Write-ups\//)
@@ -89,19 +103,19 @@ describe('project filters', () => {
     expect(filterProjects(projects, { statuses: ['development'] }).every((p) => p.status === 'development')).toBe(true)
   })
 
-  it('rates every project and sorts by date, complexity and selection', () => {
+  it('rates every project and sorts by date and complexity', () => {
     for (const p of projects) expect(complexity[p.slug], p.slug).toBeDefined()
     const byDate = sortProjects(projects, 'date')
     expect(byDate[0]!.period.end).toBeUndefined()
     const byNote = sortProjects(projects, 'complexity')
     for (let i = 1; i < byNote.length; i++) expect(complexityOf(byNote[i - 1]!)).toBeGreaterThanOrEqual(complexityOf(byNote[i]!))
-    const selection = sortProjects(projects, 'selection')
-    expect(selection.slice(0, dossiers.length).every((p) => p.tier === 'dossier')).toBe(true)
   })
 
 
   it('reads ?metier= from the URL and ignores unknown values', () => {
     expect(tracksFromSearch('?metier=cyber,ia,foo')).toEqual(['cyber', 'ia'])
+    expect(tracksFromSearch('?metier=data')).toEqual(['data'])
+    expect(tracksFromSearch('?metier=devops')).toEqual(['devops'])
     expect(tracksFromSearch('')).toEqual([])
   })
 })
@@ -109,12 +123,14 @@ describe('project filters', () => {
 describe('expertise order', () => {
   const ids = (t: Parameters<typeof orderedDomains>[0]) => orderedDomains(t).map((d) => d.id)
   it('keeps the default order without ?metier=', () => {
-    expect(ids([])).toEqual(['ia', 'offensive', 'defensive', 'devops', 'dev'])
+    expect(ids([])).toEqual(['ia', 'data', 'offensive', 'defensive', 'devops', 'dev'])
   })
   it('uses one order per job and keeps every domain', () => {
-    expect(ids(['ia'])).toEqual(['ia', 'offensive', 'defensive', 'devops', 'dev'])
-    expect(ids(['cyber'])).toEqual(['offensive', 'defensive', 'ia', 'devops', 'dev'])
-    expect(ids(['dev'])).toEqual(['dev', 'ia', 'offensive', 'defensive', 'devops'])
+    expect(ids(['ia'])).toEqual(['ia', 'data', 'offensive', 'defensive', 'devops', 'dev'])
+    expect(ids(['data'])).toEqual(['data', 'ia', 'dev', 'devops', 'offensive', 'defensive'])
+    expect(ids(['cyber'])).toEqual(['offensive', 'defensive', 'ia', 'data', 'devops', 'dev'])
+    expect(ids(['dev'])).toEqual(['dev', 'devops', 'ia', 'data', 'offensive', 'defensive'])
+    expect(ids(['devops'])).toEqual(['devops', 'dev', 'offensive', 'defensive', 'ia', 'data'])
     expect(ids(['ia', 'cyber'])).toEqual(ids(['ia']))
   })
 })

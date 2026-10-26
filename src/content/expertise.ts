@@ -1,6 +1,6 @@
 import type { Localized, Track } from './types'
 
-// Expertise carousel: five domains, each a list of tools that scrolls by.
+// Expertise carousel: six domains, each a list of tools that scrolls by.
 // Only real technical stack (libraries, frameworks, languages, tools): no models or hosted
 // services (Llama 3, watsonx, Groq, Whisper) and no standards (OWASP Top 10, ISO 27001, RGPD).
 // Tools come from skills.ts (backed by projects, write-ups or certificate syllabuses);
@@ -9,7 +9,7 @@ import type { Localized, Track } from './types'
 export type ExpertiseTool = { name: string; note: Localized }
 
 export type ExpertiseDomain = {
-  id: 'ia' | 'offensive' | 'defensive' | 'devops' | 'dev'
+  id: 'ia' | 'data' | 'offensive' | 'defensive' | 'devops' | 'dev'
   /** Project filter the domain links to. */
   track: Track
   /** Family shown above the name on the carousel card. */
@@ -43,9 +43,31 @@ export const expertise: ExpertiseDomain[] = [
       t('Gradio', 'Interfaces de démo des applications IBM', 'Demo interfaces of the IBM applications'),
       t('spaCy', 'Analyse de livres : entités, thèmes, style', 'Book analysis: entities, themes, style'),
       t('PyTorch', 'Exécution d’un modèle conversationnel', 'Running a conversational model'),
-      t('Pandas', 'Analyse de backtests crypto', 'Crypto backtest analysis'),
-      t('NumPy', 'Études BlockTrader, certificat IBM', 'BlockTrader studies, IBM certificate'),
       t('Flask', 'Back-end des applications IA', 'Back end of the AI applications'),
+    ],
+  },
+  {
+    id: 'data',
+    track: 'data',
+    category: { fr: 'Données', en: 'Data' },
+    label: { fr: 'Data', en: 'Data' },
+    positioning: {
+      fr: 'Des données publiques à la décision : nettoyage, géotraitement, cartes et indicateurs sourcés.',
+      en: 'From open data to decisions: cleaning, geoprocessing, maps and sourced indicators.',
+    },
+    proofs: [
+      { fr: '2e place au hackathon Microsoft × Citiz', en: '2nd place at the Microsoft × Citiz hackathon' },
+      { fr: 'Réseau piéton de 16,6 M nœuds', en: '16.6 M-node pedestrian network' },
+    ],
+    tools: [
+      t('Pandas', 'Hackathon Citiz, backtests crypto', 'Citiz hackathon, crypto backtests'),
+      t('NumPy', 'Hackathon Citiz, études BlockTrader', 'Citiz hackathon, BlockTrader studies'),
+      t('GeoPandas', 'Contours, isochrones et couverture (Citiz)', 'Boundaries, isochrones and coverage (Citiz)'),
+      t('Shapely', 'Géométries des isochrones (Citiz)', 'Isochrone geometries (Citiz)'),
+      t('OSMnx', 'Réseau piéton OpenStreetMap (Citiz)', 'OpenStreetMap pedestrian network (Citiz)'),
+      t('NetworkX', 'Plus courts chemins à pied (Citiz)', 'Walking shortest paths (Citiz)'),
+      t('SciPy', 'Graphes creux du réseau régional (Citiz)', 'Sparse graphs of the regional network (Citiz)'),
+      t('Parquet', 'Tables bronze, silver et gold (Citiz)', 'Bronze, silver and gold tables (Citiz)'),
     ],
   },
   {
@@ -58,7 +80,7 @@ export const expertise: ExpertiseDomain[] = [
       en: 'Web and Active Directory pentesting, with a documented method from reconnaissance to report.',
     },
     proofs: [
-      { fr: 'Jr Penetration Tester (95 h)', en: 'Jr Penetration Tester (95 h)' },
+      { fr: 'Jr Penetration Tester (96 h)', en: 'Jr Penetration Tester (96 h)' },
       { fr: '25 write-ups publiés', en: '25 published write-ups' },
       { fr: 'Un audit web autorisé', en: 'One authorised web audit' },
     ],
@@ -106,7 +128,7 @@ export const expertise: ExpertiseDomain[] = [
   },
   {
     id: 'devops',
-    track: 'dev',
+    track: 'devops',
     category: { fr: 'Ingénierie logicielle', en: 'Software engineering' },
     label: { fr: 'DevOps', en: 'DevOps' },
     positioning: {
@@ -114,7 +136,7 @@ export const expertise: ExpertiseDomain[] = [
       en: 'Containers, CI and automated tests, with a hardened pipeline on BlockTrader.',
     },
     proofs: [
-      { fr: '46 tests et CI durcie sur BlockTrader', en: '46 tests and hardened CI on BlockTrader' },
+      { fr: '56 tests et CI durcie sur BlockTrader', en: '56 tests and hardened CI on BlockTrader' },
       { fr: 'Déploiement Kubernetes (projet Bernstein)', en: 'Kubernetes deployment (Bernstein project)' },
     ],
     tools: [
@@ -122,7 +144,7 @@ export const expertise: ExpertiseDomain[] = [
       t('Kubernetes', 'Cluster k3d multi-nœuds : ingress, RBAC, volumes', 'Multi-node k3d cluster: ingress, RBAC, volumes'),
       t('GitHub Actions', 'CI durcie de BlockTrader', 'Hardened CI of BlockTrader'),
       t('Jenkins', 'Instance configurée par le code (JCasC)', 'Instance configured as code (JCasC)'),
-      t('Vitest', 'Tests de Time Manager et d’Atlas Academy', 'Tests of Time Manager and Atlas Academy'),
+      t('Vitest', 'Tests de Time Manager et d’Argos Security Arena', 'Tests of Time Manager and Argos Security Arena'),
       t('Jest', 'Tests de ChatFlow', 'Tests of ChatFlow'),
       t('pytest', 'Tests du moteur Argos', 'Tests of the Argos engine'),
     ],
@@ -137,15 +159,16 @@ export const expertise: ExpertiseDomain[] = [
       en: 'Tested, automated code, from prototype to production.',
     },
     proofs: [
-      { fr: 'Alternance full-stack Salesforce (ULIT)', en: 'Full-stack Salesforce work-study (ULIT)' },
+      { fr: 'Stage full-stack Salesforce (ULIT)', en: 'Full-stack Salesforce internship (ULIT)' },
       { fr: 'Un outil interne en production', en: 'One internal tool in production' },
     ],
     tools: [
       t('TypeScript', 'BlockTrader, générateur OTP, Time Manager', 'BlockTrader, OTP generator, Time Manager'),
-      t('JavaScript', 'Éditeur Salesforce, CTF du portfolio', 'Salesforce editor, portfolio CTF'),
+      t('JavaScript', 'Code Executor (Salesforce), CTF du portfolio', 'Code Executor (Salesforce), portfolio CTF'),
       t('Python', 'Argos, BlockTrader, applications IA', 'Argos, BlockTrader, AI applications'),
       t('Java', 'Vaultborn, action-RPG 2D (LibGDX)', 'Vaultborn, 2D action RPG (LibGDX)'),
-      t('Apex', 'Développement Salesforce en alternance', 'Salesforce development (work-study)'),
+      t('C#', 'ZeroDay, jeu de stratégie (Unity)', 'ZeroDay, strategy game (Unity)'),
+      t('Apex', 'Développement Salesforce en stage', 'Salesforce development (internship)'),
       t('React', 'BlockTrader, ChatFlow, ce portfolio', 'BlockTrader, ChatFlow, this portfolio'),
       t('Next.js', 'Messagerie temps réel ChatFlow', 'ChatFlow real-time messaging'),
       t('NestJS', 'API du générateur OTP et de Time Manager', 'APIs of the OTP generator and Time Manager'),
@@ -160,13 +183,15 @@ export const expertise: ExpertiseDomain[] = [
 ]
 
 /**
- * Full domain order when the visitor arrives through a targeted link (?metier=ia|cyber|dev, see
+ * Full domain order when the visitor arrives through a targeted link (?metier=ia|data|cyber|dev|devops, see
  * src/lib/projects.ts). One job per link: only the first value is used.
  */
 export const domainOrderFor: Record<Track, ExpertiseDomain['id'][]> = {
-  ia: ['ia', 'offensive', 'defensive', 'devops', 'dev'],
-  cyber: ['offensive', 'defensive', 'ia', 'devops', 'dev'],
-  dev: ['dev', 'ia', 'offensive', 'defensive', 'devops'],
+  ia: ['ia', 'data', 'offensive', 'defensive', 'devops', 'dev'],
+  data: ['data', 'ia', 'dev', 'devops', 'offensive', 'defensive'],
+  cyber: ['offensive', 'defensive', 'ia', 'data', 'devops', 'dev'],
+  dev: ['dev', 'devops', 'ia', 'data', 'offensive', 'defensive'],
+  devops: ['devops', 'dev', 'offensive', 'defensive', 'ia', 'data'],
 }
 
 /** The domains in display order for the job of the link (none = default order). */
