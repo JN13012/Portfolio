@@ -51,7 +51,7 @@ const ProjectCard = ({ titre, description, tags, image, categories, date, onClic
 
         <h3 className="mb-2 line-clamp-2 text-lg leading-tight font-bold text-zinc-100 uppercase transition-colors group-hover:text-cyber">{titre}</h3>
 
-        <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-zinc-300">{description}</p>
+        <p className="mb-4 line-clamp-3 text-sm leading-relaxed text-zinc-300">{description}</p>
 
         <StackLine tags={tags} />
 
