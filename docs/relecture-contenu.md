@@ -55,127 +55,340 @@ Preuves : Déploiement Kubernetes multi-nœuds (Bernstein) · Jenkins configuré
 
 ### BlockTrader — En développement (2026-07 → en cours)
 
-Bot de trading crypto sécurisé, actuellement en phase de test : il conçoit et teste des stratégies sur BTC et ETH, étudie le marché à partir d’une dizaine de sources de données publiques, et vise à être piloté ensuite par une IA qui choisira les stratégies à suivre en fonction du marché.
+*Carte* : Bot de trading crypto en test : 40 stratégies validées contre le surapprentissage.
+
+Bot de trading crypto en phase de test, sans fonds réels : 40 stratégies sur BTC et ETH, validées par une méthode statistique, et un observatoire du marché. Une IA doit ensuite choisir les stratégies ; elle n’est pas encore branchée.
 
 *Angle ia* : Pensé pour être piloté par une IA : stratégies validées et lecture du marché lui fourniront des conclusions vérifiables, et une règle de sûreté borne déjà ce qu’elle pourra faire.
 
-*Angle data* : Un observatoire du marché qui historise une dizaine de sources publiques, et une méthodologie statistique contre le surapprentissage (Sharpe dégonflé, holdout scellé).
+*Angle data* : Un observatoire du marché qui historise 11 indicateurs publics, et une méthodologie statistique contre le surapprentissage (Sharpe dégonflé, holdout scellé).
 
 *Angle dev* : Moteur Python compilé (numba), vérifié contre VectorBT et une boucle de référence, 56 tests, CI durcie, exécution serverless.
 
-**Le problème.** Un bot de trading ne vaut que par ses stratégies. Or la plupart des backtests sont trop beaux pour être vrais : à force d’essayer des variantes, on finit par trouver une stratégie qui a « marché » par hasard, ou qui utilise sans le savoir des informations du futur. Et une IA branchée sur de mauvaises stratégies ne ferait qu’amplifier l’erreur.
+**Le problème.** La plupart des backtests sont trop beaux pour être vrais : à force d’essayer des variantes, une stratégie finit par « marcher » par hasard, ou par utiliser sans le savoir des données du futur. Une IA branchée dessus ne ferait qu’amplifier l’erreur.
 
-**Les stratégies.** Le bot fait tourner 40 stratégies en parallèle, réparties en 6 familles : suivre la tendance, choisir entre BTC et ETH, diversifier, racheter dans les chutes, grilles, et des chefs d’orchestre qui répartissent le capital entre stratégies. Chaque protocole est figé par écrit avant le moindre calcul et chaque essai, échecs compris, est inscrit dans un registre (3 349 lignes). Les résultats sont corrigés du nombre d’essais, pour ne pas confondre chance et vraie performance, et une période de test mise de côté ne sert qu’une seule fois.
+**Les stratégies.** 40 stratégies en 6 familles : suivre la tendance, choisir entre BTC et ETH, diversifier, racheter dans les chutes, grilles, et des chefs d’orchestre qui répartissent le capital.
+- Protocole : chaque protocole est écrit avant le moindre calcul.
+- Registre : chaque essai y est inscrit, échecs compris (3 973).
+- Correction : les résultats sont corrigés du nombre d’essais, pour ne pas confondre chance et performance.
+- Validation : une période de test mise de côté ne sert qu’une seule fois.
 
-**La data et l’architecture.** À chaque passage, un observatoire du marché note une dizaine de données publiques, sans clé ni compte : financement et positions ouvertes des contrats perpétuels, volatilité implicite des options, indice Fear & Greed, stablecoins en circulation, réserves des bourses, rapport COT du CME. Il se constitue ainsi un historique daté pour étudier le marché sans regarder dans le futur. Le moteur de backtest, en Python compilé avec numba, est recoupé avec VectorBT et une boucle de référence. Le paper trading tourne toutes les 4 heures sans serveur (Google Cloud Scheduler déclenche GitHub Actions) sur des cotations Uniswap v3 lues on-chain, sur Ethereum et Arbitrum, et un tableau de bord React suit le tout.
+**La data et l’architecture.** Tout tourne sans serveur et sans compte sur une plateforme d’échange.
+- Observatoire : 11 indicateurs publics, sans clé ni compte (financement des perpétuels, volatilité implicite, Fear & Greed, stablecoins, réserves des bourses, rapport COT du CME…), historisés et datés.
+- Moteur : Python compilé avec numba, recoupé avec VectorBT et une boucle de référence.
+- Paper trading : toutes les 4 heures (Google Cloud Scheduler déclenche GitHub Actions), sur des cotations Uniswap v3 lues on-chain sur Ethereum et Arbitrum, suivi dans un tableau de bord React.
 
-**La sécurité.** Aucune clé privée, aucune signature, aucun fonds. La CI est au moindre privilège : lecture seule par défaut, actions épinglées par empreinte SHA, et le seul job autorisé à écrire n’exécute aucun code du projet. Une donnée manquante ou incohérente met le bot en pause, jamais en position. Un test injecte volontairement une stratégie qui « triche » avec le futur et vérifie qu’elle est détectée. Pour un éventuel passage au réel, l’architecture de garde est conçue (fonds dans un Safe, permissions Zodiac, clé dans un HSM Cloud KMS, coupe-circuit Ledger) mais pas implémentée.
+**La sécurité.** Le bot ne peut rien perdre, et la CI ne peut rien fuiter.
+- Aucun secret : aucune clé privée, aucune signature, aucun fonds.
+- CI : au moindre privilège, actions épinglées par empreinte SHA.
+- Données : une donnée manquante ou incohérente met le bot en pause, jamais en position.
+- Contrôle : un test injecte une stratégie qui triche avec le futur et vérifie qu’elle est détectée.
+- Passage au réel : l’architecture de garde est conçue (Safe, Zodiac, Cloud KMS, coupe-circuit Ledger), pas implémentée.
 
-**Où en est le projet.** Le banc d’essai a fait son travail : il a montré qu’aucune des stratégies testées n’est statistiquement prouvée sur l’historique, ce qui évite de confier de mauvaises stratégies à une IA. La phase de test tourne depuis le 8 octobre 2026 : un premier verdict sur l’exécution (coûts, signaux, délais) est prévu en janvier 2027 ; la performance, elle, se jugera sur au moins un an de marché.
+**Où en est le projet.** Le banc d’essai a montré qu’aucune des stratégies n’est statistiquement prouvée sur l’historique, ce qui évite de confier de mauvaises stratégies à une IA. Le test en conditions réelles, sans argent, tourne depuis le 8 octobre 2026 : un verdict sur l’exécution est prévu en janvier 2027, et la performance se jugera sur au moins un an.
 
-**La suite : le pilotage par IA.** L’IA n’est pas encore branchée. Elle s’appuiera sur les conclusions de l’observatoire pour choisir parmi les stratégies validées, avec une règle de sûreté déjà écrite : l’IA pourra réduire l’exposition ou mettre en pause, jamais déclencher un achat ni relever une limite. Paper trading uniquement, dépôt privé.
+**La suite : le pilotage par IA.** L’IA n’est pas encore branchée. Elle choisira parmi les stratégies validées, sous une règle déjà écrite : elle pourra réduire l’exposition ou mettre en pause, jamais acheter ni relever une limite. Dépôt privé.
 
-Chiffres : 56 tests · 3 349 essais enregistrés · 13 protocoles pré-enregistrés · 0 € de fonds réels engagés
+Chiffres : 40 stratégies · 6 familles de stratégies · 11 indicateurs de marché suivis · 0 € de fonds réels engagés
 
 Stack : Python, NumPy, Numba, pandas, VectorBT, web3.py, GitHub Actions, Google Cloud Scheduler, React, TypeScript
 
 ### Argos — En développement (2026-07 → en cours)
 
-Projet de fin d’études Epitech en cybersécurité. Le premier module collecte des informations publiques sur les entreprises en gardant la source de chaque donnée ; une couche d’agents IA est en conception.
+*Carte* : Plateforme de cybersécurité pilotée par IA pour les PME, du web à l’industrie.
 
-*Angle cyber* : Un cadre légal écrit avant le code : sources publiques et API officielles uniquement, données personnelles minimisées.
+Une plateforme de cybersécurité pilotée par IA, pensée pour les PME sans équipe cyber : auditer, surveiller et faire corriger leur sécurité, avec une validation humaine à chaque étape. Le moteur OSINT est en développement ; les agents IA sont conçus, pas encore codés.
 
-*Angle ia* : Architecture prévue pour des agents IA (capacités, workflows, pilotage), documentée et pas encore implémentée.
+*Angle cyber* : Six domaines d’audit prévus, du web à l’industrie, et un cadre écrit avant le code : mandat et périmètre non contournables, sources publiques, respect du RGPD.
 
-**Le moteur.** Python, connecteur à l’API publique INSEE SIRENE, base SQLite. Chaque observation est enregistrée avec sa source et sa date : une donnée sans provenance est refusée. Les rapports sont générés en Markdown.
+*Angle ia* : Des agents IA prévus pour planifier, analyser et rapprocher les données, avec une règle : l’IA assiste, les capacités essentielles fonctionnent sans elle. Conçus, pas encore codés.
 
-**Le cadre légal.** Un document fixe les règles du projet : sources publiques ou API officielles, respect des conditions d’utilisation, organisations plutôt que personnes, aucune prise de contact automatisée.
+**La vision.** Beaucoup de PME dépendent de leur informatique sans avoir les moyens d’un pentest régulier ni d’une équipe sécurité. Argos veut leur apporter une démarche professionnelle et continue : trouver les failles, prouver leur impact, faire corriger, puis vérifier.
 
-**Où en est le projet.** Dépôt reconstruit sur une base propre le 10 octobre 2026. L’intégration de modèles de langage viendra une fois le moteur stabilisé.
+**Ce qu’Argos couvrira.** Six étapes, avec dès la première un socle commun : inventaire, risques, preuves, rapports, suivi des corrections, protection des données et validation humaine.
+- V1 · Applications web : audit externe, authentification et sessions, API, code source et CI/CD.
+- V2 · IA, LLM et agents : prompt injection et fuites, RAG et bases vectorielles, agents, outils et MCP.
+- V3 · Réseau et infrastructures : exposition Internet, réseau interne, Windows, Linux, stockage, sauvegardes.
+- V4 · Identités, messagerie et cloud : Microsoft 365, Active Directory, cloud, conteneurs et Kubernetes.
+- V5 · Surveillance et réponse aux incidents : détection, investigation, réponse et reprise.
+- V6 · Environnements spécialisés : mobile, objets connectés et firmware, industrie (OT).
 
-Chiffres : 62 tests
+**Le moteur OSINT, en cours.** La base de tout le reste : collecter, nettoyer et croiser des données publiques sur des organisations, en gardant la source et la date de chaque donnée.
+- Collecte : API publiques, crawling et scraping de sites web.
+- Traitement : nettoyage, analyse et corrélation des données.
+- IA et NLP : comprendre les textes collectés, classer et rapprocher les organisations.
+- Usages : cartographier ce qu’une organisation expose avant un audit, et trouver les entreprises qui ont besoin d’un service (pentest, site à refaire, agent vocal), dans le respect du RGPD.
+
+**Où en est le projet.** La première brique du moteur OSINT est codée : elle recherche des entreprises dans la base publique SIRENE de l’INSEE, garde la source et la date de chaque donnée et produit un rapport lisible. Le crawling, l’analyse, les agents IA et les étapes V1 à V6 sont conçus, pas encore développés.
+
+Chiffres : 6 domaines de sécurité prévus · OSINT premier module en développement
 
 Stack : Python, httpx, SQLite, pytest
 
-### Pentest - write-ups et audit — Terminé (2026-04 → 2026-10)
+### Write-ups de pentest — En continu (2026-04 → 2026-10)
 
-25 rapports de tests d’intrusion publiés sur des environnements d’entraînement, et un premier audit web dans un cadre autorisé, accompagnés du parcours TryHackMe Jr Penetration Tester.
+*Carte* : 25 rapports de pentest publiés : web, Active Directory, Linux, Windows.
 
-**Une méthode documentée.** Chaque rapport suit le même standard : métadonnées structurées, déroulé de la reconnaissance au résultat, et une section d’enseignements. Les environnements viennent d’Epitech (10 machines du module T-SEC-600) et de TryHackMe (15 salles) ; ils couvrent le web, Active Directory, Linux, Windows et la rétro-ingénierie.
+25 rapports de tests d’intrusion publiés sur des machines d’entraînement, de la reconnaissance à l’élévation de privilèges. La série s’enrichit au fil de l’entraînement.
 
-**Le premier audit.** Audit de sécurité web mené dans un cadre autorisé sur une infrastructure réelle, environ 20 heures, conclu par un rapport technique. Le client et les résultats restent confidentiels.
+**Une méthode documentée.** Chaque rapport suit le même standard, sur 10 machines Exegol et 15 salles TryHackMe.
+- Métadonnées : système, techniques et outils de chaque machine.
+- Déroulé : de la reconnaissance au résultat, étape par étape.
+- Enseignements : ce qui a bloqué, et ce qu’il faut retenir.
 
-Chiffres : 25 write-ups publiés · 96 h parcours Jr Penetration Tester · ≈ 20 h premier audit autorisé
+**Ce qu’ils couvrent.** Les grandes familles d’attaque d’un test d’intrusion.
+- Web : énumération, injection de commandes, exécution de code à distance.
+- Active Directory : énumération du domaine et attaques Kerberos.
+- Élévation de privilèges : sous Linux (SUID, sudo, cron) et sous Windows.
+- Mots de passe : cassage d’empreintes et attaques par dictionnaire.
+- Rétro-ingénierie : analyse de binaires.
 
-Stack : TryHackMe, Exegol, Nmap, Burp Suite, Metasploit, Hashcat
+Chiffres : 25 write-ups publiés
+
+Stack : Nmap, Gobuster, Burp Suite, Hydra, Netcat, NetExec, Impacket, Hashcat, John the Ripper
 
 ### ZeroDay — En développement (2026-08 → en cours)
 
-Jeu de stratégie sur le thème de la cybersécurité, en phase de conception : un corpus de game design versionné, une banque de termes alignée sur MITRE ATT&CK et une première fondation technique sous Unity.
+*Carte* : Jeu mobile de stratégie : incarner un malware qui se propage, face aux défenses du monde.
 
-*Angle dev* : Cœur de simulation déterministe testé, et un éditeur d’arbres de progression écrit à la main, sans framework.
+Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se propage dans le monde entier, pendant que les pays réagissent, se défendent et construisent un remède. Un multijoueur avec classement et une version où l’on joue l’humanité sont prévus.
 
-**La conception d’abord.** Avant de coder le jeu, tout est écrit et versionné : une vision canonique figée, un registre des décisions de design, une boussole de gameplay et 22 documents de segments, soit environ 141 000 mots hors archives.
+*Angle dev* : Cœur de simulation déterministe sous Unity, vérifié par des tests, et un éditeur d’arbres d’évolution écrit à la main, sans framework.
 
-**La fondation technique.** Unity 6.3 LTS en C#, cible web. Un générateur aléatoire à graine (xorshift32) et une session de simulation rejouable rendent chaque partie reproductible, vérifiées par 5 tests. Un éditeur web maison (HTML, CSS et JavaScript) dessine les arbres de progression : 42 capacités dans l’arbre Propagation, 36 dans Adaptation.
+**Le concept.** Le joueur ne contrôle pas une armée : il fait évoluer un code malveillant, exploite les dépendances numériques des sociétés et provoque des pannes en chaîne. Chaque pays réagit à sa façon, et le monde coopère pour bâtir un « Neutralisateur ».
 
-**Les limites.** Pas encore jouable : la fondation M0 est un bac à sable sans gameplay définitif. Dépôt privé.
+**L’envergure prévue.** Un monde simulé pays par pays, et de quoi rejouer longtemps.
+- 9 classes de malware : Ver, Trojan, Virus polymorphe, RAT, Rootkit, Botnet, Ransomware, Wiper, IA rogue.
+- 3 arbres d’évolution : Propagation, Adaptation, Impact.
+- 3 difficultés : Facile, Normal, Brutal.
+- Une carte du monde : 28 types de cibles : PC, smartphones, objets connectés, véhicules, data centers…
+- Progression : des déblocages permanents d’une partie à l’autre.
+- Prévu ensuite : un multijoueur avec classement, et une V2 où l’on joue l’humanité qui se défend.
 
-Chiffres : ≈ 141 000 mots de game design · 78 capacités dans les arbres · 5 tests du cœur déterministe
+**La conception et la technique.** Tout est écrit avant d’être codé.
+- Game design : environ 141 000 mots versionnés, un registre des décisions, des termes alignés sur MITRE ATT&CK.
+- Unity (C#) : une partie peut être rejouée à l’identique, pour tester et équilibrer le jeu.
+- Éditeur maison : un outil web pour dessiner les arbres d’évolution.
+
+**Où en est le projet.** Les arbres Propagation et Adaptation sont figés, l’arbre Impact est en cours. Le premier prototype jouable (Ver, carte du monde, propagation, victoire) viendra une fois le game design terminé. Pas encore jouable ; dépôt privé.
+
+Chiffres : 9 classes de malware · 3 arbres d’évolution · 3 difficultés · ≈ 141 000 mots de game design
 
 Stack : Unity 6.3, C#, HTML, CSS, JavaScript, Markdown
 
 ## Autres réalisations
 
-### Générateur OTP RCS — Terminé · Équipe de 6 · backend et sécurité applicative
+### Générateur OTP RCS — Terminé · Équipe de 4 · Rôle : backend et sécurité applicative
 
-Hackathon inter-écoles : backend d’authentification à deux facteurs qui génère, envoie par RCS (API smsmode) et vérifie des codes à 6 chiffres. Seule l’empreinte SHA-256 des codes est stockée ; expiration, nombre d’essais limité et limitation par numéro et par IP. 3e place.
+*Carte* : Backend 2FA : codes à 6 chiffres envoyés par RCS, hachés et limités.
 
-### Hackathon Microsoft × Citiz — Terminé · Équipe de 5 · data engineer géospatial
+3e place au hackathon inter-écoles pour la conception, en 4 jours, d’un service d’authentification à deux facteurs qui envoie les codes par RCS.
 
-Hackathon Epitech : outil d’aide à la décision qui indique où ouvrir une station d’autopartage Citiz pour toucher le plus d’habitants au moindre coût. Réseau piéton, isochrones à 5 minutes, carte d’accès aux transports, modèle de prédiction et liste priorisée sous budget. 2e place.
+**Fonctionnalités.**
+- Envoi : un code à 6 chiffres, envoyé par RCS avec l’API smsmode.
+- Vérification : le code saisi est comparé à la demande en cours.
+- Expiration : 5 minutes de validité, 3 essais au plus.
 
-### ChatFlow — Terminé · Équipe de 4 · backend
+**Sécurité.**
+- Stockage : seule l’empreinte SHA-256 du code est gardée.
+- Limitation : par numéro de téléphone et par adresse IP.
+- Validation : chaque requête est vérifiée avant traitement.
 
-Messagerie temps réel façon plateforme communautaire : serveurs, salons, rôles, messages privés, pièces jointes. API Express documentée, client Next.js et application desktop Electron.
+**Ma part.**
+- Service OTP : génération, envoi et vérification des codes.
+- Données : les accès à la base MongoDB.
+- Protections : limitation par IP et validation des requêtes.
 
-### Time Manager — En développement · Équipe de 4 · backend
+Chiffres : 3e place · 4 jours de hackathon
 
-Application de gestion du temps de travail : API NestJS typée avec Drizzle et Swagger, front React, tests unitaires et de bout en bout avec Vitest.
+### Hackathon Microsoft × Citiz — Terminé · Équipe de 5 · Rôle : data engineer géospatial
+
+*Carte* : Où ouvrir une station d’autopartage : réseau piéton de 16,6 M de nœuds.
+
+2e place au hackathon Epitech pour la conception d’un outil d’aide à la décision : où ouvrir des stations d’autopartage Citiz pour desservir le plus d’habitants au moindre coût.
+
+**Objectifs.**
+- Accessibilité : cartographier, pour chaque habitant, le nombre de transports accessibles à 5 minutes à pied.
+- Desserte : recenser les arrêts et les stations par type, avec la population qu’ils desservent.
+- Décision : estimer le potentiel de chaque site, chiffrer les coûts et classer les sites selon un budget.
+- Territoire : Auvergne-Rhône-Alpes, puis une simulation sur toute la France.
+
+**Ma part.**
+- Nettoyage : contrôle qualité des données géographiques : doublons, géométries invalides, valeurs manquantes.
+- Réseau piéton : construit depuis OpenStreetMap : 16,6 millions de nœuds, découpés en 835 tuiles.
+- Croisement : arrêts et stations raccordés au réseau, croisés avec la population.
+- Zones atteignables : calcul des zones à 5 minutes à pied autour de chaque arrêt.
+- Accès et couverture : la carte d’accès et la population desservie, qui alimentent le modèle ; chaque étape testée.
+
+**Résultat.**
+- Modèle (équipe) : il apprend où les stations existantes se trouvent et note chaque zone ; testé sur des territoires qu’il n’a jamais vus, il fait mieux qu’un simple classement par population.
+- Liste priorisée : les sites qui desservent le plus d’habitants pour un budget donné, avec une part réservée hors des grandes villes.
+
+Chiffres : 2e place · 1 semaine
+
+### ChatFlow — Terminé · Équipe de 4 · Rôle : backend
+
+*Carte* : Messagerie temps réel : serveurs, salons, rôles, sur le web et en desktop.
+
+Une messagerie temps réel façon plateforme communautaire, sur le web et en application desktop.
+
+**Fonctionnalités.**
+- Communautés : serveurs, salons, membres, rôles et invitations.
+- Messages : en temps réel, avec réactions, pièces jointes, messages privés et amis.
+- Clients : un site Next.js multilingue et une application Electron (Windows, macOS, Linux).
+
+**Architecture.**
+- API : Express, Prisma et MySQL, documentée avec Swagger.
+- Temps réel : Socket.IO.
+- Fichiers : stockés dans MinIO.
+
+**Ma part.**
+- Membres : statut en ligne, exclusion, messages épinglés.
+- Invitations : une par personne, avec pagination.
+- Notifications et CI : les notifications et l’intégration continue.
+
+### Time Manager — En développement · Équipe de 4 · Rôle : backend
+
+*Carte* : App de pointage : employés, équipes et indicateurs, connexion Microsoft.
+
+Une application de pointage pour une enseigne fictive : les employés pointent, les managers gèrent leurs équipes et suivent des indicateurs.
+
+**Fonctionnalités.**
+- Pointage : arrivées, départs et corrections.
+- Équipes : les managers gèrent leurs équipes et suivent des indicateurs.
+- Connexion : par e-mail ou par Microsoft (Entra ID), sans inscription libre.
+
+**Architecture.**
+- Services : Caddy en entrée, API NestJS, PostgreSQL, front React.
+- Déploiement : Docker, avec migrations automatiques.
+
+**Ma part.**
+- Base de données : tout le schéma (utilisateurs, équipes, appartenances, pointages, corrections), avec ses migrations et ses tests.
+- API des équipes : validation, accès aux données, règles métier, droits du manager, archivage, puis les routes et le contrôleur, testés.
+
+**Où en est le projet.** En cours de construction.
 
 ### Code Executor — Terminé
 
-Éditeur interne pour l’écosystème Salesforce, utilisé en production chez ULIT : exécution, planification et chaînage de scripts, sauvegarde et suivi des logs.
+*Carte* : Éditeur Apex dans Salesforce : chaînage de scripts, planification, logs. En production.
+
+Outil interne pour écrire, exécuter, enchaîner et planifier des scripts Apex directement dans Salesforce, avec la trace de chaque exécution et de chaque version. Utilisé par les équipes QA et dev d’ULIT (une vingtaine de personnes), toujours en production.
+
+**Ce qu’il fait.** Tout ce qu’il faut pour lancer du code Apex en confiance, sans quitter Salesforce.
+- Exécution : par l’API Tooling, avec les erreurs localisées à la ligne et à la colonne.
+- Coloration syntaxique : du code Apex dans l’éditeur.
+- Chaînage de scripts : A, puis B si A réussit, puis C ; au premier échec, la chaîne s’arrête et un message d’erreur est envoyé.
+- Planification : exécution unique, quotidienne ou hebdomadaire, avec la liste des tâches planifiées.
+- Logs : niveaux réglables par catégorie, journaux sauvegardés avec chaque exécution, suivis et téléchargeables.
+- Sessions : plusieurs exécutions regroupées dans un même journal.
+- Versions : nom et numéro de version automatiques, historique des versions, import et export.
+- Historique : toutes les exécutions d’un script, la dernière affichée à côté de son nom.
+- Droits : les droits Salesforce sont vérifiés avant chaque lecture ou écriture.
+
+Chiffres : ≈ 20 utilisateurs · 9 fonctionnalités
 
 ### Bernstein - Kubernetes — Terminé
 
-Déploiement d’une application de vote en microservices sur un cluster k3d multi-nœuds : ingress Traefik, secrets, volumes persistants, RBAC et supervision cAdvisor.
+*Carte* : Une app de vote en microservices déployée sur un cluster Kubernetes multi-nœuds.
+
+Une application de vote en microservices, déployée sur un cluster Kubernetes multi-nœuds.
+
+**Architecture.**
+- Vote : une interface Flask envoie les votes dans une file Redis.
+- Traitement : un worker Java les enregistre dans la base de données PostgreSQL.
+- Résultats : une application Node.js les affiche.
+
+**Déploiement.**
+- Cluster : k3d multi-nœuds, configuré entièrement en YAML.
+- Accès : Traefik route le trafic entrant ; des droits par rôle (RBAC) lui permettent seulement de lire ses règles.
+- Configuration : ConfigMaps, et un Secret pour la base.
+- Stockage : un volume persistant pour PostgreSQL.
+- Supervision : cAdvisor sur chaque nœud.
 
 ### Bookworm — Terminé
 
-Outil en ligne de commande d’analyse de livres du projet Gutenberg avec spaCy : diversité lexicale, thèmes par section, entités nommées, résumé et fiche de lecture.
+*Carte* : Analyse de livres Gutenberg en NLP : thèmes, personnages, résumé et fiche.
+
+Un outil en ligne de commande qui analyse les livres du projet Gutenberg avec du NLP et en produit une fiche de lecture.
+
+**Analyses.**
+- Diversité lexicale : la richesse du vocabulaire.
+- Thèmes : les mots importants de chaque section (TF-IDF).
+- Entités : les personnages et les lieux, avec spaCy.
+- Résumé et livres proches : un résumé court et les livres les plus proches (similarité cosinus).
+- Fiche : tout réuni dans une fiche, avec un cache des calculs.
 
 ### Base de connaissance — En développement
 
-Base de connaissances personnelle sous Obsidian : procédures, cheatsheets, workflows et retours d’expérience en cybersécurité, IA, développement et DevOps.
+*Carte* : 728 notes Obsidian : cours, méthodes de pentest et notes de projets, cyber, IA et dev.
+
+Une base de connaissances personnelle sous Obsidian, tenue au fil des formations et des projets : notes de cours, méthodes, cheatsheets et retours d’expérience.
+
+**Ce qu’elle couvre.** Cinq domaines, comptés le 26 octobre 2026.
+- Cybersécurité (414 notes) : 370 notes de cours TryHackMe et 43 fiches de méthode pentest.
+- Projets (257 notes) : conception et suivi d’Argos, BlockTrader, ZeroDay…
+- IA (34 notes) : le parcours IBM AI Developer.
+- Salesforce et DevOps : 10 et 7 notes.
+
+Chiffres : 728 notes
 
 ### CTF du portfolio — Terminé
 
-Parcours d’entraînement en 9 niveaux intégré au site, dans un terminal simulé : de la reconnaissance à l’analyse SIEM, la forensique et le durcissement.
+*Carte* : CTF en 9 niveaux jouable sur ce site : attaquer une machine, puis la défendre.
+
+Un CTF jouable dans le Lab de ce site, dans un terminal simulé. On attaque d’abord une machine fictive, de la reconnaissance à l’exploitation, puis on passe côté défense : analyser l’attaque, la contenir et durcir l’infrastructure. La progression est gardée dans le navigateur.
+
+**Les 9 niveaux.** Six niveaux d’attaque, puis trois de défense.
+- 1 · Reconnaissance : un flag caché dans le code source de la page.
+- 2 · Commandes Linux : fouiller les fichiers avec find et grep.
+- 3 · Scan de services : énumérer les ports et les versions avec nmap.
+- 4 · Exploitation web : des pages cachées (gobuster), puis une injection SQL (sqlmap).
+- 5 · Mots de passe : casser des empreintes MD5 (john, hashcat), puis se connecter en SSH.
+- 6 · Exploitation système : la faille SMB MS17-010 avec Metasploit.
+- 7 · SOC : retrouver l’IP de l’attaquant dans un SIEM type Splunk.
+- 8 · Forensique : analyser le binaire, retrouver le processus malveillant et l’arrêter.
+- 9 · Durcissement : pare-feu, WAF et IDS (Snort).
+
+Chiffres : 9 niveaux · 2 rôles : attaquant, puis défenseur · 21 commandes et outils simulés
 
 ### Argos Security Arena — En développement
 
-Plateforme d’entraînement cyber (parcours, modules, salles, progression), en pause : elle deviendra l’arène d’entraînement d’Argos, un lab où s’exercer à l’attaque et à la défense.
+*Carte* : Plateforme de benchmark pour agents IA : les tester sur des scénarios vulnérables.
 
-### Smart Fridge — Terminé
+Une plateforme de benchmark et d’entraînement en cybersécurité, pensée d’abord pour les agents IA, puis pour les humains.
 
-Pilotage de la phase de conception d’un produit : analyse de marché (SWOT, PESTEL), personas, cartographie des risques, indicateurs, budget et planning Gantt.
+**Objectif.**
+- Benchmarks : évaluer des agents IA de pentest sur des scénarios dont on connaît les failles.
+- Mesures : scores, traces de chaque action et classements.
+- Isolation : des environnements réinitialisés après chaque essai.
+- Entraînement : les mêmes scénarios entraînent aussi bien les agents IA que les humains.
+
+**Ce qui existe.**
+- Domaines : cybersécurité, et IA en aperçu.
+- Parcours : un parcours d’entrée « Recruit », puis six spécialisations, de l’offensif à la sécurité de l’IA.
+- Salles : questions et flags, débloqués l’un après l’autre dans chaque module.
+- Progression : points selon la difficulté, rangs, tableau de bord et suivi.
+
+**Où en est le projet.** En pause. L’interface d’entraînement existe et elle est testée. Le benchmark des agents, le backend et les machines réelles restent à développer, d’après un plan déjà écrit.
+
+### Smart Fridge — Terminé · Équipe de 3
+
+*Carte* : Conception d’un produit : marché, personas, risques, budget et planning.
+
+Le pilotage de la conception d’un réfrigérateur connecté, du marché au planning.
+
+**Livrables.**
+- Cadrage : brainstorming et présentation du projet.
+- Utilisateurs : personas de l’équipe et du client.
+- Marché : analyses SWOT et PESTEL.
+- Pilotage : indicateurs, cartographie des risques, budget et ressources.
+- Planning : diagramme de Gantt, avec les risques.
 
 ## Applications LLM (certification IBM)
 
 ### RAG PDF Chatbot
 
-Projet de certification IBM AI Developer : un chatbot répond aux questions sur des CV en PDF (découpage des documents, embeddings stockés dans FAISS, Llama 3 interrogé via LangChain), conteneurisé avec Docker.
+Projet de certification IBM AI Developer : un chatbot qui analyse des CV et des lettres de motivation en PDF et répond à des questions précises, grâce au RAG.
 
 ### Meeting Companion
 
@@ -183,7 +396,7 @@ Projet de certification IBM AI Developer : un assistant de réunion transcrit l�
 
 ### Career Coach
 
-Projet de certification IBM AI Developer : un coach de carrière optimise le CV et rédige des lettres de motivation adaptées à une offre, avec Llama 3.2 sur IBM watsonx.ai.
+Projet de certification IBM AI Developer : un coach de carrière IA en trois onglets : CV, lettre de motivation et conseils.
 
 ### Assistant Translator
 
@@ -191,14 +404,107 @@ Projet de certification IBM AI Developer : un traducteur vocal transcrit la paro
 
 ## Archives
 
-- **Platino** (2025) — Plateforme d’offres d’emploi pour étudiants : comptes, profils, candidatures et favoris, API Express et PostgreSQL.
-- **POPEYE** (2025) — Application web distribuée en microservices, orchestrée avec Docker Compose.
-- **My_Marvin** (2025) — Instance Jenkins conteneurisée, configurée entièrement par le code (JCasC, Job DSL).
-- **Vaultborn** (2025) — Action-RPG 2D en Java : 7 classes jouables, mondes interconnectés, inventaire et sauvegarde, architecture en patterns (Factory, World, Screen).
-- **CyberPong** (2025) — Pong futuriste en Python : niveaux progressifs, « virus » qui modifient la physique et introduction scénarisée.
-- **Unit Converter** (2025) — Convertisseur d’unités en terminal et en interface graphique Tkinter.
-- **AI Voice Assistant** (2026) — Projet de certification IBM AI Developer : un assistant vocal qui raisonne avec Llama 3 via Groq, reconnaît et synthétise la voix avec IBM Watson, dans une interface Flask.
-- **LLM Context Wrapper** (2026) — Projet de certification IBM AI Developer : une surcouche Python à Hugging Face Transformers qui garde l’historique de conversation du modèle Blenderbot.
+### Platino (2025)
+
+*Carte* : Job board étudiant : comptes, profils, candidatures, API Express.
+
+Plateforme d’offres d’emploi pour étudiants : comptes, profils, candidatures et favoris, API Express et PostgreSQL.
+
+**Fonctionnalités.**
+- Comptes : inscription et connexion.
+- Profil : informations, bio, compétences et CV.
+- Offres : consulter, postuler, suivre ses candidatures et ses favoris.
+
+**Ma part.**
+- API : les modèles, les contrôleurs et les routes, sur PostgreSQL.
+
+### POPEYE (2025)
+
+*Carte* : Une app de vote en microservices, orchestrée avec Docker Compose.
+
+Application web distribuée en microservices, orchestrée avec Docker Compose.
+
+**Architecture.**
+- Vote : une interface web envoie les votes dans Redis.
+- Traitement : un worker les enregistre dans la base de données PostgreSQL.
+- Résultats : une seconde interface les affiche.
+- Orchestration : Docker Compose relie et démarre les services.
+
+### My_Marvin (2025)
+
+*Carte* : Jenkins entièrement configuré par le code (JCasC, Job DSL), en Docker.
+
+Instance Jenkins conteneurisée, configurée entièrement par le code (JCasC, Job DSL).
+
+**Fonctionnalités.**
+- Configuration : Jenkins Configuration as Code (JCasC) décrit tout le serveur.
+- Jobs : créés par un script Job DSL en Groovy.
+- Conteneur : le tout dans Docker, avec Docker Compose.
+
+### Vaultborn (2025)
+
+*Carte* : Action-RPG 2D en Java : 7 classes jouables, mondes connectés, sauvegarde.
+
+Action-RPG 2D en Java : 7 classes jouables, mondes interconnectés, inventaire et sauvegarde, architecture en patterns (Factory, World, Screen).
+
+**Contenu.**
+- 7 classes jouables : guerriers, archer et mages, chacun avec ses statistiques.
+- Mondes : une forêt et un enfer, reliés par des portes.
+- Progression : niveaux, inventaire et sauvegarde automatique.
+- Architecture : des patterns Factory, World et Screen.
+
+### CyberPong (2025)
+
+*Carte* : Mon premier jeu vidéo : un Pong futuriste où 7 virus déforment la partie.
+
+Mon premier jeu vidéo, en Python. Une introduction scénarisée façon terminal de hacker « infecte » le jeu ; ensuite, à chaque niveau, un nouveau virus change les règles.
+
+**Les 7 virus.** Chacun a sa musique et son effet sonore ; score, chronomètre, et l’introduction se passe avec Échap.
+- Shrinking Virus : les raquettes rétrécissent.
+- Hyper Worm : la balle accélère.
+- Crazy Virus : les rebonds partent dans des angles aléatoires.
+- Interference : l’écran tremble.
+- Trojan Distortion : la balle rétrécit.
+- Firewall Block : un mur-obstacle apparaît au milieu.
+- Critical Error : l’écran clignote en continu.
+
+### Unit Converter (2025)
+
+*Carte* : Convertisseur d’unités en Python : 8 catégories, en terminal et en interface.
+
+Un outil Python qui convertit une valeur et affiche le résultat dans toutes les autres unités de sa catégorie à la fois, en terminal ou dans une interface Tkinter.
+
+**Les 8 catégories.** Chacune avec ses unités courantes.
+- Température : Celsius, Fahrenheit.
+- Masse : du milligramme à la tonne, livres et onces.
+- Longueur : du millimètre au kilomètre, pouces, pieds, yards et miles.
+- Temps : de la seconde à l’année.
+- Volume : millilitre, centilitre, litre, mètre cube.
+- Surface : du cm² au km², hectares et acres.
+- Vitesse : m/s, km/h, mph, ft/s et nœuds.
+- Stockage : de l’octet au téraoctet, en octets et en bits.
+
+### AI Voice Assistant (2026)
+
+*Carte* : Assistant vocal : la voix avec Watson, les réponses avec Llama 3 via Groq.
+
+Projet de certification IBM AI Developer : un assistant vocal qui raisonne avec Llama 3 via Groq, reconnaît et synthétise la voix avec IBM Watson, dans une interface Flask.
+
+**Fonctionnement.**
+- Écoute : Watson Speech to Text transcrit la question.
+- Réponse : Llama 3.3 la traite, via Groq.
+- Voix : Watson Text to Speech lit la réponse, dans une page Flask.
+
+### LLM Context Wrapper (2026)
+
+*Carte* : Donner une mémoire de conversation à un modèle Hugging Face.
+
+Projet de certification IBM AI Developer : une surcouche Python à Hugging Face Transformers qui garde l’historique de conversation du modèle Blenderbot.
+
+**Fonctionnement.**
+- Modèle : Blenderbot 400M, chargé avec Hugging Face Transformers.
+- Mémoire : l’historique est renvoyé au modèle à chaque tour.
+- Pipeline : tokenisation, inférence, puis décodage.
 
 ## Lab
 
