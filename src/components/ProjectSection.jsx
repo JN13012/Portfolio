@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, Lock } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import SectionHeader from "./SectionHeader";
 import ProjectCard from "./ProjectCard";
 import { projects } from "../content/projects";
-import { statusLabels } from "../content/ui";
-import { complexityOf, filterProjects, groupOf, sortProjects, tracksFromSearch } from "../lib/projects";
+import { modalSummary, statusLabels, teamLabel } from "../content/ui";
+import { filterProjects, groupOf, sortProjects, tracksFromSearch } from "../lib/projects";
 import Smartfridge from "../assets/Projets/Smartfridge.png";
 import Cyberpong from "../assets/Projets/Cyberpong.png";
 import My_marvin from "../assets/Projets/My_marvin.png";
@@ -18,6 +18,9 @@ import Business_AI_Meeting from "../assets/Projets/Business_AI_Meeting_Companion
 import RAG_pdf_Chatbot from "../assets/Projets/RAG_PDF_Chatbot.webp";
 import AI_Assistant_Translator from "../assets/Projets/AI_Assistant_Translator.jpg";
 import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.webp";
+import AI_Career_Coach_Lettre from "../assets/Projets/AI-Career-Coach-Lettre.webp";
+import AI_Career_Coach_Lettres from "../assets/Projets/AI-Career-Coach-Lettres.webp";
+import AI_Career_Coach_Optimisateur from "../assets/Projets/AI-Career-Coach-Optimisateur.webp";
 import Tor from "../assets/Projets/Tor.webp";
 import Chatflow from "../assets/Projets/Chatflow.webp";
 import CTF_Metasploit from "../assets/Projets/CTF_Metasploit.webp";
@@ -26,6 +29,19 @@ import CTF_Snort from "../assets/Projets/CTF_Snort.webp";
 import CTF_Hashcat from "../assets/Projets/CTF_Hashcat.webp";
 import CTF_Forensic from "../assets/Projets/CTF_Forensic.png";
 import OTP_RCS from "../assets/Projets/OTP_RCS.webp";
+import BlockTrader from "../assets/Projets/BlockTrader.webp";
+import BlockTrader_Strategies from "../assets/Projets/BlockTrader_Strategies.webp";
+import BlockTrader_Tendance from "../assets/Projets/BlockTrader_Tendance.webp";
+import ZeroDay from "../assets/Projets/ZeroDay.webp";
+import Argos_Dashboard from "../assets/Projets/Argos_Dashboard.webp";
+import Argos_Parcours from "../assets/Projets/Argos_Parcours.webp";
+import Cyberpong2 from "../assets/Projets/Cyberpong2.webp";
+import Cyberpong7 from "../assets/Projets/Cyberpong7.webp";
+import Cyberpong11 from "../assets/Projets/Cyberpong11.webp";
+import Convertisseur1 from "../assets/Projets/Convertisseur1.webp";
+import Convertisseur2 from "../assets/Projets/Convertisseur2.webp";
+import Platino from "../assets/Projets/Platino.webp";
+import Hackathon_Citiz from "../assets/Projets/Hackathon_Citiz.webp";
 import Salesforce from "../assets/Experiences/Salesforce_dev.webp";
 import Obsidian from "../assets/Obsidian.webp";
 import Obsidian0 from "../assets/Obsidian0.png";
@@ -39,17 +55,23 @@ const GROUPS = [
   { id: "formation", title: "Projets de formation" },
 ];
 
-// Short context pill on the card.
-const CONTEXT_PILL = { personal: "Perso", work: "ULIT", epitech: "Epitech", ibm: "IBM", hackathon: "Hackathon" };
+// Context pill on the card, only where the group title doesn't already say it
+// (perso, ULIT and Epitech are implied by « Projets perso & pro » / « Projets de formation »).
+const CONTEXT_PILL = { ibm: "IBM", hackathon: "Hackathon" };
 
 /** Visuals per project slug (first image = card background). Projects without one get a pattern. */
 const IMAGES = {
+  blocktrader: [BlockTrader, BlockTrader_Strategies, BlockTrader_Tendance],
+  zeroday: [ZeroDay],
   pentest: [Tor],
+  argos: [Argos_Dashboard, Argos_Parcours],
   "rag-pdf-chatbot": [RAG_pdf_Chatbot],
   "meeting-companion": [Business_AI_Meeting],
-  "career-coach": [AI_Career_Coach],
+  "career-coach": [AI_Career_Coach, AI_Career_Coach_Optimisateur, AI_Career_Coach_Lettre, AI_Career_Coach_Lettres],
   "assistant-translator": [AI_Assistant_Translator],
   "generateur-otp-rcs": [OTP_RCS],
+  "hackathon-citiz": [Hackathon_Citiz],
+  platino: [Platino],
   chatflow: [Chatflow],
   "salesforce-executor": [Salesforce],
   "base-de-connaissance": [Obsidian, Obsidian0, Obsidian1],
@@ -58,20 +80,24 @@ const IMAGES = {
   popeye: [Popeye],
   "my-marvin": [My_marvin],
   vaultborn: [Vaultborn],
-  cyberpong: [Cyberpong],
-  "unit-converter": [Unit_converter],
+  cyberpong: [Cyberpong, Cyberpong2, Cyberpong7, Cyberpong11],
+  "unit-converter": [Unit_converter, Convertisseur1, Convertisseur2],
   "ai-voice-assistant": [Vocal_assistant_AI],
   "llm-context-wrapper": [LLM_Context_Wrapper],
 };
 
-const TRACK_LABEL = { ia: "IA", cyber: "Cyber", dev: "Dev" };
-const TRACK_COLOR = { ia: "#38bdf8", cyber: "#f43f5e", dev: "#34d399" };
+const TRACKS = ["ia", "data", "cyber", "dev", "devops"];
+const TRACK_LABEL = { ia: "IA", data: "Data", cyber: "Cyber", dev: "Dev", devops: "DevOps" };
+const TRACK_COLOR = { ia: "#38bdf8", data: "#facc15", cyber: "#f43f5e", dev: "#34d399", devops: "#fb923c" };
 
 const trackThemes = {
   ia: { card: "hover:border-cyber/40", badge: "text-blue-300 border-blue-500/30 bg-blue-500/10" },
+  data: { card: "hover:border-cyber/40", badge: "text-yellow-300 border-yellow-500/30 bg-yellow-500/10" },
   cyber: { card: "hover:border-cyber/40", badge: "text-red-400 border-red-500/30 bg-red-500/10" },
   dev: { card: "hover:border-cyber/40", badge: "text-emerald-300 border-emerald-500/30 bg-emerald-500/10" },
-  Default: { card: "hover:border-cyber/40", badge: "text-zinc-400 border-white/10 bg-white/5" },
+  devops: { card: "hover:border-cyber/40", badge: "text-orange-300 border-orange-500/30 bg-orange-500/10" },
+  // Projects outside the four jobs (Smart Fridge: project management).
+  Default: { card: "hover:border-cyber/40", badge: "text-violet-300 border-violet-500/30 bg-violet-500/10" },
 };
 
 const statusStyles = {
@@ -79,27 +105,23 @@ const statusStyles = {
   development: "text-sky-300 border-sky-500/40 bg-sky-500/10",
 };
 
-const CONTEXT_LABEL = {
-  personal: "Projet personnel",
-  epitech: "Epitech",
-  ibm: "Certificat IBM",
-  hackathon: "Hackathon",
-  work: "Entreprise",
-};
-
-const formatPeriod = (period) => {
-  const f = (ym) => ym.split("-").reverse().join("/");
-  return period.end ? (period.end === period.start ? f(period.start) : `${f(period.start)} – ${f(period.end)}`) : f(period.start);
-};
-// On the card: just when it was finished, or « En cours ». The modal keeps the full period.
+// Domain badges, in the order of the project's tracks; projects without one fall back to their first tool.
+const categoriesOf = (p) =>
+  p.tracks.length
+    ? p.tracks.map((t) => ({ label: TRACK_LABEL[t], badge: trackThemes[t].badge }))
+    : [{ label: p.stack[0] ?? "Projet", badge: trackThemes.Default.badge }];
+// When it was finished, or « En cours » (card and modal).
 const cardDate = (period) => (period.end ? period.end.split("-").reverse().join("/") : "En cours");
 
 
 const ProjectSection = () => {
   const [selected, setSelected] = useState(null);
   const [imageIndex, setImageIndex] = useState(0);
+  // Full-screen view of the current image, opened by clicking it.
+  const [zoomed, setZoomed] = useState(false);
   const [tracks, setTracks] = useState(() => tracksFromSearch(window.location.search));
-  const [sort, setSort] = useState("selection");
+  // Most recent first by default.
+  const [sort, setSort] = useState("date");
   const [expanded, setExpanded] = useState({});
 
   // Keep ?metier= in the URL so a filtered view can be linked in an application.
@@ -110,16 +132,37 @@ const ProjectSection = () => {
     window.history.replaceState(null, "", url);
   }, [tracks]);
 
-  useEffect(() => {
-    if (!selected) return;
-    const onKey = (e) => e.key === "Escape" && setSelected(null);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [selected]);
-
   const visible = useMemo(() => sortProjects(filterProjects(projects, { tracks }), sort), [tracks, sort]);
   const ordered = visible;
   const groups = GROUPS.map((g) => ({ ...g, items: ordered.filter((p) => groupOf(p) === g.id) })).filter((g) => g.items.length);
+
+  const open = (p) => {
+    setSelected(p);
+    setImageIndex(0);
+    setZoomed(false);
+  };
+
+  // Previous / next project from the modal, in page order (folded cards included), wrapping around.
+  const pageOrder = groups.flatMap((g) => g.items);
+  const at = selected ? pageOrder.findIndex((p) => p.slug === selected.slug) : -1;
+  const neighbour = (delta) => (at < 0 ? null : pageOrder[(at + delta + pageOrder.length) % pageOrder.length]);
+  const prev = neighbour(-1);
+  const next = neighbour(1);
+
+  const images = selected ? IMAGES[selected.slug] ?? [] : [];
+  const stepImage = (delta) => setImageIndex((i) => (i + delta + images.length) % images.length);
+
+  // Esc closes the full-screen image, then the modal; ← → move between images when zoomed, else between projects.
+  useEffect(() => {
+    if (!selected) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") (zoomed ? setZoomed(false) : setSelected(null));
+      else if (e.key === "ArrowLeft") zoomed ? stepImage(-1) : prev && open(prev);
+      else if (e.key === "ArrowRight") zoomed ? stepImage(1) : next && open(next);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
   const card = (p) => (
     <ProjectCard
       key={p.slug}
@@ -127,10 +170,11 @@ const ProjectSection = () => {
       description={p.summary.fr}
       tags={p.stack}
       image={IMAGES[p.slug]?.[0]}
-      categorie={TRACK_LABEL[p.tracks[0]] ?? p.stack[0] ?? "Projet"}
+      categories={categoriesOf(p)}
       date={cardDate(p.period)}
       ongoing={!p.period.end}
-      context={CONTEXT_PILL[p.context]}
+      context={CONTEXT_PILL[p.context] && [CONTEXT_PILL[p.context], p.award?.fr].filter(Boolean).join(" · ")}
+      silver={p.context === "hackathon"}
       inProduction={p.inProduction?.fr}
       theme={trackThemes[p.tracks[0]] || trackThemes.Default}
       onClick={() => open(p)}
@@ -140,13 +184,6 @@ const ProjectSection = () => {
   const updateTracks = (next) => {
     setTracks(next);
   };
-
-  const open = (p) => {
-    setSelected(p);
-    setImageIndex(0);
-  };
-
-  const images = selected ? IMAGES[selected.slug] ?? [] : [];
 
   const select =
     "appearance-none rounded-md border border-white/10 bg-zinc-950/70 py-1.5 pr-8 pl-3 text-sm text-zinc-200 transition-colors hover:border-white/25 focus-visible:border-cyber/60 focus-visible:outline-none [&>option]:bg-zinc-900";
@@ -160,7 +197,7 @@ const ProjectSection = () => {
         <div className="mb-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pb-2">
           {/* Job tabs: underlined like the Expertise list, with the number of projects in a coloured badge. */}
           <div role="group" aria-label="Filtrer par métier" className="flex flex-wrap items-center gap-x-8 gap-y-3">
-            {[null, "ia", "cyber", "dev"].map((t) => {
+            {[null, ...TRACKS].map((t) => {
               const on = t ? tracks.length === 1 && tracks[0] === t : tracks.length === 0;
               const color = t ? TRACK_COLOR[t] : "#e4e4e7";
               const count = filterProjects(projects, { tracks: t ? [t] : [] }).length;
@@ -191,7 +228,6 @@ const ProjectSection = () => {
                 }}
                 className={select}
               >
-                <option value="selection">Sélection</option>
                 <option value="date">Plus récents</option>
                 <option value="complexity">Plus complexes</option>
               </select>
@@ -217,7 +253,7 @@ const ProjectSection = () => {
                     {g.title} <span className="text-zinc-600 tabular-nums">{g.items.length}</span>
                     <span className="h-px flex-1 bg-white/10" />
                   </h3>
-                  <div className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{shown.map(card)}</div>
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{shown.map(card)}</div>
                   {rest > 0 && (
                     <div className="mt-8 text-center">
                       <button
@@ -249,27 +285,28 @@ const ProjectSection = () => {
           >
             <div className="relative p-6 text-center">
               <p className="mb-3 text-base uppercase tracking-[0.3em] text-cyber opacity-80">
-                {selected.tier === "dossier" ? "DOSSIER" : "PROJECT_OVERVIEW"}
+                PROJECT_OVERVIEW
               </p>
               <h3 className="pb-5 text-xl font-bold uppercase text-white md:text-3xl">{selected.title}</h3>
               <button type="button" onClick={() => setSelected(null)} className="absolute top-6 right-6 text-xl text-zinc-500 transition-colors hover:text-white">
                 [ESC_EXIT]
               </button>
-              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 border-y border-white/10 bg-white/5 p-4 text-sm uppercase md:justify-between">
-                <span><span className="text-cyber">Période :</span> <span className="text-white">{formatPeriod(selected.period)}</span></span>
-                <span><span className="text-cyber">Équipe :</span> <span className="text-white">{selected.team.size > 1 ? (selected.team.label?.fr ?? `${selected.team.size} personnes`) : "Solo"}</span></span>
-                <span><span className="text-cyber">Contexte :</span> <span className="text-white">{CONTEXT_LABEL[selected.context]}</span></span>
-                <span className="inline-flex items-center gap-2">
-                  <span className="text-cyber">Complexité :</span>
-                  <span aria-hidden="true" className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <span key={n} className={`size-2 rounded-full ${n <= complexityOf(selected) ? "bg-cyber shadow-[0_0_6px_var(--color-cyber)]" : "bg-white/15"}`} />
-                    ))}
+              {/* One short line: status (with the end date) on the left, team centred, domains on the right. */}
+              <div className="grid grid-cols-1 items-center justify-items-center gap-y-2 border-y border-white/10 bg-white/5 p-3 text-sm text-zinc-300 md:grid-cols-[1fr_auto_1fr]">
+                <span className="flex flex-wrap items-center gap-2 md:justify-self-start">
+                  <span className={`border px-2.5 py-1 ${statusStyles[selected.status]}`}>
+                    {statusLabels[selected.status].fr}
+                    {selected.period.end && ` · ${cardDate(selected.period)}`}
                   </span>
-                  <span className="text-white">{complexityOf(selected)}/5</span>
+                  {selected.inProduction && <span className="border border-cyber/50 bg-cyber/10 px-2.5 py-1 text-cyber">{selected.inProduction.fr}</span>}
                 </span>
-                <span className={`border px-2.5 py-1 ${statusStyles[selected.status]}`}>{statusLabels[selected.status].fr}</span>
-                {selected.inProduction && <span className="border border-cyber/50 bg-cyber/10 px-2.5 py-1 text-cyber">{selected.inProduction.fr}</span>}
+                {/* Team only for group projects (solo is the default). */}
+                <span>{selected.team.size > 1 ? teamLabel(selected.team, "fr") : null}</span>
+                <span className="flex flex-wrap gap-1.5 md:justify-self-end">
+                  {categoriesOf(selected).map((c) => (
+                    <span key={c.label} className={`border px-2 py-1 text-xs uppercase ${c.badge}`}>{c.label}</span>
+                  ))}
+                </span>
               </div>
             </div>
 
@@ -279,13 +316,18 @@ const ProjectSection = () => {
                   <div className="absolute inset-0 bg-cyber opacity-10 blur-3xl" />
                   <div className="relative z-10 flex w-full items-center justify-center">
                     {images.length > 1 && (
-                      <button type="button" onClick={() => setImageIndex((i) => (i - 1 + images.length) % images.length)} aria-label="Image précédente" className="absolute left-0 z-20 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
+                      <button type="button" onClick={() => stepImage(-1)} aria-label="Image précédente" className="absolute left-0 z-20 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
                         ‹
                       </button>
                     )}
-                    <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className="max-h-[62vh] max-w-full border border-white/10 object-contain shadow-2xl" />
+                    <button type="button" onClick={() => setZoomed(true)} aria-label="Agrandir l’image" className="cursor-zoom-in">
+                      <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className="max-h-[62vh] max-w-full border border-white/10 object-contain shadow-2xl" />
+                    </button>
+                    {selected.imageNote && (
+                      <p className="absolute bottom-0 left-1/2 z-20 -translate-x-1/2 bg-black/75 px-4 py-2 text-center text-sm text-zinc-200 backdrop-blur-sm md:text-base">{selected.imageNote.fr}</p>
+                    )}
                     {images.length > 1 && (
-                      <button type="button" onClick={() => setImageIndex((i) => (i + 1) % images.length)} aria-label="Image suivante" className="absolute right-0 z-20 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
+                      <button type="button" onClick={() => stepImage(1)} aria-label="Image suivante" className="absolute right-0 z-20 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
                         ›
                       </button>
                     )}
@@ -298,7 +340,7 @@ const ProjectSection = () => {
                   <h4 className="flex items-center gap-3 text-lg uppercase tracking-[0.2em] text-zinc-100">
                     <span className="text-cyber">⬢</span> Résumé
                   </h4>
-                  <p className="border-l-2 border-cyber/30 pl-4 text-base leading-relaxed text-zinc-200">{selected.summary.fr}</p>
+                  <p className="border-l-2 border-cyber/30 pl-4 text-base leading-relaxed text-zinc-200">{modalSummary(selected, "fr")}</p>
                 </div>
 
                 {selected.facts.length > 0 && (
@@ -340,6 +382,66 @@ const ProjectSection = () => {
 
             <ProjectLinks project={selected} onInternal={() => setSelected(null)} />
           </div>
+
+          {/* Full-screen image: click or Esc to close, ‹ › or ← → for the other images. */}
+          {zoomed && images.length > 0 && (
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${selected.title}, image ${imageIndex + 1} sur ${images.length}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setZoomed(false);
+              }}
+              className="fixed inset-0 z-[1200] flex cursor-zoom-out items-center justify-center bg-black p-4"
+            >
+              <img src={images[imageIndex]} alt={selected.title} className="max-h-[94vh] max-w-[94vw] object-contain" />
+              {selected.imageNote && <p className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/75 px-4 py-2 text-base text-zinc-200">{selected.imageNote.fr}</p>}
+              {images.length > 1 &&
+                [
+                  { delta: -1, side: "left-4", Icon: ChevronLeft, label: "Image précédente" },
+                  { delta: 1, side: "right-4", Icon: ChevronRight, label: "Image suivante" },
+                ].map(({ delta, side, Icon, label }) => (
+                  <button
+                    key={label}
+                    type="button"
+                    aria-label={label}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      stepImage(delta);
+                    }}
+                    className={`absolute top-1/2 flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/15 bg-black/60 text-zinc-300 transition-colors hover:border-cyber/60 hover:text-cyber ${side}`}
+                  >
+                    <Icon size={26} aria-hidden="true" />
+                  </button>
+                ))}
+            </div>
+          )}
+
+          {/* Previous / next project, outside the modal (also ← →). Hidden on phones, where the modal fills the width. */}
+          {[
+            { p: prev, side: "left-2 lg:left-[3vw]", Icon: ChevronLeft, label: "Projet précédent" },
+            { p: next, side: "right-2 lg:right-[3vw]", Icon: ChevronRight, label: "Projet suivant" },
+          ].map(({ p, side, Icon, label }) =>
+            p && p.slug !== selected.slug ? (
+              <button
+                key={label}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  open(p);
+                }}
+                aria-label={`${label} : ${p.title}`}
+                title={p.title}
+                className={`group absolute top-1/2 hidden -translate-y-1/2 cursor-pointer flex-col items-center gap-2 text-zinc-500 transition-colors hover:text-cyber md:flex ${side}`}
+              >
+                <span className="flex size-12 items-center justify-center rounded-full border border-white/15 bg-black/60 transition-colors group-hover:border-cyber/60">
+                  <Icon size={26} aria-hidden="true" />
+                </span>
+                <span className="hidden max-w-[9vw] text-center text-xs leading-tight text-zinc-400 uppercase lg:block">{p.title}</span>
+              </button>
+            ) : null,
+          )}
         </div>,
         document.body,
       )}

@@ -18,8 +18,8 @@ export const llmApps: Project[] = [
     title: 'RAG PDF Chatbot',
     period: { start: '2026-03', end: '2026-05' },
     summary: {
-      fr: 'Chatbot qui répond aux questions sur des CV en PDF : découpage des documents, embeddings stockés dans FAISS et interrogation de Llama 3 via LangChain, conteneurisé avec Docker.',
-      en: 'Chatbot answering questions about PDF CVs: document chunking, embeddings stored in FAISS and Llama 3 queried through LangChain, containerised with Docker.',
+      fr: 'Un chatbot répond aux questions sur des CV en PDF (découpage des documents, embeddings stockés dans FAISS, Llama 3 interrogé via LangChain), conteneurisé avec Docker.',
+      en: 'A chatbot answering questions about PDF CVs (document chunking, embeddings stored in FAISS, Llama 3 queried through LangChain), containerised with Docker.',
     },
     stack: ['Python', 'LangChain', 'FAISS', 'Llama 3', 'Flask', 'Docker'],
     links: { github: 'https://github.com/JN13012/RAG-pdf-Chatbot' },
@@ -31,8 +31,8 @@ export const llmApps: Project[] = [
     title: 'Meeting Companion',
     period: { start: '2026-03', end: '2026-03' },
     summary: {
-      fr: 'Assistant de réunion : transcription audio avec Whisper, puis résumé, plan d’action et analyse de tonalité avec le modèle Granite d’IBM.',
-      en: 'Meeting assistant: audio transcription with Whisper, then summary, action plan and tone analysis with IBM’s Granite model.',
+      fr: 'Un assistant de réunion transcrit l’audio avec Whisper, puis en tire résumé, plan d’action et analyse de tonalité avec le modèle Granite d’IBM.',
+      en: 'A meeting assistant that transcribes audio with Whisper, then produces a summary, action plan and tone analysis with IBM’s Granite model.',
     },
     stack: ['Python', 'Whisper', 'Granite', 'Hugging Face', 'Gradio'],
     links: { github: 'https://github.com/JN13012/Business_AI_Meeting_Companion_STT' },
@@ -44,8 +44,8 @@ export const llmApps: Project[] = [
     title: 'Career Coach',
     period: { start: '2026-04', end: '2026-04' },
     summary: {
-      fr: 'Coach de carrière : optimisation de CV et rédaction de lettres de motivation adaptées à une offre, avec Llama 3.2 sur IBM watsonx.ai.',
-      en: 'Career coach: CV optimisation and cover letters tailored to a job offer, with Llama 3.2 on IBM watsonx.ai.',
+      fr: 'Un coach de carrière optimise le CV et rédige des lettres de motivation adaptées à une offre, avec Llama 3.2 sur IBM watsonx.ai.',
+      en: 'A career coach that optimises CVs and writes cover letters tailored to a job offer, with Llama 3.2 on IBM watsonx.ai.',
     },
     stack: ['Python', 'IBM watsonx', 'Llama 3', 'Gradio'],
     links: { github: 'https://github.com/JN13012/AI-Career-Coach' },
@@ -57,8 +57,8 @@ export const llmApps: Project[] = [
     title: 'Assistant Translator',
     period: { start: '2026-03', end: '2026-04' },
     summary: {
-      fr: 'Traducteur vocal : la parole est transcrite, traduite par Llama 3.3 via Groq, puis relue à voix haute avec les services Watson.',
-      en: 'Voice translator: speech is transcribed, translated by Llama 3.3 through Groq, then read aloud with Watson services.',
+      fr: 'Un traducteur vocal transcrit la parole, la traduit avec Llama 3.3 via Groq, puis la relit à voix haute avec les services Watson.',
+      en: 'A voice translator that transcribes speech, translates it with Llama 3.3 through Groq, then reads it aloud with Watson services.',
     },
     stack: ['Python', 'Groq', 'Llama 3', 'IBM Watson', 'Flask'],
     links: { github: 'https://github.com/JN13012/AI-Assistant-Translator' },

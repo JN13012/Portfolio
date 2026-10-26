@@ -1,26 +1,59 @@
 import type { Project } from '../types'
 
-// « Autres réalisations ». Teams counted with git shortlog (JN13 = Jérémie) on 2026-10-17.
+// « Autres réalisations ». Teams counted with git shortlog (JN13 = Jérémie) on 2026-10-17; course projects
+// re-uploaded to GitHub in one commit (Popeye, Vaultborn…) keep { size: 1 } until Jérémie gives their size.
 
 export const cards: Project[] = [
   {
     slug: 'generateur-otp-rcs',
     tier: 'card',
     status: 'delivered',
+    award: { fr: '3e place', en: '3rd place' },
     tracks: ['cyber', 'dev'],
     title: 'Générateur OTP RCS',
     period: { start: '2026-06', end: '2026-06' },
-    team: { size: 6, label: { fr: 'équipe de 6, hackathon', en: 'team of 6, hackathon' } },
+    // Jérémie's commits: OTP service, repositories, IP rate limiting, DTO validation.
+    team: { size: 6, role: { fr: 'backend et sécurité applicative', en: 'backend and application security' } },
     context: 'hackathon',
     summary: {
-      fr: 'Backend d’authentification à deux facteurs : génération, envoi par RCS (API smsmode) et vérification de codes à 6 chiffres. Seule l’empreinte SHA-256 des codes est stockée ; expiration, nombre d’essais limité et limitation par numéro et par IP.',
-      en: 'Two-factor authentication backend: generation, RCS delivery (smsmode API) and verification of 6-digit codes. Only the SHA-256 hash of codes is stored; expiry, limited attempts and per-number and per-IP rate limiting.',
+      fr: 'Hackathon inter-écoles : backend d’authentification à deux facteurs qui génère, envoie par RCS (API smsmode) et vérifie des codes à 6 chiffres. Seule l’empreinte SHA-256 des codes est stockée ; expiration, nombre d’essais limité et limitation par numéro et par IP. 3e place.',
+      en: 'Inter-school hackathon: a two-factor authentication backend that generates, sends over RCS (smsmode API) and verifies 6-digit codes. Only the SHA-256 hash of codes is stored; expiry, limited attempts and per-number and per-IP rate limiting. 3rd place.',
     },
     stack: ['NestJS', 'TypeScript', 'MongoDB', 'Docker Compose', 'Swagger'],
     links: { github: 'https://github.com/JN13012/Generateur_Code_OTP' },
-    facts: [{ value: '4 jours', label: { fr: 'de hackathon', en: 'hackathon days' }, source: 'git log: 2026-06-03 → 2026-06-06' }],
+    facts: [
+      { value: '3e', label: { fr: 'place', en: 'place' }, source: 'Jérémie, 2026-10-24 (proof on request)' },
+      { value: '4 jours', label: { fr: 'de hackathon', en: 'hackathon days' }, source: 'git log: 2026-06-03 → 2026-06-06' },
+    ],
     scale: { months: 1 },
     doNotClaim: ['ISO 27001 certification (practices aligned with it, nothing more)'],
+  },
+  {
+    slug: 'hackathon-citiz',
+    tier: 'card',
+    status: 'delivered',
+    award: { fr: '2e place', en: '2nd place' },
+    tracks: ['data', 'ia'],
+    title: 'Hackathon Microsoft × Citiz',
+    period: { start: '2026-10', end: '2026-10' },
+    // 5 authors in git shortlog of Epitech2026-2027/T-HAK-700-MAR-7-1-hack-7 (2026-10-24); 5 roles in its README.
+    team: { size: 5, role: { fr: 'data engineer géospatial', en: 'geospatial data engineer' } },
+    context: 'hackathon',
+    summary: {
+      fr: 'Hackathon Epitech : outil d’aide à la décision qui indique où ouvrir une station d’autopartage Citiz pour toucher le plus d’habitants au moindre coût. Réseau piéton, isochrones à 5 minutes, carte d’accès aux transports, modèle de prédiction et liste priorisée sous budget. 2e place.',
+      en: 'Epitech hackathon: a decision tool showing where to open a Citiz car-sharing station to reach the most residents at the lowest cost. Pedestrian network, 5-minute isochrones, transport access map, prediction model and a budgeted priority list. 2nd place.',
+    },
+    stack: ['Python', 'Pandas', 'GeoPandas', 'Shapely', 'OSMnx', 'NetworkX', 'SciPy', 'Parquet', 'Leaflet', 'Docker'],
+    links: { privateRepo: true },
+    facts: [
+      { value: '2e', label: { fr: 'place', en: 'place' }, source: 'Jérémie, 2026-10-24 (proof on request)' },
+      { value: '16,6 M', label: { fr: 'nœuds du réseau piéton', en: 'pedestrian network nodes' }, source: 'T-HAK-700 geo/README.md: 16 608 205 OSM nodes, 835 tiles (ARA)' },
+    ],
+    scale: { months: 1 },
+    doNotClaim: [
+      'Jérémie built the prediction model (it is team work; he collected, cleaned and computed the geodata)',
+      'The model code is in the repo (it is not: confirmed done by Jérémie, 2026-10-24)',
+    ],
   },
   {
     slug: 'chatflow',
@@ -29,7 +62,8 @@ export const cards: Project[] = [
     tracks: ['dev'],
     title: 'ChatFlow',
     period: { start: '2026-03', end: '2026-04' },
-    team: { size: 4, label: { fr: 'équipe de 4, Epitech', en: 'team of 4, Epitech' } },
+    // Jérémie's commits touch ChatFlow/api and ChatFlow/client; role given by Jérémie (2026-10-24).
+    team: { size: 4, role: { fr: 'backend', en: 'back end' } },
     context: 'epitech',
     summary: {
       fr: 'Messagerie temps réel façon plateforme communautaire : serveurs, salons, rôles, messages privés, pièces jointes. API Express documentée, client Next.js et application desktop Electron.',
@@ -43,11 +77,12 @@ export const cards: Project[] = [
   {
     slug: 'time-manager',
     tier: 'card',
-    status: 'delivered',
+    status: 'development',
     tracks: ['dev'],
     title: 'Time Manager',
-    period: { start: '2026-10', end: '2026-10' },
-    team: { size: 2, label: { fr: 'binôme, Epitech', en: 'pair, Epitech' } },
+    period: { start: '2026-10' },
+    // 4 authors in git shortlog (2026-10-24): cassidy-epitech, cyrine, Jérémie, Aboubakr.
+    team: { size: 4, role: { fr: 'backend', en: 'back end' } },
     context: 'epitech',
     summary: {
       fr: 'Application de gestion du temps de travail : API NestJS typée avec Drizzle et Swagger, front React, tests unitaires et de bout en bout avec Vitest.',
@@ -64,15 +99,16 @@ export const cards: Project[] = [
     status: 'delivered',
     inProduction: { fr: 'En production chez ULIT', en: 'In production at ULIT' },
     tracks: ['dev'],
-    title: 'Salesforce Executor',
+    title: 'Code Executor',
     period: { start: '2026-01', end: '2026-06' },
-    team: { size: 1, label: { fr: 'alternance chez ULIT', en: 'work-study at ULIT' } },
+    team: { size: 1 },
     context: 'work',
     summary: {
       fr: 'Éditeur interne pour l’écosystème Salesforce, utilisé en production chez ULIT : exécution, planification et chaînage de scripts, sauvegarde et suivi des logs.',
       en: 'Internal editor for the Salesforce ecosystem, used in production at ULIT: running, scheduling and chaining scripts, saving them and tracking logs.',
     },
-    stack: ['Apex', 'Lightning Web Components', 'JavaScript', 'Salesforce'],
+    // GitHub languages of JN13012/Code-Executor---Salesforce (2026-10-24): JavaScript, Apex, HTML, CSS; XML metadata.
+    stack: ['Apex', 'JavaScript', 'HTML', 'CSS', 'XML'],
     links: { privateRepo: true },
     facts: [],
     scale: { months: 6 },
@@ -81,11 +117,11 @@ export const cards: Project[] = [
     slug: 'kubernetes',
     tier: 'card',
     status: 'delivered',
-    tracks: ['dev'],
+    tracks: ['devops'],
     title: 'Bernstein - Kubernetes',
     period: { start: '2026-06', end: '2026-06' },
     team: { size: 1 },
-    context: 'personal',
+    context: 'epitech',
     summary: {
       fr: 'Déploiement d’une application de vote en microservices sur un cluster k3d multi-nœuds : ingress Traefik, secrets, volumes persistants, RBAC et supervision cAdvisor.',
       en: 'Deployment of a microservice voting app on a multi-node k3d cluster: Traefik ingress, secrets, persistent volumes, RBAC and cAdvisor monitoring.',
@@ -99,7 +135,7 @@ export const cards: Project[] = [
     slug: 'bookworm',
     tier: 'card',
     status: 'delivered',
-    tracks: ['ia'],
+    tracks: ['ia', 'data'],
     title: 'Bookworm',
     period: { start: '2026-06', end: '2026-06' },
     team: { size: 1 },
@@ -126,7 +162,7 @@ export const cards: Project[] = [
       fr: 'Base de connaissances personnelle sous Obsidian : procédures, cheatsheets, workflows et retours d’expérience en cybersécurité, IA, développement et DevOps.',
       en: 'Personal knowledge base in Obsidian: procedures, cheat sheets, workflows and lessons learned in security, AI, development and DevOps.',
     },
-    stack: ['Obsidian', 'Markdown', 'Git'],
+    stack: ['Obsidian'],
     links: { privateRepo: true },
     facts: [{ value: '659', label: { fr: 'notes', en: 'notes' }, source: 'find vault -name "*.md" | wc -l (2026-10-17)' }],
     scale: { months: 4 },
@@ -150,17 +186,17 @@ export const cards: Project[] = [
     scale: { months: 5 },
   },
   {
-    slug: 'atlas-academy',
+    slug: 'argos-security-arena',
     tier: 'card',
     status: 'development',
-    tracks: ['cyber', 'ia'],
-    title: 'Atlas Academy',
+    tracks: ['cyber'],
+    title: 'Argos Security Arena',
     period: { start: '2026-06' },
     team: { size: 1 },
     context: 'personal',
     summary: {
-      fr: 'Plateforme d’apprentissage cybersécurité et IA (parcours, modules, salles, progression), en pause : son moteur servira aux salles du Lab.',
-      en: 'A security and AI learning platform (paths, modules, rooms, progress), on hold: its engine will power the Lab rooms.',
+      fr: 'Plateforme d’entraînement cyber (parcours, modules, salles, progression), en pause : elle deviendra l’arène d’entraînement d’Argos, un lab où s’exercer à l’attaque et à la défense.',
+      en: 'A cyber training platform (paths, modules, rooms, progress), on hold: it will become Argos’s training arena, a lab to practise attack and defence.',
     },
     stack: ['React', 'Vite', 'Tailwind CSS', 'GitHub Actions'],
     links: { github: 'https://github.com/JN13012/Lab_CTF' },
@@ -175,7 +211,7 @@ export const cards: Project[] = [
     title: 'Smart Fridge',
     period: { start: '2025-12', end: '2025-12' },
     team: { size: 1 },
-    context: 'personal',
+    context: 'epitech',
     summary: {
       fr: 'Pilotage de la phase de conception d’un produit : analyse de marché (SWOT, PESTEL), personas, cartographie des risques, indicateurs, budget et planning Gantt.',
       en: 'Running a product’s design phase: market analysis (SWOT, PESTEL), personas, risk map, KPIs, budget and Gantt planning.',

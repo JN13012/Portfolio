@@ -5,7 +5,8 @@ export const zeroday: Project = {
   slug: 'zeroday',
   tier: 'dossier',
   status: 'development',
-  tracks: ['dev', 'cyber'],
+  // Game development on a security theme, not security work.
+  tracks: ['dev'],
   title: 'ZeroDay',
   period: { start: '2026-08' },
   team: { size: 1 },
@@ -18,10 +19,6 @@ export const zeroday: Project = {
     dev: {
       fr: 'Cœur de simulation déterministe testé, et un éditeur d’arbres de progression écrit à la main, sans framework.',
       en: 'A tested deterministic simulation core, and a hand-written progression-tree editor with no framework.',
-    },
-    cyber: {
-      fr: 'Un vocabulaire de jeu calé sur MITRE ATT&CK, mais pensé pour rester compréhensible sans connaissances en cybersécurité.',
-      en: 'Game vocabulary mapped to MITRE ATT&CK, yet designed to stay understandable without any security background.',
     },
   },
   sections: [

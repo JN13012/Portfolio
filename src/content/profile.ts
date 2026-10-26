@@ -64,7 +64,7 @@ export const profile = {
   /** At-a-glance facts of the Profil section. */
   facts: [
     { label: { fr: 'Localisation', en: 'Location' }, value: { fr: 'Marseille · mobile', en: 'Marseille · open to relocation' } },
-    { label: { fr: 'Recherche', en: 'Looking for' }, value: { fr: 'Alternance (stage possible)', en: 'Work-study (internship possible)' } },
+    { label: { fr: 'Recherche', en: 'Looking for' }, value: { fr: 'Alternance 4 j entreprise / 1 j école (stage possible)', en: 'Work-study, 4 days company / 1 day school (internship possible)' } },
     { label: { fr: 'Formation', en: 'Education' }, value: { fr: 'MSc Epitech · 2025 – 2028', en: 'MSc Epitech · 2025 – 2028' } },
     { label: { fr: 'Disponibilité', en: 'Availability' }, value: { fr: 'Immédiate', en: 'Immediate' } },
   ],

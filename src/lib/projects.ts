@@ -1,7 +1,7 @@
 import type { Project, ProjectStatus, Track } from '../content/types'
 import { complexity } from '../content/complexity'
 
-export type ProjectSort = 'selection' | 'date' | 'complexity'
+export type ProjectSort = 'date' | 'complexity'
 
 export type ProjectFilter = {
   tracks?: Track[]
@@ -28,22 +28,21 @@ export function filterProjects(projects: Project[], filter: ProjectFilter) {
 }
 
 /**
- * selection (default): projects with a full case study first, then by complexity.
- * date: ongoing first, then by end month. complexity: highest note first.
- * Ties always go to the most recent project.
+ * date (default): ongoing first, then by end month; the same month goes to the most complex.
+ * complexity: highest note first. Other ties go to the most recent project.
  */
 export function sortProjects(projects: Project[], sort: ProjectSort) {
   const byRecency = (a: Project, b: Project) => recency(b).localeCompare(recency(a))
   const byComplexity = (a: Project, b: Project) => complexityOf(b) - complexityOf(a) || byRecency(a, b)
   const copy = [...projects]
-  if (sort === 'date') return copy.sort(byRecency)
   if (sort === 'complexity') return copy.sort(byComplexity)
-  const study = (p: Project) => (p.tier === 'dossier' ? 0 : 1)
-  return copy.sort((a, b) => study(a) - study(b) || byComplexity(a, b))
+  return copy.sort((a, b) => byRecency(a, b) || complexityOf(b) - complexityOf(a))
 }
+
+const TRACKS: Track[] = ['ia', 'data', 'cyber', 'dev', 'devops']
 
 /** Reads `?metier=cyber,ia` from the URL (targeted application links). */
 export function tracksFromSearch(search: string): Track[] {
   const value = new URLSearchParams(search).get('metier') ?? ''
-  return value.split(',').filter((t): t is Track => t === 'ia' || t === 'cyber' || t === 'dev')
+  return value.split(',').filter((t): t is Track => TRACKS.includes(t as Track))
 }

@@ -18,6 +18,16 @@ export const skills: Record<Track, SkillGroup[]> = {
       items: ['Python', 'Flask', 'PyTorch', 'Pandas', 'NumPy'],
     },
   ],
+  data: [
+    {
+      title: { fr: 'Traitement de données', en: 'Data processing' },
+      items: ['Python', 'Pandas', 'NumPy', 'SciPy', 'Parquet'],
+    },
+    {
+      title: { fr: 'Géodonnées', en: 'Geospatial data' },
+      items: ['GeoPandas', 'Shapely', 'OSMnx', 'NetworkX'],
+    },
+  ],
   cyber: [
     {
       title: { fr: 'Pentest web et réseau', en: 'Web and network pentest' },
@@ -44,7 +54,7 @@ export const skills: Record<Track, SkillGroup[]> = {
   dev: [
     {
       title: { fr: 'Langages', en: 'Languages' },
-      items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'Apex', 'SQL'],
+      items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C#', 'Apex', 'SQL'],
     },
     {
       title: { fr: 'Web et back-end', en: 'Web and back-end' },
@@ -55,8 +65,18 @@ export const skills: Record<Track, SkillGroup[]> = {
       items: ['PostgreSQL', 'MySQL', 'MongoDB', 'SQLite', 'Redis'],
     },
     {
-      title: { fr: 'Tests, CI et déploiement', en: 'Testing, CI and deployment' },
-      items: ['Vitest', 'Jest', 'pytest', 'GitHub Actions', 'Docker', 'Docker Compose', 'Kubernetes', 'Jenkins'],
+      title: { fr: 'Tests', en: 'Testing' },
+      items: ['Vitest', 'Jest', 'pytest'],
+    },
+  ],
+  devops: [
+    {
+      title: { fr: 'Conteneurs et orchestration', en: 'Containers and orchestration' },
+      items: ['Docker', 'Docker Compose', 'Kubernetes', 'k3d', 'Traefik'],
+    },
+    {
+      title: { fr: 'Intégration continue', en: 'Continuous integration' },
+      items: ['GitHub Actions', 'Jenkins', 'Groovy'],
     },
   ],
 }
