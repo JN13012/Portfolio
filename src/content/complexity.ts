@@ -1,20 +1,22 @@
 // Complexity of each project, 1 to 5, validated by Jérémie (2026-10-24; review in docs/projets-notes.md).
 // Note = 1 + technical difficulty (0–2) + real constraints (0–1) + polish (0–1).
-// Argos and ZeroDay are rated on their designed scope (validated by Jérémie): their cards still say
-// « En cours » and their pages state what exists today.
+// Never displayed (display tried and removed on 2026-10-26): notes only drive the « Plus complexes » sort.
+// Argos is rated on its designed scope (Jérémie's choice); its page states what exists today.
 // `why` is editorial (never displayed): it keeps every note traceable.
 
 export type Complexity = 1 | 2 | 3 | 4 | 5
 
 export const complexity: Record<string, { note: Complexity; why: string }> = {
   blocktrader: { note: 5, why: 'Backtest engine, anti-overfitting protocols, real market data, market observatory; 56 tests, hardened CI' },
-  argos: { note: 5, why: 'AI agents for cybersecurity (designed scope); OSINT engine with data provenance and a written legal framework' },
-  zeroday: { note: 5, why: 'Professional-grade game aimed at the Play Store (designed scope); in design phase' },
-  pentest: { note: 5, why: 'Active Directory and privilege escalation; one authorised client audit; 25 published reports' },
+  argos: { note: 5, why: 'Designed scope: an AI pentest and defence agent platform on the level of Strix, Pentera or NodeZero (Jérémie, 2026-10-26); today only the SIRENE discovery exists' },
+  zeroday: { note: 3, why: 'What exists: deterministic Unity core with tests, a hand-written tree editor, ~141,000 words of frozen game design; not playable yet' },
+  // Split from « pentest » on 2026-10-26; notes validated by Jérémie the same day.
+  pentest: { note: 4, why: 'Active Directory (Kerberos delegation, kerberoasting) and privilege escalation; 25 published reports' },
+  'audit-web': { note: 4, why: '1 + 1 (standard tooling, black-box, no finding) + 1 (real client behind a WAF) + 1 (technical report); still above the CTF (Jérémie, 2026-10-26)' },
   'salesforce-executor': { note: 5, why: 'Complete internal tool (execution, scheduling, logs), in production at ULIT' },
   'hackathon-citiz': { note: 4, why: 'Regional pedestrian network (16.6 M OSM nodes), 5-minute isochrones, coverage; 2nd place' },
   chatflow: { note: 4, why: 'Real-time web and desktop messaging (Socket.IO, Electron); 110 tests' },
-  'ctf-du-site': { note: 4, why: '9 levels in a simulated terminal, played by real visitors' },
+  'ctf-du-site': { note: 3, why: '9 levels in a simulated terminal, played by real visitors; easier than the audit (Jérémie, 2026-10-26)' },
   'rag-pdf-chatbot': { note: 3, why: 'Full RAG pipeline (FAISS, LangChain, Llama 3, Docker); guided IBM project' },
   'generateur-otp-rcs': { note: 4, why: '1 + 1 (2FA backend: hashing, rate limiting) + 1 (real sending API, 4-day deadline) + 1 (Swagger, Docker, 3rd place); reviewed 2026-10-25' },
   'time-manager': { note: 4, why: 'Typed API and React front end, 68 tests; same level as ChatFlow (validated by Jérémie, 2026-10-24)' },
@@ -26,7 +28,7 @@ export const complexity: Record<string, { note: Complexity; why: string }> = {
   'ai-voice-assistant': { note: 2, why: 'Voice assistant (Watson, Groq); guided IBM project' },
   'llm-context-wrapper': { note: 2, why: 'Conversation memory around a Transformers model; guided IBM project' },
   bookworm: { note: 3, why: '1 + 1 (NLP pipeline: entities, topics per section, summary) + 0 + 1 (complete CLI, book card); solo and not guided; reviewed 2026-10-25' },
-  'argos-security-arena': { note: 2, why: 'Training platform (formerly Atlas Academy), paused' },
+  'argos-security-arena': { note: 4, why: 'Front-only training platform: curriculum model (areas, paths, modules, rooms), unlock rules, points and ranks, 31 tests, backend plan written; paused (set to 4 by Jérémie, 2026-10-26)' },
   'base-de-connaissance': { note: 2, why: '659 structured Obsidian notes' },
   platino: { note: 2, why: 'Express and PostgreSQL web application' },
   popeye: { note: 2, why: 'Multi-service app with Docker Compose' },
