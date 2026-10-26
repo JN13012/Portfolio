@@ -92,7 +92,7 @@ p(
   credentials
     .map(
       (c) =>
-        `- **${c.title}** — ${c.issuer}, ${c.date} · ${credentialKindLabels[c.kind].fr} · ${credentialLevelLabels[c.level]}${c.hours ? ` · ${c.hours} h` : ''} — ${c.note.fr}${c.previous ? ` ${c.previous.fr}` : ''}`,
+        `- **${c.title}** — ${c.issuer}, ${c.date} · ${credentialKindLabels[c.kind].fr} · ${credentialLevelLabels[c.level]}${c.hours ? ` · ${c.hours} h` : ''} — ${c.note.fr}${c.goal ? ` Objectif : ${c.goal.fr}` : ''}${c.result ? ` ${c.result.fr}.` : ''}${c.previous ? ` ${c.previous.fr}` : ''}${(c.points ?? []).map((pt) => `\n  - ${pt.label ? `${pt.label.fr} : ` : ''}${pt.text.fr}`).join('')}`,
     )
     .join('\n'),
 )

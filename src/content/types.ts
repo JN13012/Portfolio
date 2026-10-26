@@ -89,8 +89,9 @@ export type CredentialKind = 'certification' | 'learning-path' | 'professional-c
 
 /**
  * Difficulty 1–5 (Intro → Insane), from the grid validated by Jérémie on 2026-10-25:
- * 1 introductions · 2 applied courses and first paths (Security Engineer) · 3 practical exam,
- * long certificate or AI pentesting workshop · 4 Jr Penetration Tester · 5 kept for a proctored
+ * 1 introductions · 2 applied courses and first paths (Security Engineer, Python for Data Science: long but rated beginner) · 3 practical exam,
+ * long certificate, AI pentesting workshop, or any course rated intermediate by its platform (THM DevSecOps,
+ * the Coursera Flask, GenAI apps and GenAI for software development courses) · 4 Jr Penetration Tester · 5 kept for a proctored
  * professional exam (PT1, OSCP…).
  */
 export type CredentialLevel = 1 | 2 | 3 | 4 | 5
@@ -98,6 +99,8 @@ export type CredentialLevel = 1 | 2 | 3 | 4 | 5
 export type Credential = {
   id: string
   title: string
+  /** Shorter title for the card when the official one runs past two lines; the modal keeps `title`. */
+  cardTitle?: string
   issuer: string
   kind: CredentialKind
   /** Tabs of the section: cyber, or IA & dev. */
@@ -111,8 +114,14 @@ export type Credential = {
   hours?: number
   /** Exam duration, for exam-based certifications. */
   examHours?: number
-  /** What it covers, recruiter level. */
+  /** What it covers, recruiter level: one or two short sentences. */
   note: Localized
+  /** Exam result, shown as one line under the note (score, pass mark, time taken). */
+  result?: Localized
+  /** Aim of a workshop, shown as « Objectif : … » before the list. */
+  goal?: Localized
+  /** The detail as a short list: one line each, with an optional bold label. */
+  points?: Array<{ label?: Localized; text: Localized }>
   /** Tools and topics, tool names as in expertise.ts so their logos show. */
   stack: string[]
   /** Courses bundled in a professional certificate. */
@@ -135,6 +144,8 @@ export type InProgress = {
   measuredAt: IsoDate
   verifyUrl?: string
   note: Localized
+  /** Same list as Credential.points. */
+  points?: Array<{ label?: Localized; text: Localized }>
   stack: string[]
 }
 

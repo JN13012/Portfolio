@@ -312,25 +312,106 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
 
 ## Certifications
 
-- **Jr Penetration Tester** — TryHackMe, 2026-10-07 · Parcours · HARD · 96 h — Le parcours pentest le plus complet de TryHackMe, dans sa version refaite en 2026 (89 salles, 17 modules). Toute la méthodologie d’un test d’intrusion : reconnaissance passive et active, scan Nmap, sécurité web avec Burp Suite (SQLi, XSS, CSRF, SSRF, IDOR, authentification, inclusion de fichiers, injection de commandes, API, OWASP Top 10 2025), recherche et exploitation de CVE, attaques de mots de passe, Metasploit et shells, élévation de privilèges Linux et Windows, Active Directory (énumération, collecte d’identifiants, mouvement latéral, pivot), pentest de LLM, scripts Python et rédaction de rapport. Il se termine par des challenges complets, de la reconnaissance à la compromission. C’est le parcours de préparation à la certification PT1.
-- **Security Engineer** — TryHackMe, 2026-10-18 · Parcours · EASY · 65 h — Parcours d’ingénierie sécurité, côté défense : sécurité des réseaux et des systèmes, durcissement, développement sécurisé (SSDLC, tests SAST et DAST, sécurité des API), modélisation des menaces, gestion des vulnérabilités et des risques, réponse à incident.
-- **Supercharging Your Pentesting With AI** — TryHackMe, 2026-10-05 · Atelier · MEDIUM — Atelier pratique de 5 crédits CPE : pentest assisté par IA, workflows agentiques, accès aux outils et construction de harness, durcissement de prompts, CTF.
-- **Cyber Security 101 (SEC1)** — TryHackMe, 2026-05-24 · Examen · MEDIUM — Examen pratique : analyse réseau (PCAP, Wireshark), administration et durcissement Windows et Linux (services, journaux), pentest web (reconnaissance, Burp Suite, SQLi), opérations SOC (surveillance et tri d’alertes), brute force et cassage de mots de passe, analyse statique de malware.
-- **Pre Security (SEC0)** — TryHackMe, 2026-05-19 · Examen · INTRO — Examen d’entrée en cybersécurité : fonctionnement d’un ordinateur, systèmes d’exploitation, réseaux, web et concepts de sécurité.
-- **Pre Security** — TryHackMe, 2026-04-14 · Parcours · INTRO · 20 h — Les fondamentaux avant la sécurité : réseaux, fonctionnement du web, systèmes Linux et Windows, principes de sécurité offensive et défensive. Première version du parcours terminée en 09/2025 (8 h). Refait en entier après sa refonte par TryHackMe : nouvelle version terminée le 14/04/2026.
-- **Cyber Security 101** — TryHackMe, 2025-10-14 · Parcours · EASY · 46 h — Administration Linux et Windows, analyse réseau, cryptographie, exploitation de vulnérabilités web et système, principes de réponse à incident et d’analyse forensique, configuration de pare-feu et d’IDS/IPS.
-- **IBM AI Developer** — IBM · Coursera, 2026-04-08 · Certificat professionnel · MEDIUM · 160 h — Certificat professionnel de 10 cours, orienté développement d’applications d’IA avec Python : data science, IA générative, orchestration de modèles, pipelines NLP et RAG.
-- **AI for Developers** — IBM · Coursera, 2026-04 · Cours · INTRO · 25 h — L’IA générative au service du développement logiciel : assistance au code, débogage, refactoring, tests et automatisation des workflows.
-- **AI Powered Apps** — IBM · Coursera, 2026-03 · Cours · EASY · 14 h — Conception d’applications d’IA : assistants, transcription et synthèse vocale, traduction contextuelle, analyse de documents, pipelines RAG et orchestration de modèles génératifs.
-- **AI Apps with Flask** — IBM · Coursera, 2026-01 · Cours · EASY · 11 h — Développement d’applications d’IA avec Flask, dont un chatbot qui garde le contexte de la conversation : pipelines NLP et orchestration des modèles côté serveur.
-- **Python for AI & Data Science** — IBM · Coursera, 2025-12 · Cours · EASY · 25 h — Python pour la data science : manipulation de datasets et de DataFrames (filtrage, nettoyage, transformation), web scraping et extraction automatisée de données.
-- **Frontend Basics** — IBM · Coursera, 2025-12 · Cours · INTRO · 14 h — Introduction au développement web : pages en HTML et CSS, interactivité en JavaScript.
-- **Software Engineering** — IBM · Coursera, 2025-12 · Cours · INTRO · 14 h — Principes de l’ingénierie logicielle : cycle de vie (SDLC), architectures et bases du développement en Python.
-- **Prompt Engineering** — IBM · Coursera, 2025-12 · Cours · INTRO · 9 h — Techniques de prompt engineering : structuration des prompts, gestion du contexte et amélioration des réponses.
-- **Introduction to GenAI** — IBM · Coursera, 2025-12 · Cours · INTRO · 8 h — Les concepts de l’IA générative : modèles, outils et cas d’usage dans différents secteurs.
-- **Introduction to AI** — IBM · Coursera, 2025-12 · Cours · INTRO · 12 h — Les fondamentaux de l’IA : machine learning, deep learning, réseaux de neurones, applications métier et enjeux de gouvernance.
+- **Jr Penetration Tester** — TryHackMe, 2026-10-07 · Parcours · HARD · 96 h — Le parcours pentest le plus complet de TryHackMe, dans sa version refaite en 2026 (89 salles, 17 modules). Il prépare à la certification PT1.
+  - Reconnaissance : passive et active, scan avec Nmap
+  - Web : Burp Suite et OWASP Top 10 2025 : SQLi, XSS, CSRF, SSRF, IDOR, inclusion de fichiers, injection de commandes, API
+  - Exploitation : recherche de CVE, Metasploit et shells, attaques de mots de passe
+  - Élévation de privilèges : Linux et Windows
+  - Active Directory : énumération, collecte d’identifiants, mouvement latéral, pivot
+  - IA : pentest de modèles de langage (LLM)
+  - Méthode : scripts Python, rédaction de rapport, challenges complets de la reconnaissance à la compromission
+- **Security Engineer** — TryHackMe, 2026-10-18 · Parcours · EASY · 65 h — Parcours d’ingénierie sécurité, côté défense : concevoir, durcir et surveiller des systèmes.
+  - Réseaux et systèmes : sécurité des réseaux, durcissement des systèmes
+  - Développement sécurisé : SSDLC, tests SAST et DAST, sécurité des API
+  - Menaces : modélisation des menaces
+  - Risques : gestion des vulnérabilités et des risques
+  - Incidents : réponse à incident
+- **DevSecOps** — TryHackMe, 2026-10-26 · Parcours · MEDIUM · 27 h — Intégrer la sécurité à chaque étape de la chaîne de livraison logicielle : 5 modules, 18 labs pratiques.
+  - Développement sécurisé : cycle de développement sécurisé, culture DevSecOps
+  - Sécurité du pipeline : outils et configurations de la chaîne CI/CD
+  - Tests dans le pipeline : gestion des dépendances, tests SAST et DAST
+  - Conteneurs : fonctionnement, failles et durcissement
+  - Infrastructure as Code : sur site et dans le cloud
+- **Supercharging Your Pentesting With AI** — TryHackMe, 2026-09-30 · Atelier · MEDIUM · 5 h — Workshop animé par Lucas Romano : responsable SOC chez Cequence, chercheur de la Synack Red Team, ancien analyste à la NSA. Objectif : construire un agent IA capable de mener un test d’intrusion, de la reconnaissance à l’exploitation.
+  - Donner à l’agent des outils de pentest : sqlmap, serveur MCP de Kali…
+  - Répartir le travail entre sous-agents pour préserver le contexte
+  - Choisir le modèle selon la tâche et son coût
+  - Enchaîner reconnaissance, exploitation, chaînage des failles et revue
+  - Vérifier l’efficacité des prompts, contourner des garde-fous et durcir les siens
+  - Mettre en pratique dans des labs, puis un CTF
+- **Cyber Security 101 (SEC1)** — TryHackMe, 2026-05-24 · Examen · MEDIUM — Examen pratique en scénarios sur 7 domaines, à mener sur une fenêtre de 24 h. 630 / 700 (90 %) · terminé en 9 h 55.
+  - Réseau : analyse de captures (DNS, FTP, IMAP, TCP), identifiants en clair
+  - Systèmes : audit de configuration Linux et Windows : droits, services, tâches planifiées, journaux
+  - Pentest web : énumération, injection SQL, API exposées, upload de fichiers
+  - Mots de passe : brute force et cassage (Hydra, John the Ripper, Hashcat)
+  - SOC : journaux de pare-feu, alertes et règle Snort, réponse à incident
+  - Malware : analyse statique et extraction d’IOC (CAPA, FLOSS)
+- **Pre Security (SEC0)** — TryHackMe, 2026-05-19 · Examen · INTRO — Examen d’entrée en cybersécurité sur six domaines : fonctionnement d’un ordinateur, systèmes d’exploitation, bases du logiciel, réseaux, web, attaques et défenses. 540 / 600 (90 %) · terminé en 1 h 58.
+- **Pre Security** — TryHackMe, 2026-04-14 · Parcours · INTRO · 20 h — Les fondamentaux avant la sécurité, pour comprendre ce qu’on protège. Première version du parcours terminée en 09/2025 (8 h). Refait en entier après sa refonte par TryHackMe : nouvelle version terminée le 14/04/2026.
+  - Réseaux : fonctionnement des réseaux et d’Internet
+  - Web : fonctionnement du web
+  - Systèmes : Linux et Windows
+  - Sécurité : principes de l’attaque et de la défense
+- **Cyber Security 101** — TryHackMe, 2025-10-14 · Parcours · EASY · 46 h — Le tronc commun de TryHackMe : les bases de l’attaque comme de la défense.
+  - Systèmes : administration Linux et Windows, Active Directory
+  - Réseau : analyse réseau, pare-feu et IDS/IPS
+  - Cryptographie : chiffrement et attaques de mots de passe
+  - Attaque : exploitation de vulnérabilités web et système
+  - Défense : réponse à incident et analyse forensique
+- **IBM AI Developer** — IBM · Coursera, 2026-04-08 · Certificat professionnel · MEDIUM · 149 h — Certificat professionnel IBM de 10 cours : créer des applications web et des solutions d’IA générative avec Python.
+  - Développement : HTML, CSS, JavaScript, Python et Flask, cycle de vie du logiciel
+  - Data : Python pour la data science : Pandas, NumPy, API, web scraping
+  - IA générative : concepts, prompt engineering, LLM, RAG avec LangChain
+  - Projets : analyse de sentiments, légendes d’images, chatbot, assistant vocal, compte rendu de réunion, traducteur vocal
+- **Generative AI: Elevate your Software Development Career** — IBM · Coursera, 2026-04-08 · Cours · MEDIUM · 24 h — L’IA générative appliquée à tout le travail du développeur, de la conception à la mise en production.
+  - Bases : environnement de développement avec l’IA, prompts, chatbot avec l’API OpenAI
+  - Conception : diagrammes d’architecture, schéma de base de données, prototypes web
+  - Workflows : revue de code, génération de tests, documentation, Dockerfiles, CI/CD et sécurité
+  - Agents : agents IA, RAG avec LangChain, vibe coding
+  - Projet final : CodeCraftHub, une plateforme d’apprentissage pour développeurs
+- **Building Generative AI-Powered Applications with Python** — IBM · Coursera, 2026-03-29 · Cours · MEDIUM · 14 h — Une application d’IA générative par module, en Python. Six sont publiées sur GitHub et présentées dans les projets.
+  - Chatbot : conversation avec mémoire sur un LLM open source (Blenderbot, Hugging Face)
+  - Voix : assistant vocal : reconnaissance et synthèse avec IBM Watson, réponses de Llama 3 via Groq
+  - Réunions : transcription avec Whisper, résumé et actions par un LLM sur watsonx
+  - Documents : questions sur des CV en PDF avec le RAG (LangChain, FAISS, Llama 3)
+  - Traduction : traducteur vocal : parole, traduction par LLM, synthèse
+  - Coach : CV adapté, lettre de motivation et conseils (Llama 3.2 sur watsonx, Gradio)
+  - Image : légendes de photos générées (BLIP, Gradio)
+- **Developing AI Applications with Python and Flask** — IBM · Coursera, 2026-01-18 · Cours · MEDIUM · 13 h — Développer, tester et déployer des applications d’IA avec Python et Flask.
+  - Code Python : modules et packages, style PEP 8, analyse statique, tests unitaires
+  - Web : applications Flask et API REST : routes, GET et POST, erreurs, CRUD, déploiement
+  - IA : analyse de sentiments et détecteur d’émotions avec IBM Watson
+- **Python for Data Science, AI & Development** — IBM · Coursera, 2025-12-28 · Cours · EASY · 25 h — Python, des bases jusqu’à la collecte et l’analyse de données.
+  - Bases : variables, structures de données, boucles, fonctions, classes
+  - Données : fichiers CSV, JSON et texte, analyse avec Pandas et NumPy
+  - Collecte : API REST et web scraping
+  - Outils : notebooks Jupyter, scripts d’automatisation
+- **Introduction to HTML, CSS, & JavaScript** — IBM · Coursera, 2025-12-15 · Cours · INTRO · 15 h — Les bases du développement web côté navigateur.
+  - HTML : structure des pages, éléments HTML5
+  - CSS : mise en forme et mise en page
+  - JavaScript : interactivité et manipulation du DOM
+  - Projet final : un site portfolio
+- **Introduction to Software Engineering** — IBM · Coursera, 2025-12-06 · Cours · INTRO · 15 h — Les principes de l’ingénierie logicielle, du cycle de vie au code.
+  - Cycle de vie : SDLC et méthodologies de développement
+  - Développement : front-end, back-end, environnements de développement
+  - Programmation : bases de la programmation
+  - Architecture : conception logicielle, design patterns, UML
+- **Generative AI: Prompt Engineering Basics** — IBM · Coursera, 2025-12-07 · Cours · INTRO · 9 h — Écrire des prompts clairs qui donnent des réponses fiables.
+  - Techniques : zero-shot, few-shot, Chain-of-Thought, Tree-of-Thought
+  - Méthodes : Interview Pattern et Playoff Method pour affiner les réponses
+  - Évaluation : juger la justesse et l’utilité des réponses
+  - Usages : prompts pour le texte, l’image et le multimodal
+- **Generative AI: Introduction and Applications** — IBM · Coursera, 2025-12-06 · Cours · INTRO · 8 h — Ce qu’est l’IA générative, ce qu’elle sait faire et avec quels outils.
+  - Concepts : fonctionnement et capacités des modèles génératifs
+  - Usages : texte, code, image, audio et vidéo
+  - Outils : panorama des outils et cas d’usage par secteur
+- **Introduction to Artificial Intelligence (AI)** — IBM · Coursera, 2025-12-03 · Cours · INTRO · 14 h — Les fondamentaux de l’IA et de ses usages.
+  - Concepts : machine learning, deep learning, réseaux de neurones, IA générative
+  - Domaines : applications de l’IA par domaine
+  - Entreprises : transformation des métiers et des carrières
+  - Éthique : enjeux, risques et IA responsable
 
-En cours : SOC Level 1 (50 % au 2026-10-17) — Parcours d’analyste SOC de niveau 1 : tri d’alertes, analyse de phishing, analyse du trafic réseau, surveillance des postes Windows et Linux, SIEM et réponse à incident.
+En cours : AI Security (5 % au 2026-10-26) — Parcours de sécurité de l’IA (25 salles, 5 modules), côté attaque et défense. Il prépare à la certification AI1. · SOC Level 1 (50 % au 2026-10-17) — Parcours d’analyste SOC de niveau 1 : surveiller, trier et traiter les alertes.
 
 ## Contact
 

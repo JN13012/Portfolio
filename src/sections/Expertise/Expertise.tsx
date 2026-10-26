@@ -2,15 +2,25 @@ import { useState } from 'react'
 import {
   siApacheparquet,
   siExpress,
+  siGit,
   siGithubactions,
   siGradio,
+  siHtml5,
   siHuggingface,
+  siClaude,
+  siCss,
   siJest,
+  siJupyter,
+  siKalilinux,
   siKubernetes,
+  siMeta,
+  siModelcontextprotocol,
   siMongodb,
   siNestjs,
   siNextdotjs,
+  siOpenai,
   siOpenstreetmap,
+  siOwasp,
   siPostgresql,
   siPrisma,
   siPytest,
@@ -19,6 +29,7 @@ import {
   siScipy,
   siSpacy,
   siTypescript,
+  siUml,
   siVitest,
   type SimpleIcon,
 } from 'simple-icons'
@@ -54,7 +65,24 @@ const SVG: Record<string, SimpleIcon> = {
   scipy: siScipy,
   parquet: siApacheparquet,
   osmnx: siOpenstreetmap,
+  owasptop10: siOwasp,
+  owaspllmtop10: siOwasp,
+  kalilinux: siKalilinux,
+  claude: siClaude,
+  mcp: siModelcontextprotocol,
+  huggingface: siHuggingface,
+  jupyter: siJupyter,
+  html: siHtml5,
+  css: siCss,
+  git: siGit,
+  openai: siOpenai,
+  uml: siUml,
+  llama: siMeta,
+  whisper: siOpenai,
 }
+
+/** Brand colours too dim on the dark page: Kali's slate mark takes its brighter brand blue. */
+const HEX: Record<string, string> = { kalilinux: '#4c8dff' }
 
 /** Logos drawn small inside their image (wide wordmarks, padding) are scaled up to match the others. */
 const ICON_SCALE: Record<string, number> = {
@@ -94,7 +122,7 @@ export function Logo({ name, size, className, tone = '#a1a1aa', onlyReal }: { na
   if (icon)
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={{ width: size * 0.82, height: size * 0.82 }}>
-        <path d={icon.path} fill={readable(icon.hex)} />
+        <path d={icon.path} fill={HEX[k] ?? readable(icon.hex)} />
       </svg>
     )
   if (onlyReal) return null
