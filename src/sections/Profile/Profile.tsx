@@ -185,56 +185,51 @@ function Interests() {
   )
 }
 
-/** S-shaped jog between the two rail levels (0 and 12px), like a docs « On this page » outline. */
+/** S-shaped jog between the two rail levels (0 and 24px), like a docs « On this page » outline. */
 function Jog({ down, className }: { down: boolean; className: string }) {
   return (
-    <svg aria-hidden="true" width="13" height="12" viewBox="0 0 13 12" className={`block transition-colors ${className}`}>
-      <path d={down ? 'M0.5 0 C0.5 6 12.5 6 12.5 12' : 'M12.5 0 C12.5 6 0.5 6 0.5 12'} fill="none" stroke="currentColor" />
+    <svg aria-hidden="true" width="25" height="18" viewBox="0 0 25 18" className={`block transition-colors ${className}`}>
+      <path d={down ? 'M0.5 0 C0.5 9 24.5 9 24.5 18' : 'M24.5 0 C24.5 9 0.5 9 0.5 18'} fill="none" stroke="currentColor" />
     </svg>
   )
 }
 
 /**
- * « Avant l'informatique », drawn like a docs « On this page » outline: a thin rail, each step's title on the
- * outer level and its text one level in, joined by S-shaped jogs. Hovering a step lights its segments green;
- * the rail ends in green on « Aujourd'hui » (dot at the top of the segment), with the single link to Parcours.
+ * « Avant l'informatique », drawn like a docs « On this page » outline: years left of the rail; each step's
+ * title sits one level in (a hollow), its text on the outer level (a bump), joined by S-shaped jogs. Hovering a
+ * step lights its segments green. A single link to Parcours follows.
  */
 function StrengthsTimeline() {
   const { ui } = profile
   const idle = 'text-white/15 group-hover:text-cyber'
   const line = 'border-white/15 group-hover:border-cyber'
   return (
-    <ol>
-      {profile.strengths.map((s, i) => {
-        const last = i === profile.strengths.length - 1
-        return (
-          <li key={s.id} className="group">
-            <div className={`border-l pb-1 pl-4 transition-colors ${line}`}>
-              <p className="text-[15px] font-semibold text-zinc-50 transition-colors group-hover:text-cyber">{s.title.fr}</p>
-              <p className="text-xs text-zinc-500">
-                {s.context.fr} · {s.period.start} – {s.period.end}
-              </p>
+    <>
+      <ol>
+        {profile.strengths.map((s, i) => (
+          <li key={s.id} className="group grid grid-cols-[3rem_1fr] gap-x-3 sm:grid-cols-[3.5rem_1fr]">
+            <span className={`text-right text-xs leading-tight text-zinc-500 tabular-nums ${i > 0 ? 'pt-[18px]' : ''}`}>
+              <span className="block text-sm text-zinc-300 transition-colors group-hover:text-cyber">{s.period.start}</span>
+              {s.period.end}
+            </span>
+            <div>
+              {i > 0 && <Jog down className={idle} />}
+              <div className={`ml-6 border-l pb-1 pl-4 transition-colors ${line}`}>
+                <p className="text-[15px] font-semibold text-zinc-50 transition-colors group-hover:text-cyber">{s.title.fr}</p>
+                <p className="text-xs text-zinc-500">{s.context.fr}</p>
+              </div>
+              <Jog down={false} className={idle} />
+              <div className={`border-l py-1 pl-4 transition-colors ${line}`}>
+                <p className="text-[15px] leading-relaxed text-zinc-300">{s.text.fr}</p>
+              </div>
             </div>
-            <Jog down className={idle} />
-            <div className={`ml-3 border-l py-1 pl-4 transition-colors ${line}`}>
-              <p className="text-[15px] leading-relaxed text-zinc-300">{s.text.fr}</p>
-            </div>
-            {/* The jog back to the outer level; before « Aujourd'hui » it is already green. */}
-            <Jog down={false} className={last ? 'text-cyber' : idle} />
           </li>
-        )
-      })}
-      <li className="relative border-l border-cyber pt-1 pl-4">
-        <span aria-hidden="true" className="absolute -top-0.5 -left-[3.5px] size-1.5 rounded-full bg-cyber shadow-[0_0_6px_var(--color-cyber)]" />
-        <p className="text-xs text-cyber">{ui.today!.fr}</p>
-        <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-2">
-          <p className="text-[15px] font-semibold text-cyber">{ui.todayText!.fr}</p>
-          <a href="#parcours" className={pill}>
-            {ui.seeInParcours!.fr} <ArrowUpRight size={12} aria-hidden="true" />
-          </a>
-        </div>
-      </li>
-    </ol>
+        ))}
+      </ol>
+      <a href="#parcours" className={`${pill} mt-4 ml-[3.75rem] sm:ml-[4.25rem]`}>
+        {ui.seeInParcours!.fr} <ArrowUpRight size={12} aria-hidden="true" />
+      </a>
+    </>
   )
 }
 

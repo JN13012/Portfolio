@@ -30,7 +30,7 @@ Je suis arrivé à l’IA et à la cybersécurité par un chemin peu commun : l�
 - **Diagnostiquer vite, sans droit à l’erreur** (Mécanique, 2017 – 2025) : Responsable des pneumatiques d’un prototype LMP2 aux 24 h du Mans 2017, 1re place aux 6 h de Spa. Un arrêt au stand ne se rejoue pas : c’est l’exigence que j’applique à un diagnostic de panne ou d’intrusion.
 - **Monter et superviser une infra, seul** (Minage, 2018 – 2022) : Fermes de minage conçues, assemblées et exploitées sous Linux et HiveOS, avec des redémarrages et des alertes automatisés. Mon premier vrai travail d’exploitation et de supervision, mené en entrepreneur.
 
-**International** — 5 langues · 6 pays où j’ai vécu · base à Marseille. Adaptable : un parcours entre la France, le Liban, l’Arabie saoudite, le Qatar, le Canada et le Pérou. Cette immersion dans différentes langues et cultures m’a appris à m’adapter rapidement à de nouveaux environnements. FR 22 ans · LB 4 ans · SA 5 ans · QA 3 ans · CA 3 mois · PE 1 an et demi
+**International** — 5 langues · 6 pays où j’ai vécu · base à Marseille. Un parcours immersif entre plusieurs pays m’a appris à m’adapter rapidement à de nouveaux environnements. FR 22 ans · LB 4 ans · SA 5 ans · QA 3 ans · CA 3 mois · PE 1 an et demi
 
 **Centres d’intérêt** : Finance (Les marchés crypto, à l’origine de BlockTrader.) · Géopolitique (Suivre la géopolitique, c’est aussi suivre les avancées de l’IA, les menaces cyber et les régulations.) · Voyages (Six pays où j’ai vécu et 18 visités.) · Sport (Entretenir la forme : course à pied, natation, renforcement musculaire, randonnées.)
 

@@ -105,8 +105,8 @@ export const profile = {
     title: { fr: 'International', en: 'International' },
     summary: { fr: '5 langues · 6 pays où j’ai vécu · base à Marseille', en: '5 languages · 6 countries lived in · based in Marseille' },
     lead: {
-      fr: 'Adaptable : un parcours entre la France, le Liban, l’Arabie saoudite, le Qatar, le Canada et le Pérou. Cette immersion dans différentes langues et cultures m’a appris à m’adapter rapidement à de nouveaux environnements.',
-      en: 'Adaptable: a path between France, Lebanon, Saudi Arabia, Qatar, Canada and Peru. Immersion in different languages and cultures taught me to adapt quickly to new environments.',
+      fr: 'Un parcours immersif entre plusieurs pays m’a appris à m’adapter rapidement à de nouveaux environnements.',
+      en: 'An immersive path across several countries taught me to adapt quickly to new environments.',
     },
     countryNames: {
       CA: { fr: 'Canada', en: 'Canada' },
@@ -172,9 +172,6 @@ export const profile = {
   /** Labels of the Profil section. */
   ui: {
     strengthsTitle: { fr: 'Avant l’informatique, et ce que j’en garde', en: 'Before IT, and what I kept from it' },
-    /** End of the strengths timeline: where the road leads. */
-    today: { fr: 'Aujourd’hui', en: 'Today' },
-    todayText: { fr: 'IA et cybersécurité · Master of Science en cours à Epitech', en: 'AI and cybersecurity · Master of Science in progress at Epitech' },
     seeInParcours: { fr: 'Voir le parcours', en: 'See the journey' },
     interests: { fr: 'Centres d’intérêt', en: 'Interests' },
     native: { fr: 'Natif', en: 'Native' },
