@@ -142,38 +142,36 @@ const WORK_ICONS: Record<string, LucideIcon> = { master: GraduationCap, work: Br
 
 const INTEREST_ICONS: Record<string, LucideIcon> = { finance: Landmark, geopolitics: Globe2, travel: Plane, sport: Dumbbell }
 
-/** Interest pills: hovering, focusing or tapping one shows its line underneath (one caption for all). */
+/** Interests: one row of big icons split by thin lines; hovering, focusing or tapping one shows its line underneath (one caption for all). */
 function Interests() {
   const [active, setActive] = useState<string | null>(null)
   const current = profile.interests.find((i) => i.id === active)
   const project = current?.project ? projects.find((p) => p.slug === current.project) : undefined
   return (
     <div onMouseLeave={() => setActive(null)}>
-      <div className="flex flex-wrap items-center gap-2">
-        <h3 className="mr-1 text-sm text-zinc-400">{profile.ui.interests!.fr}</h3>
-        <ul className="flex flex-wrap gap-2">
-          {profile.interests.map((i) => {
-            const Icon = INTEREST_ICONS[i.id] ?? Globe2
-            const on = i.id === active
-            return (
-              <li key={i.id}>
-                <button
-                  type="button"
-                  aria-pressed={on}
-                  onMouseEnter={() => setActive(i.id)}
-                  onFocus={() => setActive(i.id)}
-                  onClick={() => setActive(on ? null : i.id)}
-                  className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-sm transition-colors ${on ? 'border-cyber/50 bg-cyber/10 text-cyber' : 'border-white/10 text-zinc-300 hover:border-cyber/40 hover:text-cyber'}`}
-                >
-                  <Icon size={14} aria-hidden="true" />
-                  {i.label.fr}
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-      <p aria-live="polite" className="mt-3 min-h-6 text-sm leading-relaxed text-zinc-300">
+      <h3 className="mb-4 text-sm text-zinc-400">{profile.ui.interests!.fr}</h3>
+      <ul className="grid grid-cols-4 divide-x divide-white/10">
+        {profile.interests.map((i) => {
+          const Icon = INTEREST_ICONS[i.id] ?? Globe2
+          const on = i.id === active
+          return (
+            <li key={i.id}>
+              <button
+                type="button"
+                aria-pressed={on}
+                onMouseEnter={() => setActive(i.id)}
+                onFocus={() => setActive(i.id)}
+                onClick={() => setActive(on ? null : i.id)}
+                className={`flex w-full cursor-pointer flex-col items-center gap-2.5 py-2 transition-colors ${on ? 'text-cyber' : 'text-zinc-500 hover:text-cyber'}`}
+              >
+                <Icon size={30} strokeWidth={1.25} aria-hidden="true" />
+                <span className={`text-[11px] tracking-widest uppercase sm:text-xs ${on ? 'text-cyber' : 'text-zinc-300'}`}>{i.label.fr}</span>
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+      <p aria-live="polite" className="mt-4 min-h-6 text-sm leading-relaxed text-zinc-300">
         {current?.text?.fr}
         {project && (
           <button type="button" className={`${pill} ml-2 align-middle`} onClick={() => emitCore('openProject', { slug: project.slug })}>
@@ -197,15 +195,13 @@ function Jog({ down, className }: { down: boolean; className: string }) {
 /**
  * « Avant l'informatique », drawn like a docs « On this page » outline: years left of the rail; each step's
  * title sits one level in (a hollow), its text on the outer level (a bump), joined by S-shaped jogs. Hovering a
- * step lights its segments green. A single link to Parcours follows.
+ * step lights its segments green.
  */
 function StrengthsTimeline() {
-  const { ui } = profile
   const idle = 'text-white/15 group-hover:text-cyber'
   const line = 'border-white/15 group-hover:border-cyber'
   return (
-    <>
-      <ol>
+    <ol>
         {profile.strengths.map((s, i) => (
           <li key={s.id} className="group grid grid-cols-[3rem_1fr] gap-x-3 sm:grid-cols-[3.5rem_1fr]">
             <span className={`text-right text-xs leading-tight text-zinc-500 tabular-nums ${i > 0 ? 'pt-[18px]' : ''}`}>
@@ -227,11 +223,7 @@ function StrengthsTimeline() {
             </div>
           </li>
         ))}
-      </ol>
-      <a href="#parcours" className={`${pill} mt-4 ml-[3.75rem] sm:ml-[4.25rem]`}>
-        {ui.seeInParcours!.fr} <ArrowUpRight size={12} aria-hidden="true" />
-      </a>
-    </>
+    </ol>
   )
 }
 
@@ -242,13 +234,13 @@ const pill = 'inline-flex cursor-pointer items-center gap-1 rounded-full border 
 
 /**
  * Profil: who Jérémie is, beyond what the hero and Contact already say. Portrait and profile links; an
- * introduction and what each past life brought (one block, one link to Parcours); International: the countries lived in on a static map and the languages with their CEFR level.
+ * introduction and what each past life brought (a timeline); interests; International: the countries lived in on a static map and the languages with their CEFR level.
  */
 export function Profile() {
   const { ui, international } = profile
   const [replay] = useState(canReplayGlobe)
   return (
-    <section id="profile" className="scroll-mt-24 py-24">
+    <section id="profile" className="py-24">
       <SectionHeader index="01" title="Profil" />
       <div className="grid gap-12 lg:grid-cols-[15rem_1fr] xl:grid-cols-[15rem_1fr_minmax(0,26rem)]">
         <div className="space-y-5">
@@ -280,7 +272,7 @@ export function Profile() {
               </li>
             ))}
           </ul>
-          <div className="space-y-2 border-t border-white/10 pt-5 text-sm text-zinc-300">
+          <div className="space-y-3.5 border-t border-white/10 pt-6 text-sm text-zinc-300">
             <p className="inline-flex items-center gap-2 text-xs tracking-widest text-cyber uppercase">
               <span aria-hidden="true" className="relative flex size-1.5">
                 <span className="absolute inset-0 rounded-full bg-cyber motion-safe:animate-ping" />
@@ -288,7 +280,7 @@ export function Profile() {
               </span>
               {profile.availability.fr}
             </p>
-            <ul className="space-y-1.5">
+            <ul className="space-y-2.5">
               {profile.workStudy.map((w) => {
                 const Icon = WORK_ICONS[w.id]
                 return (
