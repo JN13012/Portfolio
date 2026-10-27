@@ -2,8 +2,10 @@
 
 Branche d’intégration isolée dans `nouveau-portfolio`, créée depuis le commit Profil demandé
 `33f2cd4c306d7d198cca43afbf3fae67de8be6ff` de `v2/profil`, qui contient le Hero final `88bf779`.
+Elle intègre ensuite `ebedc92295611a570e7972755c86fca31e381d3f` : grandes icônes d’intérêt, disponibilité plus aérée
+et alignement des titres de section à 96 px du haut après navigation.
 Elle fusionne la branche `intro` au commit `b2bca9e`, conservée dans sa copie de travail d’origine.
-Le Profil et son contenu sont ceux de `33f2cd4`, sans modification. Le Hero conserve sa présentation finale. Les dépendances restent identiques.
+Le Profil et son contenu sont ceux de `ebedc92`, sans modification. Le Hero conserve sa présentation finale. Les dépendances restent identiques.
 Seul l’import vectoriel de `Hero/core/network.ts` est optimisé : le moteur WebGL reste dans les modules chargés à la demande.
 `App.jsx` et `App.css` ajoutent le conteneur de transition autour du vrai portfolio, monté une seule fois.
 Le bouton « Revoir le globe » du Profil conserve ses règles d’accessibilité et revient au Hero avant de rejouer l’introduction.
@@ -125,7 +127,7 @@ Ajouter `&phase=approach` fige l’approche à 600 ms ; `&phase=passage` contrô
 ## Vérification de cette version
 
 43 tests passent, ainsi que la vérification TypeScript, le lint complet et le build de production.
-Le Profil (`Profile.tsx` et `content/profile.ts`) et le Hero (`Hero.tsx` et `content/hero.ts`) sont identiques à `33f2cd4`.
+Le Profil (`Profile.tsx` et `content/profile.ts`) et le Hero (`Hero.tsx` et `content/hero.ts`) sont identiques à `ebedc92`.
 Le navigateur confirme la première entrée, la navigation vers Profil, le bouton « Revoir le globe » et le retour au Hero interactif.
 Le navigateur confirme 66 zones chargées, une reprise après l’arrêt du parcours, puis zéro scène active,
 zéro géométrie et zéro texture propres à l’introduction après Entrer. Le compteur d’images reste immobile après fermeture.
@@ -135,7 +137,7 @@ Passer et Échap rétablissent aussi le site ; l’accès direct en 390 × 844 i
 L’introduction ne réapparaît pas au rechargement de la page normale dans la même session.
 Ces vérifications de cycle de vie ne constituent pas une mesure de fluidité sur tous les appareils.
 L’import mathématique ciblé fait passer le bundle principal de 1 180,98 à 641 Ko, et de 353,54 à 220,32 Ko gzip (−38 %).
-Avec le nouveau Profil, le bundle principal mesure 653,56 Ko (224,49 Ko gzip), et la carte statique est un module séparé.
+Avec le dernier Profil, le bundle principal mesure 653,21 Ko (224,43 Ko gzip), et la carte statique est un module séparé.
 Le moteur WebGL est chargé séparément. La cible de 200 Ko gzip du plan reste à atteindre ; aucun score Lighthouse n’est revendiqué.
 Le diagnostic de développement `#root[data-intro-performance]` distingue les mesures CPU et les intervalles d’images du parcours et du plongeon.
 L’aperçu intégré peut limiter les animations à environ 1 image/s en arrière-plan, y compris après activation de sa fenêtre :

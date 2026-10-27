@@ -60,7 +60,7 @@ export function Lab() {
   }, [started])
 
   return (
-    <section id="lab" className="scroll-mt-24 py-24">
+    <section id="lab" className="py-24">
       <SectionHeader index="04" title="Lab" />
       <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr]">
         <div className="space-y-5">
