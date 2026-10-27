@@ -9,7 +9,7 @@ export const WIDE_FROM = 1800
 export const HERO_PLACEMENT: Record<'normal' | 'wide', Placement> = {
   // left 0 (B, 2026-10-27): the network keeps to its half and never reaches under the text.
   normal: { top: 0, right: 0, bottom: 0, left: 0 },
-  wide: { top: -20, right: -10, bottom: -10, left: 0 },
+  wide: { top: -16, right: -10, bottom: -14, left: 0 },
 }
 
 export const placementStyle = (p: Placement) => ({ top: `${p.top}%`, right: `${p.right}%`, bottom: `${p.bottom}%`, left: `${p.left}%` })

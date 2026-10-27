@@ -3,7 +3,7 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 // Compact project card on a dark panel inset from the image edges: context and production mention,
 // domain badges (a project can have several: Argos is Cyber and IA), title, two lines of summary,
 // one line of stack and date.
-const ProjectCard = ({ titre, description, tags, image, categories, date, onClick, theme, inProduction, ongoing, context, silver }) => {
+const ProjectCard = ({ titre, description, tags, image, emblem, categories, date, onClick, theme, inProduction, ongoing, context, silver }) => {
   return (
     <button
       type="button"
@@ -14,8 +14,10 @@ const ProjectCard = ({ titre, description, tags, image, categories, date, onClic
         backgroundImage: image
           ? `url(${image})`
           : "repeating-linear-gradient(135deg, rgba(74,222,128,0.06) 0 2px, transparent 2px 14px), radial-gradient(circle at 30% 20%, rgba(74,222,128,0.14), transparent 60%)",
-        backgroundSize: "cover",
+        // A project emblem (its height in the card) is shown whole, rather than cropped like a screenshot.
+        backgroundSize: emblem ? `auto ${emblem}` : "cover",
         backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <div className="absolute inset-0 bg-black/45 transition-colors duration-500 group-hover:bg-black/20" />

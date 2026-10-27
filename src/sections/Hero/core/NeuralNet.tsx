@@ -265,7 +265,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
     // Hero: the drawing area lets clicks through (it reaches under the pitch text), so presses are caught
     // on the window and kept only when they land on the network's frame, away from any control.
     const onHeroDown = (e: PointerEvent) => {
-      if (e.button !== 0 || (e.target as HTMLElement).closest('a,button,input,textarea,select,label')) return
+      if (e.button !== 0 || (e.target as HTMLElement).closest('a,button,input,textarea,select,label,[role="dialog"]')) return
       const r = el.getBoundingClientRect()
       const x = e.clientX - r.left
       const y = e.clientY - r.top

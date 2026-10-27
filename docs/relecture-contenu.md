@@ -9,9 +9,15 @@
 
 > Je construis des agents IA pour la cybersécurité, et je teste leur résistance.
 
-- IBM AI Developer Professional
-- TryHackMe Jr Penetration Tester
-- Argos : moteur OSINT, couche agents IA en conception
+Formation : Master of Science · Architecte des SI (Epitech Marseille · 1re année)
+
+Certifié : IBM AI Developer (Professional Certificate) · Jr Penetration Tester (TryHackMe · 89 labs)
+
+Projets : salesforce-executor (En production chez ULIT) · blocktrader (Bot de trading · en test) · argos (OSINT · en développement) · zeroday (Jeu mobile · en conception)
+
+Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team mon agent, bientôt)
+
+**Lab cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 
 Disponible immédiatement · Alternance · MSc Epitech · Stage possible · Marseille · mobile
 

@@ -3,21 +3,17 @@ import { Download, Mail, MapPin } from 'lucide-react'
 import { hero } from '../../content/hero'
 import { profile } from '../../content/profile'
 import { currentRun, useAssistant } from '../../lib/assistantStore'
-import Coursera from '../../assets/COURSERA.webp'
-import THM from '../../assets/THM.jpg'
-import Epitech from '../../assets/Formations/Epitech.webp'
 import { assistantNetworkNodes, networkRun } from './core/assistantNodes'
 import { NeuralHero } from './core/NeuralHero'
 import { HERO_NETWORK } from './core/network'
 import { HERO_PLACEMENT, placementStyle, WIDE_FROM, type Placement } from './core/placement'
 import { PlacementTool } from './core/PlacementTool'
+import { HeroProofs } from './HeroProofs'
 
 // Dev-only placement mode: /?placer shows a frame to move and resize the network with the mouse.
 const PLACER = import.meta.env.DEV && new URLSearchParams(window.location.search).has('placer')
 const PLACER_STORE = 'hero-placement'
 
-const panel = 'rounded-sm border border-white/10 bg-zinc-950/60 backdrop-blur-sm shadow-[0_14px_36px_rgba(0,0,0,0.26)]'
-const LOGOS: Record<string, string> = { ibm: Coursera, thm: THM, epitech: Epitech }
 const TONE: Record<string, string> = { ai: 'text-sky-400', threat: 'text-rose-500' }
 /** The third column, for Sentry's window (fixed, 360 px wide, 24 px from the edge, plus a 24 px gap):
  * as wide as the window reaches into the main column (the page margin is 5vw); 0 while it is folded. */
@@ -61,70 +57,67 @@ export function Hero() {
   }
 
   return (
-    <section id="acceuil" aria-labelledby="hero-title" className="relative flex min-h-screen flex-col justify-center gap-10 py-24">
+    <section id="acceuil" aria-labelledby="hero-title" className="relative flex min-h-screen flex-col justify-center gap-10 py-24 lg:pt-20 lg:pb-6">
       <div
         className="grid w-full grid-cols-1 items-center gap-y-10 transition-[grid-template-columns] duration-500 motion-reduce:transition-none lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)_var(--chat-room)]"
         style={{ '--chat-room': chat.open ? CHAT_ROOM : '0px' } as CSSProperties}
       >
         {/* The text column scales with its width (A, 2026-10-27): its base size is a share of the column
             (cqi), every size inside is in em, and the name has its own share so it always fits on one line.
-            Folded chat: it fills its half; open: it shrinks as much as the network. */}
+            Folded chat: it fills its half; open: it shrinks as much as the network. On a short screen the
+            base size also follows the height (vh), so the column keeps to about the screen's height. */}
         <div className="@container min-w-0 lg:pr-10">
-          <div className="flex flex-col gap-[3.25em] lg:text-[clamp(13px,2.6cqi,20px)]">
-            <div className="flex flex-col gap-[1.5em]">
-              <h1 id="hero-title" className="text-6xl leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase lg:text-[clamp(2.75rem,14cqi,8rem)]">
-                {profile.lastName} <span className="text-cyber">{profile.firstName}</span>
-              </h1>
-              <p className="text-2xl font-bold tracking-tight uppercase md:text-3xl lg:text-[min(1.875em,4.4cqi)]">
-                {hero.title.map((part, i) => (
-                  <span key={part.text.fr} className="whitespace-nowrap">
-                    {i > 0 && <span className="text-zinc-600"> · </span>}
-                    <span className={TONE[part.tone]}>{part.text.fr}</span>
-                  </span>
-                ))}
-              </p>
+          {/* Three blocks, well apart: who (name, jobs, pitch), the proofs, then what to do (availability
+              right above the buttons). */}
+          <div className="flex flex-col gap-[2.2em] lg:text-[clamp(13px,min(2.6cqi,1.75vh),20px)]">
+            <div className="flex flex-col gap-[1.1em]">
+              <div className="flex flex-col gap-[0.6em]">
+                <h1 id="hero-title" className="text-6xl leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase lg:text-[clamp(2.75rem,min(14cqi,9vh),8rem)]">
+                  {profile.lastName} <span className="text-cyber">{profile.firstName}</span>
+                </h1>
+                <p className="text-2xl font-bold tracking-tight uppercase md:text-3xl lg:text-[min(1.875em,4.4cqi)]">
+                  {hero.title.map((part, i) => (
+                    <span key={part.text.fr} className="whitespace-nowrap">
+                      {i > 0 && <span className="text-zinc-600"> · </span>}
+                      <span className={TONE[part.tone]}>{part.text.fr}</span>
+                    </span>
+                  ))}
+                </p>
+              </div>
+              <p className="max-w-[34em] border-l-2 border-cyber/80 py-[0.2em] pl-[0.9em] text-lg leading-[1.55] text-zinc-200 lg:text-[1.1em]">{hero.pitch.fr}</p>
             </div>
-            <p className="max-w-[34em] border-l-2 border-cyber/80 py-[0.4em] pl-[0.9em] text-xl leading-[1.7] text-zinc-200 lg:text-[1.25em]">{hero.pitch.fr}</p>
 
-            <ul className="flex flex-wrap gap-[0.625em]">
-              {hero.certificates.map((c) => (
-                <li key={c.id} className={`${panel} flex items-center gap-[0.75em] px-[0.75em] py-[0.7em]`}>
-                  <img src={LOGOS[c.id]} alt="" className="size-[2.25em] rounded-sm object-cover" />
-                  <div>
-                    <p className="text-[0.8125em] leading-snug whitespace-nowrap text-zinc-100">{c.title}</p>
-                    <p className="text-[max(9px,0.625em)] whitespace-nowrap text-zinc-400">{c.sub.fr}</p>
-                  </div>
+            <HeroProofs />
+
+            <div className="flex flex-col gap-[0.85em]">
+              <ul className="flex flex-wrap items-center gap-x-[1.25em] gap-y-[0.6em] text-[0.9375em] text-zinc-300">
+                <li className="inline-flex items-center gap-[0.5em] text-zinc-100">
+                  <span aria-hidden="true" className="size-[0.625em] animate-pulse rounded-full bg-cyber shadow-[0_0_12px_var(--color-cyber)]" />
+                  {hero.available.fr} · {profile.seeking[0]!.fr}
                 </li>
-              ))}
-            </ul>
+                {profile.seeking.slice(1).map((s) => (
+                  <li key={s.fr}>{s.fr}</li>
+                ))}
+                <li className="inline-flex items-center gap-[0.375em]">
+                  <MapPin aria-hidden="true" className="size-[1em]" /> {profile.location.fr}
+                </li>
+              </ul>
 
-            <ul className="flex flex-wrap items-center gap-x-[1.25em] gap-y-[0.6em] text-[0.9375em] text-zinc-300">
-              <li className="inline-flex items-center gap-[0.5em] text-zinc-100">
-                <span aria-hidden="true" className="size-[0.625em] animate-pulse rounded-full bg-cyber shadow-[0_0_12px_var(--color-cyber)]" />
-                {hero.available.fr} · {profile.seeking[0]!.fr}
-              </li>
-              {profile.seeking.slice(1).map((s) => (
-                <li key={s.fr}>{s.fr}</li>
-              ))}
-              <li className="inline-flex items-center gap-[0.375em]">
-                <MapPin aria-hidden="true" className="size-[1em]" /> {profile.location.fr}
-              </li>
-            </ul>
-
-            <div className="flex flex-wrap gap-[1em]">
-              <a
-                href={profile.cv.url}
-                download={profile.cv.fileName}
-                className="inline-flex items-center gap-[0.75em] border border-cyber/60 bg-cyber/10 px-[1.6em] py-[1.05em] tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
-              >
-                <Download aria-hidden="true" className="size-[1.125em]" /> {hero.ctaCv.fr}
-              </a>
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-[0.75em] border border-white/20 px-[1.6em] py-[1.05em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
-              >
-                <Mail aria-hidden="true" className="size-[1.125em]" /> {hero.ctaContact.fr}
-              </a>
+              <div className="flex flex-wrap gap-[1em]">
+                <a
+                  href={profile.cv.url}
+                  download={profile.cv.fileName}
+                  className="inline-flex items-center gap-[0.75em] border border-cyber/60 bg-cyber/10 px-[1.6em] py-[1.05em] tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
+                >
+                  <Download aria-hidden="true" className="size-[1.125em]" /> {hero.ctaCv.fr}
+                </a>
+                <a
+                  href="#contact"
+                  className="inline-flex items-center gap-[0.75em] border border-white/20 px-[1.6em] py-[1.05em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
+                >
+                  <Mail aria-hidden="true" className="size-[1.125em]" /> {hero.ctaContact.fr}
+                </a>
+              </div>
             </div>
           </div>
         </div>
