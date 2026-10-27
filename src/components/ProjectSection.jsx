@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import SectionHeader from "./SectionHeader";
+import TopicIcon from "./TopicIcon";
 import ProjectCard from "./ProjectCard";
 import { projects } from "../content/projects";
 import { modalSummary, statusLabels, teamLabel } from "../content/ui";
@@ -21,7 +22,11 @@ import AI_Career_Coach from "../assets/Projets/AI-Career-Coach-Conseils.webp";
 import AI_Career_Coach_Lettre from "../assets/Projets/AI-Career-Coach-Lettre.webp";
 import AI_Career_Coach_Lettres from "../assets/Projets/AI-Career-Coach-Lettres.webp";
 import AI_Career_Coach_Optimisateur from "../assets/Projets/AI-Career-Coach-Optimisateur.webp";
-import Tor from "../assets/Projets/Tor.webp";
+import Arena_Dashboard from "../assets/Projets/Arena_Dashboard.webp";
+import Arena_Path from "../assets/Projets/Arena_Path.webp";
+import Audit_Tor from "../assets/Projets/Audit_Tor.webp";
+import Audit_Gobuster from "../assets/Projets/Audit_Gobuster.webp";
+import Audit_Sqlmap from "../assets/Projets/Audit_Sqlmap.webp";
 import Chatflow from "../assets/Projets/Chatflow.webp";
 import CTF_Metasploit from "../assets/Projets/CTF_Metasploit.webp";
 import CTF_John from "../assets/Projets/CTF_John.webp";
@@ -63,8 +68,10 @@ const CONTEXT_PILL = { ibm: "IBM", hackathon: "Hackathon" };
 const IMAGES = {
   blocktrader: [BlockTrader, BlockTrader_Strategies, BlockTrader_Tendance],
   zeroday: [ZeroDay],
-  pentest: [Tor],
+  // Redacted by Jérémie (client hidden); JoomScan, Nmap and Tor start-up left out (CMS version, Tor warnings).
+  "audit-web": [Audit_Tor, Audit_Gobuster, Audit_Sqlmap],
   argos: [Argos_Dashboard, Argos_Parcours],
+  "argos-security-arena": [Arena_Dashboard, Arena_Path],
   "rag-pdf-chatbot": [RAG_pdf_Chatbot],
   "meeting-companion": [Business_AI_Meeting],
   "career-coach": [AI_Career_Coach, AI_Career_Coach_Optimisateur, AI_Career_Coach_Lettre, AI_Career_Coach_Lettres],
@@ -103,6 +110,7 @@ const trackThemes = {
 const statusStyles = {
   delivered: "text-zinc-200 border-white/25 bg-white/5",
   development: "text-sky-300 border-sky-500/40 bg-sky-500/10",
+  ongoing: "text-sky-300 border-sky-500/40 bg-sky-500/10",
 };
 
 // Domain badges, in the order of the project's tracks; projects without one fall back to their first tool.
@@ -120,8 +128,8 @@ const ProjectSection = () => {
   // Full-screen view of the current image, opened by clicking it.
   const [zoomed, setZoomed] = useState(false);
   const [tracks, setTracks] = useState(() => tracksFromSearch(window.location.search));
-  // Most recent first by default.
-  const [sort, setSort] = useState("date");
+  // Most complex first by default (Jérémie, 2026-10-26): the strongest real work leads.
+  const [sort, setSort] = useState("complexity");
   const [expanded, setExpanded] = useState({});
 
   // Keep ?metier= in the URL so a filtered view can be linked in an application.
@@ -167,7 +175,7 @@ const ProjectSection = () => {
     <ProjectCard
       key={p.slug}
       titre={p.title}
-      description={p.summary.fr}
+      description={(p.tagline ?? p.summary).fr}
       tags={p.stack}
       image={IMAGES[p.slug]?.[0]}
       categories={categoriesOf(p)}
@@ -228,8 +236,8 @@ const ProjectSection = () => {
                 }}
                 className={select}
               >
-                <option value="date">Plus récents</option>
                 <option value="complexity">Plus complexes</option>
+                <option value="date">Plus récents</option>
               </select>
               <ChevronDown aria-hidden="true" size={14} className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 text-zinc-500" />
             </label>
@@ -296,7 +304,7 @@ const ProjectSection = () => {
                 <span className="flex flex-wrap items-center gap-2 md:justify-self-start">
                   <span className={`border px-2.5 py-1 ${statusStyles[selected.status]}`}>
                     {statusLabels[selected.status].fr}
-                    {selected.period.end && ` · ${cardDate(selected.period)}`}
+                    {selected.period.end && ` · ${selected.status === "ongoing" ? "dernier ajout " : ""}${cardDate(selected.period)}`}
                   </span>
                   {selected.inProduction && <span className="border border-cyber/50 bg-cyber/10 px-2.5 py-1 text-cyber">{selected.inProduction.fr}</span>}
                 </span>
@@ -362,7 +370,20 @@ const ProjectSection = () => {
                     <h4 className="flex items-center gap-3 text-base uppercase tracking-[0.2em] text-zinc-100">
                       <span className="text-cyber">▸</span> {s.title.fr}
                     </h4>
-                    <p className="text-[15px] leading-relaxed text-zinc-300">{s.body.fr}</p>
+                    {s.body && <p className="text-[15px] leading-relaxed text-zinc-300">{s.body.fr}</p>}
+                    {s.points && (
+                      <ul className="space-y-2 pl-4 text-[15px] leading-relaxed text-zinc-300">
+                        {s.points.map((pt) => (
+                          <li key={pt.text.fr} className="flex gap-2">
+                            <span aria-hidden="true" className="text-cyber/70">▸</span>
+                            <span>
+                              {pt.label && <span className="font-semibold text-zinc-100">{pt.label.fr} : </span>}
+                              {pt.text.fr}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 ))}
 
@@ -370,7 +391,8 @@ const ProjectSection = () => {
                   <h4 className="mb-3 text-base uppercase text-zinc-100">Expertise technique</h4>
                   <div className="flex flex-wrap gap-2">
                     {selected.stack.map((t) => (
-                      <span key={t} className="border border-cyber/20 bg-cyber/5 px-3 py-1.5 text-base text-cyber">
+                      <span key={t} className="inline-flex items-center gap-2 border border-cyber/20 bg-cyber/5 px-3 py-1.5 text-base text-cyber">
+                        <TopicIcon name={t} />
                         {t}
                       </span>
                     ))}
@@ -460,7 +482,7 @@ function ProjectLinks({ project, onInternal }) {
   if (links.length === 0) {
     return (
       <p className="flex items-center justify-center gap-2 border-t border-white/10 py-4 text-sm text-zinc-400">
-        <Lock size={15} aria-hidden="true" /> Code privé
+        <Lock size={15} aria-hidden="true" /> {project.links.confidential ? "Rapport confidentiel" : "Code privé"}
       </p>
     );
   }

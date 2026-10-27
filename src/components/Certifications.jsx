@@ -1,10 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowLeft,
+  BadgeCheck,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { siTryhackme } from "simple-icons";
 import SectionHeader from "./SectionHeader";
 import { StackLine } from "./ProjectCard";
-import { Logo } from "../sections/Expertise/Expertise";
+import TopicIcon from "./TopicIcon";
 import { credentials, inProgress } from "../content/certifications";
 import { credentialKindLabels, credentialLevelLabels } from "../content/ui";
 import { tracksFromSearch } from "../lib/projects";
@@ -26,6 +32,7 @@ import Generative_AI_Elevate_Career from "../assets/Coursera/Generative_AI_Eleva
 import THM_PreSecurity1 from "../assets/THM/THM_PreSecurity1.webp";
 import THM_JR_PENTESTER from "../assets/THM/THM_Jr_Pentester.png";
 import THM_SECURITY_ENGINEER from "../assets/THM/THM_Security_Engineer.webp";
+import THM_DEVSECOPS from "../assets/THM/THM_DevSecOps.webp";
 import THM_SUPERCHARGING_AI from "../assets/THM/THM_Supercharging_AI.webp";
 import IBM_LOGO from "../assets/Logos/ibm.svg"; // IBM 8-bar logo (Wikimedia Commons, public domain), thickened for the dark cards
 
@@ -52,6 +59,7 @@ const LEVEL_STYLE = {
 const IMAGES = {
   "thm-jr-penetration-tester": [THM_JR_PENTESTER],
   "thm-security-engineer": [THM_SECURITY_ENGINEER],
+  "thm-devsecops": [THM_DEVSECOPS],
   "thm-supercharging-pentesting-ai": [THM_SUPERCHARGING_AI],
   "thm-sec1": [THM_SEC1, RESULT_SEC1],
   "thm-sec0": [THM_SEC0, RESULT_SEC0],
@@ -71,11 +79,12 @@ const IMAGES = {
 
 /** Where to crop each certificate in the card thumbnail (default: centre), so its title shows. */
 const THUMB_POSITION = {
-  "thm-security-engineer": "center 12%",
-  "thm-jr-penetration-tester": "center 42%",
-  "thm-cyber-security-101": "center 42%",
-  "thm-pre-security": "center 42%",
-  "thm-supercharging-pentesting-ai": "center 58%",
+  "thm-security-engineer": "center 18%",
+  "thm-devsecops": "center 21%",
+  "thm-jr-penetration-tester": "center 43%",
+  "thm-cyber-security-101": "center 43%",
+  "thm-pre-security": "center 43%",
+  "thm-supercharging-pentesting-ai": "center 57%",
   "ibm-ai-developer": "center 0%",
 };
 
@@ -111,6 +120,8 @@ const Certifications = () => {
   const [sort, setSort] = useState("level");
   const [expanded, setExpanded] = useState(false);
   const [selected, setSelected] = useState(null);
+  // The certificate a course was opened from (IBM AI Developer → one of its courses), for the way back.
+  const [parent, setParent] = useState(null);
   const [imageIndex, setImageIndex] = useState(0);
   // Full-screen view of the current certificate, opened by clicking it.
   const [zoomed, setZoomed] = useState(false);
@@ -122,8 +133,9 @@ const Certifications = () => {
   const shown = expanded ? visible : visible.slice(0, FIRST_CARDS);
   const rest = visible.length - FIRST_CARDS;
 
-  const open = (c) => {
+  const open = (c, from = null) => {
     setSelected(c);
+    setParent(from);
     setImageIndex(0);
     setZoomed(false);
   };
@@ -240,6 +252,17 @@ const Certifications = () => {
               <button type="button" onClick={() => setSelected(null)} className="absolute top-4 right-4 text-base text-zinc-500 transition-colors hover:text-white md:top-6 md:right-6 md:text-xl">
                 [ESC_EXIT]
               </button>
+              {/* Back to the certificate this course was opened from, top left like a browser's back button. */}
+              {parent && (
+                <button
+                  type="button"
+                  onClick={() => open(parent)}
+                  className="absolute top-4 left-4 flex max-w-[30%] cursor-pointer items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-white md:top-6 md:left-6 md:h-7 md:text-base"
+                >
+                  <ArrowLeft size={18} aria-hidden="true" className="shrink-0" />
+                  <span className="truncate">Retour à {parent.cardTitle ?? parent.title}</span>
+                </button>
+              )}
               {/* One short line: type and date on the left, duration (or progress) centred, difficulty on the right. */}
               <div className="grid grid-cols-1 items-center justify-items-center gap-y-3 border-y border-white/10 bg-white/5 p-3 text-sm text-zinc-300 md:grid-cols-[1fr_auto_1fr]">
                 <span className="flex flex-wrap items-center gap-2 md:justify-self-start">
@@ -284,12 +307,35 @@ const Certifications = () => {
                 </div>
               )}
 
-              <div className={`flex w-full flex-col gap-8 bg-zinc-900/20 p-8 md:overflow-y-auto ${images.length ? "md:w-1/2" : ""}`}>
+              <div key={selected.id} className={`flex w-full flex-col gap-8 bg-zinc-900/20 p-8 md:overflow-y-auto ${images.length ? "md:w-1/2" : ""}`}>
                 <div className="flex flex-col gap-4">
                   <h4 className="flex items-center gap-3 text-lg uppercase tracking-[0.2em] text-zinc-100">
                     <span className="text-cyber">⬢</span> Contenu
                   </h4>
                   <p className="border-l-2 border-cyber/30 pl-4 text-base leading-relaxed text-zinc-200">{selected.note.fr}</p>
+                  {selected.result && (
+                    <p className="flex items-start gap-2 pl-4 text-[15px] text-cyber">
+                      <BadgeCheck size={18} aria-hidden="true" className="mt-0.5 shrink-0" /> {selected.result.fr}
+                    </p>
+                  )}
+                  {selected.goal && (
+                    <p className="pl-4 text-[15px] leading-relaxed text-zinc-300">
+                      <span className="font-semibold text-zinc-100">Objectif</span> : {selected.goal.fr}
+                    </p>
+                  )}
+                  {selected.points && (
+                    <ul className="space-y-2 pl-4 text-[15px] leading-relaxed text-zinc-300">
+                      {selected.points.map((pt) => (
+                        <li key={pt.text.fr} className="flex gap-2">
+                          <span aria-hidden="true" className="text-cyber/70">▸</span>
+                          <span>
+                            {pt.label && <span className="font-semibold text-zinc-100">{pt.label.fr} : </span>}
+                            {pt.text.fr}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   {selected.previous && <p className="pl-4 text-sm text-zinc-400">{selected.previous.fr}</p>}
                 </div>
 
@@ -299,9 +345,21 @@ const Certifications = () => {
                       <span className="text-cyber">▸</span> {selected.includes.length} cours
                     </h4>
                     <ol className="list-inside list-decimal space-y-1 text-[15px] text-zinc-300 marker:text-zinc-500">
-                      {selected.includes.map((course) => (
-                        <li key={course}>{course}</li>
-                      ))}
+                      {selected.includes.map((course) => {
+                        // A course with its own card opens it in place; the others stay plain text.
+                        const own = ENTRIES.find((c) => c.title === course);
+                        return (
+                          <li key={course}>
+                            {own ? (
+                              <button type="button" onClick={() => open(own, selected)} className="cursor-pointer text-left text-zinc-200 underline decoration-white/20 underline-offset-4 transition-colors hover:text-cyber hover:decoration-cyber/60">
+                                {course}
+                              </button>
+                            ) : (
+                              course
+                            )}
+                          </li>
+                        );
+                      })}
                     </ol>
                   </div>
                 )}
@@ -311,7 +369,7 @@ const Certifications = () => {
                   <div className="flex flex-wrap gap-2">
                     {selected.stack.map((t) => (
                       <span key={t} className="inline-flex items-center gap-2 border border-cyber/20 bg-cyber/5 px-3 py-1.5 text-base text-cyber">
-                        <Logo name={t} size={18} onlyReal />
+                        <TopicIcon name={t} />
                         {t}
                       </span>
                     ))}
@@ -390,7 +448,7 @@ const Certifications = () => {
                 <span className="flex size-12 items-center justify-center rounded-full border border-white/15 bg-black/60 transition-colors group-hover:border-cyber/60">
                   <Icon size={26} aria-hidden="true" />
                 </span>
-                <span className="hidden max-w-[9vw] text-center text-xs leading-tight text-zinc-400 uppercase lg:block">{c.title}</span>
+                <span className="hidden max-w-[9vw] text-center text-xs leading-tight text-zinc-400 uppercase lg:block">{c.cardTitle ?? c.title}</span>
               </button>
             ) : null,
           )}
@@ -412,9 +470,9 @@ function CertCard({ c, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="group relative flex h-full min-h-[18rem] cursor-crosshair flex-col overflow-hidden border border-white/15 bg-zinc-950/80 text-left transition-all duration-500 hover:border-cyber/40 focus-visible:outline-2 focus-visible:outline-cyber"
+      className="group relative flex h-full min-h-[20rem] cursor-crosshair flex-col overflow-hidden border border-white/15 bg-zinc-950/80 text-left transition-all duration-500 hover:border-cyber/40 focus-visible:outline-2 focus-visible:outline-cyber"
     >
-      <div className="relative aspect-[16/7] overflow-hidden border-b border-white/10 bg-black">
+      <div className="relative aspect-[5/2] overflow-hidden border-b border-white/10 bg-black">
         {image ? (
           <img src={image} alt="" loading="lazy" decoding="async" style={{ objectPosition: THUMB_POSITION[c.id] }} className="size-full object-cover opacity-60 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-90" />
         ) : (
@@ -437,7 +495,7 @@ function CertCard({ c, onClick }) {
           )}
         </div>
 
-        <h3 className="mb-4 line-clamp-2 text-lg leading-tight font-bold text-zinc-100 uppercase transition-colors group-hover:text-cyber">{c.title}</h3>
+        <h3 className="mb-4 line-clamp-2 text-lg leading-tight font-bold text-zinc-100 uppercase transition-colors group-hover:text-cyber">{c.cardTitle ?? c.title}</h3>
 
         <StackLine tags={c.stack} />
 

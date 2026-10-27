@@ -28,7 +28,7 @@ const MEDIA: Record<string, { thumb: Thumb; picture?: string; fit?: 'contain' }>
   'epitech-pre-msc': { thumb: { logo: EpitechLogo } },
   ulit: { thumb: { logo: UlitLogo } },
   crypto: { thumb: { logo: CandlesLogo, bleed: true } },
-  blockchain: { thumb: { logo: CryptoLogo, dark: true }, picture: HiveOs, fit: 'contain' },
+  blockchain: { thumb: { logo: CryptoLogo, bleed: true }, picture: HiveOs, fit: 'contain' },
   motorsport: { thumb: { logo: GDriveLogo }, picture: Wec2017 },
   'ecole-performance': { thumb: { logo: EdpLogo } },
   rima: { thumb: { logo: RimaLogo } },

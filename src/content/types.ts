@@ -10,7 +10,8 @@ export type Track = 'ia' | 'data' | 'cyber' | 'dev' | 'devops'
  * Honest project status, always shown next to a project: still being built, or finished.
  * Real use by a company is said with `inProduction` on the project, not with a status.
  */
-export type ProjectStatus = 'development' | 'delivered'
+/** `ongoing`: a series that keeps growing (write-ups), shown « En continu ». */
+export type ProjectStatus = 'development' | 'delivered' | 'ongoing'
 
 /** ISO month: '2026-04'. */
 export type YearMonth = `${number}-${number}`
@@ -38,7 +39,10 @@ export type ProjectContext = 'personal' | 'epitech' | 'ibm' | 'hackathon' | 'wor
 export type DossierSection = {
   kind: 'problem' | 'approach' | 'architecture' | 'security' | 'result' | 'limits'
   title: Localized
-  body: Localized
+  /** One sentence, or the intro of the list below; left out when the title and list say it all. */
+  body?: Localized
+  /** The detail as a short list: one line each, with an optional bold label. */
+  points?: Array<{ label?: Localized; text: Localized }>
 }
 
 export type Project = {
@@ -57,7 +61,9 @@ export type Project = {
   /** `role`: what Jérémie did in a group (shown next to the team size). */
   team: { size: number; role?: Localized }
   context: ProjectContext
-  /** 2–3 lines, recruiter level. */
+  /** Card line: one full sentence, 90 characters at most (the card shows two lines). */
+  tagline?: Localized
+  /** 2–3 lines, recruiter level, shown in the modal. */
   summary: Localized
   /** The same facts seen from each job. */
   angles?: Partial<Record<Track, Localized>>
@@ -74,8 +80,10 @@ export type Project = {
     repos?: Array<{ label: string; url: string }>
     /** Repo exists but is private: described without a code link. */
     privateRepo?: boolean
+    /** Client work with no code to show (the audit): « Rapport confidentiel ». */
+    confidential?: boolean
   }
-  /** Verifiable figures only. */
+  /** Scope figures (what the project covers), 3–4 for a dossier; verifiable only. */
   facts: Fact[]
   /** Inputs of the « envergure » sort (computed, see lib/projects.ts). */
   scale: { months: number; tests?: number }
@@ -89,8 +97,9 @@ export type CredentialKind = 'certification' | 'learning-path' | 'professional-c
 
 /**
  * Difficulty 1–5 (Intro → Insane), from the grid validated by Jérémie on 2026-10-25:
- * 1 introductions · 2 applied courses and first paths (Security Engineer) · 3 practical exam,
- * long certificate or AI pentesting workshop · 4 Jr Penetration Tester · 5 kept for a proctored
+ * 1 introductions · 2 applied courses and first paths (Security Engineer, Python for Data Science: long but rated beginner) · 3 practical exam,
+ * long certificate, AI pentesting workshop, or any course rated intermediate by its platform (THM DevSecOps,
+ * the Coursera Flask, GenAI apps and GenAI for software development courses) · 4 Jr Penetration Tester · 5 kept for a proctored
  * professional exam (PT1, OSCP…).
  */
 export type CredentialLevel = 1 | 2 | 3 | 4 | 5
@@ -98,6 +107,8 @@ export type CredentialLevel = 1 | 2 | 3 | 4 | 5
 export type Credential = {
   id: string
   title: string
+  /** Shorter title for the card when the official one runs past two lines; the modal keeps `title`. */
+  cardTitle?: string
   issuer: string
   kind: CredentialKind
   /** Tabs of the section: cyber, or IA & dev. */
@@ -111,8 +122,14 @@ export type Credential = {
   hours?: number
   /** Exam duration, for exam-based certifications. */
   examHours?: number
-  /** What it covers, recruiter level. */
+  /** What it covers, recruiter level: one or two short sentences. */
   note: Localized
+  /** Exam result, shown as one line under the note (score, pass mark, time taken). */
+  result?: Localized
+  /** Aim of a workshop, shown as « Objectif : … » before the list. */
+  goal?: Localized
+  /** The detail as a short list: one line each, with an optional bold label. */
+  points?: Array<{ label?: Localized; text: Localized }>
   /** Tools and topics, tool names as in expertise.ts so their logos show. */
   stack: string[]
   /** Courses bundled in a professional certificate. */
@@ -135,6 +152,8 @@ export type InProgress = {
   measuredAt: IsoDate
   verifyUrl?: string
   note: Localized
+  /** Same list as Credential.points. */
+  points?: Array<{ label?: Localized; text: Localized }>
   stack: string[]
 }
 

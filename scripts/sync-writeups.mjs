@@ -99,5 +99,11 @@ for (const path of files) {
   })
 }
 
-await writeFile(OUT, JSON.stringify({ generatedAt: new Date().toISOString().slice(0, 10), repo: REPO, writeups }, null, 2) + '\n')
+// Month of the latest change to a write-up (README edits do not count): the project card shows it.
+const latest = await Promise.all(
+  ['Exegol', 'THM'].map(async (dir) => (await getJson(`https://api.github.com/repos/${REPO}/commits?sha=${BRANCH}&path=${dir}&per_page=1`))[0]?.commit.committer.date ?? ''),
+)
+const lastUpdate = latest.sort().at(-1).slice(0, 7)
+
+await writeFile(OUT, JSON.stringify({ generatedAt: new Date().toISOString().slice(0, 10), lastUpdate, repo: REPO, writeups }, null, 2) + '\n')
 console.log(`${writeups.length} write-ups → ${OUT}`)

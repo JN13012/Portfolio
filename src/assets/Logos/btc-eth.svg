@@ -1,5 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><!-- Bitcoin and Ethereum marks from Simple Icons (CC0), composed for the mining entry. -->
-<g transform="translate(1 3) scale(1.25)"><circle cx="12" cy="12" r="10" fill="#fff"/><path fill="#F7931A" d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.548v-.002zm-6.35-4.613c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.975.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zm-3.01 4.22c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zm.41-4.24c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z"/></g>
-<circle cx="32.5" cy="31" r="14.5" fill="#f4f4f5" stroke="#0a0d12" stroke-width="1.5"/>
-<g transform="translate(23.5 20) scale(0.75)"><path fill="#627EEA" d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z"/></g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><!-- Mining entry, drawn full-bleed like the crypto one: a Bitcoin coin (Simple Icons mark, CC0) and the faceted Ethereum diamond, on a chain of blocks. -->
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e293b"/><stop offset="1" stop-color="#0b1120"/></linearGradient>
+<radialGradient id="glowBtc" cx="28" cy="38" r="26" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f7931a" stop-opacity=".35"/><stop offset="1" stop-color="#f7931a" stop-opacity="0"/></radialGradient>
+<radialGradient id="glowEth" cx="61" cy="38" r="24" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#627eea" stop-opacity=".4"/><stop offset="1" stop-color="#627eea" stop-opacity="0"/></radialGradient>
+<linearGradient id="coin" x1="0" y1="0" x2="0" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffb347"/><stop offset="1" stop-color="#e8710a"/></linearGradient>
+</defs>
+<rect width="80" height="80" fill="url(#bg)"/>
+<g stroke="#ffffff" stroke-opacity=".07" stroke-width="1"><path d="M0 20h80M0 40h80M0 60h80M20 0v80M40 0v80M60 0v80"/></g>
+<!-- The chain: blocks linked along the bottom. -->
+<g fill="none" stroke="#94a3b8" stroke-opacity=".35" stroke-width="1.2">
+<rect x="4" y="66" width="12" height="9" rx="1.5"/><rect x="24" y="66" width="12" height="9" rx="1.5"/><rect x="44" y="66" width="12" height="9" rx="1.5"/><rect x="64" y="66" width="12" height="9" rx="1.5"/>
+<path d="M16 70.5h8M36 70.5h8M56 70.5h8"/>
+</g>
+<rect width="80" height="80" fill="url(#glowBtc)"/>
+<rect width="80" height="80" fill="url(#glowEth)"/>
+<!-- Bitcoin coin: the mark's B cut-out shows the white disc behind it. -->
+<circle cx="28" cy="36" r="13" fill="#fff"/>
+<g transform="translate(9 17) scale(1.583)"><path fill="url(#coin)" d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.548v-.002zm-6.35-4.613c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.975.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zm-3.01 4.22c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zm.41-4.24c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z"/></g>
+<circle cx="28" cy="36" r="17.2" fill="none" stroke="#ffd08a" stroke-opacity=".45" stroke-width=".8"/>
+<!-- Ethereum diamond, faceted like the official mark, in the brand's blue-violet. -->
+<g transform="translate(47 14) scale(0.115)" stroke="#0b1120" stroke-width="9" stroke-linejoin="round">
+<path d="M128 0 0 212 128 154z" fill="#a9b8ff"/>
+<path d="M128 0 256 212 128 154z" fill="#7d94f5"/>
+<path d="M0 212 128 154 128 288z" fill="#7d94f5"/>
+<path d="M256 212 128 154 128 288z" fill="#5468d4"/>
+<path d="M0 236 128 417 128 312z" fill="#a9b8ff"/>
+<path d="M256 236 128 417 128 312z" fill="#7d94f5"/>
+</g>
 </svg>
