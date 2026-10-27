@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import "./App.css";
 
 import NavBar from "./components/NavBar";
@@ -13,6 +13,7 @@ import { Expertise } from "./sections/Expertise/Expertise";
 import { Parcours } from "./sections/Parcours/Parcours";
 import { Contact } from "./sections/Contact/Contact";
 import { profile } from "./content/profile";
+import { onCore } from "./lib/coreBus";
 
 // three.js intro, loaded only when it is shown.
 const GlobeGate = lazy(() => import("./sections/Gate/GlobeGate"));
@@ -36,6 +37,9 @@ function shouldOpenGate() {
 
 function App() {
   const [gateOpen, setGateOpen] = useState(shouldOpenGate);
+
+  // « Revoir le globe » in Profil plays the intro again.
+  useEffect(() => onCore("replayGate", () => setGateOpen(true)), []);
 
   const closeGate = () => {
     try {
