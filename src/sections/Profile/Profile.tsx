@@ -1,4 +1,4 @@
-import { ArrowUpRight, Bot, Briefcase, Dumbbell, Github, Globe2, Landmark, Linkedin, MapPin, Plane, RotateCcw, type LucideIcon } from 'lucide-react'
+import { ArrowUpRight, Bot, Briefcase, GraduationCap, Dumbbell, Github, Globe2, Landmark, Linkedin, MapPin, Plane, RotateCcw, type LucideIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { siCoursera, siSalesforce, siTryhackme, type SimpleIcon } from 'simple-icons'
 import SectionHeader from '../../components/SectionHeader'
@@ -138,6 +138,8 @@ function LevelBar({ level }: { level: string }) {
   )
 }
 
+const WORK_ICONS: Record<string, LucideIcon> = { master: GraduationCap, work: Briefcase }
+
 const INTEREST_ICONS: Record<string, LucideIcon> = { finance: Landmark, geopolitics: Globe2, travel: Plane, sport: Dumbbell }
 
 /** Interest pills: hovering, focusing or tapping one shows its line underneath (one caption for all). */
@@ -183,45 +185,50 @@ function Interests() {
   )
 }
 
+/** S-shaped jog between the two rail levels (0 and 12px), like a docs « On this page » outline. */
+function Jog({ down, className }: { down: boolean; className: string }) {
+  return (
+    <svg aria-hidden="true" width="13" height="12" viewBox="0 0 13 12" className={`block transition-colors ${className}`}>
+      <path d={down ? 'M0.5 0 C0.5 6 12.5 6 12.5 12' : 'M12.5 0 C12.5 6 0.5 6 0.5 12'} fill="none" stroke="currentColor" />
+    </svg>
+  )
+}
+
 /**
- * « Avant l'informatique »: a vertical rail, oldest first. Years sit left of the rail; past steps are grey
- * rings (the « before » tone of Parcours) and light up on hover; the rail fades into green and ends on a
- * filled green node, « Aujourd'hui », where the road leads, with the single link to Parcours.
+ * « Avant l'informatique », drawn like a docs « On this page » outline: a thin rail, each step's title on the
+ * outer level and its text one level in, joined by S-shaped jogs. Hovering a step lights its segments green;
+ * the rail ends in green on « Aujourd'hui » (dot at the top of the segment), with the single link to Parcours.
  */
 function StrengthsTimeline() {
   const { ui } = profile
-  const row = 'group relative grid grid-cols-[3rem_1.5rem_1fr] gap-x-3 sm:grid-cols-[3.5rem_1.5rem_1fr]'
+  const idle = 'text-white/15 group-hover:text-cyber'
+  const line = 'border-white/15 group-hover:border-cyber'
   return (
-    <ol className="relative">
-      {/* The rail, from the first node to the last, grey then green. */}
-      <span
-        aria-hidden="true"
-        className="absolute top-2 bottom-8 left-[calc(3rem+0.75rem+0.75rem-0.5px)] w-px bg-gradient-to-b from-zinc-600 via-zinc-600 to-cyber sm:left-[calc(3.5rem+0.75rem+0.75rem-0.5px)]"
-      />
-      {profile.strengths.map((s) => (
-        <li key={s.id} className={`${row} pb-7`}>
-          <span className="pt-px text-right text-xs leading-tight text-zinc-500 tabular-nums">
-            <span className="block text-sm text-zinc-300">{s.period.start}</span>
-            {s.period.end}
-          </span>
-          <span aria-hidden="true" className="relative flex justify-center pt-1.5">
-            <span className="size-2.5 rounded-full border-2 border-zinc-500 bg-[#080b10] transition-colors group-hover:border-cyber" />
-          </span>
-          <div>
-            <p className="text-[15px] font-semibold text-zinc-50">
-              {s.title.fr} <span className="ml-1 text-xs font-normal text-zinc-500">{s.context.fr}</span>
-            </p>
-            <p className="mt-1 text-[15px] leading-relaxed text-zinc-300">{s.text.fr}</p>
-          </div>
-        </li>
-      ))}
-      <li className={row}>
-        <span className="pt-0.5 text-right text-[11px] text-cyber sm:text-xs">{ui.today!.fr}</span>
-        <span aria-hidden="true" className="relative flex justify-center pt-1">
-          <span className="size-3.5 rounded-full bg-cyber shadow-[0_0_10px_var(--color-cyber)]" />
-        </span>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <p className="text-[15px] font-semibold text-zinc-50">{ui.todayText!.fr}</p>
+    <ol>
+      {profile.strengths.map((s, i) => {
+        const last = i === profile.strengths.length - 1
+        return (
+          <li key={s.id} className="group">
+            <div className={`border-l pb-1 pl-4 transition-colors ${line}`}>
+              <p className="text-[15px] font-semibold text-zinc-50 transition-colors group-hover:text-cyber">{s.title.fr}</p>
+              <p className="text-xs text-zinc-500">
+                {s.context.fr} · {s.period.start} – {s.period.end}
+              </p>
+            </div>
+            <Jog down className={idle} />
+            <div className={`ml-3 border-l py-1 pl-4 transition-colors ${line}`}>
+              <p className="text-[15px] leading-relaxed text-zinc-300">{s.text.fr}</p>
+            </div>
+            {/* The jog back to the outer level; before « Aujourd'hui » it is already green. */}
+            <Jog down={false} className={last ? 'text-cyber' : idle} />
+          </li>
+        )
+      })}
+      <li className="relative border-l border-cyber pt-1 pl-4">
+        <span aria-hidden="true" className="absolute -top-0.5 -left-[3.5px] size-1.5 rounded-full bg-cyber shadow-[0_0_6px_var(--color-cyber)]" />
+        <p className="text-xs text-cyber">{ui.today!.fr}</p>
+        <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <p className="text-[15px] font-semibold text-cyber">{ui.todayText!.fr}</p>
           <a href="#parcours" className={pill}>
             {ui.seeInParcours!.fr} <ArrowUpRight size={12} aria-hidden="true" />
           </a>
@@ -285,12 +292,15 @@ export function Profile() {
               {profile.availability.fr}
             </p>
             <ul className="space-y-1.5">
-              {profile.workStudy.map((w, i) => (
-                <li key={w.fr} className="flex items-start gap-2.5">
-                  {i === 0 ? <Briefcase size={15} aria-hidden="true" className="mt-0.5 shrink-0 text-cyber" /> : <span aria-hidden="true" className="w-[15px] shrink-0" />}
-                  {w.fr}
-                </li>
-              ))}
+              {profile.workStudy.map((w) => {
+                const Icon = WORK_ICONS[w.id]
+                return (
+                  <li key={w.id} className="flex items-start gap-2.5">
+                    {Icon ? <Icon size={15} aria-hidden="true" className="mt-0.5 shrink-0 text-cyber" /> : <span aria-hidden="true" className="w-[15px] shrink-0" />}
+                    {w.text.fr}
+                  </li>
+                )
+              })}
               <li className="flex items-start gap-2.5">
                 <MapPin size={15} aria-hidden="true" className="mt-0.5 shrink-0 text-cyber" /> {profile.location.fr}
               </li>

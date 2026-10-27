@@ -163,11 +163,11 @@ export const profile = {
       text: { fr: 'Entretenir la forme : course à pied, natation, renforcement musculaire, randonnées.', en: 'Keeping fit: running, swimming, strength training, hiking.' },
     },
   ],
-  /** Availability block under the portrait: the work-study rhythm is not in the hero. */
+  /** Availability block under the portrait: the work-study rhythm is not in the hero. `id` picks the icon. */
   workStudy: [
-    { fr: 'Alternance · Stage possible', en: 'Work-study · Internship possible' },
-    { fr: '4 j entreprise / 1 j école', en: '4 days company / 1 day school' },
-    { fr: 'Master jusqu’en 2028', en: 'Master’s until 2028' },
+    { id: 'master', text: { fr: 'Master jusqu’en 2028', en: 'Master’s until 2028' } },
+    { id: 'work', text: { fr: 'Alternance · Stage possible', en: 'Work-study · Internship possible' } },
+    { id: 'rhythm', text: { fr: '4 j entreprise / 1 j école', en: '4 days company / 1 day school' } },
   ],
   /** Labels of the Profil section. */
   ui: {
@@ -206,7 +206,7 @@ export const profile = {
   strengths: Strength[]
   international: { title: Localized; summary: Localized; lead: Localized; countryNames: Record<string, Localized>; stays: Record<string, Localized>; mapLabel: Localized }
   interests: Array<{ id: string; label: Localized; text?: Localized; project?: string }>
-  workStudy: Localized[]
+  workStudy: Array<{ id: string; text: Localized }>
   sentryQuestions: string[]
   ui: Record<string, Localized>
   facts: Array<{ label: Localized; value: Localized }>
