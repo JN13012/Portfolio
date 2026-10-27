@@ -208,6 +208,7 @@ Une étape = une session Claude Code = une branche git.
 
 ### Ensuite
 
+- **Expertise : preuves au clic** (décision 2026-10-27) : un clic sur un outil ouvre une petite fenêtre « Utilisé dans » (projets, write-ups, certifications), calculée depuis le contenu (stacks des projets, `writeups.json`, outils des certifications) après harmonisation des noms ; note manuelle quand aucune source ne le prouve. Sur sa propre branche.
 - **V1.1** : intro vocale clonée (FR/EN/ES/AR) + globe 3D du parcours + « Vraie voix ou clone ? »
 - **V2** : agent RAG (Gemini / Cloud Run) + journal des attaques + « Red-team mon agent » + couche vocale neutre
 - **V3** : Lab — rooms Docker + prototype navigateur sur *Silence*
