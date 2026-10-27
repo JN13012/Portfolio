@@ -40,6 +40,12 @@ p(`${hero.proofTitles.labs.fr} : ${hero.labs.map((l) => `${l.label.fr} (${l.deta
 p(`**${hero.labPanel.title.fr}** : ${hero.labPanel.intro.fr} ${hero.labPanel.phases.map((x) => `${x.title.fr} : ${x.text.fr}`).join(' · ')}`)
 p(`${profile.availability.fr} · ${profile.seeking.map((s) => s.fr).join(' · ')} · ${profile.location.fr}`)
 
+h(2, 'Profil')
+p(profile.about.fr)
+p(`**${profile.ui.strengthsTitle!.fr}**\n${profile.strengths.map((x) => `- **${x.title.fr}** (${x.context.fr}, ${x.period.start} – ${x.period.end}) : ${x.text.fr}`).join('\n')}`)
+p(`**${profile.international.title.fr}** — ${profile.international.summary.fr}. ${profile.international.lead.fr} ${Object.entries(profile.international.stays).map(([c, d]) => `${c} ${d.fr}`).join(' · ')}`)
+p(`**${profile.ui.interests!.fr}** : ${profile.interests.map((i) => `${i.label.fr}${i.text ? ` (${i.text.fr})` : ''}`).join(' · ')}`)
+
 // Prepared answers of the hero assistant: shown as « Brouillon » until Jérémie sets validated: true.
 h(2, 'Assistant du hero : réponses préparées')
 for (const n of brainNodes) {

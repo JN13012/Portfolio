@@ -14,6 +14,8 @@ type CoreEvents = {
   openProject: { slug: string }
   /** The hero assistant cites a certification: open its modal over the page. */
   openCredential: { id: string }
+  /** Profil asks to play the globe intro again. */
+  replayGate: Record<string, never>
 }
 
 const bus = new EventTarget()
