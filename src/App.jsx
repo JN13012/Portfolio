@@ -6,6 +6,7 @@ import ProjectSection from "./components/ProjectSection";
 import Certifications from "./components/Certifications";
 import { NetworkBackground2 } from "./components/NetworkBackground2";
 import { Hero } from "./sections/Hero/Hero";
+import { AssistantDock } from "./sections/Assistant/AssistantDock";
 import { Profile } from "./sections/Profile/Profile";
 import { Lab } from "./sections/Lab/Lab";
 import { Expertise } from "./sections/Expertise/Expertise";
@@ -50,7 +51,7 @@ function App() {
 
   return (
     <div
-      className="relative min-h-screen overflow-x-hidden font-sans"
+      className="relative min-h-screen overflow-x-clip font-sans"
       style={{ background: "radial-gradient(ellipse at 70% 0%, #0f1720 0%, #080b10 55%, #05070a 100%)" }}
     >
       {gateOpen && (
@@ -74,6 +75,8 @@ function App() {
         <Parcours effects />
         <Certifications />
         <Contact />
+        {/* Sentry, the assistant, docked at the bottom right of every page. */}
+        <AssistantDock />
       </main>
 
       <footer className="relative z-10 mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center justify-between gap-4 border-t border-white/10 py-8 text-sm text-zinc-500" inert={gateOpen || undefined}>

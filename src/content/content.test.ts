@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { complexityOf, filterProjects, sortProjects, tracksFromSearch } from '../lib/projects'
+import { assistantUi, brainNodes } from './assistant'
 import { complexity } from './complexity'
 import { credentials, inProgress } from './certifications'
 import { contact } from './contact'
@@ -23,7 +24,7 @@ function* localizedIn(value: unknown, path = ''): Generator<[string, Localized]>
   for (const [k, v] of Object.entries(value)) yield* localizedIn(v, `${path}.${k}`)
 }
 
-const allContent = { hero, profile, projects, credentials, inProgress, contact, timeline, skills, tracks, expertise }
+const allContent = { hero, profile, projects, credentials, inProgress, contact, timeline, skills, tracks, expertise, brainNodes, assistantUi }
 
 /** Only what reaches the page: editorial fields (doNotClaim, fact sources) are dropped. */
 const displayed = (value: unknown) =>
@@ -35,6 +36,17 @@ describe('content', () => {
       expect(text.fr.trim(), `${path}.fr`).not.toBe('')
       expect(text.en.trim(), `${path}.en`).not.toBe('')
     }
+  })
+
+  it('cites only projects, certifications and sections that exist in the assistant’s answers', () => {
+    const answers = brainNodes.flatMap((n) => n.questions)
+    expect(new Set(answers.map((a) => a.id)).size).toBe(answers.length)
+    for (const a of answers)
+      for (const s of a.sources) {
+        if (s.kind === 'project') expect(projects.some((p) => p.slug === s.slug), `${a.id} → ${s.slug}`).toBe(true)
+        if (s.kind === 'credential') expect(credentials.some((c) => c.id === s.id), `${a.id} → ${s.id}`).toBe(true)
+        if (s.kind === 'section') expect(brainNodes.some((n) => n.id === s.node), `${a.id} → ${s.node}`).toBe(true)
+      }
   })
 
   it('has unique project slugs', () => {

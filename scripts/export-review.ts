@@ -2,6 +2,7 @@
 // Usage: npm run review   (regenerate after any content change)
 
 import { writeFileSync } from 'node:fs'
+import { brainNodes } from '../src/content/assistant'
 import { credentials, inProgress } from '../src/content/certifications'
 import { contact } from '../src/content/contact'
 import { hero } from '../src/content/hero'
@@ -34,6 +35,16 @@ p(`**${profile.firstName} ${profile.lastName}** — ${hero.title.map((t) => t.te
 p(`> ${hero.pitch.fr}`)
 p(hero.proofs.map((x) => `- ${x.fr}`).join('\n'))
 p(`${profile.availability.fr} · ${profile.seeking.map((s) => s.fr).join(' · ')} · ${profile.location.fr}`)
+
+// Prepared answers of the hero assistant: shown as « Brouillon » until Jérémie sets validated: true.
+h(2, 'Assistant du hero : réponses préparées')
+for (const n of brainNodes) {
+  h(3, n.label.fr)
+  for (const q of n.questions) {
+    const sources = q.sources.map((s) => (s.kind === 'section' ? s.node : s.kind === 'project' ? s.slug : s.id)).join(', ')
+    p(`**${q.question.fr}** ${q.validated ? '(validée)' : '(brouillon, à valider)'}\n\n${q.answer.fr}\n\n*Sources* : ${sources}`)
+  }
+}
 
 h(2, 'En 30 secondes')
 p(atAGlance.map((x) => x.fr).join(' · '))

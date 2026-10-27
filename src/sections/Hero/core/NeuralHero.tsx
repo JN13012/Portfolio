@@ -2,9 +2,11 @@ import { lazy, Suspense, useState, useSyncExternalStore } from 'react'
 import { cx } from '../../../lib/cx'
 import { NeuralCore } from './NeuralCore'
 import { defaultNeuralNodes, type NeuralNavNode } from './navNodes'
+import { HERO_NETWORK, type NetworkSettings } from './network'
+import type { Run } from '../../../lib/brain'
 
 // three.js lives in this chunk only.
-const Neural3D = lazy(() => import('./Neural3D'))
+const NeuralNet = lazy(() => import('./NeuralNet'))
 
 const QUERIES = ['(prefers-reduced-motion: reduce)', '(min-width: 1024px)']
 
@@ -26,16 +28,23 @@ function useCan3D() {
   )
 }
 
-type NeuralHeroProps = { nodes?: NeuralNavNode[]; className?: string }
+type NeuralHeroProps = {
+  nodes?: NeuralNavNode[]
+  /** The network's look and structure (tuned in mockups.html?view=reseau). */
+  settings?: NetworkSettings
+  /** The assistant's answer being played: the network routes it to the sections it cites. */
+  run?: Run | null
+  className?: string
+}
 
-export function NeuralHero({ nodes = defaultNeuralNodes, className }: NeuralHeroProps) {
+export function NeuralHero({ nodes = defaultNeuralNodes, settings = HERO_NETWORK, run = null, className }: NeuralHeroProps) {
   const can3D = useCan3D()
   const [ready, setReady] = useState(false)
   if (!can3D) return <NeuralCore nodes={nodes} className={className} />
   return (
-    <div className={cx('relative aspect-square transition-opacity duration-700', ready ? 'opacity-100' : 'opacity-0', className)}>
+    <div className={cx('transition-opacity duration-700', !className?.includes('absolute') && 'relative', !className?.includes('aspect-') && 'aspect-square', ready ? 'opacity-100' : 'opacity-0', className)}>
       <Suspense fallback={null}>
-        <Neural3D nodes={nodes} onReady={() => setReady(true)} />
+        <NeuralNet settings={settings} outputs={nodes} run={run} onReady={() => setReady(true)} />
       </Suspense>
     </div>
   )
