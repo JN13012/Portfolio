@@ -69,7 +69,7 @@ export function Hero() {
         <div className="@container min-w-0 lg:pr-10">
           {/* Three blocks, well apart: who (name, jobs, pitch), the proofs, then what to do (availability
               right above the buttons). */}
-          <div className="flex flex-col gap-[2.2em] lg:text-[clamp(13px,min(2.6cqi,1.75vh),20px)]">
+          <div className="flex flex-col gap-[min(4.25em,5vh)] lg:text-[clamp(12px,min(2.6cqi,1.7vh),20px)]">
             <div className="flex flex-col gap-[1.1em]">
               <div className="flex flex-col gap-[0.6em]">
                 <h1 id="hero-title" className="text-6xl leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase lg:text-[clamp(2.75rem,min(14cqi,9vh),8rem)]">
@@ -89,8 +89,9 @@ export function Hero() {
 
             <HeroProofs />
 
-            <div className="flex flex-col gap-[0.85em]">
-              <ul className="flex flex-wrap items-center gap-x-[1.25em] gap-y-[0.6em] text-[0.9375em] text-zinc-300">
+            {/* Availability on two lines (the location alone on the second), then the two buttons stacked. */}
+            <div className="flex flex-col gap-[1.1em]">
+              <ul className="flex flex-wrap items-center gap-x-[1.25em] gap-y-[0.45em] text-[0.9375em] text-zinc-300">
                 <li className="inline-flex items-center gap-[0.5em] text-zinc-100">
                   <span aria-hidden="true" className="size-[0.625em] animate-pulse rounded-full bg-cyber shadow-[0_0_12px_var(--color-cyber)]" />
                   {hero.available.fr} · {profile.seeking[0]!.fr}
@@ -98,22 +99,22 @@ export function Hero() {
                 {profile.seeking.slice(1).map((s) => (
                   <li key={s.fr}>{s.fr}</li>
                 ))}
-                <li className="inline-flex items-center gap-[0.375em]">
+                <li className="inline-flex basis-full items-center gap-[0.375em]">
                   <MapPin aria-hidden="true" className="size-[1em]" /> {profile.location.fr}
                 </li>
               </ul>
 
-              <div className="flex flex-wrap gap-[1em]">
+              <div className="flex flex-col items-start gap-[0.9em]">
                 <a
                   href={profile.cv.url}
                   download={profile.cv.fileName}
-                  className="inline-flex items-center gap-[0.75em] border border-cyber/60 bg-cyber/10 px-[1.6em] py-[1.05em] tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
+                  className="inline-flex items-center gap-[0.75em] border border-cyber/60 bg-cyber/10 px-[1.6em] py-[0.85em] tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
                 >
                   <Download aria-hidden="true" className="size-[1.125em]" /> {hero.ctaCv.fr}
                 </a>
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-[0.75em] border border-white/20 px-[1.6em] py-[1.05em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
+                  className="inline-flex items-center gap-[0.75em] border border-white/20 px-[1.6em] py-[0.85em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
                 >
                   <Mail aria-hidden="true" className="size-[1.125em]" /> {hero.ctaContact.fr}
                 </a>

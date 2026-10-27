@@ -157,6 +157,8 @@
 }
 .sentry-welcome__close:hover { color: white; background: rgb(255 255 255 / 4%); }
 .sentry-welcome__close:focus-visible { outline: 2px solid #65ff79; outline-offset: -5px; }
+.sentry-welcome[data-leaving] { animation: sentry-welcome-out 400ms ease-in both; pointer-events: none; }
+@keyframes sentry-welcome-out { to { opacity: 0; transform: translateY(6px) scale(.97); } }
 @keyframes sentry-welcome-in { from { opacity: 0; transform: translateY(8px) scale(.94); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @media (min-width: 640px) {
   .sentry-chat { --sentry-launcher-size: 103.5px; --sentry-edge: 24px; }

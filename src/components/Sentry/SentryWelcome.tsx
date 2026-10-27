@@ -3,9 +3,13 @@ import { X } from 'lucide-react'
 
 import { SEEN_KEY, markSentryWelcomeSeen } from './welcomeSession'
 
+/** Time the greeting stays on screen (paused while hovered or focused), then a short fade (2026-10-27). */
+const SHOWN_MS = 3000
+const FADE_MS = 400
+
 /** Mounted after the intro, only while the conversation is closed. */
 export function SentryWelcome({ onDismiss }: { onDismiss: () => void }) {
-  const [phase, setPhase] = useState<'waiting' | 'visible' | 'dismissed'>(() => {
+  const [phase, setPhase] = useState<'waiting' | 'visible' | 'leaving' | 'dismissed'>(() => {
     try {
       return sessionStorage.getItem(SEEN_KEY) === '1' ? 'dismissed' : 'waiting'
     } catch {
@@ -26,20 +30,27 @@ export function SentryWelcome({ onDismiss }: { onDismiss: () => void }) {
 
   useEffect(() => {
     if (phase !== 'visible' || hovered || focused) return
-    const timer = setTimeout(() => setPhase('dismissed'), 8000)
+    const timer = setTimeout(() => setPhase('leaving'), SHOWN_MS)
     return () => clearTimeout(timer)
   }, [phase, hovered, focused])
+
+  useEffect(() => {
+    if (phase !== 'leaving') return
+    const timer = setTimeout(() => setPhase('dismissed'), FADE_MS)
+    return () => clearTimeout(timer)
+  }, [phase])
 
   const dismiss = () => {
     setPhase('dismissed')
     onDismiss()
   }
 
-  if (phase !== 'visible') return null
+  if (phase !== 'visible' && phase !== 'leaving') return null
 
   return (
     <div
       className="sentry-welcome"
+      data-leaving={phase === 'leaving' || undefined}
       onKeyDown={(e) => {
         if (e.key === 'Escape') {
           e.preventDefault()
