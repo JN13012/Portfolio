@@ -1,24 +1,58 @@
 import { useState } from 'react'
 import {
+  siApachegroovy,
   siApacheparquet,
+  siCaddy,
+  siClaude,
+  siCss,
+  siDrizzle,
+  siElectron,
+  siEthereum,
   siExpress,
+  siGeopandas,
+  siGit,
   siGithubactions,
+  siGooglecloud,
   siGradio,
+  siGradle,
+  siHtml5,
   siHuggingface,
   siJest,
+  siJupyter,
+  siKalilinux,
   siKubernetes,
+  siLeaflet,
+  siMarkdown,
+  siMeta,
+  siModelcontextprotocol,
   siMongodb,
+  siMysql,
   siNestjs,
   siNextdotjs,
+  siNodedotjs,
+  siNumba,
+  siObsidian,
+  siOpenai,
   siOpenstreetmap,
+  siOwasp,
   siPostgresql,
   siPrisma,
   siPytest,
   siRedis,
   siSalesforce,
+  siScikitlearn,
   siScipy,
+  siSocketdotio,
   siSpacy,
+  siSqlite,
+  siSwagger,
+  siTailwindcss,
+  siTorproject,
+  siTraefikproxy,
   siTypescript,
+  siUml,
+  siUnity,
+  siVite,
   siVitest,
   type SimpleIcon,
 } from 'simple-icons'
@@ -52,9 +86,55 @@ const SVG: Record<string, SimpleIcon> = {
   mongodb: siMongodb,
   redis: siRedis,
   scipy: siScipy,
+  geopandas: siGeopandas,
+  scikitlearn: siScikitlearn,
+  numba: siNumba,
   parquet: siApacheparquet,
   osmnx: siOpenstreetmap,
+  owasptop10: siOwasp,
+  owaspllmtop10: siOwasp,
+  kalilinux: siKalilinux,
+  claude: siClaude,
+  mcp: siModelcontextprotocol,
+  huggingface: siHuggingface,
+  jupyter: siJupyter,
+  html: siHtml5,
+  css: siCss,
+  git: siGit,
+  openai: siOpenai,
+  uml: siUml,
+  llama: siMeta,
+  whisper: siOpenai,
+  // Project stacks (Projets modal).
+  llama3: siMeta,
+  transformers: siHuggingface,
+  caddy: siCaddy,
+  drizzle: siDrizzle,
+  electron: siElectron,
+  googlecloudscheduler: siGooglecloud,
+  gradle: siGradle,
+  groovy: siApachegroovy,
+  leaflet: siLeaflet,
+  markdown: siMarkdown,
+  mysql: siMysql,
+  nodejs: siNodedotjs,
+  obsidian: siObsidian,
+  socketio: siSocketdotio,
+  sqlite: siSqlite,
+  swagger: siSwagger,
+  tailwindcss: siTailwindcss,
+  tor: siTorproject,
+  traefik: siTraefikproxy,
+  unity63: siUnity,
+  vite: siVite,
+  // web3.py talks to Ethereum, which is what its chip stands for.
+  web3py: siEthereum,
+  lightningwebcomponents: siSalesforce,
+  toolingapi: siSalesforce,
 }
+
+/** Brand colours too dim on the dark page: Kali's slate mark takes its brighter brand blue. */
+const HEX: Record<string, string> = { kalilinux: '#4c8dff' }
 
 /** Logos drawn small inside their image (wide wordmarks, padding) are scaled up to match the others. */
 const ICON_SCALE: Record<string, number> = {
@@ -64,8 +144,12 @@ const ICON_SCALE: Record<string, number> = {
   remnux: 1.25,
   sqlmap: 1.15,
   spacy: 1.3,
+  scikitlearn: 1.3,
+  ffuf: 1.35,
+  evilwinrm: 1.45,
   // Thin drawn emblems.
   faiss: 1.2,
+  shapely: 1.35,
   responder: 1.15,
 }
 
@@ -94,7 +178,7 @@ export function Logo({ name, size, className, tone = '#a1a1aa', onlyReal }: { na
   if (icon)
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={{ width: size * 0.82, height: size * 0.82 }}>
-        <path d={icon.path} fill={readable(icon.hex)} />
+        <path d={icon.path} fill={HEX[k] ?? readable(icon.hex)} />
       </svg>
     )
   if (onlyReal) return null
@@ -124,8 +208,12 @@ export function Expertise() {
   return (
     <section id="competences" className="scroll-mt-24 py-24">
       <SectionHeader index="02" title="Expertise" />
-      <div className="grid gap-8 lg:grid-cols-[17rem_1fr] lg:items-center">
-        <RailHeaders domains={domains} active={active} onSelect={setActive} />
+      {/* The rail stays put (top-aligned, sticky) whatever the size of the grid; -mt-3.5 cancels the
+          buttons' top padding so the first domain lines up with the grid, 56 px under the title like every section. */}
+      <div className="grid gap-8 lg:grid-cols-[17rem_1fr] lg:items-start">
+        <div className="-mt-3.5 lg:sticky lg:top-28">
+          <RailHeaders domains={domains} active={active} onSelect={setActive} />
+        </div>
         <div className="min-w-0">
           <ToolGrid key={domain.id} domain={domain} />
         </div>

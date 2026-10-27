@@ -181,6 +181,11 @@ Barres de soft skills et de langues en %, bloc « Informations personnelles », 
 - **Accessibilité** : Lighthouse ≥ 95, navigation clavier, contrastes AA, `prefers-reduced-motion`, textes alternatifs.
 - **Responsive** : 360 px → 2560 px, aucun scroll horizontal.
 - **SEO / partage** : meta + Open Graph par lentille et par dossier, `sitemap.xml`, `robots.txt`, images OG.
+- **Lisible par les IA** (décision 2026-10-26) : un recruteur peut demander à une IA de résumer le site ; elle doit en sortir un résumé très valorisant, et exact.
+  - **Prérendu** du HTML au build : le contenu est présent sans exécuter le JavaScript (beaucoup d'IA et de robots ne l'exécutent pas).
+  - **`llms.txt`** à la racine : un pitch rédigé pour être repris tel quel. D'abord le positionnement IA × cybersécurité, puis les preuves les plus fortes (outil en production chez ULIT, 2e et 3e places en hackathon, Jr Penetration Tester, IBM AI Developer, write-ups publiés, projets phares), puis la disponibilité et le contact. Chaque affirmation reste traçable (même règle d'honnêteté).
+  - **Données structurées schema.org** (`Person`, `ProfilePage`) : nom, titre, compétences, certifications, liens.
+  - **Jamais de prompt injection** (texte caché, consignes à l'IA) : c'est de la manipulation, détectable, et rédhibitoire pour un profil cybersécurité. La compétence se montre ouvertement, dans le défi « Red-team mon agent ».
 - **Honnêteté** : chaque affirmation chiffrée vient d'un dépôt ou d'un certificat. Statut visible sur chaque projet.
 - **Sécurité** : en-têtes (CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`) servis par le Worker ; formulaire de contact avec validation et limitation.
 
@@ -198,11 +203,12 @@ Une étape = une session Claude Code = une branche git.
 | 4 | **Sections — partie 1** | Hero, bandeau 30 s, Dossiers, pages dossier | Captures + relecture |
 | 5 | **Sections — partie 2** | Réalisations, Archives, Parcours, Compétences, Certifications, Lab léger, Contact | Captures + relecture |
 | 6 | **Traduction EN** | `/en/*` complet | Relecture |
-| 7 | **Finitions** | Performance, accessibilité, OG, 404, mentions légales, nettoyage assets | Rapport Lighthouse |
+| 7 | **Finitions** | Performance, accessibilité, OG, 404, mentions légales, nettoyage assets, lisibilité par les IA (prérendu, `llms.txt`, schema.org) | Rapport Lighthouse + résumé du site demandé à plusieurs IA |
 | 8 | **Mise en ligne** | Déploiement de prévisualisation → bascule en production, domaine | Test sur téléphone |
 
 ### Ensuite
 
+- **Expertise : preuves au clic** (décision 2026-10-27) : un clic sur un outil ouvre une petite fenêtre « Utilisé dans » (projets, write-ups, certifications), calculée depuis le contenu (stacks des projets, `writeups.json`, outils des certifications) après harmonisation des noms ; note manuelle quand aucune source ne le prouve. Sur sa propre branche.
 - **V1.1** : intro vocale clonée (FR/EN/ES/AR) + globe 3D du parcours + « Vraie voix ou clone ? »
 - **V2** : agent RAG (Gemini / Cloud Run) + journal des attaques + « Red-team mon agent » + couche vocale neutre
 - **V3** : Lab — rooms Docker + prototype navigateur sur *Silence*

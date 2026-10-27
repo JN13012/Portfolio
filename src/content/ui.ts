@@ -5,6 +5,7 @@ import type { CredentialKind, CredentialLevel, Locale, Localized, Project, Proje
 export const statusLabels: Record<ProjectStatus, Localized> = {
   development: { fr: 'En développement', en: 'In development' },
   delivered: { fr: 'Terminé', en: 'Finished' },
+  ongoing: { fr: 'En continu', en: 'Ongoing' },
 }
 
 /** Type badge of a certification card: what was actually obtained. */
@@ -25,7 +26,7 @@ export const credentialLevelLabels: Record<CredentialLevel, string> = {
   5: 'INSANE',
 }
 
-/** « Seul », « Binôme », « Équipe de 5 », then the role when known. */
+/** « Seul », « Binôme », « Équipe de 5 », then « Rôle : … » when known. */
 export function teamLabel(team: Project['team'], locale: Locale) {
   const size =
     team.size === 1
@@ -33,7 +34,7 @@ export function teamLabel(team: Project['team'], locale: Locale) {
       : team.size === 2
         ? { fr: 'Binôme', en: 'Pair' }
         : { fr: `Équipe de ${team.size}`, en: `Team of ${team.size}` }
-  return team.role ? `${size[locale]} · ${team.role[locale]}` : size[locale]
+  return team.role ? `${size[locale]} · ${locale === 'fr' ? 'Rôle : ' : 'Role: '}${team.role[locale]}` : size[locale]
 }
 
 /** Said before the summary in the project modal (the card only shows a short badge). */
