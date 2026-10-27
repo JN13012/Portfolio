@@ -2,7 +2,7 @@ import { BadgeCheck, Download, Dumbbell, Globe, Landmark, Plane, Terminal, type 
 import type { ReactNode } from 'react'
 import SectionHeader from '../../components/SectionHeader'
 import { profile } from '../../content/profile'
-import Portrait from '../../assets/Profil.webp'
+import Portrait from '../../assets/Portrait-holographique.webp'
 
 const panel = 'rounded-sm border border-white/10 bg-zinc-950/60 backdrop-blur-sm shadow-[0_14px_36px_rgba(0,0,0,0.26)]'
 
@@ -40,7 +40,7 @@ export function Profile() {
             <div className="absolute -inset-2 border border-cyber/30" />
             <div className="absolute -top-2 -left-2 size-5 border-t-2 border-l-2 border-cyber" />
             <div className="absolute -right-2 -bottom-2 size-5 border-r-2 border-b-2 border-cyber" />
-            <img loading="lazy" decoding="async" src={Portrait} alt={`${profile.firstName} ${profile.lastName}`} className="relative w-full" />
+            <img loading="lazy" decoding="async" src={Portrait} width={1145} height={1374} alt={`${profile.firstName} ${profile.lastName}`} className="relative w-full" />
           </div>
           <ul className="grid grid-cols-5 gap-1.5">
             {LINKS.map((l) => (
