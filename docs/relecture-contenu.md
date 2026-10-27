@@ -13,7 +13,7 @@ Formation : Master of Science · Architecte des SI (Epitech Marseille · 1re ann
 
 Certifié : IBM AI Developer (Professional Certificate) · Jr Penetration Tester (TryHackMe · 89 labs)
 
-Projets : salesforce-executor (En production chez ULIT) · blocktrader (Bot de trading · en test) · argos (OSINT · en développement) · zeroday (Jeu mobile · en conception)
+Projets : argos (OSINT · en développement) · blocktrader (Bot de trading · en test) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
 Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team mon agent, bientôt)
 
