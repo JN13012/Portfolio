@@ -6,7 +6,7 @@ import type { ReactNode } from 'react'
 // similarity search) is a point cloud with a query linked to its nearest neighbours; Shapely
 // (planar geometry) is two overlapping polygons with their intersection filled. Netcat is two
 // hosts joined by a raw two-way pipe, CeWL (a crawler that builds wordlists) a spider web, and
-// Kerbrute a Kerberos ticket with its key.
+// Kerbrute a Kerberos ticket with its key. garak's official mark is its name in a monospace font.
 
 const LIGHT = '#f4f4f5'
 
@@ -104,6 +104,11 @@ const EMBLEMS: Record<string, (tone: string) => ReactNode> = {
       <path d="M25 32 H33 M30 32 V36 M33 32 V35" fill="none" stroke={tone} strokeWidth="2.2" strokeLinecap="round" />
       <path d="M43 28 H46 M43 32 H46 M43 36 H46" stroke={LIGHT} strokeWidth="1.6" strokeLinecap="round" opacity="0.7" />
     </>)
+  ),
+  garak: () => (
+    <text x="32" y="38" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="19" fill={LIGHT}>
+      garak
+    </text>
   ),
   shapely: (tone) => (
     tile(tone, 'shapely', <>

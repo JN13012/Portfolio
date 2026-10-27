@@ -10,7 +10,6 @@ import {
   siEthereum,
   siExpress,
   siGeopandas,
-  siGnubash,
   siGit,
   siGithubactions,
   siGooglecloud,
@@ -32,7 +31,6 @@ import {
   siNextdotjs,
   siNodedotjs,
   siNumba,
-  siNvidia,
   siObsidian,
   siOpenai,
   siOpenstreetmap,
@@ -90,9 +88,6 @@ const SVG: Record<string, SimpleIcon> = {
   scipy: siScipy,
   geopandas: siGeopandas,
   scikitlearn: siScikitlearn,
-  bash: siGnubash,
-  // garak's own mark is a plain wordmark: it shows NVIDIA's, which publishes it.
-  garak: siNvidia,
   numba: siNumba,
   parquet: siApacheparquet,
   osmnx: siOpenstreetmap,
@@ -138,9 +133,8 @@ const SVG: Record<string, SimpleIcon> = {
   toolingapi: siSalesforce,
 }
 
-/** Brand colours that read wrong on the dark page: Kali's slate mark takes its brighter brand blue; Bash, whose
- * Simple Icons green is not its logo's, is drawn in the light grey of the official monochrome mark. */
-const HEX: Record<string, string> = { kalilinux: '#4c8dff', bash: '#e4e4e7' }
+/** Brand colours too dim on the dark page: Kali's slate mark takes its brighter brand blue. */
+const HEX: Record<string, string> = { kalilinux: '#4c8dff' }
 
 /** Logos drawn small inside their image (wide wordmarks, padding) are scaled up to match the others. */
 const ICON_SCALE: Record<string, number> = {
