@@ -1,6 +1,7 @@
 // Colour logos of the Expertise tools (the legacy icons, plus logos taken from each project's
 // official repository). Keys are tool names as written in src/content/expertise.ts.
 
+import Bash from '../../assets/Icon/Bash.webp' // assets/Logos/Icons/SVG/128x128.svg (odb/official-bash-logo), in colour
 import BloodHound from '../../assets/Icon/BloodHound.webp'
 import Burpsuite from '../../assets/Icon/Burpsuite.webp'
 import Cyberchef from '../../assets/Icon/Cyberchef.webp'
@@ -66,6 +67,7 @@ export const TOOL_ICONS: Record<string, string> = {
   Hydra: Hydra,
   JavaScript: Javascript,
   Linux: Linux,
+  Bash: Bash,
   Python: Python,
   Docker: Docker,
   'Docker Compose': Docker,
