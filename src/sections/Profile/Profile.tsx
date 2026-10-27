@@ -214,12 +214,14 @@ function StrengthsTimeline() {
             </span>
             <div>
               {i > 0 && <Jog down className={idle} />}
-              <div className={`ml-6 border-l pb-1 pl-4 transition-colors ${line}`}>
-                <p className="text-[15px] font-semibold text-zinc-50 transition-colors group-hover:text-cyber">{s.title.fr}</p>
-                <p className="text-xs text-zinc-500">{s.context.fr}</p>
+              <div className={`ml-6 border-l pl-4 transition-colors ${line}`}>
+                <p className="text-[15px] font-semibold text-zinc-50 transition-colors group-hover:text-cyber">
+                  {s.title.fr} <span className="ml-1 text-xs font-normal text-zinc-500">{s.context.fr}</span>
+                </p>
               </div>
               <Jog down={false} className={idle} />
-              <div className={`border-l py-1 pl-4 transition-colors ${line}`}>
+              {/* More room under the text than above it, so each step reads as one block. */}
+              <div className={`border-l pt-0.5 pl-4 transition-colors ${line} ${i < profile.strengths.length - 1 ? 'pb-6' : 'pb-1'}`}>
                 <p className="text-[15px] leading-relaxed text-zinc-300">{s.text.fr}</p>
               </div>
             </div>
