@@ -1300,7 +1300,7 @@ const ProfileConsole = () => {
       }
 
       const results = Object.entries(currentData.files)
-        .filter(([name, content]) =>
+        .filter(([, content]) =>
           content.toLowerCase().includes(pattern.toLowerCase()),
         )
         .map(([name]) => name);
