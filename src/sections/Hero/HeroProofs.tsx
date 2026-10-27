@@ -17,7 +17,7 @@ import Argos from '../../assets/Logos/Argos_Emblem_sm.webp'
 import ZeroDay from '../../assets/Projets/ZeroDay.webp'
 import { emitCore } from '../../lib/coreBus'
 import { cx } from '../../lib/cx'
-import { Sentry } from '../Assistant/Sentry'
+import { Sentry } from '../../components/Sentry'
 
 const LOGOS: Record<string, string> = { ibm: Coursera, thm: THM }
 /** Project thumbnails: an emblem shown whole, or a screenshot cropped. */
@@ -166,7 +166,7 @@ export function HeroProofs() {
                 <Item
                   thumb={
                     <Thumb className="opacity-60 grayscale">
-                      <Sentry size={44} className="size-[2.5em]" />
+                      <Sentry size={46} />
                     </Thumb>
                   }
                   title={l.label.fr}
