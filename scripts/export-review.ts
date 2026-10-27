@@ -6,6 +6,7 @@ import { brainNodes } from '../src/content/assistant'
 import { credentials, inProgress } from '../src/content/certifications'
 import { contact } from '../src/content/contact'
 import { hero } from '../src/content/hero'
+import { introCopy } from '../src/content/intro'
 import { profile } from '../src/content/profile'
 import { archive, cards, dossiers } from '../src/content/projects'
 import { llmApps } from '../src/content/projects/llm-apps'
@@ -29,6 +30,11 @@ out.push(
   `> Généré par \`npm run review\` le ${new Date().toISOString().slice(0, 10)} à partir de \`src/content/\`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.`,
   '> Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).',
 )
+
+h(2, 'Introduction')
+p(`${introCopy.title.fr} ${introCopy.titleAccent.fr}`)
+p(introCopy.description.fr)
+p(`${introCopy.enter.fr} · ${introCopy.skip.fr}`)
 
 h(2, 'Hero')
 p(`**${profile.firstName} ${profile.lastName}** — ${hero.title.map((t) => t.text.fr).join(' · ')}`)

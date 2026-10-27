@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Jérémie Nagi · Aperçu de l’introduction</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      // Dev-only entry: replay the integrated intro and the real portfolio.
+      if (import.meta.env.DEV) {
+        try { sessionStorage.removeItem('gate-seen') } catch { /* Private browsing. */ }
+        await import('/src/main.jsx')
+      }
+    </script>
+  </body>
+</html>
