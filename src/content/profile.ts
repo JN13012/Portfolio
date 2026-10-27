@@ -53,8 +53,8 @@ export const profile = {
   /** Presentation paragraphs of the Profil section. */
   about: [
     {
-      fr: 'Développeur IA et pentester junior, en MSc cybersécurité à Epitech Marseille. Mon fil rouge : construire des systèmes d’IA et savoir comment on les attaque.',
-      en: 'AI developer and junior penetration tester, MSc cybersecurity student at Epitech Marseille. My common thread: building AI systems and knowing how they get attacked.',
+      fr: 'Développeur IA et pentester junior, en Master of Science à Epitech Marseille. Mon fil rouge : construire des systèmes d’IA et savoir comment on les attaque.',
+      en: 'AI developer and junior penetration tester, Master of Science student at Epitech Marseille. My common thread: building AI systems and knowing how they get attacked.',
     },
     {
       fr: 'Avant l’informatique : l’infanterie (2e RIMa), la mécanique en endurance (24 Heures du Mans 2017) et l’infrastructure blockchain depuis 2018. Cinq langues, six pays.',

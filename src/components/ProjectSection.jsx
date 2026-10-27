@@ -35,6 +35,8 @@ import CTF_Snort from "../assets/Projets/CTF_Snort.webp";
 import CTF_Hashcat from "../assets/Projets/CTF_Hashcat.webp";
 import CTF_Forensic from "../assets/Projets/CTF_Forensic.png";
 import OTP_RCS from "../assets/Projets/OTP_RCS.webp";
+import BlockTrader_Emblem from "../assets/Logos/BlockTrader_Emblem.webp";
+import Argos_Emblem from "../assets/Logos/Argos_Emblem.webp";
 import BlockTrader from "../assets/Projets/BlockTrader.webp";
 import BlockTrader_Strategies from "../assets/Projets/BlockTrader_Strategies.webp";
 import BlockTrader_Tendance from "../assets/Projets/BlockTrader_Tendance.webp";
@@ -49,6 +51,7 @@ import Convertisseur2 from "../assets/Projets/Convertisseur2.webp";
 import Platino from "../assets/Projets/Platino.webp";
 import Hackathon_Citiz from "../assets/Projets/Hackathon_Citiz.webp";
 import Salesforce from "../assets/Experiences/Salesforce_dev.webp";
+import UlitLogo from "../assets/Experiences/ULIT-removebg-preview.png";
 import Obsidian from "../assets/Obsidian.webp";
 import Obsidian0 from "../assets/Obsidian0.png";
 import Obsidian1 from "../assets/obsidian1.png";
@@ -65,13 +68,22 @@ const GROUPS = [
 // (perso, ULIT and Epitech are implied by « Projets perso & pro » / « Projets de formation »).
 const CONTEXT_PILL = { ibm: "IBM", hackathon: "Hackathon" };
 
+/** Project emblems: shown first (card background, zoomed out; first image of the modal, without a frame), never under the mock-up note. */
+const EMBLEMS = new Map([
+  // Height of the emblem in its card, tuned by Jérémie.
+  [BlockTrader_Emblem, "87%"],
+  [Argos_Emblem, "100%"],
+  // A wide logo: a smaller height keeps it inside the card.
+  [UlitLogo, "40%"],
+]);
+
 /** Visuals per project slug (first image = card background). Projects without one get a pattern. */
 const IMAGES = {
-  blocktrader: [BlockTrader, BlockTrader_Strategies, BlockTrader_Tendance],
+  blocktrader: [BlockTrader_Emblem, BlockTrader, BlockTrader_Strategies, BlockTrader_Tendance],
   zeroday: [ZeroDay],
   // Redacted by Jérémie (client hidden); JoomScan, Nmap and Tor start-up left out (CMS version, Tor warnings).
   "audit-web": [Audit_Tor, Audit_Gobuster, Audit_Sqlmap],
-  argos: [Argos_Dashboard, Argos_Parcours],
+  argos: [Argos_Emblem, Argos_Dashboard, Argos_Parcours],
   "argos-security-arena": [Arena_Dashboard, Arena_Path],
   "rag-pdf-chatbot": [RAG_pdf_Chatbot],
   "meeting-companion": [Business_AI_Meeting],
@@ -81,7 +93,7 @@ const IMAGES = {
   "hackathon-citiz": [Hackathon_Citiz],
   platino: [Platino],
   chatflow: [Chatflow],
-  "salesforce-executor": [Salesforce],
+  "salesforce-executor": [UlitLogo, Salesforce],
   "base-de-connaissance": [Obsidian, Obsidian0, Obsidian1],
   "ctf-du-site": [CTF_John, CTF_Hashcat, CTF_Metasploit, CTF_Forensic, CTF_Snort],
   "smart-fridge": [Smartfridge],
@@ -189,6 +201,7 @@ const ProjectSection = () => {
       description={(p.tagline ?? p.summary).fr}
       tags={p.stack}
       image={IMAGES[p.slug]?.[0]}
+      emblem={EMBLEMS.get(IMAGES[p.slug]?.[0])}
       categories={categoriesOf(p)}
       date={cardDate(p.period)}
       ongoing={!p.period.end}
@@ -339,10 +352,11 @@ const ProjectSection = () => {
                         ‹
                       </button>
                     )}
-                    <button type="button" onClick={() => setZoomed(true)} aria-label="Agrandir l’image" className="cursor-zoom-in">
-                      <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className="max-h-[62vh] max-w-full border border-white/10 object-contain shadow-2xl" />
+                    {/* An emblem floats without a frame, kept clear of the arrows. */}
+                    <button type="button" onClick={() => setZoomed(true)} aria-label="Agrandir l’image" className={`cursor-zoom-in ${EMBLEMS.has(images[imageIndex]) ? "px-16" : ""}`}>
+                      <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className={`max-w-full object-contain ${EMBLEMS.has(images[imageIndex]) ? "max-h-[52vh]" : "max-h-[62vh] border border-white/10 shadow-2xl"}`} />
                     </button>
-                    {selected.imageNote && (
+                    {selected.imageNote && !EMBLEMS.has(images[imageIndex]) && (
                       <p className="absolute bottom-0 left-1/2 z-20 -translate-x-1/2 bg-black/75 px-4 py-2 text-center text-sm text-zinc-200 backdrop-blur-sm md:text-base">{selected.imageNote.fr}</p>
                     )}
                     {images.length > 1 && (
@@ -429,7 +443,7 @@ const ProjectSection = () => {
               className="fixed inset-0 z-[1200] flex cursor-zoom-out items-center justify-center bg-black p-4"
             >
               <img src={images[imageIndex]} alt={selected.title} className="max-h-[94vh] max-w-[94vw] object-contain" />
-              {selected.imageNote && <p className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/75 px-4 py-2 text-base text-zinc-200">{selected.imageNote.fr}</p>}
+              {selected.imageNote && !EMBLEMS.has(images[imageIndex]) && <p className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/75 px-4 py-2 text-base text-zinc-200">{selected.imageNote.fr}</p>}
               {images.length > 1 &&
                 [
                   { delta: -1, side: "left-4", Icon: ChevronLeft, label: "Image précédente" },

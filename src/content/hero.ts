@@ -22,19 +22,61 @@ export const hero = {
     fr: 'Je construis des agents IA pour la cybersécurité, et je teste leur résistance.',
     en: 'I build AI agents for cybersecurity, and I test how well they hold.',
   },
-  /** Verifiable proofs under the pitch (certificates, repos). */
-  proofs: [
-    { fr: 'IBM AI Developer Professional', en: 'IBM AI Developer Professional' },
-    { fr: 'TryHackMe Jr Penetration Tester', en: 'TryHackMe Jr Penetration Tester' },
-    // Verified 2026-10-17: Argos is currently an OSINT engine; the agent layer is designed, not built.
-    { fr: 'Argos : moteur OSINT, couche agents IA en conception', en: 'Argos: OSINT engine, AI agent layer in design' },
-  ],
-  /** Certificates shown as cards under the pitch (logo resolved in the component). */
+  /**
+   * Proofs under the pitch (2026-10-27), as a light list: one row per kind (label on the left, items as
+   * text). The master in progress is not a certificate (started 09/2026, specialisation not chosen yet).
+   * Certificates and projects open their modal; the master and the cyber lab open a panel in place, whose
+   * button is the only way to their section (no jump without asking).
+   */
+  proofTitles: {
+    formation: { fr: 'Formation', en: 'Education' },
+    certified: { fr: 'Certifié', en: 'Certified' },
+    projects: { fr: 'Projets', en: 'Projects' },
+    labs: { fr: 'Labs', en: 'Labs' },
+  },
+  /** The timeline entry of the master; its title, period and highlights come from timeline.ts. */
+  formation: {
+    timeline: 'epitech-msc',
+    title: { fr: 'Master of Science · Architecte des SI', en: 'Master of Science · IS Architect' },
+    detail: { fr: 'Epitech Marseille · 1re année', en: 'Epitech Marseille · first year' },
+    cta: { fr: 'Voir tout le parcours', en: 'See the whole journey' },
+    target: '#parcours',
+  },
   certificates: [
-    { id: 'ibm', title: 'IBM AI Developer', sub: { fr: 'Professional Certificate', en: 'Professional Certificate' } },
-    { id: 'thm', title: 'Jr Penetration Tester', sub: { fr: 'TryHackMe · 96 h', en: 'TryHackMe · 96 h' } },
-    { id: 'epitech', title: 'MSc Cybersécurité', sub: { fr: 'Epitech Marseille', en: 'Epitech Marseille' } },
+    { id: 'ibm', credential: 'ibm-ai-developer', title: 'IBM AI Developer', detail: { fr: 'Professional Certificate', en: 'Professional Certificate' } },
+    // 89 rooms: the path's 2026 version, as in its credential note (certifications.ts).
+    { id: 'thm', credential: 'thm-jr-penetration-tester', title: 'Jr Penetration Tester', detail: { fr: 'TryHackMe · 89 labs', en: 'TryHackMe · 89 labs' } },
   ],
+  /** Four projects on two lines, in this order (Argos, BlockTrader / Code Executor, ZeroDay); the wording follows each one's status (never « live »). */
+  projects: [
+    { slug: 'argos', detail: { fr: 'OSINT · en développement', en: 'OSINT · in development' } },
+    { slug: 'blocktrader', detail: { fr: 'Bot de trading · en test', en: 'Trading bot · in testing' } },
+    { slug: 'salesforce-executor', detail: { fr: 'En production chez ULIT', en: 'In production at ULIT' } },
+    { slug: 'zeroday', detail: { fr: 'Jeu mobile · en conception', en: 'Mobile game · in design' } },
+  ],
+  /** The labs: the cyber lab exists; the AI lab (step 4) keeps its place, marked « bientôt » until it ships. */
+  labs: [
+    { id: 'cyber', label: { fr: 'Lab cyber', en: 'Cyber lab' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
+    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red-team mon agent', en: 'Red-team my agent' }, soon: true },
+  ],
+  /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
+  labPanel: {
+    title: { fr: 'Lab cyber', en: 'Cyber lab' },
+    intro: {
+      fr: 'Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest.',
+      en: 'A CTF you play in the browser, in 9 levels, and my pentest write-ups.',
+    },
+    phases: [
+      { title: { fr: 'Reconnaissance', en: 'Reconnaissance' }, text: { fr: 'Linux, réseau, scan et énumération', en: 'Linux, networking, scanning and enumeration' } },
+      { title: { fr: 'Exploitation', en: 'Exploitation' }, text: { fr: 'Web et injection SQL, hashs et SSH, élévation de privilèges', en: 'Web and SQL injection, hashes and SSH, privilege escalation' } },
+      { title: { fr: 'Défense', en: 'Defence' }, text: { fr: 'SIEM, forensique, durcissement WAF, firewall et IDS', en: 'SIEM, forensics, WAF, firewall and IDS hardening' } },
+    ],
+    writeups: { fr: '{n} write-ups : {epitech} Epitech, {thm} TryHackMe', en: '{n} write-ups: {epitech} Epitech, {thm} TryHackMe' },
+    cta: { fr: 'Ouvrir le Lab', en: 'Open the Lab' },
+    target: '#lab',
+  },
+  close: { fr: 'Fermer', en: 'Close' },
+  soon: { fr: 'bientôt', en: 'soon' },
   /** Facts strip at the bottom of the hero. */
   strip: [
     { icon: 'globe', text: { fr: '5 langues · 6 pays', en: '5 languages · 6 countries' } },
@@ -68,7 +110,6 @@ export const hero = {
 } satisfies {
   title: Array<{ text: Localized; tone: 'ai' | 'threat' }>
   pitch: Localized
-  proofs: Localized[]
   nodes: CoreNode[]
   [key: string]: unknown
 }
