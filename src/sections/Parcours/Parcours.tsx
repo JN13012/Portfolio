@@ -126,7 +126,7 @@ export function Parcours({ effects = false }: { effects?: boolean }) {
   }, [])
   const entry = timeline.find((e) => e.id === selected) ?? timeline[0]!
   return (
-    <section id="parcours" className="scroll-mt-24 py-24">
+    <section id="parcours" className="py-24">
       <SectionHeader index="05" title="Parcours" />
 
       <div className="hidden space-y-6 lg:block">

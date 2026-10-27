@@ -66,7 +66,7 @@ export const profile = {
   },
   /**
    * Before IT, and what it left (validated by Jérémie on 2026-10-27): a proof from Parcours, then its link to the job.
-   * One block, oldest first, with a single link to Parcours.
+   * Oldest first, drawn as a timeline.
    */
   strengths: [
     {
@@ -172,7 +172,6 @@ export const profile = {
   /** Labels of the Profil section. */
   ui: {
     strengthsTitle: { fr: 'Avant l’informatique, et ce que j’en garde', en: 'Before IT, and what I kept from it' },
-    seeInParcours: { fr: 'Voir le parcours', en: 'See the journey' },
     interests: { fr: 'Centres d’intérêt', en: 'Interests' },
     native: { fr: 'Natif', en: 'Native' },
     replayGlobe: { fr: 'Revoir le globe', en: 'Replay the globe' },
