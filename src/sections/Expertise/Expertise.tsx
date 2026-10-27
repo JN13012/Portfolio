@@ -206,7 +206,7 @@ export function Expertise() {
   const [active, setActive] = useState(0)
   const domain = domains[active]!
   return (
-    <section id="competences" className="scroll-mt-24 py-24">
+    <section id="competences" className="py-24">
       <SectionHeader index="02" title="Expertise" />
       {/* The rail stays put (top-aligned, sticky) whatever the size of the grid; -mt-3.5 cancels the
           buttons' top padding so the first domain lines up with the grid, 56 px under the title like every section. */}

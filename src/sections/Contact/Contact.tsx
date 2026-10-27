@@ -99,7 +99,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="relative scroll-mt-24 py-24 text-white">
+    <section id="contact" className="relative py-24 text-white">
       <div>
         <SectionHeader index="07" title="Contact" />
 
