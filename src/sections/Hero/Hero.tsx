@@ -1,101 +1,143 @@
-import { AudioLines, BadgeCheck, BrainCircuit, Crosshair, Download, Globe, Mail, MapPin, ShieldCheck, type LucideIcon } from 'lucide-react'
+import { useMemo, useState, useSyncExternalStore, type CSSProperties } from 'react'
+import { Download, Mail, MapPin } from 'lucide-react'
 import { hero } from '../../content/hero'
 import { profile } from '../../content/profile'
+import { currentRun, useAssistant } from '../../lib/assistantStore'
 import Coursera from '../../assets/COURSERA.webp'
 import THM from '../../assets/THM.jpg'
 import Epitech from '../../assets/Formations/Epitech.webp'
+import { assistantNetworkNodes, networkRun } from './core/assistantNodes'
 import { NeuralHero } from './core/NeuralHero'
+import { HERO_NETWORK } from './core/network'
+import { HERO_PLACEMENT, placementStyle, WIDE_FROM, type Placement } from './core/placement'
+import { PlacementTool } from './core/PlacementTool'
+
+// Dev-only placement mode: /?placer shows a frame to move and resize the network with the mouse.
+const PLACER = import.meta.env.DEV && new URLSearchParams(window.location.search).has('placer')
+const PLACER_STORE = 'hero-placement'
 
 const panel = 'rounded-sm border border-white/10 bg-zinc-950/60 backdrop-blur-sm shadow-[0_14px_36px_rgba(0,0,0,0.26)]'
 const LOGOS: Record<string, string> = { ibm: Coursera, thm: THM, epitech: Epitech }
-const STRIP_ICONS: Record<string, LucideIcon> = { globe: Globe, badge: BadgeCheck, brain: BrainCircuit, shield: ShieldCheck, target: Crosshair }
 const TONE: Record<string, string> = { ai: 'text-sky-400', threat: 'text-rose-500' }
+/** The third column, for Sentry's window (fixed, 360 px wide, 24 px from the edge, plus a 24 px gap):
+ * as wide as the window reaches into the main column (the page margin is 5vw); 0 while it is folded. */
+const CHAT_ROOM = 'max(0px, calc(408px - 5vw))'
 
-/** Hero: who, which jobs, proof, availability and CTAs on the left; the neural network (navigation) on the right. */
+const onResize = (cb: () => void) => {
+  window.addEventListener('resize', cb)
+  return () => window.removeEventListener('resize', cb)
+}
+
+/**
+ * Hero (2026-10-27): who, which jobs, proof, availability and CTAs on the left; the assistant's network
+ * on the right. The chat with Sentry is docked at the bottom right of every page (AssistantDock); its
+ * answers are played by the network, toward the sections they cite. Three columns: text and network
+ * share the room equally, the third is empty while the chat is folded and takes the window's width when
+ * it opens, so both others shrink alike (the name scales with its column).
+ */
 export function Hero() {
+  const chat = useAssistant()
+  const run = useMemo(() => networkRun(currentRun(chat)), [chat])
+  const wide = useSyncExternalStore(onResize, () => window.innerWidth >= WIDE_FROM, () => true)
+  const set = wide ? 'wide' : 'normal'
+  const [tuned, setTuned] = useState<Partial<Record<'normal' | 'wide', Placement>>>(() => {
+    if (!PLACER) return {}
+    try {
+      return JSON.parse(localStorage.getItem(PLACER_STORE) ?? '{}')
+    } catch {
+      return {}
+    }
+  })
+  const placement = tuned[set] ?? HERO_PLACEMENT[set]
+  // Chat open: the drawing area stops at its column, never under the window (wide screens reach past it).
+  const box = placementStyle(chat.open ? { ...placement, right: Math.max(0, placement.right) } : placement)
+  const tune = (p: Partial<Record<'normal' | 'wide', Placement>>) => {
+    setTuned(p)
+    try {
+      localStorage.setItem(PLACER_STORE, JSON.stringify(p))
+    } catch {
+      // Private mode: the frame is just not remembered.
+    }
+  }
+
   return (
-    <section id="acceuil" aria-labelledby="hero-title" className="relative flex min-h-screen flex-col justify-center gap-10 pt-28 pb-10 lg:pb-32">
-      <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
-        <div className="space-y-6">
-          <p className="text-sm tracking-[0.3em] text-cyber uppercase">&gt; whoami</p>
-          <h1 id="hero-title" className="text-6xl leading-none font-bold tracking-tight text-white uppercase md:text-8xl">
-            {profile.lastName} <span className="text-cyber">{profile.firstName}</span>
-          </h1>
-          <p className="text-2xl font-bold tracking-tight uppercase md:text-3xl">
-            {hero.title.map((part, i) => (
-              <span key={part.text.fr}>
-                {i > 0 && <span className="text-zinc-600"> · </span>}
-                <span className={TONE[part.tone]}>{part.text.fr}</span>
-              </span>
-            ))}
-          </p>
-          <p className="max-w-2xl border-l-2 border-cyber/80 pl-4 text-xl text-zinc-200">{hero.pitch.fr}</p>
+    <section id="acceuil" aria-labelledby="hero-title" className="relative flex min-h-screen flex-col justify-center gap-10 py-24">
+      <div
+        className="grid w-full grid-cols-1 items-center gap-y-10 transition-[grid-template-columns] duration-500 motion-reduce:transition-none lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)_var(--chat-room)]"
+        style={{ '--chat-room': chat.open ? CHAT_ROOM : '0px' } as CSSProperties}
+      >
+        {/* The text column scales with its width (A, 2026-10-27): its base size is a share of the column
+            (cqi), every size inside is in em, and the name has its own share so it always fits on one line.
+            Folded chat: it fills its half; open: it shrinks as much as the network. */}
+        <div className="@container min-w-0 lg:pr-10">
+          <div className="flex flex-col gap-[3.25em] lg:text-[clamp(13px,2.6cqi,20px)]">
+            <div className="flex flex-col gap-[1.5em]">
+              <h1 id="hero-title" className="text-6xl leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase lg:text-[clamp(2.75rem,14cqi,8rem)]">
+                {profile.lastName} <span className="text-cyber">{profile.firstName}</span>
+              </h1>
+              <p className="text-2xl font-bold tracking-tight uppercase md:text-3xl lg:text-[min(1.875em,4.4cqi)]">
+                {hero.title.map((part, i) => (
+                  <span key={part.text.fr} className="whitespace-nowrap">
+                    {i > 0 && <span className="text-zinc-600"> · </span>}
+                    <span className={TONE[part.tone]}>{part.text.fr}</span>
+                  </span>
+                ))}
+              </p>
+            </div>
+            <p className="max-w-[34em] border-l-2 border-cyber/80 py-[0.4em] pl-[0.9em] text-xl leading-[1.7] text-zinc-200 lg:text-[1.25em]">{hero.pitch.fr}</p>
 
-          <ul className="flex flex-wrap gap-3">
-            {hero.certificates.map((c) => (
-              <li key={c.id} className={`${panel} flex items-center gap-3 px-3 py-2.5`}>
-                <img src={LOGOS[c.id]} alt="" className="size-10 rounded-sm object-cover" />
-                <div>
-                  <p className="text-[15px] text-zinc-100">{c.title}</p>
-                  <p className="text-xs text-zinc-400">{c.sub.fr}</p>
-                </div>
+            <ul className="flex flex-wrap gap-[0.625em]">
+              {hero.certificates.map((c) => (
+                <li key={c.id} className={`${panel} flex items-center gap-[0.75em] px-[0.75em] py-[0.7em]`}>
+                  <img src={LOGOS[c.id]} alt="" className="size-[2.25em] rounded-sm object-cover" />
+                  <div>
+                    <p className="text-[0.8125em] leading-snug whitespace-nowrap text-zinc-100">{c.title}</p>
+                    <p className="text-[max(9px,0.625em)] whitespace-nowrap text-zinc-400">{c.sub.fr}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <ul className="flex flex-wrap items-center gap-x-[1.25em] gap-y-[0.6em] text-[0.9375em] text-zinc-300">
+              <li className="inline-flex items-center gap-[0.5em] text-zinc-100">
+                <span aria-hidden="true" className="size-[0.625em] animate-pulse rounded-full bg-cyber shadow-[0_0_12px_var(--color-cyber)]" />
+                {hero.available.fr} · {profile.seeking[0]!.fr}
               </li>
-            ))}
-          </ul>
+              {profile.seeking.slice(1).map((s) => (
+                <li key={s.fr}>{s.fr}</li>
+              ))}
+              <li className="inline-flex items-center gap-[0.375em]">
+                <MapPin aria-hidden="true" className="size-[1em]" /> {profile.location.fr}
+              </li>
+            </ul>
 
-          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[15px] text-zinc-300">
-            <li className="inline-flex items-center gap-2 text-zinc-100">
-              <span aria-hidden="true" className="size-2.5 animate-pulse rounded-full bg-cyber shadow-[0_0_12px_var(--color-cyber)]" />
-              {profile.availability.fr}
-            </li>
-            {profile.seeking.map((s) => (
-              <li key={s.fr}>{s.fr}</li>
-            ))}
-            <li className="inline-flex items-center gap-1.5">
-              <MapPin size={15} aria-hidden="true" /> {profile.location.fr}
-            </li>
-          </ul>
-
-          <div className="flex flex-wrap gap-4">
-            <a
-              href={profile.cv.url}
-              download={profile.cv.fileName}
-              className="inline-flex items-center gap-3 border border-cyber/60 bg-cyber/10 px-6 py-3.5 text-base tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
-            >
-              <Download size={18} aria-hidden="true" /> {hero.ctaCv.fr}
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-3 border border-white/20 px-6 py-3.5 text-base tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
-            >
-              <Mail size={18} aria-hidden="true" /> {hero.ctaContact.fr}
-            </a>
+            <div className="flex flex-wrap gap-[1em]">
+              <a
+                href={profile.cv.url}
+                download={profile.cv.fileName}
+                className="inline-flex items-center gap-[0.75em] border border-cyber/60 bg-cyber/10 px-[1.6em] py-[1.05em] tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
+              >
+                <Download aria-hidden="true" className="size-[1.125em]" /> {hero.ctaCv.fr}
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-[0.75em] border border-white/20 px-[1.6em] py-[1.05em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
+              >
+                <Mail aria-hidden="true" className="size-[1.125em]" /> {hero.ctaContact.fr}
+              </a>
+            </div>
           </div>
-
-          {/* Cloned-voice introduction (V1.1): reserved spot, disabled until the audio exists. */}
-          <button
-            type="button"
-            disabled
-            className="inline-flex cursor-not-allowed items-center gap-3 border border-white/10 px-4 py-2.5 text-sm tracking-[0.2em] text-zinc-500 uppercase"
-          >
-            <AudioLines size={16} aria-hidden="true" /> {hero.voice.fr} <span className="text-[10px] text-zinc-600">· {hero.voiceSoon.fr}</span>
-          </button>
         </div>
 
-        {/* Desktop only: on small screens the menu handles navigation and the diagram would be unreadable. */}
-        <NeuralHero className="mx-auto hidden w-full max-w-[min(40rem,80vh)] lg:block" />
+        {/* The network (desktop only). Its drawing area can reach past its box (HERO_PLACEMENT); it lets
+            clicks through. The empty third column is the chat's room. */}
+        <div className="relative hidden min-w-0 lg:block lg:h-[min(44rem,calc(100vh-8rem))]">
+          <div className="absolute" style={box}>
+            <NeuralHero nodes={assistantNetworkNodes} settings={HERO_NETWORK} run={run} className="aspect-auto absolute inset-0" />
+          </div>
+          {PLACER && !chat.open && <PlacementTool value={placement} set={set} onChange={(p) => tune({ ...tuned, [set]: p })} onReset={() => tune({ ...tuned, [set]: undefined })} />}
+        </div>
       </div>
-
-      <ul className={`${panel} absolute right-0 bottom-6 left-0 hidden flex-wrap justify-between gap-4 px-6 py-4 lg:flex`}>
-        {hero.strip.map((f) => {
-          const Icon = STRIP_ICONS[f.icon] ?? Globe
-          return (
-            <li key={f.text.fr} className="inline-flex items-center gap-2.5 text-[15px] text-zinc-200">
-              <Icon size={18} aria-hidden="true" className="text-cyber" /> {f.text.fr}
-            </li>
-          )
-        })}
-      </ul>
     </section>
   )
 }

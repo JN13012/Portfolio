@@ -10,6 +10,10 @@ type CoreEvents = {
   incoming: Record<string, never>
   /** The entry gate closed and the hero is now visible. */
   gateClosed: Record<string, never>
+  /** The hero assistant cites a project: open its modal over the page. */
+  openProject: { slug: string }
+  /** The hero assistant cites a certification: open its modal over the page. */
+  openCredential: { id: string }
 }
 
 const bus = new EventTarget()

@@ -1,19 +1,101 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-10-26 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-10-27 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Hero
 
 **Jérémie Nagi** — Développeur IA · Pentester junior
 
-> Je construis des agents IA pour la cybersécurité, et je sais comment on les attaque.
+> Je construis des agents IA pour la cybersécurité, et je teste leur résistance.
 
 - IBM AI Developer Professional
 - TryHackMe Jr Penetration Tester
 - Argos : moteur OSINT, couche agents IA en conception
 
 Disponible immédiatement · Alternance · MSc Epitech · Stage possible · Marseille · mobile
+
+## Assistant du hero : réponses préparées
+
+### Profil
+
+**Qui est Jérémie ?** (brouillon, à valider)
+
+Développeur IA et pentester junior, en MSc cybersécurité à Epitech Marseille. Son fil rouge : construire des systèmes d’IA et savoir comment on les attaque. Avant l’informatique : l’infanterie (2e RIMa), la mécanique en endurance et l’infrastructure blockchain. Il parle cinq langues et a vécu dans six pays.
+
+*Sources* : profile, parcours
+
+### Expertise
+
+**Que sait-il faire ?** (brouillon, à valider)
+
+Trois domaines, chacun prouvé par des projets ou des certificats : l’IA appliquée (applications LLM et RAG, parcours IBM AI Developer), la cybersécurité (pentest web, Active Directory, élévation de privilèges ; certifié Jr Penetration Tester) et le développement (React, TypeScript, API testées, intégration continue).
+
+*Sources* : expertise, ibm-ai-developer, thm-jr-penetration-tester
+
+### Projets
+
+**Quels sont ses projets les plus ambitieux ?** (brouillon, à valider)
+
+BlockTrader : un moteur de backtest avec des protocoles contre le surapprentissage, en développement ; le pilotage par IA est son objectif, pas encore branché. Salesforce Executor : un outil interne complet (exécution, planification, journaux), en production chez ULIT. Argos : une plateforme d’agents IA de pentest et de défense, en développement ; aujourd’hui, seul son moteur de découverte OSINT existe.
+
+*Sources* : blocktrader, salesforce-executor, argos
+
+**Lequel est utilisé en entreprise ?** (brouillon, à valider)
+
+Salesforce Executor, développé chez ULIT pendant son poste de développeur full-stack Salesforce (janvier à juin 2026) : l’outil est en production dans l’entreprise.
+
+*Sources* : salesforce-executor, parcours
+
+### Lab
+
+**Qu’a-t-il fait en pentest ?** (brouillon, à valider)
+
+Il est certifié Jr Penetration Tester (TryHackMe, 96 h). Il a publié 25 write-ups de machines attaquées, sur Exegol (labs Epitech) et sur TryHackMe : web, élévation de privilèges, Active Directory, mots de passe… Vous pouvez aussi tenter ses défis dans le Lab.
+
+*Sources* : thm-jr-penetration-tester, pentest, lab
+
+**Peut-on tester ses défis ?** (brouillon, à valider)
+
+Oui : le Lab propose un CTF à jouer dans le navigateur, du premier flag caché dans la page jusqu’aux niveaux suivants. Votre progression reste enregistrée dans ce navigateur.
+
+*Sources* : lab, ctf-du-site
+
+### Parcours
+
+**Quel est son parcours ?** (brouillon, à valider)
+
+Formation militaire dans l’Armée de terre (2014–2016), puis technicien mécanique en compétition et maintenance (2017–2025), en parallèle d’une infrastructure de minage blockchain (2018–2022). Il passe à l’informatique avec le Pré-MSc Epitech (2025), devient développeur full-stack Salesforce chez ULIT (janvier à juin 2026) et poursuit en MSc depuis septembre 2026.
+
+*Sources* : parcours
+
+**Quelles langues parle-t-il ?** (brouillon, à valider)
+
+Français (langue maternelle) ; anglais, espagnol et arabe (libanais et littéraire) au niveau C1 ; allemand en bases (A1). Il a vécu dans six pays : Liban, Qatar, Arabie saoudite, Canada, Pérou et France.
+
+*Sources* : profile, parcours
+
+### Certifications
+
+**Quelles sont ses certifications principales ?** (brouillon, à valider)
+
+Jr Penetration Tester de TryHackMe (96 h, octobre 2026), le parcours pentest le plus complet de la plateforme, et l’IBM AI Developer Professional Certificate. Il a aussi validé les parcours TryHackMe Cyber Security 101 et Pre Security.
+
+*Sources* : thm-jr-penetration-tester, ibm-ai-developer, certifications
+
+### Contact
+
+**Est-il disponible ?** (brouillon, à valider)
+
+Oui, immédiatement. Il cherche une alternance (4 jours en entreprise, 1 jour à l’école, MSc Epitech) ; un stage est possible. Basé à Marseille, mobile.
+
+*Sources* : contact
+
+**Comment le contacter ?** (brouillon, à valider)
+
+Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV se télécharge en haut de la page.
+
+*Sources* : contact
 
 ## En 30 secondes
 

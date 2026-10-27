@@ -40,6 +40,7 @@ function buildNetwork() {
 
 type NeuralCoreProps = {
   nodes?: NeuralNavNode[]
+  onSelect?: (id: string) => void
   className?: string
 }
 
@@ -47,7 +48,7 @@ type NeuralCoreProps = {
  * Hero visual: a small neural network. Signals flow left to right; the output
  * neurons are the site navigation. Attacks (red) are stopped at the guardrail layer.
  */
-export function NeuralCore({ nodes = defaultNeuralNodes, className }: NeuralCoreProps) {
+export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className }: NeuralCoreProps) {
   const reduced = useReducedMotion()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [active, setActive] = useState<number | null>(null)
@@ -219,6 +220,11 @@ export function NeuralCore({ nodes = defaultNeuralNodes, className }: NeuralCore
               <li key={node.id} className="absolute -translate-y-1/2" style={{ left: `${(n.x / W) * 100}%`, top: `${(n.y / H) * 100}%` }}>
                 <a
                   href={node.target}
+                  onClick={(e) => {
+                    if (!onSelect) return
+                    e.preventDefault()
+                    onSelect(node.id)
+                  }}
                   aria-label={`${node.label} : ${node.hint}`}
                   onMouseEnter={() => setActive(i)}
                   onMouseLeave={() => setActive(null)}

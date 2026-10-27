@@ -7,6 +7,7 @@ import ProjectCard from "./ProjectCard";
 import { projects } from "../content/projects";
 import { modalSummary, statusLabels, teamLabel } from "../content/ui";
 import { filterProjects, groupOf, sortProjects, tracksFromSearch } from "../lib/projects";
+import { onCore } from "../lib/coreBus";
 import Smartfridge from "../assets/Projets/Smartfridge.png";
 import Cyberpong from "../assets/Projets/Cyberpong.png";
 import My_marvin from "../assets/Projets/My_marvin.png";
@@ -159,6 +160,16 @@ const ProjectSection = () => {
 
   const images = selected ? IMAGES[selected.slug] ?? [] : [];
   const stepImage = (delta) => setImageIndex((i) => (i + delta + images.length) % images.length);
+
+  // The hero assistant opens a project it cites, wherever the visitor is on the page.
+  useEffect(
+    () =>
+      onCore("openProject", ({ slug }) => {
+        const p = projects.find((x) => x.slug === slug);
+        if (p) open(p);
+      }),
+    [],
+  );
 
   // Esc closes the full-screen image, then the modal; ← → move between images when zoomed, else between projects.
   useEffect(() => {

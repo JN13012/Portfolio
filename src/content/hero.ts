@@ -18,8 +18,9 @@ export const hero = {
     { text: { fr: 'Pentester junior', en: 'Junior penetration tester' }, tone: 'threat' },
   ],
   pitch: {
-    fr: 'Je construis des agents IA pour la cybersécurité, et je sais comment on les attaque.',
-    en: 'I build AI agents for cybersecurity, and I know how they get attacked.',
+    // Shortened on 2026-10-27: keeps both halves (AI builder, security tester) in one line.
+    fr: 'Je construis des agents IA pour la cybersécurité, et je teste leur résistance.',
+    en: 'I build AI agents for cybersecurity, and I test how well they hold.',
   },
   /** Verifiable proofs under the pitch (certificates, repos). */
   proofs: [
@@ -42,6 +43,8 @@ export const hero = {
     { icon: 'shield', text: { fr: 'MSc Epitech cybersécurité', en: 'MSc Epitech cybersecurity' } },
     { icon: 'target', text: { fr: 'Ex-militaire (2e RIMa)', en: 'Former soldier (2e RIMa)' } },
   ],
+  /** Short availability shown in the hero, before the kind of contract. */
+  available: { fr: 'Disponible', en: 'Available' },
   voice: { fr: 'Écouter ma présentation', en: 'Listen to my introduction' },
   voiceSoon: { fr: 'bientôt', en: 'soon' },
   ctaCv: { fr: 'Télécharger le CV', en: 'Download CV' },

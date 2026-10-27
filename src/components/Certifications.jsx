@@ -14,6 +14,7 @@ import TopicIcon from "./TopicIcon";
 import { credentials, inProgress } from "../content/certifications";
 import { credentialKindLabels, credentialLevelLabels } from "../content/ui";
 import { tracksFromSearch } from "../lib/projects";
+import { onCore } from "../lib/coreBus";
 import CYBERSECYRITY_101 from "../assets/THM/Cybersecurity_101.webp";
 import THM_SEC0 from "../assets/THM/THM - SEC0.png";
 import RESULT_SEC0 from "../assets/THM/Result - SEC0.webp";
@@ -148,6 +149,16 @@ const Certifications = () => {
 
   const images = selected ? IMAGES[selected.id] ?? [] : [];
   const stepImage = (delta) => setImageIndex((i) => (i + delta + images.length) % images.length);
+
+  // The hero assistant opens a certification it cites, wherever the visitor is on the page.
+  useEffect(
+    () =>
+      onCore("openCredential", ({ id }) => {
+        const c = ENTRIES.find((x) => x.id === id);
+        if (c) open(c);
+      }),
+    [],
+  );
 
   // Esc closes the full-screen image, then the modal; ← → move between images when zoomed, else between certifications.
   useEffect(() => {
