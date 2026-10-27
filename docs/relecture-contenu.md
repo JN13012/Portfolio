@@ -3,6 +3,14 @@
 > Généré par `npm run review` le 2026-10-27 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
+## Introduction
+
+Un parcours. Plusieurs horizons.
+
+Des pays, des langues et des expériences qui ont façonné ma façon de voir le monde.
+
+Entrer dans le portfolio · Passer l’introduction
+
 ## Hero
 
 **Jérémie Nagi** — Développeur IA · Pentester junior

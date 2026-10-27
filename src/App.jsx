@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import "./App.css";
 
 import NavBar from "./components/NavBar";
@@ -24,10 +24,11 @@ const GATE_KEY = "gate-seen";
  * The globe intro opens once per session, on wide screens only (a 3D scene is
  * too heavy for a phone's first seconds), never under reduced motion or Save-Data.
  */
-function shouldOpenGate() {
+function shouldOpenGate(replay = false) {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
   if (!window.matchMedia("(min-width: 1024px)").matches) return false;
   if (navigator.connection?.saveData) return false;
+  if (replay) return true;
   try {
     return sessionStorage.getItem(GATE_KEY) !== "1";
   } catch {
@@ -37,9 +38,15 @@ function shouldOpenGate() {
 
 function App() {
   const [gateOpen, setGateOpen] = useState(shouldOpenGate);
+  const portfolioRef = useRef(null);
 
   // « Revoir le globe » in Profil plays the intro again.
-  useEffect(() => onCore("replayGate", () => setGateOpen(true)), []);
+  useEffect(() => onCore("replayGate", () => {
+    if (!shouldOpenGate(true)) return;
+    // The destination window always opens on the Hero, including a replay from Profil.
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    setGateOpen(true);
+  }), []);
 
   const closeGate = () => {
     try {
@@ -54,44 +61,48 @@ function App() {
   const updated = `${month}/${profile.updatedAt.slice(0, 4)}`;
 
   return (
-    <div
-      className="relative min-h-screen overflow-x-clip font-sans"
-      style={{ background: "radial-gradient(ellipse at 70% 0%, #0f1720 0%, #080b10 55%, #05070a 100%)" }}
-    >
+    <>
       {gateOpen && (
         <Suspense fallback={<div className="fixed inset-0 z-[2000] bg-black" />}>
-          <GlobeGate onClose={closeGate} />
+          <GlobeGate onClose={closeGate} portfolioRef={portfolioRef} />
         </Suspense>
       )}
+      {/* The real page is the intro's destination window; it stays mounted throughout the dive. */}
+      <div ref={portfolioRef} className={`portfolio-window${gateOpen ? " is-intro-window" : ""}`} inert={gateOpen || undefined}>
+        <div
+          className="relative min-h-screen overflow-x-clip font-sans"
+          style={{ background: "radial-gradient(ellipse at 70% 0%, #0f1720 0%, #080b10 55%, #05070a 100%)" }}
+        >
+          <NetworkBackground2 />
 
-      <NetworkBackground2 />
+          <div className="relative z-[1000]" inert={gateOpen || undefined}>
+            <NavBar />
+          </div>
 
-      <div className="relative z-[1000]" inert={gateOpen || undefined}>
-        <NavBar />
+          <main className="relative z-10 mx-auto w-[90%] max-w-[2400px]" inert={gateOpen || undefined}>
+            <Hero />
+            <Profile />
+            <Expertise />
+            <ProjectSection />
+            <Lab />
+            <Parcours effects />
+            <Certifications />
+            <Contact />
+            {/* Sentry, the assistant, docked at the bottom right of every page. */}
+            <AssistantDock introComplete={!gateOpen} />
+          </main>
+
+          <footer className="relative z-10 mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-8 pb-36 text-sm sm:pb-44 text-zinc-500" inert={gateOpen || undefined}>
+            <span>
+              © {new Date().getFullYear()} {profile.firstName} {profile.lastName}
+            </span>
+            <span className="tracking-widest">
+              LAST_UPDATE: <span className="text-zinc-300">{updated}</span>
+            </span>
+          </footer>
+        </div>
       </div>
-
-      <main className="relative z-10 mx-auto w-[90%] max-w-[2400px]" inert={gateOpen || undefined}>
-        <Hero />
-        <Profile />
-        <Expertise />
-        <ProjectSection />
-        <Lab />
-        <Parcours effects />
-        <Certifications />
-        <Contact />
-        {/* Sentry, the assistant, docked at the bottom right of every page. */}
-        <AssistantDock introComplete={!gateOpen} />
-      </main>
-
-      <footer className="relative z-10 mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-8 pb-36 text-sm sm:pb-44 text-zinc-500" inert={gateOpen || undefined}>
-        <span>
-          © {new Date().getFullYear()} {profile.firstName} {profile.lastName}
-        </span>
-        <span className="tracking-widest">
-          LAST_UPDATE: <span className="text-zinc-300">{updated}</span>
-        </span>
-      </footer>
-    </div>
+    </>
   );
 }
 

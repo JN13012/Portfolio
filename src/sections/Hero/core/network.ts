@@ -1,6 +1,7 @@
 // The hero network: settings, labels and graph layout (no DOM, no WebGL). Rendered by
 // NeuralNet.tsx in the hero, and tuned live in the dev tool mockups.html?view=reseau.
-import { Vector3 } from 'three'
+// Keep the WebGL renderer in the lazy 3D chunks; the initial settings only need vector maths.
+import { Vector3 } from 'three/src/math/Vector3.js'
 
 // ── Settings ────────────────────────────────────────────────────────────────
 

@@ -1,0 +1,67 @@
+.globe-gate {
+  --gate-accent: var(--color-cyber, #4ade80);
+  --gate-globe-x: 50%;
+  --gate-globe-y: 49%;
+  /* Keep the backdrop, real portfolio window and canvas in separate sibling stacking layers. */
+  position: static;
+  color: #ecf0f2; font-family: var(--font-sans);
+}
+.gate-backdrop {
+  position: fixed; inset: 0; z-index: 2000;
+  background: radial-gradient(ellipse at var(--gate-globe-x) var(--gate-globe-y), rgb(16 29 40 / var(--gate-backdrop-opacity, 1)) 0%, rgb(8 14 21 / var(--gate-backdrop-opacity, 1)) 43%, rgb(5 9 14 / var(--gate-backdrop-opacity, 1)) 78%);
+  /* Keep the cover opaque from its first paint: the Hero must never flash through. */
+}
+.gate-backdrop::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .2; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' opacity='.14' d='M0 0h180v180H0z'/%3E%3C/svg%3E"); }
+.globe-gate button { cursor: pointer; }
+.globe-gate button:focus-visible { outline: 2px solid var(--gate-accent); outline-offset: 6px; }
+.gate-chrome { z-index: 2003; transition: opacity 300ms ease, transform 650ms ease; }
+.gate-header { position: fixed; inset: 0 5%; height: 112px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #b1c4d016; }
+.gate-signature { display: flex; align-items: center; gap: 19px; }
+.gate-monogram { font-size: 31px; font-weight: 650; letter-spacing: -.075em; }
+.gate-monogram > span { color: var(--gate-accent); }
+.gate-signature > div { border-left: 1px solid #ffffff25; padding-left: 19px; }
+.gate-signature p { font-size: 12px; font-weight: 550; letter-spacing: .03em; }
+.gate-signature div > span { display: block; margin-top: 5px; color: #92a1ad; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.gate-skip { display: flex; align-items: center; gap: 22px; min-height: 44px; font-size: 11px; color: #a4b0bb; transition: color 200ms; }
+.gate-skip:hover { color: #fff; }
+.gate-skip > span { font-size: 19px; }
+.gate-scene { position: fixed; inset: 0; z-index: 2002; pointer-events: none; }
+.gate-scene canvas { display: block; width: 100%; height: 100%; }
+.gate-map-note { position: fixed; right: 5%; top: 145px; display: flex; align-items: center; gap: 9px; font-size: 10px; letter-spacing: .05em; color: #a4b0bb; }
+.gate-status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gate-accent); box-shadow: 0 0 14px #4ade8070; }
+.gate-editorial { position: fixed; top: 22%; left: 6%; width: 28%; pointer-events: none; }
+.gate-editorial h1 { margin-top: 0; font-size: clamp(30px, 3vw, 55px); font-weight: 450; line-height: 1.15; letter-spacing: -.055em; }
+.gate-editorial h1 > span { display: inline-block; color: #8d9ca9; }
+.gate-description { margin-top: 25px; max-width: 290px; font-size: 14px; font-weight: 400; line-height: 1.85; color: #aebbc5; }
+.gate-facts { display: flex; align-items: center; gap: 23px; margin-top: 28px; }
+.gate-facts > span { display: flex; align-items: baseline; gap: 9px; color: #aebbc5; font-size: 12px; }
+.gate-facts strong { color: #eef3f6; font-size: 30px; font-weight: 450; letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+.gate-facts i { width: 1px; height: 20px; background: #b1c4d026; }
+.gate-entry { position: fixed; left: var(--gate-globe-x); bottom: 7%; translate: -50% 0; }
+.gate-enter { pointer-events: auto; display: inline-flex; align-items: center; justify-content: space-between; gap: 38px; min-height: 54px; padding: 0 24px; border: 1px solid #4ade8070; border-radius: 2px; color: #dcfce7; font-size: 11px; white-space: nowrap; background: linear-gradient(110deg, #4ade8012, #4ade8003); transition: background 250ms, border-color 250ms, box-shadow 250ms; }
+.gate-enter:hover { background: #4ade801c; border-color: var(--gate-accent); box-shadow: 0 0 35px -15px #4ade8070; }
+.gate-enter > svg { color: var(--gate-accent); transition: transform 250ms; }
+.gate-enter:hover > svg { transform: translate(2px, -2px); }
+.gate-annotation { position: fixed; top: 0; left: 0; display: flex; align-items: flex-start; gap: 11px; pointer-events: none; opacity: 0; z-index: 2004; will-change: transform; transition: opacity 220ms; }
+.gate-annotation-line { margin-top: 5px; height: 1px; width: 39px; background: linear-gradient(90deg, #4ade80b0, #4ade8020); transform: rotate(-28deg); transform-origin: left; }
+.gate-annotation > div { padding: 0 0 0 10px; margin-top: -31px; border-left: 1px solid #4ade8060; text-shadow: 0 2px 12px #05090e; }
+.gate-annotation-index { font-size: 9px; color: var(--gate-accent); letter-spacing: .15em; font-variant-numeric: tabular-nums; }
+.gate-annotation strong { display: flex; align-items: center; gap: 8px; margin-top: 5px; font-size: 13px; font-weight: 500; }
+.gate-flag { display: inline-block; width: 16px; height: 12px; flex: 0 0 auto; object-fit: cover; border-radius: 1px; box-shadow: 0 0 0 1px #ffffff18; }
+.gate-annotation div > span:last-child { display: block; color: #9aaebd; font-size: 9px; margin-top: 4px; }
+.gate-dive-label { position: fixed; left: 50%; bottom: 13%; transform: translateX(-50%); z-index: 2004; display: flex; align-items: center; gap: 12px; font-size: 10px; letter-spacing: .25em; text-transform: uppercase; color: #d9f9e4; pointer-events: none; opacity: 0; }
+.gate-dive-label > span { width: 20px; height: 1px; background: var(--gate-accent); }
+.is-leaving { pointer-events: none; }
+.is-leaving .gate-chrome { opacity: 0; transform: translateY(-9px); }
+.is-leaving .gate-annotation { visibility: hidden; }
+.is-leaving .gate-scene { opacity: 1; }
+.is-leaving .gate-dive-label { animation: gate-destination 1400ms ease both; }
+.gate-fallback { position: fixed; z-index: 2002; left: var(--gate-globe-x); top: var(--gate-globe-y); width: min(60vh, 48vw); height: 64vh; translate: -50% -50%; display: grid; place-items: center; color: #9aaebd; font-size: 12px; }
+.gate-fallback-sphere { aspect-ratio: 1; height: 90%; border-radius: 50%; border: 1px solid #7295af60; box-shadow: inset -30px -10px 80px #000, inset 12px 3px 70px #35485c, 0 0 50px #54769220; }
+@keyframes gate-destination { 0%, 12%, 100% { opacity: 0; } 35%, 75% { opacity: 1; } }
+@media (min-width: 1800px) { .gate-editorial { top: 24%; } .gate-description { font-size: 16px; max-width: 340px; } .gate-facts strong { font-size: 34px; } .gate-facts > span { font-size: 13px; } }
+@media (max-height: 780px) and (min-width: 801px) { .gate-header { height: 85px; } .gate-map-note { top: 110px; } .gate-editorial { top: 21%; } .gate-editorial h1 { font-size: clamp(29px, 2.9vw, 48px); } .gate-description { margin-top: 23px; max-width: 255px; font-size: 14px; } .gate-facts { margin-top: 23px; } .gate-enter { min-height: 48px; } }
+@media (min-width: 801px) and (max-width: 1199px) { .gate-editorial { left: 5%; } .gate-description { max-width: 210px; } }
+/* Also supports the standalone preview on narrow screens; the app keeps its mobile bypass. */
+@media (max-width: 800px) { .globe-gate { --gate-globe-y: 48%; } .gate-header { height: 82px; } .gate-signature { gap: 12px; } .gate-signature > div { padding-left: 12px; } .gate-skip { font-size: 10px; gap: 8px; } .gate-skip > span { display: none; } .gate-map-note { top: 100px; } .gate-editorial { left: 7%; width: 86%; top: 19%; } .gate-editorial h1 { font-size: clamp(27px, 4.5vw, 36px); } .gate-description { max-width: 240px; text-shadow: 0 2px 8px #05090e; } .gate-annotation { visibility: hidden; } .gate-entry { bottom: 7%; } }
+@media (prefers-reduced-motion: reduce) { .globe-gate, .globe-gate *, .globe-gate *::before { animation: none !important; transition: none !important; } }
