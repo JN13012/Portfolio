@@ -7,7 +7,7 @@
 
 **Jérémie Nagi** — Développeur IA · Pentester junior
 
-> Je construis des agents IA pour la cybersécurité, et je teste leur résistance.
+> Je conçois des solutions logicielles, explore le potentiel de l’IA et mets la sécurité des systèmes à l’épreuve.
 
 Formation : Master of Science · Architecte des SI (Epitech Marseille · 1re année)
 

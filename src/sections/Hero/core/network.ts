@@ -190,12 +190,13 @@ export function buildGraph(s: NetworkSettings, outputs: number) {
   // Captions under the columns; the model gets one caption centred under its layers.
   const t = NETWORK_LABELS
   const hiddenXs = xs.filter((_, l) => kinds[l] === 'hidden')
-  const captions: Array<{ x: number; text: string; accent?: boolean }> = []
+  const captions: Array<{ x: number; text: string; accent?: boolean; main?: boolean }> = []
   kinds.forEach((k, l) => {
     if (k === 'input') captions.push({ x: xs[l]!, text: t.input })
     if (k === 'embed') captions.push({ x: xs[l]!, text: t.embed })
     if (k === 'guard') captions.push({ x: xs[l]!, text: t.guard, accent: true })
-    if (k === 'output') captions.push({ x: xs[l]!, text: t.output })
+    // The portfolio is where every answer lands: its caption stands out.
+    if (k === 'output') captions.push({ x: xs[l]!, text: t.output, main: true })
     if (k === 'hidden' && xs[l] === hiddenXs[0]) captions.push({ x: (hiddenXs[0]! + hiddenXs.at(-1)!) / 2, text: t.model })
   })
   return { layers, all: layers.flat(), edges, plates, walls, captions }

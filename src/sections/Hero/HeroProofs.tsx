@@ -87,13 +87,20 @@ function Item({ thumb, title, sub, extra, onClick, panel, expanded }: ItemProps)
 }
 
 /**
- * A row: its label above, then its items on the two columns shared by every row (chosen by Jérémie on
- * 2026-10-27 at every width); narrow column: everything one under the other.
+ * A row: its label on the left, level with the first items' titles, then its items on the two columns
+ * shared by every row (2026-10-27, saves height). Medium column: the label above; narrow: everything stacked.
  */
-function Row({ label, children }: { label: string; children: ReactNode }) {
+function Row({ label, rows = 1, children }: { label: string; rows?: number; children: ReactNode }) {
   return (
-    <div className="grid grid-cols-1 items-center gap-x-[1.25em] gap-y-[0.45em] py-[0.55em] @[26rem]:grid-cols-2">
-      <dt className={cx('text-[max(10px,0.6875em)] tracking-[0.2em] text-zinc-500 uppercase @[26rem]:col-span-2')}>{label}</dt>
+    <div className="grid grid-cols-1 items-center gap-x-[1.25em] gap-y-[0.45em] py-[0.55em] @[24rem]:grid-cols-2 @[32rem]:grid-cols-[5.25em_minmax(0,1fr)_minmax(0,1fr)]">
+      <dt
+        className={cx(
+          'text-[max(10px,0.6875em)] tracking-[0.2em] text-zinc-500 uppercase @[24rem]:col-span-2 @[32rem]:col-span-1 @[32rem]:mt-[0.95em] @[32rem]:self-start',
+          rows === 2 && '@[32rem]:row-span-2',
+        )}
+      >
+        {label}
+      </dt>
       {children}
     </div>
   )
@@ -132,7 +139,7 @@ export function HeroProofs() {
     <div ref={box} className="relative">
       <dl className="divide-y divide-white/8 border-y border-white/8">
         <Row label={hero.proofTitles.formation.fr}>
-          <dd className="@[26rem]:col-span-2">
+          <dd className="@[24rem]:col-span-2">
             <Item thumb={<Thumb>{img(Epitech)}</Thumb>} title={hero.formation.title.fr} sub={hero.formation.detail.fr} onClick={open('master')} panel expanded={panel === 'master'} />
           </dd>
         </Row>
@@ -143,7 +150,7 @@ export function HeroProofs() {
             </dd>
           ))}
         </Row>
-        <Row label={hero.proofTitles.projects.fr}>
+        <Row label={hero.proofTitles.projects.fr} rows={2}>
           {hero.projects.map((x) => {
             const image = PROJECT_IMAGES[x.slug]!
             return (

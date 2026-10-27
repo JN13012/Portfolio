@@ -74,13 +74,16 @@ type NeuralNetProps = {
   onReady?: () => void
 }
 
+/** How long « prompt injection » shows under the guard wall that stopped the attack (about 2 s). */
+const ALERT_MS = 2000
+
 export default function NeuralNet({ settings, outputs, run = null, onView, attackRef, onReady }: NeuralNetProps) {
   const wrap = useRef<HTMLDivElement>(null)
   const settingsRef = useRef(settings)
   const runRef = useRef(run)
   const built = useRef<Built | null>(null)
   const rebuild = useRef<(s: NetworkSettings) => void>(() => {})
-  const inputLabels = useRef<Array<HTMLSpanElement | null>>([])
+  const alertBox = useRef<HTMLSpanElement>(null)
   const outputItems = useRef<Array<HTMLLIElement | null>>([])
   const captions = useRef<Array<HTMLSpanElement | null>>([])
   const vectorBox = useRef<HTMLSpanElement>(null)
@@ -88,7 +91,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
   const onViewRef = useRef(onView)
   const onReadyRef = useRef(onReady)
   const [alert, setAlert] = useState<number | null>(null)
-  const [captionTexts, setCaptionTexts] = useState<Array<{ text: string; accent?: boolean }>>([])
+  const [captionTexts, setCaptionTexts] = useState<Array<{ text: string; accent?: boolean; main?: boolean }>>([])
 
   const structureKey = JSON.stringify(NETWORK_STRUCTURE.map((k) => settings[k]))
 
@@ -191,7 +194,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
 
       root.add(group)
       built.current = { ...g, group, nodeGeo, nodeCol, edgeGeo, edgeCol, plateGeo, platePos, plateCol, nodeMat, plateMat, walls, glow: new Float32Array(g.all.length) }
-      setCaptionTexts(g.captions.map(({ text, accent }) => ({ text, accent })))
+      setCaptionTexts(g.captions.map(({ text, accent, main }) => ({ text, accent, main })))
       pulses.length = 0
     }
 
@@ -206,6 +209,8 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
     pulsePoints.renderOrder = 5
     root.add(pulsePoints)
     const pick = <T,>(list: T[]) => list[Math.floor(Math.random() * list.length)]!
+    let alertTimer = 0
+    let alertWall = -1
     const spawn = (isThreat: boolean) => {
       const b = built.current
       if (!b || pulses.length >= MAX) return
@@ -225,7 +230,6 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
       }
       if (path.length < length) return
       pulses.push({ path, seg: 0, t: 0, threat: isThreat })
-      if (isThreat) setAlert(path[0]!.index)
     }
     // A request aimed at one section: walk the links to a guard node linked to it, then to it.
     const spawnTo = (out: number) => {
@@ -441,8 +445,14 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
           pulses.splice(i, 1)
           if (p.threat) {
             const wall = b.walls.find((w) => w.layer === reached.layer)
-            if (wall) wall.hit = now
-            window.setTimeout(() => setAlert(null), 900)
+            if (wall) {
+              wall.hit = now
+              // Its name shows under the wall that stopped it (the layer is kept to place the label).
+              alertWall = wall.layer
+              setAlert(wall.layer)
+              window.clearTimeout(alertTimer)
+              alertTimer = window.setTimeout(() => setAlert(null), ALERT_MS)
+            }
           } else if (reached.kind === 'output') {
             // The section reached lights up for a moment.
             const li = outputItems.current[reached.index]
@@ -518,10 +528,6 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
       bounds.bottom = Math.max(...xy.map((p) => p[1])) + 60
 
       // HTML labels follow their nodes.
-      b.layers[0]!.forEach((n, i) => {
-        const span = inputLabels.current[i]
-        if (span) span.style.transform = `translate(${project(n.pos).join('px,')}px)`
-      })
       b.layers.at(-1)!.forEach((n, i) => {
         const li = outputItems.current[i]
         if (li) li.style.transform = `translate(${project(n.pos).join('px,')}px)`
@@ -534,7 +540,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
       }
       // Captions on one line above the network, each centred on its column. Too close for their full
       // size (mid-size screens), they turn compact; still too close (chat open), all of them hide.
-      const top = Math.max(8, Math.min(...xy.map((p) => p[1])) - 44)
+      const top = Math.max(8, Math.min(...xy.map((p) => p[1])) - 62)
       const colX = b.captions.map(({ x }) => project(new Vector3(x, 0, 0))[0])
       const widths = captions.current.map((span) => span?.firstElementChild?.clientWidth ?? 0)
       const fitsWith = (w: number[]) => colX.every((x, i) => i === 0 || x - colX[i - 1]! >= (w[i]! + w[i - 1]!) / 2 + 6)
@@ -549,6 +555,10 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
         span.style.visibility = fits ? '' : 'hidden'
         span.style.transform = `translate(${colX[i]}px, ${top}px)`
       })
+      // A blocked attack's name: under the caption of the guard wall that stopped it, above the network.
+      const wallX = b.walls.find((w) => w.layer === alertWall)?.x
+      const at = wallX === undefined ? -1 : b.captions.findIndex((c) => c.accent && c.x === wallX)
+      if (alertBox.current && at >= 0) alertBox.current.style.transform = `translate(${colX[at]}px, ${top + 28}px)`
       if (vectorBox.current && !fits) vectorBox.current.style.display = 'none'
 
       if (first) {
@@ -560,6 +570,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
 
     return () => {
       cancelAnimationFrame(raf)
+      window.clearTimeout(alertTimer)
       ro.disconnect()
       io.disconnect()
       el.removeEventListener('pointerdown', onDown)
@@ -583,25 +594,17 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
     <div ref={wrap} className={cx('group/net absolute inset-0', onView ? 'cursor-grab touch-none select-none active:cursor-grabbing' : 'pointer-events-none')}>
       {/* Overlays positioned each frame from the 3D scene (translate from the top-left corner). */}
       <div aria-hidden="true">
-        {/* Inputs carry no name; an attack's name shows above the input it enters, until it is blocked. */}
-        {Array.from({ length: settings.inputs }, (_, i) => (
+        {/* Inputs carry no name; a blocked attack shows for about 2 s under its guard wall's caption. */}
+        <span ref={alertBox} className="pointer-events-none absolute top-0 left-0">
           <span
-            key={i}
-            ref={(e) => {
-              inputLabels.current[i] = e
-            }}
-            className="pointer-events-none absolute top-0 left-0"
+            className={cx(
+              'block -translate-x-1/2 text-[12px] tracking-wider whitespace-nowrap text-[var(--color-threat)] transition-opacity duration-500',
+              alert !== null ? 'opacity-100' : 'opacity-0',
+            )}
           >
-            <span
-              className={cx(
-                'absolute bottom-full left-0 mb-3 -translate-x-1/2 text-[11px] tracking-wider whitespace-nowrap text-[var(--color-threat)] transition-opacity duration-500',
-                alert === i ? 'opacity-100' : 'opacity-0',
-              )}
-            >
-              ⚠ prompt injection
-            </span>
+            ⚠ prompt injection
           </span>
-        ))}
+        </span>
         <span ref={vectorBox} className="pointer-events-none absolute top-0 left-0">
           <span
             ref={vectorText}
@@ -618,7 +621,16 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
             }}
             className="pointer-events-none absolute top-0 left-0"
           >
-            <span className={cx('block -translate-x-1/2 text-xs tracking-[0.14em] whitespace-nowrap uppercase group-data-[compact=true]/net:text-[11px] group-data-[compact=true]/net:tracking-[0.04em]', c.accent ? 'text-cyber' : 'text-zinc-500')}>{c.text}</span>
+            <span
+              className={cx(
+                'block -translate-x-1/2 tracking-[0.14em] whitespace-nowrap uppercase group-data-[compact=true]/net:tracking-[0.04em]',
+                c.main
+                  ? 'text-[15px] font-semibold text-zinc-100 group-data-[compact=true]/net:text-[13px]'
+                  : cx('text-[13px] group-data-[compact=true]/net:text-[11.5px]', c.accent ? 'text-cyber' : 'text-zinc-400'),
+              )}
+            >
+              {c.text}
+            </span>
           </span>
         ))}
       </div>
