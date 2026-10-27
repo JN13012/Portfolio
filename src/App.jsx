@@ -76,10 +76,10 @@ function App() {
         <Certifications />
         <Contact />
         {/* Sentry, the assistant, docked at the bottom right of every page. */}
-        <AssistantDock />
+        <AssistantDock introComplete={!gateOpen} />
       </main>
 
-      <footer className="relative z-10 mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center justify-between gap-4 border-t border-white/10 py-8 text-sm text-zinc-500" inert={gateOpen || undefined}>
+      <footer className="relative z-10 mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-8 pb-36 text-sm sm:pb-44 text-zinc-500" inert={gateOpen || undefined}>
         <span>
           © {new Date().getFullYear()} {profile.firstName} {profile.lastName}
         </span>
