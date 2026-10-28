@@ -8,7 +8,7 @@ import { projects } from '../../content/projects'
 import type { Localized } from '../../content/types'
 import { assistant } from '../../lib/assistantStore'
 import { emitCore } from '../../lib/coreBus'
-import Portrait from '../../assets/Portrait-holographique.webp'
+import Portrait from '../../assets/portrait-holographique-bleu.webp'
 
 /** Simple Icons mark (CC0), in the current text colour. */
 const Mark = ({ icon }: { icon: SimpleIcon }) => (
@@ -248,7 +248,7 @@ export function Profile() {
             <div className="absolute -inset-2 border border-cyber/30" />
             <div className="absolute -top-2 -left-2 size-5 border-t-2 border-l-2 border-cyber" />
             <div className="absolute -right-2 -bottom-2 size-5 border-r-2 border-b-2 border-cyber" />
-            <img loading="lazy" decoding="async" src={Portrait} width={1145} height={1374} alt={`${profile.firstName} ${profile.lastName}`} className="relative w-full" />
+            <img loading="lazy" decoding="async" src={Portrait} width={800} height={1087} alt={`${profile.firstName} ${profile.lastName}`} className="relative w-full" />
           </div>
           <ul className="flex justify-center gap-2">
             {SOCIALS.map((s) => (
@@ -304,7 +304,7 @@ export function Profile() {
           <h3 className="mt-10 mb-5 text-sm text-zinc-400">{ui.strengthsTitle!.fr}</h3>
           <StrengthsTimeline />
 
-          <div className="mt-10 max-w-xl">
+          <div className="mt-10 w-full">
             <Interests />
           </div>
 
