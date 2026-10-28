@@ -291,7 +291,7 @@ Stack : Unity 6.3, C#, HTML, CSS, JavaScript, Markdown
 
 *Carte* : Backend 2FA : codes à 6 chiffres envoyés par RCS, hachés et limités.
 
-3e place au hackathon inter-écoles pour la conception, en 4 jours, d’un service d’authentification à deux facteurs qui envoie les codes par RCS.
+4e place au hackathon inter-écoles pour la conception, en 4 jours, d’un service d’authentification à deux facteurs qui envoie les codes par RCS.
 
 **Fonctionnalités.**
 - Envoi : un code à 6 chiffres, envoyé par RCS avec l’API smsmode.
@@ -308,7 +308,7 @@ Stack : Unity 6.3, C#, HTML, CSS, JavaScript, Markdown
 - Données : les accès à la base MongoDB.
 - Protections : limitation par IP et validation des requêtes.
 
-Chiffres : 3e place · 4 jours de hackathon
+Chiffres : 4e place · 4 jours de hackathon
 
 ### Hackathon Microsoft × Citiz — Terminé · Équipe de 5 · Rôle : data engineer géospatial
 
