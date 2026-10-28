@@ -17,11 +17,27 @@ import { Sentry, SentryChat } from './components/Sentry'
 Les avatars sont décoratifs (`aria-hidden`) : leur contexte doit nommer Sentry.
 Les animations CSS s’arrêtent immédiatement avec `prefers-reduced-motion`.
 
-`src/app/App.jsx` monte directement `SentryChat`. Le Hero et le chat conservent
-leur historique partagé via `src/lib/assistantStore.ts`. Les questions prédéfinies montrent des fiches
-préparées et leurs sources, annoncées comme telles. Leur lecture anime encore le
-réseau existant du Hero. Les questions libres affichent un message d’indisponibilité ;
-aucune requête IA ni réponse fabriquée. La présentation vocale reste désactivée.
+Le repos ferme l’ensemble des deux neurones et les remplace brièvement par des
+yeux souriants. Le cycle CSS de 22 s contient trois clignements, espacés de 7 à
+8 s. La coque reste fixe ; le hochement de réponse anime seulement le visage.
+Les ramifications et la connexion s’effacent pendant le sourire de réponse.
+Le bouclier garde son rouge pendant toute la réaction, y compris sans animation.
+
+`animated={false}` garde les avatars des messages fixes, sans observateur.
+Seul le lanceur ou l’avatar d’en-tête est animé. `paused` suspend le lanceur
+pendant l’introduction ou l’ouverture du chat. Un IntersectionObserver et
+`visibilitychange` suspendent les timelines CSS hors écran et en onglet masqué.
+La lecture progressive utilise un timer borné à la durée de la fiche, suspendu
+en onglet masqué et pendant l’introduction ; aucun rendu React à chaque frame.
+
+`src/app/App.jsx` monte directement `SentryChat`. Le panneau public affiche seulement
+« Je suis en cours de conception, merci de revenir plus tard. », sans questions,
+historique, saisie ni bouton audio. Le focus va au bouton de fermeture.
+Les expressions, le clignement et les blocages pédagogiques du Hero restent actifs.
+Les fiches préparées et leurs sources sont conservées uniquement pour l’aperçu
+de développement (`preparedPreview`, ignoré en production). Dans cet aperçu,
+leur historique et leur animation partagent `src/lib/assistantStore.ts` avec le Hero.
+Les questions libres y affichent un message d’indisponibilité et la voix y reste désactivée.
 
 Les fiches projet et certification citées utilisent les modales partagées de `components/ui/dialogs/`.
 Le focus entre dans la fiche, puis revient au bouton source à sa fermeture ; Échap ferme la fiche
@@ -38,7 +54,12 @@ Le composant accepte les propriétés suivantes :
   de l’introduction. `App` fournit la valeur à partir de `gateOpen`.
 
 Aucun écouteur de sécurité, backend, appel vocal ou nouvel événement réseau n’est
-installé. La réduction des animations interrompt aussi la lecture progressive des
+installé. L’événement local `guardBlockedDemo` relie uniquement les blocages
+pédagogiques du Hero à une réaction de 1,5 s. Il est émis à l’arrivée du signal
+rouge sur le garde-fou, jamais à partir du contenu d’une question. Des événements
+successifs prolongent la réaction ; à son expiration, l’activité est recalculée
+depuis la fiche ou le brouillon actuels. Les Labs et la voix ne sont pas branchés.
+La réduction des animations interrompt aussi la lecture progressive des
 fiches. Échap replie la fenêtre et replace le focus sur son bouton d’ouverture.
 
 Vérifications du dépôt : `npm run lint`, `npm run typecheck`, `npm test`,
@@ -61,6 +82,15 @@ La mascotte flottante est masquée tant
 que la conversation est ouverte ; elle réapparaît à la fermeture avec le focus.
 La hauteur s’adapte au paysage et au clavier mobile, en gardant une marge haute
 de 80 px pour laisser la navigation fixe accessible.
+L’avatar de l’en-tête mesure 72 px sur ordinateur et 64 px sous 640 px ; le nom
+et le statut restent à sa droite. Les avatars historiques restent à 32 px.
+Sous 360 px de hauteur, l’avatar revient à 48 px et les marges du journal se
+réduisent pour garder la saisie accessible, notamment avec un clavier mobile.
+
+`/mockups.html?view=sentry` montre les cinq expressions et permet de piloter
+l’avatar du chat, une fiche préparée et un blocage pédagogique temporaire.
+Sur petit écran, replier le chat pour accéder aux commandes de l’aperçu.
+Cette page et ses libellés de contrôle ne font pas partie du build de production.
 
 La bulle de bienvenue a une silhouette asymétrique, une pointe SVG et un contour
 vert discret. Elle apparaît 1,2 s après la fin de l’introduction, une fois par

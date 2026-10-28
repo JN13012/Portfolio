@@ -1,5 +1,5 @@
 // Dev-only mockups (mockups.html): hero and profile proposals on top of the legacy site style.
-// ?palette=green|cyan  ?view=hero-a|hero-b|hero-c|profile|parcours|parcours-fx|reseau (hero network tuning)
+// ?palette=green|cyan  ?view=hero-a|hero-b|hero-c|profile|parcours|parcours-fx|reseau|sentry
 import { AudioLines, BadgeCheck, BrainCircuit, Crosshair, Download, Dumbbell, Globe, Landmark, Mail, MapPin, Plane, ShieldCheck, Terminal } from "lucide-react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import LegacyNetworkBackground from "./components/LegacyNetworkBackground";
@@ -19,6 +19,7 @@ const CtfButtons = lazy(() => import("./CtfButtons"));
 const ParcoursMock = lazy(() => import("./ParcoursMock"));
 const ParcoursEffects = lazy(() => import("./ParcoursEffects"));
 const NetworkTuner = lazy(() => import("./NetworkTuner"));
+const SentryPreview = lazy(() => import("./SentryPreview"));
 import { emitCore } from "../../src/lib/coreBus";
 import Profil from "../assets/Profil.webp";
 import THM from "../../src/assets/THM.jpg";
@@ -395,6 +396,12 @@ export default function Mockups() {
   const params = new URLSearchParams(window.location.search);
   const [gate, setGate] = useState(["globe", "argos"].includes(params.get("gate")));
   const Gate = params.get("gate") === "argos" ? ArgosGate : GlobeGate;
+  if (params.get("view") === "sentry")
+    return (
+      <Suspense fallback={null}>
+        <SentryPreview />
+      </Suspense>
+    );
   if (params.get("view") === "reseau")
     return (
       <Suspense fallback={null}>

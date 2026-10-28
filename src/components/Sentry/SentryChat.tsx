@@ -5,31 +5,13 @@ import { credentials } from '../../content/certifications'
 import { hero } from '../../content/hero'
 import { projects } from '../../content/projects'
 import { assistant, useAssistant } from '../../lib/assistantStore'
-import { runState, type Run, type RunState } from '../../lib/brain'
+import type { RunState } from '../../lib/brain'
 import { emitCore } from '../../lib/coreBus'
 import { cx } from '../../lib/cx'
-import { useReducedMotion } from '../../lib/useReducedMotion'
 import { Sentry, type SentryState } from './Sentry'
 import { SentryWelcome } from './SentryWelcome'
 import { markSentryWelcomeSeen } from './welcomeSession'
-
-/** Prepared-content playback, sampled at 12.5 Hz instead of rerendering the dock every frame. */
-function useRunState(run: Run | null): RunState | null {
-  const [now, setNow] = useState(0)
-  const still = useReducedMotion()
-  useEffect(() => {
-    if (!run || still) return
-    let timer: ReturnType<typeof setTimeout>
-    const tick = () => {
-      const t = performance.now()
-      setNow(t)
-      if (runState(run, t).phase !== 'done') timer = setTimeout(tick, 80)
-    }
-    timer = setTimeout(tick, 0)
-    return () => clearTimeout(timer)
-  }, [run, still])
-  return run ? runState(run, still ? Infinity : Math.max(now, 0)) : null
-}
+import { useSentryActivity } from './useSentryActivity'
 
 const nodeOf = (id: BrainNodeId) => brainNodes.find((n) => n.id === id)!
 const chip = 'inline-flex min-h-8 items-center gap-1.5 rounded-full border px-3 py-1 text-[13px] text-left transition-colors focus-visible:outline-none focus-visible:shadow-focus'
@@ -55,11 +37,11 @@ function Source({ source }: { source: AnswerSource }) {
   )
 }
 
-/** A message from Sentry: its small face, then the bubble. */
-function FromSentry({ children, state = 'idle' }: { children: React.ReactNode; state?: SentryState }) {
+/** Message avatars remain still; the header carries the current activity. */
+function FromSentry({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-2">
-      <Sentry size={32} state={state} className="mt-1" />
+      <Sentry size={32} animated={false} className="mt-1" />
       <div className="min-w-0 flex-1">{children}</div>
     </div>
   )
@@ -68,6 +50,8 @@ function FromSentry({ children, state = 'idle' }: { children: React.ReactNode; s
 const bubble = 'rounded-lg rounded-tl-sm border border-white/8 bg-zinc-900 px-3 py-2.5 text-sm leading-relaxed text-zinc-200'
 
 export type SentryChatProps = {
+  /** Development expression preview only; never enabled in the production build. */
+  preparedPreview?: boolean
   /** Supply only from real service health checks; no backend is connected by default. */
   serviceAvailable?: boolean
   /** Future assistant/security activity can drive the avatar without coupling it to the Hero. */
@@ -76,21 +60,23 @@ export type SentryChatProps = {
   introComplete?: boolean
 }
 
-export function SentryChat({ serviceAvailable = false, activity, introComplete = true }: SentryChatProps) {
+export function SentryChat({ serviceAvailable = false, activity, introComplete = true, preparedPreview = false }: SentryChatProps) {
+  const preview = import.meta.env.DEV && preparedPreview
   const { open, exchanges } = useAssistant()
   const last = exchanges.at(-1) ?? null
-  const state = useRunState(last?.run ?? null)
-  const busy = !!state && state.phase !== 'done'
   const [draft, setDraft] = useState('')
+  const { state, busy, face } = useSentryActivity(preview ? last?.run ?? null : null, preview && !!draft.trim(), introComplete, activity)
   const log = useRef<HTMLDivElement>(null)
   const toggle = useRef<HTMLButtonElement>(null)
   const input = useRef<HTMLInputElement>(null)
+  const close = useRef<HTMLButtonElement>(null)
   const wasOpen = useRef(open)
 
   useEffect(() => {
     if (open) {
       markSentryWelcomeSeen()
-      input.current?.focus({ preventScroll: true })
+      const target = input.current ?? close.current
+      target?.focus({ preventScroll: true })
     } else if (wasOpen.current) {
       toggle.current?.focus({ preventScroll: true })
     }
@@ -106,13 +92,10 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
   const asked = new Set(exchanges.map((e) => e.answer?.id))
   const current = last?.node ?? null
   const topics = current ? [nodeOf(current), ...brainNodes.filter((n) => n.id !== current)] : brainNodes
-  const suggestions = topics
+  const suggestions = preview ? topics
     .flatMap((n) => n.questions.map((q) => ({ q, node: n.id })))
     .filter(({ q }) => !asked.has(q.id))
-    .slice(0, exchanges.length ? 2 : 4)
-
-  // These phases play an explicitly labelled prepared answer, never a pretend model request.
-  const face: SentryState = activity ?? (draft.trim() ? 'reading' : busy ? (state.phase === 'question' ? 'reading' : state.phase === 'search' ? 'searching' : 'responding') : 'idle')
+    .slice(0, exchanges.length ? 2 : 4) : []
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
@@ -120,6 +103,7 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
     if (!text || busy) return
     assistant.askFree(text)
     setDraft('')
+    input.current?.focus({ preventScroll: true })
   }
 
   const status = (s: RunState, lit: BrainNodeId[]) =>
@@ -143,26 +127,27 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
         aria-controls={open ? 'sentry-chat' : undefined}
         aria-label={open ? ui.close.fr : ui.open.fr}
       >
-        <Sentry size={128} state={face} />
+        <Sentry size={128} state={face} paused={open || !introComplete} />
         <span className="sentry-launcher__chevron" aria-hidden="true">
           {open ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
         </span>
         <span className="sentry-launcher__hint" aria-hidden="true">
-          {open ? 'Réduire la conversation' : 'Discuter avec Sentry'}
+          {open ? ui.close.fr : ui.open.fr}
         </span>
       </button>
 
       {open && (
         <section id="sentry-chat" className="sentry-chat__panel" aria-label="Conversation avec Sentry">
           <header className="flex shrink-0 items-center gap-3 border-b border-white/8 px-3 py-2.5">
-            <Sentry size={48} state={face} />
+            <Sentry size={72} state={face} paused={!introComplete} className="sentry-chat__avatar" />
             <div className="min-w-0 flex-1">
               <p className="text-[15px] font-semibold text-zinc-100">{ui.name}</p>
               <p className="truncate text-xs text-zinc-400">
-                {serviceAvailable ? <span className="text-cyber-light">{ui.online.fr}</span> : ui.offline.fr}
+                {preview ? serviceAvailable ? <span className="text-cyber-light">{ui.online.fr}</span> : ui.offline.fr : ui.designing.fr}
               </p>
             </div>
             <button
+              ref={close}
               type="button"
               onClick={() => assistant.setOpen(false)}
               aria-label={ui.close.fr}
@@ -171,8 +156,8 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
               <ChevronDown size={20} aria-hidden="true" />
             </button>
           </header>
-          <div className="sentry-chat__body flex min-h-0 flex-1 flex-col">
-            <div ref={log} className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 py-3">
+          {preview ? <div className="sentry-chat__body flex min-h-0 flex-1 flex-col">
+            <div ref={log} className="sentry-chat__log flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 py-3">
               <FromSentry>
                 <p className={bubble}>{ui.greeting.fr}</p>
               </FromSentry>
@@ -193,7 +178,7 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
                         </div>
                       </FromSentry>
                     ) : (
-                      <FromSentry state={x === last ? face : 'idle'}>
+                      <FromSentry>
                         {live && !done && live.phase !== 'write' ? (
                           <p className="flex items-center gap-2 pt-1.5 text-[13px] text-cyber-light">
                             <span aria-hidden="true" className="size-2 rounded-full bg-cyber shadow-[0_0_8px_var(--color-cyber)]" />
@@ -273,7 +258,13 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
                 <SendHorizontal size={17} aria-hidden="true" />
               </button>
             </form>
-          </div>
+          </div> : (
+            <div className="sentry-chat__log min-h-0 flex-1 overflow-y-auto px-3 py-3">
+              <FromSentry>
+                <p className={bubble} role="status">{ui.underConstruction.fr}</p>
+              </FromSentry>
+            </div>
+          )}
         </section>
       )}
     </aside>
