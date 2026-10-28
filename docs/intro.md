@@ -5,7 +5,10 @@ Branche d’intégration isolée dans `nouveau-portfolio`, créée depuis le com
 Elle intègre ensuite `ebedc92295611a570e7972755c86fca31e381d3f` : grandes icônes d’intérêt, disponibilité plus aérée
 et alignement des titres de section à 96 px du haut après navigation.
 Elle fusionne la branche `intro` au commit `b2bca9e`, conservée dans sa copie de travail d’origine.
-Le Profil et son contenu sont ceux de `ebedc92`, sans modification. Le Hero conserve sa présentation finale. Les dépendances restent identiques.
+Le Profil reprend `ebedc92`, avec le portrait fourni par Jérémie et les centres d’intérêt étendus à toute la deuxième colonne.
+Les contenus restent ceux de ce commit. Le Hero conserve sa présentation finale. Les dépendances restent identiques.
+Le PNG original du portrait est conservé dans `docs/assets/portrait-holographique-bleu-source.png` ;
+le site utilise `src/assets/portrait-holographique-bleu.webp` (800 × 1087, environ 181 Ko).
 Seul l’import vectoriel de `Hero/core/network.ts` est optimisé : le moteur WebGL reste dans les modules chargés à la demande.
 `App.jsx` et `App.css` ajoutent le conteneur de transition autour du vrai portfolio, monté une seule fois.
 Le bouton « Revoir le globe » du Profil conserve ses règles d’accessibilité et revient au Hero avant de rejouer l’introduction.
@@ -127,7 +130,8 @@ Ajouter `&phase=approach` fige l’approche à 600 ms ; `&phase=passage` contrô
 ## Vérification de cette version
 
 43 tests passent, ainsi que la vérification TypeScript, le lint complet et le build de production.
-Le Profil (`Profile.tsx` et `content/profile.ts`) et le Hero (`Hero.tsx` et `content/hero.ts`) sont identiques à `ebedc92`.
+Les contenus du Profil (`content/profile.ts`) et le Hero (`Hero.tsx` et `content/hero.ts`) sont identiques à `ebedc92`.
+Les ajustements de `Profile.tsx` portent sur le portrait et la largeur des centres d’intérêt.
 Le navigateur confirme la première entrée, la navigation vers Profil, le bouton « Revoir le globe » et le retour au Hero interactif.
 Le navigateur confirme 66 zones chargées, une reprise après l’arrêt du parcours, puis zéro scène active,
 zéro géométrie et zéro texture propres à l’introduction après Entrer. Le compteur d’images reste immobile après fermeture.
