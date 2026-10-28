@@ -18,9 +18,9 @@ export const hero = {
     { text: { fr: 'Pentester junior', en: 'Junior penetration tester' }, tone: 'threat' },
   ],
   pitch: {
-    // Chosen by Jérémie on 2026-10-27: software, AI and security, without promising « agents ».
-    fr: 'Je conçois des solutions logicielles, explore le potentiel de l’IA et mets la sécurité des systèmes à l’épreuve.',
-    en: 'I design software solutions, explore what AI can do and put the security of systems to the test.',
+    // Chosen by Jérémie on 2026-10-28: AI solutions and identifying system vulnerabilities.
+    fr: 'Je développe des solutions IA et identifie les vulnérabilités des systèmes pour mieux les sécuriser.',
+    en: 'I develop AI solutions and identify system vulnerabilities to better secure them.',
   },
   /**
    * Proofs under the pitch (2026-10-27), as a light list: one row per kind (label on the left, items as

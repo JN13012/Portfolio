@@ -15,7 +15,7 @@ Entrer dans le portfolio · Passer l’introduction
 
 **Jérémie Nagi** — Développeur IA · Pentester junior
 
-> Je conçois des solutions logicielles, explore le potentiel de l’IA et mets la sécurité des systèmes à l’épreuve.
+> Je développe des solutions IA et identifie les vulnérabilités des systèmes pour mieux les sécuriser.
 
 Formation : Master of Science · Architecte des SI (Epitech Marseille · 1re année)
 
