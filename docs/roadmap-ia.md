@@ -1,6 +1,9 @@
-# Feuille de route : l'IA du portfolio (décidé le 2026-10-24, à reprendre plus tard)
+# Feuille de route IA
 
-Le réseau de neurones du hero n'a de sens que s'il devient le visage d'une vraie IA. Une animation seule, ou une simple navigation qui ne sert qu'une fois, ne vaut pas la place qu'elle prend.
+État au 28 octobre 2026 : Sentry est la mascotte et la fenêtre de conversation du portfolio.
+Il affiche des fiches préparées avec leurs sources ; le réseau du Hero en illustre les étapes.
+Les questions libres, la voix et le défi IA restent à développer. Voir [l’architecture actuelle](architecture.md).
+Les propositions ci-dessous décrivent des fonctionnalités futures, pas des services déjà branchés.
 
 ## Les trois fonctionnalités
 
@@ -10,10 +13,10 @@ Le réseau de neurones du hero n'a de sens que s'il devient le visage d'une vrai
 - Un sous-titre défile pendant la lecture, pour l'accessibilité et pour qui regarde sans le son.
 - Il faut les enregistrements de Jérémie, un texte validé et un service de synthèse vocale.
 
-### 2. Chatbot sur le portfolio (RAG)
+### 2. Questions libres sur le portfolio
 - Une bulle en bas à droite, sur tout le site, qui s'ouvre en petit panneau et se referme, comme la messagerie LinkedIn.
 - Il répond à partir du contenu du site (`src/content`). Chaque réponse cite les sections utilisées, avec un lien pour y aller.
-- Sur le hero, le réseau montre le chemin réel de la réponse : la question entre, les nœuds « sources » (les sections retrouvées) s'allument, la réponse sort. Un clic sur un nœud ouvre la section correspondante.
+- Sur le hero, le réseau montre le chemin réel de la réponse : la question entre, les nœuds « sources » (les sections retrouvées) s'allument, la réponse sort. Les nœuds illustrent les sources ; la navigation reste dans la barre et les liens du chat.
 - Sur les autres sections, une version miniature du réseau est animée en haut du panneau.
 - C'est le mode « recruteur » : sérieux, protégé contre les détournements.
 
@@ -24,16 +27,17 @@ Le réseau de neurones du hero n'a de sens que s'il devient le visage d'une vrai
 
 ## Contraintes
 
-- **Coûts de l'API** : une limite de messages par visiteur, gérée dans le Worker Cloudflare (`worker.js`).
+- **Coûts de l'API** : une limite de messages par visiteur, gérée dans le Worker Cloudflare (`server/worker.js`).
 - **Sécurité** : aucun vrai secret dans le défi, des instructions séparées entre le chatbot et le défi, des journaux sans données personnelles.
 - **Performance** : le réseau 3D reste chargé seulement sur ordinateur. Sur mobile, le chatbot fonctionne sans l'animation. Lighthouse mobile doit rester à 90 ou plus.
 - **Honnêteté** : afficher ce qui tourne vraiment, à savoir le modèle utilisé et ses limites.
 
-## En attendant
+## Base existante
 
-- Épurer le hero.
-- Garder le réseau seulement comme avatar, sans les entrées de navigation, avec une place réservée au bouton audio.
-- `Neural3D` reste dans le dépôt pour ces étapes.
+- `src/components/Sentry/` : fenêtre de chat, mascotte, questions préparées et états visuels.
+- `src/lib/assistantStore.ts` : conversation partagée avec le Hero.
+- `src/sections/Hero/core/` : réseau 3D et fallback 2D.
+- `dev/mockups/NetworkTuner.tsx` : réglage du même moteur en développement.
 
 ## Ordre proposé (une branche par étape)
 

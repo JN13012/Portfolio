@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { AlertTriangle, Briefcase, Check, CheckCircle2, Copy, Download, Github, Linkedin, Mail, MapPin, Send } from 'lucide-react'
 import { siCoursera, siTryhackme, type SimpleIcon } from 'simple-icons'
-import SectionHeader from '../../components/SectionHeader'
+import SectionHeader from '../../components/ui/SectionHeader'
 import { contact, contactLimits } from '../../content/contact'
 import { profile } from '../../content/profile'
 import { cx } from '../../lib/cx'

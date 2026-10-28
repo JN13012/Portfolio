@@ -4,7 +4,7 @@ import metadata from './globeCrust.json'
 import { clamp, GLOBE_RADIUS, smooth } from './journeyGeometry'
 
 export const PLATE_COUNT = metadata.regions.length
-export type CrustAsset = { geometry: BufferGeometry; centres: Vector3[]; labels: Uint8Array; width: number; height: number }
+type CrustAsset = { geometry: BufferGeometry; centres: Vector3[]; labels: Uint8Array; width: number; height: number }
 
 export async function loadCrust(signal: AbortSignal): Promise<CrustAsset> {
   const response = await fetch(crustUrl, { signal })
@@ -68,7 +68,7 @@ export function createCrustMotion() {
   const axes = Array.from({ length: PLATE_COUNT }, () => new Vector3())
   return { centres, rotations, offsets, visibility, translations, velocities, axes, angles: new Float32Array(PLATE_COUNT), delays: new Float32Array(PLATE_COUNT), proximities: new Float32Array(PLATE_COUNT), uniforms: { uPlateCentres: { value: centres }, uPlateRotations: { value: rotations }, uPlateOffsets: { value: translations } }, quaternion: new Quaternion() }
 }
-export type CrustMotion = ReturnType<typeof createCrustMotion>
+type CrustMotion = ReturnType<typeof createCrustMotion>
 
 /** Calculate the burst once, when the precomputed geometry arrives. */
 export function prepareCrustMotion(motion: CrustMotion, source: Vector3) {

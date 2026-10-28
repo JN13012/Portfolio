@@ -1,6 +1,6 @@
 import type { Localized } from './types'
 
-export type JourneyStop = {
+type JourneyStop = {
   code: string
   country: Localized
   city: string
@@ -23,6 +23,7 @@ export const introJourney: JourneyStop[] = [
 
 export const introCopy = {
   portfolio: { fr: 'Portfolio personnel', en: 'Personal portfolio' },
+  domains: { fr: 'IA · Cybersécurité', en: 'AI · Cybersecurity' },
   title: { fr: 'Un parcours.', en: 'One journey.' },
   titleAccent: { fr: 'Plusieurs horizons.', en: 'Many horizons.' },
   description: {
@@ -31,7 +32,6 @@ export const introCopy = {
   },
   countries: { fr: 'pays', en: 'countries' },
   languages: { fr: 'langues', en: 'languages' },
-  base: { fr: 'Aujourd’hui à Marseille', en: 'Based in Marseille' },
   enter: { fr: 'Entrer dans le portfolio', en: 'Enter the portfolio' },
   skip: { fr: 'Passer l’introduction', en: 'Skip introduction' },
   accessible: {
@@ -39,7 +39,5 @@ export const introCopy = {
     en: 'The globe traces my journey: France, Lebanon, Saudi Arabia, Qatar, Canada, Peru, then back to France. Enter opens the portfolio with a dive towards Marseille. You can enter at any time.',
   },
   start: { fr: 'Point de départ', en: 'Starting point' },
-  return: { fr: 'Retour en France', en: 'Back to France' },
-  destination: { fr: 'Destination · Marseille', en: 'Destination · Marseille' },
   fallback: { fr: 'Chaque étape ouvre un nouvel horizon.', en: 'Every stop opens a new horizon.' },
 } satisfies Record<string, Localized>

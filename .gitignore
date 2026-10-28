@@ -25,5 +25,7 @@ dist-ssr
 
 # Fonts
 public/fonts/
+# Local reference fonts from the abandoned serif design
+docs/assets/archive/fonts/
 
 *Zone.Identifier

@@ -13,7 +13,7 @@ const WIRE = '#9ca3af'
 
 type Ctx = CanvasRenderingContext2D
 type Pt = [number, number]
-export type Effect = {
+type Effect = {
   duration: (w: number) => number
   draw: (c: Ctx, w: number, ms: number) => void
   /** Drawn over the whole details panel, `h` units high (the scene stays along its bottom). */
@@ -169,7 +169,7 @@ function confetti(c: Ctx, w: number, h: number, t: number) {
   }
 }
 
-export const lmp2: Effect = {
+const lmp2: Effect = {
   duration: lmp2Ms,
   draw(c, w, ms) {
     ground(c, w, fade(ms, lmp2Ms(w)))
@@ -380,7 +380,7 @@ function obstacles(c: Ctx, w: number) {
   c.stroke()
 }
 
-export const commando: Effect = {
+const commando: Effect = {
   duration: (w) => segments(w).reduce((s, [a, b, v]) => s + (b - a) / (SPEED * v), 0),
   draw(c, w, ms) {
     const alpha = fade(ms, this.duration(w))
@@ -508,7 +508,7 @@ function bot(c: Ctx, x: number, y: number, eye: string, ms: number) {
   dot(c, x - 3.5, y - 1, 1.5)
   dot(c, x + 3.5, y - 1, 1.5)
 }
-export const piscine = timed(2800, (c, w, ms, a) => {
+const piscine = timed(2800, (c, w, ms, a) => {
   const W = Math.min(w * 0.2, 150)
   const h = 58
   const x0 = Math.max(w * 0.6, 580) // right of the tags, in line with the MSc crane
@@ -663,7 +663,7 @@ function floor(c: Ctx, bx: number, top: number, k: number) {
 }
 /** Floors lowered by the crane: start time; the last one stops on its way down, the build is still going on. */
 const LIFTS = [200, 1050, 1900]
-export const construction = timed(2800, (c, w, ms, a) => {
+const construction = timed(2800, (c, w, ms, a) => {
   const mx = Math.max(w * 0.68, 650) // right of the text
   const bx = mx + 62
   const jy = 14
@@ -724,7 +724,7 @@ export const construction = timed(2800, (c, w, ms, a) => {
 
 // ---------- ULIT, Salesforce developer: a cloud hops along the bottom of the panel, squashing a little as it lands
 const HOP_MS = 2000
-export const cloudHop = timed(HOP_MS, (c, w, ms, a) => {
+const cloudHop = timed(HOP_MS, (c, w, ms, a) => {
   const t = prog(ms, 0, HOP_MS)
   // Same speed as a 3.2 s run from x = 400 (right of the tags): starting later, it appears further right.
   const from = w + 40 - ((w + 40 - 400) * HOP_MS) / 3200
@@ -768,7 +768,7 @@ function candles(n: number): Candle[] {
   candleCache.set(n, out)
   return out
 }
-export const chart = timed(2600, (c, w, ms, a) => {
+const chart = timed(2600, (c, w, ms, a) => {
   const n = Math.floor((w - 40) / 13)
   const data = candles(n)
   const lo = Math.min(...data.map((d) => d.l))
@@ -851,7 +851,7 @@ function padlock(c: Ctx, x: number, y: number, lift: number) {
   c.lineTo(x + 2, y - 2.5 - lift)
   c.stroke()
 }
-export const mining = timed(2900, (c, w, ms, a) => {
+const mining = timed(2900, (c, w, ms, a) => {
   const bx = w * 0.64 // left of the dashboard screenshot on the right
   const bw = 64
   const bh = 50
@@ -949,7 +949,7 @@ const powerCh = (r: number) => rawKw(r) * KW_SCALE * KW_TO_CH
 const SCALE_MAX = 700 // both vertical axes, ch and Nm
 const fmt = (n: number) => Math.round(n).toLocaleString('fr-FR')
 
-export const dyno = timed(2900, (c, w, ms, a) => {
+const dyno = timed(2900, (c, w, ms, a) => {
   const x0 = Math.max(w * 0.52, 420)
   const x1 = w * 0.92
   const yt = 24

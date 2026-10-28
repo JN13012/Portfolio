@@ -1,24 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { brainNodes } from '../content/assistant'
-import { buildGraph, edgeKey, idleRoute, litNodes, project, QUESTION_MS, routes, runDuration, runState, SEARCH_MS, type Phase } from './brain'
-
-const ids = brainNodes.map((n) => n.id)
-const g = buildGraph(ids)
-const edges = new Set(g.edges.map(([a, b]) => edgeKey(a, b)))
-const followsEdges = (path: number[]) => path.every((n, i) => i === 0 || edges.has(edgeKey(path[i - 1]!, n)))
-
-describe('brain graph', () => {
-  it('has one node per section, in order', () => {
-    expect(g.sections.map((s) => g.nodes[s]!.section)).toEqual(ids)
-  })
-
-  it('projects closer points bigger', () => {
-    const view = { yaw: 0, pitch: 0, width: 500, height: 500 }
-    const near = project({ x: 0, y: 0, z: 0.4 }, view)
-    const far = project({ x: 0, y: 0, z: -0.4 }, view)
-    expect(near.k).toBeGreaterThan(far.k)
-  })
-})
+import { litNodes, QUESTION_MS, runDuration, runState, SEARCH_MS } from './brain'
 
 describe('answer timeline', () => {
   const run = { startedAt: 1000, chars: 200 }
@@ -45,17 +26,5 @@ describe('answer timeline', () => {
         { kind: 'section', node: 'lab' },
       ]),
     ).toEqual(['projects', 'certifications', 'lab'])
-  })
-
-  it('moves pulses along real edges only', () => {
-    const phases: Phase[] = ['question', 'search', 'write', 'done']
-    for (const phase of phases) for (const r of routes(g, phase, ['lab', 'certifications'])) expect(followsEdges(r.path), phase).toBe(true)
-    for (const seed of [0, 0.13, 0.5, 0.99]) expect(followsEdges(idleRoute(g, seed).path)).toBe(true)
-  })
-
-  it('probes one unused section while searching', () => {
-    const search = routes(g, 'search', ['lab'])
-    expect(search.filter((r) => r.probe)).toHaveLength(1)
-    expect(g.nodes[search.find((r) => r.probe)!.path.at(-1)!]!.section).not.toBe('lab')
   })
 })

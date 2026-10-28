@@ -46,7 +46,7 @@ const PIECES = (() => {
   })
 })()
 
-export type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 'bracket' | 'loader' | 'split' | 'card' | 'cap' | 'tilt' | 'brick' | 'socket'
+type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 'bracket' | 'loader' | 'split' | 'card' | 'cap' | 'tilt' | 'brick' | 'socket'
 
 type Progress = { level: number; solved: boolean }
 function readProgress(): Progress {

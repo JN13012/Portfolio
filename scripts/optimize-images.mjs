@@ -8,7 +8,7 @@ import sharp from 'sharp'
 
 const ROOT = new URL('..', import.meta.url).pathname
 const ASSETS = join(ROOT, 'src/assets')
-const SRC = join(ROOT, 'src')
+const SOURCE_ROOTS = ['src', 'dev'].map((directory) => join(ROOT, directory))
 const THRESHOLD = 120 * 1024 // bytes
 const MAX_WIDTH = 1600
 const dry = process.argv.includes('--dry')
@@ -20,7 +20,7 @@ const walk = (dir) =>
   })
 
 const images = walk(ASSETS).filter((p) => /\.(png|jpe?g)$/i.test(p) && statSync(p).size > THRESHOLD)
-const sources = walk(SRC).filter((p) => /\.(jsx?|tsx?)$/.test(p))
+const sources = SOURCE_ROOTS.flatMap(walk).filter((p) => /\.(jsx?|tsx?)$/.test(p))
 
 let saved = 0
 for (const img of images) {

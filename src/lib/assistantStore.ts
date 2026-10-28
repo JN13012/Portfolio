@@ -4,7 +4,7 @@ import { useSyncExternalStore } from 'react'
 import { type BrainNodeId, type PreparedAnswer } from '../content/assistant'
 import { litNodes, type Run } from './brain'
 
-export type Exchange = {
+type Exchange = {
   id: number
   question: string
   /** null: a free question, not answered yet (no backend in this step). */

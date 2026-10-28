@@ -102,7 +102,7 @@ export const NETWORK_STRUCTURE: Array<keyof NetworkSettings> = [
 ]
 
 // Column captions (2026-10-27). The inputs carry no name: only an attack shows its own (« prompt injection »).
-export const NETWORK_LABELS = { input: 'Requête', embed: 'Embedding', model: 'Modèle', guard: 'Garde-fous', output: 'Portfolio' }
+const NETWORK_LABELS = { input: 'Requête', embed: 'Embedding', model: 'Modèle', guard: 'Garde-fous', output: 'Portfolio' }
 // ── Graph ───────────────────────────────────────────────────────────────────
 
 export type NetworkNode = { pos: Vector3; layer: number; index: number; kind: 'input' | 'embed' | 'hidden' | 'guard' | 'output' }

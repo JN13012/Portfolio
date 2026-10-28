@@ -2,7 +2,7 @@ import type { Localized } from './types'
 
 export type CoreNodeId = 'ia' | 'cyber' | 'dev' | 'parcours' | 'contact'
 
-export type CoreNode = {
+type CoreNode = {
   id: CoreNodeId
   /** In-page anchor the node scrolls to. */
   target: string
@@ -11,7 +11,7 @@ export type CoreNode = {
   hint: Localized
 }
 
-// Hero copy: option A, chosen 2026-10-17 (docs/concept-v1.md §6).
+// Hero copy: option A, chosen 2026-10-17 (docs/archive/concept-v1.md §6).
 export const hero = {
   title: [
     { text: { fr: 'Développeur IA', en: 'AI developer' }, tone: 'ai' },
@@ -49,7 +49,7 @@ export const hero = {
   ],
   /** Four projects on two lines, in this order (Argos, BlockTrader / Code Executor, ZeroDay); the wording follows each one's status (never « live »). */
   projects: [
-    { slug: 'argos', detail: { fr: 'OSINT · en développement', en: 'OSINT · in development' } },
+    { slug: 'argos', detail: { fr: 'Agents IA cyber · en développement', en: 'Cyber AI agents · in development' } },
     { slug: 'blocktrader', detail: { fr: 'Bot de trading · en test', en: 'Trading bot · in testing' } },
     { slug: 'salesforce-executor', detail: { fr: 'En production chez ULIT', en: 'In production at ULIT' } },
     { slug: 'zeroday', detail: { fr: 'Jeu mobile · en conception', en: 'Mobile game · in design' } },

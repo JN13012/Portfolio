@@ -1,25 +1,16 @@
-# Nouveau portfolio — branche `v2/nouveau-portfolio`
+# Introduction du portfolio
 
-Branche d’intégration isolée dans `nouveau-portfolio`, créée depuis le commit Profil demandé
-`33f2cd4c306d7d198cca43afbf3fae67de8be6ff` de `v2/profil`, qui contient le Hero final `88bf779`.
-Elle intègre ensuite `ebedc92295611a570e7972755c86fca31e381d3f` : grandes icônes d’intérêt, disponibilité plus aérée
-et alignement des titres de section à 96 px du haut après navigation.
-Elle fusionne la branche `intro` au commit `b2bca9e`, conservée dans sa copie de travail d’origine.
-Le Profil reprend `ebedc92`, avec le portrait fourni par Jérémie et les centres d’intérêt étendus à toute la deuxième colonne.
-Les contenus restent ceux de ce commit. Le Hero conserve sa présentation finale. Les dépendances restent identiques.
-Le PNG original du portrait est conservé dans `docs/assets/portrait-holographique-bleu-source.png` ;
-le site utilise `src/assets/portrait-holographique-bleu.webp` (800 × 1087, environ 181 Ko).
-Seul l’import vectoriel de `Hero/core/network.ts` est optimisé : le moteur WebGL reste dans les modules chargés à la demande.
-`App.jsx` et `App.css` ajoutent le conteneur de transition autour du vrai portfolio, monté une seule fois.
-Le bouton « Revoir le globe » du Profil conserve ses règles d’accessibilité et revient au Hero avant de rejouer l’introduction.
+L’introduction et le portfolio partagent une seule application sur `main`.
+`src/app/App.jsx` garde le vrai portfolio monté pendant la transition du globe vers le Hero ;
+`src/app/App.css` gère sa fenêtre animée. Il n’existe plus de copie de travail séparée à lancer.
+Voir [l’architecture](architecture.md) pour l’organisation complète.
 
-Copie de travail : `C:/Users/Cyber/Documents/ChatGPT/Portfolio/nouveau-portfolio`.
-L’aperçu d’intégration utilise `npm run dev -- --port 5174 --strictPort`, puis `/intro-preview.html`.
-La copie `intro` et son aperçu sur le port 5173 restent séparés.
+Le portrait affiché est `src/assets/portrait-holographique-bleu.webp` ; son original est conservé
+sous `docs/assets/portrait-holographique-bleu-source.png`.
 
 ## Aperçu
 
-Depuis cette copie : `npm ci`, puis `npm run dev`.
+Depuis la racine du dépôt : `npm ci`, puis `npm run dev`.
 Ouvrir `/intro-preview.html` sur le serveur local pour rejouer l’introduction à chaque rechargement.
 Cette entrée de développement ouvre le vrai portfolio après le plongeon ; elle est absente du build de production.
 Le comportement existant reste conservé : introduction sur ordinateur (≥ 1024 px), une fois par session,
@@ -29,13 +20,14 @@ ignorée sur mobile, avec Save-Data ou une préférence système pour réduire l
 
 Fond graphite, globe en points issus des données cartographiques existantes, lumières nocturnes,
 atmosphère discrète et accent vert conservé. Un seul pays est annoté à la fois, avec son drapeau.
-Le globe est centré horizontalement sur l’écran (axe à 50 % de la largeur), avec le fond lumineux et le bouton sur le même axe.
+Sur ordinateur, le globe et son bouton partagent un axe horizontal à 55 % de la largeur ; le centre du globe est à 50 % de la hauteur. Sur les écrans de 800 px ou moins, l’axe horizontal est à 50 %. Les positions viennent des variables CSS `--gate-globe-x` et `--gate-globe-y`.
+L’en-tête affiche la signature et « IA · Cybersécurité » ; le bouton « Passer l’introduction » se place sous son filet, à droite.
 Son diamètre est plafonné à 45 % de la largeur sur les fenêtres étroites et hautes pour laisser le texte lisible.
 Le surtitre avec son filet vert est retiré ; le titre est réduit, le paragraphe et les chiffres sont agrandis.
 Description : « Des pays, des langues et des expériences qui ont façonné ma façon de voir le monde. » (FR et EN dans `intro.ts`).
 Le bouton Entrer est centré horizontalement sous le globe, sur un axe partagé avec le cadrage de la caméra.
 La frise, la sélection de pays et les commandes de relecture ont été retirées pour alléger l’écran.
-Les annotations affichent uniquement le pays (sans « Étape » ni durée de résidence).
+Les annotations affichent le compteur des sept étapes (`01 / 07` à `07 / 07`), puis le drapeau et le pays, reliés au repère par un petit trait. La France porte « Point de départ » au début ; aucun sous-texte n’est affiché à la dernière étape.
 Le bouton Entrer fonctionne dès l’ouverture, sans attendre le parcours.
 Le trajet complet dure environ six secondes : liaisons régionales rapides, grandes traversées plus progressives.
 Une traînée lumineuse suit le mouvement et s’efface dans les 620 ms suivant l’arrivée.
@@ -74,7 +66,7 @@ légèrement décalés. À partir de 1,1 s, une petite fenêtre apparaît au cen
 le vrai Hero final, sa navigation, ses preuves et son réseau, avec le même DOM et les mêmes composants que la page finale.
 Sa taille suit la perspective de la distance réelle de la caméra : environ 27 % de l’écran à 1,6 s, 51 % à 2,4 s,
 puis exactement 100 % à 3 s. Son cadre s’efface à l’approche. Le fond reste opaque à l’extérieur de cette fenêtre.
-La page est préparée hors écran pendant le parcours ; son réseau reprend dès le début du plongeon, avant l’apparition de la fenêtre.
+La page est préparée hors écran pendant le parcours ; son réseau reprend dès le début du plongeon, avant l’apparition de la fenêtre. Son fond cartographique reste figé pendant l’introduction, puis reprend à sa fermeture.
 À la fermeture, le conteneur retrouve le flux normal et devient interactif, sans remonter ni remplacer le Hero.
 Les paramètres sont préparés une seule fois ; aucune découpe ou simulation physique n’est exécutée à chaque image.
 Le rapprochement accélère après la séparation pour garder
@@ -93,17 +85,19 @@ La croûte utilise un seul objet de rendu ;
 le quadrillage est regroupé et les contours sont réunis par pays. Les données de classement cartographique sont relâchées après association.
 Les éléments totalement invisibles ne sont pas soumis au rendu : pic observé de 27 appels graphiques, contre 35 auparavant.
 Les vecteurs de caméra, les positions d’annotation et les états de parcours/traînée/fenêtre sont réutilisés pendant l’animation.
+Les traînées invisibles ne mettent plus à jour leurs buffers de dessin ni leurs paramètres graphiques ; la position de leur tête n’est calculée que lorsqu’elle est visible. La coque cesse d’être rendue une fois entièrement transparente. Les annotations ne sont ni projetées ni déplacées lorsqu’elles sont masquées sur petit écran ou pendant le plongeon.
 La compilation du shader de croûte est préparée au repos via `compileAsync`, avec annulation du travail planifié à la fermeture.
 Une requête annulée ne poursuit pas le décodage de la croûte. Le nettoyage est idempotent et détache aussi les groupes de la scène.
-Le rendu s’arrête lorsque l’onglet est masqué et une fois le parcours immobile ; un clic sur Entrer le réveille pour la transition.
+Le rendu s’arrête lorsque l’onglet est masqué et une fois le parcours immobile ; un clic sur Entrer le réveille pour la transition. Le réseau 3D du Hero annule aussi sa boucle hors écran, au lieu de conserver un rappel vide à chaque image. Le réseau et le fond suspendent leur boucle dans un onglet masqué, puis reprennent sans intégrer le temps passé en arrière-plan.
 À la fermeture, la boucle est annulée, les événements et l’observation de taille sont retirés, les géométries, matériaux et textures
 propres à l’introduction sont libérés, puis son contexte graphique est fermé et son canvas retiré. Les sprites possèdent leur propre
 géométrie afin de ne pas toucher aux buffers partagés des autres scènes du portfolio.
+La croûte n’est chargée qu’après validation des données de base et création du moteur graphique : un échec initial ne laisse pas de géométrie décodée sans propriétaire. Le démontage du réseau du Hero libère également ses géométries, matériaux, texture, temporisations et contexte graphique.
 
-## Fichiers à intégrer
+## Fichiers principaux
 
 - `src/content/intro.ts` : itinéraire et textes FR/EN.
-- `src/App.jsx` et `src/App.css` : conteneur du vrai portfolio, inertie et fenêtre synchronisée avec le plongeon.
+- `src/app/App.jsx` et `src/app/App.css` : conteneur du vrai portfolio, inertie et fenêtre synchronisée avec le plongeon.
 - `src/sections/Gate/GlobeGate.tsx` : interface, entrée et accessibilité.
 - `src/sections/Gate/globeGate.css` : styles limités à l’introduction.
 - `src/sections/Gate/globeScene.ts` : rendu et animation.
@@ -114,12 +108,6 @@ géométrie afin de ne pas toucher aux buffers partagés des autres scènes du p
 - `src/sections/Gate/journeyGeometry.ts` et son test : géométrie des arcs.
 - `intro-preview.html` et ce document : prévisualisation et intégration.
 
-`App.jsx`, `App.css` et `GlobeGate.tsx` sont les fichiers existants modifiés par l’intégration.
-`Hero/core/network.ts` utilise uniquement un import mathématique ciblé ; `Hero.tsx`, ses contenus et sa présentation restent ceux du commit final.
-`scripts/export-review.ts` et les tests de contenu incluent maintenant les textes de l’introduction.
-Pour collaborer avec Claude, repartir de `v2/nouveau-portfolio` : les deux historiques sont conservés par la fusion.
-Une branche évite de partager les commits ; une copie indépendante évite aussi de partager les fichiers en cours d’édition.
-
 ## Inspection locale de la transition
 
 Uniquement en développement : `/intro-preview.html?transition=slow` ralentit la transition,
@@ -127,22 +115,22 @@ et `?transition=inspect` la fige à mi-ouverture après le clic pour contrôler 
 Ajouter `&phase=approach` fige l’approche à 600 ms ; `&phase=passage` contrôle le zoom final à 2,4 s.
 Échap permet de fermer cette inspection. Le lien sans paramètre utilise la vitesse normale.
 
-## Vérification de cette version
+## Vérification
 
-43 tests passent, ainsi que la vérification TypeScript, le lint complet et le build de production.
-Les contenus du Profil (`content/profile.ts`) et le Hero (`Hero.tsx` et `content/hero.ts`) sont identiques à `ebedc92`.
-Les ajustements de `Profile.tsx` portent sur le portrait et la largeur des centres d’intérêt.
-Le navigateur confirme la première entrée, la navigation vers Profil, le bouton « Revoir le globe » et le retour au Hero interactif.
-Le navigateur confirme 66 zones chargées, une reprise après l’arrêt du parcours, puis zéro scène active,
-zéro géométrie et zéro texture propres à l’introduction après Entrer. Le compteur d’images reste immobile après fermeture.
-La fenêtre est centrée en 1 280 × 800 et 1 920 × 1 080, avec un seul Hero dans le DOM. À la sortie,
-ses transformations, ses styles temporaires et son attribut `inert` sont retirés ; le défilement du site est rétabli.
-Passer et Échap rétablissent aussi le site ; l’accès direct en 390 × 844 ignore l’introduction et laisse la page interactive.
-L’introduction ne réapparaît pas au rechargement de la page normale dans la même session.
-Ces vérifications de cycle de vie ne constituent pas une mesure de fluidité sur tous les appareils.
-L’import mathématique ciblé fait passer le bundle principal de 1 180,98 à 641 Ko, et de 353,54 à 220,32 Ko gzip (−38 %).
-Avec le dernier Profil, le bundle principal mesure 653,21 Ko (224,43 Ko gzip), et la carte statique est un module séparé.
-Le moteur WebGL est chargé séparément. La cible de 200 Ko gzip du plan reste à atteindre ; aucun score Lighthouse n’est revendiqué.
-Le diagnostic de développement `#root[data-intro-performance]` distingue les mesures CPU et les intervalles d’images du parcours et du plongeon.
-L’aperçu intégré peut limiter les animations à environ 1 image/s en arrière-plan, y compris après activation de sa fenêtre :
-ces mesures ne permettent pas de certifier un débit d’images représentatif d’un navigateur utilisateur actif. Les échantillons sont absents du build de production.
+Les tests de géométrie et de contenu font partie de `npm test` (52 tests au total).
+Compléter avec `npm run typecheck`, `npm run lint` et `npm run build`.
+Dans le navigateur, vérifier Entrer, Passer, Échap, « Revoir le globe », le maintien d’un seul Hero
+et le retour du focus sur son titre à la fermeture. Le mobile doit accéder directement au portfolio.
+Le diagnostic de développement `#root[data-intro-performance]` distingue les mesures CPU et
+les intervalles d’images du parcours et du plongeon. Ces mesures ne constituent pas un audit Lighthouse
+ni une garantie de fluidité sur un appareil physique. Les diagnostics sont absents de la production.
+
+Contrôle du 28 octobre 2026 : lint, typage, 52 tests et build réussis. Vérifications Chromium :
+parcours puis plongeon, entrée immédiate, Passer, Échap, relectures successives, pause/reprise de visibilité simulée,
+perte de contexte et échecs de chargement des points ou de la croûte. Le Hero reste monté et retrouve le focus.
+Pendant le parcours, aucun redessin récurrent du fond caché ni rendu du réseau hors écran n’a été observé ;
+la boucle du globe s’arrête au repos. Après chaque fermeture contrôlée, ses compteurs GPU reviennent à zéro.
+Le build a aussi été contrôlé sur mobile, en mouvement réduit et avec Save-Data.
+Le navigateur de test utilise SwiftShader : les intervalles d’images mesurés restent élevés dans cet environnement
+logiciel et ne permettent pas de certifier une animation sans saccade sur la machine du visiteur.
+Le préchargement et la compilation ponctuelle de la croûte sont conservés pour préparer la transition.

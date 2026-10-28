@@ -146,11 +146,6 @@ function rotationFor(point: Vector3) {
 }
 
 export async function createGlobeScene({ host, cover, portfolio, controls, annotation, signal, onStep, onClose }: Options) {
-  // Load the larger closed-shell asset in the background; the opening globe stays immediate.
-  const crustTask = loadCrust(signal).catch(error => {
-    if (import.meta.env.DEV && !signal.aborted) host.dataset.crustError = error instanceof Error ? error.message : String(error)
-    return null
-  })
   const response = await fetch(dotsUrl, { signal })
   if (!response.ok) throw new Error('Globe data unavailable')
   const buffer = await response.arrayBuffer()
@@ -196,6 +191,12 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
   let shell: Mesh<BufferGeometry, ShaderMaterial> | null = null
   let disposed = false
   let cancelWarmup = () => {}
+  // Start only after the base data and renderer succeed, so a failed opening
+  // cannot leave an unowned decoded crust in the background.
+  const crustTask = loadCrust(signal).catch(error => {
+    if (import.meta.env.DEV && !signal.aborted) host.dataset.crustError = error instanceof Error ? error.message : String(error)
+    return null
+  })
   const intact = new Mesh(geometry(new SphereGeometry(R * 0.998, 96, 64)), material(new ShaderMaterial({ vertexShader: VERT, fragmentShader: INTACT_FRAG })))
   globe.add(intact)
   const atmosphere = new Mesh(geometry(new SphereGeometry(R * 1.04, 64, 48)), material(new ShaderMaterial({ vertexShader: VERT, fragmentShader: ATMOSPHERE_FRAG, uniforms: { uBreak: breakUniform }, side: BackSide, transparent: true, depthWrite: false, blending: AdditiveBlending })))
@@ -260,7 +261,6 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
     return mat
   })
   void crustTask.then(asset => {
-    if (signal.aborted) { asset?.geometry.dispose(); return }
     if (!asset) { if (import.meta.env.DEV) host.dataset.crustStatus = 'fallback'; return }
     if (disposed || signal.aborted) { asset.geometry.dispose(); return }
     asset.centres.forEach((centre, i) => crustMotion.centres[i]!.copy(centre))
@@ -354,7 +354,7 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
   let height = 1
   let lensShift = 1
   let globeX = 0.5
-  let globeY = 0.49
+  let globeY = 0.5
   let requestRender = () => {}
   const frameCamera = () => {
     camera.setViewOffset(width, height, width * (0.5 - globeX) * lensShift, height * (0.5 - globeY) * lensShift, width, height)
@@ -463,12 +463,13 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
     }
 
     dotMat.uniforms.uReveal!.value = controls.reduced ? 1 : smooth(elapsed / 450)
+    const mapFade = 1 - smooth(breakUniform.value * 3)
+    const outlineFade = 0.48 * (1 - smooth((breakUniform.value - 0.82) / 0.18))
     stops.forEach((marker, index) => {
       const arrival = index === 0 ? 0 : JOURNEY_SCHEDULE[index - 1]!.arrival
       const reveal = controls.reduced ? 1 : smooth((time - arrival + 130) / 450)
       lit[index + 1] = reveal
-      const mapFade = 1 - smooth(breakUniform.value * 3)
-      outlineMaterials[index]!.uniforms.uOpacity!.value = reveal * 0.48 * (1 - smooth((breakUniform.value - 0.82) / 0.18))
+      outlineMaterials[index]!.uniforms.uOpacity!.value = reveal * outlineFade
       outlineObjects[index]!.visible = outlineMaterials[index]!.uniforms.uOpacity!.value > 0
       marker.mat.opacity = reveal * mapFade
       marker.glowMat.opacity = reveal * mapFade * (index === step || step === 6 && index === 0 ? 0.95 : 0.5)
@@ -476,54 +477,58 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
       marker.glow.visible = marker.glowMat.opacity > 0
       marker.glow.scale.setScalar(index === step || step === 6 && index === 0 ? 0.19 : 0.12)
     })
+    const exitFade = exitElapsed < 0 ? 1 : 1 - smooth(exitElapsed / 450)
     arcs.forEach((arc, index) => {
+      if (!exitFade) { arc.mesh.visible = arc.halo.visible = false; return }
       const trail = controls.reduced ? stillTrail : trailAt(time, index, trailState)
+      const opacity = trail.opacity * exitFade
+      if (opacity <= 0 || trail.head <= trail.tail) {
+        arc.mesh.visible = arc.halo.visible = false
+        return
+      }
       const start = Math.floor(trail.tail * 128)
       const length = Math.max(0, Math.ceil(trail.head * 128) - start)
       arc.geo.setDrawRange(start * 6 * 6, length * 6 * 6)
       arc.haloGeo.setDrawRange(start * 5 * 6, length * 5 * 6)
-      const exitFade = exitElapsed < 0 ? 1 : 1 - smooth(exitElapsed / 450)
-      arc.mesh.visible = arc.halo.visible = length > 0 && trail.opacity * exitFade > 0
+      arc.mesh.visible = arc.halo.visible = length > 0
       for (const mat of arc.materials) {
         mat.uniforms.uHead!.value = trail.head
         mat.uniforms.uTail!.value = trail.tail
-        mat.uniforms.uOpacity!.value = trail.opacity * exitFade * (mat === arc.mat ? 0.95 : 0.08)
+        mat.uniforms.uOpacity!.value = opacity * (mat === arc.mat ? 0.95 : 0.08)
       }
     })
-    const activeArc = arcs[legIndex]!
-    activeArc.curve.getPoint(travel, head.position)
     headMat.opacity = time >= TOUR_START && time < TOUR_END && travel < 1 && exitElapsed < 0 ? 0.95 : 0
     head.visible = headMat.opacity > 0
+    if (head.visible) arcs[legIndex]!.curve.getPoint(travel, head.position)
 
     gridMaterial.opacity = 0.075 * (1 - smooth(breakUniform.value * 3))
     grid.visible = gridMaterial.opacity > 0
     atmosphere.visible = breakUniform.value < 0.45
     land.visible = breakUniform.value < 1
     intact.visible = shell ? breakUniform.value < 0.002 : exitElapsed < 1600
-    if (shell) shell.visible = !intact.visible
+    if (shell) shell.visible = !intact.visible && breakUniform.value < 1
 
-    if (running || exitElapsed >= 0 || elapsed < 1000) {
-      // render() updates world matrices; avoid a second scene traversal here.
-      renderer.render(scene, camera)
-      frames++
-      peakDrawCalls = Math.max(peakDrawCalls, renderer.info.render.calls)
-      peakTriangles = Math.max(peakTriangles, renderer.info.render.triangles)
-      if (cover && exitElapsed >= 1100) {
-        // The real page grows behind the canvas; the backdrop stays opaque outside its frame.
-        cover.classList.add('is-opening')
-      }
-      if (annotation) {
-        local.copy(annotationPoints[step]!)
-        world.copy(local).applyMatrix4(globe.matrixWorld)
-        normal.copy(local).normalize().applyQuaternion(globe.quaternion)
-        viewDirection.copy(camera.position).sub(world).normalize()
-        projected.copy(world).project(camera)
-        const x = (projected.x + 1) * width / 2
-        const y = (1 - projected.y) * height / 2
-        const show = normal.dot(viewDirection) > 0.15 && x > 15 && x < width - 185 && y > 65 && y < height - 30 && exitElapsed < 0
-        annotation.style.opacity = show ? '1' : '0'
-        annotation.style.transform = `translate(${x + 8}px, ${y - 5}px)`
-      }
+    // render() updates world matrices; avoid a second scene traversal here.
+    renderer.render(scene, camera)
+    frames++
+    peakDrawCalls = Math.max(peakDrawCalls, renderer.info.render.calls)
+    peakTriangles = Math.max(peakTriangles, renderer.info.render.triangles)
+    if (cover && exitElapsed >= 1100) {
+      // The real page grows behind the canvas; the backdrop stays opaque outside its frame.
+      cover.classList.add('is-opening')
+    }
+    // CSS hides this label on small screens and throughout the dive.
+    if (annotation && width > 800 && exitElapsed < 0) {
+      local.copy(annotationPoints[step]!)
+      world.copy(local).applyMatrix4(globe.matrixWorld)
+      normal.copy(local).normalize().applyQuaternion(globe.quaternion)
+      viewDirection.copy(camera.position).sub(world).normalize()
+      projected.copy(world).project(camera)
+      const x = (projected.x + 1) * width / 2
+      const y = (1 - projected.y) * height / 2
+      const show = normal.dot(viewDirection) > 0.15 && x > 15 && x < width - 185 && y > 65 && y < height - 30
+      annotation.style.opacity = show ? '1' : '0'
+      if (show) annotation.style.transform = `translate(${x + 8}px, ${y - 5}px)`
     }
     if (cpuSamples && intervalSamples && sampleCount < cpuSamples.length) {
       cpuSamples[sampleCount] = performance.now() - cpuStart
@@ -551,11 +556,18 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
       if (diagnostics) diagnostics.dataset.introLoopState = 'running'
     }
   }
+  const visibilityChanged = () => {
+    if (document.hidden) {
+      cancelAnimationFrame(raf)
+      raf = 0
+      if (diagnostics) diagnostics.dataset.introLoopState = 'paused'
+    } else wake()
+  }
   requestRender = wake
   controls.invalidate = wake
   renderer.domElement.addEventListener('webglcontextlost', lost)
-  document.addEventListener('visibilitychange', wake)
-  raf = requestAnimationFrame(frame)
+  document.addEventListener('visibilitychange', visibilityChanged)
+  wake()
 
   return () => {
     if (disposed) return
@@ -564,7 +576,7 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
     cancelWarmup()
     observer.disconnect()
     renderer.domElement.removeEventListener('webglcontextlost', lost)
-    document.removeEventListener('visibilitychange', wake)
+    document.removeEventListener('visibilitychange', visibilityChanged)
     geometries.forEach((item) => item.dispose())
     materials.forEach((item) => item.dispose())
     texture.dispose()

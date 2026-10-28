@@ -11,7 +11,7 @@ type TrackContent = {
   featured: [string, string]
 }
 
-// « Trois métiers » section (docs/concept-v1.md §6). Proofs come from certificates and
+// « Trois métiers » section (docs/archive/concept-v1.md §6). Proofs come from certificates and
 // the facts of src/content/projects (verified 2026-10-17).
 export const tracks: TrackContent[] = [
   {
@@ -96,5 +96,3 @@ export const atAGlance: Localized[] = [
   { fr: 'Ex-militaire', en: 'Former soldier' },
   { fr: 'Disponible immédiatement', en: 'Available immediately' },
 ]
-
-export const trackLabels = Object.fromEntries(tracks.map((t) => [t.id, t.label])) as Record<Track, Localized>

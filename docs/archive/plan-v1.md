@@ -1,0 +1,249 @@
+# Portfolio V1 — Plan de refonte
+
+> Archive historique : ce document décrit des propositions antérieures, dont certaines ont été abandonnées.
+> Pour le code et les choix actuels, consulter [l’architecture du projet](../architecture.md).
+
+> Document de référence. Chaque session de travail commence par le lire.
+> Il remplace le brainstorming initial : toutes les décisions prises y sont consignées.
+
+---
+
+## 0. Objectif
+
+Un seul site, trois métiers visés, pour postuler **vite** :
+
+- **IA** : développement, conception, orchestration (LLM, RAG, agents)
+- **Cyber** : pentest + blue team
+- **Dev** : full-stack
+
+Cibles : grands groupes (Thales, Airbus, Naval Group, EDF, TotalEnergies, SNCF, Capgemini, BNP, SG, Crédit Agricole…) et l'offre déclencheuse **CMA CGM — Cyber Innovation Intern, Applied AI & Cybersecurity** (Marseille, GCP / Gemini / Cloud Run).
+
+Le site est lu par deux publics :
+
+1. **RH / talent acquisition** — 30 secondes : qui, quel poste, disponibilité, CV, contact.
+2. **Manager technique** — creuse : projets, rigueur, honnêteté sur ce qui est fini ou non.
+
+**V1 = site complet sans agent IA, sans voix, sans rooms.** Assez bon pour postuler partout.
+
+---
+
+## 1. Décisions déjà prises
+
+| Sujet | Décision |
+|---|---|
+| Concept | « Model Under Attack » : le site est la salle de contrôle d'une IA, vue depuis l'orbite. Version **sobre et premium**, pas « gamer ». Storyboard complet : [`docs/archive/concept-v1.md`](concept-v1.md) (validé le 2026-10-17). |
+| Positionnement | **Double compétence IA × cyber** (développeur IA + pentester junior), incarnée par Argos. Le développement est le socle ; la blockchain et le web3 sont un différenciateur secondaire. Hero : « Développeur IA · Pentester junior — Je construis des agents IA pour la cybersécurité, et je teste leur résistance. » (raccourci le 2026-10-27) |
+| Palette | Graphite `#0B0D10`, texte blanc cassé, **cyan = IA**, **orange = menace**. Fin du vert « Matrix ». |
+| Typo | Serif éditorial pour les titres (Cormorant Garamond, déjà dans `public/fonts`) + mono pour les données. |
+| Détails visuels | Barres de caviardage révélées au survol, numéros de dossier, horodatages. Clin d'œil maritime optionnel et discret. |
+| Visuels animés | **Noyau astrolabe + iris blindé** en SVG/Canvas 2D (hero) : il sert de navigation (5 nœuds) et réagit aux attaques et aux flags du CTF ; visible aussi sur mobile. **Décor** : la Terre de nuit vue d'orbite (Canvas 2D), qui deviendra le globe du parcours en V1.1. Ouverture « Entrer / Passer », une fois par session. Tout est figé en `prefers-reduced-motion`. Pas de WebGL : three / r3f retirés le 2026-10-17. |
+| Lentilles | ~~Onglets `/ia`, `/cyber`, `/dev`~~ abandonnés le 2026-10-17 : **page unique** avec les trois métiers côte à côte, et **filtres** (métier, statut) + **tri** (date, envergure) sur les projets. Le filtre est dans l'URL (`?metier=cyber`) pour les liens de candidature. |
+| Projets | 3 niveaux : **Dossiers** (études de cas) → **Autres réalisations** (cartes) → **Archives** (liste repliée). Statut honnête sur chaque projet. |
+| Langues du site | FR + EN en V1. |
+| Voix (V1.1) | Option **A + B** : clone de la voix de Jérémie **uniquement** sur des textes écrits et validés, pré-générés (intro multilingue FR/EN/ES/AR) ; agent vocal live avec une **voix neutre non clonée**, à la 3e personne. Jamais le clone sur du texte LLM libre. |
+| Agent (V2) | ~~Gemini payant sur Cloud Run~~ remplacé le 2026-10-27 (voir « Hero, assistant et Lab IA » dans §6 Ensuite) : route `/api/chat` dans le **Worker Cloudflare existant**, modèles open source de **Workers AI** (part gratuite quotidienne) ; Gemini Flash payant avec plafond strict seulement si la qualité en français ne suffit pas (l'offre gratuite Gemini reste interdite pour des utilisateurs dans l'EEE). Le fournisseur est un réglage du Worker. Défense en profondeur : Turnstile invisible → quota par session → **plafond global sortant** → limite de dépense chez le fournisseur. Mode dégradé : réponses préparées + contact. |
+| Lab (V3) | Rooms tirées des write-ups (Exegol autorisé par Epitech, flags changés ; THM = scénarios réécrits). Un Dockerfile par room → `docker compose` local + version navigateur (prototype sur *Silence*). Pas de VM hébergées + VPN. Atlas Academy en pause, son moteur sera réutilisé. |
+| Write-ups | Source unique : dépôt public [JN13012/Cyber-Write-ups](https://github.com/JN13012/Cyber-Write-ups). Le portfolio affiche des fiches et **renvoie vers GitHub**, il ne recopie pas les textes. |
+
+---
+
+## 2. Décisions à valider avant de coder
+
+| # | Question | Recommandation |
+|---|---|---|
+| D1 | Migrer en **TypeScript** ? | **Oui**, pour le nouveau code : le modèle de contenu est typé, et c'est un signal pour la lentille Dev. |
+| D2 | Pages projet : modale ou **route dédiée** (`/projets/blocktrader`) ? | **Route** : partageable, indexable, aperçu LinkedIn. |
+| D3 | Globe 3D en V1 ou V1.1 ? | **V1.1**, avec la voix. Le hero 3D suffit pour la V1. |
+| D4 | Nom de domaine ? | Un domaine court (`jeremienagi.fr` / `.dev`), à acheter avant la mise en ligne. |
+| D5 | Statistiques de visite ? | Cloudflare Web Analytics (sans cookie → pas de bandeau). |
+| D6 | Ligne de candidature `?pour=thales` | En V1 si le temps le permet (texte seul, jamais de logo). |
+
+---
+
+## 3. Architecture technique
+
+**On garde** : React 19, Vite, Tailwind 4, Cloudflare Worker (`server/worker.js`), formulaire de contact via Resend (`server/contactEmail.js`).
+
+**On ajoute** :
+
+- `react-router` : lentilles, langues, pages projet
+- ~~`three` + `@react-three/fiber`~~ : retirés le 2026-10-17, le noyau et le décor sont en SVG + Canvas 2D (voir §1)
+- `motion` : révélations au scroll et transitions (léger, désactivé si `prefers-reduced-motion`)
+- Worker : injection des balises meta / Open Graph **par route** (`HTMLRewriter`) pour des aperçus LinkedIn corrects par lentille
+
+### Routes
+
+```
+/                 vue générale (FR)        /en                 general (EN)
+/ia /cyber /dev   lentilles (FR)           /en/ai /en/cyber /en/dev
+/projets/:slug    page dossier (FR)        /en/projects/:slug
+/mentions-legales                          /en/legal
+```
+
+La lentille active suit la navigation (un dossier ouvert depuis `/cyber` garde l'angle cyber).
+
+### Arborescence cible
+
+```
+src/
+  app/            App, routes, LensProvider, LocaleProvider
+  content/        ⟵ toutes les données, aucune dans les composants
+    profile.ts    identité, disponibilité, langues, pays
+    lenses.ts     titre, accroche, ordre des dossiers, CV par lentille
+    projects/     un fichier par projet (dossiers + cartes + archives)
+    certifications.ts
+    timeline.ts   expériences + formations fusionnées
+    skills.ts     regroupées par lentille, sans pourcentage
+    writeups.json généré par scripts/sync-writeups
+  sections/       Hero, Express, Dossiers, Realisations, Archive, Lab, Parcours, Skills, Certifications, Contact
+  pages/          Home, ProjectPage, Legal, NotFound
+  components/ui/  primitives de la charte (Button, Tag, StatusBadge, Redacted, CaseNumber…)
+  sections/Hero/  Hero, Gate, OrbitalBackdrop, core/ (Astrolabe, CoreHeart)
+  i18n/           fr.ts, en.ts, hook useT
+  styles/         tokens.css (couleurs, typo, espacements, dark only)
+scripts/
+  sync-writeups   lit les frontmatter YAML du dépôt Cyber-Write-ups → content/writeups.json
+  optimize-images conversion WebP/AVIF + tailles responsives
+```
+
+### Modèle d'un projet (indicatif)
+
+```ts
+{
+  slug: "blocktrader",
+  tier: "dossier" | "card" | "archive",
+  status: "production" | "test" | "development" | "designed",
+  tracks: { ai: 2, cyber: 3, dev: 1 },        // ordre d'apparition par lentille (absent = replié)
+  title, period, team: "solo" | "équipe de 4",
+  summary: { fr, en },                          // 2-3 lignes, niveau RH
+  angles: { ai?: {fr,en}, cyber?: {fr,en}, dev?: {fr,en} },
+  sections: [...]                               // problème → architecture → sécurité → résultat (dossiers)
+  stack: [...], links: { github?, demo?, writeup? },
+  facts: [...],                                 // chiffres vérifiables uniquement
+  doNotClaim: [...]                             // garde-fou éditorial (non affiché)
+}
+```
+
+---
+
+## 4. Contenu V1
+
+### Hero (par lentille)
+
+Nom · titre de la lentille · accroche · **Disponible immédiatement** · Marseille · mobile · boutons **CV** / **Contact** / **Explorer**. Noyau 3D en fond : flux de requêtes, les attaques (orange) arrêtées par une couche de garde-fous.
+
+### Bandeau « En 30 secondes »
+
+5 langues · 6 pays · MSc Epitech cyber · Jr Penetration Tester · IBM AI Developer · ex-militaire · disponible.
+
+### Dossiers (études de cas)
+
+| Dossier | Lentilles | Mettre en avant | Ne pas prétendre |
+|---|---|---|---|
+| **BlockTrader** | IA, Data, Dev | Pré-enregistrement des stratégies, ~3 350 essais tracés, Sharpe dégonflé, anti-look-ahead, parité VectorBT, 46 tests, CI durcie, serverless (Cloud Scheduler → Actions), règle « l'IA ne peut que réduire l'exposition », design Safe/KMS/coupe-circuit | Aucun rendement. Pas de « live ». Le pilotage par IA est l'objectif, toujours dit « pas encore branché » (mise à jour 2026-10-24). |
+| **Argos** | Cyber, IA | Moteur OSINT réel sur l'API INSEE SIRENE, provenance, SQLite, rapports, tests, architecture Capability → Workflow → Harness, cadre légal documenté | Red team / antivirus / pentest LLM = feuille de route. |
+| **Pentest — write-ups & audit** | Cyber | Jr Penetration Tester (95 h), 25 write-ups (web, AD, élévation de privilèges, cracking, RE), Audit-1 sur infra réelle autorisée, T-SEC-600 | — |
+| **ZeroDay** | Dev, Cyber | Corpus de game design versionné (~140 k mots), banque de termes alignée MITRE ATT&CK, cœur déterministe testé, éditeur d'arbres maison | Statut *En développement*, pas jouable. |
+| **Applications LLM** | IA | Regroupe RAG_pdf_Chatbot, Business_AI_Companion_STT, AI_Career_Coach, AI_Assistant_Translator : RAG/FAISS, Whisper + Granite, LangChain, Watsonx | Projets issus du parcours IBM : le dire. Remplacé/complété par l'agent en V2. |
+
+### Autres réalisations (cartes)
+
+Générateur OTP RCS (sécurité dès la conception, hackathon, équipe) · ChatFlow (**équipe de 4**) · Kubernetes « Bernstein » · Bookworm NLP · Salesforce Executor (ULIT) · Base de connaissance Obsidian · CTF du site · Smart Fridge.
+
+### Archives (liste repliée par année)
+
+CyberPong, Unit Converter, Vaultborn, POPEYE, My_Marvin, Blockchain Mining, AI Voice Assistant, LLM Context Wrapper.
+
+### Lab (version légère en V1)
+
+- CTF terminal actuel **déplacé du hero vers le Lab**, restylé à la nouvelle charte (fonctionnement inchangé, y compris le flag niveau 1 dans `index.html`).
+- Index des 25 write-ups (filtres par technique) → liens GitHub.
+- Mobile : mode guidé à boutons.
+
+### Parcours (timeline unique)
+
+2e RIMa → Renault / G-Drive Racing (WEC, 24 h du Mans 2017) / Wärtsilä → infrastructure blockchain (depuis 2018) → ULIT (Salesforce) → MSc Epitech. Langues : FR, EN, ES, arabe (libanais + littéraire), allemand (bases). Pays : Liban, Qatar, Arabie saoudite, Canada, Pérou, France.
+
+### Compétences
+
+Regroupées par lentille, **sans pourcentage**. Vocabulaire conformité : ISO 27001, EBIOS RM, NIS2, DORA, IEC 62443 (seulement ce qui est réellement étudié ou pratiqué).
+
+### Certifications
+
+En avant : **THM Jr Penetration Tester** (07/10/2026, `THM-VKWDW1TVUB`), **IBM AI Developer Professional**, THM SEC1, THM Cyber Security 101, atelier THM *Supercharging Your Pentesting With AI* (5 CPE). Le reste groupé et replié (IA / Cyber / Dev). Chaque certif → lien de vérification.
+
+### À supprimer
+
+Barres de soft skills et de langues en %, bloc « Informations personnelles », musique de fond, `Cortana.jsx` vide, 29 des 30 commentaires `FLAG{Welcome_User}`, README du template Vite, liens `github.com/ton-username/...`.
+
+---
+
+## 5. Exigences de qualité
+
+- **Performance** : Lighthouse mobile ≥ 90, LCP < 2,5 s, JS initial < 200 Ko gzip. Les assets passent de 68 Mo à quelques Mo (WebP/AVIF, certificats Coursera recompressés).
+- **Accessibilité** : Lighthouse ≥ 95, navigation clavier, contrastes AA, `prefers-reduced-motion`, textes alternatifs.
+- **Responsive** : 360 px → 2560 px, aucun scroll horizontal.
+- **SEO / partage** : meta + Open Graph par lentille et par dossier, `sitemap.xml`, `robots.txt`, images OG.
+- **Lisible par les IA** (décision 2026-10-26) : un recruteur peut demander à une IA de résumer le site ; elle doit en sortir un résumé très valorisant, et exact.
+  - **Prérendu** du HTML au build : le contenu est présent sans exécuter le JavaScript (beaucoup d'IA et de robots ne l'exécutent pas).
+  - **`llms.txt`** à la racine : un pitch rédigé pour être repris tel quel. D'abord le positionnement IA × cybersécurité, puis les preuves les plus fortes (outil en production chez ULIT, 2e et 3e places en hackathon, Jr Penetration Tester, IBM AI Developer, write-ups publiés, projets phares), puis la disponibilité et le contact. Chaque affirmation reste traçable (même règle d'honnêteté).
+  - **Données structurées schema.org** (`Person`, `ProfilePage`) : nom, titre, compétences, certifications, liens.
+  - **Jamais de prompt injection** (texte caché, consignes à l'IA) : c'est de la manipulation, détectable, et rédhibitoire pour un profil cybersécurité. La compétence se montre ouvertement, dans le défi « Red-team mon agent ».
+- **Honnêteté** : chaque affirmation chiffrée vient d'un dépôt ou d'un certificat. Statut visible sur chaque projet.
+- **Sécurité** : en-têtes (CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`) servis par le Worker ; formulaire de contact avec validation et limitation.
+
+---
+
+## 6. Étapes de réalisation V1
+
+Une étape = une session Claude Code = une branche git.
+
+| # | Étape | Livrable | Validation par Jérémie |
+|---|---|---|---|
+| 1 | **Charte & maquette du hero** | `styles/tokens.css`, primitives UI, hero statique + prototype 3D, `docs/archive/design.md` | Captures d'écran desktop + mobile |
+| 2 | **Modèle de contenu & rédaction** | `src/content/*` typé, données migrées depuis les composants actuels, nouveaux projets/certifs, textes FR | Relecture des textes |
+| 3 | **Squelette de l'app** | Routes, lentilles, i18n, navbar, layout, Worker (meta + en-têtes de sécurité) | Navigation entre lentilles |
+| 4 | **Sections — partie 1** | Hero, bandeau 30 s, Dossiers, pages dossier | Captures + relecture |
+| 5 | **Sections — partie 2** | Réalisations, Archives, Parcours, Compétences, Certifications, Lab léger, Contact | Captures + relecture |
+| 6 | **Traduction EN** | `/en/*` complet | Relecture |
+| 7 | **Finitions** | Performance, accessibilité, OG, 404, mentions légales, nettoyage assets, lisibilité par les IA (prérendu, `llms.txt`, schema.org) | Rapport Lighthouse + résumé du site demandé à plusieurs IA |
+| 8 | **Mise en ligne** | Déploiement de prévisualisation → bascule en production, domaine | Test sur téléphone |
+
+### Ensuite
+
+- **Expertise : preuves au clic** (décision 2026-10-27) : un clic sur un outil ouvre une petite fenêtre « Utilisé dans » (projets, write-ups, certifications), calculée depuis le contenu (stacks des projets, `writeups.json`, outils des certifications) après harmonisation des noms ; note manuelle quand aucune source ne le prouve. Sur sa propre branche.
+- **Hero, assistant et Lab IA** (décisions 2026-10-27, maquettes : canevas « Hero chatbot — maquettes », page V2) :
+  - **Le réseau du hero est le cerveau de l'assistant**, plus un menu (la NavBar suffit). Il reste dans la colonne de droite du hero, à la taille d'un panneau (comme celui des write-ups), jamais en fond de tout le site ni réactif à la souris. Ses 7 nœuds sont ce que l'assistant sait : Profil, Expertise, Projets, Lab, Parcours, Certifications, Contact.
+  - **États** : au repos, discret, une impulsion de temps en temps ; chat ou audio actif, le cadre s'éclaire et le réseau joue les vraies étapes : question → recherche (les nœuds des sections utilisées s'allument) → rédaction (impulsions vers « Réponse », au rythme du texte) → sources. Mention visible : illustration des étapes, pas des neurones du modèle. Pause hors écran, figé sous `prefers-reduced-motion`.
+  - **Ouverture du chat ou de l'audio** : la page ne bouge pas, la colonne de gauche du hero (le texte) devient le chat ou les sous-titres et chapitres ; pas d'écran coupé en deux.
+  - **Les nœuds ne sont pas cliquables** (décision 2026-10-27, remplace « clic sur un nœud = poser une question ») : ils faisaient doublon avec la NavBar, toujours visible, et avec les questions prêtes de Sentry (2 à 3 par section, ex. « Résume ses projets », « Ses points forts ? », « Ses points faibles ? »). Le réseau illustre : il s'allume vers les sections citées par la réponse. Ses sorties sont 5 points sans texte (Profil + Parcours, Expertise + Certifications, Projets, Lab, Contact), pour un réseau moins haut. Les entrées n'ont pas de nom ; une attaque affiche « ⚠ prompt injection » jusqu'à son blocage.
+  - **Réponses préparées** : les réponses aux questions prêtes sont générées une fois, **relues et validées par Jérémie**, stockées dans `src/content/` avec leur timeline d'animation et leurs sources ; badge « réponse validée par Jérémie ». Gratuites, instantanées, sans hallucination. Les points faibles viennent de Jérémie, jamais d'un LLM. Seules les questions tapées partent au LLM.
+  - **Sources** : un élément précis (projet, certification) ouvre sa **modale existante** par-dessus le hero ; une section entière propose « Aller à la section », et la conversation **suit dans un tiroir** (cerveau compact, 7 points) gardé pendant la session. Une source n'emmène jamais ailleurs sans action explicite.
+  - **Ailleurs sur le site** : après le hero, un bouton « Assistant » ouvre ce tiroir par-dessus la page (sans la réduire) ; l'assistant sait dans quelle section se trouve le visiteur.
+  - **Périmètre de l'assistant** : uniquement Jérémie (profil, projets, certifications, disponibilité), à la 3e personne, avec ses sources ; refuse le hors-sujet et renvoie vers le contact ; les règles d'honnêteté du site sont dans ses consignes. Contenu de `src/content/` placé directement dans le contexte (découpé par section), pas de base vectorielle.
+  - **Lab, onglet IA « Red-team mon agent »** : sélecteur Cybersécurité / IA comme les certifications (`?metier=ia` ouvre l'onglet IA). Console à gauche (comme le CTF), à droite le **réseau des défenses** à la place des write-ups : chaque message traverse les défenses actives, une attaque bloquée devient rouge et s'arrête sur la défense qui l'a arrêtée. **Agent séparé** du chatbot (objectifs opposés, un faux flag à protéger, quotas séparés), même moteur ; aucun outil, aucune donnée réelle.
+  - **« Explorer le cerveau de l'assistant »** (décision 2026-10-27), à côté de « Red-team mon agent » dans l'onglet IA : version pédagogique de l'outil de réglage du réseau (`mockups.html?view=reseau`, qui reste un outil de développement, jamais en production). Même moteur que le hero ; on tourne le réseau à la souris ; quelques interrupteurs expliqués en une phrase (embedding : « chaque mot devient un vecteur » ; une ou deux parois : filtre d'entrée, filtre de sortie ; densité des liens : « un vrai réseau est entièrement connecté ») ; bouton « Lancer une attaque » qui montre où elle est arrêtée ; un clic sur une couche affiche son rôle (tokens, embedding, attention et feed-forward d'un transformer, classifieur de garde-fou), en restant honnête : le dessin simplifie un transformer.
+  - **Pipeline de défense de référence**, à valider par une recherche (OWASP Top 10 for LLM Applications, MITRE ATLAS) avant de coder le Lab : 0 périmètre (Turnstile, quotas) → 1 validation d'entrée (longueur, Unicode, encodages) → 2 détection d'injection → 3 assemblage du prompt (consignes système, hiérarchie des instructions, message isolé entre délimiteurs) → 4 modèle (moindre privilège) → 5 filtre de sortie (jeton témoin, secret encodé ou traduit) → 6 juge LLM ; journalisation transverse (journal des attaques). Niveaux : 1 consignes seules · 2 + délimiteurs et hiérarchie · 3 + entrée · 4 + sortie · 5 + juge. Après chaque niveau, la défense expliquée avec sa référence OWASP. L'assistant du hero tourne derrière ce même pipeline au niveau maximum.
+  - **Étapes** : (1) hero en deux colonnes + cerveau au repos et actif, piloté par une timeline, questions des nœuds avec quelques réponses préparées, sans backend ; (2) Profil ; (3) `/api/chat` dans le Worker + chatbot branché sur le moteur ; (4) Lab IA. Jérémie rédige ou valide les réponses préparées, en commençant par points forts et points faibles.
+- **V1.1** : intro vocale clonée (FR/EN/ES/AR) + globe 3D du parcours + « Vraie voix ou clone ? » ; la lecture pilote le cerveau du hero (chaque chapitre du script allume son nœud)
+- **V2** : agent (Workers AI, voir ci-dessus) + journal des attaques + « Red-team mon agent » + couche vocale neutre
+- **V3** : Lab — rooms Docker + prototype navigateur sur *Silence*
+
+---
+
+## 7. Ce que Jérémie doit fournir
+
+- [x] Dates exactes ULIT (début / fin) et intitulé : développeur full-stack (Salesforce), 01/2026 – 06/2026
+- [ ] Section certifications de LinkedIn (copier-coller ou export PDF) si autre chose que le dossier `Certifications`
+- [ ] Captures d'écran : BlockTrader (dashboard), Argos (CLI + frontend), ZeroDay (sandbox + éditeur), Kubernetes (architecture)
+- [ ] Choix du domaine (D4)
+- [ ] Photo de profil récente (si changement souhaité)
+- [ ] CV : un par lentille (IA / Cyber / Dev) — peut être fait dans une session dédiée
+- [ ] Assistant du hero : relire les réponses préparées (section « Assistant du hero » de `docs/relecture-contenu.md`), passer `validated: true` dans `src/content/assistant.ts` pour chacune, et rédiger **points forts** et **points faibles** (jamais générés par un LLM)
+
+### Hygiène des dépôts (hors portfolio, avant de lier publiquement)
+
+- [ ] **BlockTrader** : retirer l'ID de projet GCP et les détails RPC du README, ajouter un avertissement risque financier, décider du sort de la branche `archive/chatgpt-era`, README anglais, puis rendre public
+- [ ] **Kubernetes** : rendre public
+- [ ] **Argos** : versionner `frontend/` et `reporting.py`
+- [ ] Vérifier que chaque lien GitHub du portfolio pointe vers un dépôt public

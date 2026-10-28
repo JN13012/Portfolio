@@ -1,7 +1,7 @@
 import type { Localized } from './types'
 
 // The hero assistant (plan §6, « Hero, assistant et Lab IA », 2026-10-27).
-// The brain's nodes are what the assistant knows; clicking one asks one of its prepared questions.
+// The brain's nodes represent the sections cited by prepared answers; questions are asked in Sentry.
 // Prepared answers are drafted from src/content/ and only get the « validée » badge once Jérémie
 // has read them (`validated: true`). Strengths and weaknesses are left out until he writes them.
 
@@ -22,7 +22,7 @@ export type PreparedAnswer = {
   validated: boolean
 }
 
-export type BrainNode = {
+type BrainNode = {
   id: BrainNodeId
   label: Localized
   /** Anchor of the section on the page. */
@@ -221,6 +221,11 @@ export const assistantUi = {
   greeting: {
     fr: 'Bonjour, je suis Sentry. Découvrez le parcours, les compétences et les projets de Jérémie avec les fiches préparées ci-dessous et leurs sources. L’assistant IA conversationnel sera connecté plus tard.',
     en: 'Hello, I am Sentry. Explore Jérémie’s background, skills and projects through the prepared cards below and their sources. The conversational AI assistant will be connected later.',
+  },
+  welcomeTitle: { fr: 'Bonjour, moi c’est Sentry ! 👋', en: 'Hello, I’m Sentry! 👋' },
+  welcomeBody: {
+    fr: 'Voici mon réseau de neurones. Il s’active lorsque je réfléchis à vos questions. Il illustre ainsi la façon dont je traite l’information pendant que je vous guide à travers le portfolio de Jérémie.',
+    en: 'Here is my neural network.  It activates when I process your questions. It illustrates how I process information while guiding you through Jérémie’s portfolio.',
   },
   /** Captions under the brain's layers. */
   layers: {

@@ -59,7 +59,7 @@ type Built = Omit<NetworkGraph, 'walls'> & {
   glow: Float32Array
 }
 
-export type NetworkView = { yaw?: number; pitch?: number; distance?: number }
+type NetworkView = { yaw?: number; pitch?: number; distance?: number }
 
 type NeuralNetProps = {
   settings: NetworkSettings
@@ -129,7 +129,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
     type Pulse = { path: NetworkNode[]; seg: number; t: number; threat: boolean }
     const pulses: Pulse[] = []
 
-    rebuild.current = (st: NetworkSettings) => {
+    const disposeGraph = () => {
       const old = built.current
       if (old) {
         root.remove(old.group)
@@ -138,7 +138,11 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
           m.geometry?.dispose()
           ;(m.material as MeshBasicMaterial | undefined)?.dispose?.()
         })
+        built.current = null
       }
+    }
+    rebuild.current = (st: NetworkSettings) => {
+      disposeGraph()
       const g = buildGraph(st, outputs.length)
       const group = new Group()
 
@@ -353,8 +357,11 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
     }
 
     // Pause off-screen and in a hidden tab.
-    let visible = true
-    const io = new IntersectionObserver(([e]) => (visible = e?.isIntersecting ?? true))
+    let visible = false
+    const io = new IntersectionObserver(([e]) => {
+      visible = e?.isIntersecting ?? false
+      syncVisibility()
+    })
     io.observe(el)
 
     let last = performance.now()
@@ -364,6 +371,14 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
     let first = true
     let fullWidths: number[] = []
     let raf = 0
+    const syncVisibility = () => {
+      if (visible && !document.hidden) {
+        if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame) }
+      } else {
+        cancelAnimationFrame(raf)
+        raf = 0
+      }
+    }
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame)
       const st = settingsRef.current
@@ -566,11 +581,13 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
         onReadyRef.current?.()
       }
     }
-    raf = requestAnimationFrame(frame)
+    document.addEventListener('visibilitychange', syncVisibility)
 
     return () => {
       cancelAnimationFrame(raf)
       window.clearTimeout(alertTimer)
+      vectorTimers.forEach(window.clearTimeout)
+      document.removeEventListener('visibilitychange', syncVisibility)
       ro.disconnect()
       io.disconnect()
       el.removeEventListener('pointerdown', onDown)
@@ -579,9 +596,18 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
       window.removeEventListener('pointerdown', onHeroDown)
       setCursor('')
       el.removeEventListener('wheel', onWheel)
-      renderer.dispose()
+      disposeGraph()
+      rebuild.current = () => {}
+      if (attackRef) attackRef.current = () => {}
+      pulses.length = 0
       tex.dispose()
       pulseGeo.dispose()
+      pulseMat.dispose()
+      root.clear()
+      scene.clear()
+      renderer.renderLists.dispose()
+      renderer.dispose()
+      renderer.forceContextLoss()
       renderer.domElement.remove()
     }
   }, [outputs, attackRef])

@@ -1,140 +1,10 @@
 import { useState } from 'react'
-import {
-  siApachegroovy,
-  siApacheparquet,
-  siCaddy,
-  siClaude,
-  siCss,
-  siDrizzle,
-  siElectron,
-  siEthereum,
-  siExpress,
-  siGeopandas,
-  siGit,
-  siGithubactions,
-  siGooglecloud,
-  siGradio,
-  siGradle,
-  siHtml5,
-  siHuggingface,
-  siJest,
-  siJupyter,
-  siKalilinux,
-  siKubernetes,
-  siLeaflet,
-  siMarkdown,
-  siMeta,
-  siModelcontextprotocol,
-  siMongodb,
-  siMysql,
-  siNestjs,
-  siNextdotjs,
-  siNodedotjs,
-  siNumba,
-  siObsidian,
-  siOpenai,
-  siOpenstreetmap,
-  siOwasp,
-  siPostgresql,
-  siPrisma,
-  siPytest,
-  siRedis,
-  siSalesforce,
-  siScikitlearn,
-  siScipy,
-  siSocketdotio,
-  siSpacy,
-  siSqlite,
-  siSwagger,
-  siTailwindcss,
-  siTorproject,
-  siTraefikproxy,
-  siTypescript,
-  siUml,
-  siUnity,
-  siVite,
-  siVitest,
-  type SimpleIcon,
-} from 'simple-icons'
-import SectionHeader from '../../components/SectionHeader'
-import { TOOL_ICONS } from './toolIcons'
+import SectionHeader from '../../components/ui/SectionHeader'
+import { ToolLogo } from '../../components/ui/ToolLogo/ToolLogo'
+import { normalizeToolName } from '../../components/ui/ToolLogo/logoRegistry'
 import { orderedDomains, type ExpertiseDomain } from '../../content/expertise'
 import { tracksFromSearch } from '../../lib/projects'
-import { emblem } from './emblems'
 import { cx } from '../../lib/cx'
-
-const key = (name: string) => name.toLowerCase().replace(/[^a-z0-9]/g, '')
-
-// Logos: the colour icons first, then Simple Icons (CC0), then drawn emblems, else a monogram.
-const PNG: Record<string, string> = Object.fromEntries(Object.entries(TOOL_ICONS).map(([k, v]) => [key(k), v]))
-const SVG: Record<string, SimpleIcon> = {
-  huggingfacetransformers: siHuggingface,
-  gradio: siGradio,
-  spacy: siSpacy,
-  kubernetes: siKubernetes,
-  githubactions: siGithubactions,
-  vitest: siVitest,
-  jest: siJest,
-  pytest: siPytest,
-  typescript: siTypescript,
-  apex: siSalesforce,
-  nextjs: siNextdotjs,
-  nestjs: siNestjs,
-  express: siExpress,
-  prisma: siPrisma,
-  postgresql: siPostgresql,
-  mongodb: siMongodb,
-  redis: siRedis,
-  scipy: siScipy,
-  geopandas: siGeopandas,
-  scikitlearn: siScikitlearn,
-  numba: siNumba,
-  parquet: siApacheparquet,
-  osmnx: siOpenstreetmap,
-  owasptop10: siOwasp,
-  owaspllmtop10: siOwasp,
-  kalilinux: siKalilinux,
-  claude: siClaude,
-  mcp: siModelcontextprotocol,
-  huggingface: siHuggingface,
-  jupyter: siJupyter,
-  html: siHtml5,
-  css: siCss,
-  git: siGit,
-  openai: siOpenai,
-  uml: siUml,
-  llama: siMeta,
-  whisper: siOpenai,
-  // Project stacks (Projets modal).
-  llama3: siMeta,
-  transformers: siHuggingface,
-  caddy: siCaddy,
-  drizzle: siDrizzle,
-  electron: siElectron,
-  googlecloudscheduler: siGooglecloud,
-  gradle: siGradle,
-  groovy: siApachegroovy,
-  leaflet: siLeaflet,
-  markdown: siMarkdown,
-  mysql: siMysql,
-  nodejs: siNodedotjs,
-  obsidian: siObsidian,
-  socketio: siSocketdotio,
-  sqlite: siSqlite,
-  swagger: siSwagger,
-  tailwindcss: siTailwindcss,
-  tor: siTorproject,
-  traefik: siTraefikproxy,
-  unity63: siUnity,
-  vite: siVite,
-  // web3.py talks to Ethereum, which is what its chip stands for.
-  web3py: siEthereum,
-  lightningwebcomponents: siSalesforce,
-  toolingapi: siSalesforce,
-}
-
-/** Brand colours too dim on the dark page: Kali's slate mark takes its brighter brand blue. */
-const HEX: Record<string, string> = { kalilinux: '#4c8dff' }
 
 /** Logos drawn small inside their image (wide wordmarks, padding) are scaled up to match the others. */
 const ICON_SCALE: Record<string, number> = {
@@ -161,40 +31,6 @@ const HUE: Record<ExpertiseDomain['id'], { accent: string; text: string }> = {
   defensive: { accent: '#2563eb', text: '#60a5fa' },
   devops: { accent: '#f97316', text: '#fb923c' },
   dev: { accent: '#22c55e', text: '#4ade80' },
-}
-
-/** Brand colours too dark for a dark card are drawn light instead. */
-const readable = (hex: string) => {
-  const n = parseInt(hex, 16)
-  const l = (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255
-  return l < 0.32 ? '#e4e4e7' : `#${hex}`
-}
-
-/** `onlyReal`: nothing when the tool has no real logo (no drawn emblem, no monogram). */
-export function Logo({ name, size, className, tone = '#a1a1aa', onlyReal }: { name: string; size: number; className?: string; tone?: string; onlyReal?: boolean }) {
-  const k = key(name)
-  if (PNG[k]) return <img src={PNG[k]} alt="" loading="lazy" decoding="async" draggable={false} className={cx('object-contain', className)} style={{ width: size, height: size }} />
-  const icon = SVG[k]
-  if (icon)
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={{ width: size * 0.82, height: size * 0.82 }}>
-        <path d={icon.path} fill={HEX[k] ?? readable(icon.hex)} />
-      </svg>
-    )
-  if (onlyReal) return null
-  const drawn = emblem(name, size, tone, className)
-  if (drawn) return drawn
-  const letters = name.replace(/[^A-Za-z0-9 ]/g, '').split(' ').filter(Boolean)
-  const mono = (letters.length > 1 ? letters[0]![0]! + letters[1]![0]! : name.slice(0, 2)).toUpperCase()
-  return (
-    <span
-      aria-hidden="true"
-      className={cx('grid place-items-center rounded-2xl border font-semibold tracking-wide', className)}
-      style={{ width: size * 0.74, height: size * 0.74, fontSize: size * 0.26, color: tone, borderColor: `${tone}55`, background: `linear-gradient(160deg, ${tone}22, ${tone}08)` }}
-    >
-      {mono}
-    </span>
-  )
 }
 
 /**
@@ -277,7 +113,7 @@ function ToolGrid({ domain }: { domain: ExpertiseDomain }) {
           style={{ ['--accent' as string]: `${accent}80` }}
         >
           <span className="grid h-[76px] place-items-center">
-            <Logo name={t.name} size={Math.round(76 * (ICON_SCALE[key(t.name)] ?? 1))} tone={accent} />
+            <ToolLogo name={t.name} size={Math.round(76 * (ICON_SCALE[normalizeToolName(t.name)] ?? 1))} tone={accent} />
           </span>
           <span className="text-sm font-semibold text-zinc-100">{t.name}</span>
           {/* What Jérémie did with it. */}

@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber: #4ade80;
+  --color-cyber-dark: #166534;
+  --color-cyber-light: #86efac;
+  --color-background: #000000;
+
+  /* Inter everywhere; Fira Code (the Kali Linux terminal font) only for the CTF console. */
+  --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-mono: "Fira Code Variable", "Fira Code", "ui-monospace", monospace;
+
+  /* Tokens used by the hero core (green palette). */
+  --color-ai: #4ade80;
+  --color-threat: #f43f5e;
+  --color-ink: #f4f4f5;
+  --color-ink-muted: #a1a1aa;
+  --color-canvas: #000000;
+  --color-line-strong: rgb(255 255 255 / 0.18);
+  --shadow-focus: 0 0 0 2px #000, 0 0 0 4px #4ade80;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --duration-base: 220ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration-base: 0ms; }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: #080808;
+  color: #e8e4df;
+  font-family: var(--font-sans);
+}
+
+/* Terminal cursor. */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* CTF intro: a screen that jumps now and then (still most of the time). */
+@keyframes crt-glitch {
+  0%,
+  89%,
+  100% {
+    transform: none;
+    opacity: 1;
+    text-shadow: none;
+  }
+  90% {
+    transform: translate(-2px, 1px) skewX(-4deg);
+    opacity: 0.75;
+    text-shadow: 2px 0 rgba(244, 63, 94, 0.7), -2px 0 rgba(56, 189, 248, 0.7);
+    filter: hue-rotate(35deg) brightness(1.25);
+  }
+  91% {
+    transform: translate(2px, -1px);
+    opacity: 1;
+  }
+  92% {
+    transform: translate(0, 2px) skewX(3deg);
+    opacity: 0.6;
+    text-shadow: -2px 0 rgba(244, 63, 94, 0.6), 2px 0 rgba(56, 189, 248, 0.6);
+  }
+  93% {
+    transform: none;
+    opacity: 1;
+    text-shadow: none;
+    filter: none;
+  }
+  96% {
+    opacity: 0.85;
+  }
+  97% {
+    opacity: 1;
+  }
+}
+
+/* CTF start button: blinks to invite the click, softer at its brightest and nearly off at its dimmest. */
+@keyframes start-blink {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* CTF intro: a brighter refresh band sweeps the screen. */
+@keyframes scan-sweep {
+  0% {
+    transform: translateY(-30%);
+  }
+  100% {
+    transform: translateY(130%);
+  }
+}
+
+/* CTF start key: a light crosses it from left to right. */
+@keyframes key-sweep {
+  0% {
+    transform: translateX(-150%) skewX(-12deg);
+  }
+  60%,
+  100% {
+    transform: translateX(400%) skewX(-12deg);
+  }
+}
+
+/* CTF intro: the screen switches off like an old CRT before the console opens. */
+@keyframes crt-off {
+  0% {
+    transform: scale(1, 1);
+    filter: brightness(1);
+    opacity: 1;
+  }
+  55% {
+    transform: scale(1, 0.012);
+    filter: brightness(2.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0, 0.012);
+    filter: brightness(3);
+    opacity: 0;
+  }
+}

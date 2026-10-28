@@ -4,7 +4,7 @@
 // Argos is rated on its designed scope (Jérémie's choice); its page states what exists today.
 // `why` is editorial (never displayed): it keeps every note traceable.
 
-export type Complexity = 1 | 2 | 3 | 4 | 5
+type Complexity = 1 | 2 | 3 | 4 | 5
 
 export const complexity: Record<string, { note: Complexity; why: string }> = {
   blocktrader: { note: 5, why: 'Backtest engine, anti-overfitting protocols, real market data, market observatory; 56 tests, hardened CI' },

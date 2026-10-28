@@ -1,11 +1,11 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import SectionHeader from '../../components/SectionHeader'
+import SectionHeader from '../../components/ui/SectionHeader'
 import writeupsIndex from '../../content/writeups.json'
 import { CtfIntro } from './CtfIntro'
 import { cx } from '../../lib/cx'
 
 // The CTF console (3,000+ lines) is fetched only when the Lab comes near the viewport.
-const ProfileConsole = lazy(() => import('../../components/ProfileConsole/ProfileConsole'))
+const CtfConsole = lazy(() => import('./ctf/CtfConsole'))
 
 const TOPICS = {
   web: { label: 'Web', title: 'Web', rule: /web/i },
@@ -70,7 +70,7 @@ export function Lab() {
             {started ? (
               showConsole && (
                 <Suspense fallback={null}>
-                  <ProfileConsole />
+                  <CtfConsole />
                 </Suspense>
               )
             ) : (
