@@ -2,6 +2,8 @@
 // CTF, later the prompt-injection agent) and the core that reacts.
 
 type CoreEvents = {
+  /** A red pulse reached a guard in the Hero's pedagogical demo; never a real security verdict. */
+  guardBlockedDemo: { layer: number }
   /** Something hit the guardrail shell. `angle` in radians, screen space (0 = right, clockwise). */
   attack: { angle: number }
   /** A CTF level was solved. */

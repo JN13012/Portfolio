@@ -214,6 +214,11 @@ export const assistantUi = {
   role: { fr: 'Assistant IA de Jérémie', en: 'Jérémie’s AI assistant' },
   online: { fr: 'En ligne', en: 'Online' },
   offline: { fr: 'Fiches du portfolio · IA à venir', en: 'Portfolio cards · AI coming soon' },
+  designing: { fr: 'En cours de conception', en: 'Under development' },
+  underConstruction: {
+    fr: 'Je suis en cours de conception, merci de revenir plus tard.',
+    en: 'I am still under development. Please come back later.',
+  },
   open: { fr: 'Ouvrir la conversation avec Sentry', en: 'Open the chat with Sentry' },
   close: { fr: 'Réduire la conversation', en: 'Minimise the chat' },
   title: { fr: 'Sentry', en: 'Sentry' },

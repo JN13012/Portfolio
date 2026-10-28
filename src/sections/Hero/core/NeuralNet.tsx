@@ -26,6 +26,7 @@ import {
   WebGLRenderer,
 } from 'three'
 import { readToken } from '../../../lib/color'
+import { emitCore } from '../../../lib/coreBus'
 import { cx } from '../../../lib/cx'
 import { buildGraph, NETWORK_STRUCTURE, type NetworkGraph, type NetworkNode, type NetworkSettings } from './network'
 import type { NeuralNavNode } from './navNodes'
@@ -462,6 +463,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
             const wall = b.walls.find((w) => w.layer === reached.layer)
             if (wall) {
               wall.hit = now
+              emitCore('guardBlockedDemo', { layer: wall.layer })
               // Its name shows under the wall that stopped it (the layer is kept to place the label).
               alertWall = wall.layer
               setAlert(wall.layer)
