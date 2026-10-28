@@ -8,7 +8,7 @@ export const cards: Project[] = [
     slug: 'generateur-otp-rcs',
     tier: 'card',
     status: 'delivered',
-    award: { fr: '3e place', en: '3rd place' },
+    award: { fr: '4e place', en: '4th place' },
     tracks: ['cyber', 'dev'],
     title: 'Générateur OTP RCS',
     period: { start: '2026-06', end: '2026-06' },
@@ -21,8 +21,8 @@ export const cards: Project[] = [
       en: 'A 2FA back end: 6-digit codes sent over RCS, hashed and rate-limited.',
     },
     summary: {
-      fr: '3e place au hackathon inter-écoles pour la conception, en 4 jours, d’un service d’authentification à deux facteurs qui envoie les codes par RCS.',
-      en: '3rd place at an inter-school hackathon for designing, in 4 days, a two-factor authentication service sending codes over RCS.',
+      fr: '4e place au hackathon inter-écoles pour la conception, en 4 jours, d’un service d’authentification à deux facteurs qui envoie les codes par RCS.',
+      en: '4th place at an inter-school hackathon for designing, in 4 days, a two-factor authentication service sending codes over RCS.',
     },
     sections: [
       {
@@ -56,7 +56,7 @@ export const cards: Project[] = [
     stack: ['NestJS', 'TypeScript', 'MongoDB', 'Docker Compose', 'Swagger'],
     links: { github: 'https://github.com/JN13012/Generateur_Code_OTP' },
     facts: [
-      { value: '3e', label: { fr: 'place', en: 'place' }, source: 'Jérémie, 2026-10-24 (proof on request)' },
+      { value: '4e', label: { fr: 'place', en: 'place' }, source: 'Jérémie, 2026-10-28 (ranking correction)' },
       { value: '4 jours', label: { fr: 'de hackathon', en: 'hackathon days' }, source: 'git log: 2026-06-03 → 2026-06-06' },
     ],
     scale: { months: 1 },

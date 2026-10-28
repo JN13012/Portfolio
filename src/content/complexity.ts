@@ -18,7 +18,7 @@ export const complexity: Record<string, { note: Complexity; why: string }> = {
   chatflow: { note: 4, why: 'Real-time web and desktop messaging (Socket.IO, Electron); 110 tests' },
   'ctf-du-site': { note: 3, why: '9 levels in a simulated terminal, played by real visitors; easier than the audit (Jérémie, 2026-10-26)' },
   'rag-pdf-chatbot': { note: 3, why: 'Full RAG pipeline (FAISS, LangChain, Llama 3, Docker); guided IBM project' },
-  'generateur-otp-rcs': { note: 4, why: '1 + 1 (2FA backend: hashing, rate limiting) + 1 (real sending API, 4-day deadline) + 1 (Swagger, Docker, 3rd place); reviewed 2026-10-25' },
+  'generateur-otp-rcs': { note: 4, why: '1 + 1 (2FA backend: hashing, rate limiting) + 1 (real sending API, 4-day deadline) + 1 (Swagger, Docker, 4th place); reviewed 2026-10-25, ranking corrected 2026-10-28' },
   'time-manager': { note: 4, why: 'Typed API and React front end, 68 tests; same level as ChatFlow (validated by Jérémie, 2026-10-24)' },
   kubernetes: { note: 3, why: 'Multi-node cluster: ingress, secrets, volumes, RBAC, monitoring' },
   vaultborn: { note: 3, why: 'Complete 2D action RPG: 7 classes, worlds, saving, design patterns' },
