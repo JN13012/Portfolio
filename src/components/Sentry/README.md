@@ -23,6 +23,22 @@ yeux souriants. Le cycle CSS de 22 s contient trois clignements, espacés de 7 �
 Les ramifications et la connexion s’effacent pendant le sourire de réponse.
 Le bouclier garde son rouge pendant toute la réaction, y compris sans animation.
 
+Au survol avec une souris, le regard au repos suit le pointeur sur 2 px au plus
+en X et 1,3 px en Y (moins sur les petits avatars). Une transition de 240 ms
+amortit le mouvement et le retour au centre. La coque et l’antenne restent fixes.
+Le suivi s’efface dès qu’une expression active prend la priorité, qu’on quitte
+la mascotte, qu’elle est masquée ou que la préférence de mouvement change.
+Il est désactivé avec un pointeur tactile et sous réduction des mouvements.
+Le pointeur planifie au plus une frame par déplacement, sans boucle permanente
+ni mise à jour de l’état React ; la frame éventuelle est annulée au nettoyage.
+
+Des signaux lumineux parcourent quelques ramifications toutes les 9,6 s,
+avec un décalage de 4,2 s entre les yeux. Une impulsion remonte la tige de
+l’antenne toutes les 10,6 s, puis éclaire ses trois sphères en décalé. Au survol,
+leur luminosité augmente légèrement. La recherche utilise un cycle de 1,8 s ;
+le blocage rend la tige et les sphères rouges. Ces effets SVG suivent les mêmes
+règles de pause que le clignement et restent fixes sous réduction des mouvements.
+
 `animated={false}` garde les avatars des messages fixes, sans observateur.
 Seul le lanceur ou l’avatar d’en-tête est animé. `paused` suspend le lanceur
 pendant l’introduction ou l’ouverture du chat. Un IntersectionObserver et
