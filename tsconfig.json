@@ -19,5 +19,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": ["src", "scripts"]
+  "include": ["src", "dev", "scripts", "server"]
 }

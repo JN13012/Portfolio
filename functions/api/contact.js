@@ -1,4 +1,4 @@
-import { handleContactRequest, jsonResponse } from "../../src/contactEmail.js";
+import { handleContactRequest, jsonResponse } from "../../server/contactEmail.js";
 
 export const onRequestPost = async ({ request, env }) => {
   return handleContactRequest(request, env);

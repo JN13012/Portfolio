@@ -1,7 +1,7 @@
-import { ArrowUpRight, Bot, Briefcase, GraduationCap, Dumbbell, Github, Globe2, Landmark, Linkedin, MapPin, Plane, RotateCcw, type LucideIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { ArrowUpRight, Bot, Briefcase, GraduationCap, Dumbbell, Github, Globe2, Landmark, Linkedin, MapPin, Plane, RotateCcw, X, type LucideIcon } from 'lucide-react'
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { siCoursera, siSalesforce, siTryhackme, type SimpleIcon } from 'simple-icons'
-import SectionHeader from '../../components/SectionHeader'
+import SectionHeader from '../../components/ui/SectionHeader'
 import { brainNodes } from '../../content/assistant'
 import { profile } from '../../content/profile'
 import { projects } from '../../content/projects'
@@ -9,6 +9,12 @@ import type { Localized } from '../../content/types'
 import { assistant } from '../../lib/assistantStore'
 import { emitCore } from '../../lib/coreBus'
 import Portrait from '../../assets/portrait-holographique-bleu.webp'
+import fr from 'flag-icons/flags/4x3/fr.svg'
+import lb from 'flag-icons/flags/4x3/lb.svg'
+import sa from 'flag-icons/flags/4x3/sa.svg'
+import qa from 'flag-icons/flags/4x3/qa.svg'
+import ca from 'flag-icons/flags/4x3/ca.svg'
+import pe from 'flag-icons/flags/4x3/pe.svg'
 
 /** Simple Icons mark (CC0), in the current text colour. */
 const Mark = ({ icon }: { icon: SimpleIcon }) => (
@@ -17,13 +23,15 @@ const Mark = ({ icon }: { icon: SimpleIcon }) => (
   </svg>
 )
 
-// Same buttons as Contact; Trailblazer is Salesforce's profile.
+// Use GitHub's inverse white mark on the dark background.
+// TryHackMe red is sampled from https://tryhackme.com/favicon-96x96.png.
+// Trailblazer is Salesforce's profile.
 const SOCIALS = [
-  { label: 'GitHub', url: profile.links.github, icon: <Github size={18} aria-hidden="true" /> },
-  { label: 'LinkedIn', url: profile.links.linkedin, icon: <Linkedin size={18} aria-hidden="true" /> },
-  { label: 'TryHackMe', url: profile.links.tryhackme, icon: <Mark icon={siTryhackme} /> },
-  { label: 'Coursera', url: profile.links.coursera, icon: <Mark icon={siCoursera} /> },
-  { label: 'Salesforce Trailblazer', url: profile.links.trailblazer, icon: <Mark icon={siSalesforce} /> },
+  { label: 'GitHub', url: profile.links.github, color: '#ffffff', icon: <Github size={18} aria-hidden="true" /> },
+  { label: 'LinkedIn', url: profile.links.linkedin, color: '#0a66c2', icon: <Linkedin size={18} aria-hidden="true" /> },
+  { label: 'TryHackMe', url: profile.links.tryhackme, color: '#c11111', icon: <Mark icon={siTryhackme} /> },
+  { label: 'Coursera', url: profile.links.coursera, color: `#${siCoursera.hex}`, icon: <Mark icon={siCoursera} /> },
+  { label: 'Salesforce Trailblazer', url: profile.links.trailblazer, color: `#${siSalesforce.hex}`, icon: <Mark icon={siSalesforce} /> },
 ]
 
 const profileNode = brainNodes.find((n) => n.id === 'profile')!
@@ -31,6 +39,7 @@ const SENTRY_QUESTIONS = profile.sentryQuestions.flatMap((id) => profileNode.que
 
 const COUNTRY_NAMES: Record<string, Localized> = profile.international.countryNames
 const STAYS: Record<string, Localized> = profile.international.stays
+const FLAGS: Record<string, string> = { FR: fr, LB: lb, SA: sa, QA: qa, CA: ca, PE: pe }
 
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 
@@ -44,8 +53,10 @@ const PLACES: Record<string, { lat: number; lon: number; dx: number; dy: number;
   QA: { lat: 25.3, lon: 51.2, dx: 7, dy: 4, anchor: 'start' },
 }
 
-// Equirectangular crop, from the Americas to the Gulf.
-const W0 = -135, W1 = 70, N0 = 72, S0 = -40, K = 3
+// Rotate the longitude view eastward while preserving its 205° span and scale.
+// France stays at 63.5% of the width; newly exposed land is drawn on the right.
+const LONGITUDE_SPAN = 205
+const W0 = PLACES.FR!.lon - LONGITUDE_SPAN * 0.635, W1 = W0 + LONGITUDE_SPAN, N0 = 72, S0 = -40, K = 3
 const px = (lon: number) => (lon - W0) * K
 const py = (lat: number) => (N0 - lat) * K
 
@@ -116,9 +127,10 @@ function WorldRoute() {
       {hover && tip && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+12px)] rounded-md border border-white/10 bg-zinc-900 px-2 py-1 text-xs whitespace-nowrap text-zinc-100 shadow-lg"
+          className="pointer-events-none absolute z-10 inline-flex -translate-x-1/2 -translate-y-[calc(100%+12px)] items-center gap-1.5 rounded-md border border-white/10 bg-zinc-900 px-2 py-1 text-xs whitespace-nowrap text-zinc-300 shadow-lg"
           style={{ left: `${(px(tip.lon) / MAP_W) * 100}%`, top: `${(py(tip.lat) / MAP_H) * 100}%` }}
         >
+          <img src={FLAGS[hover]} alt="" className="h-3 w-4 shrink-0 rounded-[1px]" />
           {COUNTRY_NAMES[hover]?.fr} · {STAYS[hover]?.fr}
         </span>
       )}
@@ -142,43 +154,142 @@ const WORK_ICONS: Record<string, LucideIcon> = { master: GraduationCap, work: Br
 
 const INTEREST_ICONS: Record<string, LucideIcon> = { finance: Landmark, geopolitics: Globe2, travel: Plane, sport: Dumbbell }
 
-/** Interests: one row of big icons split by thin lines; hovering, focusing or tapping one shows its line underneath (one caption for all). */
+/** Interests: a compact horizontal panel above and right of the pointer, with an icon anchor for keyboard/touch. */
 function Interests() {
   const [active, setActive] = useState<string | null>(null)
+  const box = useRef<HTMLDivElement>(null)
+  const opener = useRef<HTMLButtonElement | null>(null)
+  const panelId = useId()
+  const panel = useRef<HTMLDivElement>(null)
+  const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null)
+  const [placement, setPlacement] = useState({ left: 0, top: 0 })
   const current = profile.interests.find((i) => i.id === active)
   const project = current?.project ? projects.find((p) => p.slug === current.project) : undefined
+
+  useLayoutEffect(() => {
+    if (!active) return
+    const place = () => {
+      if (!box.current || !panel.current || !opener.current) return
+      const row = box.current.getBoundingClientRect()
+      const button = opener.current.getBoundingClientRect()
+      const width = panel.current.offsetWidth
+      const height = panel.current.offsetHeight
+      const x = pointer ? pointer.x + 16 : button.left + button.width / 2 - width / 2
+      const y = pointer?.y ?? button.top
+      const left = Math.max(16, Math.min(x, window.innerWidth - width - 16))
+      // Above the pointer by default; flip below if the navigation leaves too little room.
+      const top = y - height < 80 ? (pointer?.y ?? button.bottom) + 12 : y - height
+      setPlacement({ left: left - row.left, top: Math.max(80, Math.min(top, window.innerHeight - height - 16)) - row.top })
+    }
+    place()
+    window.addEventListener('resize', place)
+    window.addEventListener('scroll', place, true)
+    return () => {
+      window.removeEventListener('resize', place)
+      window.removeEventListener('scroll', place, true)
+    }
+  }, [active, pointer])
+
+  useEffect(() => {
+    if (!active) return
+    const outside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !box.current?.contains(event.target)) setActive(null)
+    }
+    // A hover-opened panel may have no focus inside it: Escape must also work from the page.
+    const escape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      event.preventDefault()
+      opener.current?.focus({ preventScroll: true })
+      setActive(null)
+    }
+    window.addEventListener('pointerdown', outside)
+    window.addEventListener('keydown', escape)
+    return () => {
+      window.removeEventListener('pointerdown', outside)
+      window.removeEventListener('keydown', escape)
+    }
+  }, [active])
+
+  const close = () => {
+    opener.current?.focus({ preventScroll: true })
+    setActive(null)
+  }
+
   return (
-    <div onMouseLeave={() => setActive(null)}>
-      <h3 className="mb-4 text-sm text-zinc-400">{profile.ui.interests!.fr}</h3>
-      <ul className="grid grid-cols-4 divide-x divide-white/10">
-        {profile.interests.map((i) => {
-          const Icon = INTEREST_ICONS[i.id] ?? Globe2
-          const on = i.id === active
-          return (
-            <li key={i.id}>
-              <button
-                type="button"
-                aria-pressed={on}
-                onMouseEnter={() => setActive(i.id)}
-                onFocus={() => setActive(i.id)}
-                onClick={() => setActive(on ? null : i.id)}
-                className={`flex w-full cursor-pointer flex-col items-center gap-2.5 py-2 transition-colors ${on ? 'text-cyber' : 'text-zinc-500 hover:text-cyber'}`}
-              >
-                <Icon size={30} strokeWidth={1.25} aria-hidden="true" />
-                <span className={`text-[11px] tracking-widest uppercase sm:text-xs ${on ? 'text-cyber' : 'text-zinc-300'}`}>{i.label.fr}</span>
+    <div>
+      <h3 className="mb-4 text-base font-normal text-zinc-400 italic">{profile.ui.interests!.fr}</h3>
+      <div
+        ref={box}
+        className="relative"
+        onMouseLeave={() => {
+          if (!box.current?.contains(document.activeElement)) setActive(null)
+        }}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) setActive(null)
+        }}
+      >
+        <ul className="grid grid-cols-4 divide-x divide-white/10">
+          {profile.interests.map((i) => {
+            const Icon = INTEREST_ICONS[i.id] ?? Globe2
+            const on = i.id === active
+            return (
+              <li key={i.id}>
+                <button
+                  type="button"
+                  aria-haspopup="dialog"
+                  aria-expanded={on}
+                  aria-controls={on ? panelId : undefined}
+                  onPointerEnter={(event) => {
+                    if (event.pointerType !== 'mouse') return
+                    opener.current = event.currentTarget
+                    if (active !== i.id) setPointer({ x: event.clientX, y: event.clientY })
+                    setActive(i.id)
+                  }}
+                  onFocus={(event) => {
+                    opener.current = event.currentTarget
+                    if (event.currentTarget.matches(':focus-visible')) setPointer(null)
+                    setActive(i.id)
+                  }}
+                  onClick={(event) => {
+                    opener.current = event.currentTarget
+                    if (active !== i.id) setPointer(event.detail > 0 && window.matchMedia('(hover: hover)').matches ? { x: event.clientX, y: event.clientY } : null)
+                    setActive(i.id)
+                  }}
+                  className={`flex w-full cursor-pointer flex-col items-center gap-2.5 rounded-sm py-2 transition-colors focus-visible:outline-none focus-visible:shadow-focus ${on ? 'text-cyber' : 'text-zinc-500 hover:text-cyber'}`}
+                >
+                  <Icon size={30} strokeWidth={1.25} aria-hidden="true" />
+                  <span className={`text-[11px] tracking-widest uppercase sm:text-xs ${on ? 'text-cyber' : 'text-zinc-200'}`}>{i.label.fr}</span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+        {current && (
+          // The padding bridges the gap, so the pointer can reach the panel and its project link.
+          <div
+            ref={panel}
+            className="absolute z-30 w-max max-w-[min(52rem,calc(100vw-2rem))] pb-3"
+            style={{ left: placement.left, top: placement.top }}
+          >
+            <div
+              id={panelId}
+              role="dialog"
+              aria-label={current.label.fr}
+              className="flex items-center gap-3 rounded-sm border border-cyber/30 bg-zinc-950/95 px-4 py-3 text-sm leading-snug text-zinc-300 shadow-[0_18px_48px_rgba(0,0,0,0.6)] backdrop-blur-md"
+            >
+              <p className="min-w-0">{current.text.fr}</p>
+              {project && (
+                <button type="button" className={`${pill} shrink-0`} onClick={() => { setActive(null); emitCore('openProject', { slug: project.slug }) }}>
+                  {project.title} <ArrowUpRight size={12} aria-hidden="true" />
+                </button>
+              )}
+              <button type="button" aria-label={profile.ui.closeInterest.fr} onClick={close} className="-mr-1 grid size-7 shrink-0 cursor-pointer place-items-center rounded-sm text-zinc-400 hover:text-zinc-100 focus-visible:outline-none focus-visible:shadow-focus">
+                <X size={15} aria-hidden="true" />
               </button>
-            </li>
-          )
-        })}
-      </ul>
-      <p aria-live="polite" className="mt-4 min-h-6 text-sm leading-relaxed text-zinc-300">
-        {current?.text?.fr}
-        {project && (
-          <button type="button" className={`${pill} ml-2 align-middle`} onClick={() => emitCore('openProject', { slug: project.slug })}>
-            {project.title} <ArrowUpRight size={12} aria-hidden="true" />
-          </button>
+            </div>
+          </div>
         )}
-      </p>
+      </div>
     </div>
   )
 }
@@ -186,7 +297,7 @@ function Interests() {
 /** S-shaped jog between the two rail levels (0 and 24px), like a docs « On this page » outline. */
 function Jog({ down, className }: { down: boolean; className: string }) {
   return (
-    <svg aria-hidden="true" width="25" height="18" viewBox="0 0 25 18" className={`block transition-colors ${className}`}>
+    <svg aria-hidden="true" width="25" height={down ? 18 : 8} viewBox="0 0 25 18" preserveAspectRatio="none" className={`block transition-colors ${className}`}>
       <path d={down ? 'M0.5 0 C0.5 9 24.5 9 24.5 18' : 'M24.5 0 C24.5 9 0.5 9 0.5 18'} fill="none" stroke="currentColor" />
     </svg>
   )
@@ -211,14 +322,14 @@ function StrengthsTimeline() {
             <div>
               {i > 0 && <Jog down className={idle} />}
               <div className={`ml-6 border-l pl-4 transition-colors ${line}`}>
-                <p className="text-[15px] font-semibold text-zinc-50 transition-colors group-hover:text-cyber">
-                  {s.title.fr} <span className="ml-1 text-xs font-normal text-zinc-500">{s.context.fr}</span>
+                <p className="text-[15px] font-semibold text-zinc-200 transition-colors group-hover:text-cyber">
+                  {s.title.fr} <span className="ml-1 text-xs font-normal text-zinc-400">{s.context.fr}</span>
                 </p>
               </div>
               <Jog down={false} className={idle} />
               {/* More room under the text than above it, so each step reads as one block. */}
-              <div className={`border-l pt-0.5 pl-4 transition-colors ${line} ${i < profile.strengths.length - 1 ? 'pb-6' : 'pb-1'}`}>
-                <p className="text-[15px] leading-relaxed text-zinc-300">{s.text.fr}</p>
+              <div className={`border-l pl-4 transition-colors ${line} ${i < profile.strengths.length - 1 ? 'pb-6' : 'pb-1'}`}>
+                <p className="text-[15px] leading-[1.6] text-zinc-300">{s.text.fr}</p>
               </div>
             </div>
           </li>
@@ -244,11 +355,11 @@ export function Profile() {
       <SectionHeader index="01" title="Profil" />
       <div className="grid gap-12 lg:grid-cols-[15rem_1fr] xl:grid-cols-[15rem_1fr_minmax(0,26rem)]">
         <div className="space-y-5">
-          <div className="relative mx-auto max-w-60">
-            <div className="absolute -inset-2 border border-cyber/30" />
-            <div className="absolute -top-2 -left-2 size-5 border-t-2 border-l-2 border-cyber" />
-            <div className="absolute -right-2 -bottom-2 size-5 border-r-2 border-b-2 border-cyber" />
-            <img loading="lazy" decoding="async" src={Portrait} width={800} height={1087} alt={`${profile.firstName} ${profile.lastName}`} className="relative w-full" />
+          <div className="group/portrait relative mx-auto max-w-60 overflow-hidden">
+            <img loading="lazy" decoding="async" src={Portrait} width={800} height={1087} alt={`${profile.firstName} ${profile.lastName}`} className="block w-full translate-y-[3%] origin-bottom motion-safe:scale-105 motion-safe:transition-transform motion-safe:duration-600 motion-safe:ease-out motion-safe:group-hover/portrait:scale-100" />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 border border-cyber/30 motion-safe:transition-colors motion-safe:duration-600 group-hover/portrait:border-cyber/50" />
+            <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 size-5 border-t-2 border-l-2 border-cyber" />
+            <div aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 size-5 border-r-2 border-b-2 border-cyber" />
           </div>
           <ul className="flex justify-center gap-2">
             {SOCIALS.map((s) => (
@@ -258,14 +369,15 @@ export function Profile() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.label}
-                  className="grid size-10 place-items-center rounded-md border border-white/10 bg-zinc-950/60 text-zinc-300 transition-colors hover:border-cyber/50 hover:text-cyber"
+                  style={{ '--social-color': s.color } as CSSProperties}
+                  className="grid size-10 place-items-center rounded-md border border-white/10 bg-zinc-950/60 text-zinc-300 transition-colors hover:border-cyber/50 hover:text-[var(--social-color)] focus-visible:border-cyber/50 focus-visible:text-[var(--social-color)]"
                 >
                   {s.icon}
                 </a>
                 {/* Small tooltip on hover and keyboard focus (the link is named by aria-label). */}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute top-full left-1/2 z-20 mt-2 -translate-x-1/2 rounded-md border border-white/10 bg-zinc-900 px-2 py-1 text-xs whitespace-nowrap text-zinc-100 opacity-0 shadow-lg transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
+                  className="pointer-events-none absolute top-full left-1/2 z-20 mt-2 -translate-x-1/2 rounded-md border border-white/10 bg-zinc-900 px-2 py-1 text-xs whitespace-nowrap text-zinc-300 opacity-0 shadow-lg transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
                 >
                   {s.label}
                 </span>
@@ -299,9 +411,9 @@ export function Profile() {
 
         <div>
           <div className="mb-5 h-px w-16 bg-cyber" />
-          <p className="text-[19px] leading-relaxed text-zinc-100">{profile.about.fr}</p>
+          <p className="text-[18px] leading-relaxed text-zinc-100">{profile.about.fr}</p>
 
-          <h3 className="mt-10 mb-5 text-sm text-zinc-400">{ui.strengthsTitle!.fr}</h3>
+          <h3 className="mt-10 mb-5 text-base font-normal text-zinc-400 italic">{ui.strengthsTitle!.fr}</h3>
           <StrengthsTimeline />
 
           <div className="mt-10 w-full">
@@ -324,7 +436,7 @@ export function Profile() {
 
         <div className="space-y-6 lg:col-span-2 xl:col-span-1">
           <div>
-            <h3 className="mb-1 flex items-center gap-2 text-[15px] font-semibold text-zinc-50">
+            <h3 className="mb-1 flex items-center gap-2 text-base font-semibold text-zinc-100">
               <Globe2 size={17} aria-hidden="true" className="text-cyber" /> {international.title.fr}
             </h3>
             <p className="text-sm text-zinc-400">{international.summary.fr}</p>
@@ -344,9 +456,9 @@ export function Profile() {
             <ul className="space-y-2.5">
               {profile.languages.map((l) => (
                 <li key={l.code} className="flex items-center justify-between gap-3 border-b border-white/5 pb-2.5 last:border-0">
-                  <span className="text-[15px] text-zinc-100">
+                  <span className="text-[15px] text-zinc-200">
                     {l.name.fr}
-                    {l.note && <span className="ml-2 text-xs text-zinc-500">{l.note.fr}</span>}
+                    {l.note && <span className="text-xs text-zinc-400"> · {l.note.fr}</span>}
                   </span>
                   <span className="flex items-center gap-3">
                     <LevelBar level={l.level} />

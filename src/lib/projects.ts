@@ -1,14 +1,14 @@
 import type { Project, ProjectStatus, Track } from '../content/types'
 import { complexity } from '../content/complexity'
 
-export type ProjectSort = 'date' | 'complexity'
+type ProjectSort = 'date' | 'complexity'
 
-export type ProjectFilter = {
+type ProjectFilter = {
   tracks?: Track[]
   statuses?: ProjectStatus[]
 }
 
-export type ProjectGroup = 'perso-pro' | 'formation'
+type ProjectGroup = 'perso-pro' | 'formation'
 
 /** Personal and work projects first; course projects (Epitech, IBM, hackathon) second. */
 export const groupOf = (p: Project): ProjectGroup =>

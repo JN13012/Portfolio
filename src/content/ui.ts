@@ -38,7 +38,7 @@ export function teamLabel(team: Project['team'], locale: Locale) {
 }
 
 /** Said before the summary in the project modal (the card only shows a short badge). */
-export const contextLead: Partial<Record<ProjectContext, Localized>> = {
+const contextLead: Partial<Record<ProjectContext, Localized>> = {
   ibm: { fr: 'Projet de certification IBM AI Developer', en: 'IBM AI Developer certification project' },
 }
 
@@ -69,3 +69,9 @@ export const motorsportWin = {
   title: { fr: '1re place LMP2', en: '1st in LMP2' },
   detail: { fr: '6 Heures de Spa-Francorchamps (Belgique) · 6 mai 2017', en: '6 Hours of Spa-Francorchamps (Belgium) · 6 May 2017' },
 } satisfies Record<string, Localized>
+
+/** Shared image-navigation labels. */
+export const dialogUi = {
+  previousImage: { fr: 'Image précédente', en: 'Previous image' },
+  nextImage: { fr: 'Image suivante', en: 'Next image' },
+}

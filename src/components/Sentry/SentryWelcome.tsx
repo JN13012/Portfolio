@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
+import { assistantUi as ui } from '../../content/assistant'
 
 import { SEEN_KEY, markSentryWelcomeSeen } from './welcomeSession'
 
 /** Time the greeting stays on screen (paused while hovered or focused), then a short fade (2026-10-27). */
-const SHOWN_MS = 3000
+const SHOWN_MS = 10000
 const FADE_MS = 400
 
 /** Mounted after the intro, only while the conversation is closed. */
@@ -77,8 +78,8 @@ export function SentryWelcome({ onDismiss }: { onDismiss: () => void }) {
         <X size={15} aria-hidden="true" />
       </button>
       <p role="status">
-        <strong>Bonjour, moi c’est Sentry.</strong>
-        <span>Je vous guide dans le portfolio de Jérémie.</span>
+        <strong>{ui.welcomeTitle.fr}</strong>
+        <span>{ui.welcomeBody.fr}</span>
       </p>
     </div>
   )

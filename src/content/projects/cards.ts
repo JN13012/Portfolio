@@ -460,7 +460,7 @@ export const cards: Project[] = [
     stack: ['React', 'JavaScript'],
     links: { demo: '#lab' },
     facts: [
-      { value: '9', label: { fr: 'niveaux', en: 'levels' }, source: 'src/components/ProfileConsole/ctfData.js' },
+      { value: '9', label: { fr: 'niveaux', en: 'levels' }, source: 'src/sections/Lab/ctf/ctfData.js' },
       { value: '2', label: { fr: 'rôles : attaquant, puis défenseur', en: 'roles: attacker, then defender' }, source: 'ctfData.js: levels 1–6 attack, 7–9 defence' },
       { value: '21', label: { fr: 'commandes et outils simulés', en: 'simulated commands and tools' }, source: 'ctfData.js: `unlocks` of all levels' },
     ],

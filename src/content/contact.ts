@@ -1,4 +1,4 @@
-/** Field limits, shared by the form (counters) and the Worker (src/contactEmail.js checks the same numbers). */
+/** Field limits, shared by the form (counters) and the Worker (server/contactEmail.js checks the same numbers). */
 export const contactLimits = { name: 100, email: 254, subject: 120, message: 2000, messageMin: 10 } as const
 
 // Copy of the Contact section. No promised reply time: Jérémie did not commit to one.

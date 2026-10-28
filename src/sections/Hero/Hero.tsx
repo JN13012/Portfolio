@@ -26,7 +26,7 @@ const onResize = (cb: () => void) => {
 
 /**
  * Hero (2026-10-27): who, which jobs, proof, availability and CTAs on the left; the assistant's network
- * on the right. The chat with Sentry is docked at the bottom right of every page (AssistantDock); its
+ * on the right. The chat with Sentry is docked at the bottom right of every page (SentryChat); its
  * answers are played by the network, toward the sections they cite. Three columns: text and network
  * share the room equally, the third is empty while the chat is folded and takes the window's width when
  * it opens, so both others shrink alike (the name scales with its column).
@@ -72,7 +72,7 @@ export function Hero() {
           <div className="flex flex-col gap-[min(4.25em,5vh)] lg:text-[clamp(12px,min(2.6cqi,1.7vh),20px)]">
             <div className="flex flex-col gap-[1.1em]">
               <div className="flex flex-col gap-[0.6em]">
-                <h1 id="hero-title" className="text-6xl leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase lg:text-[clamp(2.75rem,min(14cqi,9vh),8rem)]">
+                <h1 id="hero-title" className="outline-none text-6xl leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase lg:text-[clamp(2.75rem,min(14cqi,9vh),8rem)]">
                   {profile.lastName} <span className="text-cyber">{profile.firstName}</span>
                 </h1>
                 <p className="text-2xl font-bold tracking-tight uppercase md:text-3xl lg:text-[min(1.875em,4.4cqi)]">

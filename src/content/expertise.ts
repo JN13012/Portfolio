@@ -7,7 +7,7 @@ import type { Localized, Track } from './types'
 // Tools come from skills.ts (backed by projects, write-ups or certificate syllabuses);
 // proofs from tracks.ts and certifications.ts (verified 2026-10-17).
 
-export type ExpertiseTool = { name: string; note: Localized }
+type ExpertiseTool = { name: string; note: Localized }
 
 export type ExpertiseDomain = {
   id: 'ia' | 'data' | 'offensive' | 'defensive' | 'devops' | 'dev'
@@ -199,7 +199,7 @@ export const expertise: ExpertiseDomain[] = [
  * Full domain order when the visitor arrives through a targeted link (?metier=ia|data|cyber|dev|devops, see
  * src/lib/projects.ts). One job per link: only the first value is used.
  */
-export const domainOrderFor: Record<Track, ExpertiseDomain['id'][]> = {
+const domainOrderFor: Record<Track, ExpertiseDomain['id'][]> = {
   ia: ['ia', 'data', 'offensive', 'defensive', 'devops', 'dev'],
   data: ['data', 'ia', 'dev', 'devops', 'offensive', 'defensive'],
   cyber: ['offensive', 'defensive', 'ia', 'data', 'devops', 'dev'],

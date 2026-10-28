@@ -12,6 +12,7 @@ import { expertise, orderedDomains } from './expertise'
 import { skills } from './skills'
 import { timeline } from './timeline'
 import { tracks } from './tracks'
+import { dialogUi } from './ui'
 import type { Localized } from './types'
 import writeups from './writeups.json'
 
@@ -25,7 +26,7 @@ function* localizedIn(value: unknown, path = ''): Generator<[string, Localized]>
   for (const [k, v] of Object.entries(value)) yield* localizedIn(v, `${path}.${k}`)
 }
 
-const allContent = { introCopy, hero, profile, projects, credentials, inProgress, contact, timeline, skills, tracks, expertise, brainNodes, assistantUi }
+const allContent = { introCopy, hero, profile, projects, credentials, inProgress, contact, timeline, skills, tracks, expertise, brainNodes, assistantUi, dialogUi }
 
 /** Only what reaches the page: editorial fields (doNotClaim, fact sources) are dropped. */
 const displayed = (value: unknown) =>

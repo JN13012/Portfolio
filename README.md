@@ -1,16 +1,59 @@
-# React + Vite
+# Portfolio — Jérémie Nagi
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portfolio personnel : IA, cybersécurité et développement. React 19, Vite, TypeScript/JSX,
+Tailwind CSS 4 et three.js. Une seule application assemble l’introduction, les sections et Sentry.
 
-Currently, two official plugins are available:
+## Développement
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm ci
+npm run dev
+```
 
-## React Compiler
+Ouvrir http://localhost:5173/ et laisser le terminal actif. Le port est fixe : Vite signale
+une erreur si 5173 est déjà occupé. Le serveur écoute sur `0.0.0.0` pour l’accès depuis Windows/WSL.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Organisation
 
-## Expanding the ESLint configuration
+| Dossier | Rôle |
+| --- | --- |
+| `src/app/` | Assemblage de la page et transition d’entrée |
+| `src/sections/` | Sections du portfolio, console CTF dans `Lab/ctf/` |
+| `src/components/` | Sentry, navigation, décor et composants partagés |
+| `src/content/` | Textes FR/EN, projets, certifications et sources |
+| `src/assets/`, `src/styles/` | Visuels utilisés et styles globaux |
+| `server/` | Worker Cloudflare et envoi du formulaire de contact |
+| `dev/` | Maquettes, prototypes et visuels propres au développement |
+| `scripts/` | Génération cartographique, images, write-ups et relecture |
+| `docs/` | Documentation actuelle ; anciens concepts dans `archive/` |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Voir [l’architecture détaillée](docs/architecture.md), [l’introduction](docs/intro.md),
+[Sentry](src/components/Sentry/README.md) et la [feuille de route IA](docs/roadmap-ia.md).
+
+## Vérifications
+
+```sh
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
+
+`npm run review` régénère la [relecture du contenu français](docs/relecture-contenu.md).
+`npm run sync:writeups` met à jour les métadonnées depuis le dépôt public Cyber-Write-ups.
+
+Les aperçus `/mockups.html?view=reseau`, `/intro-preview.html` et le réglage `/?placer`
+servent au développement. `npm run preview` sert le build de production, sans ces pages de maquettes.
+
+## Contact et hébergement
+
+`npm run dev` sert l’interface ; il ne démarre pas l’API Cloudflare `/api/contact`.
+Le Worker configuré dans `wrangler.toml` sert `dist/` et traite le contact via Resend.
+Il utilise le secret `RESEND_API_KEY`, les variables optionnelles `CONTACT_FROM_EMAIL` /
+`CONTACT_TO_EMAIL`, ainsi que le binding `CONTACT_LIMITER`.
+
+`npm run deploy:worker` construit puis publie le site ; l’exécuter seulement pour un déploiement demandé.
+L’adaptateur `functions/api/contact.js` est conservé pour Cloudflare Pages et partage le même traitement.
+
+Sentry affiche actuellement des réponses préparées et leurs sources. Les questions libres par IA
+et la voix sont prévues, pas connectées.

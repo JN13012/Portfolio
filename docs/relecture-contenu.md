@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-10-27 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-10-28 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Introduction
@@ -21,7 +21,7 @@ Formation : Master of Science · Architecte des SI (Epitech Marseille · 1re ann
 
 Certifié : IBM AI Developer (Professional Certificate) · Jr Penetration Tester (TryHackMe · 89 labs)
 
-Projets : argos (OSINT · en développement) · blocktrader (Bot de trading · en test) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
+Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · en test) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
 Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team mon agent, bientôt)
 
@@ -31,16 +31,16 @@ Disponible immédiatement · Alternance · MSc Epitech · Stage possible · Mars
 
 ## Profil
 
-Je suis arrivé à l’IA et à la cybersécurité par un chemin peu commun : l’armée, la course automobile, puis l’entrepreneuriat dans la blockchain. Chaque étape m’a laissé quelque chose que j’utilise aujourd’hui.
+Je suis arrivé à l’IA et à la cybersécurité par un chemin peu commun. Chaque étape m’a laissé quelque chose que j’utilise aujourd’hui.
 
-**Avant l’informatique, et ce que j’en garde**
-- **Tenir sous pression, suivre la procédure** (Armée, 2014 – 2016) : Préparation commando (CPIS, CNEC), puis le 2e RIMa. Une réponse à incident demande la même chose : rester calme, appliquer la procédure, rendre compte.
-- **Diagnostiquer vite, sans droit à l’erreur** (Mécanique, 2017 – 2025) : Responsable des pneumatiques d’un prototype LMP2 aux 24 h du Mans 2017, 1re place aux 6 h de Spa. Un arrêt au stand ne se rejoue pas : c’est l’exigence que j’applique à un diagnostic de panne ou d’intrusion.
-- **Monter et superviser une infra, seul** (Minage, 2018 – 2022) : Fermes de minage conçues, assemblées et exploitées sous Linux et HiveOS, avec des redémarrages et des alertes automatisés. Mon premier vrai travail d’exploitation et de supervision, mené en entrepreneur.
+**Avant l’informatique, et ce que j’en garde :**
+- **Décider sous pression, agir ensemble** (Armée, 2014 – 2016) : L’exigence du terrain m’a appris la discipline, la cohésion et l’importance de pouvoir compter les uns sur les autres.
+- **Diagnostiquer vite, sans droit à l’erreur** (Mécanique, 2017 – 2025) : Responsable des pneumatiques d’un prototype LMP2 lors du FIA World Endurance Championship, WEC 2017. Un arrêt au stand ne se rejoue pas.
+- **Monter et superviser une infra** (Minage, 2018 – 2022) : Ma première expérience entrepreneuriale dans l’exploitation de systèmes informatiques, avec la responsabilité du bon fonctionnement et de la rentabilité.
 
-**International** — 5 langues · 6 pays où j’ai vécu · base à Marseille. Un parcours immersif entre plusieurs pays m’a appris à m’adapter rapidement à de nouveaux environnements. FR 22 ans · LB 4 ans · SA 5 ans · QA 3 ans · CA 3 mois · PE 1 an et demi
+**International** — 5 langues · 6 pays où j’ai vécu. Un parcours immersif entre plusieurs pays m’a appris à m’adapter rapidement à de nouveaux environnements. FR 22 ans · LB 4 ans · SA 5 ans · QA 3 ans · CA 3 mois · PE 1 an et demi
 
-**Centres d’intérêt** : Finance (Les marchés crypto, à l’origine de BlockTrader.) · Géopolitique (Suivre la géopolitique, c’est aussi suivre les avancées de l’IA, les menaces cyber et les régulations.) · Voyages (Six pays où j’ai vécu et 18 visités.) · Sport (Entretenir la forme : course à pied, natation, renforcement musculaire, randonnées.)
+**Centres d’intérêt** : Finance (Les marchés crypto, à l’origine de BlockTrader.) · Géopolitique (Suivre la géopolitique, c’est aussi suivre les avancées de l’IA, les menaces cyber et les régulations.) · Voyages (Six pays où j’ai vécu et 18 visités.) · Sport (Course à pied, natation, renforcement musculaire, randonnées…)
 
 ## Assistant du hero : réponses préparées
 
@@ -858,4 +858,9 @@ En cours : AI Security (5 % au 2026-10-26) — Parcours de sécurité de l’IA 
 ## Langues
 
 Français (langue maternelle) · Anglais (C1) · Espagnol (C1) · Arabe (C1, libanais et littéraire) · Allemand (A1)
+
+## Interface des galeries
+
+- Image précédente
+- Image suivante
 

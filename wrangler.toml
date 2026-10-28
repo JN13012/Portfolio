@@ -1,5 +1,5 @@
 name = "www"
-main = "worker.js"
+main = "server/worker.js"
 compatibility_date = "2026-05-18"
 
 [assets]
@@ -7,7 +7,7 @@ directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
 
-# Contact form: at most 3 messages per minute per IP (Workers rate-limiting binding, read in src/contactEmail.js).
+# Contact form: at most 3 messages per minute per IP (Workers rate-limiting binding, read in server/contactEmail.js).
 [[ratelimits]]
 name = "CONTACT_LIMITER"
 namespace_id = "1001"

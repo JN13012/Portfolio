@@ -15,6 +15,7 @@ import './globeGate.css'
 
 type GlobeGateProps = { onClose: () => void; portfolioRef?: RefObject<HTMLDivElement | null> }
 const flags: Record<string, string> = { FR: fr, LB: lb, SA: sa, QA: qa, CA: ca, PE: pe }
+const countryCount = new Set(journey.map((stop) => stop.code)).size
 const inspectionTimes: Record<string, number> = { approach: 600, fracture: 1600, passage: 2400 }
 
 export default function GlobeGate({ onClose, portfolioRef }: GlobeGateProps) {
@@ -75,7 +76,9 @@ export default function GlobeGate({ onClose, portfolioRef }: GlobeGateProps) {
       document.body.style.overflow = previous
       window.removeEventListener('keydown', key)
       requestAnimationFrame(() => {
-        const target = document.querySelector<HTMLElement>('main h1, main, nav a')
+        // Query each fallback separately: selector lists follow DOM order, not priority.
+        const target = document.querySelector<HTMLElement>('main h1')
+          ?? document.querySelector<HTMLElement>('main')
         if (target && !target.closest('[inert]')) {
           if (!target.hasAttribute('tabindex')) {
             target.setAttribute('tabindex', '-1')
@@ -110,17 +113,17 @@ export default function GlobeGate({ onClose, portfolioRef }: GlobeGateProps) {
           <span className="gate-monogram" aria-hidden="true">JN<span>.</span></span>
           <div><p id="intro-name">{profile.firstName} {profile.lastName}</p><span>{copy.portfolio.fr}</span></div>
         </div>
-        <button className="gate-skip" type="button" onClick={() => closeRef.current()}>{copy.skip.fr}<span aria-hidden="true">↗</span></button>
+        <p className="gate-domains">{copy.domains.fr}</p>
       </header>
+      <button className="gate-skip gate-chrome" type="button" onClick={() => closeRef.current()}>{copy.skip.fr}<span aria-hidden="true">↗</span></button>
 
       <div ref={sceneHost} className="gate-scene" aria-hidden="true" />
       {unavailable && <div className="gate-fallback" aria-hidden="true"><div className="gate-fallback-sphere" /><span>{copy.fallback.fr}</span></div>}
-      <div className="gate-map-note gate-chrome" aria-hidden="true"><span className="gate-status-dot" />{copy.base.fr}</div>
 
       <section className="gate-editorial gate-chrome" aria-hidden={exiting || undefined}>
         <h1>{copy.title.fr}<br /><span>{copy.titleAccent.fr}</span></h1>
         <p className="gate-description">{copy.description.fr}</p>
-        <div className="gate-facts"><span><strong>{new Set(journey.map((item) => item.code)).size.toString().padStart(2, '0')}</strong>{copy.countries.fr}</span><i /><span><strong>{profile.languages.length.toString().padStart(2, '0')}</strong>{copy.languages.fr}</span></div>
+        <div className="gate-facts"><span><strong>{countryCount.toString().padStart(2, '0')}</strong>{copy.countries.fr}</span><i /><span><strong>{profile.languages.length.toString().padStart(2, '0')}</strong>{copy.languages.fr}</span></div>
       </section>
 
       <div className="gate-entry gate-chrome">
@@ -128,10 +131,8 @@ export default function GlobeGate({ onClose, portfolioRef }: GlobeGateProps) {
       </div>
 
       <div ref={annotation} className="gate-annotation" aria-hidden="true">
-        <span className="gate-annotation-line" /><div><span className="gate-annotation-index">{String(active + 1).padStart(2, '0')} / 07</span><strong><img className="gate-flag" src={flags[stop.code]} alt="" />{stop.country.fr}</strong>{(active === 0 || active === 6) && <span>{active === 0 ? copy.start.fr : copy.return.fr}</span>}</div>
+        <span className="gate-annotation-line" /><div><span className="gate-annotation-index">{String(active + 1).padStart(2, '0')} / {String(journey.length).padStart(2, '0')}</span><strong><img className="gate-flag" src={flags[stop.code]} alt="" />{stop.country.fr}</strong>{active === 0 && <span className="gate-annotation-note">{copy.start.fr}</span>}</div>
       </div>
-
-      <div className="gate-dive-label" aria-hidden="true"><span />{copy.destination.fr}</div>
     </div>
   )
 }

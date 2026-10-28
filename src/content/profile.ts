@@ -61,22 +61,22 @@ export const profile = {
   ] satisfies Language[],
   /** Introduction of the Profil section: the road, not the job (the hero pitch already says what he does). */
   about: {
-    fr: 'Je suis arrivé à l’IA et à la cybersécurité par un chemin peu commun : l’armée, la course automobile, puis l’entrepreneuriat dans la blockchain. Chaque étape m’a laissé quelque chose que j’utilise aujourd’hui.',
-    en: 'I came to AI and cybersecurity by an unusual road: the army, motor racing, then entrepreneurship in blockchain. Each step left me something I use today.',
+    fr: 'Je suis arrivé à l’IA et à la cybersécurité par un chemin peu commun. Chaque étape m’a laissé quelque chose que j’utilise aujourd’hui.',
+    en: 'I came to AI and cybersecurity by an unusual road. Each step left me something I use today.',
   },
   /**
-   * Before IT, and what it left (validated by Jérémie on 2026-10-27): a proof from Parcours, then its link to the job.
+   * Before IT, and what it left: concise takeaways, with the full experience details in Parcours.
    * Oldest first, drawn as a timeline.
    */
   strengths: [
     {
       id: 'rima',
-      title: { fr: 'Tenir sous pression, suivre la procédure', en: 'Holding firm under pressure, following procedure' },
+      title: { fr: 'Décider sous pression, agir ensemble', en: 'Deciding under pressure, acting together' },
       context: { fr: 'Armée', en: 'Army' },
       period: { start: '2014', end: '2016' },
       text: {
-        fr: 'Préparation commando (CPIS, CNEC), puis le 2e RIMa. Une réponse à incident demande la même chose : rester calme, appliquer la procédure, rendre compte.',
-        en: 'Commando preparation (CPIS, CNEC), then the 2e RIMa. Incident response asks for the same: stay calm, follow the procedure, report.',
+        fr: 'L’exigence du terrain m’a appris la discipline, la cohésion et l’importance de pouvoir compter les uns sur les autres.',
+        en: 'The demands of the field taught me discipline, cohesion and the importance of being able to rely on one another.',
       },
     },
     {
@@ -85,25 +85,25 @@ export const profile = {
       context: { fr: 'Mécanique', en: 'Mechanics' },
       period: { start: '2017', end: '2025' },
       text: {
-        fr: 'Responsable des pneumatiques d’un prototype LMP2 aux 24 h du Mans 2017, 1re place aux 6 h de Spa. Un arrêt au stand ne se rejoue pas : c’est l’exigence que j’applique à un diagnostic de panne ou d’intrusion.',
-        en: 'In charge of the tyres of an LMP2 prototype at the 2017 24 Hours of Le Mans, 1st place at the 6 Hours of Spa. A pit stop cannot be replayed: that is the standard I bring to diagnosing a fault or an intrusion.',
+        fr: 'Responsable des pneumatiques d’un prototype LMP2 lors du FIA World Endurance Championship, WEC 2017. Un arrêt au stand ne se rejoue pas.',
+        en: 'In charge of the tyres of an LMP2 prototype during the FIA World Endurance Championship, WEC 2017. A pit stop cannot be replayed.',
       },
     },
     {
       id: 'blockchain',
-      title: { fr: 'Monter et superviser une infra, seul', en: 'Building and monitoring an infrastructure, alone' },
+      title: { fr: 'Monter et superviser une infra', en: 'Building and monitoring infrastructure' },
       context: { fr: 'Minage', en: 'Mining' },
       period: { start: '2018', end: '2022' },
       text: {
-        fr: 'Fermes de minage conçues, assemblées et exploitées sous Linux et HiveOS, avec des redémarrages et des alertes automatisés. Mon premier vrai travail d’exploitation et de supervision, mené en entrepreneur.',
-        en: 'Mining farms designed, assembled and run on Linux and HiveOS, with automated restarts and alerts. My first real operations and monitoring work, run as an entrepreneur.',
+        fr: 'Ma première expérience entrepreneuriale dans l’exploitation de systèmes informatiques, avec la responsabilité du bon fonctionnement et de la rentabilité.',
+        en: 'My first entrepreneurial experience running IT systems, with responsibility for their reliability and profitability.',
       },
     },
   ],
   /** The International block: languages and the countries lived in, drawn on a flat map. */
   international: {
     title: { fr: 'International', en: 'International' },
-    summary: { fr: '5 langues · 6 pays où j’ai vécu · base à Marseille', en: '5 languages · 6 countries lived in · based in Marseille' },
+    summary: { fr: '5 langues · 6 pays où j’ai vécu', en: '5 languages · 6 countries lived in' },
     lead: {
       fr: 'Un parcours immersif entre plusieurs pays m’a appris à m’adapter rapidement à de nouveaux environnements.',
       en: 'An immersive path across several countries taught me to adapt quickly to new environments.',
@@ -136,7 +136,7 @@ export const profile = {
    * its answer exists: Jérémie writes strengths and weaknesses himself (plan §7), never an LLM.
    */
   sentryQuestions: ['strengths', 'weaknesses'],
-  /** Interests: a row of tiles, each says a line on hover, focus or tap. */
+  /** Interests: a row of icons, each opens a small panel on hover, focus or tap. */
   interests: [
     {
       id: 'finance',
@@ -160,7 +160,7 @@ export const profile = {
     {
       id: 'sport',
       label: { fr: 'Sport', en: 'Sport' },
-      text: { fr: 'Entretenir la forme : course à pied, natation, renforcement musculaire, randonnées.', en: 'Keeping fit: running, swimming, strength training, hiking.' },
+      text: { fr: 'Course à pied, natation, renforcement musculaire, randonnées…', en: 'Running, swimming, strength training, hiking…' },
     },
   ],
   /** Availability block under the portrait: the work-study rhythm is not in the hero. `id` picks the icon. */
@@ -171,7 +171,8 @@ export const profile = {
   ],
   /** Labels of the Profil section. */
   ui: {
-    strengthsTitle: { fr: 'Avant l’informatique, et ce que j’en garde', en: 'Before IT, and what I kept from it' },
+    strengthsTitle: { fr: 'Avant l’informatique, et ce que j’en garde :', en: 'Before IT, and what I kept from it:' },
+    closeInterest: { fr: 'Fermer le détail du centre d’intérêt', en: 'Close interest details' },
     interests: { fr: 'Centres d’intérêt', en: 'Interests' },
     native: { fr: 'Natif', en: 'Native' },
     replayGlobe: { fr: 'Revoir le globe', en: 'Replay the globe' },

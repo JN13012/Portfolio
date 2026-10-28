@@ -17,11 +17,15 @@ import { Sentry, SentryChat } from './components/Sentry'
 Les avatars sont décoratifs (`aria-hidden`) : leur contexte doit nommer Sentry.
 Les animations CSS s’arrêtent immédiatement avec `prefers-reduced-motion`.
 
-`AssistantDock` réexporte `SentryChat` pour conserver l’intégration App/Hero et
-l’historique partagé existant. Les questions prédéfinies montrent des fiches
+`src/app/App.jsx` monte directement `SentryChat`. Le Hero et le chat conservent
+leur historique partagé via `src/lib/assistantStore.ts`. Les questions prédéfinies montrent des fiches
 préparées et leurs sources, annoncées comme telles. Leur lecture anime encore le
 réseau existant du Hero. Les questions libres affichent un message d’indisponibilité ;
 aucune requête IA ni réponse fabriquée. La présentation vocale reste désactivée.
+
+Les fiches projet et certification citées utilisent les modales partagées de `components/ui/dialogs/`.
+Le focus entre dans la fiche, puis revient au bouton source à sa fermeture ; Échap ferme la fiche
+sans réduire la conversation avec Sentry. Le clavier du chat n’actionne pas une galerie en arrière-plan.
 
 Le composant accepte les propriétés suivantes :
 
@@ -60,13 +64,13 @@ de 80 px pour laisser la navigation fixe accessible.
 
 La bulle de bienvenue a une silhouette asymétrique, une pointe SVG et un contour
 vert discret. Elle apparaît 1,2 s après la fin de l’introduction, une fois par
-session (`sessionStorage`, clé `sentry-welcome-seen`), puis disparaît après 8 s.
-Le survol ou le focus suspend cette disparition. Sa croix et Échap la ferment
+session (`sessionStorage`, clé `sentry-welcome-seen`), puis disparaît après 10 s.
+Le survol ou le focus suspend cette disparition ; le délai de 10 s repart à leur sortie. Sa croix et Échap la ferment
 et remettent le focus sur Sentry. L’ouverture de la conversation annule également
 la bienvenue. Aucun focus n’est déplacé lors de son apparition.
 
 Contrôles complémentaires du lanceur flottant : apparition après la véritable
 introduction, pause au survol et au focus, fermeture avec retour du focus,
 absence de réapparition après rechargement dans la même session, disparition
-automatique après 8 s, et en-tête/saisie non masqués par la navigation aux formats
+automatique après 10 s, et en-tête/saisie non masqués par la navigation aux formats
 320 × 568, 390 × 844, 844 × 390, 390 × 320 et 390 × 250.

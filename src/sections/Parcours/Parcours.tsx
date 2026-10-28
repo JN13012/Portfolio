@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
-import SectionHeader from '../../components/SectionHeader'
+import SectionHeader from '../../components/ui/SectionHeader'
 import { timeline } from '../../content/timeline'
 import type { TimelineEntry, TimelineTone, YearMonth } from '../../content/types'
 import { parcoursEffectsLabels } from '../../content/ui'

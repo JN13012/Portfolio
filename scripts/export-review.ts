@@ -14,7 +14,7 @@ import { skills } from '../src/content/skills'
 import { timeline } from '../src/content/timeline'
 import { atAGlance, tracks } from '../src/content/tracks'
 import type { Period, Project } from '../src/content/types'
-import { credentialKindLabels, credentialLevelLabels, modalSummary, statusLabels, teamLabel } from '../src/content/ui'
+import { credentialKindLabels, credentialLevelLabels, dialogUi, modalSummary, statusLabels, teamLabel } from '../src/content/ui'
 import writeups from '../src/content/writeups.json'
 
 const out: string[] = []
@@ -140,6 +140,9 @@ p(Object.values(contact).map((x) => `- ${x.fr}`).join('\n'))
 
 h(2, 'Langues')
 p(profile.languages.map((l) => `${l.name.fr} (${l.level === 'native' ? 'langue maternelle' : l.level}${l.note ? `, ${l.note.fr}` : ''})`).join(' · '))
+
+h(2, 'Interface des galeries')
+p(Object.values(dialogUi).map((label) => `- ${label.fr}`).join('\n'))
 
 writeFileSync(new URL('../docs/relecture-contenu.md', import.meta.url), out.join('\n').replace(/\n{3,}/g, '\n\n') + '\n')
 console.log('docs/relecture-contenu.md written')

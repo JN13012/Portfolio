@@ -1,0 +1,9 @@
+.intro-background {
+  animation: fadeIn 1.1s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-background {
+    animation: none;
+  }
+}
