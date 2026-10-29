@@ -58,11 +58,11 @@ Les questions libres y affichent un message d’indisponibilité.
 La présentation préenregistrée est indépendante du chat : `PresentationPlayer` à
 gauche de la mascotte affiche dès l’arrivée une bande de lecture à chapitres et pilote un seul élément audio,
 créé au premier clic par `src/lib/presentationAudio.ts`. Le MP3 est chargé à la demande ;
-les WAV de référence restent dans `src/assets/audio` : `intro`, `fraude` et `profil`,
+les WAV de référence restent dans `src/assets/audio` : `intro`, `fraude`, `profil` et `projets`,
 chacun en `.wav` et `.mp3`. Les événements média pilotent `speaking`,
 le réseau, la progression et les sous-titres. Le texte fourni par Jérémie et les
 chapitres sont dans `src/content/presentation.ts` : Intro, Fraude, Profil,
-Projets, Parcours et Alternance. Intro, Fraude et Profil sont enregistrés ; les trois
+Projets, Parcours et Alternance. Intro, Fraude, Profil et Projets sont enregistrés ; les deux
 autres restent désactivés. Une fin de piste native enchaîne sur le prochain audio
 disponible ; la fin du dernier chapitre arrête la lecture. Un clic sur un chapitre
 disponible le lance depuis son début, et réécouter à la fin reprend depuis Intro.
@@ -74,12 +74,12 @@ cadence deux fois plus espacée (environ 10 à 15 s entre lancements avec les r�
 du Hero). Elles attendent la fermeture de l’accueil. Un blocage colore brièvement
 Sentry en rouge, puis son expression de parole reprend sans interrompre l’audio.
 Le texte fourni est regroupé en unités de sens, calées par reconnaissance locale
-et repérage des pauses sur Intro (14,72 s), Fraude (22,64 s) et Profil (33,45 s). La bulle réserve
+et repérage des pauses sur Intro (14,72 s), Fraude (22,64 s), Profil (33,45 s) et Projets (67,84 s). La bulle réserve
 au moins deux lignes (trois sous 360 px et dans le tiroir plus étroit) pour stabiliser sa hauteur,
 sans tronquer le texte. `PresentationSpeech`
 l’affiche au-dessus de Sentry, avec cinq barres illustratives animées uniquement
 pendant la lecture visible. Le bloc reste entièrement lisible en zinc-200 ; le mot prononcé
-passe en vert pastel, sans déplacement ni changement de graisse. Les repères de mots
+devient zinc-100 (`#F4F4F5`), avec un épaississement visuel de 0,04 px de chaque côté, sans fond ni déplacement des lignes. Les repères de mots
 sont enregistrés avec le texte dans `src/content/presentation.ts`. `presentationTranscript.ts`
 programme seulement la prochaine limite de mot, en lisant l’horloge native et la vitesse
 réelle de l’audio, sans boucle par frame ni mises à jour supplémentaires du réseau.
