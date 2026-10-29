@@ -9,7 +9,7 @@ describe('presentation display, independent of playback', () => {
     const saved = new Map<string, string>()
     const storage = { getItem: (key: string) => saved.get(key) ?? null, setItem: (key: string, value: string) => { saved.set(key, value) } }
     const createMedia = vi.fn()
-    const player = createPresentationPlayer(createMedia, '/intro.mp3')
+    const player = createPresentationPlayer(createMedia, [{ id: 'introduction', src: '/intro.mp3' }])
     const display = createPresentationDisplay(storage)
     expect(display.get().minimized).toBe(false)
     expect(display.get().controlsVisible).toBe(false)

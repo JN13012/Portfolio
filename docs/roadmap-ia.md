@@ -2,7 +2,7 @@
 
 État au 29 octobre 2026 : Sentry est la mascotte du portfolio ; son chat public affiche
 un message de conception. Les fiches préparées restent dans l’aperçu de développement.
-La présentation vocale préenregistrée est intégrée pour le chapitre Introduction.
+La présentation vocale préenregistrée est intégrée pour les chapitres Intro, Fraude et Profil.
 Les questions libres, les autres chapitres et le défi IA restent à développer.
 Voir [l’architecture actuelle](architecture.md).
 
@@ -10,7 +10,7 @@ Voir [l’architecture actuelle](architecture.md).
 
 ### 1. Présentation vocale (voix clonée)
 - À gauche de Sentry, bande de lecture à chapitres visible dès l’arrivée, sans lecture automatique ; chevron pour la réduire, choix conservé pendant la session.
-- Introduction disponible avec la voix clonée de Jérémie ; sept chapitres annoncés et désactivés.
+- Intro, Fraude et Profil disponibles, avec enchaînement et sélection directe ; Projets, Parcours et Alternance restent désactivés.
 - Le réseau et Sentry s’activent pendant la lecture réelle, sans analyse d’amplitude sonore.
 - Bulle au-dessus de Sentry : barres illustratives et phrases du texte validé, recalées localement sur l’audio ; même affichage dans le chat ouvert.
 - Pas de service de synthèse ni de clonage exécuté par le portfolio : le fichier est pré-généré.

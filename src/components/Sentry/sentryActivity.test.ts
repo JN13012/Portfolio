@@ -25,4 +25,9 @@ describe('Sentry activity and temporary guard reactions', () => {
     expect(sentryState({ typing: true })).toBe('reading')
     expect(sentryState({})).toBe('idle')
   })
+
+  it('temporarily shows a guard reaction over speech, then resumes the current speaking expression', () => {
+    expect(sentryState({ activity: 'speaking', blocked: true })).toBe('blocked')
+    expect(sentryState({ activity: 'speaking' })).toBe('speaking')
+  })
 })
