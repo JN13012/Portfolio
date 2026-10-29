@@ -1,17 +1,19 @@
 # Feuille de route IA
 
-État au 28 octobre 2026 : Sentry est la mascotte et la fenêtre de conversation du portfolio.
-Il affiche des fiches préparées avec leurs sources ; le réseau du Hero en illustre les étapes.
-Les questions libres, la voix et le défi IA restent à développer. Voir [l’architecture actuelle](architecture.md).
-Les propositions ci-dessous décrivent des fonctionnalités futures, pas des services déjà branchés.
+État au 29 octobre 2026 : Sentry est la mascotte du portfolio ; son chat public affiche
+un message de conception. Les fiches préparées restent dans l’aperçu de développement.
+La présentation vocale préenregistrée est intégrée pour le chapitre Introduction.
+Les questions libres, les autres chapitres et le défi IA restent à développer.
+Voir [l’architecture actuelle](architecture.md).
 
 ## Les trois fonctionnalités
 
 ### 1. Présentation vocale (voix clonée)
-- Dans le hero, un bouton « Écouter ma présentation ».
-- Le réseau pulse au rythme de l'audio : il devient l'avatar de la présentation.
-- Un sous-titre défile pendant la lecture, pour l'accessibilité et pour qui regarde sans le son.
-- Il faut les enregistrements de Jérémie, un texte validé et un service de synthèse vocale.
+- À gauche de Sentry, bande de lecture à chapitres visible dès l’arrivée, sans lecture automatique ; chevron pour la réduire, choix conservé pendant la session.
+- Introduction disponible avec la voix clonée de Jérémie ; sept chapitres annoncés et désactivés.
+- Le réseau et Sentry s’activent pendant la lecture réelle, sans analyse d’amplitude sonore.
+- Bulle au-dessus de Sentry : barres illustratives et phrases du texte validé, recalées localement sur l’audio ; même affichage dans le chat ouvert.
+- Pas de service de synthèse ni de clonage exécuté par le portfolio : le fichier est pré-généré.
 
 ### 2. Questions libres sur le portfolio
 - Une bulle en bas à droite, sur tout le site, qui s'ouvre en petit panneau et se referme, comme la messagerie LinkedIn.

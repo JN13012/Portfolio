@@ -168,8 +168,9 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
   renderer.domElement.setAttribute('aria-hidden', 'true')
   host.append(renderer.domElement)
   const scene = new Scene()
+  const initialCameraDistance = 7.1
   const camera = new PerspectiveCamera(38, 1, 0.02, 60)
-  camera.position.set(0, 0, 7.4)
+  camera.position.set(0, 0, initialCameraDistance)
   const globe = new Group()
   scene.add(globe)
   const accent = new Color(getComputedStyle(host).getPropertyValue('--color-cyber').trim() || '#4ade80')
@@ -372,7 +373,7 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
     if (!controls.leaving) {
       // Cap the globe diameter on tall, narrow desktops to preserve the left text column.
       const fitDistance = Math.hypot(R, height * R / (width * 0.45 * Math.tan(camera.fov * Math.PI / 360)))
-      camera.position.set(0, 0, Math.max(7.4, fitDistance))
+      camera.position.set(0, 0, Math.max(initialCameraDistance, fitDistance))
     }
     frameCamera()
     camera.updateProjectionMatrix()

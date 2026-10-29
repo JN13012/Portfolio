@@ -227,10 +227,10 @@ export const assistantUi = {
     fr: 'Bonjour, je suis Sentry. Découvrez le parcours, les compétences et les projets de Jérémie avec les fiches préparées ci-dessous et leurs sources. L’assistant IA conversationnel sera connecté plus tard.',
     en: 'Hello, I am Sentry. Explore Jérémie’s background, skills and projects through the prepared cards below and their sources. The conversational AI assistant will be connected later.',
   },
-  welcomeTitle: { fr: 'Bonjour, moi c’est Sentry ! 👋', en: 'Hello, I’m Sentry! 👋' },
+  welcomeTitle: { fr: 'Bonjour, moi, c’est Sentry ! 👋', en: 'Hello, I’m Sentry! 👋' },
   welcomeBody: {
-    fr: 'Voici mon réseau de neurones. Il illustre la façon dont je traite l’information pendant que je vous guide à travers le portfolio de Jérémie.',
-    en: 'Here is my neural network. It illustrates how I process information while guiding you through Jérémie’s portfolio.',
+    fr: 'Mon réseau illustre mon activité. Vous pouvez aussi écouter mon introduction avec la voix clonée de Jérémie.',
+    en: 'My network illustrates my activity. You can also listen to my introduction using a clone of Jérémie’s voice.',
   },
   /** Captions under the brain's layers. */
   layers: {

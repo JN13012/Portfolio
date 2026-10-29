@@ -6,7 +6,7 @@ import { sentryPreviewUi as ui } from '../../src/content/sentryPreview'
 import { assistant } from '../../src/lib/assistantStore'
 import { emitCore } from '../../src/lib/coreBus'
 
-const states: SentryState[] = ['idle', 'reading', 'searching', 'responding', 'blocked']
+const states: SentryState[] = ['idle', 'reading', 'searching', 'responding', 'speaking', 'blocked']
 const button = 'rounded-lg border border-white/20 px-3 py-2 text-sm hover:border-cyber focus-visible:outline-2 focus-visible:outline-cyber'
 
 export default function SentryPreview() {

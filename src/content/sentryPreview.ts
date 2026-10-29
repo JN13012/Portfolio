@@ -11,5 +11,6 @@ export const sentryPreviewUi = {
   reading: { fr: 'Lecture', en: 'Reading' },
   searching: { fr: 'Recherche', en: 'Searching' },
   responding: { fr: 'Réponse', en: 'Responding' },
+  speaking: { fr: 'Présentation vocale', en: 'Voice presentation' },
   blocked: { fr: 'Blocage', en: 'Blocked' },
 } satisfies Record<string, Localized>
