@@ -4,7 +4,9 @@ import { readToken, withAlpha } from '../../../lib/color'
 import { onCore } from '../../../lib/coreBus'
 import { cx } from '../../../lib/cx'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
+import { runState, type Run } from '../../../lib/brain'
 import { defaultNeuralNodes, type NeuralNavNode } from './navNodes'
+import { easePulseSpeed, IDLE_FREQUENCY, IDLE_SPEED } from './networkTempo'
 
 // Layer sizes, left to right. The last layer is the navigation; layer index GUARD is the guardrail layer.
 const LAYERS = [4, 7, 7, 5]
@@ -42,23 +44,29 @@ type NeuralCoreProps = {
   nodes?: NeuralNavNode[]
   onSelect?: (id: string) => void
   className?: string
+  run?: Run | null
 }
 
 /**
  * Hero visual: a small neural network. Signals flow left to right; the output
  * neurons are the site navigation. Attacks (red) are stopped at the guardrail layer.
  */
-export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className }: NeuralCoreProps) {
+export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className, run = null }: NeuralCoreProps) {
   const reduced = useReducedMotion()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [active, setActive] = useState<number | null>(null)
   const activeRef = useRef<number | null>(null)
+  const runRef = useRef(run)
   const net = useMemo(() => buildNetwork(), [])
   const outputs = net.neurons[net.neurons.length - 1]!
 
   useEffect(() => {
     activeRef.current = active
   }, [active])
+
+  useEffect(() => {
+    runRef.current = run
+  }, [run])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -85,6 +93,7 @@ export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className }: 
     const glow = new Map<Neuron, number>()
     let guardHit = 0
     let nextWave = 0
+    let pulseSpeed = IDLE_SPEED
 
     // Each signal follows a single path, picking the next edge in proportion to its weight.
     const fire = (from: Neuron, threatPulse = false) => {
@@ -152,14 +161,17 @@ export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className }: 
     }
 
     const step = (now: number, dt: number) => {
+      const current = runRef.current
+      const answering = !!current && runState(current, now).phase !== 'done'
+      pulseSpeed = easePulseSpeed(pulseSpeed, answering, dt / 1000)
       if (now > nextWave) {
         const inputs = net.neurons[0]!
         fire(inputs[Math.floor(Math.random() * inputs.length)]!)
-        nextWave = now + 350 + Math.random() * 450
+        nextWave = now + (350 + Math.random() * 450) / (answering ? 1 : IDLE_FREQUENCY)
       }
       for (let i = pulses.length - 1; i >= 0; i--) {
         const p = pulses[i]!
-        p.t += (p.speed * dt) / 1000
+        p.t += (p.speed * dt * pulseSpeed) / 1000
         if (p.threat && p.edge.to.layer === GUARD && p.t >= 1) {
           guardHit = now
           glow.set(p.edge.to, 1)

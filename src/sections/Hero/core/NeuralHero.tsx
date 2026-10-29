@@ -40,7 +40,7 @@ type NeuralHeroProps = {
 export function NeuralHero({ nodes = defaultNeuralNodes, settings = HERO_NETWORK, run = null, className }: NeuralHeroProps) {
   const can3D = useCan3D()
   const [ready, setReady] = useState(false)
-  if (!can3D) return <NeuralCore nodes={nodes} className={className} />
+  if (!can3D) return <NeuralCore nodes={nodes} className={className} run={run} />
   return (
     <div className={cx('transition-opacity duration-700', !className?.includes('absolute') && 'relative', !className?.includes('aspect-') && 'aspect-square', ready ? 'opacity-100' : 'opacity-0', className)}>
       <Suspense fallback={null}>

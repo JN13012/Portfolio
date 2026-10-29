@@ -229,8 +229,8 @@ export const assistantUi = {
   },
   welcomeTitle: { fr: 'Bonjour, moi c’est Sentry ! 👋', en: 'Hello, I’m Sentry! 👋' },
   welcomeBody: {
-    fr: 'Voici mon réseau de neurones. Il s’active lorsque je réfléchis à vos questions. Il illustre ainsi la façon dont je traite l’information pendant que je vous guide à travers le portfolio de Jérémie.',
-    en: 'Here is my neural network.  It activates when I process your questions. It illustrates how I process information while guiding you through Jérémie’s portfolio.',
+    fr: 'Voici mon réseau de neurones. Il illustre la façon dont je traite l’information pendant que je vous guide à travers le portfolio de Jérémie.',
+    en: 'Here is my neural network. It illustrates how I process information while guiding you through Jérémie’s portfolio.',
   },
   /** Captions under the brain's layers. */
   layers: {

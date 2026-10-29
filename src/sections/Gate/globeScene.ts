@@ -21,6 +21,7 @@ type Options = {
   signal: AbortSignal
   onStep: (step: number) => void
   onClose: () => void
+  onPortfolioVisible?: () => void
 }
 
 const VERT = /* glsl */ `
@@ -145,7 +146,7 @@ function rotationFor(point: Vector3) {
   return new Quaternion().setFromEuler(new Euler(Math.asin(point.y / point.length()), -Math.atan2(point.x, point.z), 0))
 }
 
-export async function createGlobeScene({ host, cover, portfolio, controls, annotation, signal, onStep, onClose }: Options) {
+export async function createGlobeScene({ host, cover, portfolio, controls, annotation, signal, onStep, onClose, onPortfolioVisible }: Options) {
   const response = await fetch(dotsUrl, { signal })
   if (!response.ok) throw new Error('Globe data unavailable')
   const buffer = await response.arrayBuffer()
@@ -350,6 +351,7 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
   const trailState = { head: 0, tail: 0, opacity: 0 }
   const stillTrail = { head: 0, tail: 0, opacity: 0 }
   const windowState = { scale: 0, opacity: 0, edge: 0 }
+  let portfolioRevealed = false
   let width = 1
   let height = 1
   let lensShift = 1
@@ -445,6 +447,10 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
         portfolio.style.setProperty('--portal-scale', window.scale.toFixed(6))
         portfolio.style.setProperty('--portal-opacity', window.opacity.toFixed(5))
         portfolio.style.setProperty('--portal-edge', window.edge.toFixed(5))
+        if (!portfolioRevealed && window.opacity >= 1) {
+          portfolioRevealed = true
+          onPortfolioVisible?.()
+        }
       }
       if (import.meta.env.DEV) {
         host.dataset.diveDistance = camera.position.length().toFixed(4)

@@ -31,6 +31,8 @@ import { cx } from '../../../lib/cx'
 import { buildGraph, NETWORK_STRUCTURE, type NetworkGraph, type NetworkNode, type NetworkSettings } from './network'
 import type { NeuralNavNode } from './navNodes'
 import { runState, type Run } from '../../../lib/brain'
+import { easePulseSpeed, IDLE_FREQUENCY, IDLE_SPEED } from './networkTempo'
+import { sentryWelcome } from '../../../lib/sentryWelcome'
 
 function dotTexture() {
   const c = document.createElement('canvas')
@@ -367,8 +369,9 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
 
     let last = performance.now()
     let nextRequest = 0
-    let nextAttack = performance.now() + 3500
+    let nextAttack = performance.now() + 3500 / IDLE_FREQUENCY
     let nextAnswerPulse = 0
+    let pulseSpeed = IDLE_SPEED
     let first = true
     let fullWidths: number[] = []
     let raf = 0
@@ -423,6 +426,8 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
       const current = runRef.current
       const answer = current ? runState(current, now) : null
       const answering = !!answer && answer.phase !== 'done'
+      // Time-based easing stays consistent across frame rates and changes no answer timings.
+      pulseSpeed = easePulseSpeed(pulseSpeed, answering, dt)
       const litOut = new Set(current ? current.lit.map((id) => outputs.findIndex((o) => o.id === id)) : [])
       if (answering && now > nextAnswerPulse) {
         litOut.forEach((i) => i >= 0 && spawnTo(i))
@@ -439,15 +444,20 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
       // Traffic.
       if (now > nextRequest) {
         spawn(false)
-        nextRequest = now + st.requestEvery * 1000 * (0.7 + Math.random() * 0.6)
+        nextRequest = now + st.requestEvery * 1000 / IDLE_FREQUENCY * (0.7 + Math.random() * 0.6)
       }
-      if (now > nextAttack) {
+      // Only automatic demos wait for the welcome; manual tuner attacks remain available.
+      // Restart the cadence on release instead of accumulating overdue attacks.
+      const holdAttacks = !onViewRef.current && sentryWelcome.get().phase !== 'dismissed'
+      if (holdAttacks) nextAttack = Infinity
+      else if (!Number.isFinite(nextAttack)) nextAttack = now + st.attackEvery * 1000 / IDLE_FREQUENCY * (0.8 + Math.random() * 0.4)
+      if (!holdAttacks && now > nextAttack) {
         spawn(true)
-        nextAttack = now + st.attackEvery * 1000 * (0.8 + Math.random() * 0.4)
+        nextAttack = now + st.attackEvery * 1000 / IDLE_FREQUENCY * (0.8 + Math.random() * 0.4)
       }
       for (let i = pulses.length - 1; i >= 0; i--) {
         const p = pulses[i]!
-        p.t += dt * (p.threat ? 1.1 : 1.5)
+        p.t += dt * (p.threat ? 1.1 : 1.5) * pulseSpeed
         if (p.t < 1) continue
         p.t = 0
         p.seg++
