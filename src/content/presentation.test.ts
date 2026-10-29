@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { fraudeCaptions, profilCaptions, presentationCaptionAt, presentationChapters } from './presentation'
+import { fraudeCaptions, profilCaptions, projetsCaptions, presentationCaptionAt, presentationChapters } from './presentation'
 
 describe('the current Sentry recording caption alignment', () => {
   it('matches the spoken phrases, including the welcome and closing sentence present in the 14.72 s recording', () => {
@@ -21,13 +21,27 @@ describe('the current Sentry recording caption alignment', () => {
     expect(presentationCaptionAt(14.72)).toBeUndefined()
   })
 
-  it('offers the six requested chapters with the three recordings enabled in playlist order', () => {
+  it('offers the six requested chapters with the four recordings enabled in playlist order', () => {
     expect(presentationChapters.map((chapter) => chapter.shortTitle.toLocaleUpperCase('fr-FR'))).toEqual(['INTRO', 'FRAUDE', 'PROFIL', 'PROJETS', 'PARCOURS', 'ALTERNANCE'])
-    expect(presentationChapters.filter((chapter) => 'src' in chapter).map((chapter) => chapter.id)).toEqual(['introduction', 'fraude', 'profil'])
+    expect(presentationChapters.filter((chapter) => 'src' in chapter).map((chapter) => chapter.id)).toEqual(['introduction', 'fraude', 'profil', 'projets'])
     expect(presentationCaptionAt(0, 'fraude')?.text).toContain('fraude numérique')
     expect(presentationCaptionAt(5, 'profil')?.text).toBe('Alors, qui est Jérémie ?')
-    expect(presentationCaptionAt(5, 'projets')).toBeUndefined()
+    expect(presentationCaptionAt(5, 'projets')?.text).toContain('ARGOS')
+    expect(presentationCaptionAt(5, 'parcours')).toBeUndefined()
     expect(presentationCaptionAt(22.64, 'fraude')).toBeUndefined()
+  })
+
+  it('keeps the supplied Projets transcript complete, including project names and the transition to Parcours', () => {
+    expect(projetsCaptions.map((cue) => cue.text).join(' ')).toBe(
+      'Passons maintenant aux projets de Jérémie ! Commençons par ARGOS, une plateforme de cybersécurité pilotée par intelligence artificielle, conçue pour aider les entreprises à identifier et corriger leurs vulnérabilités. Son premier module de recherche et d’analyse de données publiques est en développement. Avec Block-Trader, Jérémie développe un système de trading, où la validation des stratégies et la gestion des risques occupent une place centrale. Maria Agent est un projet d’assistant vocal intelligent, conçu pour accompagner les professionnels dans la gestion des appels et des réservations. Code Executor est un outil Salesforce permettant d’exécuter, d’enchaîner et de planifier des scripts. Il est déjà utilisé en production. Et avec ZERO//DAY, Jérémie développe un jeu de stratégie dans lequel vous incarnez une intelligence artificielle malveillante qui se propage à travers le monde. Il développe également de nombreux autres projets, dont des laboratoires d’entraînement en IA et en cybersécurité. Derrière tous ces projets, un même fil conducteur : explorer de nouvelles technologies, relever des défis et donner vie à ses idées. Mais son parcours n’a pas commencé dans l’informatique… Découvrons son histoire !',
+    )
+    expect(presentationCaptionAt(14, 'projets')?.text).toBe('Son premier module de recherche et d’analyse de données publiques est en développement.')
+    expect(presentationCaptionAt(17, 'projets')?.text).toContain('Block-Trader')
+    expect(presentationCaptionAt(26, 'projets')?.text).toContain('Maria Agent')
+    expect(presentationCaptionAt(33, 'projets')?.text).toContain('Code Executor')
+    expect(presentationCaptionAt(42, 'projets')?.text).toContain('ZERO//DAY')
+    expect(presentationCaptionAt(67, 'projets')?.text).toContain('Découvrons son histoire !')
+    expect(presentationCaptionAt(67.84, 'projets')).toBeUndefined()
   })
 
   it('keeps the full approved Profil transcript, aspirations and closing invitation', () => {
@@ -51,7 +65,7 @@ describe('the current Sentry recording caption alignment', () => {
     expect(presentationCaptionAt(9, 'introduction')?.text).toContain('sa propre voix')
   })
 
-  it('keeps readable passages contiguous, with no brief fragment or caption beyond either recording', () => {
+  it('keeps readable passages contiguous, with no brief fragment or caption beyond any recording', () => {
     for (const chapter of presentationChapters) {
       if (!('captions' in chapter)) continue
       expect(chapter.captions.at(0)?.start).toBe(0)

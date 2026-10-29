@@ -163,7 +163,7 @@ describe('shared voice presentation player', () => {
   it('advances after a native end, stops at the final recording and replays from the introduction', async () => {
     const media = new FakeMedia()
     const create = vi.fn(() => media)
-    const player = createPresentationPlayer(create, [{ id: 'introduction', src: '/intro.mp3' }, { id: 'fraude', src: '/fraude.mp3' }, { id: 'profil', src: '/profil.mp3' }])
+    const player = createPresentationPlayer(create, [{ id: 'introduction', src: '/intro.mp3' }, { id: 'fraude', src: '/fraude.mp3' }, { id: 'profil', src: '/profil.mp3' }, { id: 'projets', src: '/projets.mp3' }])
     await player.play()
     media.emit('playing')
     media.ended = true
@@ -189,7 +189,16 @@ describe('shared voice presentation player', () => {
     media.paused = true
     media.emit('pause')
     media.emit('ended')
-    expect(player.get()).toMatchObject({ chapterId: 'profil', status: 'ended', currentTime: 33.450091 })
+    expect(player.get()).toMatchObject({ chapterId: 'projets', status: 'loading', currentTime: 0, duration: 0 })
+    expect(media.src).toBe('/projets.mp3')
+    media.duration = 67.84
+    media.emit('loadedmetadata')
+    media.emit('playing')
+    media.ended = true
+    media.paused = true
+    media.emit('pause')
+    media.emit('ended')
+    expect(player.get()).toMatchObject({ chapterId: 'projets', status: 'ended', currentTime: 67.84 })
     await player.play()
     expect(player.get()).toMatchObject({ chapterId: 'introduction', status: 'loading', currentTime: 0, duration: 0 })
     expect(media.src).toBe('/intro.mp3')
