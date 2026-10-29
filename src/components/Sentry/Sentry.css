@@ -8,6 +8,7 @@
   color: #65ff79;
   --sentry-glow: #36ff6e;
   isolation: isolate;
+  transform-origin: 50% 85%;
 }
 .sentry__shell, .sentry__face { position: absolute; inset: 0; width: 100%; height: 100%; }
 .sentry__shell { object-fit: contain; }

@@ -19,7 +19,7 @@ Les animations CSS s’arrêtent immédiatement avec `prefers-reduced-motion`.
 
 Le repos ferme l’ensemble des deux neurones et les remplace brièvement par des
 yeux souriants. Le cycle CSS de 22 s contient trois clignements, espacés de 7 à
-8 s. La coque reste fixe ; le hochement de réponse anime seulement le visage.
+8 s. La coque reste fixe au repos ; le hochement de réponse anime seulement le visage.
 Les ramifications et la connexion s’effacent pendant le sourire de réponse.
 Le bouclier garde son rouge pendant toute la réaction, y compris sans animation.
 
@@ -109,11 +109,41 @@ Sur petit écran, replier le chat pour accéder aux commandes de l’aperçu.
 Cette page et ses libellés de contrôle ne font pas partie du build de production.
 
 La bulle de bienvenue a une silhouette asymétrique, une pointe SVG et un contour
-vert discret. Elle apparaît 1,2 s après la fin de l’introduction, une fois par
+vert discret. Elle apparaît après le dernier salut, une fois par
 session (`sessionStorage`, clé `sentry-welcome-seen`), puis disparaît après 10 s.
 Le survol ou le focus suspend cette disparition ; le délai de 10 s repart à leur sortie. Sa croix et Échap la ferment
 et remettent le focus sur Sentry. L’ouverture de la conversation annule également
 la bienvenue. Aucun focus n’est déplacé lors de son apparition.
+
+Le salut comporte trois inclinaisons de 750 ms : droite (+3°), gauche (−3°),
+droite (+1,5°), puis au centre. La première suit la révélation réelle de la
+fenêtre pendant le zoom (`onPortfolioVisible`, lorsque son fondu est terminé).
+La deuxième suit la fermeture effective du globe. La troisième attend deux
+secondes après cette ouverture, puis la fin réelle du mouvement précédent.
+L’infobulle attend l’événement de fin du dernier mouvement, sans estimer sa durée.
+Sans introduction, le premier passage est omis ; une session déjà accueillie
+ne rejoue aucun salut. L’ouverture du chat ou la relecture du globe termine l’accueil.
+
+`lib/sentryWelcome.ts` conserve ces repères et bloque seulement les injections
+automatiques du réseau jusqu’à la disparition complète ou la fermeture de la
+bulle. Les requêtes vertes continuent ; la cadence rouge repart ensuite sans
+accumuler de signaux en attente. Le réglage manuel du réseau reste indépendant.
+`useSentryInclination.ts` anime la coque sans dépendre de l’état du visage : une
+réaction rouge ne coupe pas le salut. Hors écran ou en onglet masqué, le mouvement
+est mis en pause et reprend ensuite. Ses observateurs et écouteurs sont retirés
+à la fin de chaque passage ; aucune boucle JavaScript n’est ajoutée.
+La réduction des animations saute les mouvements, y compris si elle est activée
+pendant un salut, tout en conservant l’infobulle. Le délai de deux secondes et
+le temps de lecture attendent que l’onglet soit visible.
+
+Au repos, le réseau du Hero émet 20 % moins de requêtes et de signaux rouges
+de démonstration, qui circulent 15 % moins vite. Les intervalles sont donc
+divisés par 0,8 : 3,75 s entre requêtes et 6,25 s entre signaux rouges en moyenne,
+avec la variation aléatoire conservée. Pendant une fiche préparée, les signaux
+ciblés gardent leur intervalle de 450 ms et retrouvent leur vitesse initiale,
+avec une transition progressive ; la durée de lecture et de génération ne change pas.
+La version 2D utilise les mêmes coefficients de repos et retrouve aussi son
+rythme initial pendant une fiche préparée, sans charger le moteur 3D.
 
 Contrôles complémentaires du lanceur flottant : apparition après la véritable
 introduction, pause au survol et au focus, fermeture avec retour du focus,

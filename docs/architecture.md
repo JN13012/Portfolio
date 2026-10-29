@@ -61,6 +61,8 @@ docs/
 - **Sentry et Hero** : `lib/assistantStore.ts` partage la conversation ; `lib/brain.ts` décrit sa progression ;
   le réseau du Hero illustre les sources des fiches préparées. Son fallback 2D reste utilisé sans WebGL
   ou avec réduction des animations. Le module 3D est chargé à la demande.
+  `lib/sentryWelcome.ts` coordonne le premier accueil à partir des repères du globe et des fins
+  d’inclinaison ; les injections pédagogiques automatiques attendent la fermeture de la bulle.
 - **Interactions entre sections** : `lib/coreBus.ts` relaie notamment l’ouverture des modales de projets
   et certifications, et la relecture du globe. Sentry ne duplique pas ces modales.
 - **CTF** : le terminal appartient au Lab. Sa progression conserve la clé `ctf-progress`, ses neuf niveaux

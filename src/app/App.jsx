@@ -14,6 +14,7 @@ import { Parcours } from "../sections/Parcours/Parcours";
 import { Contact } from "../sections/Contact/Contact";
 import { profile } from "../content/profile";
 import { onCore } from "../lib/coreBus";
+import { sentryWelcome } from "../lib/sentryWelcome";
 
 // three.js intro, loaded only when it is shown.
 const GlobeGate = lazy(() => import("../sections/Gate/GlobeGate"));
@@ -43,6 +44,7 @@ function App() {
   // « Revoir le globe » in Profil plays the intro again.
   useEffect(() => onCore("replayGate", () => {
     if (!shouldOpenGate(true)) return;
+    sentryWelcome.dismiss();
     // The destination window always opens on the Hero, including a replay from Profil.
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     setGateOpen(true);
@@ -64,7 +66,7 @@ function App() {
     <>
       {gateOpen && (
         <Suspense fallback={<div className="fixed inset-0 z-[2000] bg-black" />}>
-          <GlobeGate onClose={closeGate} portfolioRef={portfolioRef} />
+          <GlobeGate onClose={closeGate} onPortfolioVisible={sentryWelcome.reveal} portfolioRef={portfolioRef} />
         </Suspense>
       )}
       {/* The real page is the intro's destination window; it stays mounted throughout the dive. */}

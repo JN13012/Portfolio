@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from 'react'
 import { ArrowRight, BadgeCheck, ChevronDown, ChevronUp, PenLine, Play, SendHorizontal } from 'lucide-react'
 import { assistantUi as ui, brainNodes, type AnswerSource, type BrainNodeId } from '../../content/assistant'
 import { credentials } from '../../content/certifications'
@@ -10,7 +10,8 @@ import { emitCore } from '../../lib/coreBus'
 import { cx } from '../../lib/cx'
 import { Sentry, type SentryState } from './Sentry'
 import { SentryWelcome } from './SentryWelcome'
-import { markSentryWelcomeSeen } from './welcomeSession'
+import { LAST_CUE_DELAY_MS, sentryWelcome } from '../../lib/sentryWelcome'
+import { useDocumentVisible } from '../../lib/useDocumentVisible'
 import { useSentryActivity } from './useSentryActivity'
 
 const nodeOf = (id: BrainNodeId) => brainNodes.find((n) => n.id === id)!
@@ -65,6 +66,8 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
   const { open, exchanges } = useAssistant()
   const last = exchanges.at(-1) ?? null
   const [draft, setDraft] = useState('')
+  const welcome = useSyncExternalStore(sentryWelcome.subscribe, sentryWelcome.get, sentryWelcome.get)
+  const documentVisible = useDocumentVisible()
   const { state, busy, face } = useSentryActivity(preview ? last?.run ?? null : null, preview && !!draft.trim(), introComplete, activity)
   const log = useRef<HTMLDivElement>(null)
   const toggle = useRef<HTMLButtonElement>(null)
@@ -74,7 +77,7 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
 
   useEffect(() => {
     if (open) {
-      markSentryWelcomeSeen()
+      sentryWelcome.dismiss()
       const target = input.current ?? close.current
       target?.focus({ preventScroll: true })
     } else if (wasOpen.current) {
@@ -82,6 +85,16 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
     }
     wasOpen.current = open
   }, [open])
+
+  useEffect(() => {
+    if (introComplete) sentryWelcome.opened()
+  }, [introComplete])
+
+  useEffect(() => {
+    if (!introComplete || !documentVisible || welcome.phase !== 'pending' || welcome.finalReady) return
+    const timer = setTimeout(sentryWelcome.lastReady, LAST_CUE_DELAY_MS)
+    return () => clearTimeout(timer)
+  }, [introComplete, documentVisible, welcome.phase, welcome.finalReady])
 
   useEffect(() => {
     const el = log.current
@@ -116,7 +129,10 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
         assistant.setOpen(false)
       }
     }} aria-label={`${ui.name}, ${ui.role.fr}`} className="sentry-chat" data-open={open}>
-      {introComplete && !open && <SentryWelcome onDismiss={() => toggle.current?.focus({ preventScroll: true })} />}
+      {introComplete && !open && welcome.phase === 'visible' && <SentryWelcome
+        onDismiss={() => toggle.current?.focus({ preventScroll: true })}
+        onDone={sentryWelcome.dismiss}
+      />}
 
       <button
         ref={toggle}
@@ -127,7 +143,8 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
         aria-controls={open ? 'sentry-chat' : undefined}
         aria-label={open ? ui.close.fr : ui.open.fr}
       >
-        <Sentry size={128} state={face} paused={open || !introComplete} />
+        <Sentry size={128} state={face} paused={open || (!introComplete && !welcome.portalVisible)}
+          welcomeCue={welcome.cue} onCueFinished={sentryWelcome.cueFinished} />
         <span className="sentry-launcher__chevron" aria-hidden="true">
           {open ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
         </span>

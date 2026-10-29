@@ -1,52 +1,38 @@
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import { assistantUi as ui } from '../../content/assistant'
-
-import { SEEN_KEY, markSentryWelcomeSeen } from './welcomeSession'
+import { useDocumentVisible } from '../../lib/useDocumentVisible'
 
 /** Time the greeting stays on screen (paused while hovered or focused), then a short fade (2026-10-27). */
 const SHOWN_MS = 10000
 const FADE_MS = 400
 
 /** Mounted after the intro, only while the conversation is closed. */
-export function SentryWelcome({ onDismiss }: { onDismiss: () => void }) {
-  const [phase, setPhase] = useState<'waiting' | 'visible' | 'leaving' | 'dismissed'>(() => {
-    try {
-      return sessionStorage.getItem(SEEN_KEY) === '1' ? 'dismissed' : 'waiting'
-    } catch {
-      return 'waiting'
-    }
-  })
+export function SentryWelcome({ onDismiss, onDone }: {
+  onDismiss: () => void
+  onDone: () => void
+}) {
+  const [phase, setPhase] = useState<'visible' | 'leaving'>('visible')
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
+  const documentVisible = useDocumentVisible()
 
   useEffect(() => {
-    if (phase !== 'waiting') return
-    const timer = setTimeout(() => {
-      markSentryWelcomeSeen()
-      setPhase('visible')
-    }, 1200)
-    return () => clearTimeout(timer)
-  }, [phase])
-
-  useEffect(() => {
-    if (phase !== 'visible' || hovered || focused) return
+    if (phase !== 'visible' || hovered || focused || !documentVisible) return
     const timer = setTimeout(() => setPhase('leaving'), SHOWN_MS)
     return () => clearTimeout(timer)
-  }, [phase, hovered, focused])
+  }, [phase, hovered, focused, documentVisible])
 
   useEffect(() => {
     if (phase !== 'leaving') return
-    const timer = setTimeout(() => setPhase('dismissed'), FADE_MS)
+    const timer = setTimeout(onDone, FADE_MS)
     return () => clearTimeout(timer)
-  }, [phase])
+  }, [phase, onDone])
 
   const dismiss = () => {
-    setPhase('dismissed')
+    onDone()
     onDismiss()
   }
-
-  if (phase !== 'visible' && phase !== 'leaving') return null
 
   return (
     <div

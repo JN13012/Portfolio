@@ -13,12 +13,12 @@ import ca from 'flag-icons/flags/4x3/ca.svg'
 import pe from 'flag-icons/flags/4x3/pe.svg'
 import './globeGate.css'
 
-type GlobeGateProps = { onClose: () => void; portfolioRef?: RefObject<HTMLDivElement | null> }
+type GlobeGateProps = { onClose: () => void; onPortfolioVisible?: () => void; portfolioRef?: RefObject<HTMLDivElement | null> }
 const flags: Record<string, string> = { FR: fr, LB: lb, SA: sa, QA: qa, CA: ca, PE: pe }
 const countryCount = new Set(journey.map((stop) => stop.code)).size
 const inspectionTimes: Record<string, number> = { approach: 600, fracture: 1600, passage: 2400 }
 
-export default function GlobeGate({ onClose, portfolioRef }: GlobeGateProps) {
+export default function GlobeGate({ onClose, onPortfolioVisible, portfolioRef }: GlobeGateProps) {
   const cover = useRef<HTMLDivElement>(null)
   const sceneHost = useRef<HTMLDivElement>(null)
   const annotation = useRef<HTMLDivElement>(null)
@@ -49,13 +49,13 @@ export default function GlobeGate({ onClose, portfolioRef }: GlobeGateProps) {
     createGlobeScene({
       host: el, cover: cover.current, portfolio: portfolioRef?.current ?? null, controls: controls.current, annotation: annotation.current,
       signal: controller.signal,
-      onStep: setActive, onClose: () => closeRef.current(),
+      onStep: setActive, onClose: () => closeRef.current(), onPortfolioVisible,
     }).then((cleanup) => {
       if (cancelled) cleanup()
       else dispose = cleanup
     }).catch(() => { if (!cancelled) setUnavailable(true) })
     return () => { cancelled = true; controller.abort(); dispose() }
-  }, [portfolioRef])
+  }, [portfolioRef, onPortfolioVisible])
 
   useEffect(() => {
     const previous = document.body.style.overflow
