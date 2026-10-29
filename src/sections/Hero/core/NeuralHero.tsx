@@ -4,6 +4,7 @@ import { NeuralCore } from './NeuralCore'
 import { defaultNeuralNodes, type NeuralNavNode } from './navNodes'
 import { HERO_NETWORK, type NetworkSettings } from './network'
 import type { Run } from '../../../lib/brain'
+import { usePresentationPhase } from '../../../lib/usePresentationAudio'
 
 // three.js lives in this chunk only.
 const NeuralNet = lazy(() => import('./NeuralNet'))
@@ -39,12 +40,13 @@ type NeuralHeroProps = {
 
 export function NeuralHero({ nodes = defaultNeuralNodes, settings = HERO_NETWORK, run = null, className }: NeuralHeroProps) {
   const can3D = useCan3D()
+  const presentation = usePresentationPhase()
   const [ready, setReady] = useState(false)
-  if (!can3D) return <NeuralCore nodes={nodes} className={className} run={run} />
+  if (!can3D) return <NeuralCore nodes={nodes} className={className} run={run} presentation={presentation} />
   return (
     <div className={cx('transition-opacity duration-700', !className?.includes('absolute') && 'relative', !className?.includes('aspect-') && 'aspect-square', ready ? 'opacity-100' : 'opacity-0', className)}>
       <Suspense fallback={null}>
-        <NeuralNet settings={settings} outputs={nodes} run={run} onReady={() => setReady(true)} />
+        <NeuralNet settings={settings} outputs={nodes} run={run} presentation={presentation} onReady={() => setReady(true)} />
       </Suspense>
     </div>
   )

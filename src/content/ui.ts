@@ -1,5 +1,10 @@
 import type { CredentialKind, CredentialLevel, Locale, Localized, Project, ProjectContext, ProjectStatus } from './types'
 
+export const footerUi = {
+  lastUpdate: { fr: 'Mis à jour', en: 'Updated' },
+  lastUpdateLabel: { fr: 'Dernière mise à jour', en: 'Last updated' },
+} satisfies Record<string, Localized>
+
 // Interface vocabulary shared by components. Moves to src/i18n in step 3.
 
 export const statusLabels: Record<ProjectStatus, Localized> = {

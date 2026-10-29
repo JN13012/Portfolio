@@ -15,3 +15,16 @@ namespace_id = "1001"
   [ratelimits.simple]
   limit = 3
   period = 60
+
+[[d1_databases]]
+binding = "VISITS_DB"
+database_name = "portfolio-visits"
+database_id = "ea578ed1-b495-459a-b60d-24cc8e543a25"
+migrations_dir = "migrations"
+
+[[ratelimits]]
+name = "VISITS_LIMITER"
+namespace_id = "1002"
+  [ratelimits.simple]
+  limit = 20
+  period = 60

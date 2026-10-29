@@ -1,7 +1,10 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { Clock3 } from "lucide-react";
 import "./App.css";
 
 import NavBar from "../components/layout/NavBar";
+import { VisitCounter } from "../components/layout/VisitCounter";
+import { PresentationAudioLifecycle } from "../components/Sentry/PresentationAudioLifecycle";
 import Projects from "../sections/Projects/Projects";
 import Certifications from "../sections/Certifications/Certifications";
 import { NetworkBackground } from "../components/layout/NetworkBackground";
@@ -13,6 +16,7 @@ import { Expertise } from "../sections/Expertise/Expertise";
 import { Parcours } from "../sections/Parcours/Parcours";
 import { Contact } from "../sections/Contact/Contact";
 import { profile } from "../content/profile";
+import { footerUi } from "../content/ui";
 import { onCore } from "../lib/coreBus";
 import { sentryWelcome } from "../lib/sentryWelcome";
 
@@ -59,11 +63,12 @@ function App() {
     setGateOpen(false);
   };
 
-  const [, month, ] = profile.updatedAt.split("-");
-  const updated = `${month}/${profile.updatedAt.slice(0, 4)}`;
+  const updated = new Intl.DateTimeFormat("fr-FR", { month: "short", year: "numeric", timeZone: "UTC" })
+    .format(new Date(profile.updatedAt));
 
   return (
     <>
+      <PresentationAudioLifecycle />
       {gateOpen && (
         <Suspense fallback={<div className="fixed inset-0 z-[2000] bg-black" />}>
           <GlobeGate onClose={closeGate} onPortfolioVisible={sentryWelcome.reveal} portfolioRef={portfolioRef} />
@@ -94,12 +99,20 @@ function App() {
             <SentryChat introComplete={!gateOpen} />
           </main>
 
-          <footer className="relative z-10 mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-8 pb-36 text-sm sm:pb-44 text-zinc-500" inert={gateOpen || undefined}>
-            <span>
+          <footer className="relative mx-auto flex w-[90%] max-w-[2400px] flex-wrap items-center gap-x-3 gap-y-2 border-t border-white/10 pt-8 pr-24 pb-[calc(max(1.25rem,var(--presentation-footer-space,0px))+env(safe-area-inset-bottom,0px))] text-xs text-zinc-400 sm:pr-36" inert={gateOpen || undefined}>
+            <span className="whitespace-nowrap">
               © {new Date().getFullYear()} {profile.firstName} {profile.lastName}
             </span>
-            <span className="tracking-widest">
-              LAST_UPDATE: <span className="text-zinc-300">{updated}</span>
+            <span className="flex items-center gap-3 whitespace-nowrap">
+              <span className="h-3 w-px bg-zinc-700" aria-hidden="true" />
+              <VisitCounter />
+            </span>
+            <span className="flex basis-full items-center gap-3 whitespace-nowrap sm:basis-auto" aria-label={`${footerUi.lastUpdateLabel.fr} : ${updated}`}>
+              <span className="hidden h-3 w-px bg-zinc-700 sm:block" aria-hidden="true" />
+              <span className="inline-flex items-center gap-1.5">
+                <Clock3 size={13} className="shrink-0" aria-hidden="true" />
+                <span>{footerUi.lastUpdate.fr} · <time dateTime={profile.updatedAt}>{updated}</time></span>
+              </span>
             </span>
           </footer>
         </div>

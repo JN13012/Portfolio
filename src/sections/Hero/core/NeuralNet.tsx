@@ -33,6 +33,7 @@ import type { NeuralNavNode } from './navNodes'
 import { runState, type Run } from '../../../lib/brain'
 import { easePulseSpeed, IDLE_FREQUENCY, IDLE_SPEED } from './networkTempo'
 import { sentryWelcome } from '../../../lib/sentryWelcome'
+import type { PresentationPhase } from '../../../lib/presentationAudio'
 
 function dotTexture() {
   const c = document.createElement('canvas')
@@ -70,6 +71,7 @@ type NeuralNetProps = {
   outputs: NeuralNavNode[]
   /** The assistant's answer being played: requests flow to the sections it cites, which light up. */
   run?: Run | null
+  presentation?: PresentationPhase
   /** Tuner only: dragging turns the network and the wheel zooms; the new view is reported here. */
   onView?: (view: NetworkView) => void
   /** Tuner only: receives a function that launches an attack now. */
@@ -80,10 +82,11 @@ type NeuralNetProps = {
 /** How long « prompt injection » shows under the guard wall that stopped the attack (about 2 s). */
 const ALERT_MS = 2000
 
-export default function NeuralNet({ settings, outputs, run = null, onView, attackRef, onReady }: NeuralNetProps) {
+export default function NeuralNet({ settings, outputs, run = null, presentation = 'idle', onView, attackRef, onReady }: NeuralNetProps) {
   const wrap = useRef<HTMLDivElement>(null)
   const settingsRef = useRef(settings)
   const runRef = useRef(run)
+  const presentationRef = useRef(presentation)
   const built = useRef<Built | null>(null)
   const rebuild = useRef<(s: NetworkSettings) => void>(() => {})
   const alertBox = useRef<HTMLSpanElement>(null)
@@ -100,6 +103,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
 
   useEffect(() => {
     runRef.current = run
+    presentationRef.current = presentation
     settingsRef.current = settings
     onViewRef.current = onView
     onReadyRef.current = onReady
@@ -219,6 +223,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
     let alertTimer = 0
     let alertWall = -1
     const spawn = (isThreat: boolean) => {
+      if (isThreat && presentationRef.current !== 'idle') return
       const b = built.current
       if (!b || pulses.length >= MAX) return
       // An attack stops at a guard wall: with two walls, the input filter catches half of them and the
@@ -373,6 +378,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
     let nextAnswerPulse = 0
     let pulseSpeed = IDLE_SPEED
     let first = true
+    let wasPresenting = false
     let fullWidths: number[] = []
     let raf = 0
     const syncVisibility = () => {
@@ -426,17 +432,29 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
       const current = runRef.current
       const answer = current ? runState(current, now) : null
       const answering = !!answer && answer.phase !== 'done'
+      const narrating = presentationRef.current === 'playing'
+      const presenting = presentationRef.current !== 'idle'
+      // A recording is a separate activity, never a fabricated assistant answer or security event.
+      if (presenting && !wasPresenting) {
+        for (let i = pulses.length - 1; i >= 0; i--) if (pulses[i]!.threat) pulses.splice(i, 1)
+        b.walls.forEach((wall) => { wall.hit = -Infinity })
+        window.clearTimeout(alertTimer)
+        if (alertWall >= 0) setAlert(null)
+        alertWall = -1
+      }
+      wasPresenting = presenting
       // Time-based easing stays consistent across frame rates and changes no answer timings.
-      pulseSpeed = easePulseSpeed(pulseSpeed, answering, dt)
+      pulseSpeed = easePulseSpeed(pulseSpeed, answering || narrating, dt)
       const litOut = new Set(current ? current.lit.map((id) => outputs.findIndex((o) => o.id === id)) : [])
-      if (answering && now > nextAnswerPulse) {
-        litOut.forEach((i) => i >= 0 && spawnTo(i))
+      if ((answering || narrating) && now > nextAnswerPulse) {
+        if (narrating) spawnTo(0)
+        else litOut.forEach((i) => i >= 0 && spawnTo(i))
         nextAnswerPulse = now + 450
       }
       outputItems.current.forEach((li, i) => {
-        if (li) li.dataset.lit = String(!!answer && answer.phase !== 'question' && litOut.has(i))
+        if (li) li.dataset.lit = String(narrating ? i === 0 : !!answer && answer.phase !== 'question' && litOut.has(i))
       })
-      if (answering) {
+      if (answering || narrating) {
         nextRequest = Math.max(nextRequest, now + 800)
         nextAttack = Math.max(nextAttack, now + 2000)
       }
@@ -448,7 +466,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
       }
       // Only automatic demos wait for the welcome; manual tuner attacks remain available.
       // Restart the cadence on release instead of accumulating overdue attacks.
-      const holdAttacks = !onViewRef.current && sentryWelcome.get().phase !== 'dismissed'
+      const holdAttacks = presenting || (!onViewRef.current && sentryWelcome.get().phase !== 'dismissed')
       if (holdAttacks) nextAttack = Infinity
       else if (!Number.isFinite(nextAttack)) nextAttack = now + st.attackEvery * 1000 / IDLE_FREQUENCY * (0.8 + Math.random() * 0.4)
       if (!holdAttacks && now > nextAttack) {
@@ -629,7 +647,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
   const size = 12 * (settings.outputSize / 0.3)
 
   return (
-    <div ref={wrap} className={cx('group/net absolute inset-0', onView ? 'cursor-grab touch-none select-none active:cursor-grabbing' : 'pointer-events-none')}>
+    <div ref={wrap} data-presentation-phase={presentation} className={cx('group/net absolute inset-0', onView ? 'cursor-grab touch-none select-none active:cursor-grabbing' : 'pointer-events-none')}>
       {/* Overlays positioned each frame from the 3D scene (translate from the top-left corner). */}
       <div aria-hidden="true">
         {/* Inputs carry no name; a blocked attack shows for about 2 s under its guard wall's caption. */}
@@ -637,7 +655,7 @@ export default function NeuralNet({ settings, outputs, run = null, onView, attac
           <span
             className={cx(
               'block -translate-x-1/2 text-[12px] tracking-wider whitespace-nowrap text-[var(--color-threat)] transition-opacity duration-500',
-              alert !== null ? 'opacity-100' : 'opacity-0',
+              alert !== null && presentation === 'idle' ? 'opacity-100' : 'opacity-0',
             )}
           >
             ⚠ prompt injection

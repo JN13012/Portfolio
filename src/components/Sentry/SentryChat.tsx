@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from 'react'
-import { ArrowRight, BadgeCheck, ChevronDown, ChevronUp, PenLine, Play, SendHorizontal } from 'lucide-react'
+import { ArrowRight, BadgeCheck, ChevronDown, PenLine, SendHorizontal } from 'lucide-react'
 import { assistantUi as ui, brainNodes, type AnswerSource, type BrainNodeId } from '../../content/assistant'
 import { credentials } from '../../content/certifications'
-import { hero } from '../../content/hero'
 import { projects } from '../../content/projects'
 import { assistant, useAssistant } from '../../lib/assistantStore'
 import type { RunState } from '../../lib/brain'
@@ -13,6 +12,8 @@ import { SentryWelcome } from './SentryWelcome'
 import { LAST_CUE_DELAY_MS, sentryWelcome } from '../../lib/sentryWelcome'
 import { useDocumentVisible } from '../../lib/useDocumentVisible'
 import { useSentryActivity } from './useSentryActivity'
+import { PresentationPlayer } from './PresentationPlayer'
+import { PresentationSpeech } from './PresentationSpeech'
 
 const nodeOf = (id: BrainNodeId) => brainNodes.find((n) => n.id === id)!
 const chip = 'inline-flex min-h-8 items-center gap-1.5 rounded-full border px-3 py-1 text-[13px] text-left transition-colors focus-visible:outline-none focus-visible:shadow-focus'
@@ -134,6 +135,9 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
         onDone={sentryWelcome.dismiss}
       />}
 
+      {!open && introComplete && <PresentationPlayer />}
+      {!open && introComplete && <PresentationSpeech />}
+
       <button
         ref={toggle}
         type="button"
@@ -145,9 +149,6 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
       >
         <Sentry size={128} state={face} paused={open || (!introComplete && !welcome.portalVisible)}
           welcomeCue={welcome.cue} onCueFinished={sentryWelcome.cueFinished} />
-        <span className="sentry-launcher__chevron" aria-hidden="true">
-          {open ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
-        </span>
         <span className="sentry-launcher__hint" aria-hidden="true">
           {open ? ui.close.fr : ui.open.fr}
         </span>
@@ -173,6 +174,8 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
               <ChevronDown size={20} aria-hidden="true" />
             </button>
           </header>
+          <PresentationSpeech inChat />
+          <PresentationPlayer inChat />
           {preview ? <div className="sentry-chat__body flex min-h-0 flex-1 flex-col">
             <div ref={log} className="sentry-chat__log flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 py-3">
               <FromSentry>
@@ -244,16 +247,6 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
             </p>
 
             <form onSubmit={submit} className="flex gap-2 border-t border-white/8 p-3">
-              {/* Voice introduction (V1.1): reserved spot, disabled until the audio exists. */}
-              <button
-                type="button"
-                disabled
-                aria-label={`${hero.voice.fr} (${hero.voiceSoon.fr})`}
-                title={`${hero.voice.fr} · ${hero.voiceSoon.fr}`}
-                className="grid size-10 shrink-0 cursor-not-allowed place-items-center rounded-md border border-white/12 text-zinc-500"
-              >
-                <Play size={15} aria-hidden="true" />
-              </button>
               <label htmlFor="assistant-input" className="sr-only">
                 {ui.inputLabel.fr}
               </label>

@@ -59,6 +59,12 @@
 .sentry[data-state='responding'] .sentry__neuron { opacity: 0; transform: scaleY(.65); }
 .sentry[data-state='responding'] .sentry__smile { opacity: 1; }
 .sentry[data-state='responding'] .sentry__synapse { opacity: 0; }
+.sentry[data-state='speaking'] .sentry__signals { opacity: .8; }
+.sentry[data-state='speaking'] .sentry__signal { animation: sentry-signal 1.6s linear infinite; }
+.sentry[data-state='speaking'] .sentry__signal--echo { animation-delay: -.8s; }
+.sentry[data-state='speaking'] .sentry__neuron { animation: sentry-thinking 2.4s ease-in-out infinite; }
+.sentry[data-state='speaking'] .sentry__antenna-trace { animation: sentry-antenna-trace 3.2s linear infinite; }
+.sentry[data-state='speaking'] .sentry__bulb { animation: sentry-bulb 3.2s ease-in-out infinite; }
 .sentry[data-state='blocked'] { color: #ff6262; --sentry-glow: #ff4545; }
 .sentry[data-state='blocked'] .sentry__antenna, .sentry[data-state='blocked'] .sentry__bulb { opacity: 1; }
 .sentry[data-state='blocked'] .sentry__antenna-trace { stroke-dasharray: none; opacity: .8; }
@@ -100,13 +106,6 @@
   transform: translateY(-2px);
 }
 .sentry-launcher:focus-visible { outline: 2px solid #65ff79; outline-offset: 3px; }
-.sentry-launcher__chevron {
-  position: absolute;
-  right: 0;
-  top: 19%;
-  color: #b0f4c0;
-  filter: drop-shadow(0 0 5px #07150e);
-}
 .sentry-launcher__hint {
   position: absolute;
   bottom: calc(100% + 6px);

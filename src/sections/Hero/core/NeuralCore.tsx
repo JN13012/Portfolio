@@ -7,6 +7,7 @@ import { useReducedMotion } from '../../../lib/useReducedMotion'
 import { runState, type Run } from '../../../lib/brain'
 import { defaultNeuralNodes, type NeuralNavNode } from './navNodes'
 import { easePulseSpeed, IDLE_FREQUENCY, IDLE_SPEED } from './networkTempo'
+import type { PresentationPhase } from '../../../lib/presentationAudio'
 
 // Layer sizes, left to right. The last layer is the navigation; layer index GUARD is the guardrail layer.
 const LAYERS = [4, 7, 7, 5]
@@ -45,18 +46,20 @@ type NeuralCoreProps = {
   onSelect?: (id: string) => void
   className?: string
   run?: Run | null
+  presentation?: PresentationPhase
 }
 
 /**
  * Hero visual: a small neural network. Signals flow left to right; the output
  * neurons are the site navigation. Attacks (red) are stopped at the guardrail layer.
  */
-export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className, run = null }: NeuralCoreProps) {
+export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className, run = null, presentation = 'idle' }: NeuralCoreProps) {
   const reduced = useReducedMotion()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [active, setActive] = useState<number | null>(null)
   const activeRef = useRef<number | null>(null)
   const runRef = useRef(run)
+  const presentationRef = useRef(presentation)
   const net = useMemo(() => buildNetwork(), [])
   const outputs = net.neurons[net.neurons.length - 1]!
 
@@ -66,7 +69,8 @@ export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className, ru
 
   useEffect(() => {
     runRef.current = run
-  }, [run])
+    presentationRef.current = presentation
+  }, [run, presentation])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -105,6 +109,7 @@ export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className, ru
     }
 
     const offAttack = onCore('attack', () => {
+      if (presentationRef.current !== 'idle') return
       const entry = net.neurons[0]![Math.floor(Math.random() * LAYERS[0]!)]!
       fire(entry, true)
     })
@@ -162,7 +167,11 @@ export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className, ru
 
     const step = (now: number, dt: number) => {
       const current = runRef.current
-      const answering = !!current && runState(current, now).phase !== 'done'
+      const answering = presentationRef.current === 'playing' || (!!current && runState(current, now).phase !== 'done')
+      if (presentationRef.current !== 'idle') {
+        for (let i = pulses.length - 1; i >= 0; i--) if (pulses[i]!.threat) pulses.splice(i, 1)
+        guardHit = -Infinity
+      }
       pulseSpeed = easePulseSpeed(pulseSpeed, answering, dt / 1000)
       if (now > nextWave) {
         const inputs = net.neurons[0]!
@@ -219,7 +228,7 @@ export function NeuralCore({ nodes = defaultNeuralNodes, onSelect, className, ru
   }, [net, reduced])
 
   return (
-    <div data-core className={cx('relative aspect-square select-none', className)}>
+    <div data-core data-presentation-phase={presentation} className={cx('relative aspect-square select-none', className)}>
       <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 size-full" />
       <nav aria-label="Navigation du site">
         <ul>

@@ -12,7 +12,7 @@ import { Sentry, SentryChat } from './components/Sentry'
 <SentryChat />
 ```
 
-`state` accepte `idle`, `reading`, `searching`, `responding` ou `blocked`.
+`state` accepte `idle`, `reading`, `searching`, `responding`, `speaking` ou `blocked`.
 `size` est exprimé en pixels ; sous 64 px, les ramifications sont simplifiées.
 Les avatars sont décoratifs (`aria-hidden`) : leur contexte doit nommer Sentry.
 Les animations CSS s’arrêtent immédiatement avec `prefers-reduced-motion`.
@@ -48,12 +48,43 @@ en onglet masqué et pendant l’introduction ; aucun rendu React à chaque fram
 
 `src/app/App.jsx` monte directement `SentryChat`. Le panneau public affiche seulement
 « Je suis en cours de conception, merci de revenir plus tard. », sans questions,
-historique, saisie ni bouton audio. Le focus va au bouton de fermeture.
+historique ni saisie. Le focus va au bouton de fermeture.
 Les expressions, le clignement et les blocages pédagogiques du Hero restent actifs.
 Les fiches préparées et leurs sources sont conservées uniquement pour l’aperçu
 de développement (`preparedPreview`, ignoré en production). Dans cet aperçu,
 leur historique et leur animation partagent `src/lib/assistantStore.ts` avec le Hero.
-Les questions libres y affichent un message d’indisponibilité et la voix y reste désactivée.
+Les questions libres y affichent un message d’indisponibilité.
+
+La présentation préenregistrée est indépendante du chat : `PresentationPlayer` à
+gauche de la mascotte affiche dès l’arrivée une bande de lecture à chapitres et pilote un seul élément audio,
+créé au premier clic par `src/lib/presentationAudio.ts`. Le MP3 est chargé à la demande ;
+le WAV de référence reste dans `src/assets/audio`. Les événements média pilotent `speaking`,
+le réseau, la progression et les sous-titres. Le texte fourni par Jérémie et les
+chapitres sont dans `src/content/presentation.ts` ; les sept chapitres sans audio
+sont désactivés. Les impulsions sont illustratives, sans analyse d’amplitude sonore.
+Les phrases complètes et leurs débuts ont été vérifiés par reconnaissance locale
+sur le fichier de 14,72 s, puis découpés en passages courts. `PresentationSpeech`
+les affiche au-dessus de Sentry, avec cinq barres illustratives animées uniquement
+pendant la lecture visible. La pause fige les barres et conserve la phrase trois secondes,
+puis masque la bulle ; la reprise la réaffiche au passage courant et la fin la masque.
+Dans le chat, la même bulle passe sous l’en-tête.
+Le chevron réduit le lecteur à lecture/pause, une progression et un chevron de
+réouverture, sans interrompre le son ; la bulle est masquée en vue réduite.
+Hors du chat, seule la flèche reste avant la première lecture, à la fin et après
+trois secondes en pause. Les commandes gardent leur place tant qu’elles ont le
+focus clavier ; la flèche reste ancrée à droite. Le lanceur Sentry conserve son
+effet au survol et son infobulle, sans chevron supplémentaire.
+`src/lib/presentationDisplay.ts` conserve ce choix dans `sessionStorage` et gère
+un seul délai de pause, indépendant de l’horloge audio et du montage du chat.
+L’accueil mentionne la voix clonée et laisse place à la parole dès la lecture.
+Afficher la bande ou la réduire ne charge aucun audio et ne déclenche aucune lecture.
+La bande, sans panneau de transcription supplémentaire, reste hors du flux du Hero
+(dont les positions sont conservées), à 16 px du bas avec réserve pour Sentry.
+La bande conserve cette position jusqu’au footer, sans écouteur de scroll.
+Un observateur de taille réserve de l’espace dans le footer uniquement si ses textes
+partagent la largeur du lecteur ; les commandes ne remontent pas à son arrivée.
+La lecture se met en pause en onglet masqué ou lors d’une relecture du globe,
+sans reprise automatique. Les commandes passent dans le panneau si le chat est ouvert.
 
 Les fiches projet et certification citées utilisent les modales partagées de `components/ui/dialogs/`.
 Le focus entre dans la fiche, puis revient au bouton source à sa fermeture ; Échap ferme la fiche
@@ -74,7 +105,8 @@ installé. L’événement local `guardBlockedDemo` relie uniquement les blocage
 pédagogiques du Hero à une réaction de 1,5 s. Il est émis à l’arrivée du signal
 rouge sur le garde-fou, jamais à partir du contenu d’une question. Des événements
 successifs prolongent la réaction ; à son expiration, l’activité est recalculée
-depuis la fiche ou le brouillon actuels. Les Labs et la voix ne sont pas branchés.
+depuis la fiche ou le brouillon actuels. Les Labs et la voix interactive ne sont pas branchés.
+Les réactions rouges pédagogiques sont suspendues pendant le chargement et la lecture audio.
 La réduction des animations interrompt aussi la lecture progressive des
 fiches. Échap replie la fenêtre et replace le focus sur son bouton d’ouverture.
 

@@ -1,6 +1,6 @@
 import type { RunState } from '../../lib/brain'
 
-export type SentryState = 'idle' | 'reading' | 'searching' | 'responding' | 'blocked'
+export type SentryState = 'idle' | 'reading' | 'searching' | 'responding' | 'speaking' | 'blocked'
 
 export const GUARD_REACTION_MS = 1500
 
