@@ -11,5 +11,16 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    {
+      name: 'cloudflare-web-analytics',
+      apply: (config, { command }) => command === 'build' && config.mode === 'production',
+      transformIndexHtml: {
+        order: 'post',
+        handler: (html) => html.replace(
+          '<!-- Cloudflare Web Analytics -->',
+          `<!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "e300160d171f4e5387345e68cd10c8a9"}'></script><!-- End Cloudflare Web Analytics -->`,
+        ),
+      },
+    },
   ],
 })
