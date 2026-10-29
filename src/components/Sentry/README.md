@@ -58,14 +58,33 @@ Les questions libres y affichent un message d’indisponibilité.
 La présentation préenregistrée est indépendante du chat : `PresentationPlayer` à
 gauche de la mascotte affiche dès l’arrivée une bande de lecture à chapitres et pilote un seul élément audio,
 créé au premier clic par `src/lib/presentationAudio.ts`. Le MP3 est chargé à la demande ;
-le WAV de référence reste dans `src/assets/audio`. Les événements média pilotent `speaking`,
+les WAV de référence restent dans `src/assets/audio` : `intro`, `fraude` et `profil`,
+chacun en `.wav` et `.mp3`. Les événements média pilotent `speaking`,
 le réseau, la progression et les sous-titres. Le texte fourni par Jérémie et les
-chapitres sont dans `src/content/presentation.ts` ; les sept chapitres sans audio
-sont désactivés. Les impulsions sont illustratives, sans analyse d’amplitude sonore.
-Les phrases complètes et leurs débuts ont été vérifiés par reconnaissance locale
-sur le fichier de 14,72 s, puis découpés en passages courts. `PresentationSpeech`
-les affiche au-dessus de Sentry, avec cinq barres illustratives animées uniquement
-pendant la lecture visible. La pause fige les barres et conserve la phrase trois secondes,
+chapitres sont dans `src/content/presentation.ts` : Intro, Fraude, Profil,
+Projets, Parcours et Alternance. Intro, Fraude et Profil sont enregistrés ; les trois
+autres restent désactivés. Une fin de piste native enchaîne sur le prochain audio
+disponible ; la fin du dernier chapitre arrête la lecture. Un clic sur un chapitre
+disponible le lance depuis son début, et réécouter à la fin reprend depuis Intro.
+Le temps et la progression concernent le chapitre courant ; la liste défile horizontalement
+si nécessaire pour le garder visible, sans déplacer la page. Les impulsions sont
+illustratives, sans analyse d’amplitude sonore.
+Les démonstrations de prompt injection continuent pendant la lecture, avec une
+cadence deux fois plus espacée (environ 10 à 15 s entre lancements avec les réglages
+du Hero). Elles attendent la fermeture de l’accueil. Un blocage colore brièvement
+Sentry en rouge, puis son expression de parole reprend sans interrompre l’audio.
+Le texte fourni est regroupé en unités de sens, calées par reconnaissance locale
+et repérage des pauses sur Intro (14,72 s), Fraude (22,64 s) et Profil (33,45 s). La bulle réserve
+au moins deux lignes (trois sous 360 px et dans le tiroir plus étroit) pour stabiliser sa hauteur,
+sans tronquer le texte. `PresentationSpeech`
+l’affiche au-dessus de Sentry, avec cinq barres illustratives animées uniquement
+pendant la lecture visible. Le bloc reste entièrement lisible en zinc-200 ; le mot prononcé
+passe en vert pastel, sans déplacement ni changement de graisse. Les repères de mots
+sont enregistrés avec le texte dans `src/content/presentation.ts`. `presentationTranscript.ts`
+programme seulement la prochaine limite de mot, en lisant l’horloge native et la vitesse
+réelle de l’audio, sans boucle par frame ni mises à jour supplémentaires du réseau.
+Le suivi s’arrête si la bulle est masquée ou la réduction des animations activée ;
+les blocs restent alors affichés sans surbrillance. La pause fige les barres et conserve la phrase trois secondes,
 puis masque la bulle ; la reprise la réaffiche au passage courant et la fin la masque.
 Dans le chat, la même bulle passe sous l’en-tête.
 Le chevron réduit le lecteur à lecture/pause, une progression et un chevron de
@@ -106,7 +125,6 @@ pédagogiques du Hero à une réaction de 1,5 s. Il est émis à l’arrivée du
 rouge sur le garde-fou, jamais à partir du contenu d’une question. Des événements
 successifs prolongent la réaction ; à son expiration, l’activité est recalculée
 depuis la fiche ou le brouillon actuels. Les Labs et la voix interactive ne sont pas branchés.
-Les réactions rouges pédagogiques sont suspendues pendant le chargement et la lecture audio.
 La réduction des animations interrompt aussi la lecture progressive des
 fiches. Échap replie la fenêtre et replace le focus sur son bouton d’ouverture.
 

@@ -34,6 +34,7 @@ import { runState, type Run } from '../../../lib/brain'
 import { easePulseSpeed, IDLE_FREQUENCY, IDLE_SPEED } from './networkTempo'
 import { sentryWelcome } from '../../../lib/sentryWelcome'
 import type { PresentationPhase } from '../../../lib/presentationAudio'
+import { createGuardDemoCadence } from './guardDemoCadence'
 
 function dotTexture() {
   const c = document.createElement('canvas')
@@ -223,7 +224,6 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
     let alertTimer = 0
     let alertWall = -1
     const spawn = (isThreat: boolean) => {
-      if (isThreat && presentationRef.current !== 'idle') return
       const b = built.current
       if (!b || pulses.length >= MAX) return
       // An attack stops at a guard wall: with two walls, the input filter catches half of them and the
@@ -374,11 +374,10 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
 
     let last = performance.now()
     let nextRequest = 0
-    let nextAttack = performance.now() + 3500 / IDLE_FREQUENCY
+    const guardDemos = createGuardDemoCadence(performance.now())
     let nextAnswerPulse = 0
     let pulseSpeed = IDLE_SPEED
     let first = true
-    let wasPresenting = false
     let fullWidths: number[] = []
     let raf = 0
     const syncVisibility = () => {
@@ -428,21 +427,11 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
       root.updateMatrixWorld()
 
       // An answer being played: its requests go to the sections it cites, and these light up; the
-      // usual traffic and attacks pause meanwhile.
+      // usual green traffic pauses meanwhile; guard demonstrations keep their own cadence.
       const current = runRef.current
       const answer = current ? runState(current, now) : null
       const answering = !!answer && answer.phase !== 'done'
       const narrating = presentationRef.current === 'playing'
-      const presenting = presentationRef.current !== 'idle'
-      // A recording is a separate activity, never a fabricated assistant answer or security event.
-      if (presenting && !wasPresenting) {
-        for (let i = pulses.length - 1; i >= 0; i--) if (pulses[i]!.threat) pulses.splice(i, 1)
-        b.walls.forEach((wall) => { wall.hit = -Infinity })
-        window.clearTimeout(alertTimer)
-        if (alertWall >= 0) setAlert(null)
-        alertWall = -1
-      }
-      wasPresenting = presenting
       // Time-based easing stays consistent across frame rates and changes no answer timings.
       pulseSpeed = easePulseSpeed(pulseSpeed, answering || narrating, dt)
       const litOut = new Set(current ? current.lit.map((id) => outputs.findIndex((o) => o.id === id)) : [])
@@ -456,7 +445,6 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
       })
       if (answering || narrating) {
         nextRequest = Math.max(nextRequest, now + 800)
-        nextAttack = Math.max(nextAttack, now + 2000)
       }
 
       // Traffic.
@@ -465,14 +453,8 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
         nextRequest = now + st.requestEvery * 1000 / IDLE_FREQUENCY * (0.7 + Math.random() * 0.6)
       }
       // Only automatic demos wait for the welcome; manual tuner attacks remain available.
-      // Restart the cadence on release instead of accumulating overdue attacks.
-      const holdAttacks = presenting || (!onViewRef.current && sentryWelcome.get().phase !== 'dismissed')
-      if (holdAttacks) nextAttack = Infinity
-      else if (!Number.isFinite(nextAttack)) nextAttack = now + st.attackEvery * 1000 / IDLE_FREQUENCY * (0.8 + Math.random() * 0.4)
-      if (!holdAttacks && now > nextAttack) {
-        spawn(true)
-        nextAttack = now + st.attackEvery * 1000 / IDLE_FREQUENCY * (0.8 + Math.random() * 0.4)
-      }
+      const holdAttacks = !onViewRef.current && sentryWelcome.get().phase !== 'dismissed'
+      if (guardDemos.due(now, st.attackEvery, holdAttacks, answering || narrating)) spawn(true)
       for (let i = pulses.length - 1; i >= 0; i--) {
         const p = pulses[i]!
         p.t += dt * (p.threat ? 1.1 : 1.5) * pulseSpeed
@@ -655,7 +637,7 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
           <span
             className={cx(
               'block -translate-x-1/2 text-[12px] tracking-wider whitespace-nowrap text-[var(--color-threat)] transition-opacity duration-500',
-              alert !== null && presentation === 'idle' ? 'opacity-100' : 'opacity-0',
+              alert !== null ? 'opacity-100' : 'opacity-0',
             )}
           >
             ⚠ prompt injection

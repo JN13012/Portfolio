@@ -7,9 +7,10 @@ class FakeMedia extends EventTarget {
   currentTime = 0
   duration = 29.88
   paused = true
-  load = vi.fn()
+  ended = false
+  load = vi.fn(() => { this.currentTime = 0; this.duration = NaN; this.ended = false; this.paused = true })
   removeAttribute = vi.fn()
-  play = vi.fn(async () => { this.paused = false })
+  play = vi.fn(async () => { this.paused = false; this.ended = false })
   pause = vi.fn(() => {
     this.paused = true
     this.dispatchEvent(new Event('pause'))
@@ -20,7 +21,7 @@ class FakeMedia extends EventTarget {
 function setup() {
   const media = new FakeMedia()
   const create = vi.fn(() => media)
-  const player = createPresentationPlayer(create, '/intro.mp3')
+  const player = createPresentationPlayer(create, [{ id: 'introduction', src: '/intro.mp3' }])
   return { media, create, player }
 }
 
@@ -93,7 +94,7 @@ describe('shared voice presentation player', () => {
     expect(media.currentTime).toBe(29.88)
     player.stop()
     media.emit('pause') // Browsers may queue this event after stop has reset the player.
-    expect(player.get()).toEqual({ status: 'idle', currentTime: 0, duration: 29.88 })
+    expect(player.get()).toEqual({ chapterId: 'introduction', status: 'idle', currentTime: 0, duration: 29.88 })
     expect(media.paused).toBe(true)
     expect(create).toHaveBeenCalledTimes(1)
   })
@@ -132,11 +133,91 @@ describe('shared voice presentation player', () => {
     const calls = listener.mock.calls.length
     media.emit('error')
     expect(listener.mock.calls).toHaveLength(calls)
-    expect(player.get()).toEqual({ status: 'idle', currentTime: 0, duration: 0 })
+    expect(player.get()).toEqual({ chapterId: 'introduction', status: 'idle', currentTime: 0, duration: 0 })
     expect(media.removeAttribute).toHaveBeenCalledWith('src')
     expect(media.load).toHaveBeenCalledOnce()
     await player.play()
     expect(create).toHaveBeenCalledTimes(2)
     unsubscribe()
+  })
+
+  it('selects a recorded chapter directly, resets its clock and reuses the same media element', async () => {
+    const media = new FakeMedia()
+    const create = vi.fn(() => media)
+    const player = createPresentationPlayer(create, [{ id: 'introduction', src: '/intro.mp3' }, { id: 'fraude', src: '/fraude.mp3' }])
+    player.selectChapter('unavailable')
+    expect(create).not.toHaveBeenCalled()
+    player.selectChapter('fraude')
+    expect(media.src).toBe('/fraude.mp3')
+    media.duration = 29.04
+    media.emit('loadedmetadata')
+    media.emit('playing')
+    player.seek(15)
+    expect(player.get()).toMatchObject({ chapterId: 'fraude', currentTime: 15, duration: 29.04 })
+    player.selectChapter('introduction')
+    expect(media.src).toBe('/intro.mp3')
+    expect(player.get()).toMatchObject({ chapterId: 'introduction', currentTime: 0, duration: 0, status: 'loading' })
+    expect(create).toHaveBeenCalledTimes(1)
+  })
+
+  it('advances after a native end, stops at the final recording and replays from the introduction', async () => {
+    const media = new FakeMedia()
+    const create = vi.fn(() => media)
+    const player = createPresentationPlayer(create, [{ id: 'introduction', src: '/intro.mp3' }, { id: 'fraude', src: '/fraude.mp3' }, { id: 'profil', src: '/profil.mp3' }])
+    await player.play()
+    media.emit('playing')
+    media.ended = true
+    media.paused = true
+    media.emit('pause') // Native browsers emit pause before ended at the end of a track.
+    expect(player.get().status).toBe('playing')
+    media.emit('ended')
+    expect(player.get()).toMatchObject({ chapterId: 'fraude', status: 'loading', currentTime: 0, duration: 0 })
+    expect(media.src).toBe('/fraude.mp3')
+    media.duration = 29.04
+    media.emit('loadedmetadata')
+    media.emit('playing')
+    media.ended = true
+    media.paused = true
+    media.emit('pause')
+    media.emit('ended')
+    expect(player.get()).toMatchObject({ chapterId: 'profil', status: 'loading', currentTime: 0, duration: 0 })
+    expect(media.src).toBe('/profil.mp3')
+    media.duration = 33.450091
+    media.emit('loadedmetadata')
+    media.emit('playing')
+    media.ended = true
+    media.paused = true
+    media.emit('pause')
+    media.emit('ended')
+    expect(player.get()).toMatchObject({ chapterId: 'profil', status: 'ended', currentTime: 33.450091 })
+    await player.play()
+    expect(player.get()).toMatchObject({ chapterId: 'introduction', status: 'loading', currentTime: 0, duration: 0 })
+    expect(media.src).toBe('/intro.mp3')
+    expect(create).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not advance on a late ended event after an explicit pause', async () => {
+    const media = new FakeMedia()
+    const player = createPresentationPlayer(() => media, [{ id: 'introduction', src: '/intro.mp3' }, { id: 'fraude', src: '/fraude.mp3' }])
+    await player.play()
+    media.emit('playing')
+    player.pause()
+    media.ended = true
+    media.emit('ended')
+    expect(player.get()).toMatchObject({ chapterId: 'introduction', status: 'paused' })
+    expect(media.src).toBe('/intro.mp3')
+  })
+
+  it('ignores a cancelled old play promise when a different chapter has already started', async () => {
+    const media = new FakeMedia()
+    const player = createPresentationPlayer(() => media, [{ id: 'introduction', src: '/intro.mp3' }, { id: 'fraude', src: '/fraude.mp3' }])
+    let reject!: (reason: Error) => void
+    media.play.mockImplementationOnce(() => new Promise<void>((_, fail) => { reject = fail }))
+    const pending = player.play()
+    player.selectChapter('fraude')
+    media.emit('playing')
+    reject(new Error('AbortError from the previous source'))
+    await pending
+    expect(player.get()).toMatchObject({ chapterId: 'fraude', status: 'playing' })
   })
 })
