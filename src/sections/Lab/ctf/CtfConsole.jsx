@@ -2,39 +2,20 @@ import React, { useState, useRef, useEffect } from "react";
 import { Terminal, ShieldCheck, Lock } from "lucide-react";
 import { CTF_LEVELS } from "./ctfData";
 import { createCommandTimers } from "./commandTimers";
+import { LabNavigation } from "../LabNavigation";
 
-// Progress is kept in this browser only (localStorage), so a visitor can come back to the same level.
-// Same key as src/sections/Lab/CtfIntro.tsx (the intro shows this progress).
-const CTF_PROGRESS_KEY = "ctf-progress";
-const readProgress = () => {
-  try {
-    const p = JSON.parse(localStorage.getItem(CTF_PROGRESS_KEY) || "null");
-    return p && CTF_LEVELS[p.level] ? p : { level: 1, solved: false };
-  } catch {
-    return { level: 1, solved: false };
-  }
-};
-
-const CtfConsole = () => {
-  const [level, setLevel] = useState(() => readProgress().level);
+// One mounted console per visited level; the parent stores only earned successes.
+const CtfConsole = ({ initialLevel = 1, onComplete, onPresentation, onCurriculum, curriculumOpen, completedAll, onNext }) => {
+  const level = initialLevel;
   const [remoteSession, setRemoteSession] = useState(null);
-  const [history, setHistory] = useState(() => {
-    const start = readProgress().level;
-    return [
-      { msg: "CYBERSECURITY TRAINING LAB - CAPTURE THE FLAG", type: "sys" },
-      ...(start > 1 ? [{ msg: `RESUMING AT LEVEL ${start} : ${CTF_LEVELS[start].label}`, type: "sys" }] : []),
-      { msg: "TYPE 'help' TO START THE CHALLENGE.", type: "sys" },
-    ];
-  });
+  const [history, setHistory] = useState(() => [
+    { msg: "CYBERSECURITY TRAINING LAB - CAPTURE THE FLAG", type: "sys" },
+    { msg: `LEVEL ${level} : ${CTF_LEVELS[level].label}`, type: "sys" },
+    ...(CTF_LEVELS[level].unlocks?.length ? [{ msg: `AVAILABLE TOOLS: ${CTF_LEVELS[level].unlocks.join(", ")}`, type: "sys" }] : []),
+    { msg: "TYPE 'help' TO START THE CHALLENGE.", type: "sys" },
+  ]);
   const [inputValue, setInputValue] = useState("");
-  const [solved, setSolved] = useState(() => readProgress().solved);
-  useEffect(() => {
-    try {
-      localStorage.setItem(CTF_PROGRESS_KEY, JSON.stringify({ level, solved }));
-    } catch {
-      // Private mode: progress is simply not kept.
-    }
-  }, [level, solved]);
+  const [solved, setSolved] = useState(false);
   const scrollRef = useRef(null);
   const [commandTimers] = useState(createCommandTimers);
   const scheduleCommand = commandTimers.schedule;
@@ -3100,35 +3081,9 @@ const CtfConsole = () => {
       const userFlag = command === "submit" ? args[1] : input;
 
       if (userFlag === currentData.flag) {
-        if (CTF_LEVELS[level + 1]) {
-          const nextLvl = level + 1;
-
-          addLog(`[+] Access Granted`, "sys");
-
-          scheduleCommand(() => {
-            const nextLevelData = CTF_LEVELS[nextLvl];
-
-            if (nextLevelData) {
-              addLog(`Level ${nextLvl} : ${nextLevelData.label}`, "sys");
-
-              if (nextLevelData.unlocks?.length) {
-                addLog(
-                  `[!] NEW TOOLS INSTALLED: ${nextLevelData.unlocks.join(", ")}`,
-                  "sys",
-                );
-              }
-
-              addLog("TYPE 'help' TO START THE CHALLENGE.", "sys");
-            } else {
-              addLog("[!] SYSTEM STATE UPDATED", "sys");
-            }
-
-            setLevel((prev) => prev + 1);
-          }, 150);
-        } else {
-          addLog("[!] CONGRATULATIONS !", "sys");
-          setSolved(true);
-        }
+        addLog("[+] Access Granted — niveau réussi", "sys");
+        setSolved(true);
+        onComplete(level);
       } else {
         addLog("[-] FLAG INCORRECT.", "err");
       }
@@ -3144,18 +3099,17 @@ const CtfConsole = () => {
     >
       {/* Header */}
       <div className="bg-zinc-900 px-3 py-2 flex justify-between items-center border-b border-white/10 shrink-0 font-mono text-[10px]">
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           {solved ? (
             <ShieldCheck size={14} className="text-green-500" />
           ) : (
             <Terminal size={14} className="text-cyber" />
           )}
-          <span className="text-white uppercase tracking-widest">
-            {solved
-              ? "ROOT@NCTF:~#"
-              : `LVL_${level}_${CTF_LEVELS[level].label}`}
+          <span className="truncate text-white uppercase tracking-widest" title={CTF_LEVELS[level].label}>
+            {String(level).padStart(2, "0")}/09 · {CTF_LEVELS[level].label}
           </span>
         </div>
+        <LabNavigation onPresentation={onPresentation} onCurriculum={onCurriculum} open={curriculumOpen} drawerId="cyber-lab-curriculum" />
       </div>
 
       {/* Logs View */}
@@ -3184,27 +3138,9 @@ const CtfConsole = () => {
           </div>
         ))}
         {solved && (
-          <div className="mt-6 p-4 border border-green-500/50 text-center uppercase text-sm space-y-2 text-green-500">
-            <div className="animate-pulse text-green-300">
-              [ CTF COMPLETED ]
-            </div>
-
-            <div className="text-white mt-8">Gained skills</div>
-
-            <div className="text-cyan-400 mt-3 space-y-1">
-              <div>✔ Linux commands</div>
-              <div>✔ Network protocols TCP/IP</div>
-              <div>✔ Attack surface enumeration & port exposure</div>
-              <div>✔ Hash cracking</div>
-              <div>✔ Exploitation & privilege escalation</div>
-              <div>✔ SOC monitoring & log analysis</div>
-              <div>✔ Threat hunting & containment</div>
-              <div>✔ System hardening</div>
-            </div>
-
-            <div className="mt-8 text-yellow-400">
-              CYBERSECURITY CERTIFICATE GRANTED
-            </div>
+          <div className="mt-6 space-y-3 border border-green-500/40 p-4 text-sm text-green-300" role="status">
+            <p>{completedAll ? "Les neuf niveaux sont réussis." : `Niveau ${level} réussi.`}</p>
+            {onNext && <button type="button" onClick={onNext} className="cursor-pointer border border-cyber/40 px-3 py-2 text-xs text-cyber focus-visible:outline-2 focus-visible:outline-cyber">Niveau suivant</button>}
           </div>
         )}
       </div>
@@ -3219,12 +3155,12 @@ const CtfConsole = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && !e.nativeEvent.isComposing && e.keyCode !== 229) {
               handleCommand(inputValue);
               setInputValue("");
             }
           }}
-          disabled={solved}
+          aria-label={`Commande du niveau ${level}`}
           className="bg-transparent border-none outline-none text-white font-mono text-[11px] w-full"
         />
         {!solved && <Lock size={10} className="text-zinc-700" />}

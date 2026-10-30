@@ -1,27 +1,16 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import { Check, Play, RotateCcw } from 'lucide-react'
+import { Check, ChevronRight, Play } from 'lucide-react'
 import { cx } from '../../lib/cx'
 import { useReducedMotion } from '../../lib/useReducedMotion'
 import { TerminalStartButton } from '../../components/ui/TerminalStartButton'
 import { TerminalTypedText as Typed } from '../../components/ui/TerminalTypedText'
 import { useTerminalTyping } from '../../lib/useTerminalTyping'
+import { cyberLabCurriculum } from '../../content/cyberLab'
 
 // Intro screen of the CTF terminal: what the 9 levels train, typed in once per visit, with the
 // visitor's progress (kept in this browser by the console) and the button that opens the console.
 
-const CTF_PROGRESS_KEY = 'ctf-progress'
-
-const CTF_SKILLS = [
-  'Système Linux & recherche de fichiers',
-  'Réseaux TCP/IP & services exposés',
-  'Scan, énumération & reconnaissance',
-  'Exploitation web & injection SQL',
-  'Cassage de hashs & accès SSH',
-  'Exploitation système & élévation de privilèges',
-  'Analyse SIEM & corrélation de logs',
-  'Forensique, investigation & confinement',
-  'Durcissement : WAF, firewall & IDS',
-]
+const CTF_SKILLS = cyberLabCurriculum.flatMap(group => group.levels.map(level => level.title))
 
 const PHASES = [
   { title: 'Reconnaissance', levels: [1, 2, 3] },
@@ -49,46 +38,27 @@ const PIECES = (() => {
 
 type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 'bracket' | 'loader' | 'split' | 'card' | 'cap' | 'tilt' | 'brick' | 'socket'
 
-type Progress = { level: number; solved: boolean }
-function readProgress(): Progress {
-  try {
-    const p = JSON.parse(localStorage.getItem(CTF_PROGRESS_KEY) ?? 'null') as Progress | null
-    return p && p.level >= 1 && p.level <= 9 ? p : { level: 1, solved: false }
-  } catch {
-    return { level: 1, solved: false }
-  }
-}
-
-export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; button?: StartButtonStyle }) {
+export function CtfIntro({ onStart, completed = [], onCurriculum, button = 'socket' }: { onStart: (level: number) => void; completed?: readonly number[]; onCurriculum?: () => void; button?: StartButtonStyle }) {
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
-  const [progress] = useState(readProgress)
   const total = TITLE.length + SUBTITLE.length + PHASES.reduce((n, p) => n + p.title.length + p.levels.reduce((m, l) => m + CTF_SKILLS[l - 1]!.length + 3, 0), 0)
   const chars = useTerminalTyping(root, total, 'ctf-intro-typed', reduced)
 
-  const started = progress.level > 1 || progress.solved
-  const label = progress.solved ? 'Rejouer' : started ? `Reprendre au niveau ${progress.level}` : 'Commencer'
-  const done = (n: number) => progress.solved || n < progress.level
+  const done = (n: number) => completed.includes(n)
   const typing = chars < total
 
   // On click, the screen switches off like an old CRT (collapses to a bright line), then the console opens.
-  const [leaving, setLeaving] = useState(false)
+  const [target, setTarget] = useState<number | null>(null)
+  const leaving = target !== null
   useEffect(() => {
-    if (!leaving) return
-    const timer = window.setTimeout(onStart, 520)
+    if (target === null) return
+    const timer = window.setTimeout(() => onStart(target), 520)
     return () => window.clearTimeout(timer)
-  }, [leaving, onStart])
-  const go = () => {
-    if (reduced) return onStart()
-    setLeaving(true)
-  }
-  const restart = () => {
-    try {
-      localStorage.removeItem(CTF_PROGRESS_KEY)
-    } catch {
-      // Nothing stored.
-    }
-    go()
+  }, [target, onStart])
+  const go = (level = 1) => {
+    if (typing || leaving) return
+    if (reduced) return onStart(level)
+    setTarget(level)
   }
 
   return (
@@ -119,7 +89,7 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
         />
       </span>
 
-      <p className="text-2xl font-bold tracking-[0.25em] text-cyber uppercase [text-shadow:0_0_18px_rgba(74,222,128,0.45)] motion-safe:animate-[crt-glitch_3s_steps(1)_infinite]">
+      <p data-lab-intro-heading tabIndex={-1} className="text-2xl font-bold tracking-[0.25em] text-cyber uppercase outline-none [text-shadow:0_0_18px_rgba(74,222,128,0.45)] motion-safe:animate-[crt-glitch_3s_steps(1)_infinite]">
         <Typed text={TITLE} from={0} chars={chars} />
       </p>
       <p className="mt-2 text-[15px] text-zinc-300 motion-safe:animate-[crt-glitch_4.2s_steps(1)_1.1s_infinite]">
@@ -140,7 +110,6 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
             <ol className="relative space-y-2 border-l border-cyber/25 pl-5">
               {phase.lines.map(({ n, at }) => {
                 const ok = done(n)
-                const current = !progress.solved && started && n === progress.level
                 return (
                   <li key={n} className={cx('relative text-[15px]', ok ? 'text-zinc-400' : 'text-zinc-100')}>
                     {ok ? (
@@ -150,14 +119,15 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
                         aria-hidden="true"
                         className={cx(
                           'absolute top-1/2 -left-[1.4rem] size-1.5 -translate-y-1/2 rounded-full',
-                          current ? 'bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,0.8)]' : 'bg-cyber shadow-[0_0_6px_var(--color-cyber)]',
+                          'bg-cyber shadow-[0_0_6px_var(--color-cyber)]',
                         )}
                       />
                     )}
-                    <span className={cx('mr-3 tabular-nums', current ? 'text-amber-300' : 'text-cyber')}>{String(n).padStart(2, '0')}</span>
-                    <Typed text={CTF_SKILLS[n - 1]!} from={at} chars={chars} />
-                    {ok && <span className="sr-only"> (réussi)</span>}
-                    {current && <span className="sr-only"> (en cours)</span>}
+                    <button type="button" className="lab-intro-level" disabled={typing || leaving} onClick={() => go(n)} aria-label={`Ouvrir le niveau ${n} : ${CTF_SKILLS[n - 1]}${ok ? ' — Réussi' : ''}`}>
+                      <span className="mr-3 text-cyber tabular-nums">{String(n).padStart(2, '0')}</span>
+                      <Typed text={CTF_SKILLS[n - 1]!} from={at} chars={chars} />
+                      {ok && <span className="sr-only"> (réussi)</span>}
+                    </button>
                   </li>
                 )
               })}
@@ -170,16 +140,12 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
         {/* Slow blink, with the same occasional screen jump as the text. */}
         <span className="motion-safe:animate-[start-blink_2.8s_ease-in-out_infinite]">
           <span className="inline-block motion-safe:animate-[crt-glitch_3.7s_steps(1)_1.7s_infinite]">
-            <StartButton style={button} onClick={go}>
-              {label}
+            <StartButton style={button} onClick={() => go(1)}>
+              Commencer
             </StartButton>
           </span>
         </span>
-        {started && (
-          <button type="button" onClick={restart} className="inline-flex items-center gap-1.5 text-xs text-zinc-400 transition-colors hover:text-zinc-200">
-            <RotateCcw size={12} aria-hidden="true" /> Recommencer à zéro
-          </button>
-        )}
+        {onCurriculum && <button type="button" onClick={onCurriculum} className="inline-flex items-center gap-1 text-xs text-zinc-400 hover:text-cyber" aria-haspopup="dialog" aria-controls="cyber-lab-curriculum">Parcours <ChevronRight size={13} aria-hidden="true" /></button>}
       </div>
     </div>
   )

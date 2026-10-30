@@ -1,6 +1,7 @@
 import { Activity, lazy, Suspense, useState } from 'react'
 import SectionHeader from '../../components/ui/SectionHeader'
 import { CyberLab } from './CyberLab'
+import { LabConstructionNotice } from './LabConstructionNotice'
 import './lab.css'
 
 // The preview and its fixtures are eliminated from the production build.
@@ -15,6 +16,7 @@ export function Lab() {
   const [visitedIa, setVisitedIa] = useState(startInIa)
   return (
     <section id="lab" className="py-24">
+      {preview && domain === 'ia' && <LabConstructionNotice />}
       <SectionHeader index="04" title="Lab" />
       <div role="group" aria-label="Domaine du Lab" className="mb-6 flex flex-wrap items-center gap-x-8 gap-y-3 pb-2">
         <button type="button" aria-pressed={domain === 'cyber'} onClick={() => { setVisitedCyber(true); setDomain('cyber') }} className="group relative inline-flex cursor-pointer items-center gap-2 pb-2.5 text-lg">

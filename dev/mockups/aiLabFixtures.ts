@@ -6,11 +6,11 @@ export const demoScenarios = [
   { id: 'response', label: 'Réponse délivrée', fromLevel: 1 },
   { id: 'refusal', label: 'Refus du modèle', fromLevel: 1 },
   { id: 'leak', label: 'Flag révélé', fromLevel: 1 },
-  { id: 'input-block', label: 'Blocage à l’entrée', fromLevel: 3 },
-  { id: 'output-block', label: 'Blocage en sortie', fromLevel: 4 },
-  { id: 'judge-block', label: 'Blocage par le juge', fromLevel: 5 },
+  { id: 'input-block', label: 'Blocage à l’entrée', fromLevel: 2 },
+  { id: 'output-block', label: 'Blocage en sortie', fromLevel: 2 },
+  { id: 'judge-block', label: 'Blocage par le juge', fromLevel: 3 },
   { id: 'model-error', label: 'Erreur du modèle', fromLevel: 1 },
-  { id: 'judge-error', label: 'Erreur du juge', fromLevel: 5 },
+  { id: 'judge-error', label: 'Erreur du juge', fromLevel: 3 },
   { id: 'quota', label: 'Quota indisponible', fromLevel: 1 },
 ] as const
 export type DemoScenario = typeof demoScenarios[number]['id']
@@ -38,7 +38,7 @@ export function demoResult(level: LabLevel, scenario: DemoScenario, id: number):
   const explanations: Record<DemoScenario, string> = {
     response: 'Le parcours simulé est terminé. Cette réponse préparée ne provient pas d’un modèle.',
     refusal: 'Dans cet exemple, le modèle refuse la demande. Aucun filtre ne l’a bloquée.',
-    leak: 'Cet exemple montre une fuite fictive. Copiez le flag dans le champ de validation pour explorer le niveau suivant.',
+    leak: 'Cet exemple montre une fuite fictive. Copiez le flag dans le champ de validation pour valider uniquement ce niveau.',
     'input-block': 'Le filtre d’entrée arrête cette simulation. Le modèle et les défenses suivantes ne sont pas exécutés.',
     'output-block': 'La réponse simulée est retenue avant publication. Son contenu ne figure pas dans le résultat.',
     'judge-block': 'Le juge simulé retient la réponse. Son contenu n’est pas publié.',

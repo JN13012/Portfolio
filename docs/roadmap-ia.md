@@ -26,12 +26,14 @@ Voir [l’architecture actuelle](architecture.md).
 
 Lot 1 réalisé localement le 30 octobre 2026 : aperçu interactif accessible par le sélecteur IA
 en développement (ou directement via `/?lab=ia#lab`),
-avec cinq niveaux simulés, console, tiroir de consignes et schéma des défenses. Aucun modèle
+avec trois niveaux directs simulés, console, tiroir de parcours et schéma des défenses. Aucun modèle
 ni API connecté ; accès public IA toujours désactivé. Prochaine étape : niveau 1 réel et quotas serveur.
 Voir le [plan de conception et son avancement](plan-lab-ia.md).
 Le [parcours cible Sentry](conception-lab-ia.md) prévoit désormais neuf niveaux :
 trois directs, deux indirects, deux sur l’agent/application et deux de défense.
-L’écran d’entrée les annonce ; la console reste la démonstration initiale à cinq niveaux.
+L’écran d’entrée et le tiroir les annoncent ; les trois niveaux directs sont accessibles,
+les six suivants restent « À venir ». Les deux Labs proposent le retour à la présentation
+et la sélection directe des niveaux disponibles, sans valider les niveaux sautés.
 
 - Dans le Lab, à côté du CTF, avec sa propre interface façon terminal. Le chatbot y renvoie avec un lien « Défier l'IA », mais ce n'est pas le même mode.
 - Objectif : faire révéler à l'IA un flag caché dans ses instructions, avec plusieurs niveaux de garde-fous de plus en plus solides.

@@ -6,6 +6,8 @@ Ce document ne constitue pas une autorisation de publication.
 Mise à jour : le [résumé de conception du parcours Sentry](conception-lab-ia.md) définit
 désormais la cible à neuf niveaux, dont injections indirectes et défense. Le présent plan
 conserve le détail technique de la première maquette à cinq niveaux simulés.
+La navigation actuelle regroupe les démonstrations directes en trois niveaux accessibles
+librement ; les six exercices futurs restent indisponibles. Voir le résumé pour l’état actuel.
 
 ## Avancement — lot 1
 
