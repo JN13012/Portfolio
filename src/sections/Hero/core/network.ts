@@ -102,7 +102,7 @@ export const NETWORK_STRUCTURE: Array<keyof NetworkSettings> = [
 ]
 
 // Column captions (2026-10-27). The inputs carry no name: only an attack shows its own (« prompt injection »).
-const NETWORK_LABELS = { input: 'Requête', embed: 'Embedding', model: 'Modèle', guard: 'Garde-fous', output: 'Portfolio' }
+const NETWORK_LABELS = { input: 'Requête', embed: 'Embedding', model: 'Modèle', inputFilter: 'Filtre d’entrée', outputFilter: 'Filtre de sortie', output: 'Portfolio' }
 // ── Graph ───────────────────────────────────────────────────────────────────
 
 export type NetworkNode = { pos: Vector3; layer: number; index: number; kind: 'input' | 'embed' | 'hidden' | 'guard' | 'output' }
@@ -195,7 +195,7 @@ export function buildGraph(s: NetworkSettings, outputs: number) {
   kinds.forEach((k, l) => {
     if (k === 'input') captions.push({ x: xs[l]!, text: t.input })
     if (k === 'embed') captions.push({ x: xs[l]!, text: t.embed })
-    if (k === 'guard') captions.push({ x: xs[l]!, text: t.guard, accent: true })
+    if (k === 'guard') captions.push({ x: xs[l]!, text: two && l === kinds.indexOf('guard') ? t.inputFilter : t.outputFilter, accent: true })
     // The portfolio is where every answer lands: its caption stands out.
     if (k === 'output') captions.push({ x: xs[l]!, text: t.output, main: true })
     if (k === 'hidden' && xs[l] === hiddenXs[0]) captions.push({ x: (hiddenXs[0]! + hiddenXs.at(-1)!) / 2, text: t.model })

@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-10-28 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-10-30 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Introduction
@@ -23,7 +23,7 @@ Certifié : IBM AI Developer (Professional Certificate) · Jr Penetration Tester
 
 Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · en test) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
-Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team mon agent, bientôt)
+Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team Sentry, bientôt)
 
 **Lab cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Terminal, ShieldCheck, Lock } from "lucide-react";
 import { CTF_LEVELS } from "./ctfData";
+import { createCommandTimers } from "./commandTimers";
 
 // Progress is kept in this browser only (localStorage), so a visitor can come back to the same level.
 // Same key as src/sections/Lab/CtfIntro.tsx (the intro shows this progress).
@@ -35,6 +36,26 @@ const CtfConsole = () => {
     }
   }, [level, solved]);
   const scrollRef = useRef(null);
+  const [commandTimers] = useState(createCommandTimers);
+  const scheduleCommand = commandTimers.schedule;
+  useEffect(() => {
+    let inView = false;
+    const sync = () => {
+      if (inView && !document.hidden) commandTimers.resume();
+      else commandTimers.pause();
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = !!entry?.isIntersecting;
+      sync();
+    });
+    if (scrollRef.current) observer.observe(scrollRef.current);
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+      commandTimers.pause();
+    };
+  }, [commandTimers]);
   const [crackedPasswords, setCrackedPasswords] = useState({});
   const [level5State, setLevel5State] = useState({
     hashesFound: false,
@@ -153,23 +174,23 @@ const CtfConsole = () => {
     if (allOk && !flagTriggeredRef.current) {
       flagTriggeredRef.current = true;
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog("HARDENING COMPLETE. UNLOCKING FLAG.", "sys");
       }, 500);
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog("[+]", "sys");
       }, 900);
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog("[+]", "sys");
       }, 1300);
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog("[+]", "sys");
       }, 1700);
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog(`FLAG{${CTF_LEVELS[9].flag}}`, "out");
       }, 2200);
     }
@@ -307,7 +328,7 @@ const CtfConsole = () => {
       if (fullCommand === "search index=ctf") {
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
-        setTimeout(() => {
+        scheduleCommand(() => {
           addLog(`${shellPrefix} ERROR: incomplete query`, "err");
           addLog(
             `${shellPrefix} hint: try 'search index=ctf | stats count'`,
@@ -324,7 +345,7 @@ const CtfConsole = () => {
       if (fullCommand === "search index=ctf | stats count") {
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
-        setTimeout(() => {
+        scheduleCommand(() => {
           addLog(
             "==============================================================",
             "out",
@@ -365,7 +386,7 @@ const CtfConsole = () => {
 
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
-        setTimeout(() => {
+        scheduleCommand(() => {
           if (sourcetype === "auth") {
             addLog(
               `==============================================================`,
@@ -414,7 +435,7 @@ const CtfConsole = () => {
           }
 
           if (sourcetype === "endpoint_telemetry") {
-            setTimeout(() => {
+            scheduleCommand(() => {
               addLog(
                 "==============================================================",
                 "out",
@@ -461,10 +482,10 @@ const CtfConsole = () => {
                 "out",
               );
 
-              setTimeout(() => {
+              scheduleCommand(() => {
                 addLog(`${shellPrefix} ATTACKER_IP = 45.83.122.91`, "err");
 
-                setTimeout(() => {
+                scheduleCommand(() => {
                   addLog(`${shellPrefix} FLAG{WORM_ILOVEYOU}`, "sys");
                 }, 1400);
               }, 1000);
@@ -491,7 +512,7 @@ const CtfConsole = () => {
       if (fullCommand.startsWith("search")) {
         addLog(`${shellPrefix} executing SPL query...`, "sys");
 
-        setTimeout(() => {
+        scheduleCommand(() => {
           addLog(
             `${shellPrefix} ERROR: invalid or unsupported SPL syntax`,
             "err",
@@ -699,7 +720,7 @@ const CtfConsole = () => {
           return;
         }
         addLog(`${shellPrefix} migrating to process ${pid}...`, "sys");
-        setTimeout(() => {
+        scheduleCommand(() => {
           // LSASS = SUCCESS
           if (pid === "396") {
             setMeterpreterState({
@@ -1326,7 +1347,7 @@ const CtfConsole = () => {
 
       addLog(`Starting Nmap scan on ${target}...`, "sys");
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog("PORT      STATE    SERVICE     VERSION", "out");
 
         const hasVulnerability = currentData.services.some((s) =>
@@ -1334,7 +1355,7 @@ const CtfConsole = () => {
         );
 
         currentData.services.forEach((s, i) => {
-          setTimeout(() => {
+          scheduleCommand(() => {
             const serviceName =
               s.port === "5000" && !showVersion ? "unknown" : s.service;
             const versionDisplay = showVersion ? s.version : "Unknown";
@@ -1345,7 +1366,7 @@ const CtfConsole = () => {
             );
 
             if (i === currentData.services.length - 1) {
-              setTimeout(() => {
+              scheduleCommand(() => {
                 if (showVersion && hasVulnerability) {
                   addLog(
                     "\n[!] CRITICAL VULNERABILITY DETECTED ON PORT 5000",
@@ -1369,7 +1390,7 @@ const CtfConsole = () => {
       const port = args[2];
       if (host === currentData.targetIp && port === "5000") {
         addLog(`Establish connection to ${host}:${port}...`, "sys");
-        setTimeout(() => {
+        scheduleCommand(() => {
           addLog("Logged in as flask-debug@10.0.2.15>", "sys");
           addLog("Remote Commands: ls, cat [file], exit", "sys");
           setRemoteSession({
@@ -1409,7 +1430,7 @@ const CtfConsole = () => {
       ];
 
       logs.forEach(([msg, type], index) => {
-        setTimeout(() => addLog(msg, type), 600 + index * 450);
+        scheduleCommand(() => addLog(msg, type), 600 + index * 450);
       });
     }
     // CURL
@@ -1495,18 +1516,18 @@ const CtfConsole = () => {
       addLog(`[+] POST data detected`, "out");
       addLog(`[+] Parameters: ${params.join(", ")}`, "out");
 
-      setTimeout(() => {
-        setTimeout(() => {
-          setTimeout(() => {
+      scheduleCommand(() => {
+        scheduleCommand(() => {
+          scheduleCommand(() => {
             addLog("[+] Confirmed: Boolean-based SQL injection", "out");
 
             addLog("[*] Enumerating database...", "out");
 
-            setTimeout(() => {
+            scheduleCommand(() => {
               addLog("[*] Found table: users", "out");
 
-              setTimeout(() => {
-                setTimeout(() => {
+              scheduleCommand(() => {
+                scheduleCommand(() => {
                   addLog("[+] Dump successful", "sys");
                   addLog(`[+] FLAG{${currentData.flag}}`, "out");
                 }, 900);
@@ -1568,7 +1589,7 @@ const CtfConsole = () => {
 
       addLog("[*] Initializing John the Ripper...", "sys");
 
-      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const sleep = (ms) => new Promise((r) => scheduleCommand(r, ms));
 
       const runCrack = async (user, hash, password, success) => {
         addLog("[*] Loaded 2 password hashes", "sys");
@@ -1673,7 +1694,7 @@ const CtfConsole = () => {
 
       addLog(`[+] connecting to ${host}...`, "sys");
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog("Password:", "sys");
 
         setSshLoginPending({ user, host });
@@ -1721,11 +1742,11 @@ const CtfConsole = () => {
         addLog(`[*] workload profile: ${argsStr[workloadIndex + 1]}`, "sys");
       }
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog("[*] loading hashes...", "sys");
         addLog("[*] detected format: NTLM", "sys");
 
-        setTimeout(() => {
+        scheduleCommand(() => {
           // DICTIONARY ATTACK
           if (attack === "0") {
             const wordlist = argsStr.find(
@@ -1745,12 +1766,12 @@ const CtfConsole = () => {
             const progress = [14, 29, 47, 62, 80, 96];
 
             progress.forEach((p, i) => {
-              setTimeout(() => {
+              scheduleCommand(() => {
                 addLog(`[*] progress: ${p}%`, "sys");
               }, i * 250);
             });
 
-            setTimeout(() => {
+            scheduleCommand(() => {
               addLog("[!] no matches found in wordlist", "err");
               addLog("[!] password not in common dictionaries", "out");
               addLog("[!] recommendation: use mask attack (-a 3)", "out");
@@ -1782,10 +1803,10 @@ const CtfConsole = () => {
             addLog("[*] starting brute-force (mask attack)...", "sys");
             addLog("[*] analyzing password structure...", "sys");
 
-            setTimeout(() => {
+            scheduleCommand(() => {
               addLog(`[*] testing mask: ${mask}`, "sys");
 
-              setTimeout(() => {
+              scheduleCommand(() => {
                 // MASK VALIDATION
                 const expectedMask = "?u?l?l?l?l?l?l?l?l?d?d?d?d?s";
 
@@ -1802,7 +1823,7 @@ const CtfConsole = () => {
                 addLog("[*] high entropy credential detected", "sys");
                 addLog("[*] GPU acceleration options (-O, -w 4)", "sys");
 
-                setTimeout(() => {
+                scheduleCommand(() => {
                   addLog("[+] hash successfully cracked", "out");
 
                   addLog(`FLAG{${currentData.flag}}`, "out");
@@ -1826,7 +1847,7 @@ const CtfConsole = () => {
 
       addLog("[*] Starting Metasploit Framework...", "sys");
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog("Metasploit Framework 6.4.0", "out");
         addLog(
           "Msfconsole Commands: ls, cat [file], use, set, run, exit",
@@ -1949,15 +1970,15 @@ const CtfConsole = () => {
 
         addLog("[*] Launching exploit...", "sys");
 
-        setTimeout(() => {
+        scheduleCommand(() => {
           if (module === "exploit/windows/smb/ms17_010_eternalblue") {
             addLog("[+] SMBv1 vulnerability detected", "out");
             addLog("[+] Target appears vulnerable to MS17-010", "out");
 
-            setTimeout(() => {
+            scheduleCommand(() => {
               addLog("[*] Sending exploit payload...", "out");
 
-              setTimeout(() => {
+              scheduleCommand(() => {
                 addLog("[+] Meterpreter session 1 opened", "out");
 
                 setRemoteSession({
@@ -2020,7 +2041,7 @@ const CtfConsole = () => {
       if (file === "updater.exe") {
         addLog("[*] strings analysis: updater.exe", "sys");
 
-        setTimeout(() => {
+        scheduleCommand(() => {
           addLog(
             "[*] updater.exe : PE32 executable (possible packed payload)",
             "sys",
@@ -2221,7 +2242,7 @@ const CtfConsole = () => {
       // -ano
       // =========================
       if (hasA && hasN && hasO) {
-        setTimeout(() => {
+        scheduleCommand(() => {
           addLog("Active Connections", "out");
           addLog("", "out");
 
@@ -2248,7 +2269,7 @@ const CtfConsole = () => {
 
       addLog("[*] Enumerating active processes...", "sys");
 
-      setTimeout(() => {
+      scheduleCommand(() => {
         addLog("PID     PROCESS               USER", "out");
         addLog(
           "==========================================================",
@@ -2306,7 +2327,7 @@ const CtfConsole = () => {
       ];
 
       logs.forEach((log, i) => {
-        setTimeout(
+        scheduleCommand(
           () => {
             addLog(log.msg, log.type);
           },
@@ -3084,7 +3105,7 @@ const CtfConsole = () => {
 
           addLog(`[+] Access Granted`, "sys");
 
-          setTimeout(() => {
+          scheduleCommand(() => {
             const nextLevelData = CTF_LEVELS[nextLvl];
 
             if (nextLevelData) {

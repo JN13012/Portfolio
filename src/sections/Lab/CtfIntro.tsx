@@ -2,12 +2,14 @@ import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, ty
 import { Check, Play, RotateCcw } from 'lucide-react'
 import { cx } from '../../lib/cx'
 import { useReducedMotion } from '../../lib/useReducedMotion'
+import { TerminalStartButton } from '../../components/ui/TerminalStartButton'
+import { TerminalTypedText as Typed } from '../../components/ui/TerminalTypedText'
+import { useTerminalTyping } from '../../lib/useTerminalTyping'
 
 // Intro screen of the CTF terminal: what the 9 levels train, typed in once per visit, with the
 // visitor's progress (kept in this browser by the console) and the button that opens the console.
 
 const CTF_PROGRESS_KEY = 'ctf-progress'
-const TYPED_KEY = 'ctf-intro-typed'
 
 const CTF_SKILLS = [
   'Système Linux & recherche de fichiers',
@@ -29,7 +31,6 @@ const PHASES = [
 
 const TITLE = 'Laboratoire cybersécurité'
 const SUBTITLE = 'CTF en 9 niveaux · de la reconnaissance à la défense'
-const CHARS_PER_SECOND = 170
 
 // Where each typed piece starts, in reading order (title, subtitle, then phase titles and levels).
 const PIECES = (() => {
@@ -58,68 +59,12 @@ function readProgress(): Progress {
   }
 }
 
-/** Text typed in character by character; the full text is always there for screen readers and layout. */
-function Typed({ text, from, chars }: { text: string; from: number; chars: number }) {
-  const n = Math.max(0, Math.min(text.length, chars - from))
-  return (
-    <>
-      <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
-        {text.slice(0, n)}
-        <span className="invisible">{text.slice(n)}</span>
-      </span>
-    </>
-  )
-}
-
 export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; button?: StartButtonStyle }) {
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
   const [progress] = useState(readProgress)
   const total = TITLE.length + SUBTITLE.length + PHASES.reduce((n, p) => n + p.title.length + p.levels.reduce((m, l) => m + CTF_SKILLS[l - 1]!.length + 3, 0), 0)
-  // Already typed during this visit: show everything at once.
-  const [alreadyTyped] = useState(() => {
-    try {
-      return Boolean(sessionStorage.getItem(TYPED_KEY))
-    } catch {
-      return true
-    }
-  })
-  const [typedChars, setChars] = useState(0)
-  const chars = reduced || alreadyTyped ? Infinity : typedChars
-
-  // Types the screen once, when it comes into view; instant under reduced motion.
-  useEffect(() => {
-    if (reduced || alreadyTyped) return
-    const el = root.current
-    if (!el) return
-    let raf = 0
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (!e?.isIntersecting) return
-        io.disconnect()
-        const t0 = performance.now()
-        const tick = (now: number) => {
-          const c = ((now - t0) / 1000) * CHARS_PER_SECOND
-          setChars(c)
-          if (c < total) raf = requestAnimationFrame(tick)
-          else
-            try {
-              sessionStorage.setItem(TYPED_KEY, '1')
-            } catch {
-              // Private mode: the screen is typed again next time.
-            }
-        }
-        raf = requestAnimationFrame(tick)
-      },
-      { threshold: 0.35 },
-    )
-    io.observe(el)
-    return () => {
-      io.disconnect()
-      cancelAnimationFrame(raf)
-    }
-  }, [reduced, alreadyTyped, total])
+  const chars = useTerminalTyping(root, total, 'ctf-intro-typed', reduced)
 
   const started = progress.level > 1 || progress.solved
   const label = progress.solved ? 'Rejouer' : started ? `Reprendre au niveau ${progress.level}` : 'Commencer'
@@ -128,10 +73,14 @@ export function CtfIntro({ onStart, button = 'socket' }: { onStart: () => void; 
 
   // On click, the screen switches off like an old CRT (collapses to a bright line), then the console opens.
   const [leaving, setLeaving] = useState(false)
+  useEffect(() => {
+    if (!leaving) return
+    const timer = window.setTimeout(onStart, 520)
+    return () => window.clearTimeout(timer)
+  }, [leaving, onStart])
   const go = () => {
     if (reduced) return onStart()
     setLeaving(true)
-    window.setTimeout(onStart, 520)
   }
   const restart = () => {
     try {
@@ -242,7 +191,7 @@ export function StartButton({ style, onClick, children }: { style: StartButtonSt
   if (style === 'cap') return <KeycapButton onClick={onClick}>{children}</KeycapButton>
   if (style === 'tilt') return <TiltButton onClick={onClick}>{children}</TiltButton>
   if (style === 'brick') return <BrickButton onClick={onClick}>{children}</BrickButton>
-  if (style === 'socket') return <SocketButton onClick={onClick}>{children}</SocketButton>
+  if (style === 'socket') return <TerminalStartButton onClick={onClick}>{children}</TerminalStartButton>
   if (style === 'solid')
     return (
       <button
@@ -474,62 +423,6 @@ function BrickButton({ onClick, children }: { onClick: () => void; children: Rea
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.2),transparent_55%)]"
             />
             <span className="relative">▶ {children}</span>
-          </span>
-        </button>
-      </span>
-    </span>
-  )
-}
-
-/**
- * Socket: a key sitting in a recessed housing. The housing never moves; the key stands a little
- * above it (its side shows at the bottom) and, when pressed, sinks into the housing, flush and
- * darker, like a real push button. The whole unit leans towards the pointer (not on touch screens
- * or under reduced motion).
- */
-function SocketButton({ onClick, children }: { onClick: () => void; children: ReactNode }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const reduced = useReducedMotion()
-  const move = (e: ReactPointerEvent) => {
-    const el = ref.current
-    if (!el || reduced || e.pointerType !== 'mouse') return
-    const r = el.getBoundingClientRect()
-    const x = (e.clientX - r.left) / r.width - 0.5
-    const y = (e.clientY - r.top) / r.height - 0.5
-    el.style.transform = `rotateX(${-y * 15}deg) rotateY(${x * 22}deg)`
-    el.style.setProperty('--gx', `${(x + 0.5) * 100}%`)
-    el.style.setProperty('--gy', `${(y + 0.5) * 100}%`)
-  }
-  const leave = () => {
-    const el = ref.current
-    if (el) el.style.transform = ''
-  }
-  return (
-    <span className="inline-block [perspective:700px]">
-      <span ref={ref} className="block transition-transform duration-150 ease-out">
-        <button
-          type="button"
-          onClick={onClick}
-          onPointerMove={move}
-          onPointerLeave={leave}
-          // The housing: a dark recessed frame.
-          className="group block cursor-pointer rounded-2xl focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyber"
-        >
-          {/* A dark recessed well the key sits in. */}
-          <span className="block rounded-[13px] bg-[#040607] px-2.5 pt-3 pb-2.5 shadow-[inset_0_4px_8px_rgba(0,0,0,0.95),inset_0_-1px_0_rgba(255,255,255,0.06)]">
-            {/* The key: stands out of the well; pressed, it shrinks back into it, away from the viewer, and darkens. */}
-            <span className="relative block overflow-hidden rounded-lg border border-cyber/60 bg-[linear-gradient(180deg,#1f6b40,#0e3a22)] px-11 py-3.5 text-[15px] font-bold tracking-[0.3em] whitespace-nowrap text-white uppercase shadow-[0_0_0_2px_#0b3a1f,0_6px_14px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-100 ease-out [text-shadow:0_0_5px_rgba(74,222,128,0.3)] group-hover:brightness-110 group-active:scale-[0.94] group-active:bg-[linear-gradient(180deg,#123e26,#0a2818)] group-active:shadow-[0_0_0_0_#0b3a1f,inset_0_3px_10px_rgba(0,0,0,0.75)] group-active:brightness-90">
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--gx,50%)_var(--gy,0%),rgba(255,255,255,0.18),transparent_55%)]"
-              />
-              {/* A light sweeps across the key from left to right, in time with the blink. */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)] motion-safe:animate-[key-sweep_2.8s_ease-in-out_infinite] motion-reduce:hidden"
-              />
-              <span className="relative">▶ {children}</span>
-            </span>
           </span>
         </button>
       </span>

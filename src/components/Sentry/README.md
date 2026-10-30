@@ -79,7 +79,7 @@ au moins deux lignes (trois sous 360 px et dans le tiroir plus étroit) pour sta
 sans tronquer le texte. `PresentationSpeech`
 l’affiche au-dessus de Sentry, avec cinq barres illustratives animées uniquement
 pendant la lecture visible. Le bloc reste entièrement lisible en zinc-200 ; le mot prononcé
-devient zinc-100 (`#F4F4F5`), avec un épaississement visuel de 0,04 px de chaque côté, sans fond ni déplacement des lignes. Les repères de mots
+devient zinc-100 (`#F4F4F5`), avec un épaississement visuel de 0,01 px de chaque côté, sans fond ni déplacement des lignes. Les repères de mots
 sont enregistrés avec le texte dans `src/content/presentation.ts`. `presentationTranscript.ts`
 programme seulement la prochaine limite de mot, en lisant l’horloge native et la vitesse
 réelle de l’audio, sans boucle par frame ni mises à jour supplémentaires du réseau.
