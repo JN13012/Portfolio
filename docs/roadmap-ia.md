@@ -1,16 +1,16 @@
 # Feuille de route IA
 
-État au 29 octobre 2026 : Sentry est la mascotte du portfolio ; son chat public affiche
+État au 30 octobre 2026 : Sentry est la mascotte du portfolio ; son chat public affiche
 un message de conception. Les fiches préparées restent dans l’aperçu de développement.
-La présentation vocale préenregistrée est intégrée pour les chapitres Intro, Fraude et Profil.
+La présentation vocale préenregistrée est intégrée pour les chapitres Intro, Fraude, Profil et Projets.
 Les questions libres, les autres chapitres et le défi IA restent à développer.
-Voir [l’architecture actuelle](architecture.md).
+Voir [l’architecture actuelle](architecture.md). L’ordre de réalisation est dans le [plan de travail](plan-travail.md).
 
 ## Les trois fonctionnalités
 
 ### 1. Présentation vocale (voix clonée)
 - À gauche de Sentry, bande de lecture à chapitres visible dès l’arrivée, sans lecture automatique ; chevron pour la réduire, choix conservé pendant la session.
-- Intro, Fraude et Profil disponibles, avec enchaînement et sélection directe ; Projets, Parcours et Alternance restent désactivés.
+- Intro, Fraude, Profil et Projets disponibles, avec enchaînement et sélection directe ; Parcours et Alternance restent désactivés.
 - Le réseau et Sentry s’activent pendant la lecture réelle, sans analyse d’amplitude sonore.
 - Bulle au-dessus de Sentry : barres illustratives et phrases du texte validé, recalées localement sur l’audio ; même affichage dans le chat ouvert.
 - Pas de service de synthèse ni de clonage exécuté par le portfolio : le fichier est pré-généré.
@@ -53,8 +53,7 @@ et la sélection directe des niveaux disponibles, sans valider les niveaux saut�
 - `src/sections/Hero/core/` : réseau 3D et fallback 2D.
 - `dev/mockups/NetworkTuner.tsx` : réglage du même moteur en développement.
 
-## Ordre proposé (une branche par étape)
+## Ordre
 
-1. Présentation vocale.
-2. Chatbot.
-3. Défi de jailbreak.
+Décidé dans le [plan de travail](plan-travail.md) : présentation vocale (déjà en grande partie intégrée),
+défi de jailbreak, fiches préparées de Sentry, puis questions libres.

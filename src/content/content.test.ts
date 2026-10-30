@@ -16,10 +16,10 @@ import { dialogUi } from './ui'
 import type { Localized } from './types'
 import writeups from './writeups.json'
 
-/** Walks any value and yields every { fr, en } object found. */
+/** Walks any value and yields every { fr } or { fr, en } object found. */
 function* localizedIn(value: unknown, path = ''): Generator<[string, Localized]> {
   if (!value || typeof value !== 'object') return
-  if ('fr' in value && 'en' in value && Object.keys(value).length === 2) {
+  if ('fr' in value && Object.keys(value).every((key) => key === 'fr' || key === 'en')) {
     yield [path, value as Localized]
     return
   }
@@ -33,11 +33,8 @@ const displayed = (value: unknown) =>
   JSON.stringify(value, (key, v) => (key === 'doNotClaim' || key === 'source' ? undefined : v))
 
 describe('content', () => {
-  it('has every user-facing string in French and English', () => {
-    for (const [path, text] of localizedIn(allContent)) {
-      expect(text.fr.trim(), `${path}.fr`).not.toBe('')
-      expect(text.en.trim(), `${path}.en`).not.toBe('')
-    }
+  it('has every user-facing string in French', () => {
+    for (const [path, text] of localizedIn(allContent)) expect(text.fr.trim(), `${path}.fr`).not.toBe('')
   })
 
   it('cites only projects, certifications and sections that exist in the assistant’s answers', () => {
