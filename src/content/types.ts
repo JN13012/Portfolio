@@ -1,7 +1,7 @@
 export type Locale = 'fr' | 'en'
 
-/** Every user-facing string exists in both languages (EN is reviewed in step 6). */
-export type Localized = Record<Locale, string>
+/** French is the only maintained language (decision 2026-10-30). Existing EN text stays until the English version is built, and may be stale. */
+export type Localized = { fr: string; en?: string }
 
 /** The jobs the site targets. Also used for project filters (`?metier=`). */
 export type Track = 'ia' | 'data' | 'cyber' | 'dev' | 'devops'

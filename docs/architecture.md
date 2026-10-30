@@ -35,7 +35,7 @@ src/
     ui/                  SectionHeader.jsx, TopicIcon.jsx, StackLine.tsx
       ToolLogo/          logos, registres d’images et emblèmes partagés
       dialogs/           cadre, zoom, galerie, clavier et couches de focus
-  content/               données et textes bilingues, sources, garde-fous éditoriaux
+  content/               données et textes, sources, garde-fous éditoriaux
   lib/                   état partagé, événements, filtres, animation et utilitaires
   assets/                images, logos et CV utilisés par le portfolio
   styles/                global.css : Tailwind, thème et styles transversaux
@@ -55,8 +55,8 @@ docs/
 
 ## Responsabilités et dépendances
 
-- **Contenu** : les composants lisent `src/content/`. Les textes existent en FR/EN ; l’interface utilise
-  actuellement le français. `skills.ts` et `tracks.ts` restent des données éditoriales utilisées par
+- **Contenu** : les composants lisent `src/content/`. Seul le français est maintenu (décision du 30 octobre
+  2026) ; les textes anglais existants peuvent être périmés. `skills.ts` et `tracks.ts` restent des données éditoriales utilisées par
   la relecture, les contrôles de contenu et certaines maquettes.
 - **Sentry et Hero** : `lib/assistantStore.ts` partage la conversation ; `lib/brain.ts` décrit sa progression ;
   le réseau du Hero illustre les sources des fiches préparées. Son fallback 2D reste utilisé sans WebGL
@@ -111,8 +111,7 @@ Les exports Cloudflare et les types du modèle public restent disponibles.
 `lib/brain.ts` contient uniquement le déroulement des réponses et la sélection de leurs sources.
 Les cinq fonctions de l’ancien graphe, utilisées uniquement par quatre tests devenus sans objet,
 ont été retirées avec ces tests. Le moteur du Hero dans `sections/Hero/core/` reste inchangé,
-y compris son fallback 2D. Cette étape a laissé 39 tests, dont les trois tests conservés
-du déroulement des réponses de Sentry.
+y compris son fallback 2D. Les trois tests du déroulement des réponses de Sentry sont conservés.
 
 ## Composants partagés et modales
 
@@ -134,7 +133,6 @@ Le focus revient au bouton d’agrandissement ou à l’ouvreur ; un titre de se
 si la carte n’existe plus. Une navigation interne, notamment vers le Lab, évite ce retour de focus.
 Une fermeture de fiche ouverte depuis Sentry laisse le chat et sa conversation disponibles.
 
-La suite comprend 52 tests : les 39 tests conservés, huit tests de galerie et cinq tests de logos.
 Les contrôles navigateur couvrent aussi les parcours métier et le clavier sur ordinateur, mobile,
 paysage et au seuil de 768 px. Les comparaisons statiques avec la copie sauvegardée couvrent
 18 vues, une fois les images et polices chargées ; les canvases et contours de focus y sont exclus.

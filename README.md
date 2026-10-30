@@ -20,7 +20,7 @@ une erreur si 5173 est déjà occupé. Le serveur écoute sur `0.0.0.0` pour l�
 | `src/app/` | Assemblage de la page et transition d’entrée |
 | `src/sections/` | Sections du portfolio, console CTF dans `Lab/ctf/` |
 | `src/components/` | Sentry, navigation, décor et composants partagés |
-| `src/content/` | Textes FR/EN, projets, certifications et sources |
+| `src/content/` | Textes, projets, certifications et sources |
 | `src/assets/`, `src/styles/` | Visuels utilisés et styles globaux |
 | `server/` | Worker Cloudflare et envoi du formulaire de contact |
 | `dev/` | Maquettes, prototypes et visuels propres au développement |

@@ -50,7 +50,7 @@ const contextLead: Partial<Record<ProjectContext, Localized>> = {
 /** The summary as read in the modal: « Projet de certification IBM AI Developer : un chatbot… ». */
 export function modalSummary(project: Project, locale: Locale) {
   const lead = contextLead[project.context]?.[locale]
-  const text = project.summary[locale]
+  const text = project.summary[locale] ?? project.summary.fr
   return lead ? `${lead}${locale === 'fr' ? ' : ' : ': '}${text.charAt(0).toLowerCase()}${text.slice(1)}` : text
 }
 
