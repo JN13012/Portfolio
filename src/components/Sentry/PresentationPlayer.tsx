@@ -14,6 +14,7 @@ function timestamp(seconds: number) {
 
 /** Portal escapes the chapter list's scrolling clip; pointer movement does not rerender the player. */
 function PresentationChapter({ available, current, children }: { available: boolean; current: boolean; children: ReactNode }) {
+  const [hovered, setHovered] = useState(false)
   const [open, setOpen] = useState(false)
   const hint = useRef<HTMLSpanElement>(null)
   const pointer = useRef({ x: 0, y: 0 })
@@ -27,9 +28,10 @@ function PresentationChapter({ available, current, children }: { available: bool
   useLayoutEffect(() => {
     if (open) position(pointer.current.x, pointer.current.y)
   }, [open, position])
+  const close = useCallback(() => { setHovered(false); setOpen(false) }, [])
   useEffect(() => {
-    if (!open) return
-    const close = () => setOpen(false)
+    if (!hovered) return
+    const delay = window.setTimeout(() => setOpen(true), 400)
     const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') close() }
     window.addEventListener('scroll', close, true)
     window.addEventListener('resize', close)
@@ -37,21 +39,23 @@ function PresentationChapter({ available, current, children }: { available: bool
     document.addEventListener('visibilitychange', close)
     document.addEventListener('keydown', escape)
     return () => {
+      window.clearTimeout(delay)
       window.removeEventListener('scroll', close, true)
       window.removeEventListener('resize', close)
       window.removeEventListener('blur', close)
       document.removeEventListener('visibilitychange', close)
       document.removeEventListener('keydown', escape)
     }
-  }, [open])
+  }, [hovered, close])
   return <li className="presentation-chapter" data-available={available} data-current={current}
+    style={available ? undefined : { cursor: 'not-allowed' }}
     onPointerEnter={available ? undefined : event => {
       if (event.pointerType !== 'mouse') return
       position(event.clientX, event.clientY)
-      setOpen(true)
+      setHovered(true)
     }}
     onPointerMove={available ? undefined : event => position(event.clientX, event.clientY)}
-    onPointerLeave={() => setOpen(false)} onPointerDown={() => setOpen(false)}>
+    onPointerLeave={close} onPointerDown={close}>
     {children}
     {open && createPortal(<span ref={hint} role="tooltip" className="pointer-events-none fixed z-[1100] max-w-[calc(100vw-16px)] -translate-y-full rounded-md border border-white/10 bg-zinc-900 px-2 py-1 text-xs whitespace-nowrap text-zinc-300 shadow-lg">En cours de conception.</span>, document.body)}
   </li>
