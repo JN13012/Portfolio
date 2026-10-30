@@ -113,7 +113,8 @@ export function PresentationPlayer({ inChat = false }: { inChat?: boolean }) {
                 const available = 'src' in chapter
                 const current = chapter.id === audio.chapterId
                 return (
-                  <li key={chapter.id} className="presentation-chapter" data-available={available} data-current={current}>
+                  <li key={chapter.id} className="presentation-chapter" data-available={available} data-current={current}
+                    title={available ? undefined : 'En cours de conception.'}>
                     {current ? (
                       <label className="presentation-track">
                         <span className="sr-only">{`Position dans le chapitre ${chapter.title}`}</span>
