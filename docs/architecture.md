@@ -25,7 +25,7 @@ src/
     Profile/             profil, international, langues et centres d’intérêt
     Expertise/
     Projects/            Projects.jsx, ProjectCard.jsx et modales
-    Lab/                 CtfIntro.tsx, Lab.tsx, ctf/CtfConsole.jsx, ctf/ctfData.js
+    Lab/                 Lab.tsx, CyberLab.tsx, CtfIntro.tsx, ctf/, ia/ (aperçu dev)
     Parcours/
     Certifications/
     Contact/
@@ -140,6 +140,34 @@ paysage et au seuil de 768 px. Les comparaisons statiques avec la copie sauvegar
 Ces comparaisons ne remplacent pas les contrôles d’interaction et ne constituent pas un audit Lighthouse.
 
 ## Vérifier une évolution
+
+### Aperçu du Lab IA (lot 1, 30 octobre 2026)
+
+En développement, le sélecteur IA du Lab ouvre une interface chargée à la demande : console,
+tiroir des cinq niveaux et schéma SVG. `/?lab=ia#lab` l'ouvre directement.
+L'entrée « Red-team Sentry » réutilise sa coque avec une activation visuelle finie ; les défenses
+sont visibles avant le premier essai. Sentry reste dans un mode entraînement indépendant du chat du site.
+Les deux entrées partagent `components/ui/TerminalStartButton.tsx` : même bouton en relief,
+avec palettes verte et bleue. L'entrée IA reprend le quadrillage, les scanlines et la typographie
+du Cyber, avec suspension du balayage et du bouton lorsqu'ils ne sont pas visibles.
+Leur apparition progressive utilise `lib/useTerminalTyping.ts` et `components/ui/TerminalTypedText.tsx`
+(170 caractères/seconde, une fois par session). L'entrée « Laboratoire IA » annonce
+« CTF en 5 niveaux · contournez les défenses de Sentry » ; la mission est présentée dans la console.
+Le bouton « Commencer » déclenche une extinction CRT de 520 ms, dont la fin ouvre la console.
+Cette transition et l'apparition progressive sont immédiates avec réduction des mouvements.
+Les réponses et résultats sont des fixtures explicites
+dans `dev/mockups/aiLabFixtures.ts` ; aucune API ni modèle n'est connecté.
+Les descriptions publiques sont dans `content/aiLab.ts`, sans consignes privées.
+L'accès IA reste désactivé dans le build de production, qui exclut le code de l'aperçu.
+
+`Lab.tsx` coordonne les écrans et conserve leur état avec les frontières `Activity` de React.
+`CyberLab.tsx` porte le CTF et les write-ups existants. Les effets masqués sont suspendus ;
+`ctf/commandTimers.ts` met en pause les opérations différées du terminal et les reprend
+avec leur délai restant. Le focus du terminal reste limité à sa propre console.
+Le schéma IA suspend sa relecture hors écran et en arrière-plan, et reste statique sur mobile
+ou avec réduction des mouvements. Voir le [plan et son avancement](plan-lab-ia.md).
+
+### Contrôles du projet
 
 Depuis la racine : `npm run lint`, `npm run typecheck`, `npm test`, puis `npm run build`.
 Après une modification du contenu, exécuter `npm run review`.

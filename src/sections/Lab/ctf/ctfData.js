@@ -3,7 +3,7 @@ export const CTF_LEVELS = {
         label: "FOOTPRINTING",
         flag: "Welcome_User",
         unlocks: [],
-        hint: "'Ctrl + U' or 'F12' or right click => inspect the page => source code => index.html. (refresh page if needed)",
+        hint: "Using 'Ctrl + U' or 'F12' or right click => inspect the page => source code => index.html. (refresh page if needed) may help you.",
         files: {
             "readme.txt": "Welcome user. Search, find, and validate. Exit any session before submit flag.",
             ".flag.txt": "Did you think it would be that easy? The flag is hidden within the source code of the index.html page. Type 'hint' for more help."

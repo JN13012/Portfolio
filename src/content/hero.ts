@@ -57,7 +57,7 @@ export const hero = {
   /** The labs: the cyber lab exists; the AI lab (step 4) keeps its place, marked « bientôt » until it ships. */
   labs: [
     { id: 'cyber', label: { fr: 'Lab cyber', en: 'Cyber lab' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
-    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red-team mon agent', en: 'Red-team my agent' }, soon: true },
+    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red-team Sentry', en: 'Red-team Sentry' }, soon: true },
   ],
   /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
   labPanel: {

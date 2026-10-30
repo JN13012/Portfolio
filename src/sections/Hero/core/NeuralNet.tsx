@@ -565,8 +565,7 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
         // Under the embedding: the captions take the space above the network.
         if (embed) vectorBox.current.style.transform = `translate(${project(new Vector3(embed[0]!.pos.x, -(st.embedSpread / 2 + st.plateMargin + 0.25), 0)).join('px,')}px)`
       }
-      // Captions on one line above the network, each centred on its column. Too close for their full
-      // size (mid-size screens), they turn compact; still too close (chat open), all of them hide.
+      // Compact captions keep their font size; stagger them if neighboring columns are too close.
       const top = Math.max(8, Math.min(...xy.map((p) => p[1])) - 62)
       const colX = b.captions.map(({ x }) => project(new Vector3(x, 0, 0))[0])
       const widths = captions.current.map((span) => span?.firstElementChild?.clientWidth ?? 0)
@@ -576,17 +575,22 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
       const roomy = fitsWith(fullWidths)
       el.dataset.compact = String(!roomy)
       const fits = roomy || (compact && fitsWith(widths))
+      const staggered = !fits && compact && colX.every((x, i) => i < 2 || x - colX[i - 2]! >= (widths[i]! + widths[i - 2]!) / 2 + 6)
+      const captionTop = staggered ? Math.max(8, top - 44) : top
       b.captions.forEach((_, i) => {
         const span = captions.current[i]
         if (!span) return
-        span.style.visibility = fits ? '' : 'hidden'
-        span.style.transform = `translate(${colX[i]}px, ${top}px)`
+        span.style.visibility = fits || staggered ? '' : 'hidden'
+        span.style.transform = `translate(${colX[i]}px, ${captionTop + (staggered && i % 2 ? 44 : 0)}px)`
       })
       // A blocked attack's name: under the caption of the guard wall that stopped it, above the network.
       const wallX = b.walls.find((w) => w.layer === alertWall)?.x
       const at = wallX === undefined ? -1 : b.captions.findIndex((c) => c.accent && c.x === wallX)
-      if (alertBox.current && at >= 0) alertBox.current.style.transform = `translate(${colX[at]}px, ${top + 28}px)`
-      if (vectorBox.current && !fits) vectorBox.current.style.display = 'none'
+      if (alertBox.current && at >= 0) {
+        const captionHeight = captions.current[at]?.firstElementChild?.clientHeight ?? 20
+        alertBox.current.style.transform = `translate(${colX[at]}px, ${captionTop + (staggered ? 44 : 0) + captionHeight + 8}px)`
+      }
+      if (vectorBox.current && !fits && !staggered) vectorBox.current.style.display = 'none'
 
       if (first) {
         first = false
@@ -661,7 +665,8 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
           >
             <span
               className={cx(
-                'block -translate-x-1/2 tracking-[0.14em] whitespace-nowrap uppercase group-data-[compact=true]/net:tracking-[0.04em]',
+                'block -translate-x-1/2 tracking-[0.14em] uppercase group-data-[compact=true]/net:tracking-[0.04em]',
+                c.accent ? 'max-w-[6em] text-center leading-snug whitespace-normal' : 'whitespace-nowrap',
                 c.main
                   ? 'text-[15px] font-semibold text-zinc-100 group-data-[compact=true]/net:text-[13px]'
                   : cx('text-[13px] group-data-[compact=true]/net:text-[11.5px]', c.accent ? 'text-cyber' : 'text-zinc-400'),
