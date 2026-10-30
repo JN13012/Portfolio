@@ -1,8 +1,9 @@
 import { useEffect, useRef, type Dispatch, type FormEvent } from 'react'
-import { Check, LockKeyhole, Send, SlidersHorizontal } from 'lucide-react'
+import { Send } from 'lucide-react'
 import { aiLabLevels } from '../../../content/aiLab'
 import { demoScenarios, type DemoScenario } from '../../../../dev/mockups/aiLabFixtures'
 import { labReducer, type LabState } from './labState'
+import { LabNavigation } from '../LabNavigation'
 
 type Props = {
   state: LabState
@@ -12,9 +13,11 @@ type Props = {
   onSend: () => void
   onValidate: () => void
   onDetails: () => void
+  onPresentation: () => void
+  curriculumOpen: boolean
 }
 
-export function AttackConsole({ state, dispatch, scenario, onScenario, onSend, onValidate, onDetails }: Props) {
+export function AttackConsole({ state, dispatch, scenario, onScenario, onSend, onValidate, onDetails, onPresentation, curriculumOpen }: Props) {
   const history = useRef<HTMLDivElement>(null)
   const level = aiLabLevels[state.level - 1]!
   const attempts = state.attempts.filter(attempt => attempt.result.level === state.level)
@@ -26,18 +29,8 @@ export function AttackConsole({ state, dispatch, scenario, onScenario, onSend, o
   return (
     <div className="lab-terminal ai-lab__console">
       <div className="ai-lab__console-heading">
-        <ol className="ai-lab__levels" aria-label="Progression des niveaux de démonstration">
-          {aiLabLevels.map(item => {
-            const unlocked = item.id === 1 || state.completed.includes((item.id - 1) as typeof state.level)
-            return <li key={item.id}>
-              <button type="button" disabled={!unlocked} aria-label={`Niveau ${item.id} : ${item.title}${unlocked ? '' : ' — verrouillé'}`} aria-current={item.id === state.level ? 'step' : undefined}
-                onClick={() => dispatch({ type: 'level', level: item.id })}>
-                {item.id}{state.completed.includes(item.id) ? <Check size={12} aria-hidden="true" /> : !unlocked ? <LockKeyhole size={10} aria-hidden="true" /> : null}
-              </button>
-            </li>
-          })}
-        </ol>
-        <button type="button" className="ai-lab__details" onClick={onDetails}><SlidersHorizontal size={14} aria-hidden="true" /> Niveaux et consignes</button>
+        <span className="ai-lab__level-title">{String(state.level).padStart(2, '0')}/09 · {level.title}</span>
+        <LabNavigation tone="blue" onPresentation={onPresentation} onCurriculum={onDetails} open={curriculumOpen} drawerId="ai-lab-curriculum" />
       </div>
       <div className="ai-lab__console-meta"><span>Sentry · niveau {state.level}</span><span>{level.title}</span></div>
       <div className="ai-lab__history" ref={history} role="log" aria-label="Conversation de démonstration" aria-live="polite" aria-relevant="additions">
@@ -74,9 +67,9 @@ export function AttackConsole({ state, dispatch, scenario, onScenario, onSend, o
           <div><input id="ai-lab-flag" value={state.flag} maxLength={100} autoComplete="off" spellCheck={false} placeholder="DEMO{…}" onChange={event => dispatch({ type: 'flag', value: event.target.value })} />
             <button type="submit" disabled={!state.flag.trim()}>Valider</button></div>
         </form>
-        <p className="ai-lab__validation" role="status">
-          {state.validation === 'incorrect' ? 'Ce flag ne correspond pas à la démonstration de ce niveau.' : state.validation === 'correct' ? state.level === 5 ? 'Démonstration terminée : les cinq niveaux ont été explorés.' : 'Flag de démonstration validé. Le niveau suivant est accessible.' : 'Aucun appel IA · aucun token consommé'}
-        </p>
+        {state.validation !== 'idle' && <p className="ai-lab__validation" role="status">
+          {state.validation === 'incorrect' ? 'Ce flag ne correspond pas à la démonstration de ce niveau.' : 'Flag de démonstration validé pour ce niveau.'}
+        </p>}
       </div>
     </div>
   )

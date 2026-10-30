@@ -78,12 +78,32 @@ Chaque niveau offensif se termine aussi par une explication de la protection ada
 - Prévoir un accès « Voir une démonstration » indépendant de la progression pour une découverte rapide ; non implémenté.
 - Mettre en avant la méthode, les traces reproductibles, les corrections et leurs tests, plutôt que le nombre de niveaux.
 
+## Navigation commune aux Labs Cyber et IA
+
+Un seul fonctionnement, sans modes distincts : « Commencer » ouvre toujours le niveau 01 ;
+cliquer sur un niveau disponible dans la présentation ou le tiroir l’ouvre directement.
+L’en-tête du CTF propose une flèche de demi-tour (« Revenir à la présentation ») et
+« Parcours › » pour ouvrir le tiroir. Le retour conserve le travail en cours en mémoire.
+Le tiroir reste à l’intérieur du cadre du terminal, sans voile sur l’ensemble du site.
+Sa liste compacte affiche les intitulés, les états utiles et les indices repliés ; la navbar
+reste accessible. Un bandeau jaune avec panneaux 🚧 apparaît sous la navbar uniquement
+quand le Lab IA est sélectionné, sur le modèle de l’ancien bandeau de construction.
+Chaque réussite est enregistrée individuellement ; sélectionner le niveau 08 ne valide
+aucun niveau précédent. Les exercices non implémentés sont signalés « À venir ».
+
+Le Cyber conserve une console indépendante par niveau visité, y compris son brouillon,
+ses outils et opérations différées, suspendues pendant qu’elle est masquée. Ses réussites
+restent enregistrées localement après rechargement ; les anciennes réussites séquentielles
+sont migrées vers une liste explicite. La validation propose « Niveau suivant », sans saut automatique.
+L’IA conserve les essais et brouillons des trois démonstrations directes ; les six autres niveaux
+sont annoncés mais ne peuvent pas être lancés. Aucune réussite n’est déduite d’une simple visite.
+
 ## État réel et réalisation progressive
 
-L’entrée affiche désormais le parcours prévu. Après « Commencer », l’aperçu conserve
-les cinq niveaux simulés de la première maquette : leur console, leur tiroir et leurs
-identifiants ne sont pas encore migrés vers les neuf exercices. Les résultats préparés
-ne prouvent pas une attaque contre un modèle réel.
+L’entrée et le tiroir affichent les neuf niveaux. Les trois niveaux directs sont accessibles
+en démonstration et les six suivants restent « À venir ». Les anciens cinq niveaux sont
+regroupés en trois ; le schéma et les résultats préparés suivent cette nouvelle numérotation.
+Ces résultats ne prouvent pas une attaque contre un modèle réel.
 
 L’IA reste accessible uniquement en développement. Aucun modèle, API Lab, document
 modifiable, outil agentique ou exercice défensif réel n’est connecté par cette passe.
@@ -92,10 +112,9 @@ ses cinq niveaux et exclusions initiales ne sont plus le périmètre cible du pa
 
 Prochaines étapes :
 
-1. Adapter l’état, la progression et le tiroir aux trois niveaux directs, sans présenter les autres comme jouables.
-2. Connecter et calibrer un premier niveau avec un adaptateur de modèle et des limites serveur.
-3. Ajouter les scénarios indirects, puis les outils et l’API du scénario.
-4. Ajouter les deux niveaux de défense avec vérification avant/après.
+1. Connecter et calibrer un premier niveau avec un adaptateur de modèle et des limites serveur.
+2. Ajouter les scénarios indirects, puis les outils et l’API du scénario.
+3. Ajouter les deux niveaux de défense avec vérification avant/après.
 
 Workers AI reste un candidat ; le modèle n’est pas fixé. Prévoir idempotence, isolation
 des sessions, limites de débit, de tokens et de budget global avant ouverture publique.

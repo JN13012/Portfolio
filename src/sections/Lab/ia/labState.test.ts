@@ -4,8 +4,21 @@ import { demoFlag, demoResult, demoScenarios } from '../../../../dev/mockups/aiL
 import { initialLabState, labReducer } from './labState'
 
 describe('Lab IA development contract', () => {
-  it('keeps future levels locked, validates without duplicate progress and preserves history across levels', () => {
-    expect(labReducer(initialLabState, { type: 'level', level: 3 })).toBe(initialLabState)
+  it('allows direct selection, rejects unavailable exercises and preserves work without awarding skipped levels', () => {
+    expect(labReducer(initialLabState, { type: 'level', level: 4 })).toBe(initialLabState)
+    expect(labReducer(initialLabState, { type: 'level', level: 99 })).toBe(initialLabState)
+    let direct = labReducer(initialLabState, { type: 'level', level: 3 })
+    expect(direct.completed).toEqual([])
+    direct = labReducer(direct, { type: 'draft', value: 'Brouillon du juge' })
+    direct = labReducer(direct, { type: 'flag', value: 'flag partiel' })
+    direct = labReducer(direct, { type: 'validate-demo', correct: true })
+    expect(direct.completed).toEqual([3])
+    direct = labReducer(direct, { type: 'level', level: 1 })
+    expect(direct.draft).toBe('')
+    direct = labReducer(direct, { type: 'level', level: 3 })
+    expect(direct.draft).toBe('Brouillon du juge')
+    expect(direct.flag).toBe('flag partiel')
+    expect(direct.validation).toBe('correct')
     let state = labReducer(initialLabState, { type: 'draft', value: 'Une demande' })
     state = labReducer(state, { type: 'attempt', prompt: 'Une demande', result: demoResult(1, 'response', 1) })
     expect(state.draft).toBe('')
@@ -53,21 +66,21 @@ describe('Lab IA development contract', () => {
   })
 
   it('distinguishes a refusal, a technical error and unavailable budget from guardrail blocks', () => {
-    expect(demoResult(5, 'refusal', 1).outcome).toBe('refused')
-    expect(demoResult(5, 'refusal', 1).trace.every(entry => entry.status === 'passed')).toBe(true)
-    expect(demoResult(5, 'judge-error', 1).outcome).toBe('error')
-    expect(demoResult(5, 'quota', 1).outcome).toBe('quota')
-    expect(demoResult(5, 'input-block', 1).outcome).toBe('blocked')
+    expect(demoResult(3, 'refusal', 1).outcome).toBe('refused')
+    expect(demoResult(3, 'refusal', 1).trace.every(entry => entry.status === 'passed')).toBe(true)
+    expect(demoResult(3, 'judge-error', 1).outcome).toBe('error')
+    expect(demoResult(3, 'quota', 1).outcome).toBe('quota')
+    expect(demoResult(3, 'input-block', 1).outcome).toBe('blocked')
   })
 
-  it('can explore all five levels, without claiming server-side validation', () => {
+  it('can validate the three direct exercises, without claiming server-side validation', () => {
     let state = initialLabState
     for (const level of aiLabLevels) {
       state = labReducer(state, { type: 'level', level: level.id })
       expect(state.level).toBe(level.id)
       state = labReducer(state, { type: 'validate-demo', correct: true })
     }
-    expect(state.completed).toEqual([1, 2, 3, 4, 5])
+    expect(state.completed).toEqual([1, 2, 3])
     expect(JSON.stringify(aiLabLevels)).not.toContain('DEMO{')
   })
 })

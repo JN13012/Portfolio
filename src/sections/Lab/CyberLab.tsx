@@ -1,7 +1,10 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { Activity, lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import writeupsIndex from '../../content/writeups.json'
 import { CtfIntro } from './CtfIntro'
 import { cx } from '../../lib/cx'
+import { cyberLabCurriculum } from '../../content/cyberLab'
+import { CYBER_PROGRESS_KEY, completeCyberLevel, readCyberProgress } from './ctf/cyberProgress'
+import { LabCurriculumDrawer } from './LabCurriculumDrawer'
 
 // The CTF console (3,000+ lines) is fetched only when the Lab comes near the viewport.
 const CtfConsole = lazy(() => import('./ctf/CtfConsole'))
@@ -41,43 +44,66 @@ function useNearViewport<T extends Element>() {
 /** Cyber screen kept intact while the Lab switches domains. */
 export function CyberLab() {
   const [topic, setTopic] = useState<Topic | null>(null)
-  const [started, setStarted] = useState(false)
+  const [activeLevel, setActiveLevel] = useState<number | null>(null)
+  const [visited, setVisited] = useState<number[]>([])
+  const [selection, setSelection] = useState(0)
+  const [progress, setProgress] = useState(readCyberProgress)
+  const [drawer, setDrawer] = useState(false)
   const [consoleRef, showConsole] = useNearViewport<HTMLDivElement>()
   const visible = topic ? writeups.filter((w) => w.topics.includes(topic)) : writeups
 
-  // After « Commencer », put the cursor in the console once it has loaded.
+  const selectLevel = (level: number) => {
+    if (!cyberLabCurriculum.some(group => group.levels.some(item => item.id === level))) return
+    setVisited(previous => previous.includes(level) ? previous : [...previous, level])
+    setActiveLevel(level)
+    setSelection(previous => previous + 1)
+  }
+  const completeLevel = useCallback((level: number) => setProgress(previous => completeCyberLevel(previous, level)), [])
   useEffect(() => {
-    if (!started) return
+    try { localStorage.setItem(CYBER_PROGRESS_KEY, JSON.stringify(progress)) } catch { /* Keep earned progress in memory. */ }
+  }, [progress])
+  // The hidden sessions retain drafts, tools and pending operations; only this one receives focus.
+  useEffect(() => {
+    if (activeLevel === null) {
+      if (selection > 0) consoleRef.current?.querySelector<HTMLElement>('[data-lab-intro-heading]')?.focus({ preventScroll: true })
+      return
+    }
     const id = window.setInterval(() => {
-      const input = consoleRef.current?.querySelector<HTMLInputElement>('input')
+      const input = consoleRef.current?.querySelector<HTMLInputElement>(`[data-cyber-level="${activeLevel}"] input`)
       if (input) {
         input.focus({ preventScroll: true })
         window.clearInterval(id)
       }
     }, 100)
     return () => window.clearInterval(id)
-  }, [started, consoleRef])
+  }, [activeLevel, consoleRef, selection])
 
   return (
       <div className="lab-grid">
         <div className="space-y-5">
           {/* One terminal window: an intro screen (what the CTF trains), then « Commencer » opens the real console.
               Fixed height, sized to the window so the whole Lab fits on screen; the console scrolls inside. */}
-          <div ref={consoleRef} className="lab-terminal flex flex-col overflow-hidden border border-cyber/20 bg-black">
-            {started ? (
-              showConsole && (
-                <Suspense fallback={null}>
-                  <CtfConsole />
-                </Suspense>
-              )
-            ) : (
+          <div ref={consoleRef} className="lab-terminal lab-workspace flex flex-col overflow-hidden border border-cyber/20 bg-black">
+            {activeLevel === null && (
               <>
                 <div className="flex items-center gap-2 border-b border-white/10 bg-zinc-900 px-3 py-2 font-mono text-[10px] tracking-widest text-white uppercase">
                   <span className="text-cyber">&gt;_</span> ctf@lab:~
                 </div>
-                <CtfIntro onStart={() => setStarted(true)} />
+                <CtfIntro onStart={selectLevel} completed={progress.completed} onCurriculum={() => setDrawer(true)} />
               </>
             )}
+            {showConsole && visited.map(level => <div key={level} className="lab-session" data-cyber-level={level} hidden={activeLevel !== level}>
+              <Activity mode={activeLevel === level ? 'visible' : 'hidden'}>
+                <Suspense fallback={<p role="status" className="p-4 text-sm text-zinc-400">Chargement du niveau…</p>}>
+                  <CtfConsole initialLevel={level} onComplete={completeLevel} onPresentation={() => setActiveLevel(null)}
+                    onCurriculum={() => setDrawer(true)} curriculumOpen={drawer} completedAll={progress.completed.length === 9}
+                    onNext={level < 9 ? () => selectLevel(level + 1) : undefined} />
+                </Suspense>
+              </Activity>
+            </div>)}
+            {drawer && <LabCurriculumDrawer id="cyber-lab-curriculum" title="Parcours cybersécurité" groups={cyberLabCurriculum}
+              completed={progress.completed} current={activeLevel ?? undefined} visited={visited}
+              onClose={() => setDrawer(false)} onSelect={selectLevel} />}
           </div>
         </div>
 
