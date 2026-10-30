@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import { Check, ChevronRight, Play } from 'lucide-react'
+import { Check, Play } from 'lucide-react'
 import { cx } from '../../lib/cx'
 import { useReducedMotion } from '../../lib/useReducedMotion'
 import { TerminalStartButton } from '../../components/ui/TerminalStartButton'
@@ -38,7 +38,7 @@ const PIECES = (() => {
 
 type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 'bracket' | 'loader' | 'split' | 'card' | 'cap' | 'tilt' | 'brick' | 'socket'
 
-export function CtfIntro({ onStart, completed = [], onCurriculum, button = 'socket' }: { onStart: (level: number) => void; completed?: readonly number[]; onCurriculum?: () => void; button?: StartButtonStyle }) {
+export function CtfIntro({ onStart, completed = [], button = 'socket' }: { onStart: (level: number) => void; completed?: readonly number[]; button?: StartButtonStyle }) {
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
   const total = TITLE.length + SUBTITLE.length + PHASES.reduce((n, p) => n + p.title.length + p.levels.reduce((m, l) => m + CTF_SKILLS[l - 1]!.length + 3, 0), 0)
@@ -125,7 +125,7 @@ export function CtfIntro({ onStart, completed = [], onCurriculum, button = 'sock
                     )}
                     <button type="button" className="lab-intro-level" disabled={typing || leaving} onClick={() => go(n)} aria-label={`Ouvrir le niveau ${n} : ${CTF_SKILLS[n - 1]}${ok ? ' — Réussi' : ''}`}>
                       <span className="mr-3 text-cyber tabular-nums">{String(n).padStart(2, '0')}</span>
-                      <Typed text={CTF_SKILLS[n - 1]!} from={at} chars={chars} />
+                      <span className="lab-intro-level__title"><Typed text={CTF_SKILLS[n - 1]!} from={at} chars={chars} /></span>
                       {ok && <span className="sr-only"> (réussi)</span>}
                     </button>
                   </li>
@@ -145,7 +145,6 @@ export function CtfIntro({ onStart, completed = [], onCurriculum, button = 'sock
             </StartButton>
           </span>
         </span>
-        {onCurriculum && <button type="button" onClick={onCurriculum} className="inline-flex items-center gap-1 text-xs text-zinc-400 hover:text-cyber" aria-haspopup="dialog" aria-controls="cyber-lab-curriculum">Parcours <ChevronRight size={13} aria-hidden="true" /></button>}
       </div>
     </div>
   )

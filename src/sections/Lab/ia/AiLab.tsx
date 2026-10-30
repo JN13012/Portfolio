@@ -39,10 +39,10 @@ export default function AiLab() {
   return <div className="ai-lab">
     <div className="lab-grid ai-lab__grid">
       <div ref={consoleRoot} className="lab-terminal lab-workspace">
-        {!entered && <AiLabIntro onEnter={selectLevel} completed={state.completed} onCurriculum={() => setDrawer(true)} />}
+        {!entered && <AiLabIntro onEnter={selectLevel} completed={state.completed} />}
         <div className="lab-session" hidden={!entered}><Activity mode={entered ? 'visible' : 'hidden'}>
           <AttackConsole state={state} dispatch={dispatch} scenario={scenario} onScenario={setScenario} onSend={send}
-            onValidate={() => dispatch({ type: 'validate-demo', correct: state.flag.trim() === demoFlag(state.level) })} onDetails={() => setDrawer(true)}
+            onValidate={() => dispatch({ type: 'validate-demo', correct: state.flag.trim() === demoFlag(state.level) })} onDetails={() => setDrawer(previous => !previous)}
             onPresentation={() => setEntered(false)} curriculumOpen={drawer} />
         </Activity></div>
         {drawer && <LevelDrawer level={entered ? state.level : undefined} completed={state.completed} visited={visited} onClose={() => setDrawer(false)} onSelect={selectLevel} />}

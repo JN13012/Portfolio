@@ -89,14 +89,14 @@ export function CyberLab() {
                 <div className="flex items-center gap-2 border-b border-white/10 bg-zinc-900 px-3 py-2 font-mono text-[10px] tracking-widest text-white uppercase">
                   <span className="text-cyber">&gt;_</span> ctf@lab:~
                 </div>
-                <CtfIntro onStart={selectLevel} completed={progress.completed} onCurriculum={() => setDrawer(true)} />
+                <CtfIntro onStart={selectLevel} completed={progress.completed} />
               </>
             )}
             {showConsole && visited.map(level => <div key={level} className="lab-session" data-cyber-level={level} hidden={activeLevel !== level}>
               <Activity mode={activeLevel === level ? 'visible' : 'hidden'}>
                 <Suspense fallback={<p role="status" className="p-4 text-sm text-zinc-400">Chargement du niveau…</p>}>
                   <CtfConsole initialLevel={level} onComplete={completeLevel} onPresentation={() => setActiveLevel(null)}
-                    onCurriculum={() => setDrawer(true)} curriculumOpen={drawer} completedAll={progress.completed.length === 9}
+                    onCurriculum={() => setDrawer(previous => !previous)} curriculumOpen={drawer} completedAll={progress.completed.length === 9}
                     onNext={level < 9 ? () => selectLevel(level + 1) : undefined} />
                 </Suspense>
               </Activity>
