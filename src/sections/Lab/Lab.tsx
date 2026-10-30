@@ -16,7 +16,6 @@ export function Lab() {
   const [visitedIa, setVisitedIa] = useState(startInIa)
   return (
     <section id="lab" className="py-24">
-      {preview && domain === 'ia' && <LabConstructionNotice />}
       <SectionHeader index="04" title="Lab" />
       <div role="group" aria-label="Domaine du Lab" className="mb-6 flex flex-wrap items-center gap-x-8 gap-y-3 pb-2">
         <button type="button" aria-pressed={domain === 'cyber'} onClick={() => { setVisitedCyber(true); setDomain('cyber') }} className="group relative inline-flex cursor-pointer items-center gap-2 pb-2.5 text-lg">
@@ -29,6 +28,7 @@ export function Lab() {
           <span aria-hidden="true" className="absolute bottom-0 left-0 h-0.5 rounded-full bg-sky-400" style={{ width: domain === 'ia' ? '100%' : 0 }} />
         </button>
       </div>
+      {preview && domain === 'ia' && <LabConstructionNotice />}
       {visitedCyber && <div className="lab-panel" hidden={domain !== 'cyber'}><Activity mode={domain === 'cyber' ? 'visible' : 'hidden'}><CyberLab /></Activity></div>}
       {preview && visitedIa && AiLab && <div className="lab-panel" hidden={domain !== 'ia'}><Activity mode={domain === 'ia' ? 'visible' : 'hidden'}>
         <Suspense fallback={<p className="text-sm text-zinc-400" role="status">Chargement de l’aperçu IA…</p>}><AiLab /></Suspense>

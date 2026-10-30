@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { aiLabCurriculum, isAiLabLevel, type LabLevel } from '../../../content/aiLab'
-import { Check, ChevronRight } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
 import { TerminalStartButton } from '../../../components/ui/TerminalStartButton'
 import { TerminalTypedText as Typed } from '../../../components/ui/TerminalTypedText'
@@ -24,7 +24,7 @@ const pieces = (() => {
   return { phases, total: offset }
 })()
 
-export function AiLabIntro({ onEnter, onCurriculum, completed }: { onEnter: (level: LabLevel) => void; onCurriculum: () => void; completed: readonly number[] }) {
+export function AiLabIntro({ onEnter, completed }: { onEnter: (level: LabLevel) => void; completed: readonly number[] }) {
   const entry = useRef<HTMLDivElement>(null)
   const screen = useRef<HTMLDivElement>(null)
   const reduced = useReducedMotion()
@@ -82,7 +82,7 @@ export function AiLabIntro({ onEnter, onCurriculum, completed }: { onEnter: (lev
           <ol className="ai-lab-entry__levels">
             {phase.levels.map(level => <li key={level.id}><button type="button" className="lab-intro-level" disabled={!level.available || typing || leaving}
               aria-label={`Ouvrir le niveau ${level.id} : ${level.title}${!level.available ? ' — À venir' : completed.includes(level.id) ? ' — Réussi' : ''}`} onClick={() => go(level.id)}>
-              <span className="ai-lab-entry__level-number">{String(level.id).padStart(2, '0')}</span><Typed text={level.title} from={level.from} chars={chars} />
+              <span className="ai-lab-entry__level-number">{String(level.id).padStart(2, '0')}</span><span className="lab-intro-level__title"><Typed text={level.title} from={level.from} chars={chars} /></span>
               {!level.available && <span className="ml-2 text-[10px] text-zinc-500">À venir</span>}
               {completed.includes(level.id) && <Check size={13} aria-label="Réussi" className="ml-2 inline text-green-300" />}
             </button></li>)}
@@ -90,11 +90,9 @@ export function AiLabIntro({ onEnter, onCurriculum, completed }: { onEnter: (lev
         </li>)}
       </ol>
       <div className="ai-lab-entry__footer" data-typing={typing || undefined} aria-hidden={typing || undefined}>
-        <p className="mb-3 text-[11px] text-zinc-400">Démonstration actuelle : injection directe.</p>
         <span className="ai-lab-entry__button-blink"><span className="ai-lab-entry__button-glitch">
           <TerminalStartButton tone="blue" disabled={typing || leaving} onClick={() => go(1)}>Commencer</TerminalStartButton>
         </span></span>
-        <button type="button" className="mt-3 inline-flex items-center gap-1 text-xs text-zinc-400 hover:text-sky-300" aria-haspopup="dialog" aria-controls="ai-lab-curriculum" onClick={onCurriculum}>Parcours <ChevronRight size={13} aria-hidden="true" /></button>
       </div>
     </div>
   </div>

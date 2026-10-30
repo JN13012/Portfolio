@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef, type ReactNode } from 'react'
-import { Check, X } from 'lucide-react'
+import { useEffectEvent, useLayoutEffect, useRef, type ReactNode } from 'react'
+import { Check } from 'lucide-react'
 import type { LabCourseGroup } from '../../content/lab'
 
 export function LabCurriculumDrawer({ id, title, groups, completed, current, visited, onClose, onSelect, details, tone = 'green' }: {
@@ -10,31 +10,49 @@ export function LabCurriculumDrawer({ id, title, groups, completed, current, vis
   const selected = useRef(false)
   const opener = useRef<HTMLElement | null | undefined>(undefined)
   const mounted = useRef(false)
+  const close = useEffectEvent(onClose)
   useLayoutEffect(() => {
     const node = scope.current
     if (!node) return
     mounted.current = true
     if (opener.current === undefined) opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    // Only the covered terminal is inert. The rest of the site remains usable.
-    const siblings = [...(node.parentElement?.children ?? [])].filter((element): element is HTMLElement => element instanceof HTMLElement && element !== node)
-    const previous = siblings.map(element => element.inert)
-    siblings.forEach(element => { element.inert = true })
-    node.querySelector<HTMLButtonElement>('[data-dialog-initial-focus]')?.focus({ preventScroll: true })
+    const workspace = node.parentElement
+    const trigger = [...(workspace?.querySelectorAll<HTMLButtonElement>(`button[aria-controls="${id}"]`) ?? [])].find(button => button.getClientRects().length > 0)
+    const position = () => {
+      if (!workspace || !trigger) return
+      const frame = workspace.getBoundingClientRect()
+      const button = trigger.getBoundingClientRect()
+      node.style.top = `${button.bottom - frame.top - workspace.clientTop + 4}px`
+      node.style.right = `${Math.max(8, frame.right - workspace.clientLeft - button.right)}px`
+    }
+    position()
+    const observer = new ResizeObserver(position)
+    if (workspace) observer.observe(workspace)
+    if (trigger) observer.observe(trigger)
+    const outside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !node.contains(event.target) && !trigger?.contains(event.target)) {
+        selected.current = true // Let the clicked control receive focus.
+        close()
+      }
+    }
+    document.addEventListener('pointerdown', outside, true)
+    node.querySelector<HTMLButtonElement>('li > button:not(:disabled)')?.focus({ preventScroll: true })
     return () => {
       mounted.current = false
-      siblings.forEach((element, index) => { element.inert = previous[index]! })
+      observer.disconnect()
+      document.removeEventListener('pointerdown', outside, true)
       queueMicrotask(() => {
         if (!mounted.current && !selected.current && opener.current?.isConnected && opener.current.getClientRects().length && !opener.current.closest('[inert]')) {
           opener.current.focus({ preventScroll: true })
         }
       })
     }
-  }, [])
+  }, [id])
   return <div id={id} ref={scope} className="lab-curriculum" data-tone={tone} role="dialog" aria-labelledby={`${id}-title`} tabIndex={-1}
     onKeyDown={event => { if (event.key === 'Escape' && !event.defaultPrevented) { event.preventDefault(); event.stopPropagation(); onClose() } }}
     onClick={event => { if (event.target === event.currentTarget) onClose() }}>
     <div className="lab-curriculum__panel" data-dialog-panel>
-      <header><h3 id={`${id}-title`}>{title}</h3><button type="button" data-dialog-initial-focus aria-label="Fermer le parcours" onClick={onClose}><X size={20} aria-hidden="true" /></button></header>
+      <h3 id={`${id}-title`} className="sr-only">{title}</h3>
       <div className="lab-curriculum__body">
         {groups.map(group => <section key={group.title} aria-label={group.title}><h4>{group.title}</h4><ol>
           {group.levels.map(level => <li key={level.id}>
