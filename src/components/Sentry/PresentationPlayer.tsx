@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef, type CSSProperties } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { ChevronDown, ChevronUp, LoaderCircle, Pause, Play, RotateCcw } from 'lucide-react'
 import { presentationChapters, presentationCopy as copy } from '../../content/presentation'
 import { presentationAudio } from '../../lib/presentationAudio'
@@ -9,6 +10,51 @@ import './presentation.css'
 function timestamp(seconds: number) {
   const safe = Number.isFinite(seconds) ? Math.max(0, Math.floor(seconds)) : 0
   return `${Math.floor(safe / 60)}:${String(safe % 60).padStart(2, '0')}`
+}
+
+/** Portal escapes the chapter list's scrolling clip; pointer movement does not rerender the player. */
+function PresentationChapter({ available, current, children }: { available: boolean; current: boolean; children: ReactNode }) {
+  const [open, setOpen] = useState(false)
+  const hint = useRef<HTMLSpanElement>(null)
+  const pointer = useRef({ x: 0, y: 0 })
+  const position = useCallback((x: number, y: number) => {
+    pointer.current = { x, y }
+    const element = hint.current
+    if (!element) return
+    element.style.left = `${Math.max(8, Math.min(x + 12, window.innerWidth - element.offsetWidth - 8))}px`
+    element.style.top = `${Math.max(element.offsetHeight + 8, y - 12)}px`
+  }, [])
+  useLayoutEffect(() => {
+    if (open) position(pointer.current.x, pointer.current.y)
+  }, [open, position])
+  useEffect(() => {
+    if (!open) return
+    const close = () => setOpen(false)
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') close() }
+    window.addEventListener('scroll', close, true)
+    window.addEventListener('resize', close)
+    window.addEventListener('blur', close)
+    document.addEventListener('visibilitychange', close)
+    document.addEventListener('keydown', escape)
+    return () => {
+      window.removeEventListener('scroll', close, true)
+      window.removeEventListener('resize', close)
+      window.removeEventListener('blur', close)
+      document.removeEventListener('visibilitychange', close)
+      document.removeEventListener('keydown', escape)
+    }
+  }, [open])
+  return <li className="presentation-chapter" data-available={available} data-current={current}
+    onPointerEnter={available ? undefined : event => {
+      if (event.pointerType !== 'mouse') return
+      position(event.clientX, event.clientY)
+      setOpen(true)
+    }}
+    onPointerMove={available ? undefined : event => position(event.clientX, event.clientY)}
+    onPointerLeave={() => setOpen(false)} onPointerDown={() => setOpen(false)}>
+    {children}
+    {open && createPortal(<span ref={hint} role="tooltip" className="pointer-events-none fixed z-[1100] max-w-[calc(100vw-16px)] -translate-y-full rounded-md border border-white/10 bg-zinc-900 px-2 py-1 text-xs whitespace-nowrap text-zinc-300 shadow-lg">En cours de conception.</span>, document.body)}
+  </li>
 }
 
 /** Reserve footer space only where its text shares the fixed player's horizontal area. */
@@ -113,8 +159,7 @@ export function PresentationPlayer({ inChat = false }: { inChat?: boolean }) {
                 const available = 'src' in chapter
                 const current = chapter.id === audio.chapterId
                 return (
-                  <li key={chapter.id} className="presentation-chapter" data-available={available} data-current={current}
-                    title={available ? undefined : 'En cours de conception.'}>
+                  <PresentationChapter key={chapter.id} available={available} current={current}>
                     {current ? (
                       <label className="presentation-track">
                         <span className="sr-only">{`Position dans le chapitre ${chapter.title}`}</span>
@@ -124,12 +169,12 @@ export function PresentationPlayer({ inChat = false }: { inChat?: boolean }) {
                           style={{ '--track-progress': `${progress}%` } as CSSProperties} />
                       </label>
                     ) : <span className={`presentation-track ${available ? 'presentation-track--available' : 'presentation-track--locked'}`} style={{ '--track-progress': index < chapterIndex ? '100%' : '0%' } as CSSProperties} aria-hidden="true" />}
-                    <button type="button" disabled={!available} aria-current={current ? 'step' : undefined}
+                    <button type="button" disabled={!available} style={available ? undefined : { pointerEvents: 'none' }} aria-current={current ? 'step' : undefined}
                       aria-label={`${index + 1}. ${chapter.title}${available ? '' : ` · ${copy.soon}`}`}
                       onClick={() => presentationAudio.selectChapter(chapter.id)}>
                       {chapter.shortTitle}
                     </button>
-                  </li>
+                  </PresentationChapter>
                 )
               })}
             </ol>
