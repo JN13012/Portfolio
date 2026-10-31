@@ -57,7 +57,7 @@ export const hero = {
   /** The labs. */
   labs: [
     { id: 'cyber', label: { fr: 'Lab cyber', en: 'Cyber lab' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
-    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red-team Sentry · niveau 1 jouable', en: 'Red-team Sentry' } },
+    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red-team Sentry · niveau 1', en: 'Red-team Sentry' } },
   ],
   /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
   labPanel: {
@@ -74,6 +74,19 @@ export const hero = {
     writeups: { fr: '{n} write-ups : {epitech} Epitech, {thm} TryHackMe', en: '{n} write-ups: {epitech} Epitech, {thm} TryHackMe' },
     cta: { fr: 'Ouvrir le Lab', en: 'Open the Lab' },
     target: '#lab',
+  },
+  /** The AI lab's panel: what can be played today, and what is announced. */
+  labIaPanel: {
+    title: { fr: 'Lab IA', en: 'AI lab' },
+    intro: { fr: 'Un exercice de red team sur un vrai modèle : faites révéler son flag à Sentry.' },
+    phases: [
+      { title: { fr: 'Direct Prompt Injection' }, text: { fr: 'niveau 1 jouable' } },
+      { title: { fr: 'Indirect Prompt Injection' }, text: { fr: 'à venir' } },
+      { title: { fr: 'Agents & API' }, text: { fr: 'à venir' } },
+      { title: { fr: 'Hardening' }, text: { fr: 'à venir' } },
+    ],
+    cta: { fr: 'Jouer au niveau 1' },
+    target: '#lab-ia',
   },
   close: { fr: 'Fermer', en: 'Close' },
   /** Short availability shown in the hero, before the kind of contract. */

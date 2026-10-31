@@ -35,9 +35,9 @@ const fill = (text: string) =>
     .replace('{epitech}', String(count('epitech')))
     .replace('{thm}', String(count('tryhackme')))
 
-type PanelId = 'master' | 'lab'
+type PanelId = 'master' | 'lab' | 'labIa'
 /** Where each panel opens on desktop: right of the pointer, growing down (master) or up (lab, low in the list). */
-const GROWS: Record<PanelId, 'down' | 'up'> = { master: 'down', lab: 'up' }
+const GROWS: Record<PanelId, 'down' | 'up'> = { master: 'down', lab: 'up', labIa: 'up' }
 /** The panel's anchor in the list's box (px): the click point, or the opener's right edge from the keyboard. */
 type Anchor = { x: number; y: number; height: number }
 const DESKTOP = '(min-width: 1024px)'
@@ -169,7 +169,7 @@ export function HeroProofs() {
           {hero.labs.map((l) => (
             <dd key={l.id} className="min-w-0">
               {l.id === 'ia' ? (
-                // The agent to red-team; played from the Lab section.
+                // The agent to red-team: its panel leads to the AI side of the Lab.
                 <Item
                   thumb={
                     <Thumb>
@@ -178,6 +178,9 @@ export function HeroProofs() {
                   }
                   title={l.label.fr}
                   sub={l.detail.fr}
+                  onClick={open('labIa')}
+                  panel
+                  expanded={panel === 'labIa'}
                 />
               ) : (
                 <Item
@@ -223,6 +226,18 @@ export function HeroProofs() {
             ))}
           </ul>
           <p className="text-zinc-400">{fill(hero.labPanel.writeups.fr)}</p>
+        </Panel>
+      )}
+      {panel === 'labIa' && (
+        <Panel style={place('labIa')} title={hero.labIaPanel.title.fr} onClose={close} cta={hero.labIaPanel.cta.fr} target={hero.labIaPanel.target}>
+          <p>{hero.labIaPanel.intro.fr}</p>
+          <ul className="space-y-[0.3em]">
+            {hero.labIaPanel.phases.map((x) => (
+              <li key={x.title.fr}>
+                <span className="text-cyber-light">{x.title.fr}</span> · {x.text.fr}
+              </li>
+            ))}
+          </ul>
         </Panel>
       )}
     </div>

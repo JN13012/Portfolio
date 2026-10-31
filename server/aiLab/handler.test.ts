@@ -12,7 +12,7 @@ const REASONING = 'FUITE-DU-RAISONNEMENT'
 /** The real migration and real SQL on SQLite, the engine behind D1. */
 function database() {
   const sqlite = new DatabaseSync(':memory:')
-  sqlite.exec(readFileSync('migrations/ai-lab/0001_lab.sql', 'utf8'))
+  for (const file of ['0001_lab.sql', '0002_budget_hours.sql']) sqlite.exec(readFileSync(`migrations/ai-lab/${file}`, 'utf8'))
   const statement = (sql: string, values: (string | number)[] = []) => ({
     bind: (...next: (string | number)[]) => statement(sql, next),
     first: async () => sqlite.prepare(sql).get(...values) ?? null,
@@ -85,7 +85,7 @@ describe('Lab API', () => {
     expect(JSON.stringify(reply.body)).not.toContain(REASONING)
     const statuses = Object.fromEntries((reply.body.trace as unknown as { stage: string; status: string }[]).map(entry => [entry.stage, entry.status]))
     expect(statuses).toEqual({ entry: 'passed', input: 'inactive', instructions: 'passed', model: 'passed', output: 'inactive', classifier: 'inactive', response: 'passed', flag: 'not-run' })
-    const stored = ['lab_sessions', 'lab_requests', 'lab_ip_usage', 'lab_budget'].map(table => JSON.stringify(db.sqlite.prepare(`SELECT * FROM ${table}`).all())).join()
+    const stored = ['lab_sessions', 'lab_requests', 'lab_ip_usage', 'lab_budget_hours'].map(table => JSON.stringify(db.sqlite.prepare(`SELECT * FROM ${table}`).all())).join()
     expect(stored).not.toContain('PROMPT-TEMOIN')
     expect(stored).not.toContain('Je ne peux pas')
     expect(stored).not.toContain('203.0.113.9')
@@ -137,7 +137,7 @@ describe('Lab API', () => {
     const unclear = await attempt()
     expect(unclear.body.outcome).toBe('error')
     expect(JSON.stringify(unclear.body)).not.toContain('SECRET')
-    expect(db.sqlite.prepare('SELECT neurons FROM lab_budget').get()).toEqual({ neurons: 0 })
+    expect(db.sqlite.prepare('SELECT neurons FROM lab_budget_hours').get()).toEqual({ neurons: 0 })
   })
 
   it('does not call the model twice for a duplicate request', async () => {
@@ -179,11 +179,24 @@ describe('Lab API', () => {
 
   it('stops at the global budget, returns the attempt, and settles to the real cost', async () => {
     await attempt()
-    expect(db.sqlite.prepare('SELECT neurons FROM lab_budget').get()).toEqual({ neurons: 12 })
-    db.sqlite.prepare('UPDATE lab_budget SET neurons = ?').run(QUOTAS.neuronsPerDay - 10)
+    expect(db.sqlite.prepare('SELECT neurons FROM lab_budget_hours').get()).toEqual({ neurons: 12 })
+    db.sqlite.prepare('UPDATE lab_budget_hours SET neurons = ?').run(QUOTAS.neuronsPerHour - 10)
     run.mockClear()
     expect(await attempt()).toMatchObject({ status: 503, body: { outcome: 'quota', reason: 'budget', remaining: QUOTAS.session - 1 } })
     expect(run).not.toHaveBeenCalled()
+  })
+
+  it('caps the global budget over 5 h and 24 h too, across hours', async () => {
+    const hour = Math.floor(NOW / 3_600_000)
+    const insert = db.sqlite.prepare('INSERT OR REPLACE INTO lab_budget_hours (hour, neurons) VALUES (?, ?)')
+    insert.run(hour - 3, QUOTAS.neuronsPer5h - 10)
+    expect((await attempt()).body.reason).toBe('budget')
+    db.sqlite.exec('DELETE FROM lab_budget_hours')
+    insert.run(hour - 20, QUOTAS.neuronsPer24h - 10)
+    expect((await attempt()).body.reason).toBe('budget')
+    db.sqlite.exec('DELETE FROM lab_budget_hours')
+    insert.run(hour - 25, QUOTAS.neuronsPer24h)
+    expect((await attempt()).body.outcome).toBe('delivered')
   })
 
   it('validates the flag on the server, idempotently, and only for this session', async () => {

@@ -80,6 +80,8 @@ export type Project = {
     repos?: Array<{ label: string; url: string }>
     /** Repo exists but is private: described without a code link. */
     privateRepo?: boolean
+    /** Code deliberately not linked: nothing is said about it. */
+    noCodeLink?: boolean
     /** Client work with no code to show (the audit): « Rapport confidentiel ». */
     confidential?: boolean
   }

@@ -1,8 +1,14 @@
+import { normalizeToolName } from './logoRegistry'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { ToolLogo } from './ToolLogo'
 
 describe('shared tool logos', () => {
+  it('keeps C++ and C# apart', () => {
+    expect(normalizeToolName('C++')).toBe('cplusplus')
+    expect(normalizeToolName('C#')).not.toBe(normalizeToolName('C++'))
+  })
+
   it('recognizes punctuation and case while preserving an image logo', () => {
     const html = renderToStaticMarkup(<ToolLogo name="docker-compose" size={40} />)
     expect(html).toContain('<img')

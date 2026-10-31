@@ -30,7 +30,7 @@ const MAX_HISTORY_ANSWER = 1000
 const MAX_HISTORY_CHARS = 4000
 const MAX_EXCHANGES = 6
 // Measured on 31 October 2026: about 15 neurons for a usual attempt, 80 for the longest one allowed.
-export const QUOTAS = { session: 60, ip1h: 30, ip5h: 60, ip24h: 100, neuronsPerDay: 5000, reservedNeurons: 80, validations: 200 } as const
+export const QUOTAS = { session: 60, ip1h: 30, ip5h: 60, ip24h: 100, neuronsPerHour: 1000, neuronsPer5h: 3000, neuronsPer24h: 5000, reservedNeurons: 80, validations: 200 } as const
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const REAL_LEVELS: readonly number[] = aiLabCurriculum.flatMap(part => part.levels).filter(level => level.available).map(level => level.id)
 
@@ -126,7 +126,7 @@ async function createOrResume(request: Request, env: Ready, now: number) {
     db.prepare('DELETE FROM lab_progress WHERE rowid IN (SELECT rowid FROM lab_progress WHERE expires_at <= ? LIMIT 100)').bind(now),
     db.prepare('DELETE FROM lab_requests WHERE rowid IN (SELECT rowid FROM lab_requests WHERE expires_at <= ? LIMIT 200)').bind(now),
     db.prepare('DELETE FROM lab_ip_usage WHERE rowid IN (SELECT rowid FROM lab_ip_usage WHERE hour <= ? LIMIT 200)').bind(Math.floor((now - 2 * SESSION_MS) / HOUR_MS)),
-    db.prepare('DELETE FROM lab_budget WHERE day < ?').bind(utcDay(now - 2 * SESSION_MS)),
+    db.prepare('DELETE FROM lab_budget_hours WHERE hour <= ?').bind(Math.floor((now - 2 * SESSION_MS) / HOUR_MS)),
     db.prepare('INSERT INTO lab_sessions (session_hash, secret, expires_at) VALUES (?, ?, ?)').bind(await sha256(token), randomHex(32), expires),
   ])
   return reply(200, { available: true, completed: [], remaining: QUOTAS.session }, {
@@ -168,12 +168,14 @@ async function attempt(request: Request, env: Ready, now: number) {
   if (!ipHeld) { await release(true); return unavailable(429, 'quota', 'ip', remaining + 1) }
   const releaseIp = () => db.prepare('UPDATE lab_ip_usage SET count = MAX(0, count - 1) WHERE ip_hash = ? AND hour = ?').bind(ips.today, hour).run()
 
-  const day = utcDay(now)
-  const budgetHeld = await db.prepare(`INSERT INTO lab_budget (day, neurons) SELECT ?1, ?2 WHERE ?2 <= ?3
-    ON CONFLICT (day) DO UPDATE SET neurons = neurons + ?2 WHERE neurons + ?2 <= ?3 RETURNING neurons`)
-    .bind(day, QUOTAS.reservedNeurons, QUOTAS.neuronsPerDay).first()
+  // The site-wide budget, over the same windows, stops an attack spread over many IPs from using a whole day at once.
+  const spentSince = (hours: number) => `(SELECT COALESCE(SUM(neurons), 0) FROM lab_budget_hours WHERE hour > ?1 - ${hours}) + ?2`
+  const budgetHeld = await db.prepare(`INSERT INTO lab_budget_hours (hour, neurons) SELECT ?1, ?2
+    WHERE ${spentSince(1)} <= ?3 AND ${spentSince(5)} <= ?4 AND ${spentSince(24)} <= ?5
+    ON CONFLICT (hour) DO UPDATE SET neurons = neurons + ?2 RETURNING neurons`)
+    .bind(hour, QUOTAS.reservedNeurons, QUOTAS.neuronsPerHour, QUOTAS.neuronsPer5h, QUOTAS.neuronsPer24h).first()
   if (!budgetHeld) { await Promise.all([release(true), releaseIp()]); return unavailable(503, 'quota', 'budget', remaining + 1) }
-  const settleBudget = (spent: number) => db.prepare('UPDATE lab_budget SET neurons = MAX(0, neurons - ?) WHERE day = ?').bind(QUOTAS.reservedNeurons - Math.min(spent, QUOTAS.reservedNeurons), day).run()
+  const settleBudget = (spent: number) => db.prepare('UPDATE lab_budget_hours SET neurons = MAX(0, neurons - ?) WHERE hour = ?').bind(QUOTAS.reservedNeurons - Math.min(spent, QUOTAS.reservedNeurons), hour).run()
 
   // A provider failure is neither an attack blocked nor a spent attempt.
   const failed = async (ran: Partial<Record<DefenseStageId, StageStatus>>) => {

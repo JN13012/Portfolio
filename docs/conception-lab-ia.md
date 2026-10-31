@@ -105,7 +105,7 @@ Le code du banc est publié avec le corpus.
 | --- | --- |
 | **Affichage public** | Ouvert avec le seul niveau 01 (décision de Jérémie du 31 octobre). Les neuf autres restent annoncés « À venir » et ne sont pas jouables. |
 | **Accès aux niveaux** | Libre, comme au Lab cyber. Chaque réussite est enregistrée séparément ; rien n’est déduit d’une visite. |
-| **Quotas** | 60 essais par session, 30 / 60 / 100 par empreinte d’IP sur 1 h, 5 h et 24 h, 5 000 neurones par jour au total. Workers AI n’offre pas de plafond de dépense : ce budget, inférieur aux 10 000 neurones gratuits par jour, en tient lieu. Un essai courant coûte environ 15 neurones. |
+| **Quotas** | 60 essais par session, 30 / 60 / 100 par empreinte d’IP sur 1 h, 5 h et 24 h, et, pour tout le site, 1 000 / 3 000 / 5 000 neurones sur les mêmes durées. Workers AI n’offre pas de plafond de dépense : ce budget, inférieur aux 10 000 neurones gratuits par jour, en tient lieu. Un essai courant coûte environ 15 neurones. |
 | **IP** | HMAC avec secret serveur et sel changé chaque jour, conservé 48 h au plus, jamais d’IP en clair. Une empreinte reste une donnée personnelle : une courte mention l’indique près du Lab. |
 | **Abus** | Un garde-fou sur tous les niveaux (Llama Guard 3 envisagé), séparé des défenses du jeu : réponses courtes, limitées à l’exercice, avec un état propre dans la trace (« Hors exercice »). Il réduit le risque sans l’éliminer ; le Lab nomme le modèle qui génère les réponses. |
 | **Recruteur pressé** | Une démonstration tirée de vraies tentatives enregistrées, avec date et modèle. Elle arrive avec l’ouverture publique, jamais avant le modèle réel. |

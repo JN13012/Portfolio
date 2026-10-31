@@ -23,7 +23,7 @@ Certifié : IBM AI Developer (Professional Certificate) · Jr Penetration Tester
 
 Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · en test) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
-Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team Sentry · niveau 1 jouable)
+Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team Sentry · niveau 1)
 
 **Lab cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 
@@ -286,6 +286,38 @@ Chiffres : 9 classes de malware · 3 arbres d’évolution · 3 difficultés · 
 Stack : Unity 6.3, C#, HTML, CSS, JavaScript, Markdown
 
 ## Autres réalisations
+
+### Chronox — En développement
+
+*Carte* : Widget Windows natif en C++ qui mesure le temps de session, sans cloud.
+
+Une application Windows native qui mesure le temps où la session est déverrouillée et le PC éveillé. Tout reste en local, dans une base SQLite. Le premier widget fonctionne ; le tableau de bord n’existe pas encore.
+
+**Ce qui fonctionne.**
+- Mesure : suit le verrouillage de session et la mise en veille de Windows.
+- Fiabilité : sauvegarde au moins une fois par minute, reprise propre après un arrêt brutal, changements d’heure pris en compte.
+- Rapports : le moteur calcule le jour, la semaine, le mois et l’année ; le widget affiche pour l’instant le jour.
+- Interface : widget dessiné avec Direct2D, qui se replie en languette.
+
+**Vérifications.**
+- Tests : suites automatisées lancées par GitHub Actions sous Windows.
+- Performance : environ 8 Mo de mémoire privée et 0,15 % d’un cœur, sur de courts échantillons de 30 secondes.
+
+### Maria Agent — En développement
+
+*Carte* : Plateforme d’assistants vocaux en cours : un studio simulé, sans voix réelle.
+
+Le début d’une plateforme d’assistants vocaux personnalisables, dont Maria sera l’agent par défaut. Aujourd’hui, seul un studio simulé existe : il valide le parcours complet, mais renvoie un signal de test. Aucune voix ni aucun modèle n’est connecté.
+
+**Ce qui existe.**
+- Studio : texte, choix d’une voix fictive et réglages, avec écoute et téléchargement du résultat.
+- API Rust : valide la demande et génère un fichier WAV de deux bips, sans réseau ni stockage.
+- Tests : 11 tests d’intégration de l’API, et une intégration continue Rust et React.
+
+**À venir.**
+- Non construit : la vraie synthèse vocale, la voix personnalisée et la conversation.
+
+Chiffres : 11 tests d’intégration
 
 ### Générateur OTP RCS — Terminé · Équipe de 4 · Rôle : backend et sécurité applicative
 
@@ -717,8 +749,8 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
 
 ### dev
 
-- **Langages** : TypeScript, JavaScript, Python, Java, C#, Apex, SQL
-- **Web et back-end** : React, Next.js, NestJS, Express, Prisma, Drizzle, Socket.IO, Electron, Lightning Web Components
+- **Langages** : TypeScript, JavaScript, Python, Java, C#, C++, Rust, Apex, SQL
+- **Web et back-end** : React, Next.js, NestJS, Express, Prisma, Drizzle, Socket.IO, Electron, Lightning Web Components, Axum, Win32, Direct2D, CMake
 - **Données** : PostgreSQL, MySQL, MongoDB, SQLite, Redis
 - **Tests** : Vitest, Jest, pytest
 

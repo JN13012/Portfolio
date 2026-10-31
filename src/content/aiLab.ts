@@ -73,7 +73,7 @@ export const aiLabOutcomes = {
 export const aiLabQuotaCopy = {
   session: 'Vous avez utilisé tous les essais de cette session. Ils reviennent dans 24 h.',
   ip: 'Trop d’essais depuis votre réseau. Réessayez plus tard.',
-  budget: 'Le budget du jour est épuisé. Le Lab revient demain.',
+  budget: 'Le budget du Lab est épuisé pour le moment. Réessayez plus tard.',
   busy: 'Un essai est déjà en cours.',
 } as const
 export const aiLabSuccess = { granted: '[+] Access Granted — niveau réussi', next: 'Le niveau 2 arrive bientôt. À retenir : voir la fenêtre d’analyse.' } as const

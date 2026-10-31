@@ -2,6 +2,8 @@ import {
   siApachegroovy,
   siApacheparquet,
   siCaddy,
+  siCmake,
+  siCplusplus,
   siClaude,
   siCss,
   siDrizzle,
@@ -45,6 +47,7 @@ import {
   siSpacy,
   siSqlite,
   siSwagger,
+  siRust,
   siTailwindcss,
   siTorproject,
   siTraefikproxy,
@@ -57,7 +60,8 @@ import {
 } from 'simple-icons'
 import { TOOL_ICONS } from './toolIcons'
 
-export const normalizeToolName = (name: string) => name.toLowerCase().replace(/[^a-z0-9]/g, '')
+// « C++ » is spelled out: without its signs, it would collide with « C# ».
+export const normalizeToolName = (name: string) => name.toLowerCase().replace('c++', 'cplusplus').replace(/[^a-z0-9]/g, '')
 
 // Logos: the colour icons first, then Simple Icons (CC0), then drawn emblems, else a monogram.
 export const IMAGE_LOGOS: Record<string, string> = Object.fromEntries(Object.entries(TOOL_ICONS).map(([k, v]) => [normalizeToolName(k), v]))
@@ -121,6 +125,9 @@ export const VECTOR_LOGOS: Record<string, SimpleIcon> = {
   traefik: siTraefikproxy,
   unity63: siUnity,
   vite: siVite,
+  cplusplus: siCplusplus,
+  cmake: siCmake,
+  rust: siRust,
   // web3.py talks to Ethereum, which is what its chip stands for.
   web3py: siEthereum,
   lightningwebcomponents: siSalesforce,
