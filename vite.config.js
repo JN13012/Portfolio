@@ -1,13 +1,8 @@
-import process from 'node:process'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  // Workers Builds names the branch: the AI Lab reaches the preview's build, never production's.
-  define: {
-    'import.meta.env.VITE_AI_LAB_PREVIEW': JSON.stringify(process.env.WORKERS_CI_BRANCH === 'developpement'),
-  },
   server: {
     host: '0.0.0.0',
     port: 5173,

@@ -42,7 +42,7 @@ p(`> ${hero.pitch.fr}`)
 p(`${hero.proofTitles.formation.fr} : ${hero.formation.title.fr} (${hero.formation.detail.fr})`)
 p(`${hero.proofTitles.certified.fr} : ${hero.certificates.map((c) => c.title + (c.detail ? ` (${c.detail.fr})` : '')).join(' · ')}`)
 p(`${hero.proofTitles.projects.fr} : ${hero.projects.map((x) => `${x.slug} (${x.detail.fr})`).join(' · ')}`)
-p(`${hero.proofTitles.labs.fr} : ${hero.labs.map((l) => `${l.label.fr} (${l.detail.fr}${l.soon ? `, ${hero.soon.fr}` : ''})`).join(' · ')}`)
+p(`${hero.proofTitles.labs.fr} : ${hero.labs.map((l) => `${l.label.fr} (${l.detail.fr})`).join(' · ')}`)
 p(`**${hero.labPanel.title.fr}** : ${hero.labPanel.intro.fr} ${hero.labPanel.phases.map((x) => `${x.title.fr} : ${x.text.fr}`).join(' · ')}`)
 p(`${profile.availability.fr} · ${profile.seeking.map((s) => s.fr).join(' · ')} · ${profile.location.fr}`)
 

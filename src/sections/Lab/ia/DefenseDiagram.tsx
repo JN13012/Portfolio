@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from 'react'
-import { RotateCcw } from 'lucide-react'
+import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { Sentry } from '../../../components/Sentry'
 import { aiLabLevels, defensePanelCopy, defenseStages, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
@@ -14,10 +14,10 @@ const subscribeWidth = (callback: () => void) => {
   query.addEventListener('change', callback)
   return () => query.removeEventListener('change', callback)
 }
-// A simplified drawing: each stage of the current level is one point on a line, a ring marks the stages
-// that can stop a request, and only the model is drawn as a small network.
+// A simplified drawing: each stage of the current level is one point on a line and a ring marks the stages
+// that can stop a request. The Hero illustrates the model's network; here it is one larger point.
 const SIGNAL_SPEED = 100 // Drawing units per second, measured along the line so the pace stays the same everywhere.
-const BASE_HEIGHT = 232
+const BASE_HEIGHT = 124
 const TOP_SPACE = 44
 const BOTTOM_SPACE = 26
 const MAX_ROW_GAP = 110
@@ -27,11 +27,11 @@ const STAGE_LAYOUT: Record<DefenseStageId, { rows: readonly number[]; label: rea
   entry: { rows: [1], label: ['Entrée'] },
   input: { rows: [1], label: ['Filtre', 'd’entrée'], check: true },
   instructions: { rows: [1], label: ['Consignes'] },
-  model: { rows: [3, 3], label: ['Modèle'] },
+  model: { rows: [1], label: ['Modèle'] },
   output: { rows: [1], label: ['Filtre', 'de sortie'], check: true },
   classifier: { rows: [1], label: ['Classifieur', 'IA'], check: true },
-  guard: { rows: [1], label: ['Garde-fou'], check: true },
   response: { rows: [1], label: ['Réponse'] },
+  flag: { rows: [1], label: ['Flag'] },
 }
 type Point = { x: number; y: number }
 type Column = { stage: number; x: number; nodes: Point[] }
@@ -51,17 +51,6 @@ function buildNetwork(stages: readonly DefenseStageId[], height = BASE_HEIGHT) {
   return { columns, edges, height, centerY, rowGap }
 }
 type Network = ReturnType<typeof buildNetwork>
-
-/** Where one of the three pulses is when the signal's front reaches x: together on the line, one per row in the model. */
-function pulseY(columns: Column[], x: number, pulse: number) {
-  const next = Math.max(1, columns.findIndex(column => column.x > x))
-  const from = columns[next - 1]!
-  const to = columns[next] ?? from
-  const row = (column: Column) => column.nodes[column.nodes.length === 1 ? 0 : pulse]!.y
-  const progress = to === from ? 0 : Math.min(1, (x - from.x) / (to.x - from.x))
-  return row(from) + (row(to) - row(from)) * progress
-}
-const PULSES = [0, 1, 2]
 
 /** On wide screens the drawing takes all the height its window leaves it, in drawing units. */
 function useDrawingHeight(box: RefObject<HTMLElement | null>) {
@@ -84,14 +73,12 @@ function useDrawingHeight(box: RefObject<HTMLElement | null>) {
 }
 const activeStages = (trace: LabTrace) => trace.filter(entry => entry.status !== 'inactive')
 
-function NetworkPicture({ trace, network, revealed, waiting = false, moving = false, front, frontRef, pulseRefs, title }: {
+function NetworkPicture({ trace, network, revealed, waiting = false, moving = false, front, frontRef, pulseRef, title }: {
   trace: LabTrace; network: Network; revealed: string[]; waiting?: boolean; moving?: boolean; front: number; title: string
-  frontRef?: RefObject<SVGRectElement | null>; pulseRefs?: RefObject<(SVGCircleElement | null)[]>
+  frontRef?: RefObject<SVGRectElement | null>; pulseRef?: RefObject<SVGCircleElement | null>
 }) {
   const stages = activeStages(trace)
   const { columns, edges, height, centerY, rowGap } = network
-  const modelFailed = stages.some(entry => entry.stage === 'model' && entry.status === 'error')
-  const modelStage = stages.findIndex(entry => entry.stage === 'model')
   return <svg className="ai-lab__network" viewBox={`0 0 ${WIDTH} ${height}`} role="img" aria-label={`Réseau des défenses : ${title}`}>
     <defs>
       <linearGradient id="ai-lab-signal" gradientUnits="userSpaceOnUse" x1={MARGIN_X} y1="0" x2={WIDTH - MARGIN_X} y2="0"><stop offset="0" stopColor="#4ade80" /><stop offset="1" stopColor="#38bdf8" /></linearGradient>
@@ -112,13 +99,12 @@ function NetworkPicture({ trace, network, revealed, waiting = false, moving = fa
                 ? <path className="ai-lab__check-mark" d={`M${node.x - 3} ${node.y - 3}l6 6m0-6l-6 6`} />
                 : <circle cx={node.x} cy={node.y} r={2.25} />}
             </g>
-          : <circle key={`${node.x}-${node.y}`} cx={node.x} cy={node.y} r={3.5} />))}
+          : <circle key={`${node.x}-${node.y}`} cx={node.x} cy={node.y} r={entry.stage === 'model' ? 6 : 3.5} />))}
         <text className="ai-lab__stage-name" x={labelX} y={layout.label.length > 1 ? 12 : 27} textAnchor="middle">{layout.label.map((label, line) => <tspan key={label} x={labelX} dy={line ? 15 : 0}>{label}</tspan>)}</text>
         {(status === 'blocked' || status === 'error') && <text className="ai-lab__stage-word" x={layout.check ? labelX - 4 : labelX} y={centerY + (layout.check ? 30 : rowGap + 22)} textAnchor={layout.check ? 'start' : 'middle'}>{stageStatusLabels[status]}</text>}
       </g>
     })}
-    {!waiting && !modelFailed && <g clipPath="url(#ai-lab-front)">{columns.filter(column => column.stage === modelStage).flatMap(column => column.nodes.map(node => <circle key={`${node.x}-${node.y}`} className="ai-lab__neuron-lit" cx={node.x} cy={node.y} r={3.5} />))}</g>}
-    {moving && PULSES.map(pulse => <circle key={pulse} ref={element => { if (pulseRefs) pulseRefs.current[pulse] = element }} className="ai-lab__pulse" cx={MARGIN_X} cy={centerY} r={2.5} />)}
+    {moving && <circle ref={pulseRef} className="ai-lab__pulse" cx={MARGIN_X} cy={centerY} r={2.5} />}
   </svg>
 }
 
@@ -145,7 +131,7 @@ function Trace({ result }: { result: LabResult }) {
   const desktop = useSyncExternalStore(subscribeWidth, () => window.matchMedia('(min-width: 1024px)').matches, () => false)
   const root = useRef<HTMLDivElement>(null)
   const frontRef = useRef<SVGRectElement>(null)
-  const pulseRefs = useRef<(SVGCircleElement | null)[]>([])
+  const pulseRef = useRef<SVGCircleElement>(null)
   const elapsed = useRef(0)
   const [near, setNear] = useState(false)
   const [step, setStep] = useState(0)
@@ -176,46 +162,74 @@ function Trace({ result }: { result: LabResult }) {
       last = now
       const front = Math.min(stop, MARGIN_X + elapsed.current * SIGNAL_SPEED / 1000)
       frontRef.current?.setAttribute('width', String(front))
-      pulseRefs.current.forEach((pulse, index) => {
-        pulse?.setAttribute('cx', String(front))
-        pulse?.setAttribute('cy', String(pulseY(network.columns, front, index)))
-      })
+      pulseRef.current?.setAttribute('cx', String(front))
       setStep(arrivals.filter(x => x <= front).length)
       if (front < stop) frame = requestAnimationFrame(tick)
     }
     frame = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame)
-  }, [playing, stop, arrivals, network])
+  }, [playing, stop, arrivals])
   const stage = defenseStages.find(entry => entry.id === ordered[shown - 1]?.stage)
   return <>
     <div ref={root} className="ai-lab__picture" data-playback={playing ? 'playing' : done ? 'complete' : 'suspended'} data-trace-step={shown}>
       <NetworkPicture trace={result.trace} network={network} revealed={ordered.slice(0, shown).map(entry => entry.stage)} moving={!instant && !done}
-        front={done ? stop : MARGIN_X} frontRef={frontRef} pulseRefs={pulseRefs} title={result.title} />
+        front={done ? stop : MARGIN_X} frontRef={frontRef} pulseRef={pulseRef} title={result.title} />
     </div>
     {done ? <Explanation title={result.title} text={result.explanation} outcome={result.outcome} />
       : <Explanation title={stage?.label ?? defensePanelCopy.analysing} text={stage?.note ?? defensePanelCopy.analysing} live={false} />}
   </>
 }
 
-export function DefenseDiagram({ level, result, hintsShown, onHint }: { level: LabLevel; result?: LabResult; hintsShown: number; onHint: () => void }) {
+/** What to learn from the level. The takeaway comes once the server has validated the flag. */
+function Lesson({ level, solved }: { level: LabLevel; solved: boolean }) {
+  const brief = aiLabLevels[level - 1]!
+  const root = useRef<HTMLDivElement>(null)
+  // On short screens this block scrolls: bring the takeaway into view when it appears.
+  useEffect(() => { if (solved && root.current) root.current.scrollTop = root.current.scrollHeight }, [solved])
+  return <div ref={root} className="ai-lab__lesson">
+    <dl>
+      <div><dt>Défense en place</dt><dd>{brief.defense}</dd></div>
+      <div><dt>Type d’attaque</dt><dd>{brief.attack}</dd></div>
+    </dl>
+    <div><h4>Comprendre</h4><p>{brief.lesson}</p></div>
+    <a href={brief.reference.url} target="_blank" rel="noreferrer">{brief.reference.label}</a>
+    {solved && <div data-solved="true"><h4>À retenir</h4><p>{brief.takeaway}</p></div>}
+  </div>
+}
+
+/** One hint at a time, in a block that keeps its height. */
+function HintCarousel({ level, hint, onHint, onUsePrompt }: { level: LabLevel; hint: number; onHint: (value: number) => void; onUsePrompt: (prompt: string) => void }) {
+  const { hints } = aiLabLevels[level - 1]!
+  const current = hints[hint - 1]
+  return <section className="ai-lab__hints" aria-label="Indices">
+    {current
+      ? <p aria-live="polite"><strong>Indice {hint}/{hints.length}</strong>{current.text}</p>
+      : <p aria-live="polite" className="ai-lab__hints-intro"><Sentry size={28} animated={false} /><span>{defensePanelCopy.hintsIntro}</span></p>}
+    <div className="ai-lab__hints-nav">
+      <button type="button" aria-label="Indice précédent" disabled={hint <= 0} onClick={() => onHint(hint - 1)}><ChevronLeft size={15} aria-hidden="true" /></button>
+      {current?.prompt && <button type="button" className="ai-lab__hint-use" onClick={() => onUsePrompt(current.prompt!)}>Mettre dans le champ</button>}
+      <button type="button" aria-label="Indice suivant" disabled={hint >= hints.length} onClick={() => onHint(hint + 1)}><ChevronRight size={15} aria-hidden="true" /></button>
+    </div>
+  </section>
+}
+
+export function DefenseDiagram({ level, result, solved, hint, onHint, onUsePrompt }: {
+  level: LabLevel; result?: LabResult; solved: boolean; hint: number; onHint: (value: number) => void; onUsePrompt: (prompt: string) => void
+}) {
   const [replay, setReplay] = useState(0)
   const brief = aiLabLevels[level - 1]!
   const trace: LabTrace = result?.trace ?? defenseStages.map(stage => ({ stage: stage.id, status: stage.fromLevel <= level ? 'not-run' : 'inactive' }))
-  return <aside id="ai-lab-defenses" className="ai-lab__defenses" aria-label="Défenses de Sentry">
-    <header><p><Sentry size={32} animated={false} /><span>Défenses de Sentry · niveau {level}</span></p></header>
+  return <aside id="ai-lab-defenses" className="ai-lab__defenses" aria-label="Analyse et guide">
+    <header><p><Sentry size={32} animated={false} /><span>Analyse et guide · niveau {level}</span></p>
+      <button type="button" className="ai-lab__replay" disabled={!result} onClick={() => setReplay(value => value + 1)}><RotateCcw size={14} aria-hidden="true" /> Rejouer</button></header>
     <div className="ai-lab__defenses-body">
       {result ? <Trace key={`${result.id}-${replay}`} result={result} /> : <WaitingPicture trace={trace} level={level} />}
       {!result && <Explanation title={`Niveau ${level} · ${brief.title}`} text={brief.description} />}
-      <div className="ai-lab__hints">
-        {brief.hints.slice(0, hintsShown).map((hint, index) => <p key={hint} className="ai-lab__hint"><strong>Indice {index + 1}</strong> {hint}</p>)}
-        <button type="button" className="ai-lab__hint-button" disabled={hintsShown >= brief.hints.length} onClick={onHint}>
-          {hintsShown >= brief.hints.length ? 'Tous les indices sont affichés' : `Afficher l’indice ${hintsShown + 1}/${brief.hints.length}`}
-        </button>
-      </div>
+      <Lesson level={level} solved={solved} />
+      <HintCarousel level={level} hint={hint} onHint={onHint} onUsePrompt={onUsePrompt} />
       <ol className="ai-lab__stage-list" aria-label={result ? 'Étapes du dernier essai' : 'Défenses disponibles'}>{trace.filter(entry => entry.status !== 'inactive').map(entry => <li key={entry.stage} data-status={!result ? 'ready' : entry.status}>
         <span>{defenseStages.find(stage => stage.id === entry.stage)!.label}</span><span>{!result ? 'Prête' : stageStatusLabels[entry.status]}</span>
       </li>)}</ol>
-      <button type="button" className="ai-lab__replay" disabled={!result} onClick={() => setReplay(value => value + 1)}><RotateCcw size={14} aria-hidden="true" /> Rejouer</button>
     </div>
   </aside>
 }

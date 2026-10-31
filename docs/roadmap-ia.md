@@ -25,8 +25,7 @@ Voir [l’architecture actuelle](architecture.md). L’ordre de réalisation est
 ### 3. Lab IA « Red-team Sentry »
 
 Mini-jeu pédagogique à côté du CTF : attaquer Sentry, puis corriger et durcir.
-Tout est dans le [plan du Lab IA](conception-lab-ia.md). Le niveau 1 tourne sur un vrai modèle, en développement et
-sur la préversion (`/?lab=ia#lab`). L’accès public reste désactivé.
+Tout est dans le [plan du Lab IA](conception-lab-ia.md). Le niveau 1 est public et tourne sur un vrai modèle (`/?lab=ia#lab`).
 
 ## Contraintes
 

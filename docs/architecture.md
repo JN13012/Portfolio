@@ -143,10 +143,10 @@ Ces comparaisons ne remplacent pas les contrôles d’interaction et ne constitu
 
 ### Aperçu du Lab IA
 
-En développement et sur la préversion, le sélecteur IA du Lab ouvre une interface chargée à la demande : console,
+Le sélecteur IA du Lab ouvre une interface chargée à la demande : console,
 tiroir des dix niveaux et schéma SVG. `/?lab=ia#lab` l'ouvre directement.
 Le niveau 1 tourne sur le vrai modèle ; les neuf autres restent « À venir ».
-En local, l'API demande `npx wrangler dev` à côté de `npm run dev`, qui lui transmet `/api/lab`, et un `LAB_IP_SECRET` dans `.dev.vars`.
+En local, l'API demande `npm run dev:lab` à côté de `npm run dev`, qui lui transmet `/api/lab`, et un `LAB_IP_SECRET` dans `.dev.vars`.
 La mascotte n’est plus affichée entre le titre et la liste d’entrée. Les défenses sont visibles
 avant le premier essai ; la conversation du Lab est indépendante du chat du site.
 Les deux entrées partagent `components/ui/TerminalStartButton.tsx` : même bouton en relief,
@@ -159,7 +159,6 @@ Le bouton « Commencer » déclenche une extinction CRT de 520 ms, dont la fin o
 Cette transition et l'apparition progressive sont immédiates avec réduction des mouvements.
 Les réponses viennent de `server/aiLab/`, jamais de résultats préparés.
 Les descriptions publiques sont dans `content/aiLab.ts`, sans consignes privées.
-L'accès IA reste désactivé dans le build de production, qui exclut ce code, et ses routes y répondent 404.
 
 `Lab.tsx` coordonne les écrans et conserve leur état avec les frontières `Activity` de React.
 `CyberLab.tsx` porte le CTF et les write-ups existants. Les effets masqués sont suspendus ;

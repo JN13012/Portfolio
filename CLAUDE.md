@@ -9,6 +9,7 @@ not instructions to rebuild the old design or recreate deleted branches.
 ## Commands
 
 - `npm run dev` — Vite dev server
+- `npm run dev:lab` — AI Lab API for local work, next to `npm run dev` (real model calls, needs `LAB_IP_SECRET` in `.dev.vars`)
 - `npm run build` — production build into `dist/`
 - `npm run lint` — ESLint
 - `npm run typecheck` — TypeScript (new code is `.ts`/`.tsx`; existing `.jsx` is allowed via `allowJs`)
@@ -36,9 +37,8 @@ React 19 · Vite · Tailwind 4 · Cloudflare Worker (`server/worker.js` serves `
 The hero network (`sections/Hero/core/`) illustrates Sentry's prepared answers; it is not navigation.
 Keep its 2D fallback, lazy 3D loading, off-screen pause and reduced-motion support.
 In production Sentry plays pre-recorded voice chapters (cloned voice, approved text) and its chat shows
-an under-construction message; prepared cards exist only in development. The AI Lab runs on a real model in
-development and on the `developpement` preview only (`server/aiLab/`, `OPEN_HOSTS`, `WORKERS_CI_BRANCH`): production has no
-model connected and free-form AI is unavailable; never present roadmap functionality as connected. Preserve keyboard focus restoration and session behavior.
+an under-construction message; prepared cards exist only in development. The AI Lab is public: level 1 runs on a real model (`server/aiLab/`, `OPEN_HOSTS`),
+the other levels are shown as « À venir ». Sentry's chat has no model and free-form AI is unavailable; never present roadmap functionality as connected. Preserve keyboard focus restoration and session behavior.
 The Profile globe replay returns to the Hero; the portfolio must stay mounted through the transition.
 Keep Formation (MSc in progress, not a certificate), project and certification modals, and the explicit
 buttons leading from the Hero's information panels to the relevant sections.

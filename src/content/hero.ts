@@ -54,10 +54,10 @@ export const hero = {
     { slug: 'salesforce-executor', detail: { fr: 'En production chez ULIT', en: 'In production at ULIT' } },
     { slug: 'zeroday', detail: { fr: 'Jeu mobile · en conception', en: 'Mobile game · in design' } },
   ],
-  /** The labs: the cyber lab exists; the AI lab (step 4) keeps its place, marked « bientôt » until it ships. */
+  /** The labs. */
   labs: [
     { id: 'cyber', label: { fr: 'Lab cyber', en: 'Cyber lab' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
-    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red-team Sentry', en: 'Red-team Sentry' }, soon: true },
+    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red-team Sentry · niveau 1 jouable', en: 'Red-team Sentry' } },
   ],
   /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
   labPanel: {
@@ -76,7 +76,6 @@ export const hero = {
     target: '#lab',
   },
   close: { fr: 'Fermer', en: 'Close' },
-  soon: { fr: 'bientôt', en: 'soon' },
   /** Short availability shown in the hero, before the kind of contract. */
   available: { fr: 'Disponible', en: 'Available' },
   voice: { fr: 'Écouter ma présentation', en: 'Listen to my introduction' },

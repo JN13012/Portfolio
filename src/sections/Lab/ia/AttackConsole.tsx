@@ -1,9 +1,10 @@
-import { useEffect, useRef, type Dispatch, type FormEvent } from 'react'
+import { Fragment, useEffect, useRef, type Dispatch, type FormEvent } from 'react'
 import { Send, ShieldCheck, Terminal } from 'lucide-react'
-import { aiLabConfigs, aiLabCurriculum, aiLabLevels, aiLabUnavailable, defensePanelCopy, type AiLabConfig } from '../../../content/aiLab'
+import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePanelCopy } from '../../../content/aiLab'
 import { labReducer, type LabState } from './labState'
 import { LabNavigation } from '../LabNavigation'
 
+const [noticeStart, noticeEnd] = defensePanelCopy.notice.split(defensePanelCopy.modelName)
 const levelCount = String(aiLabCurriculum.reduce((count, part) => count + part.levels.length, 0)).padStart(2, '0')
 
 type Props = {
@@ -24,9 +25,13 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
   useEffect(() => {
     const node = history.current
     if (node) node.scrollTop = node.scrollHeight
-  }, [state.attempts, state.level, state.pending])
+  }, [state.attempts, state.level, state.pending, state.solvedAfter])
+  const success = (attemptId: number) => state.solvedAfter[state.level] === attemptId && <div className="ai-lab__success" role="status">
+    <p><span aria-hidden="true">&gt;&gt;</span> {aiLabSuccess.granted}</p>
+    <p><span aria-hidden="true">&gt;&gt;</span> {aiLabSuccess.next}</p>
+  </div>
   const send = (event: FormEvent) => { event.preventDefault(); onSend() }
-  const canSend = available && !state.pending && !!state.draft.trim()
+  const canSend = state.pending === null && !!state.draft.trim()
   return (
     <div className="lab-terminal ai-lab__console">
       <div className="ai-lab__console-heading">
@@ -40,34 +45,30 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
         <div className="ai-lab__boot">
           <p><span aria-hidden="true">&gt;&gt;</span> RED-TEAM SENTRY — CAPTURE THE FLAG</p>
           <p className="ai-lab__greeting"><span>sentry&gt;</span> Je protège un flag. Votre mission : me le faire révéler.</p>
-          <p><span aria-hidden="true">&gt;&gt;</span> Cible volontairement vulnérable, flag fictif, vrai modèle.</p>
           <p><span aria-hidden="true">&gt;&gt;</span> Saisissez votre premier prompt pour commencer.</p>
         </div>
         {!available && <p className="ai-lab__empty" role="status">{aiLabUnavailable}</p>}
-        {attempts.map(({ prompt, result }) => <div className="ai-lab__exchange" key={result.id}>
-          <p className="ai-lab__prompt"><span>vous&gt;</span> {prompt}</p>
+        {success(0)}
+        {attempts.map(({ prompt, result }) => <Fragment key={result.id}><div className="ai-lab__exchange">
+          <p className="ai-lab__prompt"><span className="sr-only">Vous : </span>{prompt}</p>
           <p className="ai-lab__result-label" data-outcome={result.outcome}>{result.title}</p>
           {result.answer && <p className="ai-lab__answer"><span>sentry&gt;</span> {result.answer}</p>}
           <button type="button" className="ai-lab__see-trace" onClick={() => document.getElementById('ai-lab-defenses')?.scrollIntoView()}>{defensePanelCopy.seeTrace}</button>
-        </div>)}
-        {state.pending && <p className="ai-lab__empty" role="status">{defensePanelCopy.analysing}</p>}
+        </div>{success(result.id)}</Fragment>)}
+        {state.pending !== null && <div className="ai-lab__exchange">
+          <p className="ai-lab__prompt"><span className="sr-only">Vous : </span>{state.pending}</p>
+          <p className="ai-lab__answer" role="status"><span>sentry&gt;</span> <span className="ai-lab__thinking" aria-hidden="true"><i /><i /><i /></span><span className="sr-only">{defensePanelCopy.analysing}</span></p>
+        </div>}
       </div>
       <div className="ai-lab__controls">
         <div className="ai-lab__toolbar">
-          <label className="ai-lab__scenario">Défense
-            <select value={state.config} disabled={state.pending} onChange={event => dispatch({ type: 'config', value: event.target.value as AiLabConfig })}>
-              {aiLabConfigs.map(config => <option key={config.id} value={config.id}>{config.label}</option>)}
-            </select>
-          </label>
-          <button type="button" className="ai-lab__new-conversation" disabled={state.pending || !attempts.length} onClick={() => dispatch({ type: 'new-conversation' })}>Nouvelle conversation</button>
+          <button type="button" className="ai-lab__new-conversation" disabled={state.pending !== null || !attempts.length} onClick={() => dispatch({ type: 'new-conversation' })}>Nouvelle conversation</button>
           <form onSubmit={event => { event.preventDefault(); onValidate() }} className="ai-lab__flag-form">
             <label htmlFor="ai-lab-flag">Valider le flag</label>
             <div><input id="ai-lab-flag" value={state.flag} maxLength={100} autoComplete="off" spellCheck={false} placeholder="FLAG{…}" onChange={event => dispatch({ type: 'flag', value: event.target.value })} />
-              <button type="submit" disabled={!state.flag.trim() || !available}>Valider</button></div>
+              <button type="submit" disabled={!state.flag.trim()}>Valider</button></div>
           </form>
-          {state.validation !== 'idle' && <p className="ai-lab__validation" role="status">
-            {state.validation === 'incorrect' ? 'Ce flag n’est pas le bon pour ce niveau.' : 'Flag validé par le serveur : niveau réussi.'}
-          </p>}
+          {state.validation === 'incorrect' && <p className="ai-lab__validation" role="status">Ce flag n’est pas le bon pour ce niveau.</p>}
         </div>
         <form onSubmit={send} className="ai-lab__prompt-form">
           <span className="ai-lab__prompt-mark" aria-hidden="true">&gt;</span>
@@ -78,7 +79,7 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
             }} />
           <button type="submit" className="ai-lab__send" disabled={!canSend}><Send size={15} aria-hidden="true" /><span>Envoyer</span></button>
         </form>
-        <p className="ai-lab__notice">{state.remaining !== null && <strong>Essais restants : {state.remaining}. </strong>}{defensePanelCopy.notice}</p>
+        <p className="ai-lab__notice">{state.remaining !== null && <strong>Essais restants : {state.remaining}. </strong>}{noticeStart}<span className="ai-lab__model">{defensePanelCopy.modelName}</span>{noticeEnd}</p>
       </div>
     </div>
   )

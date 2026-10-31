@@ -42,9 +42,11 @@ export default function AiLab() {
   const send = async () => {
     const prompt = state.draft.trim()
     if (!prompt || state.pending) return
-    const { level, config } = state
-    dispatch({ type: 'pending', value: true })
-    const reply = await sendAttempt({ level, config, prompt, history: conversationHistory(state) })
+    const { level } = state
+    dispatch({ type: 'sending', prompt })
+    const reply = await sendAttempt({ level, prompt, history: conversationHistory(state) })
+    // A failure is never final: the next attempt tries again and clears the message if the service is back.
+    setAvailable(!!reply)
     const id = nextAttempt.current++
     const notRun = defenseStages.map(stage => ({ stage: stage.id, status: stage.fromLevel > level ? 'inactive' as const : 'not-run' as const }))
     const result: LabResult = !reply
@@ -52,12 +54,12 @@ export default function AiLab() {
       : reply.outcome === 'quota'
         ? { id, level, outcome: 'quota', title: 'Essais indisponibles', explanation: aiLabQuotaCopy[reply.reason ?? 'busy'], trace: reply.trace }
         : { id, level, outcome: reply.outcome, title: aiLabOutcomes[reply.outcome].title, explanation: aiLabOutcomes[reply.outcome].text, answer: reply.answer, trace: reply.trace }
-    dispatch({ type: 'attempt', prompt, config, result, remaining: reply?.remaining ?? null })
+    dispatch({ type: 'attempt', prompt, result, remaining: reply?.remaining ?? null })
   }
   const validate = async () => {
     const reply = await validateFlag(state.level, state.flag)
+    setAvailable(!!reply)
     if (reply) dispatch({ type: 'validated', correct: reply.correct, completed: reply.completed })
-    else setAvailable(false)
   }
   return <div className="ai-lab">
     <div className="lab-grid ai-lab__grid">
@@ -70,7 +72,9 @@ export default function AiLab() {
         </Activity></div>
         {drawer && <LevelDrawer level={entered ? state.level : undefined} completed={state.completed} onClose={() => setDrawer(false)} onSelect={selectLevel} />}
       </div>
-      <DefenseDiagram level={state.level} result={last} hintsShown={state.hints[state.level] ?? 0} onHint={() => dispatch({ type: 'hint', total: aiLabLevels[state.level - 1]!.hints.length })} />
+      <DefenseDiagram level={state.level} result={last} solved={state.completed.includes(state.level)} hint={state.hints[state.level] ?? 0}
+        onHint={value => dispatch({ type: 'hint', value, total: aiLabLevels[state.level - 1]!.hints.length })}
+        onUsePrompt={prompt => { dispatch({ type: 'draft', value: prompt }); document.getElementById('ai-lab-prompt')?.focus({ preventScroll: true }) }} />
     </div>
   </div>
 }

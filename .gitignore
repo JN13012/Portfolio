@@ -31,3 +31,6 @@ public/fonts/
 docs/assets/archive/fonts/
 
 *Zone.Identifier
+
+# Temporary Chrome profiles left by Lighthouse under WSL
+C:*

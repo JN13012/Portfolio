@@ -36,6 +36,8 @@
 .lab-curriculum li > button[aria-current] strong, .lab-curriculum li > button[aria-current]:hover strong { color: var(--lab-accent); font-weight: 500; }
 .lab-curriculum li > button[aria-current] .lab-curriculum__number { color: var(--lab-accent); }
 .lab-curriculum__done { margin-left: 8px; color: #86efac; }
+/* Tight rows with a mouse; touch keeps a comfortable target. */
+@media (hover: hover) and (pointer: fine) { .lab-curriculum li > button { min-height: 26px; padding-block: 2px; } }
 .lab-curriculum__hint { position: absolute; z-index: 1; width: max-content; transform: translateY(-50%); padding: 5px 9px; border: 1px solid #ffffff1f; border-radius: 4px; background: #18181b; color: #e4e4e7; font-size: 12px; line-height: 1.4; pointer-events: none; }
 .lab-curriculum__rail { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .lab-curriculum__rail path { fill: none; stroke: #ffffff24; stroke-width: 1; stroke-linecap: round; }

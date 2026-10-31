@@ -47,6 +47,7 @@ export function CyberLab() {
   const [topic, setTopic] = useState<Topic | null>(null)
   const [activeLevel, setActiveLevel] = useState<number | null>(null)
   const [visited, setVisited] = useState<number[]>([])
+  const [announced, setAnnounced] = useState<number[]>([])
   const [selection, setSelection] = useState(0)
   const [progress, setProgress] = useState(readCyberProgress)
   const [drawer, setDrawer] = useState(false)
@@ -98,7 +99,8 @@ export function CyberLab() {
                 <Suspense fallback={<p role="status" className="p-4 text-sm text-zinc-400">Chargement du niveau…</p>}>
                   <CtfConsole initialLevel={level} onComplete={completeLevel} onPresentation={() => setActiveLevel(null)}
                     onCurriculum={() => setDrawer(previous => !previous)} curriculumOpen={drawer} completedAll={progress.completed.length === 9}
-                    onNext={level < 9 ? () => selectLevel(level + 1) : undefined} />
+                    announce={announced.includes(level)}
+                    onNext={level < 9 ? () => { if (!visited.includes(level + 1)) setAnnounced(previous => [...previous, level + 1]); selectLevel(level + 1) } : undefined} />
                 </Suspense>
               </Activity>
             </div>)}

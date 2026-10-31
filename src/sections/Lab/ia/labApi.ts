@@ -1,4 +1,4 @@
-import type { AiLabConfig, LabLevel } from '../../../content/aiLab'
+import type { LabLevel } from '../../../content/aiLab'
 import type { LabOutcome, LabTrace } from './labState'
 
 type SessionReply = { available: true; completed: number[]; remaining: number }
@@ -17,7 +17,7 @@ export async function openSession(): Promise<SessionReply | null> {
 }
 
 /** Returns null when no usable answer came back; a lost session is reopened once, with a new request id. */
-export async function sendAttempt(input: { level: LabLevel; config: AiLabConfig; prompt: string; history: { prompt: string; answer: string }[] }): Promise<AttemptReply | null> {
+export async function sendAttempt(input: { level: LabLevel; prompt: string; history: { prompt: string; answer: string }[] }): Promise<AttemptReply | null> {
   try {
     let response = await post('attempt', { ...input, requestId: crypto.randomUUID() })
     if (response.status === 401 && await openSession()) response = await post('attempt', { ...input, requestId: crypto.randomUUID() })
