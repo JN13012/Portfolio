@@ -41,18 +41,20 @@ Déroulé d’une étape :
 
 ### 1. Corrections visibles en ligne — branche `etape-1-corrections-prod`
 
-- [ ] **Hero sur téléphone** : le titre est coupé jusqu’à 390 px de large et le sous-titre jusqu’à 430 px
-  (`sections/Hero/Hero.tsx`, `whitespace-nowrap`). Vérifier à 320, 360, 390, 430 et 768 px.
-- [ ] **CV** : griser les boutons du Hero et de Contact avec le message, retirer `CV.pdf` du build
-  pour que l’ancien ne soit plus accessible. « Me contacter » devient l’action principale du Hero.
-- [ ] **Description Google** (`index.html`) : remplacer « MSc cybersécurité » par l’intitulé de Parcours.
-- [ ] **En-têtes de sécurité** dans le Worker : CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`,
-  `Permissions-Policy`, `frame-ancestors`. Vérifier sur la préversion : globe, audio, Web Analytics, contact.
-- [ ] **Aperçu de partage** : balises Open Graph et image, à contrôler avec un vrai partage LinkedIn.
-- [ ] **`llms.txt` et `sitemap.xml`** : ils renvoient la page d’accueil à cause du repli SPA ;
-  créer de vrais fichiers, ou régler le repli pour qu’ils répondent 404.
-- [ ] **Réseau du Hero** : indiquer que c’est une illustration, car le vecteur d’embedding
-  et les filtres affichés laissent croire à un modèle en cours d’exécution.
+- [x] **Hero sur téléphone** : titre, sous-titre et bouton Menu tiennent à 320, 360, 390, 430 et 768 px.
+- [x] **CV** : mention grisée dans le Hero et Contact, `CV.pdf` retiré du dépôt et du build,
+  « Me contacter » est l’action principale du Hero.
+- [x] **Description Google** et réponse préparée « Qui est Jérémie ? » : intitulé de Parcours
+  à la place de « MSc cybersécurité ».
+- [x] **En-têtes de sécurité** dans `public/_headers`, car le Worker ne s’exécute pas pour les fichiers statiques :
+  CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors`.
+  Testé sous le Worker local : globe, audio, modale, envoi du formulaire jusqu’au Worker, aucun blocage CSP.
+- [ ] **À vérifier sur la préversion** : envoi réel d’un message de contact et mesure Web Analytics
+  (non testables en local : pas de clé d’envoi, CORS de Cloudflare sur localhost).
+- [x] **Aperçu de partage** : balises Open Graph et image (`public/og-image.png`, source `dev/assets/og-image.html`).
+- [ ] **À vérifier après la mise en ligne** : un vrai partage LinkedIn, car l’image pointe vers l’URL de production.
+- [x] **`llms.txt` et `sitemap.xml`** : vrais fichiers, `sitemap.xml` déclaré dans `robots.txt`.
+- [x] **Réseau du Hero** : mention « Illustration animée : aucun modèle n’est connecté ».
 
 **Terminé quand** le Hero est lisible sur téléphone et que le site ne diffuse plus d’information fausse.
 
@@ -122,7 +124,8 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 ## À fournir par Jérémie, à son rythme
 
 - **Nouveau CV** : ULIT 6 mois (janvier à juin 2026), dates du master selon Parcours, audit web selon
-  le texte du projet, positionnement IA et cyber. Le bouton est réactivé à sa réception.
+  le texte du projet, positionnement IA et cyber. À sa réception : remettre le PDF dans `src/assets/`,
+  son import dans `content/profile.ts` et les liens de téléchargement du Hero et de Contact.
 - **Réponses de Sentry** : relire les 11 réponses préparées (`content/assistant.ts`), écrire « points forts »
   et « points faibles ». Elles débloquent l’étape 6.
 
@@ -130,5 +133,5 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 
 - `main` : un commit local non poussé (`6f398d0`), qui partira avec la prochaine mise en ligne.
 - `etape-0-stabilisation` : ce plan et les corrections de documents. Rien n’est encore poussé.
-- `etape-1-corrections-prod` : part de l’étape 0, prochaine étape à réaliser.
+- `etape-1-corrections-prod` : part de l’étape 0, étape 1 réalisée, à vérifier sur sa préversion.
 - `etape-2-tiroir` : part de l’étape 0, contient le tiroir en cours.

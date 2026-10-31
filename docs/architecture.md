@@ -37,8 +37,9 @@ src/
       dialogs/           cadre, zoom, galerie, clavier et couches de focus
   content/               données et textes, sources, garde-fous éditoriaux
   lib/                   état partagé, événements, filtres, animation et utilitaires
-  assets/                images, logos et CV utilisés par le portfolio
+  assets/                images et logos utilisés par le portfolio
   styles/                global.css : Tailwind, thème et styles transversaux
+public/                  _headers (en-têtes de sécurité des fichiers statiques), robots.txt, sitemap.xml, llms.txt, og-image.png
 server/                  worker.js, contactEmail.js et tests du contact
 functions/api/           adaptateur Cloudflare Pages vers le même contact
 dev/

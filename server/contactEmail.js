@@ -7,6 +7,7 @@ export const jsonResponse = (status, body) =>
     status,
     headers: {
       "Content-Type": "application/json",
+      "X-Content-Type-Options": "nosniff",
     },
   });
 
