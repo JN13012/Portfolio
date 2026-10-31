@@ -13,6 +13,18 @@ supprimées à chaque POST valide. Un onglet ouvert plus de 30 jours lit le tota
 sans être recompté. Le limiteur accepte 20 requêtes/minute par IP hachée (hors D1).
 Cette protection et le contrôle d’origine ne prouvent pas qu’une visite est humaine.
 
+## Reprise historique
+
+La migration `0002_import_historical_visits.sql` ajoute une seule fois 7 visites
+issues du récapitulatif Cloudflare Web Analytics fourni par le propriétaire le
+31 octobre 2026 (7 visites, 10 pages vues). Elle préserve les sessions déjà
+comptées dans D1. Le suivi des migrations Wrangler empêche un second ajout.
+
+Le total public associe donc ce forfait historique aux sessions d’onglet D1.
+Les deux méthodes diffèrent : ce total ne mesure pas des visiteurs uniques et
+ne se synchronise pas automatiquement avec Analytics. Aucun identifiant de
+session historique n’est inventé ou importé.
+
 ## Tester localement
 
 ```sh
@@ -33,6 +45,7 @@ binding `VISITS_DB` de `wrangler.toml`.
 1. Après autorisation uniquement : `npx wrangler d1 migrations apply portfolio-visits --remote`.
 2. Après autorisation uniquement : `npm run deploy:worker`.
 
-Le compteur de production commence à zéro ; les données locales ne sont pas publiées.
+Le compteur est initialisé à zéro par la première migration, puis reçoit la
+reprise historique de 7 visites par la deuxième. Les données locales ne sont pas publiées.
 Vérifier `GET /api/visits`, une première visite, puis un rechargement dans le même
 onglet. Les totaux ne correspondent pas nécessairement à ceux de Web Analytics.

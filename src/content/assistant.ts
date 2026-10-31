@@ -40,7 +40,7 @@ export const brainNodes: BrainNode[] = [
         id: 'who',
         question: { fr: 'Qui est Jérémie ?', en: 'Who is Jérémie?' },
         answer: {
-          fr: 'Développeur IA et pentester junior, en MSc cybersécurité à Epitech Marseille. Son fil rouge : construire des systèmes d’IA et savoir comment on les attaque. Avant l’informatique : l’infanterie (2e RIMa), la mécanique en endurance et l’infrastructure blockchain. Il parle cinq langues et a vécu dans six pays.',
+          fr: 'Développeur IA et pentester junior, en Master of Science Architecte des systèmes d’information à Epitech Marseille. Son fil rouge : construire des systèmes d’IA et savoir comment on les attaque. Avant l’informatique : l’infanterie (2e RIMa), la mécanique en endurance et l’infrastructure blockchain. Il parle cinq langues et a vécu dans six pays.',
           en: 'AI developer and junior penetration tester, MSc cybersecurity student at Epitech Marseille. His common thread: building AI systems and knowing how they get attacked. Before IT: the infantry (2e RIMa), endurance-racing mechanics and blockchain infrastructure. He speaks five languages and has lived in six countries.',
         },
         sources: [{ kind: 'section', node: 'profile' }, { kind: 'section', node: 'parcours' }],
@@ -198,8 +198,7 @@ export const brainNodes: BrainNode[] = [
         id: 'reach',
         question: { fr: 'Comment le contacter ?', en: 'How can I reach him?' },
         answer: {
-          fr: 'Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV se télécharge en haut de la page.',
-          en: 'Through the site’s contact form or by email (jeremie.nagi@epitech.eu). His CV can be downloaded at the top of the page.',
+          fr: 'Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV est en cours de mise à jour.',
         },
         sources: [{ kind: 'section', node: 'contact' }],
         validated: false,

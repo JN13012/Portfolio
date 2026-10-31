@@ -90,7 +90,7 @@ export const tracks: TrackContent[] = [
 export const atAGlance: Localized[] = [
   { fr: '5 langues', en: '5 languages' },
   { fr: '6 pays', en: '6 countries' },
-  { fr: 'MSc Epitech cybersécurité', en: 'MSc Epitech cybersecurity' },
+  { fr: 'Master of Science · Epitech' },
   { fr: 'Jr Penetration Tester', en: 'Jr Penetration Tester' },
   { fr: 'IBM AI Developer', en: 'IBM AI Developer' },
   { fr: 'Ex-militaire', en: 'Former soldier' },

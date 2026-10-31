@@ -1,0 +1,13 @@
+# Jérémie Nagi
+
+> Développeur IA et pentester junior, en Master of Science Architecte des systèmes d’information à Epitech Marseille. Disponible immédiatement en alternance (4 jours en entreprise, 1 jour à l’école), stage possible. Marseille, mobile dans toute la France.
+
+Ce site est un portfolio en une seule page, en français. Aucun modèle d’IA n’y est connecté : l’assistant Sentry y lit des présentations vocales préenregistrées et le réseau animé de l’accueil est une illustration.
+
+## Liens
+
+- [Portfolio](https://www.jeremie-nagi.workers.dev/): profil, compétences, projets, Lab, parcours, certifications et contact
+- [GitHub](https://github.com/JN13012): dépôts de code
+- [Write-ups de cybersécurité](https://github.com/JN13012/Cyber-Write-ups): comptes rendus de pentest
+- [LinkedIn](https://www.linkedin.com/in/jn13012)
+- [TryHackMe](https://tryhackme.com/p/JN13)
