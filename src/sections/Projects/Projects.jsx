@@ -12,6 +12,7 @@ import { filterProjects, groupOf, sortProjects, tracksFromSearch } from "../../l
 import { onCore } from "../../lib/coreBus";
 import Smartfridge from "../../assets/Projets/Smartfridge.png";
 import Cyberpong from "../../assets/Projets/Cyberpong.png";
+import Chronox from "../../assets/Projets/Chronox.webp";
 import My_marvin from "../../assets/Projets/My_marvin.png";
 import Popeye from "../../assets/Projets/Popeye.png";
 import Vaultborn from "../../assets/Projets/Vaultborn.webp";
@@ -95,6 +96,7 @@ const IMAGES = {
   "hackathon-citiz": [Hackathon_Citiz],
   platino: [Platino],
   chatflow: [Chatflow],
+  chronox: [Chronox],
   "salesforce-executor": [UlitLogo, Salesforce],
   "base-de-connaissance": [Obsidian, Obsidian0, Obsidian1],
   "ctf-du-site": [CTF_John, CTF_Hashcat, CTF_Metasploit, CTF_Forensic, CTF_Snort],
@@ -472,6 +474,7 @@ function ProjectLinks({ project, onInternal }) {
   ].filter(Boolean);
 
   if (links.length === 0) {
+    if (project.links.noCodeLink) return null;
     return (
       <p className="flex items-center justify-center gap-2 border-t border-white/10 py-4 text-sm text-zinc-400">
         <Lock size={15} aria-hidden="true" /> {project.links.confidential ? "Rapport confidentiel" : "Code privé"}

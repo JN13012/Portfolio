@@ -33,6 +33,9 @@ export const complexity: Record<string, { note: Complexity; why: string }> = {
   platino: { note: 2, why: 'Express and PostgreSQL web application' },
   popeye: { note: 2, why: 'Multi-service app with Docker Compose' },
   'my-marvin': { note: 2, why: 'Jenkins configured entirely as code' },
+  // Proposed on 2026-10-31, to validate with Jérémie.
+  chronox: { note: 3, why: '1 + 1 (native Win32 and Direct2D, session events, DST, crash recovery) + 0 + 1 (automated tests, Windows CI, measured performance)' },
+  'maria-agent': { note: 2, why: '1 + 1 (typed Rust API and React front end) + 0 + 0; the studio is simulated, 11 integration tests' },
   cyberpong: { note: 1, why: 'Pong game in Python' },
   'unit-converter': { note: 1, why: 'Converter with a Tkinter interface' },
   'smart-fridge': { note: 1, why: 'Project-management project' },

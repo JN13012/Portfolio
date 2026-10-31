@@ -5,6 +5,89 @@ import type { Project } from '../types'
 
 export const cards: Project[] = [
   {
+    slug: 'chronox',
+    tier: 'card',
+    status: 'development',
+    tracks: ['dev'],
+    title: 'Chronox',
+    period: { start: '2026-10' },
+    team: { size: 1 },
+    context: 'personal',
+    tagline: {
+      fr: 'Widget Windows natif en C++ qui mesure le temps de session, sans cloud.',
+    },
+    summary: {
+      fr: 'Une application Windows native qui mesure le temps où la session est déverrouillée et le PC éveillé. Tout reste en local, dans une base SQLite. Le premier widget fonctionne ; le tableau de bord n’existe pas encore.',
+    },
+    sections: [
+      {
+        kind: 'approach',
+        title: { fr: 'Ce qui fonctionne', en: 'What works' },
+        points: [
+          { label: { fr: 'Mesure', en: 'Tracking' }, text: { fr: 'suit le verrouillage de session et la mise en veille de Windows.' } },
+          { label: { fr: 'Fiabilité', en: 'Reliability' }, text: { fr: 'sauvegarde au moins une fois par minute, reprise propre après un arrêt brutal, changements d’heure pris en compte.' } },
+          { label: { fr: 'Rapports', en: 'Reports' }, text: { fr: 'le moteur calcule le jour, la semaine, le mois et l’année ; le widget affiche pour l’instant le jour.' } },
+          { label: { fr: 'Interface', en: 'Interface' }, text: { fr: 'widget dessiné avec Direct2D, qui se replie en languette.' } },
+        ],
+      },
+      {
+        kind: 'result',
+        title: { fr: 'Vérifications', en: 'Checks' },
+        points: [
+          { label: { fr: 'Tests', en: 'Tests' }, text: { fr: 'suites automatisées lancées par GitHub Actions sous Windows.' } },
+          { label: { fr: 'Performance', en: 'Performance' }, text: { fr: 'environ 8 Mo de mémoire privée et 0,15 % d’un cœur, sur de courts échantillons de 30 secondes.' } },
+        ],
+      },
+    ],
+    imageNote: { fr: 'Référence artistique de l’interface visée, pas une capture du widget actuel.' },
+    stack: ['C++', 'Win32', 'Direct2D', 'DirectWrite', 'SQLite', 'CMake', 'GitHub Actions'],
+    links: { github: 'https://github.com/JN13012/chronox' },
+    facts: [],
+    scale: { months: 1 },
+    doNotClaim: ['A finished product', 'The reference image as a screenshot', 'A long-term performance profile: only short samples were measured'],
+  },
+  {
+    slug: 'maria-agent',
+    tier: 'card',
+    status: 'development',
+    tracks: ['ia', 'dev'],
+    title: 'Maria Agent',
+    period: { start: '2026-10' },
+    team: { size: 1 },
+    context: 'personal',
+    tagline: {
+      fr: 'Plateforme d’assistants vocaux en cours : un studio simulé, sans voix réelle.',
+    },
+    summary: {
+      fr: 'Le début d’une plateforme d’assistants vocaux personnalisables, dont Maria sera l’agent par défaut. Aujourd’hui, seul un studio simulé existe : il valide le parcours complet, mais renvoie un signal de test. Aucune voix ni aucun modèle n’est connecté.',
+    },
+    sections: [
+      {
+        kind: 'approach',
+        title: { fr: 'Ce qui existe', en: 'What exists' },
+        points: [
+          { label: { fr: 'Studio', en: 'Studio' }, text: { fr: 'texte, choix d’une voix fictive et réglages, avec écoute et téléchargement du résultat.' } },
+          { label: { fr: 'API Rust', en: 'Rust API' }, text: { fr: 'valide la demande et génère un fichier WAV de deux bips, sans réseau ni stockage.' } },
+          { label: { fr: 'Tests', en: 'Tests' }, text: { fr: '11 tests d’intégration de l’API, et une intégration continue Rust et React.' } },
+        ],
+      },
+      {
+        kind: 'limits',
+        title: { fr: 'À venir', en: 'Coming' },
+        points: [
+          { label: { fr: 'Non construit', en: 'Not built' }, text: { fr: 'la vraie synthèse vocale, la voix personnalisée et la conversation.' } },
+        ],
+      },
+    ],
+    stack: ['Rust', 'Axum', 'Tokio', 'Serde', 'React', 'TypeScript', 'Vite', 'Tailwind CSS'],
+    links: { noCodeLink: true },
+    facts: [
+      { value: '11', label: { fr: 'tests d’intégration', en: 'integration tests' }, source: 'apps/api/tests, 2026-10-31' },
+    ],
+    scale: { months: 1, tests: 11 },
+    doNotClaim: ['A working voice assistant: the studio is simulated', 'Any real voice, LLM or speech-to-text'],
+  },
+  {
     slug: 'generateur-otp-rcs',
     tier: 'card',
     status: 'delivered',

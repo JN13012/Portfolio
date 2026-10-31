@@ -29,6 +29,8 @@ D = difficulté, C = contraintes, A = aboutissement.
 | Générateur OTP RCS | cyber, dev | 06/2026 | 6 | 1 | 1 | 0 | **3** | Authentification à deux facteurs par une API réelle d'envoi (hackathon) |
 | Time Manager | dev | 10/2026 | 2 | 1 | 0 | 1 | **3** | API typée et front React ; 68 tests |
 | Bernstein — Kubernetes | dev | 06/2026 | 1 | 2 | 0 | 0 | **3** | Cluster multi-nœuds : ingress, secrets, volumes, RBAC, supervision |
+| Chronox | dev | en cours | 1 | 1 | 0 | 1 | **3** | Widget Windows natif, session, changements d’heure, reprise après arrêt ; à valider par Jérémie |
+| Maria Agent | ia, dev | en cours | 1 | 1 | 0 | 0 | **2** | API Rust et front React ; studio simulé, 11 tests ; à valider par Jérémie |
 | Vaultborn | dev | 10/2025 | 1 | 1 | 0 | 1 | **3** | Action-RPG 2D complet : 7 classes, mondes, sauvegarde, patterns |
 | ZeroDay | dev, cyber | en cours | 1 | 1 | 0 | 0 | **2** | En phase de conception (game design, première base technique) |
 | RAG PDF Chatbot | ia | 05/2026 | 1 | 1 | 0 | 0 | **2** | RAG complet (FAISS, LangChain, Llama 3, Docker), projet guidé IBM |
