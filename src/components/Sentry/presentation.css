@@ -44,15 +44,16 @@
 }
 .presentation-control--play { color: #b0f4c0; }
 .presentation-control:disabled { opacity: .4; cursor: not-allowed; }
-.presentation-mini { display: flex; align-items: center; }
-.presentation-mini__playback { display: flex; align-items: center; gap: 6px; padding-right: 6px; background: rgb(6 9 12 / 85%); }
-/* Keep keyboard-focused playback controls available until the user leaves them. */
-.presentation-mini[data-controls-visible='false'] .presentation-mini__playback:not(:has(:focus-visible)) { display: none; }
-.presentation-mini progress { width: 56px; height: 2px; border: 0; background: #3f3f46; color: #b0f4c0; }
-.presentation-mini progress::-webkit-progress-bar { background: #3f3f46; }
-.presentation-mini progress::-webkit-progress-value { background: #b0f4c0; }
-.presentation-mini progress::-moz-progress-bar { background: #b0f4c0; }
-.presentation-mini[data-state='error'] .presentation-control--play { color: #f4c7a9; }
+.presentation-progress { display: none; flex: none; width: 56px; height: 2px; margin-right: 6px; border: 0; background: #3f3f46; color: #b0f4c0; }
+.presentation-progress::-webkit-progress-bar { background: #3f3f46; }
+.presentation-progress::-webkit-progress-value { background: #b0f4c0; }
+.presentation-progress::-moz-progress-bar { background: #b0f4c0; }
+.presentation-dock:is([data-minimized='true'], [data-folding]) .presentation-progress { display: block; }
+.presentation-listen { display: none; margin-right: 8px; font-size: 12px; white-space: nowrap; overflow: hidden; text-shadow: 0 0 6px #000, 0 0 2px #000; }
+.presentation-dock:is([data-minimized='true'], [data-folding]) .presentation-listen { display: block; }
+.presentation-dock:is([data-minimized='true'], [data-folding]) .presentation-control--play:has(.presentation-listen) { display: inline-flex; align-items: center; width: auto; gap: 0; padding-left: 10px; }
+.presentation-dock:is([data-minimized='true'], [data-folding]) .presentation-control--play:has(.presentation-listen) > svg { flex: none; margin-right: 6px; }
+.presentation-dock[data-state='error'] .presentation-control--play { color: #f4c7a9; }
 .presentation-time { color: #a1a1aa; font-size: 10px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .presentation-chapters {
   display: flex;
@@ -107,6 +108,21 @@
 .presentation-dock[data-inline='true'] { position: relative; inset: auto; flex: none; width: auto; max-width: none; max-height: 40dvh; overflow-y: auto; margin: 10px 12px 0; }
 .presentation-dock[data-inline='true'][data-minimized='true'] { display: flex; justify-content: flex-end; }
 .presentation-dock[data-inline='true'] .presentation-controls { flex-direction: column; gap: 0; }
+
+/* Unused for a while: only the chevron remains, and the empty space lets clicks through to the page. */
+.presentation-dock[data-quiet='true'] { pointer-events: none; }
+.presentation-dock[data-quiet='true'] .presentation-control--view { pointer-events: auto; }
+.presentation-dock .presentation-controls { transition: opacity 240ms ease, visibility 240ms; }
+.presentation-dock[data-quiet='true'] .presentation-controls { opacity: 0; visibility: hidden; }
+/* Reduced view: only play/pause, its progress and the chevron remain. */
+.presentation-dock[data-minimized='true'] :is([data-fold], .presentation-chapters) { display: none; }
+.presentation-dock[data-minimized='true'] :is(.presentation-toolbar, .presentation-controls) { gap: 0; }
+/* Reduced: the controls sit directly on the page. */
+.presentation-dock[data-minimized='true'] .presentation-strip { border-color: transparent; background: transparent; }
+/* While folding: the width follows the blocks, which presentationFold.ts narrows one by one. */
+.presentation-dock[data-folding] { left: auto; width: max-content; max-width: none; }
+.presentation-dock[data-folding] .presentation-chapters { flex: none; overflow: hidden; }
+.presentation-dock[data-folding] [data-fold] { flex: none; overflow: hidden; white-space: nowrap; }
 
 .presentation-speech {
   position: absolute;

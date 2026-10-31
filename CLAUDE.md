@@ -29,15 +29,16 @@ React 19 · Vite · Tailwind 4 · Cloudflare Worker (`server/worker.js` serves `
 - `src/components/layout/`: navigation and neutral network background. `src/components/ui/`: shared headings, topic icons, StackLine, ToolLogo/ (logos and registries), and dialogs/ (frame, lightbox, gallery and focus/keyboard handling). Shared UI must not import sections.
 - `src/components/Sentry/`: floating assistant and chat, imported directly by App. Shared conversation in `src/lib/assistantStore.ts`; animation timeline in `src/lib/brain.ts`.
 - `src/content/`: typed content and provenance. `src/assets/`: assets used by the portfolio. `src/styles/global.css`: Tailwind theme and global styles.
-- `server/`: Worker entry, contact handler and its tests. `functions/api/contact.js` keeps the Pages adapter, sharing that same handler.
+- `server/`: Worker entry, contact handler and its tests; `server/aiLab/`: AI Lab API (private instructions, flags, quotas). `functions/api/contact.js` keeps the Pages adapter, sharing that same handler.
 - `dev/mockups/`: visual proposals and network tuner; `dev/assets/`: their exclusive images. `/mockups.html?view=reseau` and `/?placer` stay development tools. `/intro-preview.html` replays the real portfolio's intro.
 - `docs/archive/`: previous concepts; `docs/assets/archive/`: unused authored visuals retained as source material.
 
 The hero network (`sections/Hero/core/`) illustrates Sentry's prepared answers; it is not navigation.
 Keep its 2D fallback, lazy 3D loading, off-screen pause and reduced-motion support.
 In production Sentry plays pre-recorded voice chapters (cloned voice, approved text) and its chat shows
-an under-construction message; prepared cards and the AI Lab exist only in the dev preview. No model is
-connected and free-form AI is unavailable; never present roadmap functionality as connected. Preserve keyboard focus restoration and session behavior.
+an under-construction message; prepared cards exist only in development. The AI Lab runs on a real model in
+development and on the `developpement` preview only (`server/aiLab/`, `OPEN_HOSTS`, `WORKERS_CI_BRANCH`): production has no
+model connected and free-form AI is unavailable; never present roadmap functionality as connected. Preserve keyboard focus restoration and session behavior.
 The Profile globe replay returns to the Hero; the portfolio must stay mounted through the transition.
 Keep Formation (MSc in progress, not a certificate), project and certification modals, and the explicit
 buttons leading from the Hero's information panels to the relevant sections.
@@ -51,5 +52,5 @@ buttons leading from the Hero's information panels to the relevant sections.
 - **Keep the CTF working:** level 1 expects one `FLAG{Welcome_User}` comment in `index.html`; CTF data is in `src/sections/Lab/ctf/ctfData.js`; progress is kept in this browser (`localStorage` key `ctf-progress`) and shown on the intro screen (`src/sections/Lab/CtfIntro.tsx`).
 - Write-ups are sourced from https://github.com/JN13012/Cyber-Write-ups — link to them, don't copy their text.
 - Performance and accessibility targets are in `docs/archive/plan-v1.md` (§5): check them before calling a step done.
-- One branch per step of `docs/plan-travail.md`. Any push to `main` deploys production: merge or push it only when Jérémie asks, after he has checked the branch preview. Don't commit, push or deploy unless asked.
+- Two branches only: `main` (production) and `developpement` (all work; preview at https://developpement-www.jeremie-nagi.workers.dev). Any push to `main` deploys production: merge or push it only when Jérémie asks, after he has checked the preview. Don't commit, push or deploy unless asked.
 - UI copy is in French; code, identifiers and comments in English.

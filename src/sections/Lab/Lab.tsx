@@ -1,12 +1,11 @@
 import { Activity, lazy, Suspense, useState } from 'react'
 import SectionHeader from '../../components/ui/SectionHeader'
 import { CyberLab } from './CyberLab'
-import { LabConstructionNotice } from './LabConstructionNotice'
 import './lab.css'
 
-// The preview and its fixtures are eliminated from the production build.
-const AiLab = import.meta.env.DEV ? lazy(() => import('./ia/AiLab')) : null
-const preview = import.meta.env.DEV
+// Development and the `developpement` preview only: the AI Lab is eliminated from the production build.
+const preview = import.meta.env.DEV || import.meta.env.VITE_AI_LAB_PREVIEW === true
+const AiLab = preview ? lazy(() => import('./ia/AiLab')) : null
 const startInIa = preview && new URLSearchParams(window.location.search).get('lab') === 'ia'
 
 /** Domain selection preserves each screen's state and suspends the hidden screen's effects. */
@@ -28,7 +27,6 @@ export function Lab() {
           <span aria-hidden="true" className="absolute bottom-0 left-0 h-0.5 rounded-full bg-sky-400" style={{ width: domain === 'ia' ? '100%' : 0 }} />
         </button>
       </div>
-      {preview && domain === 'ia' && <LabConstructionNotice />}
       {visitedCyber && <div className="lab-panel" hidden={domain !== 'cyber'}><Activity mode={domain === 'cyber' ? 'visible' : 'hidden'}><CyberLab /></Activity></div>}
       {preview && visitedIa && AiLab && <div className="lab-panel" hidden={domain !== 'ia'}><Activity mode={domain === 'ia' ? 'visible' : 'hidden'}>
         <Suspense fallback={<p className="text-sm text-zinc-400" role="status">Chargement de l’aperçu IA…</p>}><AiLab /></Suspense>

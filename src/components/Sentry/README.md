@@ -88,11 +88,16 @@ les blocs restent alors affichés sans surbrillance. La pause fige les barres et
 puis masque la bulle ; la reprise la réaffiche au passage courant et la fin la masque.
 Dans le chat, la même bulle passe sous l’en-tête.
 Le chevron réduit le lecteur à lecture/pause, une progression et un chevron de
-réouverture, sans interrompre le son ; la bulle est masquée en vue réduite.
-Hors du chat, seule la flèche reste avant la première lecture, à la fin et après
-trois secondes en pause. Les commandes gardent leur place tant qu’elles ont le
-focus clavier ; la flèche reste ancrée à droite. Le lanceur Sentry conserve son
-effet au survol et son infobulle, sans chevron supplémentaire.
+réouverture, sans interrompre le son ; la bulle est masquée en vue réduite. Sans
+lecture, il reste « ▶ Écouter » (« ↺ Réécouter » à la fin) et le chevron, sans fond. Après 6 s sans usage
+(hors lecture ou erreur), seul le chevron reste ; le survol ou le clavier fait revenir le bouton, qui lance
+l’audio sans déplier la bande. `LABELLED_PLAY` dans `PresentationPlayer.tsx` rétablit le ▶ seul.
+La bande se replie aussi seule, en cascade (`src/lib/presentationFold.ts`, immédiat si
+les animations sont réduites) : 10 s après la fin de l’accueil sans usage, 8 s après une
+pause, à la fin de la lecture et en quittant le Hero, 6 s au lieu de 10 ou 8 sur téléphone.
+Le délai est suspendu au survol, au focus clavier et onglet masqué. Elle ne se redéplie
+jamais seule ; dépliée à la main, elle reste ouverte sans lecture jusqu’à la sortie du Hero.
+Une erreur la laisse dépliée et le chat n’a pas de repli automatique.
 `src/lib/presentationDisplay.ts` conserve ce choix dans `sessionStorage` et gère
 un seul délai de pause, indépendant de l’horloge audio et du montage du chat.
 L’accueil mentionne la voix clonée et laisse place à la parole dès la lecture.

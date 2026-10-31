@@ -1,13 +1,7 @@
 # Plan de conception — Lab IA « Red-team Sentry »
 
-Date : 30 octobre 2026. Statut : lot 1 réalisé localement ; lots 2 à 5 non commencés.
-Ce document ne constitue pas une autorisation de publication.
-
-Mise à jour : le [résumé de conception du parcours Sentry](conception-lab-ia.md) définit
-désormais la cible à neuf niveaux, dont injections indirectes et défense. Le présent plan
-conserve le détail technique de la première maquette à cinq niveaux simulés.
-La navigation actuelle regroupe les démonstrations directes en trois niveaux accessibles
-librement ; les six exercices futurs restent indisponibles. Voir le résumé pour l’état actuel.
+**Archivé le 31 octobre 2026.** Remplacé par le [plan unique du Lab IA](../conception-lab-ia.md).
+Ce document n’est conservé que pour l’historique de la première maquette à cinq niveaux.
 
 ## Avancement — lot 1
 
@@ -149,6 +143,7 @@ Le streaming pourra venir plus tard si un besoin mesuré le justifie.
 
 Le schéma peut garder des nœuds et liens rappelant le Hero, avec une mention :
 **« Illustration du parcours de traitement »**. Il ne représente pas les neurones réels du modèle.
+Décision du 31 octobre : seul le modèle reste dessiné en petit réseau et chaque colonne porte le nom de son étape ; cette mention est retirée, « Simulation » reste affiché.
 Une légende textuelle présente les mêmes informations ; couleur et animation ne portent pas seules le sens.
 Les exemples simulés restent marqués « Démonstration » et exclus des compteurs réels.
 
@@ -295,7 +290,7 @@ Ne pas déclarer le comportement d'un modèle réel vérifié à partir des seul
 
 ## 9. Références de conception
 
-- [Feuille de route existante](roadmap-ia.md) et [ancienne proposition détaillée](archive/plan-v1.md).
+- [Feuille de route existante](../roadmap-ia.md) et [ancienne proposition détaillée](plan-v1.md).
 - [OWASP — Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) :
   limites des protections et mesures complémentaires.
 - [OWASP — System Prompt Leakage](https://genai.owasp.org/llmrisk/llm072025-system-prompt-leakage/) :

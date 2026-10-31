@@ -40,7 +40,7 @@ src/
   assets/                images et logos utilisés par le portfolio
   styles/                global.css : Tailwind, thème et styles transversaux
 public/                  _headers (en-têtes de sécurité des fichiers statiques), robots.txt, sitemap.xml, llms.txt, og-image.png
-server/                  worker.js, contactEmail.js et tests du contact
+server/                  worker.js, contactEmail.js et tests du contact ; aiLab/ : API du Lab IA
 functions/api/           adaptateur Cloudflare Pages vers le même contact
 dev/
   mockups/               maquettes et réglage du réseau
@@ -141,25 +141,25 @@ Ces comparaisons ne remplacent pas les contrôles d’interaction et ne constitu
 
 ## Vérifier une évolution
 
-### Aperçu du Lab IA (lot 1, 30 octobre 2026)
+### Aperçu du Lab IA
 
-En développement, le sélecteur IA du Lab ouvre une interface chargée à la demande : console,
-tiroir des neuf niveaux et schéma SVG. `/?lab=ia#lab` l'ouvre directement.
-Les trois niveaux directs sont accessibles en simulation ; les six autres restent « À venir ».
+En développement et sur la préversion, le sélecteur IA du Lab ouvre une interface chargée à la demande : console,
+tiroir des dix niveaux et schéma SVG. `/?lab=ia#lab` l'ouvre directement.
+Le niveau 1 tourne sur le vrai modèle ; les neuf autres restent « À venir ».
+En local, l'API demande `npx wrangler dev` à côté de `npm run dev`, qui lui transmet `/api/lab`, et un `LAB_IP_SECRET` dans `.dev.vars`.
 La mascotte n’est plus affichée entre le titre et la liste d’entrée. Les défenses sont visibles
 avant le premier essai ; la conversation du Lab est indépendante du chat du site.
 Les deux entrées partagent `components/ui/TerminalStartButton.tsx` : même bouton en relief,
 avec palettes verte et bleue. L'entrée IA reprend le quadrillage, les scanlines et la typographie
 du Cyber, avec suspension du balayage et du bouton lorsqu'ils ne sont pas visibles.
 Leur apparition progressive utilise `lib/useTerminalTyping.ts` et `components/ui/TerminalTypedText.tsx`
-(170 caractères/seconde, une fois par session). L'entrée « Laboratoire IA » annonce
-« Parcours prévu en 9 niveaux · de l’attaque à la défense » ; la mission est présentée dans la console.
+(170 caractères/seconde, une fois par session). L'entrée « Red-team Sentry » annonce
+« Faites révéler son flag à Sentry · parcours prévu en 10 niveaux » ; la mission est présentée dans la console.
 Le bouton « Commencer » déclenche une extinction CRT de 520 ms, dont la fin ouvre la console.
 Cette transition et l'apparition progressive sont immédiates avec réduction des mouvements.
-Les réponses et résultats sont des fixtures explicites
-dans `dev/mockups/aiLabFixtures.ts` ; aucune API ni modèle n'est connecté.
+Les réponses viennent de `server/aiLab/`, jamais de résultats préparés.
 Les descriptions publiques sont dans `content/aiLab.ts`, sans consignes privées.
-L'accès IA reste désactivé dans le build de production, qui exclut le code de l'aperçu.
+L'accès IA reste désactivé dans le build de production, qui exclut ce code, et ses routes y répondent 404.
 
 `Lab.tsx` coordonne les écrans et conserve leur état avec les frontières `Activity` de React.
 `CyberLab.tsx` porte le CTF et les write-ups existants. Les effets masqués sont suspendus ;
@@ -171,11 +171,9 @@ ou avec réduction des mouvements.
 et le choix direct d’un niveau. Les catalogues publics sont dans `content/cyberLab.ts`
 et `content/aiLab.ts`. Le Cyber conserve une console par niveau visité avec `Activity` ;
 le tiroir est rendu dans le cadre du terminal et ne rend inerte que son contenu couvert.
-`LabConstructionNotice.tsx` ajoute un bandeau de construction sous la navbar pendant
-la sélection IA ; il est retiré lors du retour à Cyber.
 `ctf/cyberProgress.ts` migre les anciennes réussites séquentielles. Les brouillons et sessions
 restent en mémoire pendant la navigation, les réussites Cyber persistent localement.
-Voir le [résumé de conception](conception-lab-ia.md).
+Voir le [plan du Lab IA](conception-lab-ia.md).
 
 ### Contrôles du projet
 

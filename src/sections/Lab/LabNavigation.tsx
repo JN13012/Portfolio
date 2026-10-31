@@ -1,4 +1,4 @@
-import { ChevronRight, Undo2 } from 'lucide-react'
+import { ChevronDown, Undo2 } from 'lucide-react'
 
 export function LabNavigation({ onPresentation, onCurriculum, open, drawerId, tone = 'green' }: {
   onPresentation: () => void; onCurriculum: () => void; open: boolean; drawerId: string; tone?: 'green' | 'blue'
@@ -8,7 +8,7 @@ export function LabNavigation({ onPresentation, onCurriculum, open, drawerId, to
       <Undo2 size={16} aria-hidden="true" />
     </button>
     <button type="button" aria-haspopup="dialog" aria-expanded={open} aria-controls={drawerId} onClick={onCurriculum}>
-      Parcours <ChevronRight size={14} aria-hidden="true" />
+      Niveaux <ChevronDown size={14} aria-hidden="true" />
     </button>
   </div>
 }

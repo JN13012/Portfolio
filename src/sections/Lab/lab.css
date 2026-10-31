@@ -10,7 +10,8 @@
 .lab-session { height: 100%; min-height: 0; }
 .lab-session[hidden] { display: none; }
 .lab-session[hidden] * { animation-play-state: paused !important; }
-.lab-navigation, .lab-curriculum { --lab-accent: #4ade80; }
+/* --lab-terminal-bg: the terminal's colour as seen on screen, so the drawer opens directly on it. */
+.lab-navigation, .lab-curriculum { --lab-accent: #4ade80; --lab-terminal-bg: #000; }
 .lab-navigation[data-tone='blue'], .lab-curriculum[data-tone='blue'] { --lab-accent: #38bdf8; }
 .lab-navigation { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
 .lab-navigation button { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 32px; padding: 4px 7px; color: #a1a1aa; cursor: pointer; font-size: 11px; }
@@ -21,25 +22,33 @@
 .lab-intro-level:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 .lab-intro-level:disabled { cursor: not-allowed; }
 .lab-curriculum { position: absolute; inset: 0; z-index: 30; display: flex; align-items: flex-start; justify-content: flex-end; padding: 0; pointer-events: none; outline: none; color: #e4e4e7; }
-.lab-curriculum__panel { pointer-events: auto; display: flex; flex-direction: column; width: min(100%, 320px); max-height: 100%; min-height: 0; overflow: hidden; border-radius: 6px; background: #090d12f5; box-shadow: 0 8px 24px #0005; }
-.lab-curriculum__body { overflow-y: auto; overscroll-behavior: contain; padding: 12px; min-height: 0; flex: 0 1 auto; }
-.lab-curriculum section + section { margin-top: 16px; }
-.lab-curriculum h4 { margin-bottom: 8px; font-family: var(--font-mono); color: var(--lab-accent); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
-.lab-curriculum ol { list-style: none; margin: 0 0 0 4px; padding: 0 0 0 16px; border-left: 1px solid color-mix(in srgb, var(--lab-accent) 25%, transparent); display: grid; gap: 4px; }
-.lab-curriculum li > button { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 8px; width: 100%; min-height: 40px; padding: 7px 0; border: 0; background: transparent; text-align: left; cursor: pointer; position: relative; }
-.lab-curriculum li > button::before { content: ''; position: absolute; left: -19px; top: 50%; width: 5px; height: 5px; border-radius: 50%; background: var(--lab-accent); transform: translateY(-50%); opacity: .45; }
-.lab-curriculum li > button[aria-current]::before { opacity: 1; box-shadow: 0 0 6px var(--lab-accent); }
-.lab-curriculum li > button[aria-current] strong { color: #fafafa; }
-.lab-curriculum li > button:not(:disabled):hover strong { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
-.lab-curriculum li > button:disabled { cursor: not-allowed; opacity: .6; }
-.lab-curriculum__number { font-family: var(--font-mono); font-size: 12px; color: var(--lab-accent); }
-.lab-curriculum strong { display: block; font-size: 13px; line-height: 1.5; font-weight: 500; }
-.lab-curriculum__status { display: inline-flex; align-items: center; gap: 3px; color: #a1a1aa; font-size: 10px; white-space: nowrap; }
-.lab-curriculum__status:has(svg) { color: #86efac; }
-.lab-curriculum details { padding: 4px 0 10px 30px; color: #a1a1aa; font-size: 12px; line-height: 1.7; }
+.lab-curriculum__panel { pointer-events: auto; display: flex; flex-direction: column; width: max-content; max-width: min(100%, 340px); max-height: 100%; min-height: 0; overflow: hidden; background: var(--lab-terminal-bg); }
+.lab-curriculum__body { overflow-y: auto; overscroll-behavior: contain; padding: 14px 12px 16px 16px; min-height: 0; flex: 0 1 auto; }
+.lab-curriculum__levels { position: relative; }
+.lab-curriculum section + section { margin-top: 24px; }
+.lab-curriculum h4 { margin-bottom: 10px; padding-left: 14px; font-size: 13px; line-height: 1.5; font-weight: 600; color: #fafafa; }
+.lab-curriculum ol { list-style: none; margin: 0; padding: 0; display: grid; }
+.lab-curriculum li > button { display: grid; grid-auto-flow: column; grid-template-columns: 20px minmax(0, 1fr); grid-auto-columns: auto; align-items: center; column-gap: 6px; width: 100%; min-height: 34px; padding: 5px 0 5px 26px; border: 0; background: transparent; text-align: left; cursor: pointer; }
+.lab-curriculum li > button:disabled { cursor: not-allowed; opacity: .5; }
+.lab-curriculum__number { font-family: var(--font-mono); font-size: 11px; color: #71717a; font-variant-numeric: tabular-nums; transition: color 150ms ease; }
+.lab-curriculum strong { display: block; font-size: 13px; line-height: 1.5; font-weight: 400; color: #a1a1aa; transition: color 150ms ease; }
+.lab-curriculum li > button:not(:disabled):hover strong { color: #fafafa; }
+.lab-curriculum li > button[aria-current] strong, .lab-curriculum li > button[aria-current]:hover strong { color: var(--lab-accent); font-weight: 500; }
+.lab-curriculum li > button[aria-current] .lab-curriculum__number { color: var(--lab-accent); }
+.lab-curriculum__done { margin-left: 8px; color: #86efac; }
+.lab-curriculum__hint { position: absolute; z-index: 1; width: max-content; transform: translateY(-50%); padding: 5px 9px; border: 1px solid #ffffff1f; border-radius: 4px; background: #18181b; color: #e4e4e7; font-size: 12px; line-height: 1.4; pointer-events: none; }
+.lab-curriculum__rail { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.lab-curriculum__rail path { fill: none; stroke: #ffffff24; stroke-width: 1; stroke-linecap: round; }
+.lab-curriculum__rail path[data-lit] { stroke: var(--lab-accent); }
+.lab-curriculum__rail circle { fill: var(--lab-accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .lab-curriculum__panel { animation: lab-menu-open 140ms ease-out; }
+  .lab-navigation button[aria-expanded] svg { transition: transform 150ms ease; }
+}
+.lab-navigation button[aria-expanded='true'] svg { transform: rotate(180deg); }
+@keyframes lab-menu-open { from { opacity: 0; transform: translateY(-4px); } }
+/* Opened text wraps inside the width set by the level names. */
+.lab-curriculum details { width: 0; min-width: 100%; padding: 2px 0 8px 52px; color: #a1a1aa; font-size: 12px; line-height: 1.7; }
+.lab-curriculum details details { padding: 2px 0 2px 12px; }
 .lab-curriculum summary { cursor: pointer; color: #d4d4d8; }
 .lab-curriculum details p { margin-top: 8px; }
-.lab-construction-notice { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; padding: 7px 16px; border: 1px solid #facc4066; border-radius: 4px; background: #191608; color: #facc40; font-family: var(--font-mono); font-size: 11px; line-height: 1.6; letter-spacing: .12em; text-align: center; text-transform: uppercase; }
-@media (max-width: 479px) {
-  .lab-construction-notice { gap: 8px; padding: 6px 12px; font-size: 10px; letter-spacing: .06em; }
-}

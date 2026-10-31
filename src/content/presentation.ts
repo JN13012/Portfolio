@@ -228,6 +228,8 @@ export function presentationCaptionAt(seconds: number, chapterId = 'introduction
 }
 
 export const presentationCopy = {
+  listen: 'Écouter',
+  listenAgain: 'Réécouter',
   play: 'Écouter la présentation',
   pause: 'Mettre la présentation en pause',
   resume: 'Reprendre la présentation',
