@@ -1,86 +1,57 @@
 import { describe, expect, it } from 'vitest'
-import { aiLabLevels, defenseStages } from '../../../content/aiLab'
-import { demoFlag, demoResult, demoScenarios } from '../../../../dev/mockups/aiLabFixtures'
-import { initialLabState, labReducer } from './labState'
+import { aiLabCurriculum, aiLabLevels, defenseStages } from '../../../content/aiLab'
+import { conversationHistory, initialLabState, labReducer, type LabResult } from './labState'
 
-describe('Lab IA development contract', () => {
-  it('allows direct selection, rejects unavailable exercises and preserves work without awarding skipped levels', () => {
-    expect(labReducer(initialLabState, { type: 'level', level: 4 })).toBe(initialLabState)
+const result = (id: number, answer?: string): LabResult => ({
+  id, level: 1, outcome: answer ? 'delivered' : 'error', title: 'Résultat', explanation: 'Texte', answer,
+  trace: defenseStages.map(stage => ({ stage: stage.id, status: 'not-run' })),
+})
+const attempt = (id: number, answer?: string) => ({ type: 'attempt', prompt: `prompt ${id}`, config: 'simple', result: result(id, answer), remaining: 10 }) as const
+
+describe('Lab IA interface state', () => {
+  it('rejects unavailable levels and blank prompts', () => {
+    expect(labReducer(initialLabState, { type: 'level', level: 2 })).toBe(initialLabState)
     expect(labReducer(initialLabState, { type: 'level', level: 99 })).toBe(initialLabState)
-    let direct = labReducer(initialLabState, { type: 'level', level: 3 })
-    expect(direct.completed).toEqual([])
-    direct = labReducer(direct, { type: 'draft', value: 'Brouillon du juge' })
-    direct = labReducer(direct, { type: 'flag', value: 'flag partiel' })
-    direct = labReducer(direct, { type: 'validate-demo', correct: true })
-    expect(direct.completed).toEqual([3])
-    direct = labReducer(direct, { type: 'level', level: 1 })
-    expect(direct.draft).toBe('')
-    direct = labReducer(direct, { type: 'level', level: 3 })
-    expect(direct.draft).toBe('Brouillon du juge')
-    expect(direct.flag).toBe('flag partiel')
-    expect(direct.validation).toBe('correct')
-    let state = labReducer(initialLabState, { type: 'draft', value: 'Une demande' })
-    state = labReducer(state, { type: 'attempt', prompt: 'Une demande', result: demoResult(1, 'response', 1) })
-    expect(state.draft).toBe('')
-    state = labReducer(state, { type: 'validate-demo', correct: false })
-    expect(state.completed).toEqual([])
-    expect(state.validation).toBe('incorrect')
-    state = labReducer(state, { type: 'validate-demo', correct: true })
-    state = labReducer(state, { type: 'validate-demo', correct: true })
-    expect(state.completed).toEqual([1])
-    state = labReducer(state, { type: 'level', level: 2 })
-    expect(state.level).toBe(2)
-    expect(state.attempts).toHaveLength(1)
-    state = labReducer(state, { type: 'level', level: 1 })
-    expect(state.attempts[0]?.prompt).toBe('Une demande')
+    expect(labReducer(initialLabState, { ...attempt(1, 'ok'), prompt: ' ' })).toBe(initialLabState)
   })
 
-  it('ignores blank prompts and results for another level; bounds the local conversation', () => {
-    expect(labReducer(initialLabState, { type: 'attempt', prompt: ' ', result: demoResult(1, 'response', 1) })).toBe(initialLabState)
-    expect(labReducer(initialLabState, { type: 'attempt', prompt: 'test', result: demoResult(2, 'response', 1) })).toBe(initialLabState)
+  it('bounds the local conversation and keeps the server count', () => {
     let state = initialLabState
-    for (let n = 1; n <= 25; n++) state = labReducer(state, { type: 'attempt', prompt: `test ${n}`, result: demoResult(1, 'response', n) })
+    for (let n = 1; n <= 25; n++) state = labReducer(state, attempt(n, 'ok'))
     expect(state.attempts).toHaveLength(20)
     expect(state.attempts[0]?.result.id).toBe(6)
+    expect(state.remaining).toBe(10)
+    expect(labReducer(state, { ...attempt(26), remaining: null }).remaining).toBe(10)
   })
 
-  it('has a complete ordered trace and never executes a stage after a stop, for every available fixture', () => {
-    for (const level of aiLabLevels) {
-      for (const scenario of demoScenarios) {
-        if (scenario.fromLevel > level.id) {
-          expect(() => demoResult(level.id, scenario.id, 1)).toThrow()
-          continue
-        }
-        const result = demoResult(level.id, scenario.id, 1)
-        expect(result.trace.map(entry => entry.stage)).toEqual(defenseStages.map(stage => stage.id))
-        let stopped = false
-        result.trace.forEach((entry, index) => {
-          if (defenseStages[index]!.fromLevel > level.id) expect(entry.status).toBe('inactive')
-          else if (stopped) expect(entry.status).toBe('not-run')
-          if (entry.status === 'blocked' || entry.status === 'error') stopped = true
-        })
-        if (result.outcome === 'blocked' || result.outcome === 'error' || result.outcome === 'quota') expect(result.answer).toBeUndefined()
-        if (scenario.id === 'leak') expect(result.answer).toContain(demoFlag(level.id))
-      }
-    }
+  it('takes progress only from the server', () => {
+    const wrong = labReducer(initialLabState, { type: 'validated', correct: false, completed: [] })
+    expect(wrong.validation).toBe('incorrect')
+    const right = labReducer(wrong, { type: 'validated', correct: true, completed: [1] })
+    expect(right.completed).toEqual([1])
   })
 
-  it('distinguishes a refusal, a technical error and unavailable budget from guardrail blocks', () => {
-    expect(demoResult(3, 'refusal', 1).outcome).toBe('refused')
-    expect(demoResult(3, 'refusal', 1).trace.every(entry => entry.status === 'passed')).toBe(true)
-    expect(demoResult(3, 'judge-error', 1).outcome).toBe('error')
-    expect(demoResult(3, 'quota', 1).outcome).toBe('quota')
-    expect(demoResult(3, 'input-block', 1).outcome).toBe('blocked')
+  it('sends back only published answers of the current conversation and configuration', () => {
+    let state = labReducer(initialLabState, attempt(1, 'un'))
+    state = labReducer(state, attempt(2))
+    state = labReducer(state, attempt(3, 'trois'))
+    expect(conversationHistory(state).map(entry => entry.answer)).toEqual(['un', 'trois'])
+    expect(conversationHistory(labReducer(state, { type: 'config', value: 'structured' }))).toEqual([])
+    expect(conversationHistory(labReducer(state, { type: 'new-conversation' }))).toEqual([])
+    for (let n = 4; n <= 12; n++) state = labReducer(state, attempt(n, `r${n}`))
+    expect(conversationHistory(state)).toHaveLength(6)
   })
 
-  it('can validate the three direct exercises, without claiming server-side validation', () => {
+  it('reveals three hints one at a time, for each playable level', () => {
+    for (const level of aiLabLevels) expect(level.hints).toHaveLength(3)
     let state = initialLabState
-    for (const level of aiLabLevels) {
-      state = labReducer(state, { type: 'level', level: level.id })
-      expect(state.level).toBe(level.id)
-      state = labReducer(state, { type: 'validate-demo', correct: true })
-    }
-    expect(state.completed).toEqual([1, 2, 3])
-    expect(JSON.stringify(aiLabLevels)).not.toContain('DEMO{')
+    for (let n = 0; n < 5; n++) state = labReducer(state, { type: 'hint', total: 3 })
+    expect(state.hints[1]).toBe(3)
+  })
+
+  it('announces ten levels and only playable levels as available', () => {
+    const levels = aiLabCurriculum.flatMap(part => part.levels)
+    expect(levels.map(level => level.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    expect(levels.filter(level => level.available).map(level => level.id)).toEqual(aiLabLevels.map(level => level.id))
   })
 })

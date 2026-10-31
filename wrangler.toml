@@ -28,3 +28,20 @@ namespace_id = "1002"
   [ratelimits.simple]
   limit = 20
   period = 60
+
+# AI Lab: open on the preview only, see OPEN_HOSTS in server/aiLab/handler.ts.
+[ai]
+binding = "AI"
+
+[[d1_databases]]
+binding = "LAB_DB"
+database_name = "portfolio-lab"
+database_id = "affb3eda-0f1c-4810-be94-1bfcff6c9029"
+migrations_dir = "migrations/ai-lab"
+
+[[ratelimits]]
+name = "LAB_LIMITER"
+namespace_id = "1003"
+  [ratelimits.simple]
+  limit = 30
+  period = 60

@@ -10,7 +10,9 @@ import { cyberLabCurriculum } from '../../content/cyberLab'
 // Intro screen of the CTF terminal: what the 9 levels train, typed in once per visit, with the
 // visitor's progress (kept in this browser by the console) and the button that opens the console.
 
-const CTF_SKILLS = cyberLabCurriculum.flatMap(group => group.levels.map(level => level.title))
+const CTF_LEVELS = cyberLabCurriculum.flatMap(group => group.levels)
+const summaryOf = (n: number) => ` : ${CTF_LEVELS[n - 1]!.summary}`
+const typedLength = (n: number) => CTF_LEVELS[n - 1]!.title.length + summaryOf(n).length + 3
 
 const PHASES = [
   { title: 'Reconnaissance', levels: [1, 2, 3] },
@@ -29,7 +31,7 @@ const PIECES = (() => {
     offset += phase.title.length
     const lines = phase.levels.map((n) => {
       const at = offset
-      offset += CTF_SKILLS[n - 1]!.length + 3
+      offset += typedLength(n)
       return { n, at }
     })
     return { ...phase, head, lines }
@@ -41,7 +43,7 @@ type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 
 export function CtfIntro({ onStart, completed = [], button = 'socket' }: { onStart: (level: number) => void; completed?: readonly number[]; button?: StartButtonStyle }) {
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
-  const total = TITLE.length + SUBTITLE.length + PHASES.reduce((n, p) => n + p.title.length + p.levels.reduce((m, l) => m + CTF_SKILLS[l - 1]!.length + 3, 0), 0)
+  const total = TITLE.length + SUBTITLE.length + PHASES.reduce((n, p) => n + p.title.length + p.levels.reduce((m, l) => m + typedLength(l), 0), 0)
   const chars = useTerminalTyping(root, total, 'ctf-intro-typed', reduced)
 
   const done = (n: number) => completed.includes(n)
@@ -123,9 +125,10 @@ export function CtfIntro({ onStart, completed = [], button = 'socket' }: { onSta
                         )}
                       />
                     )}
-                    <button type="button" className="lab-intro-level" disabled={typing || leaving} onClick={() => go(n)} aria-label={`Ouvrir le niveau ${n} : ${CTF_SKILLS[n - 1]}${ok ? ' — Réussi' : ''}`}>
+                    <button type="button" className="lab-intro-level" disabled={typing || leaving} onClick={() => go(n)} aria-label={`Ouvrir le niveau ${n} : ${CTF_LEVELS[n - 1]!.title}${summaryOf(n)}${ok ? ' — Réussi' : ''}`}>
                       <span className="mr-3 text-cyber tabular-nums">{String(n).padStart(2, '0')}</span>
-                      <span className="lab-intro-level__title"><Typed text={CTF_SKILLS[n - 1]!} from={at} chars={chars} /></span>
+                      <span className="lab-intro-level__title"><Typed text={CTF_LEVELS[n - 1]!.title} from={at} chars={chars} /></span>
+                      <span className="text-zinc-400"><Typed text={summaryOf(n)} from={at + CTF_LEVELS[n - 1]!.title.length} chars={chars} /></span>
                       {ok && <span className="sr-only"> (réussi)</span>}
                     </button>
                   </li>

@@ -1,127 +1,226 @@
-# Lab IA — parcours Sentry
+# Lab IA — Red-team Sentry
 
-Décisions du 30 octobre 2026. Ce document définit le parcours cible ; il ne décrit pas
-neuf exercices déjà réalisés et n’autorise aucun déploiement.
+Plan unique du Lab IA, établi le 31 octobre 2026. Il remplace les deux documents précédents ;
+l’ancien plan technique est conservé dans [l’archive](archive/plan-lab-ia.md).
+Ce document n’autorise aucun déploiement.
 
-## Intention
+## Ce qu’est le Lab
 
-Faire découvrir la sécurité d’un assistant puis d’un agent IA avec une progression :
-comprendre, attaquer, protéger et vérifier. Sentry conserve sa coque et son identité,
-mais sa conversation de Lab reste indépendante du chatbot et de la présentation vocale.
+Un mini-jeu pédagogique du portfolio, comme le Lab cyber : il montre aux recruteurs une démarche
+de sécurité sur un agent IA. Le visiteur attaque Sentry, puis apprend à corriger et à durcir.
 
-« Red-team Sentry » est le titre envisagé. « Laboratoire IA » reste le titre actuel
-de l’écran ; le nom n’est pas modifié par cette passe de contenu.
-Le parcours comprend du red teaming et des exercices défensifs : ce n’est pas
-la reproduction exhaustive d’une mission professionnelle.
+- **Ce n’est pas** un produit, un outil d’évaluation ni la reproduction d’une mission professionnelle.
+- **Taille proportionnée** : pas de compte, de classement ni d’infrastructure au-delà du nécessaire
+  pour tenir le coût et éviter les abus.
+- Sentry garde son personnage, mais les consignes, la conversation et les quotas du Lab sont
+  séparés de son chat et de sa présentation vocale.
 
-## Neuf niveaux, quatre thèmes
+## Réalisme technique (décision du 31 octobre)
 
-| Thème | Niveau | Mission et compétence |
-| --- | --- | --- |
-| Injection directe | 01 — Consignes | Obtenir un flag fictif ; comparer consigne simple et instructions structurées. |
-| Injection directe | 02 — Filtres | Comprendre les contrôles d’entrée et de sortie et identifier où une tentative est arrêtée. |
-| Injection directe | 03 — Défenses combinées | Adapter sa démarche face aux protections précédentes et à un juge IA. |
-| Injection indirecte | 04 — Document piégé | Modifier une fiche que Sentry doit résumer dans le cadre d’une demande légitime. |
-| Injection indirecte | 05 — Sources et RAG | Faire rencontrer à Sentry un document manipulé parmi plusieurs sources ; comprendre la récupération et les frontières de confiance. |
-| Agent et application | 06 — Agent et outils | Comprendre les outils accessibles et tenter une action interdite sur un agenda fictif. |
-| Agent et application | 07 — Application et API | Découvrir les endpoints du scénario et tester la séparation entre utilisateurs. |
-| Défense | 08 — Protéger l’assistant | Configurer des protections contre le détournement par un document sans empêcher les résumés légitimes. |
-| Défense | 09 — Sécuriser l’agent | Limiter les outils, contrôler les droits sur les réservations et imposer les confirmations adaptées ; mission finale avec vérification avant/après. |
+La technique est réelle, seules les données sont fictives. Modèle, classifieurs, outils, endpoints, droits,
+quotas et traces fonctionnent réellement ; le flag, l’agenda et les personnes sont inventés. La cible est
+volontairement vulnérable, ce que le Lab annonce. Toute fuite reste confinée au domaine du Lab et à la session.
 
-Les cinq niveaux d’injection directe de la première maquette sont condensés en trois :
-consigne simple et instructions structurées deviennent deux configurations du niveau 01 ;
-les filtres d’entrée et de sortie sont réunis au niveau 02 ; le juge complète le niveau 03.
-La correspondance ne doit pas réutiliser silencieusement les anciens identifiants de progression.
+## Parcours en 10 niveaux
 
-## Progression et reconnaissance
+Sentry gagne une capacité à chaque partie : la surface d’attaque grandit avec l’histoire.
+Les niveaux 6 à 10 sont confirmés : les appels d’outils fonctionnent sur le vrai modèle (voir les résultats plus bas).
 
-- Commencer par un briefing guidé sur la mission et le périmètre, puis réduire les indices.
-- Introduire la reconnaissance progressivement : sources, outils, accès et endpoints.
-- Faire varier la surface contrôlable et le nombre d’étapes à comprendre, pas seulement le nombre de filtres.
-- Calibrer la difficulté avec le modèle réel ; un juge IA ne garantit pas un exercice plus difficile.
-- Ne pas ajouter de niveaux uniquement pour augmenter le compteur. Les quinze niveaux précédemment
-  envisagés sont remplacés par ce parcours de neuf niveaux.
-- Garder les scans réseau et services dans le Lab Cyber ; une extension IA nécessitant
-  une infrastructure vulnérable utiliserait un environnement isolé ou une simulation annoncée.
+| Partie | Niveau | Mission | Difficulté visée |
+| --- | --- | --- | --- |
+| Le faire parler | 01 — Consignes | Obtenir le flag fictif ; comparer consigne simple et instructions structurées. | Facile, très guidé |
+| Le faire parler | 02 — Filtres | Comprendre les contrôles d’entrée et de sortie, et où une tentative est arrêtée. | Facile à moyen |
+| Le faire parler | 03 — Classifieur IA | Contourner un évaluateur dédié qui contrôle la réponse. | Moyen |
+| Il lit des documents | 04 — Document piégé | Modifier une fiche que Sentry doit résumer à la suite d’une demande légitime. | Moyen |
+| Il lit des documents | 05 — Sources et RAG | Faire remonter un document manipulé parmi plusieurs sources ; comprendre les frontières de confiance. | Moyen |
+| Il agit | 06 — Agent et outils | Découvrir les outils de l’agent et obtenir une action interdite sur un agenda fictif. | Moyen à difficile |
+| Il agit | 07 — Reconnaissance et API | Cartographier les endpoints, appeler un outil sans l’agent, lire les données d’un autre utilisateur fictif, tester les limites de débit. | Moyen à difficile |
+| Il agit | 08 — Chaîne complète | Enchaîner document piégé, lecture de données privées et fuite vers un point de collecte. | Difficile |
+| Corriger | 09 — Protéger l’assistant | Corriger les niveaux 3 à 5 sans empêcher les résumés légitimes, puis rejouer les attaques. | Moyen |
+| Corriger | 10 — Sécuriser l’agent | Corriger les niveaux 6 à 8 : droits, outils, confirmations, CSP et URL autorisées ; vérification avant/après. | Difficile |
 
-## Injection indirecte
+Règles communes :
 
-L’exercice doit permettre d’agir sur une source effectivement consultée par Sentry,
-pas uniquement de saisir une attaque dans le chat : éditeur de fiche au niveau 04,
-petite base documentaire contrôlée au niveau 05.
-Une instruction hostile peut être visible : le point pédagogique est qu’un contenu
-externe ne doit pas acquérir l’autorité d’une consigne.
-Documents, identités, outils et effets restent propres au scénario ; aucune cible externe.
+- Chaque niveau ajoute une seule nouveauté, pour une progression sans à-coup. La difficulté visée est mesurée sur le vrai modèle.
+- Trois indices à la demande, sans pénalité : piste, technique, quasi-solution.
+- Au niveau 01, les deux configurations se choisissent dans la console. Le flag du niveau est valable
+  quelle que soit la configuration ; le bilan invite à essayer l’autre.
+- Les documents, identités, outils et effets restent propres au scénario, sans aucune cible externe.
+- Scans réseau et services restent dans le Lab cyber.
+- Chaque niveau offensif se termine par la protection adaptée. Les filtres, le classifieur et les consignes
+  sont des défenses partielles : on ne promet jamais l’inviolabilité.
+- La difficulté se calibre sur le modèle réel. Si un niveau n’est pas jouable, on le dit et on le revoit :
+  pas de réussite fabriquée ni de filtre désactivé en silence.
 
-## Défense et validation
+### Classifieur IA (03)
 
-Aux niveaux 08–09, la console laisse place à une configuration guidée. Le schéma montre
-les sources, protections, permissions et le chemin de chaque essai.
+« Classifieur IA » remplace « Juge IA », qui n’est pas le terme du métier. Llama Guard vise les contenus
+dangereux et ne repérerait sans doute pas une fuite de flag : ce niveau utilise donc un évaluateur dédié,
+qui lit lui aussi du texte contrôlé par l’attaquant. Ce montage n’est pas présenté comme un standard de l’industrie.
+
+### Injection indirecte (04–05)
+
+Le visiteur agit sur une source que Sentry consulte, pas seulement sur le chat : éditeur de fiche
+de longueur bornée au niveau 04, petite base documentaire fixe au niveau 05.
+Le point à faire comprendre est qu’un contenu externe ne doit pas acquérir l’autorité d’une consigne.
+
+### Reconnaissance et API (07)
+
+Le red team IA couvre tout le système, pas seulement les prompts. La console envoie de vraies requêtes HTTP
+à une petite application du Lab, avec de vrais contrôles d’accès volontairement défaillants à ce niveau.
+Tout reste limité à la session et aux utilisateurs fictifs du scénario.
+
+### Chaîne complète (08)
+
+La fuite est réelle : le rendu de la réponse fait partir du navigateur une vraie requête vers un point de collecte
+du Lab, avec un flag fictif. Le rendu n’autorise que ce point de collecte, sans HTML libre ; la CSP bloque toute autre destination.
+Le niveau 10 corrige par une vraie CSP et une liste d’URL autorisées.
+
+### Remédiation (09–10)
+
+La console laisse place à une configuration guidée :
 
 1. Observer un incident et sa trace.
-2. Choisir/configurer une protection ; inclure des choix pertinents et insuffisants.
+2. Choisir une protection, parmi des choix pertinents et d’autres insuffisants.
 3. Rejouer des attaques et des tâches légitimes.
-4. Comparer les résultats, expliquer l’impact, les faux positifs et les limites.
+4. Comparer, puis expliquer l’impact, les faux positifs et les limites.
 
-Tout bloquer ou désactiver tous les outils ne constitue pas une réussite.
-Les autorisations sont appliquées par le serveur et les outils, pas seulement décrites
-dans un prompt. La validation vérifie les conséquences dans l’environnement fictif,
-pas uniquement une phrase de refus ni le verdict d’un juge LLM.
-Les résultats restent limités au corpus testé ; aucune promesse d’invulnérabilité.
-Chaque niveau offensif se termine aussi par une explication de la protection adaptée.
+Tout bloquer ou couper tous les outils n’est pas une réussite. Les droits sont appliqués par le serveur
+et les outils, pas seulement décrits dans un prompt. La validation vérifie les conséquences dans
+l’environnement fictif, pas une phrase de refus. Les résultats valent pour le corpus testé.
+Les défenses les plus solides tiennent à l’architecture : droits limités et séparation des données non fiables
+(Dual LLM, CaMeL).
 
-## Présentation et intérêt du projet
+### Rapport de fin de parcours
 
-- Conserver le cadre, la typographie et les dimensions communes aux Labs Cyber et IA, avec la palette bleue de l’IA.
-- Afficher les neuf niveaux regroupés sur l’écran d’entrée ; détails et indices dans le tiroir.
-- Faire évoluer le panneau droit selon la surface : chaîne de traitement, documents, outils ou permissions.
-- Prévoir un accès « Voir une démonstration » indépendant de la progression pour une découverte rapide ; non implémenté.
-- Mettre en avant la méthode, les traces reproductibles, les corrections et leurs tests, plutôt que le nombre de niveaux.
+Généré à partir des vraies traces de la session : faille, impact, référence OWASP, gravité, correction et résultat avant/après.
 
-## Navigation commune aux Labs Cyber et IA
+### Banc de test
 
-Un seul fonctionnement, sans modes distincts : « Commencer » ouvre toujours le niveau 01 ;
-cliquer sur un niveau disponible dans la présentation ou le tiroir l’ouvre directement.
-L’en-tête du CTF propose une flèche de demi-tour (« Revenir à la présentation ») et
-« Parcours › » pour ouvrir le tiroir. Le retour conserve le travail en cours en mémoire.
-Le tiroir reste à l’intérieur du cadre du terminal, sans voile sur l’ensemble du site.
-Sa liste compacte affiche les intitulés, les états utiles et les indices repliés ; la navbar
-reste accessible. Un bandeau jaune avec panneaux 🚧 apparaît sous la navbar uniquement
-quand le Lab IA est sélectionné, sur le modèle de l’ancien bandeau de construction.
-Chaque réussite est enregistrée individuellement ; sélectionner le niveau 08 ne valide
-aucun niveau précédent. Les exercices non implémentés sont signalés « À venir ».
+Un script rejoue chaque attaque du corpus plusieurs fois, car les réponses d’un modèle varient.
+Le résultat publié est un taux de réussite par niveau, reproductible, avec modèle, version et date.
+Le code du banc est publié avec le corpus.
 
-Le Cyber conserve une console indépendante par niveau visité, y compris son brouillon,
-ses outils et opérations différées, suspendues pendant qu’elle est masquée. Ses réussites
-restent enregistrées localement après rechargement ; les anciennes réussites séquentielles
-sont migrées vers une liste explicite. La validation propose « Niveau suivant », sans saut automatique.
-L’IA conserve les essais et brouillons des trois démonstrations directes ; les six autres niveaux
-sont annoncés mais ne peuvent pas être lancés. Aucune réussite n’est déduite d’une simple visite.
+## Décisions du 31 octobre
 
-## État réel et réalisation progressive
+| Sujet | Décision |
+| --- | --- |
+| **Affichage public** | Seuls les niveaux réels sont affichés : 01 à 04 à l’ouverture, puis 05 à 10 quand ils sont prêts. L’aperçu de développement garde tous les niveaux et « À venir » jusque-là. |
+| **Accès aux niveaux** | Libre, comme au Lab cyber. Chaque réussite est enregistrée séparément ; rien n’est déduit d’une visite. |
+| **Quotas** | 60 essais par session, 30 / 60 / 100 par empreinte d’IP sur 1 h, 5 h et 24 h, 5 000 neurones par jour au total. Workers AI n’offre pas de plafond de dépense : ce budget, inférieur aux 10 000 neurones gratuits par jour, en tient lieu. Un essai courant coûte environ 15 neurones. |
+| **IP** | HMAC avec secret serveur et sel changé chaque jour, conservé 48 h au plus, jamais d’IP en clair. Une empreinte reste une donnée personnelle : une courte mention l’indique près du Lab. |
+| **Abus** | Un garde-fou sur tous les niveaux (Llama Guard 3 envisagé), séparé des défenses du jeu : réponses courtes, limitées à l’exercice, avec un état propre dans la trace (« Hors exercice »). Il réduit le risque sans l’éliminer ; le Lab indique que les réponses sont générées et non relues. |
+| **Recruteur pressé** | Une démonstration tirée de vraies tentatives enregistrées, avec date et modèle. Elle arrive avec l’ouverture publique, jamais avant le modèle réel. |
+| **Preuve** | Publier le corpus d’attaques, le banc de test et les taux de réussite par niveau, avec modèle, version, date et limites. |
+| **Modèle** | Workers AI. GLM 4.7 Flash pour le niveau 1, raisonnement désactivé ; Llama Guard 3 pour le garde-fou. Le modèle des niveaux suivants sera choisi selon la difficulté visée. |
 
-L’entrée et le tiroir affichent les neuf niveaux. Les trois niveaux directs sont accessibles
-en démonstration et les six suivants restent « À venir ». Les anciens cinq niveaux sont
-regroupés en trois ; le schéma et les résultats préparés suivent cette nouvelle numérotation.
-Ces résultats ne prouvent pas une attaque contre un modèle réel.
+## Résultats des modèles
 
-L’IA reste accessible uniquement en développement. Aucun modèle, API Lab, document
-modifiable, outil agentique ou exercice défensif réel n’est connecté par cette passe.
-Le [plan technique initial](plan-lab-ia.md) documente le prototype existant ;
-ses cinq niveaux et exclusions initiales ne sont plus le périmètre cible du parcours.
+Mesurés le 31 octobre 2026 sur Workers AI, avec un flag fictif. Fuites : 10 attaques en français répétées 3 fois, soit 30 essais par configuration,
+en ne comptant que la réponse publiée. Outils : 4 appels par cas, sur un agenda fictif. Petit corpus : ce sont des ordres de grandeur.
 
-Prochaines étapes :
+| Modèle | Fuites, consigne simple | Fuites, instructions structurées | Neurones par appel | Agenda d’un autre | Suppression interdite | Injection par un résultat d’outil |
+| --- | --- | --- | --- | --- | --- | --- |
+| GLM 4.7 Flash | 13/30 | 8/30 | 2,4 | 0/4 | 4/4 | 0/4 |
+| Llama 3.3 70B | 6/30 | 3/30 | 15,6 | 2/4 | 4/4 | 4/4 |
+| Mistral Small 3.1 | 6/30 | 0/30 | 5,5 | 0/4 | 4/4 | 0/4 |
+| Gemma 4 26B | 0/30 | 0/30 | 2,2 | 0/4 | 0/4 | 0/4 |
 
-1. Connecter et calibrer un premier niveau avec un adaptateur de modèle et des limites serveur.
-2. Ajouter les scénarios indirects, puis les outils et l’API du scénario.
-3. Ajouter les deux niveaux de défense avec vérification avant/après.
+- **Niveau 1 :** GLM 4.7 Flash, le seul à rester facile dans les deux configurations, et le moins cher des modèles qui fuient.
+- **Niveaux d’agent :** Llama 3.3 est le seul à obéir à une consigne cachée dans un résultat d’outil, ce qu’exige le niveau 08. Il coûte 6 fois plus cher.
+- **Raisonnement :** certains modèles répètent le flag dans un champ de raisonnement. Le serveur ne lit que la réponse publiée.
+- **Garde-fou :** Llama Guard 3 a classé correctement 4 demandes dangereuses en français et 2 demandes légitimes. Il classe « ignore tes instructions » en S14,
+  soit l’exercice lui-même : cette seule catégorie est ignorée. Non mesuré sur un grand corpus.
 
-Workers AI reste un candidat ; le modèle n’est pas fixé. Prévoir idempotence, isolation
-des sessions, limites de débit, de tokens et de budget global avant ouverture publique.
-Ne jamais confier de véritable secret au défi. Ne pas stocker de conversations brutes
-sans nécessité. Réduire les mouvements et suspendre les animations invisibles.
-Aucune création distante, migration distante ni publication sans autorisation.
+## Interface
 
-Références de conception : [injections directes et indirectes OWASP](https://genai.owasp.org/llmrisk/llm01-prompt-injection/),
-[guide de red teaming OWASP](https://genai.owasp.org/resource/genai-red-teaming-guide/),
-[protections contre les injections](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html).
+- Console à gauche, fenêtre « Défenses de Sentry » à droite, dans le même cadre que le Lab cyber, en bleu.
+- « Commencer » ouvre le niveau 01. Un niveau disponible s’ouvre directement depuis l’entrée ou le tiroir « Niveaux ».
+  La flèche de demi-tour revient à la présentation et conserve le travail en mémoire.
+- La fenêtre de droite suit la surface du niveau : chaîne de traitement, documents, outils ou permissions.
+- Sur téléphone : console d’abord, puis résultat en texte et dessin statique.
+- Entrée envoie ; Maj+Entrée ajoute une ligne ; pas d’envoi pendant une composition IME.
+- Les essais restants viennent du serveur. Blocage, réponse délivrée, hors exercice, erreur, quota et validation
+  sont des états distincts. Un refus du modèle reste une réponse délivrée : le détecter demanderait un classifieur, et une liste de mots serait trompeuse.
+- La trace affichée rejoue la réponse du serveur. Pendant l’attente, seul « Analyse en cours… » s’affiche :
+  pas d’étapes simulées en direct ni de faux temps d’inférence. Pas de streaming dans cette version.
+- Le dessin ne tourne que pendant une tentative ou un « Rejouer », se suspend hors écran et reste statique
+  avec réduction des mouvements. Une liste en texte porte la même information.
+
+## Serveur
+
+Parcours d’un essai : validation de la requête → quotas → filtre d’entrée → consignes → modèle
+→ filtre de sortie → classifieur éventuel → garde-fou → réponse publiée.
+Chaque étape est non active, passée, bloquée, en erreur ou non exécutée. Un blocage arrête le traitement.
+
+| Route | Rôle |
+| --- | --- |
+| `POST /api/lab/session` | Créer ou reprendre une session opaque, renvoyer progression et disponibilité. |
+| `POST /api/lab/attempt` | Traiter un prompt, avec identifiant de requête unique. |
+| `POST /api/lab/validate` | Vérifier un flag complet, de façon idempotente et limitée en fréquence. |
+
+Les niveaux 07 et 08 ajoutent les routes de l’application du scénario et le point de collecte, à définir à l’étape 6.
+
+**Sessions et flags**
+
+- Cookie HttpOnly, Secure et SameSite ; session de 24 h ; aucune identité demandée.
+- Flag aléatoire par session et par niveau, créé et vérifié côté serveur, jamais présent dans le build.
+- Le navigateur ne fait autorité ni sur la progression, ni sur les quotas. Son historique court est traité
+  comme non fiable : seuls les rôles utilisateur et assistant sont reconstruits.
+
+**Réponses**
+
+- Une réponse retenue par un filtre, le classifieur ou le garde-fou n’atteint jamais le navigateur, même dans la trace.
+- Le classifieur rend un verdict structuré limité. En cas d’erreur, rien n’est publié et une erreur technique s’affiche.
+- Une erreur fournisseur ou un quota épuisé ne compte jamais comme une attaque bloquée.
+- La réussite d’un niveau dépend uniquement du flag validé par le serveur.
+
+**Limites et coût**
+
+- Base D1 dédiée `LAB_DB`, séparée de `VISITS_DB` : sessions expirables, progression, réservations, budgets.
+- Pas de prompts ni de réponses bruts dans D1 ou les journaux ; à vérifier aussi sur les journaux de la plateforme.
+- 2 000 caractères par prompt, six échanges d’historique, 4 000 caractères d’historique au plus.
+- Sortie et délai bornés, un seul traitement actif par session, création de sessions limitée, Turnstile si nécessaire.
+- Un appel au modèle et, au plus, un appel au classifieur par essai. Les niveaux d’agent ont une boucle au nombre de tours borné, comptée dans le quota ; aucune relance sans limite.
+  Le coût maximal est réservé de façon atomique avant l’appel ; un doublon ne déclenche pas de second appel.
+- Sans binding, budget ou fournisseur disponible : message d’indisponibilité clair, jamais de faux résultat.
+  La démonstration enregistrée reste consultable.
+
+**Fichiers** : `src/sections/Lab/ia/` et `src/content/aiLab.ts` (textes publics, sans consignes ni flag),
+`server/aiLab/` (routes, sessions, quotas, consignes, modèle, tests) et `migrations/ai-lab/`.
+
+**Ouverture** : les routes répondent seulement sur la préversion et en local (`OPEN_HOSTS`), et le code du Lab n’entre que dans le build
+de la branche `developpement` (`WORKERS_CI_BRANCH`). La production reste inerte jusqu’à la décision de l’étape 5.
+
+## Réalisation
+
+Les étapes sont suivies dans le [plan de travail](plan-travail.md).
+
+- **État actuel :** niveau 1 réel sur le vrai modèle, en développement et sur la préversion ; les neuf autres sont « À venir ».
+  Le build de production exclut ce code et le sélecteur IA y reste désactivé.
+- **Étape 5 :** niveaux 2 à 4, démonstration, banc de test et corpus publiés, contrôle de sécurité, ouverture décidée par Jérémie.
+- **Étape 6 :** niveaux 5 à 8, puis remédiation aux niveaux 9 et 10 et rapport de fin de parcours.
+
+## Vérifications
+
+- **Serveur :** soumissions répétées, validation idempotente, session expirée, quotas concurrents, budget global,
+  doublons réseau, aucun appel après un blocage d’entrée, aucune réponse filtrée dans l’API.
+- **Build :** ni flag, ni consigne privée, ni secret fournisseur.
+- **Affichage :** contenu du modèle et de l’utilisateur échappé, sans insertion HTML directe ; au niveau 08, seul le point de collecte peut recevoir une requête.
+- **Navigateur :** 1440, 390 et 320 px, clavier seul, clavier virtuel, tiroir, historique long, bascule Cyber / IA
+  pendant un traitement. CTF, Sentry, audio et modales recontrôlés.
+- **Performance :** Lighthouse mobile avant et après, dans les mêmes conditions.
+- Un comportement de modèle n’est déclaré vérifié qu’avec des appels réels, jamais à partir de résultats préparés.
+
+## Références
+
+- [Microsoft — Lessons From Red Teaming 100 Generative AI Products](https://arxiv.org/html/2501.07238v1)
+- [OWASP — critères d’évaluation du red teaming IA](https://genai.owasp.org/2026/02/04/owasp-vendor-evaluation-criteria-for-ai-red-teaming-providers-tooling-v1-0/)
+- [CaMeL et Dual LLM](https://simonwillison.net/2025/Apr/11/camel/)
+- [Llama Guard 3 sur Workers AI](https://developers.cloudflare.com/workers-ai/models/llama-guard-3-8b/)
+- [OWASP — Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)
+- [OWASP — System Prompt Leakage](https://genai.owasp.org/llmrisk/llm072025-system-prompt-leakage/)
+- [OWASP — GenAI Red Teaming Guide](https://genai.owasp.org/resource/genai-red-teaming-guide/)
+- [OWASP — LLM Prompt Injection Prevention](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html)
+- [Cloudflare — Workers AI bindings](https://developers.cloudflare.com/workers-ai/configuration/bindings/)
+- [Cloudflare — API D1](https://developers.cloudflare.com/d1/worker-api/d1-database/)

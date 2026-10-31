@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type CSSProperties, type FormEvent } from 'react'
 import { AlertTriangle, Briefcase, Check, CheckCircle2, Copy, FileClock, Github, Linkedin, Mail, MapPin, Send } from 'lucide-react'
 import { siCoursera, siTryhackme, type SimpleIcon } from 'simple-icons'
 import SectionHeader from '../../components/ui/SectionHeader'
@@ -25,25 +25,30 @@ const Mark = ({ icon }: { icon: SimpleIcon }) => (
   </svg>
 )
 
+// Same hover colours as Profil: GitHub's inverse white mark, TryHackMe's red sampled from its favicon.
 const SOCIALS = [
   {
     label: 'GitHub',
     url: profile.links.github,
+    color: '#ffffff',
     icon: <Github size={18} aria-hidden="true" />,
   },
   {
     label: 'LinkedIn',
     url: profile.links.linkedin,
+    color: '#0a66c2',
     icon: <Linkedin size={18} aria-hidden="true" />,
   },
   {
     label: 'TryHackMe',
     url: profile.links.tryhackme,
+    color: '#c11111',
     icon: <Mark icon={siTryhackme} />,
   },
   {
     label: 'Coursera',
     url: profile.links.coursera,
+    color: `#${siCoursera.hex}`,
     icon: <Mark icon={siCoursera} />,
   },
 ]
@@ -162,7 +167,8 @@ export function Contact() {
                       rel="noreferrer"
                       aria-label={s.label}
                       title={s.label}
-                      className="grid size-11 place-items-center rounded-md border border-white/10 bg-zinc-950/60 text-zinc-300 transition-colors hover:border-cyber/50 hover:text-cyber"
+                      style={{ '--social-color': s.color } as CSSProperties}
+                      className="grid size-11 place-items-center rounded-md border border-white/10 bg-zinc-950/60 text-zinc-300 transition-colors hover:border-cyber/50 hover:text-[var(--social-color)] focus-visible:border-cyber/50 focus-visible:text-[var(--social-color)]"
                     >
                       {s.icon}
                     </a>

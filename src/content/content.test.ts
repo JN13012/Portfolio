@@ -3,6 +3,8 @@ import { complexityOf, filterProjects, sortProjects, tracksFromSearch } from '..
 import { assistantUi, brainNodes } from './assistant'
 import { complexity } from './complexity'
 import { credentials, inProgress } from './certifications'
+import { cyberLabCurriculum } from './cyberLab'
+import { CTF_LEVELS } from '../sections/Lab/ctf/ctfData'
 import { contact } from './contact'
 import { hero } from './hero'
 import { introCopy } from './intro'
@@ -143,5 +145,14 @@ describe('expertise order', () => {
     expect(ids(['dev'])).toEqual(['dev', 'devops', 'ia', 'data', 'offensive', 'defensive'])
     expect(ids(['devops'])).toEqual(['devops', 'dev', 'offensive', 'defensive', 'ia', 'data'])
     expect(ids(['ia', 'cyber'])).toEqual(ids(['ia']))
+  })
+})
+
+describe('cyber Lab level names', () => {
+  it('match the names shown in the CTF terminal and have a short description', () => {
+    for (const level of cyberLabCurriculum.flatMap((group) => group.levels)) {
+      expect(level.title).toBe(CTF_LEVELS[level.id as keyof typeof CTF_LEVELS].label)
+      expect(level.summary).toBeTruthy()
+    }
   })
 })

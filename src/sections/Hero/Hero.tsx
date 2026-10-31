@@ -126,8 +126,6 @@ export function Hero() {
           <div className="absolute" style={box}>
             <NeuralHero nodes={assistantNetworkNodes} settings={HERO_NETWORK} run={run} className="aspect-auto absolute inset-0" />
           </div>
-          {/* The vector and filters drawn by the network must not read as a model running. */}
-          <p className="absolute top-0 right-0 text-xs text-zinc-400">{hero.networkNote.fr}</p>
           {PLACER && !chat.open && <PlacementTool value={placement} set={set} onChange={(p) => tune({ ...tuned, [set]: p })} onReset={() => tune({ ...tuned, [set]: undefined })} />}
         </div>
       </div>

@@ -152,7 +152,7 @@ export const CTF_LEVELS = {
     },
 
     8: {
-        label: "FORENSIC",
+        label: "FORENSICS",
 
         flag: "NotPetya",
 
@@ -173,7 +173,7 @@ export const CTF_LEVELS = {
         },
     },
     9: {
-        label: "HARDENING - FINAL",
+        label: "HARDENING",
         flag: "LockBit",
         unlocks: [
             "waf",

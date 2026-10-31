@@ -5,6 +5,7 @@ import { cx } from '../../lib/cx'
 import { cyberLabCurriculum } from '../../content/cyberLab'
 import { CYBER_PROGRESS_KEY, completeCyberLevel, readCyberProgress } from './ctf/cyberProgress'
 import { LabCurriculumDrawer } from './LabCurriculumDrawer'
+import { keepFieldClearOfPlayer } from '../../lib/keepClearOfPlayer'
 
 // The CTF console (3,000+ lines) is fetched only when the Lab comes near the viewport.
 const CtfConsole = lazy(() => import('./ctf/CtfConsole'))
@@ -83,7 +84,7 @@ export function CyberLab() {
         <div className="space-y-5">
           {/* One terminal window: an intro screen (what the CTF trains), then « Commencer » opens the real console.
               Fixed height, sized to the window so the whole Lab fits on screen; the console scrolls inside. */}
-          <div ref={consoleRef} className="lab-terminal lab-workspace flex flex-col overflow-hidden border border-cyber/20 bg-black">
+          <div ref={consoleRef} onFocus={keepFieldClearOfPlayer} className="lab-terminal lab-workspace flex flex-col overflow-hidden border border-cyber/20 bg-black">
             {activeLevel === null && (
               <>
                 <div className="flex items-center gap-2 border-b border-white/10 bg-zinc-900 px-3 py-2 font-mono text-[10px] tracking-widest text-white uppercase">
@@ -101,8 +102,8 @@ export function CyberLab() {
                 </Suspense>
               </Activity>
             </div>)}
-            {drawer && <LabCurriculumDrawer id="cyber-lab-curriculum" title="Parcours cybersécurité" groups={cyberLabCurriculum}
-              completed={progress.completed} current={activeLevel ?? undefined} visited={visited}
+            {drawer && <LabCurriculumDrawer id="cyber-lab-curriculum" title="Niveaux cybersécurité" groups={cyberLabCurriculum}
+              completed={progress.completed} current={activeLevel ?? undefined}
               onClose={() => setDrawer(false)} onSelect={selectLevel} />}
           </div>
         </div>

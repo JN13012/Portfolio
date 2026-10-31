@@ -13,20 +13,16 @@ export function PresentationAudioLifecycle() {
       if (status !== 'idle') sentryWelcome.dismiss()
       presentationDisplay.sync(status)
     }
-    const syncDisplay = () => {
-      if (presentationDisplay.get().minimized) sentryWelcome.dismiss()
-    }
     const offPlayer = presentationAudio.subscribe(syncPlayer)
-    const offDisplay = presentationDisplay.subscribe(syncDisplay)
     syncPlayer()
-    syncDisplay()
+    // Reduced earlier in this session; an automatic fold during the visit leaves the greeting alone.
+    if (presentationDisplay.get().minimized) sentryWelcome.dismiss()
     const hide = () => { if (document.hidden) presentationAudio.pause() }
     document.addEventListener('visibilitychange', hide)
     window.addEventListener('pagehide', presentationAudio.pause)
     return () => {
       offGate()
       offPlayer()
-      offDisplay()
       document.removeEventListener('visibilitychange', hide)
       window.removeEventListener('pagehide', presentationAudio.pause)
       presentationAudio.destroy()

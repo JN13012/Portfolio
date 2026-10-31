@@ -83,7 +83,6 @@ export const hero = {
   voiceSoon: { fr: 'bientôt', en: 'soon' },
   // The old PDF is outdated and no longer served (decision 2026-10-30); greyed until the new one exists.
   cvPending: { fr: 'CV en cours de mise à jour' },
-  networkNote: { fr: 'Illustration animée : aucun modèle n’est connecté' },
   ctaContact: { fr: 'Me contacter', en: 'Contact me' },
   scrollHint: { fr: 'Défiler', en: 'Scroll' },
   updated: { fr: 'MAJ', en: 'Updated' },
