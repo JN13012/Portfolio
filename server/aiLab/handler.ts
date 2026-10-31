@@ -1,6 +1,6 @@
 import { aiLabCurriculum, defenseStages, type DefenseStageId } from '../../src/content/aiLab'
 import { askGuard, askModel, type AiBinding, type ChatMessage } from './model'
-import { isLabConfig, levelOneInstructions } from './prompts'
+import { levelOneInstructions } from './prompts'
 
 type Statement = {
   bind(...values: (string | number)[]): Statement
@@ -18,8 +18,7 @@ type Ready = Required<LabEnv>
 type Session = { session_hash: string; secret: string; attempts: number }
 type StageStatus = 'inactive' | 'passed' | 'blocked' | 'error' | 'not-run'
 
-// The Lab answers on the preview and locally only: production stays inert until Jérémie opens it (step 5).
-const OPEN_HOSTS = new Set(['developpement-www.jeremie-nagi.workers.dev', 'localhost', '127.0.0.1'])
+const OPEN_HOSTS = new Set(['www.jeremie-nagi.workers.dev', 'developpement-www.jeremie-nagi.workers.dev', 'localhost', '127.0.0.1'])
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1'])
 const COOKIE = '__Host-lab_session'
 const SESSION_MS = 24 * 60 * 60 * 1000
@@ -53,6 +52,13 @@ export async function flagFor(secret: string, level: number) {
   const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
   const code = Array.from((await hmac(secret, `flag:${level}`)).slice(0, 12), byte => alphabet[byte % 32]).join('')
   return `FLAG{${code.slice(0, 4)}-${code.slice(4, 8)}-${code.slice(8)}}`
+}
+
+/** A real check on the published answer: the flag's code, forwards or backwards, whatever separates its characters. Other encodings are not recognised. */
+export function containsFlag(answer: string, flag: string) {
+  const code = flag.slice('FLAG{'.length, -1).replaceAll('-', '')
+  const compact = answer.toUpperCase().replace(/[^A-Z0-9]/g, '')
+  return compact.includes(code) || compact.includes([...code].reverse().join(''))
 }
 
 /** The key changes every day, so yesterday's rows are found with yesterday's key and no clear IP is ever needed. */
@@ -134,7 +140,7 @@ async function attempt(request: Request, env: Ready, now: number) {
   const level = body?.level
   const history = rebuildHistory(body?.history)
   const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : ''
-  if (typeof level !== 'number' || !REAL_LEVELS.includes(level) || !isLabConfig(body?.config) || !history
+  if (typeof level !== 'number' || !REAL_LEVELS.includes(level) || !history
     || !prompt || prompt.length > MAX_PROMPT || typeof body?.requestId !== 'string' || !UUID.test(body.requestId)) return reply(400, { error: 'request' })
   const hash = await sessionHashOf(request)
   const session = hash ? await readSession(db, hash, now) : null
@@ -176,19 +182,20 @@ async function attempt(request: Request, env: Ready, now: number) {
   }
   const start = { entry: 'passed', instructions: 'passed' } as const
   const flag = await flagFor(session.secret, level)
-  const messages: ChatMessage[] = [{ role: 'system', content: levelOneInstructions(body.config, flag) }, ...history, { role: 'user', content: prompt }]
+  const messages: ChatMessage[] = [{ role: 'system', content: levelOneInstructions(flag) }, ...history, { role: 'user', content: prompt }]
   let answer: Awaited<ReturnType<typeof askModel>>
   try { answer = await askModel(env.AI, messages) }
   catch { return failed({ ...start, model: 'error' }) }
   let verdict: Awaited<ReturnType<typeof askGuard>>
   try { verdict = await askGuard(env.AI, prompt, answer.text) }
-  catch { return failed({ ...start, model: 'passed', guard: 'error' }) }
+  catch { return failed({ ...start, model: 'passed', response: 'error' }) }
 
   // An unknown cost keeps the whole reservation rather than undercounting.
   const spent = answer.neurons === null || verdict.neurons === null ? QUOTAS.reservedNeurons : answer.neurons + verdict.neurons
   await Promise.all([release(false), settleBudget(spent)])
-  if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...start, model: 'passed', guard: 'blocked' }) })
-  return reply(200, { outcome: 'delivered', answer: answer.text, remaining, trace: stageTrace(level, { ...start, model: 'passed', guard: 'passed', response: 'passed' }) })
+  if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...start, model: 'passed', response: 'blocked' }) })
+  const revealed = containsFlag(answer.text, flag)
+  return reply(200, { outcome: revealed ? 'flag' : 'delivered', answer: answer.text, remaining, trace: stageTrace(level, { ...start, model: 'passed', response: 'passed', flag: revealed ? 'passed' : 'not-run' }) })
 }
 
 async function validate(request: Request, env: Ready, now: number) {

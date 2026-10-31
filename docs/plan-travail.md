@@ -75,7 +75,7 @@ Déroulé d’une étape :
 - [x] Bande audio : repli en cascade et comportement par état (`lib/presentationFold.ts`, `autoFoldDelay`), à valider.
 
 - [x] Lab IA : bandeau « en cours de construction » retiré, terminal et fenêtre des défenses alignés sur le terminal du Lab cyber, en bleu (demande du 31 octobre), à valider.
-- [x] Fenêtre des défenses : un point par étape active du niveau, un anneau pour les étapes qui peuvent bloquer, seul le modèle dessiné en réseau (3 + 3) et traversé en entier, signal à vitesse constante, le signal s’arrête à la défense qui bloque, avec une zone de texte pour l’étape, le verdict et l’indice (31 octobre, à valider).
+- [x] Fenêtre des défenses : un point par étape active du niveau, un anneau pour les étapes qui peuvent bloquer, signal à vitesse constante, le signal s’arrête à la défense qui bloque, avec une zone de texte pour l’étape, le verdict et l’indice (31 octobre, à valider).
 - [x] Bande audio réduite : après 6 s sans usage, seul le chevron reste (31 octobre, à valider).
 - [x] Fenêtre des défenses : réseau en haut, texte juste dessous, « Simulation » retiré, Sentry dans la barre, bleu réduit (31 octobre, à valider).
 - [x] Écran IA renommé « Red-team Sentry » (31 octobre). Fenêtre des défenses sur toute la hauteur, palette bleutée et or pour l’indice, à valider.
@@ -99,23 +99,21 @@ car il dépend des résultats du vrai modèle.
 - [x] Niveau 1 connecté : routes, sessions, flag côté serveur, garde-fou, quotas (session, IP sur 1 h, 5 h et 24 h), budget global.
 - [x] Base D1 `portfolio-lab` (`LAB_DB`) créée et migrée ; binding Workers AI déclaré.
 - [x] Vraie attaque validée de bout en bout sous le Worker local : vrai modèle, flag révélé puis validé par le serveur, 1440 et 390 px.
-- [ ] **Secret à poser par Jérémie** : `LAB_IP_SECRET` sur le Worker. Sans lui, le Lab répond « indisponible ».
-- [ ] **À vérifier sur la préversion**, après commit et push de `developpement` : la même attaque. Le build lit `WORKERS_CI_BRANCH`.
+- [x] Secret `LAB_IP_SECRET` posé par Jérémie sur le Worker, sans déploiement en production.
+- [x] Même attaque validée sur la préversion le 31 octobre, à 1440 et 390 px, sans erreur dans la console. Production inchangée.
 
 Créer une ressource distante (binding, base D1) demande l’accord de Jérémie.
 
 **Terminé quand** une vraie attaque fonctionne de bout en bout sur la préversion.
 
-### 5. Niveaux 2 à 4, démonstration, ouverture
+### 5. Niveaux 2 à 4, démonstration
 
+- [x] Ouverture publique du sélecteur IA avec le seul niveau 1, décidée par Jérémie le 31 octobre. Les autres restent « À venir ».
 - [ ] Niveaux 2 et 3 réels, puis niveau 4 (document piégé).
-- [ ] Démonstration enregistrée, banc de test et corpus publiés, avec taux de réussite par niveau.
-- [ ] Afficher seulement les niveaux réels dans l’intro et le tiroir publics.
-- [ ] Contrôle sécurité ciblé : aucun flag ni consigne dans le build, quotas concurrents, réponses filtrées
-  jamais envoyées au navigateur, journaux sans données personnelles.
-- [ ] Mesure Lighthouse avant et après.
+- [ ] Démonstration enregistrée à décider, banc de test et corpus publiés, avec taux de réussite par niveau.
+- [ ] Refaire le contrôle sécurité à chaque niveau ajouté.
 
-**Terminé quand** Jérémie décide l’ouverture publique du sélecteur IA.
+**Terminé quand** les niveaux 2 à 4 sont réels et publiés.
 
 ### 6. Fin du parcours du Lab IA
 

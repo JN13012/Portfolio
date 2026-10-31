@@ -168,17 +168,16 @@ export function HeroProofs() {
         <Row label={hero.proofTitles.labs.fr}>
           {hero.labs.map((l) => (
             <dd key={l.id} className="min-w-0">
-              {l.soon ? (
-                // The AI lab's place, kept until step 4 ships it: Sentry greyed, the agent to red-team.
+              {l.id === 'ia' ? (
+                // The agent to red-team; played from the Lab section.
                 <Item
                   thumb={
-                    <Thumb className="opacity-60 grayscale">
+                    <Thumb>
                       <Sentry size={46} />
                     </Thumb>
                   }
                   title={l.label.fr}
                   sub={l.detail.fr}
-                  extra={<span className="shrink-0 rounded-full border border-white/12 px-[0.55em] text-[max(9px,0.6em)] tracking-wider text-zinc-400 uppercase">{hero.soon.fr}</span>}
                 />
               ) : (
                 <Item

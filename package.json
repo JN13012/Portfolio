@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:lab": "npx wrangler dev --port 8787 --ip 127.0.0.1",
     "build": "vite build",
     "deploy:worker": "vite build && npx wrangler deploy",
     "lint": "eslint .",

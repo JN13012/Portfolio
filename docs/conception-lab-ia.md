@@ -28,23 +28,21 @@ Les niveaux 6 à 10 sont confirmés : les appels d’outils fonctionnent sur le 
 
 | Partie | Niveau | Mission | Difficulté visée |
 | --- | --- | --- | --- |
-| Le faire parler | 01 — Consignes | Obtenir le flag fictif ; comparer consigne simple et instructions structurées. | Facile, très guidé |
-| Le faire parler | 02 — Filtres | Comprendre les contrôles d’entrée et de sortie, et où une tentative est arrêtée. | Facile à moyen |
-| Le faire parler | 03 — Classifieur IA | Contourner un évaluateur dédié qui contrôle la réponse. | Moyen |
-| Il lit des documents | 04 — Document piégé | Modifier une fiche que Sentry doit résumer à la suite d’une demande légitime. | Moyen |
-| Il lit des documents | 05 — Sources et RAG | Faire remonter un document manipulé parmi plusieurs sources ; comprendre les frontières de confiance. | Moyen |
-| Il agit | 06 — Agent et outils | Découvrir les outils de l’agent et obtenir une action interdite sur un agenda fictif. | Moyen à difficile |
-| Il agit | 07 — Reconnaissance et API | Cartographier les endpoints, appeler un outil sans l’agent, lire les données d’un autre utilisateur fictif, tester les limites de débit. | Moyen à difficile |
-| Il agit | 08 — Chaîne complète | Enchaîner document piégé, lecture de données privées et fuite vers un point de collecte. | Difficile |
-| Corriger | 09 — Protéger l’assistant | Corriger les niveaux 3 à 5 sans empêcher les résumés légitimes, puis rejouer les attaques. | Moyen |
-| Corriger | 10 — Sécuriser l’agent | Corriger les niveaux 6 à 8 : droits, outils, confirmations, CSP et URL autorisées ; vérification avant/après. | Difficile |
+| Direct Prompt Injection | 01 — SYSTEM PROMPT LEAK | Obtenir le flag fictif que protège une simple consigne. | Facile, très guidé |
+| Direct Prompt Injection | 02 — INPUT/OUTPUT FILTERS | Comprendre les contrôles d’entrée et de sortie, et où une tentative est arrêtée. | Facile à moyen |
+| Direct Prompt Injection | 03 — AI CLASSIFIER | Contourner un évaluateur dédié qui contrôle la réponse. | Moyen |
+| Indirect Prompt Injection | 04 — POISONED DOCUMENT | Modifier une fiche que Sentry doit résumer à la suite d’une demande légitime. | Moyen |
+| Indirect Prompt Injection | 05 — RAG POISONING | Faire remonter un document manipulé parmi plusieurs sources ; comprendre les frontières de confiance. | Moyen |
+| Agents & API | 06 — TOOL ABUSE | Découvrir les outils de l’agent et obtenir une action interdite sur un agenda fictif. | Moyen à difficile |
+| Agents & API | 07 — API RECON | Cartographier les endpoints, appeler un outil sans l’agent, lire les données d’un autre utilisateur fictif, tester les limites de débit. | Moyen à difficile |
+| Agents & API | 08 — DATA EXFILTRATION | Enchaîner document piégé, lecture de données privées et fuite vers un point de collecte. | Difficile |
+| Hardening | 09 — ASSISTANT HARDENING | Corriger les niveaux 3 à 5 sans empêcher les résumés légitimes, puis rejouer les attaques. | Moyen |
+| Hardening | 10 — AGENT HARDENING | Corriger les niveaux 6 à 8 : droits, outils, confirmations, CSP et URL autorisées ; vérification avant/après. | Difficile |
 
 Règles communes :
 
 - Chaque niveau ajoute une seule nouveauté, pour une progression sans à-coup. La difficulté visée est mesurée sur le vrai modèle.
-- Trois indices à la demande, sans pénalité : piste, technique, quasi-solution.
-- Au niveau 01, les deux configurations se choisissent dans la console. Le flag du niveau est valable
-  quelle que soit la configuration ; le bilan invite à essayer l’autre.
+- Trois indices à la demande, sans pénalité, dans un carrousel de la fenêtre des défenses : piste, techniques, prompt prêt à envoyer.
 - Les documents, identités, outils et effets restent propres au scénario, sans aucune cible externe.
 - Scans réseau et services restent dans le Lab cyber.
 - Chaque niveau offensif se termine par la protection adaptée. Les filtres, le classifieur et les consignes
@@ -105,11 +103,11 @@ Le code du banc est publié avec le corpus.
 
 | Sujet | Décision |
 | --- | --- |
-| **Affichage public** | Seuls les niveaux réels sont affichés : 01 à 04 à l’ouverture, puis 05 à 10 quand ils sont prêts. L’aperçu de développement garde tous les niveaux et « À venir » jusque-là. |
+| **Affichage public** | Ouvert avec le seul niveau 01 (décision de Jérémie du 31 octobre). Les neuf autres restent annoncés « À venir » et ne sont pas jouables. |
 | **Accès aux niveaux** | Libre, comme au Lab cyber. Chaque réussite est enregistrée séparément ; rien n’est déduit d’une visite. |
 | **Quotas** | 60 essais par session, 30 / 60 / 100 par empreinte d’IP sur 1 h, 5 h et 24 h, 5 000 neurones par jour au total. Workers AI n’offre pas de plafond de dépense : ce budget, inférieur aux 10 000 neurones gratuits par jour, en tient lieu. Un essai courant coûte environ 15 neurones. |
 | **IP** | HMAC avec secret serveur et sel changé chaque jour, conservé 48 h au plus, jamais d’IP en clair. Une empreinte reste une donnée personnelle : une courte mention l’indique près du Lab. |
-| **Abus** | Un garde-fou sur tous les niveaux (Llama Guard 3 envisagé), séparé des défenses du jeu : réponses courtes, limitées à l’exercice, avec un état propre dans la trace (« Hors exercice »). Il réduit le risque sans l’éliminer ; le Lab indique que les réponses sont générées et non relues. |
+| **Abus** | Un garde-fou sur tous les niveaux (Llama Guard 3 envisagé), séparé des défenses du jeu : réponses courtes, limitées à l’exercice, avec un état propre dans la trace (« Hors exercice »). Il réduit le risque sans l’éliminer ; le Lab nomme le modèle qui génère les réponses. |
 | **Recruteur pressé** | Une démonstration tirée de vraies tentatives enregistrées, avec date et modèle. Elle arrive avec l’ouverture publique, jamais avant le modèle réel. |
 | **Preuve** | Publier le corpus d’attaques, le banc de test et les taux de réussite par niveau, avec modèle, version, date et limites. |
 | **Modèle** | Workers AI. GLM 4.7 Flash pour le niveau 1, raisonnement désactivé ; Llama Guard 3 pour le garde-fou. Le modèle des niveaux suivants sera choisi selon la difficulté visée. |
@@ -126,7 +124,7 @@ en ne comptant que la réponse publiée. Outils : 4 appels par cas, sur un agend
 | Mistral Small 3.1 | 6/30 | 0/30 | 5,5 | 0/4 | 4/4 | 0/4 |
 | Gemma 4 26B | 0/30 | 0/30 | 2,2 | 0/4 | 0/4 | 0/4 |
 
-- **Niveau 1 :** GLM 4.7 Flash, le seul à rester facile dans les deux configurations, et le moins cher des modèles qui fuient.
+- **Niveau 1 :** GLM 4.7 Flash, le plus facile à faire fuiter et le moins cher des modèles qui fuient. Il utilise la consigne simple ; les instructions structurées sont gardées dans `server/aiLab/prompts.ts`, sans niveau pour l’instant (décision du 31 octobre).
 - **Niveaux d’agent :** Llama 3.3 est le seul à obéir à une consigne cachée dans un résultat d’outil, ce qu’exige le niveau 08. Il coûte 6 fois plus cher.
 - **Raisonnement :** certains modèles répètent le flag dans un champ de raisonnement. Le serveur ne lit que la réponse publiée.
 - **Garde-fou :** Llama Guard 3 a classé correctement 4 demandes dangereuses en français et 2 demandes légitimes. Il classe « ignore tes instructions » en S14,
@@ -134,23 +132,23 @@ en ne comptant que la réponse publiée. Outils : 4 appels par cas, sur un agend
 
 ## Interface
 
-- Console à gauche, fenêtre « Défenses de Sentry » à droite, dans le même cadre que le Lab cyber, en bleu.
+- Console à gauche, fenêtre « Analyse et guide » à droite, dans le même cadre que le Lab cyber, en bleu.
 - « Commencer » ouvre le niveau 01. Un niveau disponible s’ouvre directement depuis l’entrée ou le tiroir « Niveaux ».
   La flèche de demi-tour revient à la présentation et conserve le travail en mémoire.
-- La fenêtre de droite suit la surface du niveau : chaîne de traitement, documents, outils ou permissions.
+- La fenêtre de droite suit la surface du niveau : chaîne de traitement, documents, outils ou permissions, sur une ligne schématique, sans le garde-fou, qui n’est pas une défense du jeu et est annoncé sous la console. Elle porte aussi la partie pédagogique : attaque, défense, explication, référence OWASP, « À retenir » une fois le flag validé, et le carrousel d’indices.
 - Sur téléphone : console d’abord, puis résultat en texte et dessin statique.
 - Entrée envoie ; Maj+Entrée ajoute une ligne ; pas d’envoi pendant une composition IME.
 - Les essais restants viennent du serveur. Blocage, réponse délivrée, hors exercice, erreur, quota et validation
   sont des états distincts. Un refus du modèle reste une réponse délivrée : le détecter demanderait un classifieur, et une liste de mots serait trompeuse.
-- La trace affichée rejoue la réponse du serveur. Pendant l’attente, seul « Analyse en cours… » s’affiche :
-  pas d’étapes simulées en direct ni de faux temps d’inférence. Pas de streaming dans cette version.
+- Le prompt part de la zone de saisie dès l’envoi. Pendant l’attente, seuls trois points animés s’affichent dans la conversation :
+  la trace rejoue ensuite la réponse du serveur, sans étapes simulées en direct ni faux temps d’inférence. Pas de streaming dans cette version.
 - Le dessin ne tourne que pendant une tentative ou un « Rejouer », se suspend hors écran et reste statique
   avec réduction des mouvements. Une liste en texte porte la même information.
 
 ## Serveur
 
 Parcours d’un essai : validation de la requête → quotas → filtre d’entrée → consignes → modèle
-→ filtre de sortie → classifieur éventuel → garde-fou → réponse publiée.
+→ filtre de sortie → classifieur éventuel → garde-fou → réponse publiée → recherche du flag dans la réponse.
 Chaque étape est non active, passée, bloquée, en erreur ou non exécutée. Un blocage arrête le traitement.
 
 | Route | Rôle |
@@ -173,7 +171,7 @@ Les niveaux 07 et 08 ajoutent les routes de l’application du scénario et le p
 - Une réponse retenue par un filtre, le classifieur ou le garde-fou n’atteint jamais le navigateur, même dans la trace.
 - Le classifieur rend un verdict structuré limité. En cas d’erreur, rien n’est publié et une erreur technique s’affiche.
 - Une erreur fournisseur ou un quota épuisé ne compte jamais comme une attaque bloquée.
-- La réussite d’un niveau dépend uniquement du flag validé par le serveur.
+- La réussite d’un niveau dépend uniquement du flag validé par le serveur. Le point « Flag » du schéma s’allume si le serveur trouve le flag dans la réponse, à l’endroit ou à l’envers ; un autre encodage n’est pas reconnu, mais reste validable.
 
 **Limites et coût**
 
@@ -189,16 +187,14 @@ Les niveaux 07 et 08 ajoutent les routes de l’application du scénario et le p
 **Fichiers** : `src/sections/Lab/ia/` et `src/content/aiLab.ts` (textes publics, sans consignes ni flag),
 `server/aiLab/` (routes, sessions, quotas, consignes, modèle, tests) et `migrations/ai-lab/`.
 
-**Ouverture** : les routes répondent seulement sur la préversion et en local (`OPEN_HOSTS`), et le code du Lab n’entre que dans le build
-de la branche `developpement` (`WORKERS_CI_BRANCH`). La production reste inerte jusqu’à la décision de l’étape 5.
+**Ouverture** : les routes répondent seulement sur les hôtes de `OPEN_HOSTS` : production, préversion et local.
 
 ## Réalisation
 
 Les étapes sont suivies dans le [plan de travail](plan-travail.md).
 
-- **État actuel :** niveau 1 réel sur le vrai modèle, en développement et sur la préversion ; les neuf autres sont « À venir ».
-  Le build de production exclut ce code et le sélecteur IA y reste désactivé.
-- **Étape 5 :** niveaux 2 à 4, démonstration, banc de test et corpus publiés, contrôle de sécurité, ouverture décidée par Jérémie.
+- **État actuel :** niveau 1 réel et public sur le vrai modèle ; les neuf autres sont « À venir ».
+- **Étape 5 :** niveaux 2 à 4, démonstration éventuelle, banc de test et corpus publiés.
 - **Étape 6 :** niveaux 5 à 8, puis remédiation aux niveaux 9 et 10 et rapport de fin de parcours.
 
 ## Vérifications

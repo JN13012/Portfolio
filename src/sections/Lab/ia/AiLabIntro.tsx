@@ -9,6 +9,7 @@ import { useTerminalTyping } from '../../../lib/useTerminalTyping'
 const TITLE = 'Red-team Sentry'
 const levelCount = aiLabCurriculum.reduce((count, phase) => count + phase.levels.length, 0)
 const SUBTITLE = `Faites révéler son flag à Sentry · parcours prévu en ${levelCount} niveaux`
+const summaryOf = (level: { summary?: string }) => ` : ${level.summary}`
 const pieces = (() => {
   let offset = TITLE.length + SUBTITLE.length
   const phases = aiLabCurriculum.map(phase => {
@@ -16,7 +17,7 @@ const pieces = (() => {
     offset += phase.title.length
     const levels = phase.levels.map(level => {
       const from = offset
-      offset += level.title.length + 3
+      offset += level.title.length + summaryOf(level).length + 3
       return { ...level, from }
     })
     return { ...phase, head, levels }
@@ -81,8 +82,9 @@ export function AiLabIntro({ onEnter, completed }: { onEnter: (level: LabLevel) 
           <p className="ai-lab-entry__phase-title"><span aria-hidden="true" /><span><Typed text={phase.title} from={phase.head} chars={chars} /></span><span aria-hidden="true" /></p>
           <ol className="ai-lab-entry__levels">
             {phase.levels.map(level => <li key={level.id}><button type="button" className="lab-intro-level" disabled={!level.available || typing || leaving}
-              aria-label={`Ouvrir le niveau ${level.id} : ${level.title}${!level.available ? ' — À venir' : completed.includes(level.id) ? ' — Réussi' : ''}`} onClick={() => go(level.id)}>
+              aria-label={`Ouvrir le niveau ${level.id} : ${level.title}${summaryOf(level)}${!level.available ? ' — À venir' : completed.includes(level.id) ? ' — Réussi' : ''}`} onClick={() => go(level.id)}>
               <span className="ai-lab-entry__level-number">{String(level.id).padStart(2, '0')}</span><span className="lab-intro-level__title"><Typed text={level.title} from={level.from} chars={chars} /></span>
+              <span className="text-zinc-400"><Typed text={summaryOf(level)} from={level.from + level.title.length} chars={chars} /></span>
               {!level.available && <span className="ml-2 text-[10px] text-zinc-500">À venir</span>}
               {completed.includes(level.id) && <Check size={13} aria-label="Réussi" className="ml-2 inline text-green-300" />}
             </button></li>)}

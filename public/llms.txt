@@ -2,7 +2,7 @@
 
 > Développeur IA et pentester junior, en Master of Science Architecte des systèmes d’information à Epitech Marseille. Disponible immédiatement en alternance (4 jours en entreprise, 1 jour à l’école), stage possible. Marseille, mobile dans toute la France.
 
-Ce site est un portfolio en une seule page, en français. Aucun modèle d’IA n’y est connecté : l’assistant Sentry y lit des présentations vocales préenregistrées et le réseau animé de l’accueil est une illustration.
+Ce site est un portfolio en une seule page, en français. L’assistant Sentry y lit des présentations vocales préenregistrées et le réseau animé de l’accueil est une illustration. Seul le Lab IA appelle un vrai modèle (GLM 4.7 Flash), comme cible volontairement vulnérable d’un exercice de red teaming, avec un flag fictif.
 
 ## Liens
 

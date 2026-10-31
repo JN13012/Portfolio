@@ -4,16 +4,21 @@ import { CTF_LEVELS } from "./ctfData";
 import { createCommandTimers } from "./commandTimers";
 import { LabNavigation } from "../LabNavigation";
 
+const ACCESS_GRANTED = "[+] Access Granted — niveau réussi";
+
 // One mounted console per visited level; the parent stores only earned successes.
-const CtfConsole = ({ initialLevel = 1, onComplete, onPresentation, onCurriculum, curriculumOpen, completedAll, onNext }) => {
+const CtfConsole = ({ initialLevel = 1, onComplete, onPresentation, onCurriculum, curriculumOpen, completedAll, onNext, announce }) => {
   const level = initialLevel;
   const [remoteSession, setRemoteSession] = useState(null);
-  const [history, setHistory] = useState(() => [
+  const [openingLines] = useState(() => [
     { msg: "CYBERSECURITY TRAINING LAB - CAPTURE THE FLAG", type: "sys" },
     { msg: `LEVEL ${level} : ${CTF_LEVELS[level].label}`, type: "sys" },
     ...(CTF_LEVELS[level].unlocks?.length ? [{ msg: `AVAILABLE TOOLS: ${CTF_LEVELS[level].unlocks.join(", ")}`, type: "sys" }] : []),
     { msg: "TYPE 'help' TO START THE CHALLENGE.", type: "sys" },
   ]);
+  // Reached by solving the previous level: its success stays on screen and this level's lines appear one by one.
+  const [history, setHistory] = useState(() => announce ? [{ msg: ACCESS_GRANTED, type: "sys" }] : openingLines);
+  const announced = useRef(!announce);
   const [inputValue, setInputValue] = useState("");
   const [solved, setSolved] = useState(false);
   const scrollRef = useRef(null);
@@ -181,6 +186,12 @@ const CtfConsole = ({ initialLevel = 1, onComplete, onPresentation, onCurriculum
     }
     return allOk ? "UNLOCKED" : "LOCKED";
   }
+
+  useEffect(() => {
+    if (announced.current) return;
+    announced.current = true;
+    openingLines.forEach((line, index) => scheduleCommand(() => setHistory((prev) => [...prev, line]), 450 * (index + 1)));
+  }, [openingLines, scheduleCommand]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -3081,9 +3092,10 @@ const CtfConsole = ({ initialLevel = 1, onComplete, onPresentation, onCurriculum
       const userFlag = command === "submit" ? args[1] : input;
 
       if (userFlag === currentData.flag) {
-        addLog("[+] Access Granted — niveau réussi", "sys");
+        addLog(ACCESS_GRANTED, "sys");
         setSolved(true);
         onComplete(level);
+        if (onNext) scheduleCommand(onNext, 900);
       } else {
         addLog("[-] FLAG INCORRECT.", "err");
       }
@@ -3118,7 +3130,7 @@ const CtfConsole = ({ initialLevel = 1, onComplete, onPresentation, onCurriculum
         className="p-4 flex-1 overflow-y-auto space-y-1 font-mono text-[11px] bg-[rgba(0,0,0,0.9)]"
       >
         {history.map((log, i) => (
-          <div key={i} className="flex gap-2 break-all">
+          <div key={i} className="flex gap-2 [overflow-wrap:anywhere]">
             <span
               className={`shrink-0 font-bold ${log.type === "in" ? "text-zinc-500" : log.type === "err" ? "text-red-500" : "text-cyber"}`}
             >
@@ -3137,10 +3149,10 @@ const CtfConsole = ({ initialLevel = 1, onComplete, onPresentation, onCurriculum
             </span>
           </div>
         ))}
-        {solved && (
-          <div className="mt-6 space-y-3 border border-green-500/40 p-4 text-sm text-green-300" role="status">
-            <p>{completedAll ? "Les neuf niveaux sont réussis." : `Niveau ${level} réussi.`}</p>
-            {onNext && <button type="button" onClick={onNext} className="cursor-pointer border border-cyber/40 px-3 py-2 text-xs text-cyber focus-visible:outline-2 focus-visible:outline-cyber">Niveau suivant</button>}
+        {solved && completedAll && (
+          <div className="flex gap-2" role="status">
+            <span className="shrink-0 font-bold text-cyber">&gt;&gt;</span>
+            <span className="text-cyber italic">Les neuf niveaux sont réussis.</span>
           </div>
         )}
       </div>

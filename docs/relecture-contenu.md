@@ -23,7 +23,7 @@ Certifié : IBM AI Developer (Professional Certificate) · Jr Penetration Tester
 
 Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · en test) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
-Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team Sentry, bientôt)
+Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team Sentry · niveau 1 jouable)
 
 **Lab cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 
