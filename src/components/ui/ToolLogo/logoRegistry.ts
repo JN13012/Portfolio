@@ -33,6 +33,7 @@ import {
   siNodedotjs,
   siNumba,
   siObsidian,
+  siOllama,
   siOpenai,
   siOpenstreetmap,
   siOwasp,
@@ -65,6 +66,16 @@ export const normalizeToolName = (name: string) => name.toLowerCase().replace('c
 
 // Logos: the colour icons first, then Simple Icons (CC0), then drawn emblems, else a monogram.
 export const IMAGE_LOGOS: Record<string, string> = Object.fromEntries(Object.entries(TOOL_ICONS).map(([k, v]) => [normalizeToolName(k), v]))
+// Qwen is not in Simple Icons: its mark comes from @lobehub/icons-static-svg (MIT).
+const QWEN: SimpleIcon = {
+  title: 'Qwen',
+  slug: 'qwen',
+  hex: '4C6FFF',
+  source: 'https://github.com/lobehub/lobe-icons',
+  svg: '',
+  path: 'M19.713 2.825h-5.907c0-.251-.066-.503-.196-.728L12.819.728A1.46 1.46 0 0 0 11.559 0h-1.58c-.52 0-1 .275-1.26.728l-2.42 4.19a1.45 1.45 0 0 0 0 1.453l.791 1.37c.26.448.74.727 1.26.727h11.36c.52 0 1-.275 1.26-.728l.79-1.37a1.45 1.45 0 0 0 0-1.451l-.79-1.37a1.46 1.46 0 0 0-1.26-.728zM.195 9.905l2.951 5.115a1.46 1.46 0 0 0-.531.531l-.791 1.37a1.45 1.45 0 0 0 0 1.452l.79 1.37c.26.448.74.727 1.26.727h4.84c.52 0 1-.275 1.26-.728l.79-1.37a1.45 1.45 0 0 0 0-1.451L5.086 7.083a1.46 1.46 0 0 0-1.26-.728h-1.58c-.52 0-1 .276-1.26.728l-.79 1.37a1.45 1.45 0 0 0 0 1.452m15.888 13.367 2.951-5.115c.217.125.469.196.728.196h1.582c.52 0 1-.275 1.26-.728l.79-1.37a1.45 1.45 0 0 0 0-1.451l-2.42-4.191a1.46 1.46 0 0 0-1.259-.728h-1.582c-.52 0-1 .276-1.259.728l-5.678 9.838a1.45 1.45 0 0 0 0 1.452l.79 1.37c.26.448.74.727 1.26.727h1.582c.52 0 1-.275 1.26-.728z',
+}
+
 export const VECTOR_LOGOS: Record<string, SimpleIcon> = {
   huggingfacetransformers: siHuggingface,
   gradio: siGradio,
@@ -93,6 +104,8 @@ export const VECTOR_LOGOS: Record<string, SimpleIcon> = {
   owaspllmtop10: siOwasp,
   kalilinux: siKalilinux,
   claude: siClaude,
+  qwen3827b: QWEN,
+  ollama: siOllama,
   mcp: siModelcontextprotocol,
   huggingface: siHuggingface,
   jupyter: siJupyter,

@@ -64,11 +64,11 @@ const FIRST_CARDS = 8;
 
 const GROUPS = [
   { id: "perso-pro", title: "Projets perso & pro" },
-  { id: "formation", title: "Projets de formation" },
+  { id: "epitech", title: "Projets Epitech" },
 ];
 
 // Context pill on the card, only where the group title doesn't already say it
-// (perso, ULIT and Epitech are implied by « Projets perso & pro » / « Projets de formation »).
+// (perso, ULIT and Epitech are implied by « Projets perso & pro » / « Projets Epitech »).
 const CONTEXT_PILL = { ibm: "IBM", hackathon: "Hackathon" };
 
 /** Project emblems: shown first (card background, zoomed out; first image of the modal, without a frame), never under the mock-up note. */

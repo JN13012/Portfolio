@@ -105,11 +105,13 @@ export const credentials: Credential[] = [
       { text: { fr: 'Donner à l’agent des outils de pentest : sqlmap, serveur MCP de Kali…', en: 'Give the agent pentest tools: sqlmap, Kali’s MCP server…' } },
       { text: { fr: 'Répartir le travail entre sous-agents pour préserver le contexte', en: 'Split the work between sub-agents to preserve context' } },
       { text: { fr: 'Choisir le modèle selon la tâche et son coût', en: 'Pick the model by task and cost' } },
+      // Model given by Jérémie (2026-10-31): huggingface.co/HauhauCS/Qwen3.8-27B-Uncensored-HauhauCS-Aggressive-MTP-GGUF
+      { text: { fr: 'Utiliser en local, avec Ollama, un modèle non censuré pour le pentest : Qwen 3.8 27B' } },
       { text: { fr: 'Enchaîner reconnaissance, exploitation, chaînage des failles et revue', en: 'Chain reconnaissance, exploitation, vulnerability chaining and review' } },
       { text: { fr: 'Vérifier l’efficacité des prompts, contourner des garde-fous et durcir les siens', en: 'Check how well prompts work, bypass guardrails and harden your own' } },
       { text: { fr: 'Mettre en pratique dans des labs, puis un CTF', en: 'Practise in labs, then a CTF' } },
     ],
-    stack: ['AI Pentesting', 'Claude', 'Agents & sub-agents', 'Harness', 'MCP', 'Kali Linux', 'SQLMap', 'Prompt hardening', 'CTF'],
+    stack: ['AI Pentesting', 'Claude', 'Ollama', 'Qwen 3.8 27B', 'Agents & sub-agents', 'Harness', 'MCP', 'Kali Linux', 'SQLMap', 'Prompt hardening', 'CTF'],
   },
   {
     id: 'thm-sec1',

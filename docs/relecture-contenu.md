@@ -19,7 +19,7 @@ Entrer dans le portfolio · Passer l’introduction
 
 Formation : Master of Science · Architecte des SI (Epitech Marseille · 1re année)
 
-Certifié : IBM AI Developer (Professional Certificate) · Jr Penetration Tester (TryHackMe · 89 labs)
+Certificats : IBM AI Developer (Professional Certificate) · Jr Penetration Tester (TryHackMe · 89 labs)
 
 Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · en test) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
@@ -200,7 +200,7 @@ Bot de trading crypto en phase de test, sans fonds réels : 40 stratégies sur B
 
 Chiffres : 40 stratégies · 6 familles de stratégies · 11 indicateurs de marché suivis · 0 € de fonds réels engagés
 
-Stack : Python, NumPy, Numba, pandas, VectorBT, web3.py, GitHub Actions, Google Cloud Scheduler, React, TypeScript
+Stack : Python, NumPy, Numba, Pandas, VectorBT, web3.py, GitHub Actions, Google Cloud Scheduler, React, TypeScript
 
 ### Argos — En développement · POC (2026-07 → en cours)
 
@@ -232,7 +232,7 @@ Une plateforme de cybersécurité pilotée par IA, pensée pour les PME sans éq
 
 Chiffres : 6 domaines de sécurité prévus · OSINT premier module en développement
 
-Stack : Python, httpx, SQLite, pytest
+Stack : Python, SQLite, pytest
 
 ### Write-ups de pentest — En continu (2026-04 → 2026-10)
 
@@ -283,7 +283,7 @@ Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se pr
 
 Chiffres : 9 classes de malware · 3 arbres d’évolution · 3 difficultés · ≈ 141 000 mots de game design
 
-Stack : Unity 6.3, C#, HTML, CSS, JavaScript, Markdown
+Stack : Unity, C#, JavaScript
 
 ## Autres réalisations
 
@@ -294,6 +294,8 @@ Stack : Unity 6.3, C#, HTML, CSS, JavaScript, Markdown
 Curieux de connaître ma vraie moyenne d’heures travaillées, j’ai créé Chronox : un petit widget Windows qui compte le temps où ma session est ouverte et le PC éveillé, puis en tire des bilans par jour, semaine, mois et année. Tout reste sur ma machine, sans cloud.
 
 **Comment ça marche.** Chronox suit le verrouillage de session et la mise en veille de Windows, et sauvegarde au moins une fois par minute pour résister à un arrêt brutal. Écrit en C++, il reste discret : environ 8 Mo de mémoire et 0,15 % d’un cœur lors de mes mesures.
+
+**Vision.** Chronox pourrait ensuite reconnaître l’application au premier plan, rattacher le temps à des projets et préparer un compte rendu quotidien modifiable, relié à GitHub, Jira ou l’agenda.
 
 ### Maria Agent — En développement · POC
 
@@ -777,6 +779,7 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
   - Donner à l’agent des outils de pentest : sqlmap, serveur MCP de Kali…
   - Répartir le travail entre sous-agents pour préserver le contexte
   - Choisir le modèle selon la tâche et son coût
+  - Utiliser en local, avec Ollama, un modèle non censuré pour le pentest : Qwen 3.8 27B
   - Enchaîner reconnaissance, exploitation, chaînage des failles et revue
   - Vérifier l’efficacité des prompts, contourner des garde-fous et durcir les siens
   - Mettre en pratique dans des labs, puis un CTF

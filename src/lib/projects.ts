@@ -8,11 +8,11 @@ type ProjectFilter = {
   statuses?: ProjectStatus[]
 }
 
-type ProjectGroup = 'perso-pro' | 'formation'
+type ProjectGroup = 'perso-pro' | 'epitech'
 
-/** Personal and work projects first; course projects (Epitech, IBM, hackathon) second. */
+/** Personal, work and IBM projects (done outside Epitech, decision 2026-10-31) first; Epitech projects and hackathons second. */
 export const groupOf = (p: Project): ProjectGroup =>
-  p.showcase === 'perso-pro' || p.context === 'personal' || p.context === 'work' ? 'perso-pro' : 'formation'
+  p.showcase === 'perso-pro' || p.context === 'personal' || p.context === 'work' || p.context === 'ibm' ? 'perso-pro' : 'epitech'
 
 /** Complexity note 1–5 (src/content/complexity.ts); 1 if a project has none yet. */
 export const complexityOf = (p: Project) => complexity[p.slug]?.note ?? 1

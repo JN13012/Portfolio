@@ -4,6 +4,7 @@
 // way down to their section (the visitor never jumps without asking).
 import { useEffect, useId, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react'
 import { ArrowRight, Terminal, X } from 'lucide-react'
+import { credentials } from '../../content/certifications'
 import { hero } from '../../content/hero'
 import { projects } from '../../content/projects'
 import { timeline } from '../../content/timeline'
@@ -90,7 +91,7 @@ function Item({ thumb, title, sub, extra, onClick, panel, expanded }: ItemProps)
  * A row: its label on the left, level with the first items' titles, then its items on the two columns
  * shared by every row (2026-10-27, saves height). Medium column: the label above; narrow: everything stacked.
  */
-function Row({ label, rows = 1, children }: { label: string; rows?: number; children: ReactNode }) {
+function Row({ label, total, rows = 1, children }: { label: string; total?: number; rows?: number; children: ReactNode }) {
   return (
     <div className="grid grid-cols-1 items-center gap-x-[1.25em] gap-y-[0.45em] py-[0.55em] @[24rem]:grid-cols-2 @[32rem]:grid-cols-[5.25em_minmax(0,1fr)_minmax(0,1fr)]">
       <dt
@@ -99,6 +100,7 @@ function Row({ label, rows = 1, children }: { label: string; rows?: number; chil
           rows === 2 && '@[32rem]:row-span-2',
         )}
       >
+        {total !== undefined && <span className="mr-[0.2em] align-[-0.1em] text-[1.45em] font-semibold tracking-normal text-cyber">{total} </span>}
         {label}
       </dt>
       {children}
@@ -143,14 +145,14 @@ export function HeroProofs() {
             <Item thumb={<Thumb>{img(Epitech)}</Thumb>} title={hero.formation.title.fr} sub={hero.formation.detail.fr} onClick={open('master')} panel expanded={panel === 'master'} />
           </dd>
         </Row>
-        <Row label={hero.proofTitles.certified.fr}>
+        <Row label={hero.proofTitles.certified.fr} total={credentials.length}>
           {hero.certificates.map((c) => (
             <dd key={c.id} className="min-w-0">
               <Item thumb={<Thumb>{img(LOGOS[c.id]!)}</Thumb>} title={c.title} sub={c.detail.fr} onClick={() => emitCore('openCredential', { id: c.credential })} />
             </dd>
           ))}
         </Row>
-        <Row label={hero.proofTitles.projects.fr} rows={2}>
+        <Row label={hero.proofTitles.projects.fr} total={projects.length} rows={2}>
           {hero.projects.map((x) => {
             const image = PROJECT_IMAGES[x.slug]!
             return (

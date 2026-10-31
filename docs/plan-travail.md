@@ -7,8 +7,6 @@ au début de chaque étape. Cocher au fur et à mesure ; ne pas y recopier le d�
 
 - **Une étape à la fois, deux branches seulement** (décision du 31 octobre) : `main` pour la production,
   `developpement` pour tout le travail. Les étapes se font petit à petit.
-- **`/compact` entre chaque étape**, pour limiter la consommation de tokens. Tout ce qu’il faut
-  pour reprendre doit donc être écrit ici avant de compacter.
 - **`main` déploie la production à chaque push.** Une étape n’y arrive qu’après vérification sur
   l’URL de préversion de `developpement`, et seulement à la demande de Jérémie.
 
@@ -18,7 +16,7 @@ Déroulé d’une étape :
 2. Réaliser l’étape, avec des captures pour tout changement visuel.
 3. Lancer `npm run lint`, `npm run typecheck`, `npm test` et `npm run build`.
 4. Cocher ici, noter ce qui reste, commiter.
-5. Jérémie vérifie, décide de la mise en ligne, puis `/compact`.
+5. Jérémie vérifie et décide de la mise en ligne.
 
 ## Décisions du 30 octobre 2026
 

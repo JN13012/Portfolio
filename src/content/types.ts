@@ -81,6 +81,7 @@ export type Project = {
   sections?: DossierSection[]
   /** Shown under the visuals when they are not the real product (e.g. a design mock-up). */
   imageNote?: Localized
+  /** Languages, frameworks, databases and tools used, without small libraries or build tools (decision 2026-10-31). */
   stack: string[]
   links: {
     github?: string

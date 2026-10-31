@@ -196,7 +196,7 @@ Barres de soft skills et de langues en %, bloc « Informations personnelles », 
 
 ## 6. Étapes de réalisation V1
 
-Une étape = une session Claude Code = une branche git.
+Une étape = une branche git.
 
 | # | Étape | Livrable | Validation par Jérémie |
 |---|---|---|---|

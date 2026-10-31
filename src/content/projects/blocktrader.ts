@@ -114,7 +114,7 @@ export const blocktrader: Project = {
       },
     },
   ],
-  stack: ['Python', 'NumPy', 'Numba', 'pandas', 'VectorBT', 'web3.py', 'GitHub Actions', 'Google Cloud Scheduler', 'React', 'TypeScript'],
+  stack: ['Python', 'NumPy', 'Numba', 'Pandas', 'VectorBT', 'web3.py', 'GitHub Actions', 'Google Cloud Scheduler', 'React', 'TypeScript'],
   links: { privateRepo: true },
   facts: [
     { value: '40', label: { fr: 'stratégies', en: 'strategies' }, source: 'dashboard Strategies page (2026-10-24)' },

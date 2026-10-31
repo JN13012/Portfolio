@@ -30,7 +30,8 @@ export const hero = {
    */
   proofTitles: {
     formation: { fr: 'Formation', en: 'Education' },
-    certified: { fr: 'Certifié', en: 'Certified' },
+    // « Certificats », not « certifications »: most are course certificates, only two are exams (decision 2026-10-31).
+    certified: { fr: 'Certificats', en: 'Certified' },
     projects: { fr: 'Projets', en: 'Projects' },
     labs: { fr: 'Labs', en: 'Labs' },
   },

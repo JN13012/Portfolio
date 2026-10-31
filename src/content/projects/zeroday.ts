@@ -79,7 +79,7 @@ export const zeroday: Project = {
       },
     },
   ],
-  stack: ['Unity 6.3', 'C#', 'HTML', 'CSS', 'JavaScript', 'Markdown'],
+  stack: ['Unity', 'C#', 'JavaScript'],
   links: { privateRepo: true },
   facts: [
     { value: '9', label: { fr: 'classes de malware', en: 'malware classes' }, source: 'docs/00_VISION_CANONIQUE_ZERO_DAY_V1.md §17.2' },

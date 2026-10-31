@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Builds src/content/writeups.json from the public repo JN13012/Cyber-Write-ups.
 // Only the YAML front matter and the file name are read: the portfolio links to
-// the write-ups on GitHub and never copies their text (see CLAUDE.md).
+// the write-ups on GitHub and never copies their text.
 //
 // Usage: npm run sync:writeups   (needs network; set GITHUB_TOKEN to raise the rate limit)
 

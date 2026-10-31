@@ -41,7 +41,7 @@ export function projectsByOrigin(slugs: string[]) {
   const used = slugs.flatMap((slug) => projects.find((project) => project.slug === slug) ?? [])
   return [
     { title: 'Perso & pro', names: used.filter((project) => groupOf(project) === 'perso-pro').map((project) => project.title) },
-    { title: 'Formation', names: used.filter((project) => groupOf(project) === 'formation').map((project) => project.title) },
+    { title: 'Epitech', names: used.filter((project) => groupOf(project) === 'epitech').map((project) => project.title) },
   ].filter((group) => group.names.length > 0)
 }
 

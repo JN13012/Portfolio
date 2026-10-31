@@ -101,7 +101,7 @@ export const argos: Project = {
     fr: 'Maquette de l’interface cible, pas encore développée.',
     en: 'Mock-up of the target interface, not built yet.',
   },
-  stack: ['Python', 'httpx', 'SQLite', 'pytest'],
+  stack: ['Python', 'SQLite', 'pytest'],
   links: { github: 'https://github.com/JN13012/Argos' },
   facts: [
     { value: '6', label: { fr: 'domaines de sécurité prévus', en: 'planned security domains' }, source: 'Obsidian Work/Argos/Vision Version.md (V1–V6)' },
