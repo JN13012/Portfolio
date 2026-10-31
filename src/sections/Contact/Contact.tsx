@@ -1,5 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
-import { AlertTriangle, Briefcase, Check, CheckCircle2, Copy, Download, Github, Linkedin, Mail, MapPin, Send } from 'lucide-react'
+import { AlertTriangle, Briefcase, Check, CheckCircle2, Copy, FileClock, Github, Linkedin, Mail, MapPin, Send } from 'lucide-react'
 import { siCoursera, siTryhackme, type SimpleIcon } from 'simple-icons'
 import SectionHeader from '../../components/ui/SectionHeader'
 import { contact, contactLimits } from '../../content/contact'
@@ -133,9 +133,9 @@ export function Contact() {
 
               {/* Email (with copy) and CV side by side. */}
               <div className="flex flex-wrap gap-3">
-                <div className={cx(button, 'grow')}>
+                <div className={cx(button, 'max-w-full grow')}>
                   <a href={`mailto:${profile.email}`} className="flex min-w-0 flex-1 items-center gap-2.5 px-3.5 py-3 transition-colors hover:text-cyber">
-                    <Mail size={18} aria-hidden="true" />
+                    <Mail size={18} aria-hidden="true" className="hidden shrink-0 min-[360px]:block" />
                     <span className="truncate">{profile.email}</span>
                   </a>
                   <button
@@ -148,9 +148,9 @@ export function Contact() {
                     {copied ? <Check size={17} aria-hidden="true" className="text-cyber" /> : <Copy size={17} aria-hidden="true" />}
                   </button>
                 </div>
-                <a href={profile.cv.url} download={profile.cv.fileName} className={cx(button, 'grow justify-center gap-2.5 px-3.5 py-3 whitespace-nowrap hover:text-cyber')}>
-                  <Download size={18} aria-hidden="true" /> {contact.cv.fr}
-                </a>
+                <span className="inline-flex grow cursor-not-allowed items-center justify-center gap-2.5 rounded-md border border-white/10 px-3.5 py-3 text-sm text-zinc-400">
+                  <FileClock size={18} aria-hidden="true" className="shrink-0" /> {contact.cvPending.fr}
+                </span>
               </div>
 
               <ul className="flex flex-wrap gap-2">

@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-10-30 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-10-31 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Introduction
@@ -48,7 +48,7 @@ Je suis arrivé à l’IA et à la cybersécurité par un chemin peu commun. Cha
 
 **Qui est Jérémie ?** (brouillon, à valider)
 
-Développeur IA et pentester junior, en MSc cybersécurité à Epitech Marseille. Son fil rouge : construire des systèmes d’IA et savoir comment on les attaque. Avant l’informatique : l’infanterie (2e RIMa), la mécanique en endurance et l’infrastructure blockchain. Il parle cinq langues et a vécu dans six pays.
+Développeur IA et pentester junior, en Master of Science Architecte des systèmes d’information à Epitech Marseille. Son fil rouge : construire des systèmes d’IA et savoir comment on les attaque. Avant l’informatique : l’infanterie (2e RIMa), la mécanique en endurance et l’infrastructure blockchain. Il parle cinq langues et a vécu dans six pays.
 
 *Sources* : profile, parcours
 
@@ -120,13 +120,13 @@ Oui, immédiatement. Il cherche une alternance (4 jours en entreprise, 1 jour à
 
 **Comment le contacter ?** (brouillon, à valider)
 
-Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV se télécharge en haut de la page.
+Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV est en cours de mise à jour.
 
 *Sources* : contact
 
 ## En 30 secondes
 
-5 langues · 6 pays · MSc Epitech cybersécurité · Jr Penetration Tester · IBM AI Developer · Ex-militaire · Disponible immédiatement
+5 langues · 6 pays · Master of Science · Epitech · Jr Penetration Tester · IBM AI Developer · Ex-militaire · Disponible immédiatement
 
 ## Trois métiers
 
@@ -836,7 +836,7 @@ En cours : AI Security (5 % au 2026-10-26) — Parcours de sécurité de l’IA 
 - Recruteur, RH ou porteur de projet : écrivez-moi ici, ou directement par email.
 - Marseille · mobile dans toute la France
 - Disponible
-- Télécharger le CV
+- CV en cours de mise à jour
 - Copier l’adresse
 - Copiée
 - Nom
