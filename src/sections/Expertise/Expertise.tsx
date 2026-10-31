@@ -143,6 +143,7 @@ function ToolProjects({ tool, slugs, tone }: { tool: string; slugs: string[]; to
   const panel = useRef<HTMLDivElement>(null)
   const arrow = useRef<HTMLSpanElement>(null)
   const delay = useRef<number | undefined>(undefined)
+  const pressed = useRef(false)
   useEffect(() => () => window.clearTimeout(delay.current), [])
   useLayoutEffect(() => {
     const anchor = root.current?.getBoundingClientRect()
@@ -179,8 +180,9 @@ function ToolProjects({ tool, slugs, tone }: { tool: string; slugs: string[]; to
         aria-expanded={open}
         aria-label={`${tool} : ${projectCount(slugs.length)}`}
         onClick={() => { if (!window.matchMedia('(hover: hover)').matches) setPinned((on) => !on) }}
-        onFocus={(e) => setFocused(e.currentTarget.matches(':focus-visible'))}
-        onBlur={() => setFocused(false)}
+        onPointerDown={() => { pressed.current = true }}
+        onFocus={(e) => setFocused(!pressed.current && e.currentTarget.matches(':focus-visible'))}
+        onBlur={() => { pressed.current = false; setFocused(false) }}
         onKeyDown={(e) => { if (e.key === 'Escape') { setFocused(false); setPinned(false) } }}
         className="cursor-pointer text-xs text-zinc-300 underline decoration-dotted underline-offset-2 hover:text-white"
       >
