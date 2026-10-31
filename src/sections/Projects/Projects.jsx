@@ -359,6 +359,7 @@ const Projects = () => {
               <span className="flex flex-wrap items-center gap-2 md:justify-self-start">
                 <span className={`border px-2.5 py-1 ${statusStyles[selected.status]}`}>
                   {statusLabels[selected.status].fr}
+                  {selected.stage && ` · ${selected.stage}`}
                   {selected.period.end && ` · ${selected.status === "ongoing" ? "dernier ajout " : ""}${cardDate(selected.period)}`}
                 </span>
                 {selected.inProduction && <span className="border border-cyber/50 bg-cyber/10 px-2.5 py-1 text-cyber">{selected.inProduction.fr}</span>}

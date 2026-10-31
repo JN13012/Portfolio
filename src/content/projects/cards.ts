@@ -8,35 +8,23 @@ export const cards: Project[] = [
     slug: 'chronox',
     tier: 'card',
     status: 'development',
+    stage: 'MVP',
     tracks: ['dev'],
     title: 'Chronox',
     period: { start: '2026-10' },
     team: { size: 1 },
     context: 'personal',
     tagline: {
-      fr: 'Widget Windows natif en C++ qui mesure le temps de session, sans cloud.',
+      fr: 'Un widget Windows natif pour connaître mon vrai temps de travail, sans cloud.',
     },
     summary: {
-      fr: 'Une application Windows native qui mesure le temps où la session est déverrouillée et le PC éveillé. Tout reste en local, dans une base SQLite. Le premier widget fonctionne ; le tableau de bord n’existe pas encore.',
+      fr: 'Curieux de connaître ma vraie moyenne d’heures travaillées, j’ai créé Chronox : un petit widget Windows qui compte le temps où ma session est ouverte et le PC éveillé, puis en tire des bilans par jour, semaine, mois et année. Tout reste sur ma machine, sans cloud.',
     },
     sections: [
       {
         kind: 'approach',
-        title: { fr: 'Ce qui fonctionne', en: 'What works' },
-        points: [
-          { label: { fr: 'Mesure', en: 'Tracking' }, text: { fr: 'suit le verrouillage de session et la mise en veille de Windows.' } },
-          { label: { fr: 'Fiabilité', en: 'Reliability' }, text: { fr: 'sauvegarde au moins une fois par minute, reprise propre après un arrêt brutal, changements d’heure pris en compte.' } },
-          { label: { fr: 'Rapports', en: 'Reports' }, text: { fr: 'le moteur calcule le jour, la semaine, le mois et l’année ; le widget affiche pour l’instant le jour.' } },
-          { label: { fr: 'Interface', en: 'Interface' }, text: { fr: 'widget dessiné avec Direct2D, qui se replie en languette.' } },
-        ],
-      },
-      {
-        kind: 'result',
-        title: { fr: 'Vérifications', en: 'Checks' },
-        points: [
-          { label: { fr: 'Tests', en: 'Tests' }, text: { fr: 'suites automatisées lancées par GitHub Actions sous Windows.' } },
-          { label: { fr: 'Performance', en: 'Performance' }, text: { fr: 'environ 8 Mo de mémoire privée et 0,15 % d’un cœur, sur de courts échantillons de 30 secondes.' } },
-        ],
+        title: { fr: 'Comment ça marche', en: 'How it works' },
+        body: { fr: 'Chronox suit le verrouillage de session et la mise en veille de Windows, et sauvegarde au moins une fois par minute pour résister à un arrêt brutal. Écrit en C++, il reste discret : environ 8 Mo de mémoire et 0,15 % d’un cœur lors de mes mesures.' },
       },
     ],
     imageNote: { fr: 'Référence artistique de l’interface visée, pas une capture du widget actuel.' },
@@ -44,12 +32,13 @@ export const cards: Project[] = [
     links: { github: 'https://github.com/JN13012/chronox' },
     facts: [],
     scale: { months: 1 },
-    doNotClaim: ['A finished product', 'The reference image as a screenshot', 'A long-term performance profile: only short samples were measured'],
+    doNotClaim: ['A finished status: the text reads as the finished product (Jérémie, 2026-10-31), the badge stays « En développement » until it is', 'The reference image as a screenshot', 'A long-term performance profile: only short samples were measured'],
   },
   {
     slug: 'maria-agent',
     tier: 'card',
     status: 'development',
+    stage: 'POC',
     tracks: ['ia', 'dev'],
     title: 'Maria Agent',
     period: { start: '2026-10' },
@@ -79,7 +68,7 @@ export const cards: Project[] = [
         ],
       },
     ],
-    stack: ['Rust', 'Axum', 'Tokio', 'Serde', 'React', 'TypeScript', 'Vite', 'Tailwind CSS'],
+    stack: ['Rust', 'Axum', 'Tokio', 'Serde', 'React', 'TypeScript', 'Vite', 'Tailwind CSS', 'GitHub Actions'],
     links: { noCodeLink: true },
     facts: [
       { value: '11', label: { fr: 'tests d’intégration', en: 'integration tests' }, source: 'apps/api/tests, 2026-10-31' },
@@ -553,6 +542,7 @@ export const cards: Project[] = [
     slug: 'argos-security-arena',
     tier: 'card',
     status: 'development',
+    stage: 'POC',
     tracks: ['cyber', 'ia'],
     // Repo JN13012/Lab_CTF (README: « Atlas Academy »), last commit 2026-10-02; title kept by Jérémie (2026-10-26).
     // Separate from Argos (Argos Product Brief v2.4 §4: « cyber range d’entraînement et de benchmark »): never say it is

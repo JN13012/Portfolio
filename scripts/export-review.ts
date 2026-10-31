@@ -84,14 +84,14 @@ const projectDetail = (x: Project) => {
 
 h(2, 'Dossiers')
 for (const d of dossiers) {
-  h(3, `${d.title} — ${statusLabels[d.status].fr} (${period(d.period)})`)
+  h(3, `${d.title} — ${statusLabels[d.status].fr}${d.stage ? ` · ${d.stage}` : ''} (${period(d.period)})`)
   projectDetail(d)
   p(`Stack : ${d.stack.join(', ')}`)
 }
 
 h(2, 'Autres réalisations')
 for (const c of cards) {
-  h(3, `${c.title} — ${statusLabels[c.status].fr}${c.team.size > 1 || c.team.role ? ` · ${teamLabel(c.team, 'fr')}` : ''}`)
+  h(3, `${c.title} — ${statusLabels[c.status].fr}${c.stage ? ` · ${c.stage}` : ''}${c.team.size > 1 || c.team.role ? ` · ${teamLabel(c.team, 'fr')}` : ''}`)
   projectDetail(c)
 }
 

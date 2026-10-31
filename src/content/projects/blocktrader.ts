@@ -5,6 +5,7 @@ export const blocktrader: Project = {
   slug: 'blocktrader',
   tier: 'dossier',
   status: 'development',
+  stage: 'MVP',
   // AI is the target (validated by Jérémie, 2026-10-24): the text always says it is not wired in yet.
   tracks: ['ia', 'data', 'dev'],
   title: 'BlockTrader',

@@ -156,5 +156,5 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 
 ## État des branches au 31 octobre 2026
 
-- `main` : la production, sur `6f398d0`. Les étapes 0 et 1 n’y sont pas encore.
+- `main` : la production, avec les étapes 0 à 4 et le Lab IA ouvert sur son niveau 1, publiés à la demande de Jérémie.
 - `developpement` : tout le travail. Préversion : https://developpement-www.jeremie-nagi.workers.dev

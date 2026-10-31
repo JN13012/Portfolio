@@ -162,7 +162,7 @@ Preuves : Déploiement Kubernetes multi-nœuds (Bernstein) · Jenkins configuré
 
 ## Dossiers
 
-### BlockTrader — En développement (2026-07 → en cours)
+### BlockTrader — En développement · MVP (2026-07 → en cours)
 
 *Carte* : Bot de trading crypto en test : 40 stratégies validées contre le surapprentissage.
 
@@ -202,7 +202,7 @@ Chiffres : 40 stratégies · 6 familles de stratégies · 11 indicateurs de marc
 
 Stack : Python, NumPy, Numba, pandas, VectorBT, web3.py, GitHub Actions, Google Cloud Scheduler, React, TypeScript
 
-### Argos — En développement (2026-07 → en cours)
+### Argos — En développement · POC (2026-07 → en cours)
 
 *Carte* : Plateforme de cybersécurité pilotée par IA pour les PME, du web à l’industrie.
 
@@ -287,23 +287,15 @@ Stack : Unity 6.3, C#, HTML, CSS, JavaScript, Markdown
 
 ## Autres réalisations
 
-### Chronox — En développement
+### Chronox — En développement · MVP
 
-*Carte* : Widget Windows natif en C++ qui mesure le temps de session, sans cloud.
+*Carte* : Un widget Windows natif pour connaître mon vrai temps de travail, sans cloud.
 
-Une application Windows native qui mesure le temps où la session est déverrouillée et le PC éveillé. Tout reste en local, dans une base SQLite. Le premier widget fonctionne ; le tableau de bord n’existe pas encore.
+Curieux de connaître ma vraie moyenne d’heures travaillées, j’ai créé Chronox : un petit widget Windows qui compte le temps où ma session est ouverte et le PC éveillé, puis en tire des bilans par jour, semaine, mois et année. Tout reste sur ma machine, sans cloud.
 
-**Ce qui fonctionne.**
-- Mesure : suit le verrouillage de session et la mise en veille de Windows.
-- Fiabilité : sauvegarde au moins une fois par minute, reprise propre après un arrêt brutal, changements d’heure pris en compte.
-- Rapports : le moteur calcule le jour, la semaine, le mois et l’année ; le widget affiche pour l’instant le jour.
-- Interface : widget dessiné avec Direct2D, qui se replie en languette.
+**Comment ça marche.** Chronox suit le verrouillage de session et la mise en veille de Windows, et sauvegarde au moins une fois par minute pour résister à un arrêt brutal. Écrit en C++, il reste discret : environ 8 Mo de mémoire et 0,15 % d’un cœur lors de mes mesures.
 
-**Vérifications.**
-- Tests : suites automatisées lancées par GitHub Actions sous Windows.
-- Performance : environ 8 Mo de mémoire privée et 0,15 % d’un cœur, sur de courts échantillons de 30 secondes.
-
-### Maria Agent — En développement
+### Maria Agent — En développement · POC
 
 *Carte* : Plateforme d’assistants vocaux en cours : un studio simulé, sans voix réelle.
 
@@ -493,7 +485,7 @@ Un CTF jouable dans le Lab de ce site, dans un terminal simulé. On attaque d’
 
 Chiffres : 9 niveaux · 2 rôles : attaquant, puis défenseur · 21 commandes et outils simulés
 
-### Argos Security Arena — En développement
+### Argos Security Arena — En développement · POC
 
 *Carte* : Plateforme de benchmark pour agents IA : les tester sur des scénarios vulnérables.
 
@@ -750,8 +742,8 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
 ### dev
 
 - **Langages** : TypeScript, JavaScript, Python, Java, C#, C++, Rust, Apex, SQL
-- **Web et back-end** : React, Next.js, NestJS, Express, Prisma, Drizzle, Socket.IO, Electron, Lightning Web Components, Axum, Win32, Direct2D, CMake
-- **Données** : PostgreSQL, MySQL, MongoDB, SQLite, Redis
+- **Web et back-end** : React, Next.js, NestJS, Express, Prisma, Drizzle, Socket.IO, Electron, Lightning Web Components
+- **Données** : PostgreSQL, MySQL, MongoDB, Redis
 - **Tests** : Vitest, Jest, pytest
 
 ### devops

@@ -13,6 +13,14 @@ export type Track = 'ia' | 'data' | 'cyber' | 'dev' | 'devops'
 /** `ongoing`: a series that keeps growing (write-ups), shown « En continu ». */
 export type ProjectStatus = 'development' | 'delivered' | 'ongoing'
 
+/**
+ * Standard scale of a project in development, shown in its modal (decision 2026-10-31):
+ * POC = the key idea runs, not usable yet · MVP = the smallest version usable for real ·
+ * V0 = every planned feature is there, still being tested · V1 = first complete, stable version.
+ * Nothing runs yet (design only): no stage.
+ */
+export type ProjectStage = 'POC' | 'MVP' | 'V0' | 'V1'
+
 /** ISO month: '2026-04'. */
 export type YearMonth = `${number}-${number}`
 
@@ -49,6 +57,8 @@ export type Project = {
   slug: string
   tier: ProjectTier
   status: ProjectStatus
+  /** Only with status `development`. */
+  stage?: ProjectStage
   /** Shown with the personal & professional projects although made in a course (e.g. Argos, pursued beyond Epitech). */
   showcase?: 'perso-pro'
   /** Result of a competition, shown in the hackathon badge, e.g. « 2e place ». */

@@ -58,11 +58,11 @@ export const skills: Record<Track, SkillGroup[]> = {
     },
     {
       title: { fr: 'Web et back-end', en: 'Web and back-end' },
-      items: ['React', 'Next.js', 'NestJS', 'Express', 'Prisma', 'Drizzle', 'Socket.IO', 'Electron', 'Lightning Web Components', 'Axum', 'Win32', 'Direct2D', 'CMake'],
+      items: ['React', 'Next.js', 'NestJS', 'Express', 'Prisma', 'Drizzle', 'Socket.IO', 'Electron', 'Lightning Web Components'],
     },
     {
       title: { fr: 'Données', en: 'Data' },
-      items: ['PostgreSQL', 'MySQL', 'MongoDB', 'SQLite', 'Redis'],
+      items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis'],
     },
     {
       title: { fr: 'Tests', en: 'Testing' },
