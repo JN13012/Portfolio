@@ -1,5 +1,5 @@
 import { useMemo, useState, useSyncExternalStore, type CSSProperties } from 'react'
-import { Download, Mail, MapPin } from 'lucide-react'
+import { FileClock, Mail, MapPin } from 'lucide-react'
 import { hero } from '../../content/hero'
 import { profile } from '../../content/profile'
 import { currentRun, useAssistant } from '../../lib/assistantStore'
@@ -72,13 +72,14 @@ export function Hero() {
           <div className="flex flex-col gap-[min(4.25em,5vh)] lg:text-[clamp(12px,min(2.6cqi,1.7vh),20px)]">
             <div className="flex flex-col gap-[1.1em]">
               <div className="flex flex-col gap-[0.6em]">
-                <h1 id="hero-title" className="outline-none text-6xl leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase lg:text-[clamp(2.75rem,min(14cqi,9vh),8rem)]">
+                <h1 id="hero-title" className="outline-none text-[min(14cqi,3.75rem)] leading-none font-bold tracking-tight whitespace-nowrap text-white uppercase lg:text-[clamp(2.75rem,min(14cqi,9vh),8rem)]">
                   {profile.lastName} <span className="text-cyber">{profile.firstName}</span>
                 </h1>
-                <p className="text-2xl font-bold tracking-tight uppercase md:text-3xl lg:text-[min(1.875em,4.4cqi)]">
+                {/* Narrow phones: one job per line, without the separator. */}
+                <p className="flex flex-col text-2xl font-bold tracking-tight uppercase min-[480px]:block md:text-3xl lg:text-[min(1.875em,4.4cqi)]">
                   {hero.title.map((part, i) => (
                     <span key={part.text.fr} className="whitespace-nowrap">
-                      {i > 0 && <span className="text-zinc-600"> · </span>}
+                      {i > 0 && <span className="hidden text-zinc-600 min-[480px]:inline"> · </span>}
                       <span className={TONE[part.tone]}>{part.text.fr}</span>
                     </span>
                   ))}
@@ -89,7 +90,7 @@ export function Hero() {
 
             <HeroProofs />
 
-            {/* Availability on two lines (the location alone on the second), then the two buttons stacked. */}
+            {/* Availability on two lines (the location alone on the second), then the contact button and the CV's status. */}
             <div className="flex flex-col gap-[1.1em]">
               <ul className="flex flex-wrap items-center gap-x-[1.25em] gap-y-[0.45em] text-[0.9375em] text-zinc-300">
                 <li className="inline-flex items-center gap-[0.5em] text-zinc-100">
@@ -106,18 +107,14 @@ export function Hero() {
 
               <div className="flex flex-col items-start gap-[0.9em]">
                 <a
-                  href={profile.cv.url}
-                  download={profile.cv.fileName}
-                  className="inline-flex items-center gap-[0.75em] border border-cyber/60 bg-cyber/10 px-[1.6em] py-[0.85em] tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
-                >
-                  <Download aria-hidden="true" className="size-[1.125em]" /> {hero.ctaCv.fr}
-                </a>
-                <a
                   href="#contact"
-                  className="inline-flex items-center gap-[0.75em] border border-white/20 px-[1.6em] py-[0.85em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
+                  className="inline-flex items-center gap-[0.75em] border border-cyber/60 bg-cyber/10 px-[1.6em] py-[0.85em] tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
                 >
                   <Mail aria-hidden="true" className="size-[1.125em]" /> {hero.ctaContact.fr}
                 </a>
+                <span className="inline-flex cursor-not-allowed items-center gap-[0.6em] py-[0.2em] text-[0.875em] text-zinc-400">
+                  <FileClock aria-hidden="true" className="size-[1.125em]" /> {hero.cvPending.fr}
+                </span>
               </div>
             </div>
           </div>
@@ -129,6 +126,8 @@ export function Hero() {
           <div className="absolute" style={box}>
             <NeuralHero nodes={assistantNetworkNodes} settings={HERO_NETWORK} run={run} className="aspect-auto absolute inset-0" />
           </div>
+          {/* The vector and filters drawn by the network must not read as a model running. */}
+          <p className="absolute top-0 right-0 text-xs text-zinc-400">{hero.networkNote.fr}</p>
           {PLACER && !chat.open && <PlacementTool value={placement} set={set} onChange={(p) => tune({ ...tuned, [set]: p })} onReset={() => tune({ ...tuned, [set]: undefined })} />}
         </div>
       </div>

@@ -89,19 +89,19 @@ function useIsWide() {
   return useSyncExternalStore(subscribeWide, () => window.matchMedia(WIDE).matches, () => false)
 }
 
-/** Effects are on unless this browser turned them off. */
+/** Effects are off until explicitly enabled in this browser. */
 function readEffectsOn() {
   try {
-    return localStorage.getItem(EFFECTS_KEY) !== 'off'
+    return localStorage.getItem(EFFECTS_KEY) === 'on'
   } catch {
-    return true
+    return false
   }
 }
 
 /**
  * Parcours. Wide screens: a details panel above a two-lane year axis (experience / education);
  * a bar selects what the panel shows. Small screens: the same entries as a vertical list.
- * `effects`: each entry plays a one-shot neon effect in the panel when selected; a button turns them off
+ * `effects`: visitors can opt into one-shot neon effects when selecting an entry
  * (remembered in this browser). Hidden under `prefers-reduced-motion`, where the effects never play.
  */
 export function Parcours({ effects = false }: { effects?: boolean }) {

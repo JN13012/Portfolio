@@ -29,7 +29,7 @@ const NavBar = () => {
     <header className="fixed top-0 z-[1000] flex w-full flex-col">
       <nav aria-label="Navigation principale" className="border-b border-cyber/35 bg-black/85 py-4 backdrop-blur-md">
         <div className="mx-auto flex w-[90%] max-w-[2400px] items-center justify-between gap-6">
-          <a href="#acceuil" className="text-base leading-tight font-bold text-white sm:text-lg">
+          <a href="#acceuil" className="min-w-0 text-[min(4.5vw,1rem)] leading-tight font-bold text-white sm:text-lg">
             NAGI_JÉRÉMIE
             <span className="text-zinc-500">.</span>
             <span className="text-sky-400">IA</span>

@@ -11,7 +11,7 @@ export const contact = {
   // Longer than profile.location, which stays short for the hero.
   location: { fr: 'Marseille · mobile dans toute la France', en: 'Marseille · open to relocation anywhere in France' },
   available: { fr: 'Disponible', en: 'Available' },
-  cv: { fr: 'Télécharger le CV', en: 'Download the CV' },
+  cvPending: { fr: 'CV en cours de mise à jour' },
   copy: { fr: 'Copier l’adresse', en: 'Copy the address' },
   copied: { fr: 'Copiée', en: 'Copied' },
   name: { fr: 'Nom', en: 'Name' },

@@ -77,19 +77,13 @@ export const hero = {
   },
   close: { fr: 'Fermer', en: 'Close' },
   soon: { fr: 'bientôt', en: 'soon' },
-  /** Facts strip at the bottom of the hero. */
-  strip: [
-    { icon: 'globe', text: { fr: '5 langues · 6 pays', en: '5 languages · 6 countries' } },
-    { icon: 'badge', text: { fr: 'Jr Penetration Tester', en: 'Jr Penetration Tester' } },
-    { icon: 'brain', text: { fr: 'IBM AI Developer', en: 'IBM AI Developer' } },
-    { icon: 'shield', text: { fr: 'MSc Epitech cybersécurité', en: 'MSc Epitech cybersecurity' } },
-    { icon: 'target', text: { fr: 'Ex-militaire (2e RIMa)', en: 'Former soldier (2e RIMa)' } },
-  ],
   /** Short availability shown in the hero, before the kind of contract. */
   available: { fr: 'Disponible', en: 'Available' },
   voice: { fr: 'Écouter ma présentation', en: 'Listen to my introduction' },
   voiceSoon: { fr: 'bientôt', en: 'soon' },
-  ctaCv: { fr: 'Télécharger le CV', en: 'Download CV' },
+  // The old PDF is outdated and no longer served (decision 2026-10-30); greyed until the new one exists.
+  cvPending: { fr: 'CV en cours de mise à jour' },
+  networkNote: { fr: 'Illustration animée : aucun modèle n’est connecté' },
   ctaContact: { fr: 'Me contacter', en: 'Contact me' },
   scrollHint: { fr: 'Défiler', en: 'Scroll' },
   updated: { fr: 'MAJ', en: 'Updated' },

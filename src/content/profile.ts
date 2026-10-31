@@ -1,4 +1,3 @@
-import cvUrl from '../assets/CV.pdf'
 import type { Localized } from './types'
 
 type Language = {
@@ -41,11 +40,6 @@ export const profile = {
     tryhackme: 'https://tryhackme.com/p/JN13',
     coursera: 'https://www.coursera.org/user/e4a10664a5b2f8c1c89a72345402e8b1',
     trailblazer: 'https://www.salesforce.com/trailblazer/yfqjerhp8yqpaobh7v',
-  },
-  cv: {
-    // Single CV until one per job exists (plan §7).
-    url: cvUrl,
-    fileName: 'CV_Jeremie_Nagi.pdf',
   },
   languages: [
     { code: 'fr', name: { fr: 'Français', en: 'French' }, level: 'native' },
@@ -197,7 +191,6 @@ export const profile = {
   location: Localized
   email: string
   links: Record<string, string>
-  cv: { url: string; fileName: string }
   languages: Language[]
   about: Localized
   strengths: Strength[]
