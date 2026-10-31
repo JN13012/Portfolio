@@ -152,6 +152,8 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 - **Réponses de Sentry** : relire les 11 réponses préparées (`content/assistant.ts`), écrire « points forts »
   et « points faibles ». Elles débloquent l’étape 7.
 
+- **Nouveaux projets** : valider les notes de complexité proposées pour Chronox (3) et Maria Agent (2).
+
 ## État des branches au 31 octobre 2026
 
 - `main` : la production, sur `6f398d0`. Les étapes 0 et 1 n’y sont pas encore.
