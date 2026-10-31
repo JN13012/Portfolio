@@ -64,6 +64,10 @@ describe('content', () => {
     for (const p of projects) expect(p.status, p.slug).toBeTruthy()
   })
 
+  it('gives a stage only to projects in development', () => {
+    for (const p of projects) if (p.stage) expect(p.status, p.slug).toBe('development')
+  })
+
   it('contains no placeholder links', () => {
     const json = displayed(allContent)
     expect(json).not.toMatch(/ton-username|example\.com|href="#"/)
@@ -134,6 +138,11 @@ describe('project filters', () => {
 })
 
 describe('expertise order', () => {
+  it('points every tool at real projects', () => {
+    const slugs = new Set(projects.map((p) => p.slug))
+    for (const tool of expertise.flatMap((d) => d.tools)) for (const slug of tool.projects ?? []) expect(slugs, `${tool.name}: ${slug}`).toContain(slug)
+  })
+
   const ids = (t: Parameters<typeof orderedDomains>[0]) => orderedDomains(t).map((d) => d.id)
   it('keeps the default order without ?metier=', () => {
     expect(ids([])).toEqual(['ia', 'data', 'offensive', 'defensive', 'devops', 'dev'])

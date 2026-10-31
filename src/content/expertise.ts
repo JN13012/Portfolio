@@ -1,3 +1,5 @@
+import { groupOf } from '../lib/projects'
+import { projects } from './projects'
 import type { Localized, Track } from './types'
 
 // Expertise carousel: six domains, each a list of tools that scrolls by.
@@ -6,8 +8,16 @@ import type { Localized, Track } from './types'
 // Each domain's tools are grouped by sub-domain, in the order they are used (no group titles shown).
 // Tools come from skills.ts (backed by projects, write-ups or certificate syllabuses);
 // proofs from tracks.ts and certifications.ts (verified 2026-10-17).
+// A tool used in projects shows how many, and lists them on hover by origin, so repeated use shows (decision 2026-10-31).
+// Cyber tools come from write-ups and certificate rooms, not one project each: their note says what they do.
 
-type ExpertiseTool = { name: string; note: Localized }
+type ExpertiseTool = {
+  name: string
+  /** What the tool does, for a tool not tied to projects. */
+  note?: Localized
+  /** Slugs of the projects using the tool, most telling first. */
+  projects?: string[]
+}
 
 export type ExpertiseDomain = {
   id: 'ia' | 'data' | 'offensive' | 'defensive' | 'devops' | 'dev'
@@ -21,7 +31,19 @@ export type ExpertiseDomain = {
   tools: ExpertiseTool[]
 }
 
-const t = (name: string, fr: string, en: string): ExpertiseTool => ({ name, note: { fr, en } })
+const t = (name: string, fr: string, en?: string): ExpertiseTool => ({ name, note: en ? { fr, en } : { fr } })
+const used = (name: string, slugs: string[]): ExpertiseTool => ({ name, projects: slugs })
+
+export const projectCount = (count: number) => `${count} ${count > 1 ? 'projets' : 'projet'}`
+
+/** A tool's projects by origin, in the same two groups as the Projects section; an empty group is left out. */
+export function projectsByOrigin(slugs: string[]) {
+  const used = slugs.flatMap((slug) => projects.find((project) => project.slug === slug) ?? [])
+  return [
+    { title: 'Perso & pro', names: used.filter((project) => groupOf(project) === 'perso-pro').map((project) => project.title) },
+    { title: 'Formation', names: used.filter((project) => groupOf(project) === 'formation').map((project) => project.title) },
+  ].filter((group) => group.names.length > 0)
+}
 
 export const expertise: ExpertiseDomain[] = [
   {
@@ -38,13 +60,13 @@ export const expertise: ExpertiseDomain[] = [
       { fr: '4 applications LLM publiées', en: '4 published LLM applications' },
     ],
     tools: [
-      t('LangChain', 'Chatbot RAG sur des CV et des PDF', 'RAG chatbot over CVs and PDFs'),
-      t('FAISS', 'Index vectoriel du chatbot RAG', 'Vector index of the RAG chatbot'),
-      t('Hugging Face Transformers', 'Mémoire de conversation, embeddings du RAG', 'Conversation memory, RAG embeddings'),
-      t('PyTorch', 'Exécution d’un modèle conversationnel', 'Running a conversational model'),
-      t('spaCy', 'Analyse de livres : entités, thèmes, style', 'Book analysis: entities, themes, style'),
-      t('Gradio', 'Interfaces de démo des applications IBM', 'Demo interfaces of the IBM applications'),
-      t('Flask', 'Back-end des applications IA', 'Back end of the AI applications'),
+      used('LangChain', ['rag-pdf-chatbot']),
+      used('FAISS', ['rag-pdf-chatbot']),
+      used('Hugging Face Transformers', ['rag-pdf-chatbot', 'meeting-companion', 'llm-context-wrapper']),
+      used('PyTorch', ['llm-context-wrapper']),
+      used('spaCy', ['bookworm']),
+      used('Gradio', ['meeting-companion', 'career-coach']),
+      used('Flask', ['rag-pdf-chatbot', 'assistant-translator', 'ai-voice-assistant']),
     ],
   },
   {
@@ -62,15 +84,15 @@ export const expertise: ExpertiseDomain[] = [
     ],
     tools: [
       // « Python for Data Science, AI & Development » (IBM AI Developer): notebooks, Pandas and NumPy.
-      t('Jupyter', 'Notebooks d’analyse (certification IBM)', 'Analysis notebooks (IBM certification)'),
-      t('Pandas', 'Hackathon Citiz, backtests crypto', 'Citiz hackathon, crypto backtests'),
-      t('NumPy', 'Hackathon Citiz, études BlockTrader', 'Citiz hackathon, BlockTrader studies'),
-      t('GeoPandas', 'Contours, isochrones et couverture (Citiz)', 'Boundaries, isochrones and coverage (Citiz)'),
-      t('Parquet', 'Tables bronze, silver et gold (Citiz)', 'Bronze, silver and gold tables (Citiz)'),
+      t('Jupyter', 'Certification IBM'),
+      used('Pandas', ['blocktrader', 'hackathon-citiz']),
+      used('NumPy', ['blocktrader', 'hackathon-citiz']),
+      used('GeoPandas', ['hackathon-citiz']),
+      used('Parquet', ['hackathon-citiz']),
       // Alice_In_Wonderland (Bookworm) modules/topics.py and similarity.py, all Jérémie's commits.
-      t('scikit-learn', 'TF-IDF et similarité cosinus (Bookworm)', 'TF-IDF and cosine similarity (Bookworm)'),
+      used('scikit-learn', ['bookworm']),
       // blocktrader/engine/fast.py: compiled copy of the reference engine, about 25x faster.
-      t('Numba', 'Moteur de backtest compilé, ≈ 25× plus rapide (BlockTrader)', 'Compiled backtest engine, ≈ 25× faster (BlockTrader)'),
+      used('Numba', ['blocktrader']),
     ],
   },
   {
@@ -153,13 +175,13 @@ export const expertise: ExpertiseDomain[] = [
       { fr: 'Déploiement Kubernetes (projet Bernstein)', en: 'Kubernetes deployment (Bernstein project)' },
     ],
     tools: [
-      t('Docker', 'Conteneurisation des projets (Compose)', 'Containerising the projects (Compose)'),
-      t('Kubernetes', 'Cluster k3d multi-nœuds : ingress, RBAC, volumes', 'Multi-node k3d cluster: ingress, RBAC, volumes'),
-      t('GitHub Actions', 'CI durcie de BlockTrader', 'Hardened CI of BlockTrader'),
-      t('Jenkins', 'Instance configurée par le code (JCasC)', 'Instance configured as code (JCasC)'),
-      t('Vitest', 'Tests de Time Manager et d’Argos Security Arena', 'Tests of Time Manager and Argos Security Arena'),
-      t('Jest', 'Tests de ChatFlow', 'Tests of ChatFlow'),
-      t('pytest', 'Tests du moteur Argos', 'Tests of the Argos engine'),
+      used('Docker', ['time-manager', 'chatflow', 'generateur-otp-rcs', 'hackathon-citiz', 'popeye', 'my-marvin']),
+      used('Kubernetes', ['kubernetes']),
+      used('GitHub Actions', ['blocktrader', 'chronox', 'maria-agent', 'argos-security-arena']),
+      used('Jenkins', ['my-marvin']),
+      used('Vitest', ['time-manager', 'argos-security-arena']),
+      used('Jest', ['chatflow']),
+      used('pytest', ['argos']),
     ],
   },
   {
@@ -176,30 +198,23 @@ export const expertise: ExpertiseDomain[] = [
       { fr: 'Un outil interne en production', en: 'One internal tool in production' },
     ],
     tools: [
-      t('TypeScript', 'BlockTrader, générateur OTP, Time Manager', 'BlockTrader, OTP generator, Time Manager'),
-      t('JavaScript', 'Code Executor (Salesforce), CTF du portfolio', 'Code Executor (Salesforce), portfolio CTF'),
-      t('Python', 'Argos, BlockTrader, applications IA', 'Argos, BlockTrader, AI applications'),
-      t('Java', 'Vaultborn, action-RPG 2D (LibGDX)', 'Vaultborn, 2D action RPG (LibGDX)'),
-      t('C++', 'Chronox, widget Windows natif (C++20)', 'Chronox, native Windows widget (C++20)'),
-      t('Rust', 'API de Maria Agent (Axum, Tokio)', 'Maria Agent API (Axum, Tokio)'),
-      t('C#', 'ZeroDay, jeu de stratégie (Unity)', 'ZeroDay, strategy game (Unity)'),
-      t('Apex', 'Développement Salesforce en stage', 'Salesforce development (internship)'),
-      t('React', 'BlockTrader, ChatFlow, ce portfolio', 'BlockTrader, ChatFlow, this portfolio'),
-      t('Tailwind CSS', 'Ce portfolio, Maria Agent', 'This portfolio, Maria Agent'),
-      t('Vite', 'Ce portfolio, Maria Agent', 'This portfolio, Maria Agent'),
-      t('Next.js', 'Messagerie temps réel ChatFlow', 'ChatFlow real-time messaging'),
-      t('NestJS', 'API du générateur OTP et de Time Manager', 'APIs of the OTP generator and Time Manager'),
-      t('Express', 'API de ChatFlow', 'ChatFlow API'),
-      t('Axum', 'API de Maria Agent', 'Maria Agent API'),
-      t('Win32', 'Fenêtre et session Windows de Chronox', 'Chronox window and Windows session'),
-      t('Direct2D', 'Dessin du widget Chronox', 'Chronox widget drawing'),
-      t('CMake', 'Build de Chronox', 'Chronox build'),
-      t('Prisma', 'Modèle de données de ChatFlow', 'ChatFlow data model'),
-      t('SQL', 'Modélisation et requêtes', 'Modelling and queries'),
-      t('PostgreSQL', 'Bases de données de Time Manager, Bernstein et POPEYE', 'Databases of Time Manager, Bernstein and POPEYE'),
-      t('MongoDB', 'Base du générateur OTP', 'OTP generator database'),
-      t('SQLite', 'Historique local de Chronox', 'Chronox local history'),
-      t('Redis', 'File de votes de Bernstein (Kubernetes)', 'Vote queue of Bernstein (Kubernetes)'),
+      used('TypeScript', ['blocktrader', 'maria-agent', 'generateur-otp-rcs', 'time-manager']),
+      used('JavaScript', ['salesforce-executor', 'ctf-du-site', 'zeroday']),
+      used('Python', ['blocktrader', 'argos', 'cyberpong', 'unit-converter', 'hackathon-citiz', 'bookworm', 'rag-pdf-chatbot', 'meeting-companion', 'career-coach', 'assistant-translator', 'ai-voice-assistant', 'llm-context-wrapper']),
+      used('Java', ['vaultborn']),
+      used('C++', ['chronox']),
+      used('Rust', ['maria-agent']),
+      used('C#', ['zeroday']),
+      used('Apex', ['salesforce-executor']),
+      used('React', ['blocktrader', 'maria-agent', 'argos-security-arena', 'ctf-du-site', 'time-manager', 'chatflow']),
+      used('Next.js', ['chatflow']),
+      used('NestJS', ['generateur-otp-rcs', 'time-manager']),
+      used('Express', ['chatflow', 'platino']),
+      used('Prisma', ['chatflow']),
+      used('SQL', ['chronox', 'argos', 'chatflow', 'time-manager']),
+      used('PostgreSQL', ['time-manager', 'kubernetes', 'platino', 'popeye']),
+      used('MongoDB', ['generateur-otp-rcs']),
+      used('Redis', ['kubernetes', 'popeye']),
     ],
   },
 ]

@@ -1,4 +1,4 @@
-import { ArrowUpRight, Bot, Briefcase, GraduationCap, Dumbbell, Github, Globe2, Landmark, Linkedin, MapPin, Plane, RotateCcw, X, type LucideIcon } from 'lucide-react'
+import { ArrowUpRight, Bot, Briefcase, GraduationCap, Dumbbell, Github, Globe2, Landmark, Linkedin, MapPin, Plane, RotateCcw, type LucideIcon } from 'lucide-react'
 import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { siCoursera, siSalesforce, siTryhackme, type SimpleIcon } from 'simple-icons'
 import SectionHeader from '../../components/ui/SectionHeader'
@@ -210,11 +210,6 @@ function Interests() {
     }
   }, [active])
 
-  const close = () => {
-    opener.current?.focus({ preventScroll: true })
-    setActive(null)
-  }
-
   return (
     <div>
       <h3 className="mb-4 text-base font-normal text-zinc-400 italic">{profile.ui.interests!.fr}</h3>
@@ -222,7 +217,7 @@ function Interests() {
         ref={box}
         className="relative"
         onMouseLeave={() => {
-          if (!box.current?.contains(document.activeElement)) setActive(null)
+          if (!box.current?.querySelector(':focus-visible')) setActive(null)
         }}
         onBlurCapture={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget)) setActive(null)
@@ -283,9 +278,6 @@ function Interests() {
                   {project.title} <ArrowUpRight size={12} aria-hidden="true" />
                 </button>
               )}
-              <button type="button" aria-label={profile.ui.closeInterest.fr} onClick={close} className="-mr-1 grid size-7 shrink-0 cursor-pointer place-items-center rounded-sm text-zinc-400 hover:text-zinc-100 focus-visible:outline-none focus-visible:shadow-focus">
-                <X size={15} aria-hidden="true" />
-              </button>
             </div>
           </div>
         )}

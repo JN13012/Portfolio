@@ -3,22 +3,22 @@ import type { LabCourseLevel } from './lab'
 /** Full curriculum, displayed at the entrance. Only levels with `available` run on the real model. */
 export const aiLabCurriculum: readonly { title: string; levels: readonly LabCourseLevel[] }[] = [
   { title: 'Direct Prompt Injection', levels: [
-    { id: 1, title: 'SYSTEM PROMPT LEAK', summary: 'Faire fuiter le flag des consignes', objective: 'Obtenir le flag fictif que protège une simple consigne.', available: true },
-    { id: 2, title: 'INPUT/OUTPUT FILTERS', summary: 'Contourner les filtres d’entrée et de sortie', objective: 'Comprendre les contrôles d’entrée et de sortie, et où une tentative est arrêtée.', available: false },
-    { id: 3, title: 'AI CLASSIFIER', summary: 'Tromper un évaluateur dédié', objective: 'Contourner un évaluateur dédié qui contrôle la réponse.', available: false },
+    { id: 1, title: 'SYSTEM PROMPT LEAK', summary: 'Fuite des consignes', objective: 'Obtenir le flag fictif que protège une simple consigne.', available: true },
+    { id: 2, title: 'INPUT/OUTPUT FILTERS', summary: 'Contournement de filtres', objective: 'Comprendre les contrôles d’entrée et de sortie, et où une tentative est arrêtée.', available: false },
+    { id: 3, title: 'AI CLASSIFIER', summary: 'Contournement d’un évaluateur', objective: 'Contourner un évaluateur dédié qui contrôle la réponse.', available: false },
   ] },
   { title: 'Indirect Prompt Injection', levels: [
-    { id: 4, title: 'POISONED DOCUMENT', summary: 'Injection par une fiche à résumer', objective: 'Modifier une fiche que Sentry doit résumer à la suite d’une demande légitime.', available: false },
-    { id: 5, title: 'RAG POISONING', summary: 'Source manipulée dans la base documentaire', objective: 'Faire remonter un document manipulé parmi plusieurs sources.', available: false },
+    { id: 4, title: 'POISONED DOCUMENT', summary: 'Injection par document', objective: 'Modifier une fiche que Sentry doit résumer à la suite d’une demande légitime.', available: false },
+    { id: 5, title: 'RAG POISONING', summary: 'Empoisonnement de sources', objective: 'Faire remonter un document manipulé parmi plusieurs sources.', available: false },
   ] },
   { title: 'Agents & API', levels: [
-    { id: 6, title: 'TOOL ABUSE', summary: 'Action interdite via les outils de l’agent', objective: 'Découvrir les outils de l’agent et obtenir une action interdite sur un agenda fictif.', available: false },
-    { id: 7, title: 'API RECON', summary: 'Endpoints et données d’un autre utilisateur', objective: 'Cartographier les endpoints et lire les données d’un autre utilisateur fictif.', available: false },
-    { id: 8, title: 'DATA EXFILTRATION', summary: 'Chaîne complète jusqu’à la fuite', objective: 'Enchaîner document piégé, lecture de données privées et fuite vers un point de collecte.', available: false },
+    { id: 6, title: 'TOOL ABUSE', summary: 'Détournement d’outils', objective: 'Découvrir les outils de l’agent et obtenir une action interdite sur un agenda fictif.', available: false },
+    { id: 7, title: 'API RECON', summary: 'Endpoints et données privées', objective: 'Cartographier les endpoints et lire les données d’un autre utilisateur fictif.', available: false },
+    { id: 8, title: 'DATA EXFILTRATION', summary: 'Chaîne d’attaque complète', objective: 'Enchaîner document piégé, lecture de données privées et fuite vers un point de collecte.', available: false },
   ] },
   { title: 'Hardening', levels: [
-    { id: 9, title: 'ASSISTANT HARDENING', summary: 'Corriger l’assistant sans le brider', objective: 'Corriger les niveaux 3 à 5 sans empêcher les résumés légitimes.', available: false },
-    { id: 10, title: 'AGENT HARDENING', summary: 'Droits, outils, confirmations et CSP', objective: 'Corriger les niveaux 6 à 8 : droits, outils, confirmations, CSP et URL autorisées.', available: false },
+    { id: 9, title: 'ASSISTANT HARDENING', summary: 'Correction de l’assistant', objective: 'Corriger les niveaux 3 à 5 sans empêcher les résumés légitimes.', available: false },
+    { id: 10, title: 'AGENT HARDENING', summary: 'Droits, outils, CSP', objective: 'Corriger les niveaux 6 à 8 : droits, outils, confirmations, CSP et URL autorisées.', available: false },
   ] },
 ]
 

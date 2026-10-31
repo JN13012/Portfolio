@@ -21,7 +21,7 @@
 .ai-lab-entry__phase-title { display: flex; align-items: center; gap: 12px; margin: 0 0 6px; font-size: 11px; line-height: 1.5; letter-spacing: .3em; text-transform: uppercase; color: var(--color-zinc-400); }
 .ai-lab-entry__phase-title > span:first-child, .ai-lab-entry__phase-title > span:last-child { height: 1px; flex: 1; background: rgb(255 255 255 / .1); }
 .ai-lab-entry__levels { list-style: none; padding: 0 0 0 20px; margin: 0; border-left: 1px solid rgb(56 189 248 / .25); }
-.ai-lab-entry__levels li { position: relative; color: var(--color-zinc-100); font-size: 12.5px; line-height: 1.5; }
+.ai-lab-entry__levels li { position: relative; color: var(--color-zinc-100); font-size: 15px; line-height: 1.5; }
 .ai-lab-entry__levels li + li { margin-top: 4px; }
 .ai-lab-entry__levels li::before { content: ''; position: absolute; top: 50%; left: -22.4px; width: 6px; height: 6px; border-radius: 50%; transform: translateY(-50%); background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
 .ai-lab-entry__level-number { color: #38bdf8; margin-right: 12px; font-variant-numeric: tabular-nums; }

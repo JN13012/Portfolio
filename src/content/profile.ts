@@ -166,7 +166,6 @@ export const profile = {
   /** Labels of the Profil section. */
   ui: {
     strengthsTitle: { fr: 'Avant l’informatique, et ce que j’en garde :', en: 'Before IT, and what I kept from it:' },
-    closeInterest: { fr: 'Fermer le détail du centre d’intérêt', en: 'Close interest details' },
     interests: { fr: 'Centres d’intérêt', en: 'Interests' },
     native: { fr: 'Natif', en: 'Native' },
     replayGlobe: { fr: 'Revoir le globe', en: 'Replay the globe' },

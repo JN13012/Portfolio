@@ -16,6 +16,7 @@ const ExpertiseTweaks = lazy(() => import("./ExpertiseTweaks"));
 const ExpertiseGrid = lazy(() => import("./ExpertiseGrid"));
 const ProjectFilters = lazy(() => import("./ProjectFilters"));
 const CtfButtons = lazy(() => import("./CtfButtons"));
+const TooltipStyles = lazy(() => import("./TooltipStyles"));
 const ParcoursMock = lazy(() => import("./ParcoursMock"));
 const ParcoursEffects = lazy(() => import("./ParcoursEffects"));
 const NetworkTuner = lazy(() => import("./NetworkTuner"));
@@ -418,6 +419,12 @@ export default function Mockups() {
     return (
       <Suspense fallback={null}>
         <ParcoursEffects />
+      </Suspense>
+    );
+  if (params.get("view") === "infobulles")
+    return (
+      <Suspense fallback={null}>
+        <TooltipStyles />
       </Suspense>
     );
   if (params.get("view") === "ctfbuttons")

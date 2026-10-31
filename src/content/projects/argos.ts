@@ -7,6 +7,7 @@ export const argos: Project = {
   slug: 'argos',
   tier: 'dossier',
   status: 'development',
+  stage: 'POC',
   tracks: ['cyber', 'ia'],
   title: 'Argos',
   period: { start: '2026-07' },
