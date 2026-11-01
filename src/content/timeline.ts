@@ -256,12 +256,8 @@ export const timeline: TimelineEntry[] = [
     },
     highlights: [
       {
-        fr: 'Préparation militaire commando.',
-        en: 'Commando military preparation.',
-      },
-      {
-        fr: 'Stage au Centre national d’entraînement commando (CNEC) de Mont-Louis : franchissement, rusticité, autonomie.',
-        en: 'Course at the National Commando Training Centre (CNEC) in Mont-Louis: obstacle crossing, hardiness, autonomy.',
+        fr: 'Préparation militaire commando, puis stage au Centre national d’entraînement commando (CNEC) de Mont-Louis : franchissement, rusticité, autonomie.',
+        en: 'Commando military preparation, then a course at the National Commando Training Centre (CNEC) in Mont-Louis: obstacle crossing, hardiness, autonomy.',
       },
       {
         fr: 'Engagement et formation initiale de militaire du rang au 2e Régiment d’infanterie de marine (2e RIMa).',

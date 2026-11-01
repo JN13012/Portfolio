@@ -710,8 +710,7 @@ Formation en alternance de technicien de compétition : préparer, optimiser et 
 
 De la préparation commando à l’engagement comme militaire du rang : rigueur, endurance et esprit d’équipe en conditions exigeantes.
 
-- Préparation militaire commando.
-- Stage au Centre national d’entraînement commando (CNEC) de Mont-Louis : franchissement, rusticité, autonomie.
+- Préparation militaire commando, puis stage au Centre national d’entraînement commando (CNEC) de Mont-Louis : franchissement, rusticité, autonomie.
 - Engagement et formation initiale de militaire du rang au 2e Régiment d’infanterie de marine (2e RIMa).
 
 ## Compétences
