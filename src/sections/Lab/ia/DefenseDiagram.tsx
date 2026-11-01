@@ -188,16 +188,15 @@ function Lesson({ level, solved }: { level: LabLevel; solved: boolean }) {
   useEffect(() => { if (solved && root.current) root.current.scrollTop = root.current.scrollHeight }, [solved])
   return <div ref={root} className="ai-lab__lesson">
     <dl>
-      <div><dt>Défense en place</dt><dd>{brief.defense}</dd></div>
       <div><dt>Type d’attaque</dt><dd>{brief.attack}</dd></div>
+      <div><dt>Défense en place</dt><dd>{brief.defense}</dd></div>
     </dl>
-    <div><h4>Comprendre</h4><p>{brief.lesson}</p></div>
     <a href={brief.reference.url} target="_blank" rel="noreferrer">{brief.reference.label}</a>
     {solved && <div data-solved="true"><h4>À retenir</h4><p>{brief.takeaway}</p></div>}
   </div>
 }
 
-/** One hint at a time, in a block that keeps its height. */
+/** One hint at a time; its arrows sit at the top right, away from the floating Sentry at the bottom of the screen. */
 function HintCarousel({ level, hint, onHint, onUsePrompt }: { level: LabLevel; hint: number; onHint: (value: number) => void; onUsePrompt: (prompt: string) => void }) {
   const { hints } = aiLabLevels[level - 1]!
   const current = hints[hint - 1]
@@ -207,9 +206,9 @@ function HintCarousel({ level, hint, onHint, onUsePrompt }: { level: LabLevel; h
       : <p aria-live="polite" className="ai-lab__hints-intro"><Sentry size={28} animated={false} /><span>{defensePanelCopy.hintsIntro}</span></p>}
     <div className="ai-lab__hints-nav">
       <button type="button" aria-label="Indice précédent" disabled={hint <= 0} onClick={() => onHint(hint - 1)}><ChevronLeft size={15} aria-hidden="true" /></button>
-      {current?.prompt && <button type="button" className="ai-lab__hint-use" onClick={() => onUsePrompt(current.prompt!)}>Mettre dans le champ</button>}
       <button type="button" aria-label="Indice suivant" disabled={hint >= hints.length} onClick={() => onHint(hint + 1)}><ChevronRight size={15} aria-hidden="true" /></button>
     </div>
+    {current?.prompt && <button type="button" className="ai-lab__hint-use" onClick={() => onUsePrompt(current.prompt!)}>Mettre dans le champ</button>}
   </section>
 }
 

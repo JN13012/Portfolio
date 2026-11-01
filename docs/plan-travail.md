@@ -107,7 +107,8 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 ### 5. Niveaux 2 à 4, démonstration
 
 - [x] Ouverture publique du sélecteur IA avec le seul niveau 1, décidée par Jérémie le 31 octobre. Les autres restent « À venir ».
-- [ ] Niveaux 2 et 3 réels, puis niveau 4 (document piégé).
+- [x] Niveau 2 réel, sur `developpement` : filtres d’entrée et de sortie, mesurés sur le vrai modèle le 1er novembre (voir [le plan du Lab](conception-lab-ia.md#filtres-dentrée-et-de-sortie-02)).
+- [ ] Niveau 3 réel, puis niveau 4 (document piégé).
 - [ ] Démonstration enregistrée à décider, banc de test et corpus publiés, avec taux de réussite par niveau.
 - [ ] Refaire le contrôle sécurité à chaque niveau ajouté.
 

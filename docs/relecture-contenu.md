@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-10-31 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-11-01 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Introduction
@@ -21,9 +21,9 @@ Formation : Master of Science · Architecte des SI (Epitech Marseille · 1re ann
 
 Certificats : IBM AI Developer (Professional Certificate) · Jr Penetration Tester (TryHackMe · 89 labs)
 
-Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · en test) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
+Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · paper trading) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
-Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red-team Sentry · niveau 1)
+Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red team IA · 2 niveaux)
 
 **Lab cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 
@@ -64,7 +64,7 @@ Trois domaines, chacun prouvé par des projets ou des certificats : l’IA appli
 
 **Quels sont ses projets les plus ambitieux ?** (brouillon, à valider)
 
-BlockTrader : un moteur de backtest avec des protocoles contre le surapprentissage, en développement ; le pilotage par IA est son objectif, pas encore branché. Salesforce Executor : un outil interne complet (exécution, planification, journaux), en production chez ULIT. Argos : une plateforme d’agents IA de pentest et de défense, en développement ; aujourd’hui, seul son moteur de découverte OSINT existe.
+BlockTrader : un moteur de backtest avec des protocoles contre le surapprentissage, en paper trading sans fonds réels ; le pilotage par IA est son objectif, pas encore branché. Salesforce Executor : un outil interne complet (exécution, planification, journaux), en production chez ULIT. Argos : une plateforme d’agents IA de pentest et de défense, en développement ; aujourd’hui, seul son moteur de découverte OSINT existe.
 
 *Sources* : blocktrader, salesforce-executor, argos
 
@@ -74,17 +74,17 @@ Salesforce Executor, développé chez ULIT pendant son poste de développeur ful
 
 *Sources* : salesforce-executor, parcours
 
-### Lab
+### Labs
 
 **Qu’a-t-il fait en pentest ?** (brouillon, à valider)
 
-Il est certifié Jr Penetration Tester (TryHackMe, 96 h). Il a publié 25 write-ups de machines attaquées, sur Exegol (labs Epitech) et sur TryHackMe : web, élévation de privilèges, Active Directory, mots de passe… Vous pouvez aussi tenter ses défis dans le Lab.
+Il est certifié Jr Penetration Tester (TryHackMe, 96 h). Il a publié 25 write-ups de machines attaquées, sur Exegol (labs Epitech) et sur TryHackMe : web, élévation de privilèges, Active Directory, mots de passe… Vous pouvez aussi tenter ses défis dans le Lab cyber.
 
 *Sources* : thm-jr-penetration-tester, pentest, lab
 
 **Peut-on tester ses défis ?** (brouillon, à valider)
 
-Oui : le Lab propose un CTF à jouer dans le navigateur, du premier flag caché dans la page jusqu’aux niveaux suivants. Votre progression reste enregistrée dans ce navigateur.
+Oui : le Lab cyber propose un CTF à jouer dans le navigateur, du premier flag caché dans la page jusqu’aux niveaux suivants. Votre progression reste enregistrée dans ce navigateur.
 
 *Sources* : lab, ctf-du-site
 
@@ -162,11 +162,11 @@ Preuves : Déploiement Kubernetes multi-nœuds (Bernstein) · Jenkins configuré
 
 ## Dossiers
 
-### BlockTrader — En développement · MVP (2026-07 → en cours)
+### BlockTrader — Paper trading (2026-07 → en cours)
 
-*Carte* : Bot de trading crypto en test : 40 stratégies validées contre le surapprentissage.
+*Carte* : Bot de trading crypto fonctionnel, en paper trading : 40 stratégies validées contre le surapprentissage.
 
-Bot de trading crypto en phase de test, sans fonds réels : 40 stratégies sur BTC et ETH, validées par une méthode statistique, et un observatoire du marché. Une IA doit ensuite choisir les stratégies ; elle n’est pas encore branchée.
+Bot de trading crypto fonctionnel, en paper trading sans fonds réels : 40 stratégies sur BTC et ETH, validées par une méthode statistique, et un observatoire du marché. Une IA doit ensuite choisir les stratégies ; elle n’est pas encore branchée.
 
 *Angle ia* : Pensé pour être piloté par une IA : stratégies validées et lecture du marché lui fourniront des conclusions vérifiables, et une règle de sûreté borne déjà ce qu’elle pourra faire.
 
@@ -260,7 +260,7 @@ Stack : Nmap, Gobuster, Burp Suite, Hydra, Netcat, NetExec, Impacket, Hashcat, J
 
 *Carte* : Jeu mobile de stratégie : incarner un malware qui se propage, face aux défenses du monde.
 
-Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se propage dans le monde entier, pendant que les pays réagissent, se défendent et construisent un remède. Un multijoueur avec classement et une version où l’on joue l’humanité sont prévus.
+Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se propage dans le monde entier, pendant que les pays réagissent, se défendent et développent un antivirus pour l’éradiquer. Un multijoueur avec classement et une version où l’on joue l’humanité sont prévus.
 
 *Angle dev* : Cœur de simulation déterministe sous Unity, vérifié par des tests, et un éditeur d’arbres d’évolution écrit à la main, sans framework.
 
@@ -293,25 +293,19 @@ Stack : Unity, C#, JavaScript
 
 Curieux de connaître ma vraie moyenne d’heures travaillées, j’ai créé Chronox : un petit widget Windows qui compte le temps où ma session est ouverte et le PC éveillé, puis en tire des bilans par jour, semaine, mois et année. Tout reste sur ma machine, sans cloud.
 
-**Comment ça marche.** Chronox suit le verrouillage de session et la mise en veille de Windows, et sauvegarde au moins une fois par minute pour résister à un arrêt brutal. Écrit en C++, il reste discret : environ 8 Mo de mémoire et 0,15 % d’un cœur lors de mes mesures.
+**Comment ça marche.** Chronox suit le verrouillage de session et la mise en veille de Windows, et enregistre le temps au moins une fois par minute : une coupure de courant ne coûte donc qu’une minute de suivi, au plus. Écrit en C++, il reste léger : environ 8 Mo de mémoire et 0,15 % d’un cœur lors de mes mesures.
 
 **Vision.** Chronox pourrait ensuite reconnaître l’application au premier plan, rattacher le temps à des projets et préparer un compte rendu quotidien modifiable, relié à GitHub, Jira ou l’agenda.
 
 ### Maria Agent — En développement · POC
 
-*Carte* : Plateforme d’assistants vocaux en cours : un studio simulé, sans voix réelle.
+*Carte* : Une plateforme d’agents IA secrétaires, conçue pour répondre au téléphone et prendre les rendez-vous.
 
-Le début d’une plateforme d’assistants vocaux personnalisables, dont Maria sera l’agent par défaut. Aujourd’hui, seul un studio simulé existe : il valide le parcours complet, mais renvoie un signal de test. Aucune voix ni aucun modèle n’est connecté.
+Maria Agent est une plateforme d’agents IA secrétaires conçue pour répondre au téléphone et prendre les rendez-vous. Le studio web et l’API Rust sont en place ; le moteur vocal y est encore simulé.
 
-**Ce qui existe.**
-- Studio : texte, choix d’une voix fictive et réglages, avec écoute et téléchargement du résultat.
-- API Rust : valide la demande et génère un fichier WAV de deux bips, sans réseau ni stockage.
-- Tests : 11 tests d’intégration de l’API, et une intégration continue Rust et React.
+**Comment ça fonctionnera.** La voix de l’appelant sera transcrite en texte (STT). Un LLM analysera la demande, consultera l’agenda et rédigera la réponse, que Gradium transformera en voix (TTS). Chaque étape fonctionnera en flux continu pour répondre sans attente, et le serveur validera chaque réservation.
 
-**À venir.**
-- Non construit : la vraie synthèse vocale, la voix personnalisée et la conversation.
-
-Chiffres : 11 tests d’intégration
+**Vision.** Chaque professionnel pourrait ensuite personnaliser le nom, la voix et la personnalité de son agent.
 
 ### Générateur OTP RCS — Terminé · Équipe de 4 · Rôle : backend et sécurité applicative
 
@@ -454,7 +448,7 @@ Un outil en ligne de commande qui analyse les livres du projet Gutenberg avec du
 - Résumé et livres proches : un résumé court et les livres les plus proches (similarité cosinus).
 - Fiche : tout réuni dans une fiche, avec un cache des calculs.
 
-### Base de connaissance — En développement
+### Base de connaissance — En continu
 
 *Carte* : 728 notes Obsidian : cours, méthodes de pentest et notes de projets, cyber, IA et dev.
 
@@ -524,19 +518,19 @@ Le pilotage de la conception d’un réfrigérateur connecté, du marché au pla
 
 ### RAG PDF Chatbot
 
-Projet de certification IBM AI Developer : un chatbot qui analyse des CV et des lettres de motivation en PDF et répond à des questions précises, grâce au RAG.
+Projet du certificat IBM AI Developer : un chatbot qui analyse des CV et des lettres de motivation en PDF et répond à des questions précises, grâce au RAG.
 
 ### Meeting Companion
 
-Projet de certification IBM AI Developer : un assistant de réunion transcrit l’audio avec Whisper, puis en tire résumé, plan d’action et analyse de tonalité avec le modèle Granite d’IBM.
+Projet du certificat IBM AI Developer : un assistant de réunion transcrit l’audio avec Whisper, puis en tire résumé, plan d’action et analyse de tonalité avec le modèle Granite d’IBM.
 
 ### Career Coach
 
-Projet de certification IBM AI Developer : un coach de carrière IA en trois onglets : CV, lettre de motivation et conseils.
+Projet du certificat IBM AI Developer : un coach de carrière IA en trois onglets : CV, lettre de motivation et conseils.
 
 ### Assistant Translator
 
-Projet de certification IBM AI Developer : un traducteur vocal transcrit la parole, la traduit avec Llama 3.3 via Groq, puis la relit à voix haute avec les services Watson.
+Projet du certificat IBM AI Developer : un traducteur vocal transcrit la parole, la traduit avec Llama 3.3 via Groq, puis la relit à voix haute avec les services Watson.
 
 ## Archives
 
@@ -624,7 +618,7 @@ Un outil Python qui convertit une valeur et affiche le résultat dans toutes les
 
 *Carte* : Assistant vocal : la voix avec Watson, les réponses avec Llama 3 via Groq.
 
-Projet de certification IBM AI Developer : un assistant vocal qui raisonne avec Llama 3 via Groq, reconnaît et synthétise la voix avec IBM Watson, dans une interface Flask.
+Projet du certificat IBM AI Developer : un assistant vocal qui raisonne avec Llama 3 via Groq, reconnaît et synthétise la voix avec IBM Watson, dans une interface Flask.
 
 **Fonctionnement.**
 - Écoute : Watson Speech to Text transcrit la question.
@@ -635,14 +629,14 @@ Projet de certification IBM AI Developer : un assistant vocal qui raisonne avec 
 
 *Carte* : Donner une mémoire de conversation à un modèle Hugging Face.
 
-Projet de certification IBM AI Developer : une surcouche Python à Hugging Face Transformers qui garde l’historique de conversation du modèle Blenderbot.
+Projet du certificat IBM AI Developer : une surcouche Python à Hugging Face Transformers qui garde l’historique de conversation du modèle Blenderbot.
 
 **Fonctionnement.**
 - Modèle : Blenderbot 400M, chargé avec Hugging Face Transformers.
 - Mémoire : l’historique est renvoyé au modèle à chaque tour.
 - Pipeline : tokenisation, inférence, puis décodage.
 
-## Lab
+## Labs
 
 25 write-ups indexés depuis JN13012/Cyber-Write-ups (métadonnées seulement).
 

@@ -104,13 +104,13 @@ const fullDate = (date) => date.split("-").reverse().join("/");
 const percent = (c) => `${Math.round(c.progress * 100)} % au ${fullDate(c.measuredAt)}`;
 const duration = (c) => (c.hours ? `${c.hours} h` : c.examHours ? `Examen ${c.examHours} h` : null);
 
-/** In progress first, then most recent (or hardest) first, the other key breaking ties. */
+/** In progress first, then most recent or hardest first; among the same level a PRO comes first (Pro Medium > Medium). */
 const sortEntries = (list, sort) =>
   [...list].sort((a, b) => {
     if (a.ongoing !== b.ongoing) return a.ongoing ? -1 : 1;
     const byDate = b.date.localeCompare(a.date);
     const byLevel = (b.level ?? 0) - (a.level ?? 0);
-    return sort === "level" ? byLevel || byDate : byDate || byLevel;
+    return sort === "level" ? byLevel || Number(Boolean(b.pro)) - Number(Boolean(a.pro)) || byDate : byDate || byLevel;
   });
 
 const Certifications = () => {
@@ -170,7 +170,7 @@ const Certifications = () => {
   return (
     <section id="certifications" className="relative overflow-hidden border-y border-cyber/10 bg-black/45 py-24 text-white">
       <div className="relative z-10 mx-auto px-2">
-        <SectionHeader index="06" title="Certifications" />
+        <SectionHeader index="05" title="Certifications" />
 
         {/* FILTERS: one line — domain tabs on the left, sort menu and count on the right (as in Projets). */}
         <div className="mb-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pb-2">

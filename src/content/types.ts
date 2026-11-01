@@ -10,8 +10,11 @@ export type Track = 'ia' | 'data' | 'cyber' | 'dev' | 'devops'
  * Honest project status, always shown next to a project: still being built, or finished.
  * Real use by a company is said with `inProduction` on the project, not with a status.
  */
-/** `ongoing`: a series that keeps growing (write-ups), shown « En continu ». */
-export type ProjectStatus = 'development' | 'delivered' | 'ongoing'
+/**
+ * `ongoing`: a series that keeps growing (write-ups, notes), shown « En continu ».
+ * `paper-trading`: working and running on real market data, with no real funds.
+ */
+export type ProjectStatus = 'development' | 'delivered' | 'ongoing' | 'paper-trading'
 
 /**
  * Standard scale of a project in development, shown in its modal (decision 2026-10-31):

@@ -6,7 +6,7 @@ Ce site est un portfolio en une seule page, en français. L’assistant Sentry y
 
 ## Liens
 
-- [Portfolio](https://www.jeremie-nagi.workers.dev/): profil, compétences, projets, Lab, parcours, certifications et contact
+- [Portfolio](https://www.jeremie-nagi.workers.dev/): profil, projets, labs, expertise, certifications, parcours et contact
 - [GitHub](https://github.com/JN13012): dépôts de code
 - [Write-ups de cybersécurité](https://github.com/JN13012/Cyber-Write-ups): comptes rendus de pentest
 - [LinkedIn](https://www.linkedin.com/in/jn13012)

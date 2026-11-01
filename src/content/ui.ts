@@ -11,6 +11,7 @@ export const statusLabels: Record<ProjectStatus, Localized> = {
   development: { fr: 'En développement', en: 'In development' },
   delivered: { fr: 'Terminé', en: 'Finished' },
   ongoing: { fr: 'En continu', en: 'Ongoing' },
+  'paper-trading': { fr: 'Paper trading', en: 'Paper trading' },
 }
 
 /** Type badge of a certification card: what was actually obtained. */
@@ -44,10 +45,10 @@ export function teamLabel(team: Project['team'], locale: Locale) {
 
 /** Said before the summary in the project modal (the card only shows a short badge). */
 const contextLead: Partial<Record<ProjectContext, Localized>> = {
-  ibm: { fr: 'Projet de certification IBM AI Developer', en: 'IBM AI Developer certification project' },
+  ibm: { fr: 'Projet du certificat IBM AI Developer', en: 'IBM AI Developer certification project' },
 }
 
-/** The summary as read in the modal: « Projet de certification IBM AI Developer : un chatbot… ». */
+/** The summary as read in the modal: « Projet du certificat IBM AI Developer : un chatbot… ». */
 export function modalSummary(project: Project, locale: Locale) {
   const lead = contextLead[project.context]?.[locale]
   const text = project.summary[locale] ?? project.summary.fr

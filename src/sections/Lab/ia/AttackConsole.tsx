@@ -28,7 +28,7 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
   }, [state.attempts, state.level, state.pending, state.solvedAfter])
   const success = (attemptId: number) => state.solvedAfter[state.level] === attemptId && <div className="ai-lab__success" role="status">
     <p><span aria-hidden="true">&gt;&gt;</span> {aiLabSuccess.granted}</p>
-    <p><span aria-hidden="true">&gt;&gt;</span> {aiLabSuccess.next}</p>
+    <p><span aria-hidden="true">&gt;&gt;</span> {aiLabSuccess.next(state.level)}</p>
   </div>
   const send = (event: FormEvent) => { event.preventDefault(); onSend() }
   const canSend = state.pending === null && !!state.draft.trim()
@@ -44,7 +44,6 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
       <div className="ai-lab__history" ref={history} role="log" aria-label="Conversation avec Sentry" aria-live="polite" aria-relevant="additions">
         <div className="ai-lab__boot">
           <p><span aria-hidden="true">&gt;&gt;</span> RED-TEAM SENTRY — CAPTURE THE FLAG</p>
-          <p className="ai-lab__greeting"><span>sentry&gt;</span> Je protège un flag. Votre mission : me le faire révéler.</p>
           <p><span aria-hidden="true">&gt;&gt;</span> Saisissez votre premier prompt pour commencer.</p>
         </div>
         {!available && <p className="ai-lab__empty" role="status">{aiLabUnavailable}</p>}
@@ -65,7 +64,7 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
           <button type="button" className="ai-lab__new-conversation" disabled={state.pending !== null || !attempts.length} onClick={() => dispatch({ type: 'new-conversation' })}>Nouvelle conversation</button>
           <form onSubmit={event => { event.preventDefault(); onValidate() }} className="ai-lab__flag-form">
             <label htmlFor="ai-lab-flag">Valider le flag</label>
-            <div><input id="ai-lab-flag" value={state.flag} maxLength={100} autoComplete="off" spellCheck={false} placeholder="FLAG{…}" onChange={event => dispatch({ type: 'flag', value: event.target.value })} />
+            <div><input id="ai-lab-flag" value={state.flag} maxLength={100} autoComplete="off" spellCheck={false} placeholder="FLAG{XXXXXXXXXXXX}" onChange={event => dispatch({ type: 'flag', value: event.target.value })} />
               <button type="submit" disabled={!state.flag.trim()}>Valider</button></div>
           </form>
           {state.validation === 'incorrect' && <p className="ai-lab__validation" role="status">Ce flag n’est pas le bon pour ce niveau.</p>}

@@ -24,7 +24,7 @@ export const cards: Project[] = [
       {
         kind: 'approach',
         title: { fr: 'Comment ça marche', en: 'How it works' },
-        body: { fr: 'Chronox suit le verrouillage de session et la mise en veille de Windows, et sauvegarde au moins une fois par minute pour résister à un arrêt brutal. Écrit en C++, il reste discret : environ 8 Mo de mémoire et 0,15 % d’un cœur lors de mes mesures.' },
+        body: { fr: 'Chronox suit le verrouillage de session et la mise en veille de Windows, et enregistre le temps au moins une fois par minute : une coupure de courant ne coûte donc qu’une minute de suivi, au plus. Écrit en C++, il reste léger : environ 8 Mo de mémoire et 0,15 % d’un cœur lors de mes mesures.' },
       },
       {
         kind: 'limits',
@@ -50,36 +50,28 @@ export const cards: Project[] = [
     team: { size: 1 },
     context: 'personal',
     tagline: {
-      fr: 'Plateforme d’assistants vocaux en cours : un studio simulé, sans voix réelle.',
+      fr: 'Une plateforme d’agents IA secrétaires, conçue pour répondre au téléphone et prendre les rendez-vous.',
     },
     summary: {
-      fr: 'Le début d’une plateforme d’assistants vocaux personnalisables, dont Maria sera l’agent par défaut. Aujourd’hui, seul un studio simulé existe : il valide le parcours complet, mais renvoie un signal de test. Aucune voix ni aucun modèle n’est connecté.',
+      fr: 'Maria Agent est une plateforme d’agents IA secrétaires conçue pour répondre au téléphone et prendre les rendez-vous. Le studio web et l’API Rust sont en place ; le moteur vocal y est encore simulé.',
     },
     sections: [
       {
         kind: 'approach',
-        title: { fr: 'Ce qui existe', en: 'What exists' },
-        points: [
-          { label: { fr: 'Studio', en: 'Studio' }, text: { fr: 'texte, choix d’une voix fictive et réglages, avec écoute et téléchargement du résultat.' } },
-          { label: { fr: 'API Rust', en: 'Rust API' }, text: { fr: 'valide la demande et génère un fichier WAV de deux bips, sans réseau ni stockage.' } },
-          { label: { fr: 'Tests', en: 'Tests' }, text: { fr: '11 tests d’intégration de l’API, et une intégration continue Rust et React.' } },
-        ],
+        title: { fr: 'Comment ça fonctionnera', en: 'How it will work' },
+        body: { fr: 'La voix de l’appelant sera transcrite en texte (STT). Un LLM analysera la demande, consultera l’agenda et rédigera la réponse, que Gradium transformera en voix (TTS). Chaque étape fonctionnera en flux continu pour répondre sans attente, et le serveur validera chaque réservation.' },
       },
       {
         kind: 'limits',
-        title: { fr: 'À venir', en: 'Coming' },
-        points: [
-          { label: { fr: 'Non construit', en: 'Not built' }, text: { fr: 'la vraie synthèse vocale, la voix personnalisée et la conversation.' } },
-        ],
+        title: { fr: 'Vision', en: 'Vision' },
+        body: { fr: 'Chaque professionnel pourrait ensuite personnaliser le nom, la voix et la personnalité de son agent.' },
       },
     ],
     stack: ['Rust', 'Axum', 'React', 'TypeScript', 'Tailwind CSS', 'GitHub Actions'],
     links: { noCodeLink: true },
-    facts: [
-      { value: '11', label: { fr: 'tests d’intégration', en: 'integration tests' }, source: 'apps/api/tests, 2026-10-31' },
-    ],
-    scale: { months: 1, tests: 11 },
-    doNotClaim: ['A working voice assistant: the studio is simulated', 'Any real voice, LLM or speech-to-text'],
+    facts: [],
+    scale: { months: 1 },
+    doNotClaim: ['A working voice assistant: the studio is simulated, as the text says', 'Any real voice, LLM or speech-to-text'],
   },
   {
     slug: 'generateur-otp-rcs',
@@ -464,7 +456,7 @@ export const cards: Project[] = [
   {
     slug: 'base-de-connaissance',
     tier: 'card',
-    status: 'development',
+    status: 'ongoing',
     tracks: ['cyber', 'ia', 'dev'],
     title: 'Base de connaissance',
     period: { start: '2026-06' },

@@ -84,7 +84,7 @@ export const expertise: ExpertiseDomain[] = [
     ],
     tools: [
       // « Python for Data Science, AI & Development » (IBM AI Developer): notebooks, Pandas and NumPy.
-      t('Jupyter', 'Certification IBM'),
+      t('Jupyter', 'Certificat IBM'),
       used('Pandas', ['blocktrader', 'hackathon-citiz']),
       used('NumPy', ['blocktrader', 'hackathon-citiz']),
       used('GeoPandas', ['hackathon-citiz']),

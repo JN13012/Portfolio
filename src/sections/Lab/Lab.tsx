@@ -23,8 +23,8 @@ export function Lab() {
   }, [])
   return (
     <section id="lab" className="py-24">
-      <SectionHeader index="04" title="Lab" />
-      <div id="lab-ia" role="group" aria-label="Domaine du Lab" className="mb-6 scroll-mt-24 flex flex-wrap items-center gap-x-8 gap-y-3 pb-2">
+      <SectionHeader index="03" title="Labs" />
+      <div id="lab-ia" role="group" aria-label="Domaine des Labs" className="mb-6 scroll-mt-24 flex flex-wrap items-center gap-x-8 gap-y-3 pb-2">
         <button type="button" aria-pressed={domain === 'cyber'} onClick={() => { setVisitedCyber(true); setDomain('cyber') }} className="group relative inline-flex cursor-pointer items-center gap-2 pb-2.5 text-lg">
           <span className={domain === 'cyber' ? 'bg-[linear-gradient(90deg,#f43f5e_10%,#fff_115%)] bg-clip-text font-semibold text-transparent' : 'text-zinc-400 transition-colors group-hover:text-zinc-200'}>Cyber</span>
           <span aria-hidden="true" className="absolute bottom-0 left-0 h-0.5 rounded-full bg-[#f43f5e]" style={{ width: domain === 'cyber' ? '100%' : 0 }} />

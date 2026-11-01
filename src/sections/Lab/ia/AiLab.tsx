@@ -2,6 +2,7 @@ import { Activity, useEffect, useReducer, useRef, useState } from 'react'
 import { aiLabLevels, aiLabOutcomes, aiLabQuotaCopy, aiLabUnavailable, defenseStages, isAiLabLevel } from '../../../content/aiLab'
 import { keepFieldClearOfPlayer } from '../../../lib/keepClearOfPlayer'
 import { AttackConsole } from './AttackConsole'
+import { AiLabIdle } from './AiLabIdle'
 import { AiLabIntro } from './AiLabIntro'
 import { DefenseDiagram } from './DefenseDiagram'
 import { LevelDrawer } from './LevelDrawer'
@@ -72,9 +73,11 @@ export default function AiLab() {
         </Activity></div>
         {drawer && <LevelDrawer level={entered ? state.level : undefined} completed={state.completed} onClose={() => setDrawer(false)} onSelect={selectLevel} />}
       </div>
-      <DefenseDiagram level={state.level} result={last} solved={state.completed.includes(state.level)} hint={state.hints[state.level] ?? 0}
+      {/* Hidden rather than unmounted, so coming back to a level does not replay its last trace. */}
+      <Activity mode={entered ? 'visible' : 'hidden'}><DefenseDiagram level={state.level} result={last} solved={state.completed.includes(state.level)} hint={state.hints[state.level] ?? 0}
         onHint={value => dispatch({ type: 'hint', value, total: aiLabLevels[state.level - 1]!.hints.length })}
-        onUsePrompt={prompt => { dispatch({ type: 'draft', value: prompt }); document.getElementById('ai-lab-prompt')?.focus({ preventScroll: true }) }} />
+        onUsePrompt={prompt => { dispatch({ type: 'draft', value: prompt }); document.getElementById('ai-lab-prompt')?.focus({ preventScroll: true }) }} /></Activity>
+      {!entered && <AiLabIdle />}
     </div>
   </div>
 }

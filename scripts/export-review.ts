@@ -107,7 +107,7 @@ for (const a of archive) {
   projectDetail(a)
 }
 
-h(2, 'Lab')
+h(2, 'Labs')
 p(`${writeups.writeups.length} write-ups indexés depuis ${writeups.repo} (métadonnées seulement).`)
 
 h(2, 'Parcours')

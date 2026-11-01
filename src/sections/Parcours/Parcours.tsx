@@ -127,7 +127,7 @@ export function Parcours({ effects = false }: { effects?: boolean }) {
   const entry = timeline.find((e) => e.id === selected) ?? timeline[0]!
   return (
     <section id="parcours" className="py-24">
-      <SectionHeader index="05" title="Parcours" />
+      <SectionHeader index="06" title="Parcours" />
 
       <div className="hidden space-y-6 lg:block">
         {/* Fixed height: the axis must not move when the selection changes. */}

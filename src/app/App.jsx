@@ -89,11 +89,11 @@ function App() {
           <main className="relative z-10 mx-auto w-[90%] max-w-[2400px]" inert={gateOpen || undefined}>
             <Hero />
             <Profile />
-            <Expertise />
             <Projects />
             <Lab />
-            <Parcours effects />
+            <Expertise />
             <Certifications />
+            <Parcours effects />
             <Contact />
             {/* Sentry, the assistant, docked at the bottom right of every page. */}
             <SentryChat introComplete={!gateOpen} />

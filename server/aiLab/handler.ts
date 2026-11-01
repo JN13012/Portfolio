@@ -1,6 +1,7 @@
 import { aiLabCurriculum, defenseStages, type DefenseStageId } from '../../src/content/aiLab'
+import { inputAllowed, outputAllowed } from './filters'
 import { askGuard, askModel, type AiBinding, type ChatMessage } from './model'
-import { levelOneInstructions } from './prompts'
+import { simpleInstructions } from './prompts'
 
 type Statement = {
   bind(...values: (string | number)[]): Statement
@@ -33,6 +34,7 @@ const MAX_EXCHANGES = 6
 export const QUOTAS = { session: 60, ip1h: 30, ip5h: 60, ip24h: 100, neuronsPerHour: 1000, neuronsPer5h: 3000, neuronsPer24h: 5000, reservedNeurons: 80, validations: 200 } as const
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const REAL_LEVELS: readonly number[] = aiLabCurriculum.flatMap(part => part.levels).filter(level => level.available).map(level => level.id)
+const FILTERS_FROM_LEVEL = defenseStages.find(stage => stage.id === 'input')!.fromLevel
 
 const reply = (status: number, body: object, headers: HeadersInit = {}) => Response.json(body, {
   status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...headers },
@@ -60,6 +62,8 @@ export function containsFlag(answer: string, flag: string) {
   const compact = answer.toUpperCase().replace(/[^A-Z0-9]/g, '')
   return compact.includes(code) || compact.includes([...code].reverse().join(''))
 }
+
+const compactFlag = (flag: string) => flag.toUpperCase().replace(/[^A-Z0-9]/g, '')
 
 /** The key changes every day, so yesterday's rows are found with yesterday's key and no clear IP is ever needed. */
 const ipHashes = async (request: Request, secret: string, now: number) => {
@@ -168,6 +172,15 @@ async function attempt(request: Request, env: Ready, now: number) {
   if (!ipHeld) { await release(true); return unavailable(429, 'quota', 'ip', remaining + 1) }
   const releaseIp = () => db.prepare('UPDATE lab_ip_usage SET count = MAX(0, count - 1) WHERE ip_hash = ? AND hour = ?').bind(ips.today, hour).run()
 
+  const filtered = level >= FILTERS_FROM_LEVEL
+  // The history comes from the browser: a forged user turn must not slip past the input filter.
+  const userTurns = [prompt, ...history.filter(turn => turn.role === 'user').map(turn => turn.content)]
+  // No model call and no budget: this attempt costs no neurons, but still counts as an attempt.
+  if (filtered && !userTurns.every(inputAllowed)) {
+    await release(false)
+    return reply(200, { outcome: 'blocked-input', remaining, trace: stageTrace(level, { entry: 'passed', input: 'blocked' }) })
+  }
+
   // The site-wide budget, over the same windows, stops an attack spread over many IPs from using a whole day at once.
   const spentSince = (hours: number) => `(SELECT COALESCE(SUM(neurons), 0) FROM lab_budget_hours WHERE hour > ?1 - ${hours}) + ?2`
   const budgetHeld = await db.prepare(`INSERT INTO lab_budget_hours (hour, neurons) SELECT ?1, ?2
@@ -182,22 +195,29 @@ async function attempt(request: Request, env: Ready, now: number) {
     await Promise.all([release(true), releaseIp(), settleBudget(0)])
     return reply(200, { outcome: 'error', remaining: remaining + 1, trace: stageTrace(level, ran) })
   }
-  const start = { entry: 'passed', instructions: 'passed' } as const
+  // stageTrace marks the filters inactive on the levels that do not have them.
+  const start = { entry: 'passed', input: 'passed', instructions: 'passed' } as const
   const flag = await flagFor(session.secret, level)
-  const messages: ChatMessage[] = [{ role: 'system', content: levelOneInstructions(flag) }, ...history, { role: 'user', content: prompt }]
+  const messages: ChatMessage[] = [{ role: 'system', content: simpleInstructions(flag) }, ...history, { role: 'user', content: prompt }]
   let answer: Awaited<ReturnType<typeof askModel>>
   try { answer = await askModel(env.AI, messages) }
   catch { return failed({ ...start, model: 'error' }) }
+  // Nothing is published, so the safeguard has nothing to check.
+  if (filtered && !outputAllowed(answer.text, flag)) {
+    await Promise.all([release(false), settleBudget(answer.neurons ?? QUOTAS.reservedNeurons)])
+    return reply(200, { outcome: 'blocked-output', remaining, trace: stageTrace(level, { ...start, model: 'passed', output: 'blocked' }) })
+  }
+  const checked = { ...start, model: 'passed', output: 'passed' } as const
   let verdict: Awaited<ReturnType<typeof askGuard>>
   try { verdict = await askGuard(env.AI, prompt, answer.text) }
-  catch { return failed({ ...start, model: 'passed', response: 'error' }) }
+  catch { return failed({ ...checked, response: 'error' }) }
 
   // An unknown cost keeps the whole reservation rather than undercounting.
   const spent = answer.neurons === null || verdict.neurons === null ? QUOTAS.reservedNeurons : answer.neurons + verdict.neurons
   await Promise.all([release(false), settleBudget(spent)])
-  if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...start, model: 'passed', response: 'blocked' }) })
+  if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...checked, response: 'blocked' }) })
   const revealed = containsFlag(answer.text, flag)
-  return reply(200, { outcome: revealed ? 'flag' : 'delivered', answer: answer.text, remaining, trace: stageTrace(level, { ...start, model: 'passed', response: 'passed', flag: revealed ? 'passed' : 'not-run' }) })
+  return reply(200, { outcome: revealed ? 'flag' : 'delivered', answer: answer.text, remaining, trace: stageTrace(level, { ...checked, response: 'passed', flag: revealed ? 'passed' : 'not-run' }) })
 }
 
 async function validate(request: Request, env: Ready, now: number) {
@@ -210,7 +230,8 @@ async function validate(request: Request, env: Ready, now: number) {
   if (!session) return reply(401, { error: 'session' })
   const allowed = await db.prepare('UPDATE lab_sessions SET validations = validations + 1 WHERE session_hash = ? AND validations < ? RETURNING validations').bind(session.session_hash, QUOTAS.validations).first()
   if (!allowed) return reply(429, { error: 'quota' })
-  const correct = body.flag.trim().toUpperCase() === await flagFor(session.secret, level)
+  // Separators and case do not count: the model often splits the flag, and level 2 asks for it without its dashes.
+  const correct = compactFlag(body.flag) === compactFlag(await flagFor(session.secret, level))
   if (correct) await db.prepare('INSERT OR IGNORE INTO lab_progress (session_hash, level, expires_at) VALUES (?, ?, ?)').bind(session.session_hash, level, now + SESSION_MS).run()
   return reply(200, { correct, completed: await completedLevels(db, session.session_hash) })
 }

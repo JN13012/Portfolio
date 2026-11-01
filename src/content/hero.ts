@@ -51,14 +51,14 @@ export const hero = {
   /** Four projects on two lines, in this order (Argos, BlockTrader / Code Executor, ZeroDay); the wording follows each one's status (never « live »). */
   projects: [
     { slug: 'argos', detail: { fr: 'Agents IA cyber · en développement', en: 'Cyber AI agents · in development' } },
-    { slug: 'blocktrader', detail: { fr: 'Bot de trading · en test', en: 'Trading bot · in testing' } },
+    { slug: 'blocktrader', detail: { fr: 'Bot de trading · paper trading', en: 'Trading bot · paper trading' } },
     { slug: 'salesforce-executor', detail: { fr: 'En production chez ULIT', en: 'In production at ULIT' } },
     { slug: 'zeroday', detail: { fr: 'Jeu mobile · en conception', en: 'Mobile game · in design' } },
   ],
   /** The labs. */
   labs: [
     { id: 'cyber', label: { fr: 'Lab cyber', en: 'Cyber lab' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
-    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red-team Sentry · niveau 1', en: 'Red-team Sentry' } },
+    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red team IA · 2 niveaux', en: 'AI red team · 2 levels' } },
   ],
   /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
   labPanel: {
@@ -81,7 +81,7 @@ export const hero = {
     title: { fr: 'Lab IA', en: 'AI lab' },
     intro: { fr: 'Un exercice de red team sur un vrai modèle : faites révéler son flag à Sentry.' },
     phases: [
-      { title: { fr: 'Direct Prompt Injection' }, text: { fr: 'niveau 1 jouable' } },
+      { title: { fr: 'Direct Prompt Injection' }, text: { fr: 'niveaux 1 et 2 jouables' } },
       { title: { fr: 'Indirect Prompt Injection' }, text: { fr: 'à venir' } },
       { title: { fr: 'Agents & API' }, text: { fr: 'à venir' } },
       { title: { fr: 'Hardening' }, text: { fr: 'à venir' } },

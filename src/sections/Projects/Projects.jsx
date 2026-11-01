@@ -128,6 +128,7 @@ const statusStyles = {
   delivered: "text-zinc-200 border-white/25 bg-white/5",
   development: "text-sky-300 border-sky-500/40 bg-sky-500/10",
   ongoing: "text-sky-300 border-sky-500/40 bg-sky-500/10",
+  "paper-trading": "text-sky-300 border-sky-500/40 bg-sky-500/10",
 };
 
 // Domain badges, in the order of the project's tracks; projects without one fall back to their first tool.
@@ -135,8 +136,8 @@ const categoriesOf = (p) =>
   p.tracks.length
     ? p.tracks.map((t) => ({ label: TRACK_LABEL[t], badge: trackThemes[t].badge }))
     : [{ label: p.stack[0] ?? "Projet", badge: trackThemes.Default.badge }];
-// When it was finished, or « En cours » (card and modal).
-const cardDate = (period) => (period.end ? period.end.split("-").reverse().join("/") : "En cours");
+// When it was finished, its last addition, or where it stands (card and modal).
+const cardDate = ({ period, status }) => (period.end ? period.end.split("-").reverse().join("/") : status === "development" ? "En cours" : statusLabels[status].fr);
 
 
 const Projects = () => {
@@ -198,7 +199,7 @@ const Projects = () => {
       image={IMAGES[p.slug]?.[0]}
       emblem={EMBLEMS.get(IMAGES[p.slug]?.[0])}
       categories={categoriesOf(p)}
-      date={cardDate(p.period)}
+      date={cardDate(p)}
       ongoing={!p.period.end}
       context={CONTEXT_PILL[p.context] && [CONTEXT_PILL[p.context], p.award?.fr].filter(Boolean).join(" · ")}
       silver={p.context === "hackathon"}
@@ -218,7 +219,7 @@ const Projects = () => {
   return (
     <section id="projects" className="relative py-24 text-white">
       <div className="relative z-10">
-        <SectionHeader index="03" title="Projets" />
+        <SectionHeader index="02" title="Projets" />
 
         {/* FILTERS: one line — job pills on the left, status and sort menus on the right. */}
         <div className="mb-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pb-2">
@@ -360,7 +361,7 @@ const Projects = () => {
                 <span className={`border px-2.5 py-1 ${statusStyles[selected.status]}`}>
                   {statusLabels[selected.status].fr}
                   {selected.stage && ` · ${selected.stage}`}
-                  {selected.period.end && ` · ${selected.status === "ongoing" ? "dernier ajout " : ""}${cardDate(selected.period)}`}
+                  {selected.period.end && ` · ${selected.status === "ongoing" ? "dernier ajout " : ""}${cardDate(selected)}`}
                 </span>
                 {selected.inProduction && <span className="border border-cyber/50 bg-cyber/10 px-2.5 py-1 text-cyber">{selected.inProduction.fr}</span>}
               </span>

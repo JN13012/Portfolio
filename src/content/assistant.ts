@@ -78,7 +78,7 @@ export const brainNodes: BrainNode[] = [
         id: 'ambitious',
         question: { fr: 'Quels sont ses projets les plus ambitieux ?', en: 'What are his most ambitious projects?' },
         answer: {
-          fr: 'BlockTrader : un moteur de backtest avec des protocoles contre le surapprentissage, en développement ; le pilotage par IA est son objectif, pas encore branché. Salesforce Executor : un outil interne complet (exécution, planification, journaux), en production chez ULIT. Argos : une plateforme d’agents IA de pentest et de défense, en développement ; aujourd’hui, seul son moteur de découverte OSINT existe.',
+          fr: 'BlockTrader : un moteur de backtest avec des protocoles contre le surapprentissage, en paper trading sans fonds réels ; le pilotage par IA est son objectif, pas encore branché. Salesforce Executor : un outil interne complet (exécution, planification, journaux), en production chez ULIT. Argos : une plateforme d’agents IA de pentest et de défense, en développement ; aujourd’hui, seul son moteur de découverte OSINT existe.',
           en: 'BlockTrader: a backtesting engine with anti-overfitting protocols, in development; AI steering is its goal, not wired in yet. Salesforce Executor: a complete internal tool (execution, scheduling, logs), in production at ULIT. Argos: a platform of AI pentest and defence agents, in development; today only its OSINT discovery engine exists.',
         },
         sources: [
@@ -102,14 +102,14 @@ export const brainNodes: BrainNode[] = [
   },
   {
     id: 'lab',
-    label: { fr: 'Lab', en: 'Lab' },
+    label: { fr: 'Labs', en: 'Labs' },
     target: '#lab',
     questions: [
       {
         id: 'pentest',
         question: { fr: 'Qu’a-t-il fait en pentest ?', en: 'What has he done in pentesting?' },
         answer: {
-          fr: 'Il est certifié Jr Penetration Tester (TryHackMe, 96 h). Il a publié 25 write-ups de machines attaquées, sur Exegol (labs Epitech) et sur TryHackMe : web, élévation de privilèges, Active Directory, mots de passe… Vous pouvez aussi tenter ses défis dans le Lab.',
+          fr: 'Il est certifié Jr Penetration Tester (TryHackMe, 96 h). Il a publié 25 write-ups de machines attaquées, sur Exegol (labs Epitech) et sur TryHackMe : web, élévation de privilèges, Active Directory, mots de passe… Vous pouvez aussi tenter ses défis dans le Lab cyber.',
           en: 'He is a certified Jr Penetration Tester (TryHackMe, 96 h). He has published 25 write-ups of attacked machines, on Exegol (Epitech labs) and on TryHackMe: web, privilege escalation, Active Directory, passwords… You can also try his challenges in the Lab.',
         },
         sources: [
@@ -123,7 +123,7 @@ export const brainNodes: BrainNode[] = [
         id: 'ctf',
         question: { fr: 'Peut-on tester ses défis ?', en: 'Can I try his challenges?' },
         answer: {
-          fr: 'Oui : le Lab propose un CTF à jouer dans le navigateur, du premier flag caché dans la page jusqu’aux niveaux suivants. Votre progression reste enregistrée dans ce navigateur.',
+          fr: 'Oui : le Lab cyber propose un CTF à jouer dans le navigateur, du premier flag caché dans la page jusqu’aux niveaux suivants. Votre progression reste enregistrée dans ce navigateur.',
           en: 'Yes: the Lab has a CTF you play in the browser, from the first flag hidden in the page to the next levels. Your progress is kept in this browser.',
         },
         sources: [{ kind: 'section', node: 'lab' }, { kind: 'project', slug: 'ctf-du-site' }],

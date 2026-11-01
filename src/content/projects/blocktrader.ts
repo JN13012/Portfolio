@@ -4,8 +4,7 @@ import type { Project } from '../types'
 export const blocktrader: Project = {
   slug: 'blocktrader',
   tier: 'dossier',
-  status: 'development',
-  stage: 'MVP',
+  status: 'paper-trading',
   // AI is the target (validated by Jérémie, 2026-10-24): the text always says it is not wired in yet.
   tracks: ['ia', 'data', 'dev'],
   title: 'BlockTrader',
@@ -13,11 +12,11 @@ export const blocktrader: Project = {
   team: { size: 1 },
   context: 'personal',
   tagline: {
-    fr: 'Bot de trading crypto en test : 40 stratégies validées contre le surapprentissage.',
+    fr: 'Bot de trading crypto fonctionnel, en paper trading : 40 stratégies validées contre le surapprentissage.',
     en: 'A crypto trading bot in testing: 40 strategies validated against overfitting.',
   },
   summary: {
-    fr: 'Bot de trading crypto en phase de test, sans fonds réels : 40 stratégies sur BTC et ETH, validées par une méthode statistique, et un observatoire du marché. Une IA doit ensuite choisir les stratégies ; elle n’est pas encore branchée.',
+    fr: 'Bot de trading crypto fonctionnel, en paper trading sans fonds réels : 40 stratégies sur BTC et ETH, validées par une méthode statistique, et un observatoire du marché. Une IA doit ensuite choisir les stratégies ; elle n’est pas encore branchée.',
     en: 'A crypto trading bot in its test phase, with no real funds: 40 strategies on BTC and ETH, validated by a statistical method, and a market observatory. An AI is meant to choose the strategies later; it is not wired in yet.',
   },
   angles: {

@@ -9,7 +9,7 @@ de refonte sont conservées dans [archive/](archive/). Elles ne constituent plus
 
 1. L’introduction `Gate/GlobeGate.tsx`, chargée à la demande sur ordinateur.
 2. La navigation et le décor de `components/layout/`.
-3. Hero, Profile, Expertise, Projects, Lab, Parcours, Certifications et Contact.
+3. Hero, Profile, Projects, Lab, Expertise, Certifications, Parcours et Contact.
 4. `components/Sentry/SentryChat.tsx`, disponible sur toute la page.
 
 L’introduction anime la fenêtre contenant le vrai portfolio ; elle ne charge pas une seconde version.
@@ -145,7 +145,7 @@ Ces comparaisons ne remplacent pas les contrôles d’interaction et ne constitu
 
 Le sélecteur IA du Lab ouvre une interface chargée à la demande : console,
 tiroir des dix niveaux et schéma SVG. `/?lab=ia#lab` l'ouvre directement.
-Le niveau 1 tourne sur le vrai modèle ; les neuf autres restent « À venir ».
+Les niveaux 1 et 2 tournent sur le vrai modèle ; les huit autres restent « À venir ».
 En local, l'API demande `npm run dev:lab` à côté de `npm run dev`, qui lui transmet `/api/lab`, et un `LAB_IP_SECRET` dans `.dev.vars`.
 La mascotte n’est plus affichée entre le titre et la liste d’entrée. Les défenses sont visibles
 avant le premier essai ; la conversation du Lab est indépendante du chat du site.

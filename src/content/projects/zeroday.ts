@@ -17,7 +17,7 @@ export const zeroday: Project = {
     en: 'A mobile strategy game: play a malware spreading across the world against its defences.',
   },
   summary: {
-    fr: 'Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se propage dans le monde entier, pendant que les pays réagissent, se défendent et construisent un remède. Un multijoueur avec classement et une version où l’on joue l’humanité sont prévus.',
+    fr: 'Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se propage dans le monde entier, pendant que les pays réagissent, se défendent et développent un antivirus pour l’éradiquer. Un multijoueur avec classement et une version où l’on joue l’humanité sont prévus.',
     en: 'A mobile strategy game, in design: the player is a malware spreading across the world while countries react, defend themselves and build a cure. Multiplayer with a leaderboard and a version where you play humanity are planned.',
   },
   angles: {

@@ -47,7 +47,7 @@ export function Expertise() {
   const domain = domains[active]!
   return (
     <section id="competences" className="py-24">
-      <SectionHeader index="02" title="Expertise" />
+      <SectionHeader index="04" title="Expertise" />
       {/* The rail stays at the top of the section, without following the scroll; -mt-3.5 cancels the
           buttons' top padding so the first domain lines up with the grid, 56 px under the title like every section. */}
       <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[17rem_1fr] lg:items-start">
