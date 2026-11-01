@@ -28,12 +28,15 @@ const GATE_KEY = "gate-seen";
 /**
  * The globe intro opens once per session, on wide screens only (a 3D scene is
  * too heavy for a phone's first seconds), never under reduced motion or Save-Data.
+ * A replay asks for it explicitly; a direct link to a certificate skips it.
  */
 function shouldOpenGate(replay = false) {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
   if (!window.matchMedia("(min-width: 1024px)").matches) return false;
   if (navigator.connection?.saveData) return false;
   if (replay) return true;
+  // A direct link to a certificate goes straight to it.
+  if (new URLSearchParams(window.location.search).has("certificat")) return false;
   try {
     return sessionStorage.getItem(GATE_KEY) !== "1";
   } catch {

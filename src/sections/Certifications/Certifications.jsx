@@ -113,6 +113,8 @@ const sortEntries = (list, sort) =>
     return sort === "level" ? byLevel || Number(Boolean(b.pro)) - Number(Boolean(a.pro)) || byDate : byDate || byLevel;
   });
 
+const credentialFromSearch = (search) => new URLSearchParams(search).get("certificat");
+
 const Certifications = () => {
   // « Tous » by default; a link with ?metier= opens on the matching tab (ia, data, dev → IA).
   const [tab, setTab] = useState(() => {
@@ -122,7 +124,8 @@ const Certifications = () => {
   // Hardest first by default, most recent first among equals.
   const [sort, setSort] = useState("level");
   const [expanded, setExpanded] = useState(false);
-  const [selected, setSelected] = useState(null);
+  // A link with ?certificat=<id> opens on that certificate's modal (used from the GitHub profile).
+  const [selected, setSelected] = useState(() => ENTRIES.find((c) => c.id === credentialFromSearch(window.location.search)) ?? null);
   const images = selected ? IMAGES[selected.id] ?? [] : [];
   const { imageIndex, zoomed, reset: resetGallery, openZoom, closeZoom, step: stepImage } = useImageGallery(images.length);
   const shouldRestoreFocus = useRef(true);
@@ -153,6 +156,11 @@ const Certifications = () => {
   const prev = neighbour(-1);
   const next = neighbour(1);
 
+
+  // Closing a modal opened from a link leaves the visitor on this section, not on the Hero.
+  useEffect(() => {
+    if (credentialFromSearch(window.location.search)) document.getElementById("certifications")?.scrollIntoView({ behavior: "instant" });
+  }, []);
 
   // The hero assistant opens a certification it cites, wherever the visitor is on the page.
   useEffect(
