@@ -25,7 +25,6 @@ import AI_Assistant_Translator from "../../assets/Projets/AI_Assistant_Translato
 import AI_Career_Coach from "../../assets/Projets/AI-Career-Coach-Conseils.webp";
 import AI_Career_Coach_Lettre from "../../assets/Projets/AI-Career-Coach-Lettre.webp";
 import AI_Career_Coach_Lettres from "../../assets/Projets/AI-Career-Coach-Lettres.webp";
-import AI_Career_Coach_Optimisateur from "../../assets/Projets/AI-Career-Coach-Optimisateur.webp";
 import Arena_Dashboard from "../../assets/Projets/Arena_Dashboard.webp";
 import Arena_Path from "../../assets/Projets/Arena_Path.webp";
 import Audit_Tor from "../../assets/Projets/Audit_Tor.webp";
@@ -90,7 +89,7 @@ const IMAGES = {
   "argos-security-arena": [Arena_Dashboard, Arena_Path],
   "rag-pdf-chatbot": [RAG_pdf_Chatbot],
   "meeting-companion": [Business_AI_Meeting],
-  "career-coach": [AI_Career_Coach, AI_Career_Coach_Optimisateur, AI_Career_Coach_Lettre, AI_Career_Coach_Lettres],
+  "career-coach": [AI_Career_Coach, AI_Career_Coach_Lettre, AI_Career_Coach_Lettres],
   "assistant-translator": [AI_Assistant_Translator],
   "generateur-otp-rcs": [OTP_RCS],
   "hackathon-citiz": [Hackathon_Citiz],
