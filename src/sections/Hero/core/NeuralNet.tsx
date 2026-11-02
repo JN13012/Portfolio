@@ -82,6 +82,12 @@ type NeuralNetProps = {
 
 /** How long « prompt injection » shows under the guard wall that stopped the attack (about 2 s). */
 const ALERT_MS = 2000
+/** Largest turn a drag can give the hero network, in degrees. */
+const GRAB_YAW = 35
+const GRAB_PITCH = 20
+/** Share of that turn past which the overlay texts fade out, and below which they return: the gap avoids flicker. */
+const TEXTS_HIDE_AT = 0.95
+const TEXTS_SHOW_AT = 0.8
 
 export default function NeuralNet({ settings, outputs, run = null, presentation = 'idle', onView, attackRef, onReady }: NeuralNetProps) {
   const wrap = useRef<HTMLDivElement>(null)
@@ -310,8 +316,8 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
       if (!orbit && !drag) setCursor(inside ? 'grab' : '')
       if (!drag) return
       if (!orbit) {
-        grab.yaw = Math.max(-35, Math.min(35, drag.yaw + (e.clientX - drag.x) * 0.25))
-        grab.pitch = Math.max(-20, Math.min(20, drag.pitch + (e.clientY - drag.y) * 0.2))
+        grab.yaw = Math.max(-GRAB_YAW, Math.min(GRAB_YAW, drag.yaw + (e.clientX - drag.x) * 0.25))
+        grab.pitch = Math.max(-GRAB_PITCH, Math.min(GRAB_PITCH, drag.pitch + (e.clientY - drag.y) * 0.2))
         return
       }
       const yaw = Math.max(-80, Math.min(80, drag.yaw + (e.clientX - drag.x) * 0.3))
@@ -413,6 +419,9 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
         grab.yaw *= 0.94
         grab.pitch *= 0.94
       }
+      const turn = Math.max(Math.abs(grab.yaw) / GRAB_YAW, Math.abs(grab.pitch) / GRAB_PITCH)
+      if (turn > TEXTS_HIDE_AT) el.dataset.turned = 'true'
+      else if (turn < TEXTS_SHOW_AT) delete el.dataset.turned
       yaw += tilt.yaw + grab.yaw
       pitch += tilt.pitch + grab.pitch
       root.rotation.y += (yaw * rad - root.rotation.y) * 0.08
@@ -569,7 +578,11 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
       const top = Math.max(8, Math.min(...xy.map((p) => p[1])) - 62)
       const colX = b.captions.map(({ x }) => project(new Vector3(x, 0, 0))[0])
       const widths = captions.current.map((span) => span?.firstElementChild?.clientWidth ?? 0)
-      const fitsWith = (w: number[]) => colX.every((x, i) => i === 0 || x - colX[i - 1]! >= (w[i]! + w[i - 1]!) / 2 + 6)
+      // The overlay texts turn with the network, around its rest position; turned text takes less width.
+      const turnY = root.rotation.y - st.yaw * rad
+      const turnX = root.rotation.x - st.pitch * rad
+      const turned = `perspective(600px) rotateX(${-turnX}rad) rotateY(${turnY}rad)`
+      const fitsWith = (w: number[]) => colX.every((x, i) => i === 0 || x - colX[i - 1]! >= ((w[i]! + w[i - 1]!) / 2) * Math.cos(turnY) + 6)
       const compact = el.dataset.compact === 'true'
       if (!compact) fullWidths = widths
       const roomy = fitsWith(fullWidths)
@@ -577,20 +590,27 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
       const fits = roomy || (compact && fitsWith(widths))
       const staggered = !fits && compact && colX.every((x, i) => i < 2 || x - colX[i - 2]! >= (widths[i]! + widths[i - 2]!) / 2 + 6)
       const captionTop = staggered ? Math.max(8, top - 44) : top
+      // Nearer columns stand higher, as on the network's own edge.
+      const edge = Math.max(...b.all.map((n) => n.pos.y))
+      const edgeY = b.captions.map(({ x }) => project(new Vector3(x, edge, 0))[1])
+      const lift = edgeY.map((y) => y - Math.min(...edgeY))
       b.captions.forEach((_, i) => {
         const span = captions.current[i]
         if (!span) return
         span.style.visibility = fits || staggered ? '' : 'hidden'
-        span.style.transform = `translate(${colX[i]}px, ${captionTop + (staggered && i % 2 ? 44 : 0)}px)`
+        span.style.transform = `translate(${colX[i]}px, ${captionTop + lift[i]! + (staggered && i % 2 ? 44 : 0)}px)`
+        ;(span.firstElementChild as HTMLElement | null)?.style.setProperty('transform', turned)
       })
       // A blocked attack's name: under the caption of the guard wall that stopped it, above the network.
       const wallX = b.walls.find((w) => w.layer === alertWall)?.x
       const at = wallX === undefined ? -1 : b.captions.findIndex((c) => c.accent && c.x === wallX)
       if (alertBox.current && at >= 0) {
         const captionHeight = captions.current[at]?.firstElementChild?.clientHeight ?? 20
-        alertBox.current.style.transform = `translate(${colX[at]}px, ${captionTop + (staggered ? 44 : 0) + captionHeight + 8}px)`
+        alertBox.current.style.transform = `translate(${colX[at]}px, ${captionTop + lift[at]! + (staggered ? 44 : 0) + captionHeight + 8}px)`
+        ;(alertBox.current.firstElementChild as HTMLElement | null)?.style.setProperty('transform', turned)
       }
       if (vectorBox.current && !fits && !staggered) vectorBox.current.style.display = 'none'
+      if (vectorText.current) vectorText.current.style.transform = turned
 
       if (first) {
         first = false
@@ -635,7 +655,7 @@ export default function NeuralNet({ settings, outputs, run = null, presentation 
   return (
     <div ref={wrap} data-presentation-phase={presentation} className={cx('group/net absolute inset-0', onView ? 'cursor-grab touch-none select-none active:cursor-grabbing' : 'pointer-events-none')}>
       {/* Overlays positioned each frame from the 3D scene (translate from the top-left corner). */}
-      <div aria-hidden="true">
+      <div aria-hidden="true" className="transition-opacity duration-700 ease-in-out group-data-[turned=true]/net:opacity-0 motion-reduce:transition-none">
         {/* Inputs carry no name; a blocked attack shows for about 2 s under its guard wall's caption. */}
         <span ref={alertBox} className="pointer-events-none absolute top-0 left-0">
           <span

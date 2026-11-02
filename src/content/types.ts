@@ -84,6 +84,8 @@ export type Project = {
   sections?: DossierSection[]
   /** Shown under the visuals when they are not the real product (e.g. a design mock-up). */
   imageNote?: Localized
+  /** One note per image, in gallery order, when `imageNote` would not be true of all of them. */
+  imageNotes?: readonly Localized[]
   /** Languages, frameworks, databases and tools used, without small libraries or build tools (decision 2026-10-31). */
   stack: string[]
   links: {

@@ -55,17 +55,6 @@ export const llmApps: Project[] = [
       fr: 'Un assistant de réunion transcrit l’audio avec Whisper, puis en tire résumé, plan d’action et analyse de tonalité avec le modèle Granite d’IBM.',
       en: 'A meeting assistant that transcribes audio with Whisper, then produces a summary, action plan and tone analysis with IBM’s Granite model.',
     },
-    sections: [
-      {
-        kind: 'architecture',
-        title: { fr: 'Fonctionnement', en: 'How it works' },
-        points: [
-          { label: { fr: 'Transcription', en: 'Transcription' }, text: { fr: 'l’audio est transcrit avec Whisper.', en: 'the audio is transcribed with Whisper.' } },
-          { label: { fr: 'Analyse', en: 'Analysis' }, text: { fr: 'Granite (IBM, sur watsonx.ai) en tire résumé, plan d’action et tonalité.', en: 'Granite (IBM, on watsonx.ai) draws a summary, action plan and tone from it.' } },
-          { label: { fr: 'Interface', en: 'Interface' }, text: { fr: 'une page Gradio.', en: 'a Gradio page.' } },
-        ],
-      },
-    ],
     stack: ['Python', 'Whisper', 'Granite', 'Hugging Face', 'Gradio'],
     links: { github: 'https://github.com/JN13012/Business_AI_Meeting_Companion_STT' },
     facts: [],
@@ -80,19 +69,13 @@ export const llmApps: Project[] = [
       en: 'An AI career coach: optimises the CV, writes the letter, gives advice.',
     },
     summary: {
-      fr: 'Un coach de carrière IA en trois onglets : CV, lettre de motivation et conseils.',
-      en: 'An AI career coach in three tabs: CV, cover letter and advice.',
+      fr: 'Un coach de carrière IA en trois onglets : adapter son CV à une offre, rédiger la lettre de motivation et répondre aux questions de carrière.',
     },
     sections: [
       {
-        kind: 'approach',
-        title: { fr: 'Onglets', en: 'Tabs' },
-        points: [
-          { label: { fr: 'CV', en: 'CV' }, text: { fr: 'l’adapte à une offre.', en: 'tailors it to a job offer.' } },
-          { label: { fr: 'Lettre de motivation', en: 'Cover letter' }, text: { fr: 'la rédige pour l’offre.', en: 'writes it for the offer.' } },
-          { label: { fr: 'Conseils', en: 'Advice' }, text: { fr: 'répond aux questions de carrière.', en: 'answers career questions.' } },
-          { label: { fr: 'Modèle', en: 'Model' }, text: { fr: 'Llama 3.2 sur IBM watsonx.ai, interface Gradio.', en: 'Llama 3.2 on IBM watsonx.ai, Gradio interface.' } },
-        ],
+        kind: 'architecture',
+        title: { fr: 'Modèle' },
+        body: { fr: 'Llama 3.2 sur IBM watsonx.ai, interface Gradio.' },
       },
     ],
     stack: ['Python', 'IBM watsonx', 'Llama 3', 'Gradio'],
@@ -109,20 +92,8 @@ export const llmApps: Project[] = [
       en: 'A voice translator: speak, translate with Llama 3.3, listen back.',
     },
     summary: {
-      fr: 'Un traducteur vocal transcrit la parole, la traduit avec Llama 3.3 via Groq, puis la relit à voix haute avec les services Watson.',
-      en: 'A voice translator that transcribes speech, translates it with Llama 3.3 through Groq, then reads it aloud with Watson services.',
+      fr: 'Un traducteur vocal : IBM Watson transcrit la parole, Llama 3.3 la traduit via Groq, puis Watson lit la traduction à voix haute.',
     },
-    sections: [
-      {
-        kind: 'architecture',
-        title: { fr: 'Fonctionnement', en: 'How it works' },
-        points: [
-          { label: { fr: 'Écoute', en: 'Listening' }, text: { fr: 'Watson Speech to Text transcrit la parole.', en: 'Watson Speech to Text transcribes speech.' } },
-          { label: { fr: 'Traduction', en: 'Translation' }, text: { fr: 'Llama 3.3 traduit le texte, via Groq.', en: 'Llama 3.3 translates the text, through Groq.' } },
-          { label: { fr: 'Lecture', en: 'Reading' }, text: { fr: 'Watson Text to Speech lit la traduction, dans une page Flask.', en: 'Watson Text to Speech reads the translation, in a Flask page.' } },
-        ],
-      },
-    ],
     stack: ['Python', 'Groq', 'Llama 3', 'IBM Watson', 'Flask'],
     links: { github: 'https://github.com/JN13012/AI-Assistant-Translator' },
     facts: [],

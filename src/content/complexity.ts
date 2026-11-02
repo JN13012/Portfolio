@@ -36,6 +36,9 @@ export const complexity: Record<string, { note: Complexity; why: string }> = {
   // Proposed on 2026-10-31, to validate with Jérémie.
   chronox: { note: 3, why: '1 + 1 (native Win32 and Direct2D, session events, DST, crash recovery) + 0 + 1 (automated tests, Windows CI, measured performance)' },
   'maria-agent': { note: 2, why: '1 + 1 (typed Rust API and React front end) + 0 + 0; the studio is simulated, 11 integration tests' },
+  // Proposed on 2026-11-01, to validate with Jérémie.
+  'lab-ia': { note: 4, why: '1 + 1 (real model behind server-side flags, filters and Llama Guard) + 1 (public service: quotas, global budget, abuse protection) + 1 (31 server tests, per-step view of each attempt); only 3 levels of 10 so far' },
+  fraudsignal: { note: 4, why: '1 + 1 (LLM pipeline with validation, quote checks and injection hardening, measured against a baseline) + 1 (private Cloud Run deployment, measured then stopped) + 1 (104 tests, documented evaluation and limits)' },
   cyberpong: { note: 1, why: 'Pong game in Python' },
   'unit-converter': { note: 1, why: 'Converter with a Tkinter interface' },
   'smart-fridge': { note: 1, why: 'Project-management project' },

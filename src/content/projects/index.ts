@@ -8,8 +8,8 @@ import { auditWeb, pentest } from './pentest'
 import { zeroday } from './zeroday'
 
 /** Case studies, in default display order. */
-export const dossiers: Project[] = [blocktrader, argos, pentest, zeroday]
+export const dossiers: Project[] = [argos, pentest, zeroday]
 
-export const projects: Project[] = [...dossiers, auditWeb, ...llmApps, ...cards, ...archive]
+export const projects: Project[] = [blocktrader, ...dossiers, auditWeb, ...llmApps, ...cards, ...archive]
 
-export { archive, cards }
+export { archive, blocktrader, cards }

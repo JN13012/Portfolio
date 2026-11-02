@@ -8,7 +8,7 @@ import { contact } from '../src/content/contact'
 import { hero } from '../src/content/hero'
 import { introCopy } from '../src/content/intro'
 import { profile } from '../src/content/profile'
-import { archive, cards, dossiers } from '../src/content/projects'
+import { archive, blocktrader, cards, dossiers } from '../src/content/projects'
 import { llmApps } from '../src/content/projects/llm-apps'
 import { skills } from '../src/content/skills'
 import { timeline } from '../src/content/timeline'
@@ -90,7 +90,7 @@ for (const d of dossiers) {
 }
 
 h(2, 'Autres réalisations')
-for (const c of cards) {
+for (const c of [blocktrader, ...cards]) {
   h(3, `${c.title} — ${statusLabels[c.status].fr}${c.stage ? ` · ${c.stage}` : ''}${c.team.size > 1 || c.team.role ? ` · ${teamLabel(c.team, 'fr')}` : ''}`)
   projectDetail(c)
 }

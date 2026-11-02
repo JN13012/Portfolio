@@ -13,6 +13,9 @@ import { onCore } from "../../lib/coreBus";
 import Smartfridge from "../../assets/Projets/Smartfridge.png";
 import Cyberpong from "../../assets/Projets/Cyberpong.png";
 import Chronox from "../../assets/Projets/Chronox.webp";
+import Writeups_rapport from "../../assets/Projets/Writeups_rapport.webp";
+import Writeups_liste from "../../assets/Projets/Writeups_liste.webp";
+import Chronox_capture from "../../assets/Projets/Chronox_capture.webp";
 import My_marvin from "../../assets/Projets/My_marvin.png";
 import Popeye from "../../assets/Projets/Popeye.png";
 import Vaultborn from "../../assets/Projets/Vaultborn.webp";
@@ -37,6 +40,8 @@ import CTF_Snort from "../../assets/Projets/CTF_Snort.webp";
 import CTF_Hashcat from "../../assets/Projets/CTF_Hashcat.webp";
 import CTF_Forensic from "../../assets/Projets/CTF_Forensic.png";
 import OTP_RCS from "../../assets/Projets/OTP_RCS.webp";
+import Lab_IA from "../../assets/Projets/Lab_IA.webp";
+import FraudSignal from "../../assets/Projets/FraudSignal.webp";
 import BlockTrader_Emblem from "../../assets/Logos/BlockTrader_Emblem.webp";
 import Argos_Emblem from "../../assets/Logos/Argos_Emblem.webp";
 import BlockTrader from "../../assets/Projets/BlockTrader.webp";
@@ -91,11 +96,14 @@ const IMAGES = {
   "meeting-companion": [Business_AI_Meeting],
   "career-coach": [AI_Career_Coach, AI_Career_Coach_Lettre, AI_Career_Coach_Lettres],
   "assistant-translator": [AI_Assistant_Translator],
+  fraudsignal: [FraudSignal],
+  "lab-ia": [Lab_IA],
   "generateur-otp-rcs": [OTP_RCS],
   "hackathon-citiz": [Hackathon_Citiz],
   platino: [Platino],
   chatflow: [Chatflow],
-  chronox: [Chronox],
+  chronox: [Chronox, Chronox_capture],
+  pentest: [Writeups_liste, Writeups_rapport],
   "salesforce-executor": [UlitLogo, Salesforce],
   "base-de-connaissance": [Obsidian, Obsidian0, Obsidian1],
   "ctf-du-site": [CTF_John, CTF_Hashcat, CTF_Metasploit, CTF_Forensic, CTF_Snort],
@@ -143,6 +151,7 @@ const Projects = () => {
   const [selected, setSelected] = useState(null);
   const images = selected ? IMAGES[selected.slug] ?? [] : [];
   const { imageIndex, zoomed, reset: resetGallery, openZoom, closeZoom, step: stepImage } = useImageGallery(images.length);
+  const imageNote = selected?.imageNotes?.[imageIndex] ?? selected?.imageNote;
   const shouldRestoreFocus = useRef(true);
   const close = (reason = "dismiss") => {
     shouldRestoreFocus.current = reason !== "navigate";
@@ -316,7 +325,7 @@ const Projects = () => {
                   onPrevious={images.length > 1 ? () => stepImage(-1) : undefined}
                   onNext={images.length > 1 ? () => stepImage(1) : undefined}
                   labels={{ previous: dialogUi.previousImage.fr, next: dialogUi.nextImage.fr }}
-                  caption={selected.imageNote && !EMBLEMS.has(images[imageIndex]) ? <p className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/75 px-4 py-2 text-base text-zinc-200">{selected.imageNote.fr}</p> : undefined}
+                  caption={imageNote && !EMBLEMS.has(images[imageIndex]) ? <p className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/75 px-4 py-2 text-base text-zinc-200">{imageNote.fr}</p> : undefined}
                 />
               )}
               {/* Previous / next project, outside the modal (also ← →). Hidden on phones, where the modal fills the width. */}
@@ -376,7 +385,7 @@ const Projects = () => {
 
           <div className="flex flex-grow flex-col overflow-hidden md:flex-row">
             {images.length > 0 && (
-              <div className="relative flex w-full items-center justify-center border-r border-white/5 bg-black/40 p-3 md:w-1/2">
+              <div className="relative flex w-full flex-col items-center justify-center border-r border-white/5 bg-black/40 p-3 md:w-1/2">
                 <div className="absolute inset-0 bg-cyber opacity-10 blur-3xl" />
                 <div className="relative z-10 flex w-full items-center justify-center">
                   {images.length > 1 && (
@@ -386,17 +395,18 @@ const Projects = () => {
                   )}
                   {/* An emblem floats without a frame, kept clear of the arrows. */}
                   <button type="button" onClick={openZoom} aria-label="Agrandir l’image" className={`cursor-zoom-in ${EMBLEMS.has(images[imageIndex]) ? "px-16" : ""}`}>
-                    <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className={`max-w-full object-contain ${EMBLEMS.has(images[imageIndex]) ? "max-h-[52vh]" : "max-h-[62vh] border border-white/10 shadow-2xl"}`} />
+                    <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className={`max-w-full object-contain ${EMBLEMS.has(images[imageIndex]) ? "max-h-[52vh]" : `${imageNote ? "max-h-[min(62vh,calc(90vh-20rem))]" : "max-h-[62vh]"} border border-white/10 shadow-2xl`}`} />
                   </button>
-                  {selected.imageNote && !EMBLEMS.has(images[imageIndex]) && (
-                    <p className="absolute bottom-0 left-1/2 z-20 -translate-x-1/2 bg-black/75 px-4 py-2 text-center text-sm text-zinc-200 backdrop-blur-sm md:text-base">{selected.imageNote.fr}</p>
-                  )}
                   {images.length > 1 && (
                     <button type="button" onClick={() => stepImage(1)} aria-label={dialogUi.nextImage.fr} className="absolute right-0 z-20 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
                       ›
                     </button>
                   )}
                 </div>
+                {/* Under the image, so a note never hides what it describes. */}
+                {imageNote && !EMBLEMS.has(images[imageIndex]) && (
+                  <p className="relative z-10 mt-2 text-center text-sm text-zinc-300">{imageNote.fr}</p>
+                )}
               </div>
             )}
 
@@ -432,7 +442,7 @@ const Projects = () => {
                     <ul className="space-y-2 pl-4 text-[15px] leading-relaxed text-zinc-300">
                       {s.points.map((pt) => (
                         <li key={pt.text.fr} className="flex gap-2">
-                          <span aria-hidden="true" className="text-cyber/70">▸</span>
+                          <span aria-hidden="true" className="text-cyber/70">{pt.label ? "▸" : "-"}</span>
                           <span>
                             {pt.label && <span className="font-semibold text-zinc-100">{pt.label.fr} : </span>}
                             {pt.text.fr}

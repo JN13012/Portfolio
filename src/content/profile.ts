@@ -1,3 +1,4 @@
+import cvUrl from '../assets/Jeremie_Nagi_CV.pdf'
 import type { Localized } from './types'
 
 type Language = {
@@ -20,6 +21,8 @@ type Strength = {
 export const profile = {
   firstName: 'Jérémie',
   lastName: 'Nagi',
+  // General AI × cyber CV, public: no phone number. Source kept outside the repo (2026-11-01).
+  cv: { url: cvUrl, fileName: 'Jeremie_Nagi_CV.pdf' },
   availability: {
     fr: 'Disponible immédiatement',
     en: 'Available immediately',
@@ -181,10 +184,11 @@ export const profile = {
   /** Countries lived in (ISO 3166-1 alpha-2), drawn in Profil and on the intro globe. */
   countries: ['LB', 'SA', 'QA', 'CA', 'PE', 'FR'],
   /** Date shown in the hero file header. Update when content changes. */
-  updatedAt: '2026-10-17',
+  updatedAt: '2026-11-01',
 } satisfies {
   firstName: string
   lastName: string
+  cv: { url: string; fileName: string }
   availability: Localized
   seeking: Localized[]
   location: Localized

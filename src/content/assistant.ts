@@ -198,7 +198,7 @@ export const brainNodes: BrainNode[] = [
         id: 'reach',
         question: { fr: 'Comment le contacter ?', en: 'How can I reach him?' },
         answer: {
-          fr: 'Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV est en cours de mise à jour.',
+          fr: 'Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV se télécharge depuis l’accueil et la section Contact.',
         },
         sources: [{ kind: 'section', node: 'contact' }],
         validated: false,

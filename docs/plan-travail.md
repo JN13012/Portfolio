@@ -43,6 +43,7 @@ Déroulé d’une étape :
 - [x] **Hero sur téléphone** : titre, sous-titre et bouton Menu tiennent à 320, 360, 390, 430 et 768 px.
 - [x] **CV** : mention grisée dans le Hero et Contact, `CV.pdf` retiré du dépôt et du build,
   « Me contacter » est l’action principale du Hero.
+- [x] **CV de retour** (1er novembre) : CV général IA × cyber, sans téléphone, dans `src/assets/Jeremie_Nagi_CV.pdf`, téléchargeable depuis le Hero et Contact.
 - [x] **Description Google** et réponse préparée « Qui est Jérémie ? » : intitulé de Parcours
   à la place de « MSc cybersécurité ».
 - [x] **En-têtes de sécurité** dans `public/_headers`, car le Worker ne s’exécute pas pour les fichiers statiques :
@@ -108,7 +109,8 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 
 - [x] Ouverture publique du sélecteur IA avec le seul niveau 1, décidée par Jérémie le 31 octobre. Les autres restent « À venir ».
 - [x] Niveau 2 réel, sur `developpement` : filtres d’entrée et de sortie, mesurés sur le vrai modèle le 1er novembre (voir [le plan du Lab](conception-lab-ia.md#filtres-dentrée-et-de-sortie-02)).
-- [ ] Niveau 3 réel, puis niveau 4 (document piégé).
+- [x] Niveau 3 réel, sur `developpement` : classifieur Gemma 4, mesuré sur le vrai modèle le 1er novembre (voir [le plan du Lab](conception-lab-ia.md#classifieur-ia-03)).
+- [ ] Niveau 4 (document piégé).
 - [ ] Démonstration enregistrée à décider, banc de test et corpus publiés, avec taux de réussite par niveau.
 - [ ] Refaire le contrôle sécurité à chaque niveau ajouté.
 
@@ -145,13 +147,10 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 
 ## À fournir par Jérémie, à son rythme
 
-- **Nouveau CV** : ULIT 6 mois (janvier à juin 2026), dates du master selon Parcours, audit web selon
-  le texte du projet, positionnement IA et cyber. À sa réception : remettre le PDF dans `src/assets/`,
-  son import dans `content/profile.ts` et les liens de téléchargement du Hero et de Contact.
 - **Réponses de Sentry** : relire les 11 réponses préparées (`content/assistant.ts`), écrire « points forts »
   et « points faibles ». Elles débloquent l’étape 7.
 
-- **Nouveaux projets** : valider les notes de complexité proposées pour Chronox (3) et Maria Agent (2).
+- **Nouveaux projets** : valider les notes de complexité proposées pour Chronox (3), Maria Agent (2), FraudSignal (4) et Lab IA (4).
 
 ## État des branches au 31 octobre 2026
 

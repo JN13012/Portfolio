@@ -1,5 +1,5 @@
 import { useMemo, useState, useSyncExternalStore, type CSSProperties } from 'react'
-import { FileClock, Mail, MapPin } from 'lucide-react'
+import { Download, Mail, MapPin } from 'lucide-react'
 import { hero } from '../../content/hero'
 import { profile } from '../../content/profile'
 import { currentRun, useAssistant } from '../../lib/assistantStore'
@@ -90,7 +90,7 @@ export function Hero() {
 
             <HeroProofs />
 
-            {/* Availability on two lines (the location alone on the second), then the contact button and the CV's status. */}
+            {/* Availability on two lines (the location alone on the second), then the contact and CV buttons. */}
             <div className="flex flex-col gap-[1.1em]">
               <ul className="flex flex-wrap items-center gap-x-[1.25em] gap-y-[0.45em] text-[0.9375em] text-zinc-300">
                 <li className="inline-flex items-center gap-[0.5em] text-zinc-100">
@@ -112,9 +112,13 @@ export function Hero() {
                 >
                   <Mail aria-hidden="true" className="size-[1.125em]" /> {hero.ctaContact.fr}
                 </a>
-                <span className="inline-flex cursor-not-allowed items-center gap-[0.6em] py-[0.2em] text-[0.875em] text-zinc-400">
-                  <FileClock aria-hidden="true" className="size-[1.125em]" /> {hero.cvPending.fr}
-                </span>
+                <a
+                  href={profile.cv.url}
+                  download={profile.cv.fileName}
+                  className="inline-flex items-center gap-[0.75em] border border-white/20 px-[1.6em] py-[0.85em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
+                >
+                  <Download aria-hidden="true" className="size-[1.125em]" /> {hero.ctaCv.fr}
+                </a>
               </div>
             </div>
           </div>

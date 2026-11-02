@@ -58,7 +58,7 @@ export const hero = {
   /** The labs. */
   labs: [
     { id: 'cyber', label: { fr: 'Lab cyber', en: 'Cyber lab' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
-    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red team IA · 2 niveaux', en: 'AI red team · 2 levels' } },
+    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red team IA · 3 niveaux', en: 'AI red team · 3 levels' } },
   ],
   /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
   labPanel: {
@@ -81,7 +81,7 @@ export const hero = {
     title: { fr: 'Lab IA', en: 'AI lab' },
     intro: { fr: 'Un exercice de red team sur un vrai modèle : faites révéler son flag à Sentry.' },
     phases: [
-      { title: { fr: 'Direct Prompt Injection' }, text: { fr: 'niveaux 1 et 2 jouables' } },
+      { title: { fr: 'Direct Prompt Injection' }, text: { fr: 'niveaux 1 à 3 jouables' } },
       { title: { fr: 'Indirect Prompt Injection' }, text: { fr: 'à venir' } },
       { title: { fr: 'Agents & API' }, text: { fr: 'à venir' } },
       { title: { fr: 'Hardening' }, text: { fr: 'à venir' } },
@@ -94,8 +94,7 @@ export const hero = {
   available: { fr: 'Disponible', en: 'Available' },
   voice: { fr: 'Écouter ma présentation', en: 'Listen to my introduction' },
   voiceSoon: { fr: 'bientôt', en: 'soon' },
-  // The old PDF is outdated and no longer served (decision 2026-10-30); greyed until the new one exists.
-  cvPending: { fr: 'CV en cours de mise à jour' },
+  ctaCv: { fr: 'Télécharger mon CV' },
   ctaContact: { fr: 'Me contacter', en: 'Contact me' },
   scrollHint: { fr: 'Défiler', en: 'Scroll' },
   updated: { fr: 'MAJ', en: 'Updated' },

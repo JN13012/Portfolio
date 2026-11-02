@@ -7,7 +7,7 @@ export const skills: Record<Track, SkillGroup[]> = {
   ia: [
     {
       title: { fr: 'Applications LLM', en: 'LLM applications' },
-      items: ['LangChain', 'RAG', 'FAISS', 'IBM watsonx', 'Llama 3', 'Groq', 'Hugging Face Transformers', 'Gradio'],
+      items: ['LangChain', 'RAG', 'FAISS', 'Gemini', 'Vertex AI', 'IBM watsonx', 'Llama 3', 'Groq', 'Hugging Face Transformers', 'Gradio'],
     },
     {
       title: { fr: 'Voix et langage', en: 'Speech and language' },
@@ -58,7 +58,7 @@ export const skills: Record<Track, SkillGroup[]> = {
     },
     {
       title: { fr: 'Web et back-end', en: 'Web and back-end' },
-      items: ['React', 'Next.js', 'NestJS', 'Express', 'Prisma', 'Drizzle', 'Socket.IO', 'Electron', 'Lightning Web Components'],
+      items: ['React', 'Next.js', 'NestJS', 'FastAPI', 'Express', 'Prisma', 'Drizzle', 'Socket.IO', 'Electron', 'Lightning Web Components'],
     },
     {
       title: { fr: 'Données', en: 'Data' },

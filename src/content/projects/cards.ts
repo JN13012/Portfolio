@@ -5,6 +5,44 @@ import type { Project } from '../types'
 
 export const cards: Project[] = [
   {
+    // Figures from the FraudSignal README and results/ (commit 4cd29f2), read on 2026-11-01.
+    slug: 'fraudsignal',
+    tier: 'card',
+    status: 'delivered',
+    tracks: ['ia', 'cyber'],
+    title: 'FraudSignal',
+    period: { start: '2026-11', end: '2026-11' },
+    team: { size: 1 },
+    context: 'personal',
+    tagline: {
+      fr: 'Un pipeline LLM qui analyse les messages suspects et demande une relecture si besoin.',
+    },
+    summary: {
+      fr: 'FraudSignal analyse les e-mails, SMS et messages WhatsApp suspects. Gemini rend un verdict appuyé par des signaux cités dans le message, et le code décide quand un humain doit vérifier. C’est une aide à la décision, pas une preuve de fraude.',
+    },
+    sections: [
+      {
+        kind: 'result',
+        title: { fr: 'Résultats' },
+        body: { fr: 'Sur 180 messages fictifs, F1 de 0,99 sur la fraude, contre 0,81 pour une référence TF-IDF. 34 messages partent en relecture, dont les 11 où le modèle se trompe.' },
+      },
+      {
+        kind: 'security',
+        title: { fr: 'Prompt injection' },
+        body: { fr: 'Sur 48 tests de prompt injection, aucun n’a modifié le verdict.' },
+      },
+    ],
+    // The visual says itself that it is an excerpt on a fictional message: results/gemini_v3.jsonl, fraud-fr-sms-01.
+    stack: ['Python', 'Gemini', 'Vertex AI', 'FastAPI', 'Cloud Run', 'Docker', 'scikit-learn'],
+    links: { github: 'https://github.com/JN13012/FraudSignal' },
+    facts: [
+      { value: '180', label: { fr: 'messages fictifs' }, source: 'FraudSignal: data/messages.json, README « Evaluation »' },
+      { value: '48', label: { fr: 'tests de prompt injection' }, source: 'FraudSignal: data/injections.json, README « Prompt injection »' },
+    ],
+    scale: { months: 1, tests: 104 },
+    doNotClaim: ['A live service or demo: it was deployed, measured, then stopped', 'Real-world accuracy: the dataset is fictional and the figures are not a held-out test', 'Resistance to adaptive attackers', 'Billed cost: the per-message cost is an estimate from list prices'],
+  },
+  {
     slug: 'chronox',
     tier: 'card',
     status: 'development',
@@ -15,29 +53,32 @@ export const cards: Project[] = [
     team: { size: 1 },
     context: 'personal',
     tagline: {
-      fr: 'Un widget Windows natif pour connaître mon vrai temps de travail, sans cloud.',
+      fr: 'Un widget Windows natif pour connaître mon temps de travail, sans cloud.',
     },
     summary: {
-      fr: 'Curieux de connaître ma vraie moyenne d’heures travaillées, j’ai créé Chronox : un petit widget Windows qui compte le temps où ma session est ouverte et le PC éveillé, puis en tire des bilans par jour, semaine, mois et année. Tout reste sur ma machine, sans cloud.',
+      fr: 'Curieux de connaître ma moyenne d’heures travaillées, j’ai créé Chronox : un widget Windows qui compte le temps de ma session active, avec des bilans par jour, semaine, mois et année.',
     },
     sections: [
       {
         kind: 'approach',
         title: { fr: 'Comment ça marche', en: 'How it works' },
-        body: { fr: 'Chronox suit le verrouillage de session et la mise en veille de Windows, et enregistre le temps au moins une fois par minute : une coupure de courant ne coûte donc qu’une minute de suivi, au plus. Écrit en C++, il reste léger : environ 8 Mo de mémoire et 0,15 % d’un cœur lors de mes mesures.' },
+        body: { fr: 'Écrit en C++, il enregistre le temps chaque minute. Performances mesurées sur un échantillon de 8 heures : environ 8 Mo de mémoire et 0,15 % d’un cœur.' },
       },
       {
         kind: 'limits',
         title: { fr: 'Vision', en: 'Vision' },
-        body: { fr: 'Chronox pourrait ensuite reconnaître l’application au premier plan, rattacher le temps à des projets et préparer un compte rendu quotidien modifiable, relié à GitHub, Jira ou l’agenda.' },
+        body: { fr: 'Il pourrait ensuite reconnaître l’application au premier plan, rattacher le temps à des projets et préparer un compte rendu quotidien, relié à GitHub, Jira, l’agenda ou d’autres applications.' },
       },
     ],
-    imageNote: { fr: 'Référence artistique de l’interface visée, pas une capture du widget actuel.' },
+    imageNotes: [
+      { fr: 'Référence artistique de l’interface visée.' },
+      { fr: 'Capture réelle du widget.' },
+    ],
     stack: ['C++', 'SQLite', 'GitHub Actions'],
     links: { github: 'https://github.com/JN13012/chronox' },
     facts: [],
     scale: { months: 1 },
-    doNotClaim: ['A finished status: the text reads as the finished product (Jérémie, 2026-10-31), the badge stays « En développement » until it is', 'The reference image as a screenshot', 'A long-term performance profile: only short samples were measured'],
+    doNotClaim: ['A finished status: the text reads as the finished product (Jérémie, 2026-10-31), the badge stays « En développement » until it is', 'The reference image as a screenshot: only the second image is one', 'A profile beyond the 8-hour run on another PC, stated by Jérémie on 2026-11-02: docs/PERFORMANCE.md in the Chronox repo still records only short samples', 'A memory-leak test: docs/PERFORMANCE.md in the Chronox repo states none was done'],
   },
   {
     slug: 'maria-agent',
@@ -86,7 +127,7 @@ export const cards: Project[] = [
     team: { size: 4, role: { fr: 'backend et sécurité applicative', en: 'backend and application security' } },
     context: 'hackathon',
     tagline: {
-      fr: 'Backend 2FA : codes à 6 chiffres envoyés par RCS, hachés et limités.',
+      fr: 'Backend 2FA : codes à 6 chiffres envoyés par RCS, hachés et à essais limités.',
       en: 'A 2FA back end: 6-digit codes sent over RCS, hashed and rate-limited.',
     },
     summary: {
@@ -96,30 +137,24 @@ export const cards: Project[] = [
     sections: [
       {
         kind: 'approach',
-        title: { fr: 'Fonctionnalités', en: 'Features' },
+        title: { fr: 'Fonctionnalités' },
         points: [
-          { label: { fr: 'Envoi', en: 'Sending' }, text: { fr: 'un code à 6 chiffres, envoyé par RCS avec l’API smsmode.', en: 'a 6-digit code, sent over RCS with the smsmode API.' } },
-          { label: { fr: 'Vérification', en: 'Verification' }, text: { fr: 'le code saisi est comparé à la demande en cours.', en: 'the code entered is checked against the pending request.' } },
-          { label: { fr: 'Expiration', en: 'Expiry' }, text: { fr: '5 minutes de validité, 3 essais au plus.', en: 'valid for 5 minutes, 3 attempts at most.' } },
+          { label: { fr: 'Envoi' }, text: { fr: 'un code à 6 chiffres, envoyé par RCS avec l’API smsmode.' } },
+          { label: { fr: 'Expiration' }, text: { fr: '5 minutes de validité, 3 essais au plus.' } },
         ],
       },
       {
         kind: 'security',
-        title: { fr: 'Sécurité', en: 'Security' },
+        title: { fr: 'Sécurité' },
         points: [
-          { label: { fr: 'Stockage', en: 'Storage' }, text: { fr: 'seule l’empreinte SHA-256 du code est gardée.', en: 'only the SHA-256 hash of the code is kept.' } },
-          { label: { fr: 'Limitation', en: 'Rate limiting' }, text: { fr: 'par numéro de téléphone et par adresse IP.', en: 'per phone number and per IP address.' } },
-          { label: { fr: 'Validation', en: 'Validation' }, text: { fr: 'chaque requête est vérifiée avant traitement.', en: 'every request is checked before processing.' } },
+          { label: { fr: 'Stockage' }, text: { fr: 'seule l’empreinte SHA-256 du code est gardée.' } },
+          { label: { fr: 'Limitation' }, text: { fr: 'par numéro de téléphone et par adresse IP.' } },
         ],
       },
       {
         kind: 'result',
-        title: { fr: 'Ma part', en: 'My part' },
-        points: [
-          { label: { fr: 'Service OTP', en: 'OTP service' }, text: { fr: 'génération, envoi et vérification des codes.', en: 'generating, sending and checking codes.' } },
-          { label: { fr: 'Données', en: 'Data' }, text: { fr: 'les accès à la base MongoDB.', en: 'access to the MongoDB database.' } },
-          { label: { fr: 'Protections', en: 'Protections' }, text: { fr: 'limitation par IP et validation des requêtes.', en: 'per-IP rate limiting and request validation.' } },
-        ],
+        title: { fr: 'Ma part' },
+        body: { fr: 'Le service OTP, les accès à la base MongoDB, la limitation par IP et la validation des requêtes.' },
       },
     ],
     stack: ['NestJS', 'TypeScript', 'MongoDB', 'Docker Compose', 'Swagger'],
@@ -150,36 +185,12 @@ export const cards: Project[] = [
       fr: '2e place au hackathon Epitech pour la conception d’un outil d’aide à la décision : où ouvrir des stations d’autopartage Citiz pour desservir le plus d’habitants au moindre coût.',
       en: '2nd place at the Epitech hackathon for designing a decision tool: where to open Citiz car-sharing stations to serve the most residents at the lowest cost.',
     },
+    // geo/download_osm_ara.py (Jérémie's commits): Geofabrik extracts archived with a checksum.
     sections: [
       {
         kind: 'approach',
-        title: { fr: 'Objectifs', en: 'Goals' },
-        points: [
-          { label: { fr: 'Accessibilité', en: 'Accessibility' }, text: { fr: 'cartographier, pour chaque habitant, le nombre de transports accessibles à 5 minutes à pied.', en: 'map, for each resident, how many transport options are within a 5-minute walk.' } },
-          { label: { fr: 'Desserte', en: 'Coverage' }, text: { fr: 'recenser les arrêts et les stations par type, avec la population qu’ils desservent.', en: 'list stops and stations by type, with the population they serve.' } },
-          { label: { fr: 'Décision', en: 'Decision' }, text: { fr: 'estimer le potentiel de chaque site, chiffrer les coûts et classer les sites selon un budget.', en: 'estimate each site’s potential, cost it and rank the sites within a budget.' } },
-        ],
-      },
-      {
-        kind: 'architecture',
-        title: { fr: 'Ma part', en: 'My part' },
-        points: [
-          // geo/download_osm_ara.py (Jérémie's commits): Geofabrik extracts archived with a checksum.
-          { label: { fr: 'Extraction', en: 'Extraction' }, text: { fr: 'téléchargement et archivage des extraits OpenStreetMap, avec contrôle d’intégrité.', en: 'downloading and archiving the OpenStreetMap extracts, with integrity checks.' } },
-          { label: { fr: 'Nettoyage', en: 'Cleaning' }, text: { fr: 'contrôle qualité des données géographiques (doublons, géométries invalides, valeurs manquantes).', en: 'quality checks on the geographic data (duplicates, invalid geometries, missing values).' } },
-          { label: { fr: 'Réseau piéton', en: 'Pedestrian network' }, text: { fr: 'construit depuis OpenStreetMap, 16,6 millions de nœuds découpés en 835 tuiles.', en: 'built from OpenStreetMap, 16.6 million nodes split into 835 tiles.' } },
-          { label: { fr: 'Croisement', en: 'Linking' }, text: { fr: 'population, arrêts, stations et routes, pour relier chaque habitant au réseau.', en: 'population, stops, stations and roads, to link every resident to the network.' } },
-          { label: { fr: 'Zones desservies', en: 'Served areas' }, text: { fr: 'calcul des zones à 5 minutes à pied autour de chaque arrêt.', en: 'computing the areas within a 5-minute walk of each stop.' } },
-          { label: { fr: 'Accès et couverture', en: 'Access and coverage' }, text: { fr: 'la carte d’accès et la population desservie, qui alimentent le modèle ; chaque étape testée.', en: 'the access map and population served, feeding the model; every step tested.' } },
-        ],
-      },
-      {
-        kind: 'result',
-        title: { fr: 'Résultat', en: 'Result' },
-        points: [
-          { label: { fr: 'Modèle (équipe)', en: 'Model (team)' }, text: { fr: 'il apprend où les stations existantes se trouvent et note chaque zone ; testé sur des territoires qu’il n’a jamais vus, il fait mieux qu’un simple classement par population.', en: 'it learns where existing stations are and scores each area; tested on territories it has never seen, it beats a plain ranking by population.' } },
-          { label: { fr: 'Liste priorisée', en: 'Priority list' }, text: { fr: 'les sites qui desservent le plus d’habitants pour un budget donné, avec une part réservée hors des grandes villes.', en: 'the sites serving the most residents for a given budget, with a share kept outside big cities.' } },
-        ],
+        title: { fr: 'Comment ça marche' },
+        body: { fr: 'L’outil s’appuie sur des données publiques : population, emplois, équipements, ménages sans voiture, arrêts de transport et réseau piéton OpenStreetMap de 16,6 millions de nœuds. Nous les avons extraites, nettoyées et croisées pour mesurer ce qui est accessible à 5 minutes à pied. Un modèle LightGBM utilise toutes ces données pour noter chaque zone.' },
       },
     ],
     stack: ['Python', 'Pandas', 'GeoPandas', 'OSMnx', 'NetworkX', 'SciPy', 'Parquet', 'Leaflet', 'Docker'],
@@ -191,7 +202,7 @@ export const cards: Project[] = [
     scale: { months: 1 },
     doNotClaim: [
       'Jérémie built the prediction model (it is team work; he collected, cleaned and computed the geodata)',
-      'The model on main: it is on branch carte-citiz-dashboard (model/train.py, LightGBM, pushed by a teammate on 2026-10-26)',
+      'The model as his work: LightGBM is on main (README, model/), built by a teammate; data sources in SOURCES.md (read on 2026-11-02)',
     ],
   },
   {
@@ -231,16 +242,6 @@ export const cards: Project[] = [
           { label: { fr: 'Fichiers', en: 'Files' }, text: { fr: 'stockés dans MinIO.', en: 'stored in MinIO.' } },
         ],
       },
-      {
-        kind: 'result',
-        title: { fr: 'Ma part', en: 'My part' },
-        points: [
-          { label: { fr: 'Membres', en: 'Members' }, text: { fr: 'statut en ligne, exclusion, messages épinglés.', en: 'online status, kicking, pinned messages.' } },
-          { label: { fr: 'Invitations', en: 'Invitations' }, text: { fr: 'une invitation unique par personne, et une liste paginée.', en: 'a single invitation per person, and a paginated list.' } },
-          { label: { fr: 'Notifications', en: 'Notifications' }, text: { fr: 'l’envoi des notifications aux membres.', en: 'sending notifications to members.' } },
-          { label: { fr: 'CI', en: 'CI' }, text: { fr: 'la mise en place de l’intégration continue.', en: 'setting up continuous integration.' } },
-        ],
-      },
     ],
     stack: ['Node.js', 'Express', 'Prisma', 'MySQL', 'Socket.IO', 'Next.js', 'React', 'Electron', 'Docker', 'Jest'],
     links: { privateRepo: true },
@@ -271,7 +272,6 @@ export const cards: Project[] = [
         title: { fr: 'Fonctionnalités', en: 'Features' },
         points: [
           { label: { fr: 'Pointage', en: 'Clocking' }, text: { fr: 'arrivées, départs et corrections.', en: 'arrivals, departures and corrections.' } },
-          { label: { fr: 'Équipes', en: 'Teams' }, text: { fr: 'les managers gèrent leurs équipes et suivent des indicateurs.', en: 'managers run their teams and follow KPIs.' } },
           { label: { fr: 'Connexion', en: 'Sign-in' }, text: { fr: 'par e-mail ou par Microsoft (Entra ID), sans inscription libre.', en: 'by email or Microsoft (Entra ID), with no open sign-up.' } },
         ],
       },
@@ -290,11 +290,6 @@ export const cards: Project[] = [
           { label: { fr: 'Base de données', en: 'Database' }, text: { fr: 'tout le schéma (utilisateurs, équipes, appartenances, pointages, corrections), avec ses migrations et ses tests.', en: 'the whole schema (users, teams, memberships, time entries, corrections), with its migrations and tests.' } },
           { label: { fr: 'API des équipes', en: 'Teams API' }, text: { fr: 'validation, accès aux données, règles métier, droits du manager, archivage, puis les routes et le contrôleur, testés.', en: 'validation, data access, business rules, manager rights, archiving, then the routes and controller, tested.' } },
         ],
-      },
-      {
-        kind: 'limits',
-        title: { fr: 'Où en est le projet', en: 'Where it stands' },
-        body: { fr: 'En cours de construction.', en: 'Under construction.' },
       },
     ],
     stack: ['NestJS', 'TypeScript', 'PostgreSQL', 'Drizzle', 'React', 'Microsoft Entra ID', 'Caddy', 'Docker Compose', 'Vitest'],
@@ -326,43 +321,8 @@ export const cards: Project[] = [
     sections: [
       {
         kind: 'approach',
-        title: { fr: 'Ce qu’il fait', en: 'What it does' },
-        body: {
-          fr: 'Tout ce qu’il faut pour lancer du code Apex en confiance, sans quitter Salesforce.',
-          en: 'Everything needed to run Apex code with confidence, without leaving Salesforce.',
-        },
-        points: [
-          {
-            label: { fr: 'Exécution', en: 'Execution' },
-            text: { fr: 'par l’API Tooling, avec les erreurs localisées à la ligne et à la colonne.', en: 'through the Tooling API, with errors pinpointed to line and column.' },
-          },
-          { label: { fr: 'Coloration syntaxique', en: 'Syntax highlighting' }, text: { fr: 'du code Apex dans l’éditeur.', en: 'of Apex code in the editor.' } },
-          {
-            label: { fr: 'Chaînage de scripts', en: 'Script chaining' },
-            text: { fr: 'A, puis B si A réussit, puis C ; au premier échec, la chaîne s’arrête et un message d’erreur est envoyé.', en: 'A, then B if A succeeds, then C; at the first failure the chain stops and an error message is sent.' },
-          },
-          {
-            label: { fr: 'Planification', en: 'Scheduling' },
-            text: { fr: 'exécution unique, quotidienne ou hebdomadaire, avec la liste des tâches planifiées.', en: 'one-off, daily or weekly runs, with the list of scheduled jobs.' },
-          },
-          {
-            label: { fr: 'Logs', en: 'Logs' },
-            text: { fr: 'niveaux réglables par catégorie, journaux sauvegardés avec chaque exécution, suivis et téléchargeables.', en: 'levels set per category, logs saved with every run, tracked and downloadable.' },
-          },
-          { label: { fr: 'Sessions', en: 'Sessions' }, text: { fr: 'plusieurs exécutions regroupées dans un même journal.', en: 'several runs grouped in one log.' } },
-          {
-            label: { fr: 'Versions', en: 'Versions' },
-            text: { fr: 'nom et numéro de version automatiques, historique des versions, import et export.', en: 'automatic name and version number, version history, import and export.' },
-          },
-          {
-            label: { fr: 'Historique', en: 'History' },
-            text: { fr: 'toutes les exécutions d’un script, la dernière affichée à côté de son nom.', en: 'every run of a script, the latest shown next to its name.' },
-          },
-          {
-            label: { fr: 'Droits', en: 'Permissions' },
-            text: { fr: 'les droits Salesforce sont vérifiés avant chaque lecture ou écriture.', en: 'Salesforce permissions are checked before every read or write.' },
-          },
-        ],
+        title: { fr: 'Ce qu’il fait' },
+        body: { fr: 'Erreurs localisées à la ligne, chaînage qui s’arrête au premier échec, planification, journaux téléchargeables, historique des versions, et droits Salesforce vérifiés avant chaque lecture ou écriture.' },
       },
     ],
     // GitHub languages of JN13012/Code-Executor---Salesforce (2026-10-24): JavaScript, Apex, HTML, CSS; LWC components.
@@ -370,7 +330,6 @@ export const cards: Project[] = [
     links: { privateRepo: true },
     facts: [
       { value: '≈ 20', label: { fr: 'utilisateurs', en: 'users' }, source: 'Jérémie, 2026-10-26: QA and dev teams' },
-      { value: '9', label: { fr: 'fonctionnalités', en: 'features' }, source: 'the « Ce qu’il fait » list (repo + script chaining told by Jérémie)' },
     ],
     scale: { months: 6 },
   },
@@ -440,7 +399,6 @@ export const cards: Project[] = [
         kind: 'approach',
         title: { fr: 'Analyses', en: 'Analyses' },
         points: [
-          { label: { fr: 'Diversité lexicale', en: 'Lexical diversity' }, text: { fr: 'la richesse du vocabulaire.', en: 'how rich the vocabulary is.' } },
           { label: { fr: 'Thèmes', en: 'Topics' }, text: { fr: 'les mots importants de chaque section (TF-IDF).', en: 'the key words of each section (TF-IDF).' } },
           { label: { fr: 'Entités', en: 'Entities' }, text: { fr: 'les personnages et les lieux, avec spaCy.', en: 'characters and places, with spaCy.' } },
           { label: { fr: 'Résumé et livres proches', en: 'Summary and similar books' }, text: { fr: 'un résumé court et les livres les plus proches (similarité cosinus).', en: 'a short summary and the closest books (cosine similarity).' } },
@@ -463,7 +421,7 @@ export const cards: Project[] = [
     team: { size: 1 },
     context: 'personal',
     tagline: {
-      fr: '728 notes Obsidian : cours, méthodes de pentest et notes de projets, cyber, IA et dev.',
+      fr: '729 notes Obsidian : cours, méthodes de pentest et notes de projets, cyber, IA et dev.',
       en: '728 Obsidian notes: courses, pentest methods and project notes, security, AI and dev.',
     },
     summary: {
@@ -474,9 +432,8 @@ export const cards: Project[] = [
       {
         kind: 'approach',
         title: { fr: 'Ce qu’elle couvre', en: 'What it covers' },
-        body: { fr: 'Cinq domaines, comptés le 26 octobre 2026.', en: 'Five areas, counted on 26 October 2026.' },
         points: [
-          { label: { fr: 'Cybersécurité (414 notes)', en: 'Security (414 notes)' }, text: { fr: '370 notes de cours TryHackMe et 43 fiches de méthode pentest.', en: '370 TryHackMe course notes and 43 pentest method sheets.' } },
+          { label: { fr: 'Cybersécurité (414 notes)', en: 'Security (414 notes)' }, text: { fr: 'notes de cours TryHackMe et fiches de méthode pentest.', en: '370 TryHackMe course notes and 43 pentest method sheets.' } },
           { label: { fr: 'Projets (257 notes)', en: 'Projects (257 notes)' }, text: { fr: 'conception et suivi d’Argos, BlockTrader, ZeroDay…', en: 'design and follow-up of Argos, BlockTrader, ZeroDay…' } },
           { label: { fr: 'IA (34 notes)', en: 'AI (34 notes)' }, text: { fr: 'le parcours IBM AI Developer.', en: 'the IBM AI Developer path.' } },
           { label: { fr: 'Salesforce et DevOps', en: 'Salesforce and DevOps' }, text: { fr: '10 et 7 notes.', en: '10 and 7 notes.' } },
@@ -486,16 +443,50 @@ export const cards: Project[] = [
     stack: ['Obsidian'],
     links: { privateRepo: true },
     facts: [
-      { value: '728', label: { fr: 'notes', en: 'notes' }, source: 'find vault -name "*.md" | wc -l (2026-10-26), per top folder' },
+      { value: '729', label: { fr: 'notes', en: 'notes' }, source: 'find vault -name "*.md" | wc -l (2026-10-26), per top folder' },
     ],
     scale: { months: 4 },
+  },
+  {
+    // Facts from server/aiLab, content/aiLab.ts and docs/conception-lab-ia.md (2026-11-01).
+    slug: 'lab-ia',
+    tier: 'card',
+    status: 'development',
+    stage: 'MVP',
+    tracks: ['ia', 'cyber'],
+    title: 'Lab IA',
+    period: { start: '2026-10' },
+    team: { size: 1 },
+    context: 'personal',
+    tagline: {
+      fr: 'Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 3 niveaux ouverts.',
+    },
+    summary: {
+      fr: 'Un exercice de red teaming jouable dans le Lab de ce site : le visiteur tente d’obtenir un flag fictif que protège Sentry, qui répond avec un vrai modèle. Les niveaux 1 à 3 sont ouverts ; les 7 autres sont annoncés « À venir ».',
+    },
+    sections: [
+      {
+        kind: 'security',
+        title: { fr: 'Sécurité' },
+        body: { fr: 'Le serveur gère les flags et la progression, et applique des quotas par session et par adresse IP, sur 1 heure, 5 heures et 24 heures.' },
+      },
+    ],
+    stack: ['React', 'TypeScript', 'Cloudflare Workers', 'Workers AI', 'D1'],
+    links: { demo: '#lab-ia' },
+    facts: [
+      { value: '3', label: { fr: 'niveaux ouverts' }, source: 'src/content/aiLab.ts: levels with available: true' },
+      { value: '10', label: { fr: 'niveaux prévus' }, source: 'src/content/aiLab.ts: aiLabCurriculum' },
+      { value: '31', label: { fr: 'tests du serveur' }, source: 'server/aiLab/handler.test.ts' },
+    ],
+    scale: { months: 1, tests: 31 },
+    doNotClaim: ['Levels 4 to 10 as playable', 'An unbreakable defence: the target is deliberately vulnerable', 'A product or an evaluation tool: it is a teaching mini-game'],
   },
   {
     slug: 'ctf-du-site',
     tier: 'card',
     status: 'delivered',
     tracks: ['cyber'],
-    title: 'CTF du portfolio',
+    title: 'Lab cyber',
     // git log of src/components/ProfileConsole: 2026-04-29 → 2026-05-28.
     period: { start: '2026-04', end: '2026-05' },
     team: { size: 1 },
@@ -505,24 +496,22 @@ export const cards: Project[] = [
       en: 'A 9-level CTF playable on this site: attack a machine, then defend it.',
     },
     summary: {
-      fr: 'Un CTF jouable dans le Lab de ce site, dans un terminal simulé. On attaque d’abord une machine fictive, de la reconnaissance à l’exploitation, puis on passe côté défense : analyser l’attaque, la contenir et durcir l’infrastructure. La progression est gardée dans le navigateur.',
-      en: 'A CTF playable in this site’s Lab, in a simulated terminal. You first attack a fictional machine, from reconnaissance to exploitation, then switch to defence: analyse the attack, contain it and harden the infrastructure. Progress is kept in the browser.',
+      fr: 'Un CTF jouable dans le Lab de ce site, dans un terminal simulé. On attaque d’abord une machine fictive, de la reconnaissance à l’exploitation, puis on passe côté défense : analyser l’attaque, la contenir et durcir l’infrastructure.',
     },
     sections: [
       {
         kind: 'approach',
-        title: { fr: 'Les 9 niveaux', en: 'The 9 levels' },
-        body: { fr: 'Six niveaux d’attaque, puis trois de défense.', en: 'Six attack levels, then three defence levels.' },
+        title: { fr: 'Les 9 niveaux' },
         points: [
-          { label: { fr: '1 · Reconnaissance', en: '1 · Reconnaissance' }, text: { fr: 'un flag caché dans le code source de la page.', en: 'a flag hidden in the page’s source code.' } },
-          { label: { fr: '2 · Commandes Linux', en: '2 · Linux commands' }, text: { fr: 'fouiller les fichiers avec find et grep.', en: 'searching files with find and grep.' } },
-          { label: { fr: '3 · Scan de services', en: '3 · Service scanning' }, text: { fr: 'énumérer les ports et les versions avec nmap.', en: 'enumerating ports and versions with nmap.' } },
-          { label: { fr: '4 · Exploitation web', en: '4 · Web exploitation' }, text: { fr: 'des pages cachées (gobuster), puis une injection SQL (sqlmap).', en: 'hidden pages (gobuster), then an SQL injection (sqlmap).' } },
-          { label: { fr: '5 · Mots de passe', en: '5 · Passwords' }, text: { fr: 'casser des empreintes MD5 (john, hashcat), puis se connecter en SSH.', en: 'cracking MD5 hashes (john, hashcat), then logging in over SSH.' } },
-          { label: { fr: '6 · Exploitation système', en: '6 · System exploitation' }, text: { fr: 'la faille SMB MS17-010 avec Metasploit.', en: 'the MS17-010 SMB flaw with Metasploit.' } },
-          { label: { fr: '7 · SOC', en: '7 · SOC' }, text: { fr: 'retrouver l’IP de l’attaquant dans un SIEM type Splunk.', en: 'finding the attacker’s IP in a Splunk-style SIEM.' } },
-          { label: { fr: '8 · Forensique', en: '8 · Forensics' }, text: { fr: 'analyser le binaire, retrouver le processus malveillant et l’arrêter.', en: 'analysing the binary, finding the malicious process and killing it.' } },
-          { label: { fr: '9 · Durcissement', en: '9 · Hardening' }, text: { fr: 'pare-feu, WAF et IDS (Snort).', en: 'firewall, WAF and IDS (Snort).' } },
+          { text: { fr: 'Reconnaissance' } },
+          { text: { fr: 'Commandes Linux' } },
+          { text: { fr: 'Scan de services' } },
+          { text: { fr: 'Injection SQL' } },
+          { text: { fr: 'Mots de passe' } },
+          { text: { fr: 'Exploit MS17-010' } },
+          { text: { fr: 'SOC' } },
+          { text: { fr: 'Forensique' } },
+          { text: { fr: 'Durcissement' } },
         ],
       },
     ],
@@ -530,7 +519,6 @@ export const cards: Project[] = [
     links: { demo: '#lab' },
     facts: [
       { value: '9', label: { fr: 'niveaux', en: 'levels' }, source: 'src/sections/Lab/ctf/ctfData.js' },
-      { value: '2', label: { fr: 'rôles : attaquant, puis défenseur', en: 'roles: attacker, then defender' }, source: 'ctfData.js: levels 1–6 attack, 7–9 defence' },
       { value: '21', label: { fr: 'commandes et outils simulés', en: 'simulated commands and tools' }, source: 'ctfData.js: `unlocks` of all levels' },
     ],
     scale: { months: 2 },
@@ -549,41 +537,18 @@ export const cards: Project[] = [
     team: { size: 1 },
     context: 'personal',
     tagline: {
-      fr: 'Plateforme de benchmark pour agents IA : les tester sur des scénarios vulnérables.',
+      fr: 'Plateforme de benchmark et d’entraînement en cybersécurité, pour les humains comme pour les agents IA.',
       en: 'A benchmark platform for AI agents: testing them on vulnerable scenarios.',
     },
     summary: {
-      fr: 'Une plateforme de benchmark et d’entraînement en cybersécurité, pensée d’abord pour les agents IA, puis pour les humains.',
+      fr: 'Une plateforme de benchmark et d’entraînement en cybersécurité, pour les humains comme pour les agents IA, sur des scénarios dont on connaît les failles, avec scores et classements.',
       en: 'A cybersecurity benchmark and training platform, built first for AI agents, then for people.',
     },
     sections: [
       {
-        kind: 'problem',
-        title: { fr: 'Objectif', en: 'Goal' },
-        points: [
-          { label: { fr: 'Benchmarks', en: 'Benchmarks' }, text: { fr: 'évaluer des agents IA de pentest sur des scénarios dont on connaît les failles.', en: 'evaluating AI pentest agents on scenarios whose flaws are known.' } },
-          { label: { fr: 'Mesures', en: 'Metrics' }, text: { fr: 'scores, traces de chaque action et classements.', en: 'scores, a trace of every action and leaderboards.' } },
-          { label: { fr: 'Isolation', en: 'Isolation' }, text: { fr: 'des environnements réinitialisés après chaque essai.', en: 'environments reset after every run.' } },
-          { label: { fr: 'Entraînement', en: 'Training' }, text: { fr: 'les mêmes scénarios entraînent aussi bien les agents IA que les humains.', en: 'the same scenarios train AI agents and people alike.' } },
-        ],
-      },
-      {
-        kind: 'approach',
-        title: { fr: 'Ce qui existe', en: 'What exists' },
-        points: [
-          { label: { fr: 'Domaines', en: 'Areas' }, text: { fr: 'cybersécurité, et IA en aperçu.', en: 'cybersecurity, and AI as a preview.' } },
-          { label: { fr: 'Parcours', en: 'Paths' }, text: { fr: 'un parcours d’entrée « Recruit », puis six spécialisations, de l’offensif à la sécurité de l’IA.', en: 'an entry path, « Recruit », then six specialisations, from offensive work to AI security.' } },
-          { label: { fr: 'Salles', en: 'Rooms' }, text: { fr: 'questions et flags, débloqués l’un après l’autre dans chaque module.', en: 'questions and flags, unlocked one after another in each module.' } },
-          { label: { fr: 'Progression', en: 'Progress' }, text: { fr: 'points selon la difficulté, rangs, tableau de bord et suivi.', en: 'points by difficulty, ranks, dashboard and tracking.' } },
-        ],
-      },
-      {
-        kind: 'limits',
-        title: { fr: 'Où en est le projet', en: 'Where it stands' },
-        body: {
-          fr: 'En pause. L’interface d’entraînement existe et elle est testée. Le benchmark des agents, le backend et les machines réelles restent à développer, d’après un plan déjà écrit.',
-          en: 'On hold. The training interface exists and is tested. The agent benchmark, the back end and real machines are still to be built, following a plan already written.',
-        },
+        kind: 'result',
+        title: { fr: 'Où en est le projet' },
+        body: { fr: 'En pause, elle sera reprise en parallèle d’Argos pour le tester. L’interface d’entraînement existe ; le benchmark et le backend restent à développer.' },
       },
     ],
     stack: ['React', 'Tailwind CSS', 'Vitest', 'GitHub Actions'],

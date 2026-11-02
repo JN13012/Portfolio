@@ -28,55 +28,14 @@ export const zeroday: Project = {
   },
   sections: [
     {
-      kind: 'problem',
-      title: { fr: 'Le concept', en: 'The concept' },
-      body: {
-        fr: 'Le joueur ne contrôle pas une armée : il fait évoluer un code malveillant, exploite les dépendances numériques des sociétés et provoque des pannes en chaîne. Chaque pays réagit à sa façon, et le monde coopère pour bâtir un « Neutralisateur ».',
-        en: 'The player does not command an army: they evolve a malicious code, exploit the digital dependencies of societies and trigger cascading failures. Each country reacts in its own way, and the world cooperates to build a “Neutraliser”.',
-      },
-    },
-    {
       kind: 'approach',
-      title: { fr: 'L’envergure prévue', en: 'Planned scope' },
-      body: { fr: 'Un monde simulé pays par pays, et de quoi rejouer longtemps.', en: 'A world simulated country by country, and plenty of replay value.' },
-      points: [
-        {
-          label: { fr: '9 classes de malware', en: '9 malware classes' },
-          text: { fr: 'Ver, Trojan, Virus polymorphe, RAT, Rootkit, Botnet, Ransomware, Wiper, IA rogue.', en: 'Worm, Trojan, Polymorphic virus, RAT, Rootkit, Botnet, Ransomware, Wiper, Rogue AI.' },
-        },
-        { label: { fr: '3 arbres d’évolution', en: '3 evolution trees' }, text: { fr: 'Propagation, Adaptation, Impact.', en: 'Propagation, Adaptation, Impact.' } },
-        { label: { fr: '3 difficultés', en: '3 difficulty levels' }, text: { fr: 'Facile, Normal, Brutal.', en: 'Easy, Normal, Brutal.' } },
-        {
-          label: { fr: 'Une carte du monde', en: 'A world map' },
-          text: { fr: '28 types de cibles, des PC aux data centers, en passant par les smartphones, les objets connectés et les véhicules.', en: '28 kinds of targets, from PCs to data centres, through smartphones, connected devices and vehicles.' },
-        },
-        { label: { fr: 'Progression', en: 'Progression' }, text: { fr: 'des déblocages permanents d’une partie à l’autre.', en: 'permanent unlocks from one game to the next.' } },
-        {
-          label: { fr: 'Prévu ensuite', en: 'Planned next' },
-          text: { fr: 'un multijoueur avec classement, et une V2 où l’on joue l’humanité qui se défend.', en: 'multiplayer with a leaderboard, and a V2 where you play humanity defending itself.' },
-        },
-      ],
-    },
-    {
-      kind: 'architecture',
-      title: { fr: 'La conception et la technique', en: 'Design and tech' },
-      body: { fr: 'Tout est écrit avant d’être codé.', en: 'Everything is written down before it is coded.' },
-      points: [
-        {
-          label: { fr: 'Game design', en: 'Game design' },
-          text: { fr: 'environ 141 000 mots versionnés, un registre des décisions, des termes alignés sur MITRE ATT&CK.', en: 'about 141,000 versioned words, a decision register, terms aligned with MITRE ATT&CK.' },
-        },
-        { label: { fr: 'Unity (C#)', en: 'Unity (C#)' }, text: { fr: 'une partie peut être rejouée à l’identique, pour tester et équilibrer le jeu.', en: 'a game can be replayed exactly, to test and balance it.' } },
-        { label: { fr: 'Éditeur maison', en: 'In-house editor' }, text: { fr: 'un outil web pour dessiner les arbres d’évolution.', en: 'a web tool to lay out the evolution trees.' } },
-      ],
+      title: { fr: 'Le jeu prévu' },
+      body: { fr: 'Le joueur fait évoluer son malware dans 3 arbres (Propagation, Adaptation, Impact), avec 9 classes, du Ver à l’IA rogue.' },
     },
     {
       kind: 'result',
-      title: { fr: 'Où en est le projet', en: 'Where it stands' },
-      body: {
-        fr: 'Les arbres Propagation et Adaptation sont figés, l’arbre Impact est en cours. Le premier prototype jouable (Ver, carte du monde, propagation, victoire) viendra une fois le game design terminé. Pas encore jouable ; dépôt privé.',
-        en: 'The Propagation and Adaptation trees are frozen, the Impact tree is in progress. The first playable prototype (Worm, world map, spreading, victory) will follow once the game design is done. Not playable yet; private repository.',
-      },
+      title: { fr: 'Où en est le projet' },
+      body: { fr: 'Un prototype en cours de conception.' },
     },
   ],
   stack: ['Unity', 'C#', 'JavaScript'],
@@ -84,7 +43,6 @@ export const zeroday: Project = {
   facts: [
     { value: '9', label: { fr: 'classes de malware', en: 'malware classes' }, source: 'docs/00_VISION_CANONIQUE_ZERO_DAY_V1.md §17.2' },
     { value: '3', label: { fr: 'arbres d’évolution', en: 'evolution trees' }, source: 'docs/00_VISION_CANONIQUE_ZERO_DAY_V1.md (Propagation, Adaptation, Impact)' },
-    { value: '3', label: { fr: 'difficultés', en: 'difficulty levels' }, source: 'docs/00_VISION_CANONIQUE_ZERO_DAY_V1.md §18.1' },
     { value: '≈ 141 000', label: { fr: 'mots de game design', en: 'words of game design' }, source: 'docs/*.md excluding docs/archive (wc -w)' },
   ],
   scale: { months: 2, tests: 5 },

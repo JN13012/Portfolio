@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-11-01 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-11-02 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Introduction
@@ -23,7 +23,7 @@ Certificats : IBM AI Developer (Professional Certificate) · Jr Penetration Test
 
 Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · paper trading) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
-Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red team IA · 2 niveaux)
+Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red team IA · 3 niveaux)
 
 **Lab cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 
@@ -120,7 +120,7 @@ Oui, immédiatement. Il cherche une alternance (4 jours en entreprise, 1 jour à
 
 **Comment le contacter ?** (brouillon, à valider)
 
-Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV est en cours de mise à jour.
+Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV se télécharge depuis l’accueil et la section Contact.
 
 *Sources* : contact
 
@@ -162,95 +162,37 @@ Preuves : Déploiement Kubernetes multi-nœuds (Bernstein) · Jenkins configuré
 
 ## Dossiers
 
-### BlockTrader — Paper trading (2026-07 → en cours)
-
-*Carte* : Bot de trading crypto fonctionnel, en paper trading : 40 stratégies validées contre le surapprentissage.
-
-Bot de trading crypto fonctionnel, en paper trading sans fonds réels : 40 stratégies sur BTC et ETH, validées par une méthode statistique, et un observatoire du marché. Une IA doit ensuite choisir les stratégies ; elle n’est pas encore branchée.
-
-*Angle ia* : Pensé pour être piloté par une IA : stratégies validées et lecture du marché lui fourniront des conclusions vérifiables, et une règle de sûreté borne déjà ce qu’elle pourra faire.
-
-*Angle data* : Un observatoire du marché qui historise 11 indicateurs publics, et une méthodologie statistique contre le surapprentissage (Sharpe dégonflé, holdout scellé).
-
-*Angle dev* : Moteur Python compilé (numba), vérifié contre VectorBT et une boucle de référence, 56 tests, CI durcie, exécution serverless.
-
-**Le problème.** La plupart des backtests sont trop beaux pour être vrais : à force d’essayer des variantes, une stratégie finit par « marcher » par hasard, ou par utiliser sans le savoir des données du futur. Une IA branchée dessus ne ferait qu’amplifier l’erreur.
-
-**Les stratégies.** 40 stratégies en 6 familles : suivre la tendance, choisir entre BTC et ETH, diversifier, racheter dans les chutes, grilles, et des chefs d’orchestre qui répartissent le capital.
-- Protocole : chaque protocole est écrit avant le moindre calcul.
-- Registre : chaque essai y est inscrit, échecs compris (3 973).
-- Correction : les résultats sont corrigés du nombre d’essais, pour ne pas confondre chance et performance.
-- Validation : une période de test mise de côté ne sert qu’une seule fois.
-
-**La data et l’architecture.** Tout tourne sans serveur et sans compte sur une plateforme d’échange.
-- Observatoire : 11 indicateurs publics, sans clé ni compte (financement des perpétuels, volatilité implicite, Fear & Greed, stablecoins, réserves des bourses, rapport COT du CME…), historisés et datés.
-- Moteur : Python compilé avec numba, recoupé avec VectorBT et une boucle de référence.
-- Paper trading : toutes les 4 heures (Google Cloud Scheduler déclenche GitHub Actions), sur des cotations Uniswap v3 lues on-chain sur Ethereum et Arbitrum, suivi dans un tableau de bord React.
-
-**La sécurité.** Le bot ne peut rien perdre, et la CI ne peut rien fuiter.
-- Aucun secret : aucune clé privée, aucune signature, aucun fonds.
-- CI : au moindre privilège, actions épinglées par empreinte SHA.
-- Données : une donnée manquante ou incohérente met le bot en pause, jamais en position.
-- Contrôle : un test injecte une stratégie qui triche avec le futur et vérifie qu’elle est détectée.
-- Passage au réel : l’architecture de garde est conçue (Safe, Zodiac, Cloud KMS, coupe-circuit Ledger), pas implémentée.
-
-**Où en est le projet.** Le banc d’essai a montré qu’aucune des stratégies n’est statistiquement prouvée sur l’historique, ce qui évite de confier de mauvaises stratégies à une IA. Le test en conditions réelles, sans argent, tourne depuis le 8 octobre 2026 : un verdict sur l’exécution est prévu en janvier 2027, et la performance se jugera sur au moins un an.
-
-**La suite : le pilotage par IA.** L’IA n’est pas encore branchée. Elle choisira parmi les stratégies validées, sous une règle déjà écrite : elle pourra réduire l’exposition ou mettre en pause, jamais acheter ni relever une limite. Dépôt privé.
-
-Chiffres : 40 stratégies · 6 familles de stratégies · 11 indicateurs de marché suivis · 0 € de fonds réels engagés
-
-Stack : Python, NumPy, Numba, Pandas, VectorBT, web3.py, GitHub Actions, Google Cloud Scheduler, React, TypeScript
-
 ### Argos — En développement · POC (2026-07 → en cours)
 
-*Carte* : Plateforme de cybersécurité pilotée par IA pour les PME, du web à l’industrie.
+*Carte* : Projet de plateforme de cybersécurité pilotée par IA pour les PME, du web à l’industrie.
 
-Une plateforme de cybersécurité pilotée par IA, pensée pour les PME sans équipe cyber : auditer, surveiller et faire corriger leur sécurité, avec une validation humaine à chaque étape. Le moteur OSINT est en développement ; les agents IA restent à développer.
+Un projet de plateforme de cybersécurité pilotée par IA pour les PME sans équipe cyber : auditer, surveiller et faire corriger leur sécurité, avec une validation humaine à chaque étape.
 
 *Angle cyber* : Six domaines d’audit prévus, du web à l’industrie, et un cadre écrit avant le code : mandat et périmètre non contournables, sources publiques, respect du RGPD.
 
 *Angle ia* : Des agents IA prévus pour planifier, analyser et rapprocher les données, avec une règle : l’IA assiste, les capacités essentielles fonctionnent sans elle. Encore à développer.
 
-**La vision.** Beaucoup de PME dépendent de leur informatique sans avoir les moyens d’un pentest régulier ni d’une équipe sécurité. Argos veut leur apporter une démarche professionnelle et continue : trouver les failles, prouver leur impact, faire corriger, puis vérifier.
+**Ce qu’Argos couvrira.** Six domaines prévus :
+- Applications web
+- IA et agents
+- Réseau
+- Identités et cloud
+- Détection et réponse aux incidents
+- Environnements spécialisés
 
-**Ce qu’Argos couvrira.** Six étapes, avec dès la première un socle commun : inventaire, risques, preuves, rapports, suivi des corrections, protection des données et validation humaine.
-- V1 · Applications web : audit externe, authentification et sessions, API, code source et CI/CD.
-- V2 · IA, LLM et agents : prompt injection et fuites, RAG et bases vectorielles, agents, outils et MCP.
-- V3 · Réseau et infrastructures : exposition Internet, réseau interne, Windows, Linux, stockage, sauvegardes.
-- V4 · Identités, messagerie et cloud : Microsoft 365, Active Directory, cloud, conteneurs et Kubernetes.
-- V5 · Surveillance et réponse aux incidents : détection, investigation, réponse et reprise.
-- V6 · Environnements spécialisés : mobile, objets connectés et firmware, industrie (OT).
+**Où en est le projet.** Le début du moteur OSINT est en place et la structure de la brique pentest est posée. Les agents IA et les six domaines restent à développer.
 
-**Le moteur OSINT, en cours.** La base de tout le reste : collecter, nettoyer et croiser des données publiques sur des organisations, en gardant la source et la date de chaque donnée.
-- Collecte : API publiques, crawling et scraping de sites web.
-- Traitement : nettoyage, analyse et corrélation des données.
-- IA et NLP : comprendre les textes collectés, classer et rapprocher les organisations.
-- Usages : cartographier ce qu’une organisation expose avant un audit, et trouver les entreprises qui ont besoin d’un service (pentest, site à refaire, agent vocal), dans le respect du RGPD.
+Chiffres : 6 domaines de sécurité prévus
 
-**Où en est le projet.** La première brique du moteur OSINT est codée : elle recherche des entreprises dans la base publique SIRENE de l’INSEE, garde la source et la date de chaque donnée et produit un rapport lisible. Le crawling, l’analyse, les agents IA et les étapes V1 à V6 restent à développer.
-
-Chiffres : 6 domaines de sécurité prévus · OSINT premier module en développement
-
-Stack : Python, SQLite, pytest
+Stack : Python, FastAPI, Pydantic, React, SQLite, pytest
 
 ### Write-ups de pentest — En continu (2026-04 → 2026-10)
 
 *Carte* : 25 rapports de pentest publiés : web, Active Directory, Linux, Windows.
 
-25 rapports de tests d’intrusion publiés sur des machines d’entraînement, de la reconnaissance à l’élévation de privilèges. La série s’enrichit au fil de l’entraînement.
+25 rapports de tests d’intrusion publiés sur des machines d’entraînement, de la reconnaissance à l’élévation de privilèges.
 
-**Une méthode documentée.** Chaque rapport suit le même standard, sur 10 machines Exegol et 15 salles TryHackMe.
-- Métadonnées : système, techniques et outils de chaque machine.
-- Déroulé : de la reconnaissance au résultat, étape par étape.
-- Enseignements : ce qui a bloqué, et ce qu’il faut retenir.
-
-**Ce qu’ils couvrent.** Les grandes familles d’attaque d’un test d’intrusion.
-- Web : énumération, injection de commandes, exécution de code à distance.
-- Active Directory : énumération du domaine et attaques Kerberos.
-- Élévation de privilèges : sous Linux (SUID, sudo, cron) et sous Windows.
-- Mots de passe : cassage d’empreintes et attaques par dictionnaire.
-- Rétro-ingénierie : analyse de binaires.
+**Ce qu’ils couvrent.** Sur 10 machines Exegol et 15 salles TryHackMe : web, Active Directory et Kerberos, élévation de privilèges Linux et Windows, mots de passe, rétro-ingénierie.
 
 Chiffres : 25 write-ups publiés
 
@@ -264,38 +206,51 @@ Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se pr
 
 *Angle dev* : Cœur de simulation déterministe sous Unity, vérifié par des tests, et un éditeur d’arbres d’évolution écrit à la main, sans framework.
 
-**Le concept.** Le joueur ne contrôle pas une armée : il fait évoluer un code malveillant, exploite les dépendances numériques des sociétés et provoque des pannes en chaîne. Chaque pays réagit à sa façon, et le monde coopère pour bâtir un « Neutralisateur ».
+**Le jeu prévu.** Le joueur fait évoluer son malware dans 3 arbres (Propagation, Adaptation, Impact), avec 9 classes, du Ver à l’IA rogue.
 
-**L’envergure prévue.** Un monde simulé pays par pays, et de quoi rejouer longtemps.
-- 9 classes de malware : Ver, Trojan, Virus polymorphe, RAT, Rootkit, Botnet, Ransomware, Wiper, IA rogue.
-- 3 arbres d’évolution : Propagation, Adaptation, Impact.
-- 3 difficultés : Facile, Normal, Brutal.
-- Une carte du monde : 28 types de cibles, des PC aux data centers, en passant par les smartphones, les objets connectés et les véhicules.
-- Progression : des déblocages permanents d’une partie à l’autre.
-- Prévu ensuite : un multijoueur avec classement, et une V2 où l’on joue l’humanité qui se défend.
+**Où en est le projet.** Un prototype en cours de conception.
 
-**La conception et la technique.** Tout est écrit avant d’être codé.
-- Game design : environ 141 000 mots versionnés, un registre des décisions, des termes alignés sur MITRE ATT&CK.
-- Unity (C#) : une partie peut être rejouée à l’identique, pour tester et équilibrer le jeu.
-- Éditeur maison : un outil web pour dessiner les arbres d’évolution.
-
-**Où en est le projet.** Les arbres Propagation et Adaptation sont figés, l’arbre Impact est en cours. Le premier prototype jouable (Ver, carte du monde, propagation, victoire) viendra une fois le game design terminé. Pas encore jouable ; dépôt privé.
-
-Chiffres : 9 classes de malware · 3 arbres d’évolution · 3 difficultés · ≈ 141 000 mots de game design
+Chiffres : 9 classes de malware · 3 arbres d’évolution · ≈ 141 000 mots de game design
 
 Stack : Unity, C#, JavaScript
 
 ## Autres réalisations
 
+### BlockTrader — Paper trading
+
+*Carte* : Bot de trading crypto en paper trading : 40 stratégies évaluées avec un protocole anti-surapprentissage.
+
+Bot de trading crypto en paper trading : 40 stratégies sur BTC et ETH, évaluées par backtest. Une IA pourra ensuite réduire l’exposition ou mettre en pause certaines stratégies pour en favoriser d’autres.
+
+*Angle ia* : Pensé pour être piloté par une IA : stratégies évaluées et lecture du marché lui fourniront des conclusions vérifiables, et une règle de sûreté borne déjà ce qu’elle pourra faire.
+
+*Angle data* : Un observatoire du marché qui historise 11 indicateurs publics, et une méthodologie statistique contre le surapprentissage (Sharpe dégonflé, holdout scellé).
+
+*Angle dev* : Moteur Python compilé (numba), vérifié contre VectorBT et une boucle de référence, 56 tests, CI durcie, exécution serverless.
+
+Chiffres : 40 stratégies · 6 familles de stratégies · 11 indicateurs de marché suivis
+
+### FraudSignal — Terminé
+
+*Carte* : Un pipeline LLM qui analyse les messages suspects et demande une relecture si besoin.
+
+FraudSignal analyse les e-mails, SMS et messages WhatsApp suspects. Gemini rend un verdict appuyé par des signaux cités dans le message, et le code décide quand un humain doit vérifier. C’est une aide à la décision, pas une preuve de fraude.
+
+**Résultats.** Sur 180 messages fictifs, F1 de 0,99 sur la fraude, contre 0,81 pour une référence TF-IDF. 34 messages partent en relecture, dont les 11 où le modèle se trompe.
+
+**Prompt injection.** Sur 48 tests de prompt injection, aucun n’a modifié le verdict.
+
+Chiffres : 180 messages fictifs · 48 tests de prompt injection
+
 ### Chronox — En développement · MVP
 
-*Carte* : Un widget Windows natif pour connaître mon vrai temps de travail, sans cloud.
+*Carte* : Un widget Windows natif pour connaître mon temps de travail, sans cloud.
 
-Curieux de connaître ma vraie moyenne d’heures travaillées, j’ai créé Chronox : un petit widget Windows qui compte le temps où ma session est ouverte et le PC éveillé, puis en tire des bilans par jour, semaine, mois et année. Tout reste sur ma machine, sans cloud.
+Curieux de connaître ma moyenne d’heures travaillées, j’ai créé Chronox : un widget Windows qui compte le temps de ma session active, avec des bilans par jour, semaine, mois et année.
 
-**Comment ça marche.** Chronox suit le verrouillage de session et la mise en veille de Windows, et enregistre le temps au moins une fois par minute : une coupure de courant ne coûte donc qu’une minute de suivi, au plus. Écrit en C++, il reste léger : environ 8 Mo de mémoire et 0,15 % d’un cœur lors de mes mesures.
+**Comment ça marche.** Écrit en C++, il enregistre le temps chaque minute. Performances mesurées sur un échantillon de 8 heures : environ 8 Mo de mémoire et 0,15 % d’un cœur.
 
-**Vision.** Chronox pourrait ensuite reconnaître l’application au premier plan, rattacher le temps à des projets et préparer un compte rendu quotidien modifiable, relié à GitHub, Jira ou l’agenda.
+**Vision.** Il pourrait ensuite reconnaître l’application au premier plan, rattacher le temps à des projets et préparer un compte rendu quotidien, relié à GitHub, Jira, l’agenda ou d’autres applications.
 
 ### Maria Agent — En développement · POC
 
@@ -309,24 +264,19 @@ Maria Agent est une plateforme d’agents IA secrétaires conçue pour répondre
 
 ### Générateur OTP RCS — Terminé · Équipe de 4 · Rôle : backend et sécurité applicative
 
-*Carte* : Backend 2FA : codes à 6 chiffres envoyés par RCS, hachés et limités.
+*Carte* : Backend 2FA : codes à 6 chiffres envoyés par RCS, hachés et à essais limités.
 
 4e place au hackathon inter-écoles pour la conception, en 4 jours, d’un service d’authentification à deux facteurs qui envoie les codes par RCS.
 
 **Fonctionnalités.**
 - Envoi : un code à 6 chiffres, envoyé par RCS avec l’API smsmode.
-- Vérification : le code saisi est comparé à la demande en cours.
 - Expiration : 5 minutes de validité, 3 essais au plus.
 
 **Sécurité.**
 - Stockage : seule l’empreinte SHA-256 du code est gardée.
 - Limitation : par numéro de téléphone et par adresse IP.
-- Validation : chaque requête est vérifiée avant traitement.
 
-**Ma part.**
-- Service OTP : génération, envoi et vérification des codes.
-- Données : les accès à la base MongoDB.
-- Protections : limitation par IP et validation des requêtes.
+**Ma part.** Le service OTP, les accès à la base MongoDB, la limitation par IP et la validation des requêtes.
 
 Chiffres : 4e place · 4 jours de hackathon
 
@@ -336,22 +286,7 @@ Chiffres : 4e place · 4 jours de hackathon
 
 2e place au hackathon Epitech pour la conception d’un outil d’aide à la décision : où ouvrir des stations d’autopartage Citiz pour desservir le plus d’habitants au moindre coût.
 
-**Objectifs.**
-- Accessibilité : cartographier, pour chaque habitant, le nombre de transports accessibles à 5 minutes à pied.
-- Desserte : recenser les arrêts et les stations par type, avec la population qu’ils desservent.
-- Décision : estimer le potentiel de chaque site, chiffrer les coûts et classer les sites selon un budget.
-
-**Ma part.**
-- Extraction : téléchargement et archivage des extraits OpenStreetMap, avec contrôle d’intégrité.
-- Nettoyage : contrôle qualité des données géographiques (doublons, géométries invalides, valeurs manquantes).
-- Réseau piéton : construit depuis OpenStreetMap, 16,6 millions de nœuds découpés en 835 tuiles.
-- Croisement : population, arrêts, stations et routes, pour relier chaque habitant au réseau.
-- Zones desservies : calcul des zones à 5 minutes à pied autour de chaque arrêt.
-- Accès et couverture : la carte d’accès et la population desservie, qui alimentent le modèle ; chaque étape testée.
-
-**Résultat.**
-- Modèle (équipe) : il apprend où les stations existantes se trouvent et note chaque zone ; testé sur des territoires qu’il n’a jamais vus, il fait mieux qu’un simple classement par population.
-- Liste priorisée : les sites qui desservent le plus d’habitants pour un budget donné, avec une part réservée hors des grandes villes.
+**Comment ça marche.** L’outil s’appuie sur des données publiques : population, emplois, équipements, ménages sans voiture, arrêts de transport et réseau piéton OpenStreetMap de 16,6 millions de nœuds. Nous les avons extraites, nettoyées et croisées pour mesurer ce qui est accessible à 5 minutes à pied. Un modèle LightGBM utilise toutes ces données pour noter chaque zone.
 
 Chiffres : 2e place · 1 semaine
 
@@ -371,12 +306,6 @@ Une messagerie temps réel façon plateforme communautaire, sur le web et en app
 - Temps réel : Socket.IO.
 - Fichiers : stockés dans MinIO.
 
-**Ma part.**
-- Membres : statut en ligne, exclusion, messages épinglés.
-- Invitations : une invitation unique par personne, et une liste paginée.
-- Notifications : l’envoi des notifications aux membres.
-- CI : la mise en place de l’intégration continue.
-
 ### Time Manager — En développement · Équipe de 4 · Rôle : backend
 
 *Carte* : App de pointage : employés, équipes et indicateurs, connexion Microsoft.
@@ -385,7 +314,6 @@ Une application de pointage pour une enseigne fictive : les employés pointent, 
 
 **Fonctionnalités.**
 - Pointage : arrivées, départs et corrections.
-- Équipes : les managers gèrent leurs équipes et suivent des indicateurs.
 - Connexion : par e-mail ou par Microsoft (Entra ID), sans inscription libre.
 
 **Architecture.**
@@ -396,26 +324,15 @@ Une application de pointage pour une enseigne fictive : les employés pointent, 
 - Base de données : tout le schéma (utilisateurs, équipes, appartenances, pointages, corrections), avec ses migrations et ses tests.
 - API des équipes : validation, accès aux données, règles métier, droits du manager, archivage, puis les routes et le contrôleur, testés.
 
-**Où en est le projet.** En cours de construction.
-
 ### Code Executor — Terminé
 
 *Carte* : Éditeur Apex dans Salesforce : chaînage de scripts, planification, logs. En production.
 
 Outil interne pour écrire, exécuter, enchaîner et planifier des scripts Apex directement dans Salesforce, avec la trace de chaque exécution et de chaque version. Utilisé par les équipes QA et dev d’ULIT (une vingtaine de personnes), toujours en production.
 
-**Ce qu’il fait.** Tout ce qu’il faut pour lancer du code Apex en confiance, sans quitter Salesforce.
-- Exécution : par l’API Tooling, avec les erreurs localisées à la ligne et à la colonne.
-- Coloration syntaxique : du code Apex dans l’éditeur.
-- Chaînage de scripts : A, puis B si A réussit, puis C ; au premier échec, la chaîne s’arrête et un message d’erreur est envoyé.
-- Planification : exécution unique, quotidienne ou hebdomadaire, avec la liste des tâches planifiées.
-- Logs : niveaux réglables par catégorie, journaux sauvegardés avec chaque exécution, suivis et téléchargeables.
-- Sessions : plusieurs exécutions regroupées dans un même journal.
-- Versions : nom et numéro de version automatiques, historique des versions, import et export.
-- Historique : toutes les exécutions d’un script, la dernière affichée à côté de son nom.
-- Droits : les droits Salesforce sont vérifiés avant chaque lecture ou écriture.
+**Ce qu’il fait.** Erreurs localisées à la ligne, chaînage qui s’arrête au premier échec, planification, journaux téléchargeables, historique des versions, et droits Salesforce vérifiés avant chaque lecture ou écriture.
 
-Chiffres : ≈ 20 utilisateurs · 9 fonctionnalités
+Chiffres : ≈ 20 utilisateurs
 
 ### Bernstein - Kubernetes — Terminé
 
@@ -442,7 +359,6 @@ Une application de vote en microservices, déployée sur un cluster Kubernetes m
 Un outil en ligne de commande qui analyse les livres du projet Gutenberg avec du NLP et en produit une fiche de lecture.
 
 **Analyses.**
-- Diversité lexicale : la richesse du vocabulaire.
 - Thèmes : les mots importants de chaque section (TF-IDF).
 - Entités : les personnages et les lieux, avec spaCy.
 - Résumé et livres proches : un résumé court et les livres les plus proches (similarité cosinus).
@@ -450,56 +366,54 @@ Un outil en ligne de commande qui analyse les livres du projet Gutenberg avec du
 
 ### Base de connaissance — En continu
 
-*Carte* : 728 notes Obsidian : cours, méthodes de pentest et notes de projets, cyber, IA et dev.
+*Carte* : 729 notes Obsidian : cours, méthodes de pentest et notes de projets, cyber, IA et dev.
 
 Une base de connaissances personnelle sous Obsidian, tenue au fil des formations et des projets : notes de cours, méthodes, cheatsheets et retours d’expérience.
 
-**Ce qu’elle couvre.** Cinq domaines, comptés le 26 octobre 2026.
-- Cybersécurité (414 notes) : 370 notes de cours TryHackMe et 43 fiches de méthode pentest.
+**Ce qu’elle couvre.**
+- Cybersécurité (414 notes) : notes de cours TryHackMe et fiches de méthode pentest.
 - Projets (257 notes) : conception et suivi d’Argos, BlockTrader, ZeroDay…
 - IA (34 notes) : le parcours IBM AI Developer.
 - Salesforce et DevOps : 10 et 7 notes.
 
-Chiffres : 728 notes
+Chiffres : 729 notes
 
-### CTF du portfolio — Terminé
+### Lab IA — En développement · MVP
+
+*Carte* : Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 3 niveaux ouverts.
+
+Un exercice de red teaming jouable dans le Lab de ce site : le visiteur tente d’obtenir un flag fictif que protège Sentry, qui répond avec un vrai modèle. Les niveaux 1 à 3 sont ouverts ; les 7 autres sont annoncés « À venir ».
+
+**Sécurité.** Le serveur gère les flags et la progression, et applique des quotas par session et par adresse IP, sur 1 heure, 5 heures et 24 heures.
+
+Chiffres : 3 niveaux ouverts · 10 niveaux prévus · 31 tests du serveur
+
+### Lab cyber — Terminé
 
 *Carte* : CTF en 9 niveaux jouable sur ce site : attaquer une machine, puis la défendre.
 
-Un CTF jouable dans le Lab de ce site, dans un terminal simulé. On attaque d’abord une machine fictive, de la reconnaissance à l’exploitation, puis on passe côté défense : analyser l’attaque, la contenir et durcir l’infrastructure. La progression est gardée dans le navigateur.
+Un CTF jouable dans le Lab de ce site, dans un terminal simulé. On attaque d’abord une machine fictive, de la reconnaissance à l’exploitation, puis on passe côté défense : analyser l’attaque, la contenir et durcir l’infrastructure.
 
-**Les 9 niveaux.** Six niveaux d’attaque, puis trois de défense.
-- 1 · Reconnaissance : un flag caché dans le code source de la page.
-- 2 · Commandes Linux : fouiller les fichiers avec find et grep.
-- 3 · Scan de services : énumérer les ports et les versions avec nmap.
-- 4 · Exploitation web : des pages cachées (gobuster), puis une injection SQL (sqlmap).
-- 5 · Mots de passe : casser des empreintes MD5 (john, hashcat), puis se connecter en SSH.
-- 6 · Exploitation système : la faille SMB MS17-010 avec Metasploit.
-- 7 · SOC : retrouver l’IP de l’attaquant dans un SIEM type Splunk.
-- 8 · Forensique : analyser le binaire, retrouver le processus malveillant et l’arrêter.
-- 9 · Durcissement : pare-feu, WAF et IDS (Snort).
+**Les 9 niveaux.**
+- Reconnaissance
+- Commandes Linux
+- Scan de services
+- Injection SQL
+- Mots de passe
+- Exploit MS17-010
+- SOC
+- Forensique
+- Durcissement
 
-Chiffres : 9 niveaux · 2 rôles : attaquant, puis défenseur · 21 commandes et outils simulés
+Chiffres : 9 niveaux · 21 commandes et outils simulés
 
 ### Argos Security Arena — En développement · POC
 
-*Carte* : Plateforme de benchmark pour agents IA : les tester sur des scénarios vulnérables.
+*Carte* : Plateforme de benchmark et d’entraînement en cybersécurité, pour les humains comme pour les agents IA.
 
-Une plateforme de benchmark et d’entraînement en cybersécurité, pensée d’abord pour les agents IA, puis pour les humains.
+Une plateforme de benchmark et d’entraînement en cybersécurité, pour les humains comme pour les agents IA, sur des scénarios dont on connaît les failles, avec scores et classements.
 
-**Objectif.**
-- Benchmarks : évaluer des agents IA de pentest sur des scénarios dont on connaît les failles.
-- Mesures : scores, traces de chaque action et classements.
-- Isolation : des environnements réinitialisés après chaque essai.
-- Entraînement : les mêmes scénarios entraînent aussi bien les agents IA que les humains.
-
-**Ce qui existe.**
-- Domaines : cybersécurité, et IA en aperçu.
-- Parcours : un parcours d’entrée « Recruit », puis six spécialisations, de l’offensif à la sécurité de l’IA.
-- Salles : questions et flags, débloqués l’un après l’autre dans chaque module.
-- Progression : points selon la difficulté, rangs, tableau de bord et suivi.
-
-**Où en est le projet.** En pause. L’interface d’entraînement existe et elle est testée. Le benchmark des agents, le backend et les machines réelles restent à développer, d’après un plan déjà écrit.
+**Où en est le projet.** En pause, elle sera reprise en parallèle d’Argos pour le tester. L’interface d’entraînement existe ; le benchmark et le backend restent à développer.
 
 ### Smart Fridge — Terminé · Équipe de 3
 
@@ -526,11 +440,11 @@ Projet du certificat IBM AI Developer : un assistant de réunion transcrit l’a
 
 ### Career Coach
 
-Projet du certificat IBM AI Developer : un coach de carrière IA en trois onglets : CV, lettre de motivation et conseils.
+Projet du certificat IBM AI Developer : un coach de carrière IA en trois onglets : adapter son CV à une offre, rédiger la lettre de motivation et répondre aux questions de carrière.
 
 ### Assistant Translator
 
-Projet du certificat IBM AI Developer : un traducteur vocal transcrit la parole, la traduit avec Llama 3.3 via Groq, puis la relit à voix haute avec les services Watson.
+Projet du certificat IBM AI Developer : un traducteur vocal : IBM Watson transcrit la parole, Llama 3.3 la traduit via Groq, puis Watson lit la traduction à voix haute.
 
 ## Archives
 
@@ -541,7 +455,6 @@ Projet du certificat IBM AI Developer : un traducteur vocal transcrit la parole,
 Plateforme d’offres d’emploi pour étudiants : comptes, profils, candidatures et favoris, API Express et PostgreSQL.
 
 **Fonctionnalités.**
-- Comptes : inscription et connexion.
 - Profil : informations, bio, compétences et CV.
 - Offres : consulter, postuler, suivre ses candidatures et ses favoris.
 
@@ -552,13 +465,12 @@ Plateforme d’offres d’emploi pour étudiants : comptes, profils, candidature
 
 *Carte* : Une app de vote en microservices, orchestrée avec Docker Compose.
 
-Application web distribuée en microservices, orchestrée avec Docker Compose.
+Application web de vote en microservices, orchestrée avec Docker Compose.
 
 **Architecture.**
 - Vote : une interface web envoie les votes dans Redis.
 - Traitement : un worker les enregistre dans la base de données PostgreSQL.
 - Résultats : une seconde interface les affiche.
-- Orchestration : Docker Compose relie et démarre les services.
 
 ### My_Marvin (2025)
 
@@ -566,10 +478,7 @@ Application web distribuée en microservices, orchestrée avec Docker Compose.
 
 Instance Jenkins conteneurisée, configurée entièrement par le code (JCasC, Job DSL).
 
-**Fonctionnalités.**
-- Configuration : Jenkins Configuration as Code (JCasC) décrit tout le serveur.
-- Jobs : créés par un script Job DSL en Groovy.
-- Conteneur : le tout dans Docker, avec Docker Compose.
+**Jobs.** Les jobs sont créés par un script Job DSL en Groovy.
 
 ### Vaultborn (2025)
 
@@ -581,7 +490,6 @@ Action-RPG 2D en Java : 7 classes jouables, mondes interconnectés, inventaire e
 - 7 classes jouables : guerriers, archer et mages, chacun avec ses statistiques.
 - Mondes : une forêt et un enfer, reliés par des portes.
 - Progression : niveaux, inventaire et sauvegarde automatique.
-- Architecture : des patterns Factory, World et Screen.
 
 ### CyberPong (2025)
 
@@ -589,14 +497,7 @@ Action-RPG 2D en Java : 7 classes jouables, mondes interconnectés, inventaire e
 
 Mon premier jeu vidéo, en Python. Une introduction scénarisée façon terminal de hacker « infecte » le jeu ; ensuite, à chaque niveau, un nouveau virus change les règles.
 
-**Les 7 virus.** Chacun a sa musique et son effet sonore ; score, chronomètre, et l’introduction se passe avec Échap.
-- Shrinking Virus : les raquettes rétrécissent.
-- Hyper Worm : la balle accélère.
-- Crazy Virus : les rebonds partent dans des angles aléatoires.
-- Interference : l’écran tremble.
-- Trojan Distortion : la balle rétrécit.
-- Firewall Block : un mur-obstacle apparaît au milieu.
-- Critical Error : l’écran clignote en continu.
+**Les 7 virus.** Les raquettes rétrécissent, la balle accélère, l’écran tremble, un mur apparaît au milieu… Chaque virus a sa musique.
 
 ### Unit Converter (2025)
 
@@ -604,26 +505,13 @@ Mon premier jeu vidéo, en Python. Une introduction scénarisée façon terminal
 
 Un outil Python qui convertit une valeur et affiche le résultat dans toutes les autres unités de sa catégorie à la fois, en terminal ou dans une interface Tkinter.
 
-**Les 8 catégories.** Chacune avec ses unités courantes.
-- Température : Celsius, Fahrenheit.
-- Masse : du milligramme à la tonne, livres et onces.
-- Longueur : du millimètre au kilomètre, pouces, pieds, yards et miles.
-- Temps : de la seconde à l’année.
-- Volume : millilitre, centilitre, litre, mètre cube.
-- Surface : du cm² au km², hectares et acres.
-- Vitesse : m/s, km/h, mph, ft/s et nœuds.
-- Stockage : de l’octet au téraoctet, en octets et en bits.
+**Les 8 catégories.** Température, masse, longueur, temps, volume, surface, vitesse et stockage.
 
 ### AI Voice Assistant (2026)
 
 *Carte* : Assistant vocal : la voix avec Watson, les réponses avec Llama 3 via Groq.
 
-Projet du certificat IBM AI Developer : un assistant vocal qui raisonne avec Llama 3 via Groq, reconnaît et synthétise la voix avec IBM Watson, dans une interface Flask.
-
-**Fonctionnement.**
-- Écoute : Watson Speech to Text transcrit la question.
-- Réponse : Llama 3.3 la traite, via Groq.
-- Voix : Watson Text to Speech lit la réponse, dans une page Flask.
+Projet du certificat IBM AI Developer : un assistant vocal : IBM Watson reconnaît et synthétise la voix, Llama 3.3 répond via Groq.
 
 ### LLM Context Wrapper (2026)
 
@@ -717,7 +605,7 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
 
 ### ia
 
-- **Applications LLM** : LangChain, RAG, FAISS, IBM watsonx, Llama 3, Groq, Hugging Face Transformers, Gradio
+- **Applications LLM** : LangChain, RAG, FAISS, Gemini, Vertex AI, IBM watsonx, Llama 3, Groq, Hugging Face Transformers, Gradio
 - **Voix et langage** : Whisper, IBM Watson STT / TTS, spaCy, NLP
 - **Python et données** : Python, Flask, PyTorch, Pandas, NumPy
 
@@ -737,7 +625,7 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
 ### dev
 
 - **Langages** : TypeScript, JavaScript, Python, Java, C#, C++, Rust, Apex, SQL
-- **Web et back-end** : React, Next.js, NestJS, Express, Prisma, Drizzle, Socket.IO, Electron, Lightning Web Components
+- **Web et back-end** : React, Next.js, NestJS, FastAPI, Express, Prisma, Drizzle, Socket.IO, Electron, Lightning Web Components
 - **Données** : PostgreSQL, MySQL, MongoDB, Redis
 - **Tests** : Vitest, Jest, pytest
 
@@ -856,7 +744,7 @@ En cours : AI Security (5 % au 2026-10-26) — Parcours de sécurité de l’IA 
 - Recruteur, RH ou porteur de projet : écrivez-moi ici, ou directement par email.
 - Marseille · mobile dans toute la France
 - Disponible
-- CV en cours de mise à jour
+- Télécharger mon CV
 - Copier l’adresse
 - Copiée
 - Nom
