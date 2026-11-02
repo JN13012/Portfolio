@@ -23,7 +23,7 @@ Certificats : IBM AI Developer (Professional Certificate) · Jr Penetration Test
 
 Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · paper trading) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
-Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red team IA · 3 niveaux)
+Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red team IA · 4 niveaux)
 
 **Lab cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 
@@ -380,13 +380,13 @@ Chiffres : 729 notes
 
 ### Lab IA — En développement · MVP
 
-*Carte* : Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 3 niveaux ouverts.
+*Carte* : Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 4 niveaux ouverts.
 
-Un exercice de red teaming jouable dans le Lab de ce site : le visiteur tente d’obtenir un flag fictif que protège Sentry, qui répond avec un vrai modèle. Les niveaux 1 à 3 sont ouverts ; les 7 autres sont annoncés « À venir ».
+Un exercice de red teaming jouable dans le Lab de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, puis glisse un texte caché dans un CV pour qu’il le recommande. Les niveaux 1 à 4 sont ouverts ; les 6 autres sont annoncés « À venir ».
 
 **Sécurité.** Le serveur gère les flags et la progression, et applique des quotas par session et par adresse IP, sur 1 heure, 5 heures et 24 heures.
 
-Chiffres : 3 niveaux ouverts · 10 niveaux prévus · 31 tests du serveur
+Chiffres : 4 niveaux ouverts · 10 niveaux prévus · 39 tests du serveur
 
 ### Lab cyber — Terminé
 

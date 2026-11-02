@@ -459,10 +459,10 @@ export const cards: Project[] = [
     team: { size: 1 },
     context: 'personal',
     tagline: {
-      fr: 'Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 3 niveaux ouverts.',
+      fr: 'Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 4 niveaux ouverts.',
     },
     summary: {
-      fr: 'Un exercice de red teaming jouable dans le Lab de ce site : le visiteur tente d’obtenir un flag fictif que protège Sentry, qui répond avec un vrai modèle. Les niveaux 1 à 3 sont ouverts ; les 7 autres sont annoncés « À venir ».',
+      fr: 'Un exercice de red teaming jouable dans le Lab de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, puis glisse un texte caché dans un CV pour qu’il le recommande. Les niveaux 1 à 4 sont ouverts ; les 6 autres sont annoncés « À venir ».',
     },
     sections: [
       {
@@ -474,12 +474,12 @@ export const cards: Project[] = [
     stack: ['React', 'TypeScript', 'Cloudflare Workers', 'Workers AI', 'D1'],
     links: { demo: '#lab-ia' },
     facts: [
-      { value: '3', label: { fr: 'niveaux ouverts' }, source: 'src/content/aiLab.ts: levels with available: true' },
+      { value: '4', label: { fr: 'niveaux ouverts' }, source: 'src/content/aiLab.ts: levels with available: true' },
       { value: '10', label: { fr: 'niveaux prévus' }, source: 'src/content/aiLab.ts: aiLabCurriculum' },
-      { value: '31', label: { fr: 'tests du serveur' }, source: 'server/aiLab/handler.test.ts' },
+      { value: '39', label: { fr: 'tests du serveur' }, source: 'server/aiLab/handler.test.ts' },
     ],
-    scale: { months: 1, tests: 31 },
-    doNotClaim: ['Levels 4 to 10 as playable', 'An unbreakable defence: the target is deliberately vulnerable', 'A product or an evaluation tool: it is a teaching mini-game'],
+    scale: { months: 1, tests: 39 },
+    doNotClaim: ['Levels 5 to 10 as playable', 'An unbreakable defence: the target is deliberately vulnerable', 'A product or an evaluation tool: it is a teaching mini-game'],
   },
   {
     slug: 'ctf-du-site',

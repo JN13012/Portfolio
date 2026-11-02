@@ -1,5 +1,5 @@
 import { Activity, useEffect, useReducer, useRef, useState } from 'react'
-import { aiLabLevels, aiLabOutcomes, aiLabQuotaCopy, aiLabUnavailable, defenseStages, isAiLabLevel } from '../../../content/aiLab'
+import { aiLabLevels, aiLabOutcomes, aiLabQuotaCopy, aiLabUnavailable, defenseStages, isAiLabLevel, isDocumentLevel, poisonedCv, stageRuns } from '../../../content/aiLab'
 import { keepFieldClearOfPlayer } from '../../../lib/keepClearOfPlayer'
 import { AttackConsole } from './AttackConsole'
 import { AiLabIdle } from './AiLabIdle'
@@ -41,20 +41,22 @@ export default function AiLab() {
     setEntered(true)
   }
   const send = async () => {
-    const prompt = state.draft.trim()
-    if (!prompt || state.pending) return
-    const { level } = state
+    const { level, cv } = state
+    const onCv = isDocumentLevel(level)
+    // On the CV level the visitor does not write to Sentry: the conversation shows the sending instead.
+    const prompt = onCv ? poisonedCv.sent : state.draft.trim()
+    if (!prompt || state.pending || (onCv && !cv.profile.trim() && !cv.hidden.trim())) return
     dispatch({ type: 'sending', prompt })
-    const reply = await sendAttempt({ level, prompt, history: conversationHistory(state) })
+    const reply = await sendAttempt(onCv ? { level, cv } : { level, prompt, history: conversationHistory(state) })
     // A failure is never final: the next attempt tries again and clears the message if the service is back.
     setAvailable(!!reply)
     const id = nextAttempt.current++
-    const notRun = defenseStages.map(stage => ({ stage: stage.id, status: stage.fromLevel > level ? 'inactive' as const : 'not-run' as const }))
+    const notRun = defenseStages.map(stage => ({ stage: stage.id, status: stageRuns(stage.id, level) ? 'not-run' as const : 'inactive' as const }))
     const result: LabResult = !reply
       ? { id, level, outcome: 'error', title: 'Lab indisponible', explanation: aiLabUnavailable, trace: notRun }
       : reply.outcome === 'quota'
         ? { id, level, outcome: 'quota', title: 'Essais indisponibles', explanation: aiLabQuotaCopy[reply.reason ?? 'busy'], trace: reply.trace }
-        : { id, level, outcome: reply.outcome, title: aiLabOutcomes[reply.outcome].title, explanation: aiLabOutcomes[reply.outcome].text, answer: reply.answer, trace: reply.trace }
+        : { id, level, outcome: reply.outcome, title: aiLabOutcomes[reply.outcome].title, explanation: aiLabOutcomes[reply.outcome].text, answer: reply.answer, flag: reply.flag, trace: reply.trace }
     dispatch({ type: 'attempt', prompt, result, remaining: reply?.remaining ?? null })
   }
   const validate = async () => {
@@ -76,7 +78,12 @@ export default function AiLab() {
       {/* Hidden rather than unmounted, so coming back to a level does not replay its last trace. */}
       <Activity mode={entered ? 'visible' : 'hidden'}><DefenseDiagram level={state.level} result={last} solved={state.completed.includes(state.level)} hint={state.hints[state.level] ?? 0}
         onHint={value => dispatch({ type: 'hint', value, total: aiLabLevels[state.level - 1]!.hints.length })}
-        onUsePrompt={prompt => { dispatch({ type: 'draft', value: prompt }); document.getElementById('ai-lab-prompt')?.focus({ preventScroll: true }) }} /></Activity>
+        onUsePrompt={prompt => {
+          const onCv = isDocumentLevel(state.level)
+          dispatch(onCv ? { type: 'cv', field: 'hidden', value: prompt } : { type: 'draft', value: prompt })
+          // The CV's field appears with the edit view, after this render.
+          requestAnimationFrame(() => document.getElementById(onCv ? 'ai-lab-cv-hidden' : 'ai-lab-prompt')?.focus({ preventScroll: true }))
+        }} /></Activity>
       {!entered && <AiLabIdle />}
     </div>
   </div>

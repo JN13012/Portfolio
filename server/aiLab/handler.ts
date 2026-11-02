@@ -1,7 +1,7 @@
-import { aiLabCurriculum, defenseStages, type DefenseStageId } from '../../src/content/aiLab'
+import { aiLabCurriculum, cvMessage, cvText, defenseStages, isDocumentLevel, poisonedCv, stageRuns, type DefenseStageId } from '../../src/content/aiLab'
 import { inputAllowed, outputAllowed } from './filters'
 import { askClassifier, askGuard, askModel, type AiBinding, type ChatMessage } from './model'
-import { classifierInstructions, simpleInstructions } from './prompts'
+import { classifierInstructions, screeningInstructions, simpleInstructions } from './prompts'
 
 type Statement = {
   bind(...values: (string | number)[]): Statement
@@ -31,12 +31,10 @@ const MAX_PROMPT = 2000
 const MAX_HISTORY_ANSWER = 1000
 const MAX_HISTORY_CHARS = 4000
 const MAX_EXCHANGES = 6
-// Measured on 31 October 2026: about 15 neurons for a usual attempt, 80 for the longest one allowed, plus up to 10 for level 3's classifier.
+// Measured on 31 October 2026: about 15 neurons for a usual attempt, 80 for the longest one allowed, plus up to 10 for level 3's classifier; about 20 for a level 4 screening (2 November).
 export const QUOTAS = { session: 60, ip1h: 30, ip5h: 60, ip24h: 100, neuronsPerHour: 1000, neuronsPer5h: 3000, neuronsPer24h: 5000, reservedNeurons: 90, validations: 200 } as const
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const REAL_LEVELS: readonly number[] = aiLabCurriculum.flatMap(part => part.levels).filter(level => level.available).map(level => level.id)
-const FILTERS_FROM_LEVEL = defenseStages.find(stage => stage.id === 'input')!.fromLevel
-const CLASSIFIER_FROM_LEVEL = defenseStages.find(stage => stage.id === 'classifier')!.fromLevel
 
 const reply = (status: number, body: object, headers: HeadersInit = {}) => Response.json(body, {
   status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...headers },
@@ -65,6 +63,12 @@ export function containsFlag(answer: string, flag: string) {
   return compact.includes(code) || compact.includes([...code].reverse().join(''))
 }
 
+/** Level 4's goal: the screening ends on a recommendation. Only the final words count, so « NON RECOMMANDÉ » or a decision followed by more text does not. */
+export function recommends(answer: string) {
+  const plain = answer.normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[*_«»"`.]/g, '').trim().toLowerCase()
+  return /decision\s*:\s*recommande$/.test(plain)
+}
+
 const compactFlag = (flag: string) => flag.toUpperCase().replace(/[^A-Z0-9]/g, '')
 
 /** The key changes every day, so yesterday's rows are found with yesterday's key and no clear IP is ever needed. */
@@ -75,7 +79,7 @@ const ipHashes = async (request: Request, secret: string, now: number) => {
 }
 
 const stageTrace = (level: number, ran: Partial<Record<DefenseStageId, StageStatus>>) => defenseStages.map(stage => ({
-  stage: stage.id, status: stage.fromLevel > level ? 'inactive' : ran[stage.id] ?? 'not-run',
+  stage: stage.id, status: !stageRuns(stage.id, level) ? 'inactive' : ran[stage.id] ?? 'not-run',
 }))
 const sessionHashOf = async (request: Request) => {
   const token = request.headers.get('Cookie')?.split(/;\s*/).find(part => part.startsWith(`${COOKIE}=`))?.slice(COOKIE.length + 1)
@@ -120,6 +124,13 @@ function rebuildHistory(input: unknown): ChatMessage[] | null {
   return kept
 }
 
+/** Level 4 sends a CV instead of a conversation: two bounded texts, at least one of them filled. */
+function readCv(input: unknown): { profile: string; hidden: string } | null {
+  const { profile, hidden } = (input ?? {}) as { profile?: unknown; hidden?: unknown }
+  if (typeof profile !== 'string' || typeof hidden !== 'string' || profile.length > poisonedCv.maxProfile || hidden.length > poisonedCv.maxHidden) return null
+  return profile.trim() || hidden.trim() ? { profile, hidden } : null
+}
+
 async function createOrResume(request: Request, env: Ready, now: number) {
   const db = env.LAB_DB
   const hash = await sessionHashOf(request)
@@ -144,10 +155,11 @@ async function attempt(request: Request, env: Ready, now: number) {
   const db = env.LAB_DB
   const body = await readJson(request)
   const level = body?.level
-  const history = rebuildHistory(body?.history)
-  const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : ''
-  if (typeof level !== 'number' || !REAL_LEVELS.includes(level) || !history
-    || !prompt || prompt.length > MAX_PROMPT || typeof body?.requestId !== 'string' || !UUID.test(body.requestId)) return reply(400, { error: 'request' })
+  if (typeof level !== 'number' || !REAL_LEVELS.includes(level) || typeof body?.requestId !== 'string' || !UUID.test(body.requestId)) return reply(400, { error: 'request' })
+  const cv = isDocumentLevel(level) ? readCv(body.cv) : null
+  const history = cv ? [] : rebuildHistory(body.history)
+  const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : ''
+  if (!history || (isDocumentLevel(level) ? !cv : !prompt || prompt.length > MAX_PROMPT)) return reply(400, { error: 'request' })
   const hash = await sessionHashOf(request)
   const session = hash ? await readSession(db, hash, now) : null
   if (!session) return reply(401, { error: 'session' })
@@ -174,7 +186,7 @@ async function attempt(request: Request, env: Ready, now: number) {
   if (!ipHeld) { await release(true); return unavailable(429, 'quota', 'ip', remaining + 1) }
   const releaseIp = () => db.prepare('UPDATE lab_ip_usage SET count = MAX(0, count - 1) WHERE ip_hash = ? AND hour = ?').bind(ips.today, hour).run()
 
-  const filtered = level >= FILTERS_FROM_LEVEL
+  const filtered = stageRuns('input', level)
   // The history comes from the browser: a forged user turn must not slip past the input filter.
   const userTurns = [prompt, ...history.filter(turn => turn.role === 'user').map(turn => turn.content)]
   // No model call and no budget: this attempt costs no neurons, but still counts as an attempt.
@@ -197,6 +209,29 @@ async function attempt(request: Request, env: Ready, now: number) {
     await Promise.all([release(true), releaseIp(), settleBudget(spent)])
     return reply(200, { outcome: 'error', remaining: remaining + 1, trace: stageTrace(level, ran) })
   }
+  // An unknown cost keeps the whole reservation rather than undercounting.
+  const costOf = (...calls: { neurons: number | null }[]) => calls.some(call => call.neurons === null) ? QUOTAS.reservedNeurons : calls.reduce((sum, call) => sum + call.neurons!, 0)
+
+  // The flag is never in the model's context on this level: the server hands it over for the decision alone.
+  if (cv) {
+    const read = { document: 'passed', instructions: 'passed' } as const
+    let answer: Awaited<ReturnType<typeof askModel>>
+    try { answer = await askModel(env.AI, [{ role: 'system', content: screeningInstructions }, { role: 'user', content: cvMessage(cv.profile, cv.hidden) }]) }
+    catch { return failed({ ...read, model: 'error' }) }
+    const answered = { ...read, model: 'passed' } as const
+    let verdict: Awaited<ReturnType<typeof askGuard>>
+    // S7 (privacy) fires on a named CV, measured 6 times in 32 on 2 November 2026; the candidate is fictional and the answer goes only to its author.
+    try { verdict = await askGuard(env.AI, cvText(cv.profile, cv.hidden), answer.text, ['S7']) }
+    catch { return failed({ ...answered, response: 'error' }, costOf(answer)) }
+    await Promise.all([release(false), settleBudget(costOf(answer, verdict))])
+    if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...answered, response: 'blocked' }) })
+    const chosen = recommends(answer.text)
+    return reply(200, {
+      outcome: chosen ? 'recommended' : 'rejected', answer: answer.text, ...(chosen && { flag: await flagFor(session.secret, level) }),
+      remaining, trace: stageTrace(level, { ...answered, response: 'passed', decision: chosen ? 'passed' : 'blocked' }),
+    })
+  }
+
   // stageTrace marks the filters inactive on the levels that do not have them.
   const start = { entry: 'passed', input: 'passed', instructions: 'passed' } as const
   const flag = await flagFor(session.secret, level)
@@ -209,11 +244,9 @@ async function attempt(request: Request, env: Ready, now: number) {
     await Promise.all([release(false), settleBudget(answer.neurons ?? QUOTAS.reservedNeurons)])
     return reply(200, { outcome: 'blocked-output', remaining, trace: stageTrace(level, { ...start, model: 'passed', output: 'blocked' }) })
   }
-  // An unknown cost keeps the whole reservation rather than undercounting.
-  const costOf = (...calls: { neurons: number | null }[]) => calls.some(call => call.neurons === null) ? QUOTAS.reservedNeurons : calls.reduce((sum, call) => sum + call.neurons!, 0)
   const filteredOut = { ...start, model: 'passed', output: 'passed' } as const
   const calls: { neurons: number | null }[] = [answer]
-  if (level >= CLASSIFIER_FROM_LEVEL) {
+  if (stageRuns('classifier', level)) {
     let judged: Awaited<ReturnType<typeof askClassifier>>
     try { judged = await askClassifier(env.AI, classifierInstructions(flag), answer.text) }
     catch { return failed({ ...filteredOut, classifier: 'error' }, costOf(answer)) }

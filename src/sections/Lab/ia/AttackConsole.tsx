@@ -1,8 +1,9 @@
 import { Fragment, useEffect, useRef, type Dispatch, type FormEvent } from 'react'
-import { Send, ShieldCheck, Terminal } from 'lucide-react'
-import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePanelCopy } from '../../../content/aiLab'
+import { Lock, Send, ShieldCheck, Terminal } from 'lucide-react'
+import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePanelCopy, isDocumentLevel, poisonedCv } from '../../../content/aiLab'
 import { labReducer, type LabState } from './labState'
 import { LabNavigation } from '../LabNavigation'
+import { PoisonedCv } from './PoisonedCv'
 
 const levelCount = String(aiLabCurriculum.reduce((count, part) => count + part.levels.length, 0)).padStart(2, '0')
 
@@ -23,14 +24,16 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
   const attempts = state.attempts.filter(attempt => attempt.result.level === state.level)
   useEffect(() => {
     const node = history.current
-    if (node) node.scrollTop = node.scrollHeight
-  }, [state.attempts, state.level, state.pending, state.solvedAfter])
+    // The CV opens at its top, where the offer is, until it has an answer to show.
+    if (node) node.scrollTop = isDocumentLevel(state.level) && state.pending === null && !attempts.length ? 0 : node.scrollHeight
+  }, [state.attempts, state.level, state.pending, state.solvedAfter, attempts.length])
   const success = (attemptId: number) => state.solvedAfter[state.level] === attemptId && <div className="ai-lab__success" role="status">
     <p><span aria-hidden="true">&gt;&gt;</span> {aiLabSuccess.granted}</p>
     <p><span aria-hidden="true">&gt;&gt;</span> {aiLabSuccess.next(state.level)}</p>
   </div>
   const send = (event: FormEvent) => { event.preventDefault(); onSend() }
-  const canSend = state.pending === null && !!state.draft.trim()
+  const onCv = isDocumentLevel(state.level)
+  const canSend = state.pending === null && (onCv ? !!(state.cv.profile.trim() || state.cv.hidden.trim()) : !!state.draft.trim())
   return (
     <div className="lab-terminal ai-lab__console">
       <div className="ai-lab__console-heading">
@@ -40,7 +43,10 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
         </span>
         <LabNavigation tone="blue" onPresentation={onPresentation} onCurriculum={onDetails} open={curriculumOpen} drawerId="ai-lab-curriculum" />
       </div>
-      <div className="ai-lab__history" ref={history} role="log" aria-label="Conversation avec Sentry" aria-live="polite" aria-relevant="additions">
+      {onCv ? <div className="ai-lab__history ai-cv" ref={history}>
+        {!available && <p className="ai-lab__empty" role="status">{aiLabUnavailable}</p>}
+        <PoisonedCv state={state} dispatch={dispatch} last={attempts.at(-1)} success={success} />
+      </div> : <div className="ai-lab__history" ref={history} role="log" aria-label="Conversation avec Sentry" aria-live="polite" aria-relevant="additions">
         <div className="ai-lab__boot">
           <p><span aria-hidden="true">&gt;&gt;</span> RED-TEAM SENTRY — CAPTURE THE FLAG</p>
           <p><span aria-hidden="true">&gt;&gt;</span> Saisissez votre premier prompt pour commencer.</p>
@@ -57,10 +63,10 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
           <p className="ai-lab__prompt"><span className="sr-only">Vous : </span>{state.pending}</p>
           <p className="ai-lab__answer" role="status"><span>sentry&gt;</span> <span className="ai-lab__thinking" aria-hidden="true"><i /><i /><i /></span><span className="sr-only">{defensePanelCopy.analysing}</span></p>
         </div>}
-      </div>
+      </div>}
       <div className="ai-lab__controls">
         <div className="ai-lab__toolbar">
-          <button type="button" className="ai-lab__new-conversation" disabled={state.pending !== null || !attempts.length} onClick={() => dispatch({ type: 'new-conversation' })}>Nouvelle conversation</button>
+          {!onCv && <button type="button" className="ai-lab__new-conversation" disabled={state.pending !== null || !attempts.length} onClick={() => dispatch({ type: 'new-conversation' })}>Nouvelle conversation</button>}
           <form onSubmit={event => { event.preventDefault(); onValidate() }} className="ai-lab__flag-form">
             <label htmlFor="ai-lab-flag">Valider le flag</label>
             <div><input id="ai-lab-flag" value={state.flag} maxLength={100} autoComplete="off" spellCheck={false} placeholder="FLAG{XXXXXXXXXXXX}" onChange={event => dispatch({ type: 'flag', value: event.target.value })} />
@@ -68,7 +74,10 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
           </form>
           {state.validation === 'incorrect' && <p className="ai-lab__validation" role="status">Ce flag n’est pas le bon pour ce niveau.</p>}
         </div>
-        <form onSubmit={send} className="ai-lab__prompt-form">
+        {onCv ? <form onSubmit={send} className="ai-lab__prompt-form ai-cv__send">
+          <div className="ai-cv__request"><span id="ai-lab-cv-request">{poisonedCv.requestLabel}</span><p aria-labelledby="ai-lab-cv-request"><Lock size={12} aria-hidden="true" /> {poisonedCv.request}</p></div>
+          <button type="submit" className="ai-lab__send" disabled={!canSend}><Send size={15} aria-hidden="true" /><span>{poisonedCv.send}</span></button>
+        </form> : <form onSubmit={send} className="ai-lab__prompt-form">
           <span className="ai-lab__prompt-mark" aria-hidden="true">&gt;</span>
           <label className="sr-only" htmlFor="ai-lab-prompt">Votre prompt</label>
           <textarea id="ai-lab-prompt" rows={2} maxLength={2000} value={state.draft} placeholder="Votre prompt…" onChange={event => dispatch({ type: 'draft', value: event.target.value })}
@@ -76,8 +85,8 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
               if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing && event.keyCode !== 229) { event.preventDefault(); if (canSend) onSend() }
             }} />
           <button type="submit" className="ai-lab__send" disabled={!canSend}><Send size={15} aria-hidden="true" /><span>Envoyer</span></button>
-        </form>
-        <p className="ai-lab__notice">{state.remaining !== null && <strong>Essais restants : {state.remaining}. </strong>}{defensePanelCopy.noticeAnswers} (<span className="ai-lab__model">{level.models.answers}</span>){level.models.classifier && <> {defensePanelCopy.noticeClassifier} (<span className="ai-lab__model">{level.models.classifier}</span>)</>}. {defensePanelCopy.notice}</p>
+        </form>}
+        <p className="ai-lab__notice">{state.remaining !== null && <><strong>{defensePanelCopy.remaining} : {state.remaining}</strong> · </>}{defensePanelCopy.model} : <span className="ai-lab__model">{level.models.answers}</span>{level.models.classifier && <>, {defensePanelCopy.classifier} <span className="ai-lab__model">{level.models.classifier}</span></>} · {defensePanelCopy.privacy}</p>
       </div>
     </div>
   )

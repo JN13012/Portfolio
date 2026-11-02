@@ -110,7 +110,8 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 - [x] Ouverture publique du sélecteur IA avec le seul niveau 1, décidée par Jérémie le 31 octobre. Les autres restent « À venir ».
 - [x] Niveau 2 réel, sur `developpement` : filtres d’entrée et de sortie, mesurés sur le vrai modèle le 1er novembre (voir [le plan du Lab](conception-lab-ia.md#filtres-dentrée-et-de-sortie-02)).
 - [x] Niveau 3 réel, sur `developpement` : classifieur Gemma 4, mesuré sur le vrai modèle le 1er novembre (voir [le plan du Lab](conception-lab-ia.md#classifieur-ia-03)).
-- [ ] Niveau 4 (document piégé).
+- [x] Niveaux 2 et 3 publiés en production le 2 novembre, à la demande de Jérémie.
+- [x] Niveau 4 réel, sur `developpement` : CV piégé, mesuré sur le vrai modèle le 2 novembre (voir [le plan du Lab](conception-lab-ia.md#cv-piégé-04)).
 - [ ] Démonstration enregistrée à décider, banc de test et corpus publiés, avec taux de réussite par niveau.
 - [ ] Refaire le contrôle sécurité à chaque niveau ajouté.
 
@@ -152,7 +153,7 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 
 - **Nouveaux projets** : valider les notes de complexité proposées pour Chronox (3), Maria Agent (2), FraudSignal (4) et Lab IA (4).
 
-## État des branches au 31 octobre 2026
+## État des branches au 2 novembre 2026
 
-- `main` : la production, avec les étapes 0 à 4 et le Lab IA ouvert sur son niveau 1, publiés à la demande de Jérémie.
+- `main` : la production, avec les étapes 0 à 4 et le Lab IA ouvert sur ses niveaux 1 à 3, publiés à la demande de Jérémie.
 - `developpement` : tout le travail. Préversion : https://developpement-www.jeremie-nagi.workers.dev

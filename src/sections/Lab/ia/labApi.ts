@@ -2,7 +2,7 @@ import type { LabLevel } from '../../../content/aiLab'
 import type { LabOutcome, LabTrace } from './labState'
 
 type SessionReply = { available: true; completed: number[]; remaining: number }
-type AttemptReply = { outcome: LabOutcome; reason?: 'session' | 'ip' | 'budget' | 'busy'; answer?: string; remaining: number; trace: LabTrace }
+type AttemptReply = { outcome: LabOutcome; reason?: 'session' | 'ip' | 'budget' | 'busy'; answer?: string; flag?: string; remaining: number; trace: LabTrace }
 type ValidateReply = { correct: boolean; completed: number[] }
 
 const post = (path: string, body: object) => fetch(`/api/lab/${path}`, {
@@ -17,7 +17,7 @@ export async function openSession(): Promise<SessionReply | null> {
 }
 
 /** Returns null when no usable answer came back; a lost session is reopened once, with a new request id. */
-export async function sendAttempt(input: { level: LabLevel; prompt: string; history: { prompt: string; answer: string }[] }): Promise<AttemptReply | null> {
+export async function sendAttempt(input: { level: LabLevel; prompt: string; history: { prompt: string; answer: string }[] } | { level: LabLevel; cv: { profile: string; hidden: string } }): Promise<AttemptReply | null> {
   try {
     let response = await post('attempt', { ...input, requestId: crypto.randomUUID() })
     if (response.status === 401 && await openSession()) response = await post('attempt', { ...input, requestId: crypto.randomUUID() })

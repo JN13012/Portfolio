@@ -44,7 +44,7 @@ export async function askClassifier(ai: AiBinding, instructions: string, answer:
 }
 
 /** Abuse safeguard, separate from the game's defenses. Anything but a clear verdict counts as a failure. */
-export async function askGuard(ai: AiBinding, prompt: string, answer: string): Promise<{ allowed: boolean; neurons: number | null }> {
+export async function askGuard(ai: AiBinding, prompt: string, answer: string, alsoIgnored: readonly string[] = []): Promise<{ allowed: boolean; neurons: number | null }> {
   const output = await withTimeout(ai.run(GUARD_MODEL, {
     messages: [{ role: 'user', content: prompt }, { role: 'assistant', content: answer }], max_tokens: 40,
   })) as { response?: unknown; usage?: { neurons?: unknown } }
@@ -53,5 +53,5 @@ export async function askGuard(ai: AiBinding, prompt: string, answer: string): P
   if (lines[0] === 'safe') return { allowed: true, neurons }
   if (lines[0] !== 'unsafe') throw new Error('unclear verdict')
   const categories = (lines[1] ?? '').split(',').map(category => category.trim()).filter(Boolean)
-  return { allowed: categories.length > 0 && categories.every(category => IGNORED_GUARD_CATEGORIES.has(category)), neurons }
+  return { allowed: categories.length > 0 && categories.every(category => IGNORED_GUARD_CATEGORIES.has(category) || alsoIgnored.includes(category)), neurons }
 }

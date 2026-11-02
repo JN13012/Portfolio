@@ -58,7 +58,7 @@ export const hero = {
   /** The labs. */
   labs: [
     { id: 'cyber', label: { fr: 'Lab cyber', en: 'Cyber lab' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
-    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red team IA · 3 niveaux', en: 'AI red team · 3 levels' } },
+    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red team IA · 4 niveaux', en: 'AI red team · 4 levels' } },
   ],
   /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
   labPanel: {
@@ -82,7 +82,7 @@ export const hero = {
     intro: { fr: 'Un exercice de red team sur un vrai modèle : faites révéler son flag à Sentry.' },
     phases: [
       { title: { fr: 'Direct Prompt Injection' }, text: { fr: 'niveaux 1 à 3 jouables' } },
-      { title: { fr: 'Indirect Prompt Injection' }, text: { fr: 'à venir' } },
+      { title: { fr: 'Indirect Prompt Injection' }, text: { fr: 'niveau 4 jouable, niveau 5 à venir' } },
       { title: { fr: 'Agents & API' }, text: { fr: 'à venir' } },
       { title: { fr: 'Hardening' }, text: { fr: 'à venir' } },
     ],

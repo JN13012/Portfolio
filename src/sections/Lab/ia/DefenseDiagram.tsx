@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from 'react'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { Sentry } from '../../../components/Sentry'
-import { aiLabLevels, defensePanelCopy, defenseStages, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
+import { aiLabLevels, defensePanelCopy, defenseStages, stageRuns, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
 import { stageStatusLabels, type LabResult, type LabTrace } from './labState'
 
@@ -25,6 +25,7 @@ const MARGIN_X = 50
 const WIDTH = 640
 const STAGE_LAYOUT: Record<DefenseStageId, { rows: readonly number[]; label: readonly string[]; check?: true }> = {
   entry: { rows: [1], label: ['Entrée'] },
+  document: { rows: [1], label: ['CV'] },
   input: { rows: [1], label: ['Filtre', 'd’entrée'], check: true },
   instructions: { rows: [1], label: ['Consignes'] },
   model: { rows: [1], label: ['Modèle'] },
@@ -32,6 +33,7 @@ const STAGE_LAYOUT: Record<DefenseStageId, { rows: readonly number[]; label: rea
   classifier: { rows: [1], label: ['Classifieur', 'IA'], check: true },
   response: { rows: [1], label: ['Réponse'] },
   flag: { rows: [1], label: ['Flag'] },
+  decision: { rows: [1], label: ['Décision'], check: true },
 }
 type Point = { x: number; y: number }
 type Column = { stage: number; x: number; nodes: Point[] }
@@ -217,7 +219,7 @@ export function DefenseDiagram({ level, result, solved, hint, onHint, onUsePromp
 }) {
   const [replay, setReplay] = useState(0)
   const brief = aiLabLevels[level - 1]!
-  const trace: LabTrace = result?.trace ?? defenseStages.map(stage => ({ stage: stage.id, status: stage.fromLevel <= level ? 'not-run' : 'inactive' }))
+  const trace: LabTrace = result?.trace ?? defenseStages.map(stage => ({ stage: stage.id, status: stageRuns(stage.id, level) ? 'not-run' : 'inactive' }))
   return <aside id="ai-lab-defenses" className="ai-lab__defenses" aria-label="Analyse et guide">
     <header><p><Sentry size={32} animated={false} /><span>Analyse et guide · niveau {level}</span></p>
       <button type="button" className="ai-lab__replay" disabled={!result} onClick={() => setReplay(value => value + 1)}><RotateCcw size={14} aria-hidden="true" /> Rejouer</button></header>

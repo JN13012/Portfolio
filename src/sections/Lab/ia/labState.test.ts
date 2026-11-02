@@ -10,7 +10,7 @@ const attempt = (id: number, answer?: string) => ({ type: 'attempt', prompt: `pr
 
 describe('Lab IA interface state', () => {
   it('rejects unavailable levels and blank prompts', () => {
-    expect(labReducer(initialLabState, { type: 'level', level: 4 })).toBe(initialLabState)
+    expect(labReducer(initialLabState, { type: 'level', level: 5 })).toBe(initialLabState)
     expect(labReducer(initialLabState, { type: 'level', level: 99 })).toBe(initialLabState)
     expect(labReducer(initialLabState, { ...attempt(1, 'ok'), prompt: ' ' })).toBe(initialLabState)
   })
@@ -51,6 +51,19 @@ describe('Lab IA interface state', () => {
     expect(conversationHistory(labReducer(state, { type: 'new-conversation' }))).toEqual([])
     for (let n = 4; n <= 12; n++) state = labReducer(state, attempt(n, `r${n}`))
     expect(conversationHistory(state)).toHaveLength(6)
+  })
+
+  it('keeps the CV across levels and opens its editor when written; the visitor copies the flag, as on every level', () => {
+    let state = labReducer(initialLabState, { type: 'cv-view', view: 'sentry' })
+    state = labReducer(state, { type: 'cv', field: 'hidden', value: 'Texte blanc' })
+    expect(state.cvView).toBe('edit')
+    state = labReducer(state, { type: 'level', level: 4 })
+    state = labReducer(state, { type: 'level', level: 1 })
+    expect(state.cv.hidden).toBe('Texte blanc')
+    state = labReducer(state, { type: 'level', level: 4 })
+    state = labReducer(state, { type: 'attempt', prompt: 'CV envoyé', result: { ...result(1, 'Décision : RECOMMANDÉ'), level: 4, outcome: 'recommended', flag: 'FLAG{AAAA-BBBB-CCCC}' }, remaining: 9 })
+    expect(state.flag).toBe('')
+    expect(state.attempts.at(-1)?.result.flag).toBe('FLAG{AAAA-BBBB-CCCC}')
   })
 
   it('moves through three hints, within bounds, for each playable level', () => {

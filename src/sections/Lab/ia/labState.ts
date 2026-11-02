@@ -1,7 +1,7 @@
-import { isAiLabLevel, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
+import { isAiLabLevel, poisonedCv, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
 
 export type StageStatus = 'inactive' | 'passed' | 'blocked' | 'error' | 'not-run'
-export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'off-topic' | 'error' | 'quota'
+export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'recommended' | 'rejected' | 'off-topic' | 'error' | 'quota'
 export type LabTrace = { stage: DefenseStageId; status: StageStatus }[]
 export type LabResult = {
   id: number
@@ -10,6 +10,8 @@ export type LabResult = {
   title: string
   explanation: string
   answer?: string
+  /** Handed over by the server when level 4's CV is recommended. */
+  flag?: string
   trace: LabTrace
 }
 export type LabAttempt = { prompt: string; result: LabResult }
@@ -23,6 +25,9 @@ export type LabState = {
   /** The prompt on its way to the model, shown at once in the conversation. */
   pending: string | null
   draft: string
+  /** Level 4's CV, kept across levels like a file on the desk. */
+  cv: { profile: string; hidden: string }
+  cvView: CvView
   flag: string
   validation: 'idle' | 'incorrect' | 'correct'
   /** The hint shown in the carousel; 0 is its introduction. */
@@ -31,12 +36,15 @@ export type LabState = {
   solvedAfter: Partial<Record<LabLevel, number>>
   work: Partial<Record<LabLevel, { draft: string; flag: string; validation: LabState['validation'] }>>
 }
+export type CvView = keyof typeof poisonedCv.views
 export const initialLabState: LabState = {
-  level: 1, completed: [], attempts: [], conversationStart: 0, remaining: null, pending: null, draft: '', flag: '', validation: 'idle', hints: {}, solvedAfter: {}, work: {},
+  level: 1, completed: [], attempts: [], conversationStart: 0, remaining: null, pending: null, draft: '', cv: { profile: poisonedCv.profile, hidden: '' }, cvView: 'edit', flag: '', validation: 'idle', hints: {}, solvedAfter: {}, work: {},
 }
 type Action =
   | { type: 'draft'; value: string }
   | { type: 'flag'; value: string }
+  | { type: 'cv'; field: keyof LabState['cv']; value: string }
+  | { type: 'cv-view'; view: CvView }
   | { type: 'session'; completed: number[]; remaining: number }
   | { type: 'sending'; prompt: string }
   | { type: 'attempt'; prompt: string; result: LabResult; remaining: number | null }
@@ -50,6 +58,9 @@ export function labReducer(state: LabState, action: Action): LabState {
   switch (action.type) {
     case 'draft': return { ...state, draft: action.value }
     case 'flag': return { ...state, flag: action.value, validation: 'idle' }
+    // Writing in the CV always happens in the edit view, where its fields are.
+    case 'cv': return { ...state, cv: { ...state.cv, [action.field]: action.value }, cvView: 'edit' }
+    case 'cv-view': return { ...state, cvView: action.view }
     case 'session': return { ...state, completed: action.completed, remaining: action.remaining }
     case 'sending': return { ...state, pending: action.prompt, draft: '', validation: 'idle' }
     case 'attempt':
