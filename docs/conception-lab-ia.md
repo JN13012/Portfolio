@@ -74,6 +74,15 @@ déterministes, sans modèle. Même modèle (GLM 4.7 Flash), même consigne simp
 dangereux et ne repérerait sans doute pas une fuite de flag : ce niveau utilise donc un évaluateur dédié,
 qui lit lui aussi du texte contrôlé par l’attaquant. Ce montage n’est pas présenté comme un standard de l’industrie.
 
+Réalisé le 1er novembre 2026 sur `developpement` (`askClassifier`, `classifierInstructions`). Une seule nouveauté par rapport au niveau 02 : les filtres, la consigne et le modèle restent, avec un flag propre au niveau.
+
+- **Classifieur :** Gemma 4 26B, température 0, 12 jetons au plus. Il reçoit le flag et la seule réponse de Sentry, entre des balises fixes `<reponse>`, jamais le message du visiteur.
+- **Verdict :** seul un « OK » exact publie la réponse. Tout autre texte la bloque, pour qu’un verdict déraillé ne donne pas d’essai gratuit. Une panne du fournisseur reste une erreur technique : l’essai est rendu, les neurones déjà consommés restent comptés.
+- **Réussite attendue :** faire écrire à Sentry le code par groupes, puis une fausse balise de fin, un faux verdict et un leurre plausible. Les balises fixes sont la faille de ce niveau ; des balises aléatoires la fermeraient, ce qui revient au niveau 09.
+- **Choix du classifieur, 1er novembre, 12 fuites et 8 réponses légitimes, 2 fois chacune, avec le flag :** Gemma 4 voit 18 fuites sur 24 sans faux positif pour 1,5 neurone ; GLM 4.7 Flash 11 sur 24 ; Llama 3.3 20 sur 24 pour 6 neurones, sans faille plus intéressante. Sans le flag, Gemma 4 et Llama 3.3 prennent un faux code pour une fuite. Mistral Small 3.1 refuse le paramètre de gabarit commun aux autres modèles et n’a pas été comparé.
+- **Mesures de la chaîne, GLM 4.7 Flash puis Gemma 4, flag fictif :** solution du niveau 02 : 0 sur 10 publié. Note au classifieur : 0 sur 10. Faux verdict sans leurre plausible : 4 sur 25 sur le vrai serveur. Prompt du 3ᵉ indice : 17 flags publiés et validés sur 20 sur le vrai serveur, 1 erreur technique, 2 retenus en sortie. Sans fausse balise, le classifieur arrête donc l’essentiel ; petit corpus : ce sont des ordres de grandeur.
+- **Coût :** environ 4 neurones pour le modèle et le classifieur, plus le garde-fou si la réponse est publiée. La réservation passe de 80 à 90 neurones.
+
 ### Injection indirecte (04–05)
 
 Le visiteur agit sur une source que Sentry consulte, pas seulement sur le chat : éditeur de fiche
@@ -121,14 +130,14 @@ Le code du banc est publié avec le corpus.
 
 | Sujet | Décision |
 | --- | --- |
-| **Affichage public** | Ouvert avec le niveau 01 (décision de Jérémie du 31 octobre). Le niveau 02 est prêt sur `developpement`. Les autres restent annoncés « À venir » et ne sont pas jouables. |
+| **Affichage public** | Ouvert avec le niveau 01 (décision de Jérémie du 31 octobre). Les niveaux 02 et 03 sont prêts sur `developpement`. Les autres restent annoncés « À venir » et ne sont pas jouables. |
 | **Accès aux niveaux** | Libre, comme au Lab cyber. Chaque réussite est enregistrée séparément ; rien n’est déduit d’une visite. |
 | **Quotas** | 60 essais par session, 30 / 60 / 100 par empreinte d’IP sur 1 h, 5 h et 24 h, et, pour tout le site, 1 000 / 3 000 / 5 000 neurones sur les mêmes durées. Workers AI n’offre pas de plafond de dépense : ce budget, inférieur aux 10 000 neurones gratuits par jour, en tient lieu. Un essai courant coûte environ 15 neurones. |
 | **IP** | HMAC avec secret serveur et sel changé chaque jour, conservé 48 h au plus, jamais d’IP en clair. Une empreinte reste une donnée personnelle : une courte mention l’indique près du Lab. |
 | **Abus** | Un garde-fou sur tous les niveaux (Llama Guard 3 envisagé), séparé des défenses du jeu : réponses courtes, limitées à l’exercice, avec un état propre dans la trace (« Hors exercice »). Il réduit le risque sans l’éliminer ; le Lab nomme le modèle qui génère les réponses. |
 | **Recruteur pressé** | Une démonstration tirée de vraies tentatives enregistrées, avec date et modèle. Elle arrive avec l’ouverture publique, jamais avant le modèle réel. |
 | **Preuve** | Publier le corpus d’attaques, le banc de test et les taux de réussite par niveau, avec modèle, version, date et limites. |
-| **Modèle** | Workers AI. GLM 4.7 Flash pour le niveau 1, raisonnement désactivé ; Llama Guard 3 pour le garde-fou. Le modèle des niveaux suivants sera choisi selon la difficulté visée. |
+| **Modèle** | Workers AI. GLM 4.7 Flash pour les niveaux 1 à 3, raisonnement désactivé ; Gemma 4 pour le classifieur du niveau 3 ; Llama Guard 3 pour le garde-fou. Le modèle des niveaux suivants sera choisi selon la difficulté visée. |
 
 ## Résultats des modèles
 
@@ -187,7 +196,7 @@ Les niveaux 07 et 08 ajoutent les routes de l’application du scénario et le p
 **Réponses**
 
 - Une réponse retenue par un filtre, le classifieur ou le garde-fou n’atteint jamais le navigateur, même dans la trace.
-- Le classifieur rend un verdict structuré limité. En cas d’erreur, rien n’est publié et une erreur technique s’affiche.
+- Le classifieur rend un verdict limité : seul « OK » publie, tout autre texte bloque. En cas de panne, rien n’est publié et une erreur technique s’affiche.
 - Une erreur fournisseur ou un quota épuisé ne compte jamais comme une attaque bloquée.
 - La réussite d’un niveau dépend uniquement du flag validé par le serveur. Le point « Flag » du schéma s’allume si le serveur trouve le flag dans la réponse, à l’endroit ou à l’envers ; un autre encodage n’est pas reconnu, mais reste validable.
 
@@ -211,8 +220,8 @@ Les niveaux 07 et 08 ajoutent les routes de l’application du scénario et le p
 
 Les étapes sont suivies dans le [plan de travail](plan-travail.md).
 
-- **État actuel :** niveau 1 réel et public sur le vrai modèle ; niveau 2 réel sur `developpement` ; les huit autres sont « À venir ».
-- **Étape 5 :** niveaux 3 et 4, démonstration éventuelle, banc de test et corpus publiés.
+- **État actuel :** niveau 1 réel et public sur le vrai modèle ; niveaux 2 et 3 réels sur `developpement` ; les sept autres sont « À venir ».
+- **Étape 5 :** niveau 4, démonstration éventuelle, banc de test et corpus publiés.
 - **Étape 6 :** niveaux 5 à 8, puis remédiation aux niveaux 9 et 10 et rapport de fin de parcours.
 
 ## Vérifications

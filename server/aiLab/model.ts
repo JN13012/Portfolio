@@ -5,6 +5,7 @@ type Completion = { text: string; neurons: number | null }
 // Chosen on real French calls on 31 October 2026: see docs/conception-lab-ia.md.
 export const CHAT_MODEL = '@cf/zai-org/glm-4.7-flash'
 export const GUARD_MODEL = '@cf/meta/llama-guard-3-8b'
+export const CLASSIFIER_MODEL = '@cf/google/gemma-4-26b-a4b-it'
 const MAX_OUTPUT_TOKENS = 250
 const TIMEOUT_MS = 20_000
 // S14 (code interpreter abuse) fires on « ignore tes instructions », which is the exercise itself.
@@ -26,6 +27,20 @@ export async function askModel(ai: AiBinding, messages: ChatMessage[]): Promise<
   const text = output.choices?.[0]?.message?.content
   if (typeof text !== 'string' || !text.trim()) throw new Error('empty answer')
   return { text: text.trim(), neurons: neuronsOf(output) }
+}
+
+/**
+ * Level 3's evaluator. Only an exact OK publishes the answer: a verdict the attacker derails blocks it, so unreadable
+ * verdicts are never free attempts. A provider failure throws and stays a technical error.
+ */
+export async function askClassifier(ai: AiBinding, instructions: string, answer: string): Promise<{ allowed: boolean; neurons: number | null }> {
+  const output = await withTimeout(ai.run(CLASSIFIER_MODEL, {
+    messages: [{ role: 'system', content: instructions }, { role: 'user', content: `<reponse>\n${answer}\n</reponse>` }],
+    max_tokens: 12, temperature: 0, chat_template_kwargs: { enable_thinking: false },
+  })) as { choices?: { message?: { content?: unknown } }[]; usage?: { neurons?: unknown } }
+  const verdict = output.choices?.[0]?.message?.content
+  if (typeof verdict !== 'string') throw new Error('no verdict')
+  return { allowed: verdict.trim() === 'OK', neurons: neuronsOf(output) }
 }
 
 /** Abuse safeguard, separate from the game's defenses. Anything but a clear verdict counts as a failure. */

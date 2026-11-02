@@ -4,7 +4,6 @@ import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePa
 import { labReducer, type LabState } from './labState'
 import { LabNavigation } from '../LabNavigation'
 
-const [noticeStart, noticeEnd] = defensePanelCopy.notice.split(defensePanelCopy.modelName)
 const levelCount = String(aiLabCurriculum.reduce((count, part) => count + part.levels.length, 0)).padStart(2, '0')
 
 type Props = {
@@ -78,7 +77,7 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
             }} />
           <button type="submit" className="ai-lab__send" disabled={!canSend}><Send size={15} aria-hidden="true" /><span>Envoyer</span></button>
         </form>
-        <p className="ai-lab__notice">{state.remaining !== null && <strong>Essais restants : {state.remaining}. </strong>}{noticeStart}<span className="ai-lab__model">{defensePanelCopy.modelName}</span>{noticeEnd}</p>
+        <p className="ai-lab__notice">{state.remaining !== null && <strong>Essais restants : {state.remaining}. </strong>}{defensePanelCopy.noticeAnswers} (<span className="ai-lab__model">{level.models.answers}</span>){level.models.classifier && <> {defensePanelCopy.noticeClassifier} (<span className="ai-lab__model">{level.models.classifier}</span>)</>}. {defensePanelCopy.notice}</p>
       </div>
     </div>
   )

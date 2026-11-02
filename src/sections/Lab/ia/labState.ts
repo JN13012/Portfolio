@@ -1,7 +1,7 @@
 import { isAiLabLevel, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
 
 export type StageStatus = 'inactive' | 'passed' | 'blocked' | 'error' | 'not-run'
-export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'off-topic' | 'error' | 'quota'
+export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'off-topic' | 'error' | 'quota'
 export type LabTrace = { stage: DefenseStageId; status: StageStatus }[]
 export type LabResult = {
   id: number

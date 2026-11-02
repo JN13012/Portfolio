@@ -1,7 +1,7 @@
 import { aiLabCurriculum, defenseStages, type DefenseStageId } from '../../src/content/aiLab'
 import { inputAllowed, outputAllowed } from './filters'
-import { askGuard, askModel, type AiBinding, type ChatMessage } from './model'
-import { simpleInstructions } from './prompts'
+import { askClassifier, askGuard, askModel, type AiBinding, type ChatMessage } from './model'
+import { classifierInstructions, simpleInstructions } from './prompts'
 
 type Statement = {
   bind(...values: (string | number)[]): Statement
@@ -24,17 +24,19 @@ const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1'])
 const COOKIE = '__Host-lab_session'
 const SESSION_MS = 24 * 60 * 60 * 1000
 const HOUR_MS = 60 * 60 * 1000
-const BUSY_MS = 45_000
+// Longer than the three model calls of an attempt can take together, at 20 s each.
+const BUSY_MS = 70_000
 const MAX_BODY_BYTES = 16_384
 const MAX_PROMPT = 2000
 const MAX_HISTORY_ANSWER = 1000
 const MAX_HISTORY_CHARS = 4000
 const MAX_EXCHANGES = 6
-// Measured on 31 October 2026: about 15 neurons for a usual attempt, 80 for the longest one allowed.
-export const QUOTAS = { session: 60, ip1h: 30, ip5h: 60, ip24h: 100, neuronsPerHour: 1000, neuronsPer5h: 3000, neuronsPer24h: 5000, reservedNeurons: 80, validations: 200 } as const
+// Measured on 31 October 2026: about 15 neurons for a usual attempt, 80 for the longest one allowed, plus up to 10 for level 3's classifier.
+export const QUOTAS = { session: 60, ip1h: 30, ip5h: 60, ip24h: 100, neuronsPerHour: 1000, neuronsPer5h: 3000, neuronsPer24h: 5000, reservedNeurons: 90, validations: 200 } as const
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const REAL_LEVELS: readonly number[] = aiLabCurriculum.flatMap(part => part.levels).filter(level => level.available).map(level => level.id)
 const FILTERS_FROM_LEVEL = defenseStages.find(stage => stage.id === 'input')!.fromLevel
+const CLASSIFIER_FROM_LEVEL = defenseStages.find(stage => stage.id === 'classifier')!.fromLevel
 
 const reply = (status: number, body: object, headers: HeadersInit = {}) => Response.json(body, {
   status, headers: { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...headers },
@@ -190,9 +192,9 @@ async function attempt(request: Request, env: Ready, now: number) {
   if (!budgetHeld) { await Promise.all([release(true), releaseIp()]); return unavailable(503, 'quota', 'budget', remaining + 1) }
   const settleBudget = (spent: number) => db.prepare('UPDATE lab_budget_hours SET neurons = MAX(0, neurons - ?) WHERE hour = ?').bind(QUOTAS.reservedNeurons - Math.min(spent, QUOTAS.reservedNeurons), hour).run()
 
-  // A provider failure is neither an attack blocked nor a spent attempt.
-  const failed = async (ran: Partial<Record<DefenseStageId, StageStatus>>) => {
-    await Promise.all([release(true), releaseIp(), settleBudget(0)])
+  // A provider failure is neither an attack blocked nor a spent attempt, but neurons already used stay counted.
+  const failed = async (ran: Partial<Record<DefenseStageId, StageStatus>>, spent = 0) => {
+    await Promise.all([release(true), releaseIp(), settleBudget(spent)])
     return reply(200, { outcome: 'error', remaining: remaining + 1, trace: stageTrace(level, ran) })
   }
   // stageTrace marks the filters inactive on the levels that do not have them.
@@ -207,13 +209,27 @@ async function attempt(request: Request, env: Ready, now: number) {
     await Promise.all([release(false), settleBudget(answer.neurons ?? QUOTAS.reservedNeurons)])
     return reply(200, { outcome: 'blocked-output', remaining, trace: stageTrace(level, { ...start, model: 'passed', output: 'blocked' }) })
   }
-  const checked = { ...start, model: 'passed', output: 'passed' } as const
+  // An unknown cost keeps the whole reservation rather than undercounting.
+  const costOf = (...calls: { neurons: number | null }[]) => calls.some(call => call.neurons === null) ? QUOTAS.reservedNeurons : calls.reduce((sum, call) => sum + call.neurons!, 0)
+  const filteredOut = { ...start, model: 'passed', output: 'passed' } as const
+  const calls: { neurons: number | null }[] = [answer]
+  if (level >= CLASSIFIER_FROM_LEVEL) {
+    let judged: Awaited<ReturnType<typeof askClassifier>>
+    try { judged = await askClassifier(env.AI, classifierInstructions(flag), answer.text) }
+    catch { return failed({ ...filteredOut, classifier: 'error' }, costOf(answer)) }
+    calls.push(judged)
+    // Nothing is published here either, so the safeguard is skipped.
+    if (!judged.allowed) {
+      await Promise.all([release(false), settleBudget(costOf(...calls))])
+      return reply(200, { outcome: 'blocked-classifier', remaining, trace: stageTrace(level, { ...filteredOut, classifier: 'blocked' }) })
+    }
+  }
+  const checked = { ...filteredOut, classifier: 'passed' } as const
   let verdict: Awaited<ReturnType<typeof askGuard>>
   try { verdict = await askGuard(env.AI, prompt, answer.text) }
-  catch { return failed({ ...checked, response: 'error' }) }
+  catch { return failed({ ...checked, response: 'error' }, costOf(...calls)) }
 
-  // An unknown cost keeps the whole reservation rather than undercounting.
-  const spent = answer.neurons === null || verdict.neurons === null ? QUOTAS.reservedNeurons : answer.neurons + verdict.neurons
+  const spent = costOf(...calls, verdict)
   await Promise.all([release(false), settleBudget(spent)])
   if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...checked, response: 'blocked' }) })
   const revealed = containsFlag(answer.text, flag)
@@ -230,8 +246,10 @@ async function validate(request: Request, env: Ready, now: number) {
   if (!session) return reply(401, { error: 'session' })
   const allowed = await db.prepare('UPDATE lab_sessions SET validations = validations + 1 WHERE session_hash = ? AND validations < ? RETURNING validations').bind(session.session_hash, QUOTAS.validations).first()
   if (!allowed) return reply(429, { error: 'quota' })
-  // Separators and case do not count: the model often splits the flag, and level 2 asks for it without its dashes.
-  const correct = compactFlag(body.flag) === compactFlag(await flagFor(session.secret, level))
+  // Separators, case and the FLAG{} wrapper do not count: the model often splits the flag, and levels 2 and 3 end up with the code alone.
+  const submitted = compactFlag(body.flag)
+  const expected = compactFlag(await flagFor(session.secret, level))
+  const correct = submitted === expected || `FLAG${submitted}` === expected
   if (correct) await db.prepare('INSERT OR IGNORE INTO lab_progress (session_hash, level, expires_at) VALUES (?, ?, ?)').bind(session.session_hash, level, now + SESSION_MS).run()
   return reply(200, { correct, completed: await completedLevels(db, session.session_hash) })
 }
