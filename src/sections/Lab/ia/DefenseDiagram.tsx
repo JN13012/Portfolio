@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from 'react'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { Sentry } from '../../../components/Sentry'
-import { aiLabLevels, defensePanelCopy, defenseStages, stageRuns, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
+import { aiLabLevels, defensePanelCopy, defenseStages, poisonedInbox, stageRuns, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
-import { stageStatusLabels, type LabResult, type LabTrace } from './labState'
+import { stageStatusLabels, type LabCheck, type LabResult, type LabTrace } from './labState'
 
 const subscribeVisibility = (callback: () => void) => {
   document.addEventListener('visibilitychange', callback)
@@ -26,6 +26,8 @@ const WIDTH = 640
 const STAGE_LAYOUT: Record<DefenseStageId, { rows: readonly number[]; label: readonly string[]; check?: true }> = {
   entry: { rows: [1], label: ['Entrée'] },
   document: { rows: [1], label: ['CV'] },
+  index: { rows: [1], label: ['Indexation'] },
+  search: { rows: [1], label: ['Recherche'], check: true },
   input: { rows: [1], label: ['Filtre', 'd’entrée'], check: true },
   instructions: { rows: [1], label: ['Consignes'] },
   model: { rows: [1], label: ['Modèle'] },
@@ -34,6 +36,7 @@ const STAGE_LAYOUT: Record<DefenseStageId, { rows: readonly number[]; label: rea
   response: { rows: [1], label: ['Réponse'] },
   flag: { rows: [1], label: ['Flag'] },
   decision: { rows: [1], label: ['Décision'], check: true },
+  payment: { rows: [1], label: ['Virement'], check: true },
 }
 type Point = { x: number; y: number }
 type Column = { stage: number; x: number; nodes: Point[] }
@@ -111,10 +114,16 @@ function NetworkPicture({ trace, network, revealed, waiting = false, moving = fa
 }
 
 /** What happens and why, in a space kept for it so nothing jumps: the current stage, then the verdict. */
-function Explanation({ title, text, outcome, live = true }: { title: string; text: string; outcome?: string; live?: boolean }) {
+function Explanation({ title, text, outcome, checks, reason, live = true }: { title: string; text: string; outcome?: string; checks?: LabCheck[]; reason?: string; live?: boolean }) {
   return <div className="ai-lab__trace-summary" data-outcome={outcome} role="status" aria-live={live ? 'polite' : 'off'}>
     <h4>{title}</h4>
     <p>{text}</p>
+    {checks && <ul className="ai-lab__checks">{checks.map(check => <li key={check.label} data-ok={check.ok ?? 'skipped'}>
+      <span aria-hidden="true">{check.ok === null ? '·' : check.ok ? '✓' : '✗'}</span>
+      <span>{check.label}{check.detail && <em> · {check.detail}</em>}</span>
+      <span className="sr-only">{check.ok === null ? 'non atteint' : check.ok ? 'réussi' : 'échoué'}</span>
+    </li>)}</ul>}
+    {reason && <p className="ai-lab__reason"><strong>{poisonedInbox.reasonLabel}</strong> {reason}</p>}
   </div>
 }
 
@@ -177,7 +186,7 @@ function Trace({ result }: { result: LabResult }) {
       <NetworkPicture trace={result.trace} network={network} revealed={ordered.slice(0, shown).map(entry => entry.stage)} moving={!instant && !done}
         front={done ? stop : MARGIN_X} frontRef={frontRef} pulseRef={pulseRef} title={result.title} />
     </div>
-    {done ? <Explanation title={result.title} text={result.explanation} outcome={result.outcome} />
+    {done ? <Explanation title={result.title} text={result.explanation} outcome={result.outcome} checks={result.checks} reason={result.reason} />
       : <Explanation title={stage?.label ?? defensePanelCopy.analysing} text={stage?.note ?? defensePanelCopy.analysing} live={false} />}
   </>
 }

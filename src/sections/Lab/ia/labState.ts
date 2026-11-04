@@ -1,7 +1,7 @@
-import { isAiLabLevel, poisonedCv, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
+import { containsIban, isAiLabLevel, payeeIban, poisonedCv, poisonedInbox, sourceForSearch, type DefenseStageId, type EmailDraft, type IndexedSource, type LabLevel } from '../../../content/aiLab'
 
 export type StageStatus = 'inactive' | 'passed' | 'blocked' | 'error' | 'not-run'
-export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'recommended' | 'rejected' | 'off-topic' | 'error' | 'quota'
+export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'recommended' | 'rejected' | 'diverted' | 'official-iban' | 'not-retrieved' | 'off-topic' | 'error' | 'quota'
 export type LabTrace = { stage: DefenseStageId; status: StageStatus }[]
 export type LabResult = {
   id: number
@@ -10,10 +10,19 @@ export type LabResult = {
   title: string
   explanation: string
   answer?: string
-  /** Handed over by the server when level 4's CV is recommended. */
+  /** Handed over by the server when level 4's CV is recommended or level 5's IBAN is given. */
   flag?: string
+  /** Level 5: the search's ranking of the sources, the emails as they were sent, and where the attack stopped. */
+  ranking?: SearchRanking
+  emails?: IndexedSource[]
+  checks?: LabCheck[]
+  /** Why it stopped there, read from Sentry's final line. */
+  reason?: string
   trace: LabTrace
 }
+export type SearchRanking = { id: string; score: number }[]
+/** One step of level 5's attack; `ok` is null when the attempt never reached it. */
+export type LabCheck = { label: string; ok: boolean | null; detail?: string }
 export type LabAttempt = { prompt: string; result: LabResult }
 export type LabState = {
   level: LabLevel
@@ -28,6 +37,9 @@ export type LabState = {
   /** Level 4's CV, kept across levels like a file on the desk. */
   cv: { profile: string; hidden: string }
   cvView: CvView
+  /** Level 5's emails, kept the same way. */
+  emails: EmailDraft[]
+  inboxView: InboxView
   flag: string
   validation: 'idle' | 'incorrect' | 'correct'
   /** The hint shown in the carousel; 0 is its introduction. */
@@ -37,14 +49,20 @@ export type LabState = {
   work: Partial<Record<LabLevel, { draft: string; flag: string; validation: LabState['validation'] }>>
 }
 export type CvView = keyof typeof poisonedCv.views
+export type InboxView = keyof typeof poisonedInbox.views
 export const initialLabState: LabState = {
-  level: 1, completed: [], attempts: [], conversationStart: 0, remaining: null, pending: null, draft: '', cv: { profile: poisonedCv.profile, hidden: '' }, cvView: 'edit', flag: '', validation: 'idle', hints: {}, solvedAfter: {}, work: {},
+  level: 1, completed: [], attempts: [], conversationStart: 0, remaining: null, pending: null, draft: '', cv: { profile: poisonedCv.profile, hidden: '' }, cvView: 'edit', emails: [{ subject: '', body: '' }], inboxView: 'edit', flag: '', validation: 'idle', hints: {}, solvedAfter: {}, work: {},
 }
 type Action =
   | { type: 'draft'; value: string }
   | { type: 'flag'; value: string }
   | { type: 'cv'; field: keyof LabState['cv']; value: string }
   | { type: 'cv-view'; view: CvView }
+  | { type: 'email'; index: number; field: keyof EmailDraft; value: string }
+  | { type: 'emails'; emails: EmailDraft[] }
+  | { type: 'email-add' }
+  | { type: 'email-remove'; index: number }
+  | { type: 'inbox-view'; view: InboxView }
   | { type: 'session'; completed: number[]; remaining: number }
   | { type: 'sending'; prompt: string }
   | { type: 'attempt'; prompt: string; result: LabResult; remaining: number | null }
@@ -61,6 +79,11 @@ export function labReducer(state: LabState, action: Action): LabState {
     // Writing in the CV always happens in the edit view, where its fields are.
     case 'cv': return { ...state, cv: { ...state.cv, [action.field]: action.value }, cvView: 'edit' }
     case 'cv-view': return { ...state, cvView: action.view }
+    case 'email': return { ...state, emails: state.emails.map((email, index) => index === action.index ? { ...email, [action.field]: action.value } : email), inboxView: 'edit' }
+    case 'emails': return { ...state, emails: action.emails.slice(0, poisonedInbox.maxEmails), inboxView: 'edit' }
+    case 'email-add': return state.emails.length >= poisonedInbox.maxEmails ? state : { ...state, emails: [...state.emails, { subject: '', body: '' }], inboxView: 'edit' }
+    case 'email-remove': return state.emails.length <= 1 ? state : { ...state, emails: state.emails.filter((_, index) => index !== action.index) }
+    case 'inbox-view': return { ...state, inboxView: action.view }
     case 'session': return { ...state, completed: action.completed, remaining: action.remaining }
     case 'sending': return { ...state, pending: action.prompt, draft: '', validation: 'idle' }
     case 'attempt':
@@ -92,4 +115,31 @@ export const conversationHistory = (state: LabState) => state.attempts
 
 export const stageStatusLabels: Record<StageStatus, string> = {
   inactive: 'Non active', passed: 'Passée', blocked: 'Bloquée', error: 'Erreur', 'not-run': 'Non exécutée',
+}
+
+/** Where level 5's attack stopped, from facts the server returned: the email's rank and the answer. Nothing is guessed. */
+export function inboxChecks(outcome: LabOutcome, ranking: SearchRanking, emails: readonly IndexedSource[]): LabCheck[] {
+  const { checks, retrieved } = poisonedInbox
+  const rankOf = (id: string) => ranking.findIndex(entry => entry.id === id) + 1
+  const kept = emails.filter(email => rankOf(email.id) && rankOf(email.id) <= retrieved)
+  const answered = outcome === 'diverted' || outcome === 'official-iban'
+  return [
+    { label: checks.retained, ok: kept.length > 0, detail: checks.ranks(kept.map(email => rankOf(email.id)).sort((a, b) => a - b)) },
+    { label: checks.iban, ok: emails.some(email => containsIban(sourceForSearch(email))) },
+    { label: checks.answer, ok: answered ? outcome === 'diverted' : null, detail: answered ? undefined : checks.notRun },
+  ]
+}
+
+/** Why level 5's attempt ended where it did. Read from the outcome and Sentry's final « IBAN à payer » line, the one the payment tool reads. */
+export function inboxReason(outcome: LabOutcome, answer?: string): string | undefined {
+  const { reasons, iban, sources } = poisonedInbox
+  if (outcome === 'not-retrieved' || outcome === 'diverted') return reasons[outcome]
+  if (outcome === 'off-topic') return reasons.held
+  if (outcome !== 'official-iban' || !answer) return undefined
+  const payee = payeeIban(answer)
+  const official = sources.find(source => source.id === 'altiplast')!.text.match(/FR76[\d ]+\d/)![0].replace(/\s/g, '')
+  if (payee === null) return reasons.unread
+  if (payee === 'AUCUN') return reasons.blocked
+  if (payee === official) return reasons.official
+  return payee === iban.replace(/\s/g, '') ? reasons.diverted : reasons.other
 }

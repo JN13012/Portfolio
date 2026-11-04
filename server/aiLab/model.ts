@@ -6,6 +6,8 @@ type Completion = { text: string; neurons: number | null }
 export const CHAT_MODEL = '@cf/zai-org/glm-4.7-flash'
 export const GUARD_MODEL = '@cf/meta/llama-guard-3-8b'
 export const CLASSIFIER_MODEL = '@cf/google/gemma-4-26b-a4b-it'
+// Multilingual; measured on French pages on 2 November 2026.
+export const EMBEDDING_MODEL = '@cf/baai/bge-m3'
 const MAX_OUTPUT_TOKENS = 250
 const TIMEOUT_MS = 20_000
 // S14 (code interpreter abuse) fires on « ignore tes instructions », which is the exercise itself.
@@ -27,6 +29,14 @@ export async function askModel(ai: AiBinding, messages: ChatMessage[]): Promise<
   const text = output.choices?.[0]?.message?.content
   if (typeof text !== 'string' || !text.trim()) throw new Error('empty answer')
   return { text: text.trim(), neurons: neuronsOf(output) }
+}
+
+/** Level 5's search: one vector per text, in order. Its cost is in `meta`, not `usage`. */
+export async function embed(ai: AiBinding, texts: string[]): Promise<{ vectors: number[][]; neurons: number | null }> {
+  const output = await withTimeout(ai.run(EMBEDDING_MODEL, { text: texts })) as { data?: unknown; meta?: { neurons?: unknown } }
+  const vectors = output.data
+  if (!Array.isArray(vectors) || vectors.length !== texts.length || !vectors.every(vector => Array.isArray(vector) && vector.length && vector.every(value => typeof value === 'number'))) throw new Error('no vectors')
+  return { vectors: vectors as number[][], neurons: typeof output.meta?.neurons === 'number' ? output.meta.neurons : null }
 }
 
 /**

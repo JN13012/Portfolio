@@ -145,7 +145,7 @@ Ces comparaisons ne remplacent pas les contrôles d’interaction et ne constitu
 
 Le sélecteur IA du Lab ouvre une interface chargée à la demande : console,
 tiroir des dix niveaux et schéma SVG. `/?lab=ia#lab` l'ouvre directement.
-Les niveaux 1 à 4 tournent sur le vrai modèle ; les six autres restent « À venir ».
+Les niveaux 1 à 5 tournent sur le vrai modèle ; les cinq autres restent « À venir ».
 En local, l'API demande `npm run dev:lab` à côté de `npm run dev`, qui lui transmet `/api/lab`, et un `LAB_IP_SECRET` dans `.dev.vars`.
 La mascotte n’est plus affichée entre le titre et la liste d’entrée. Les défenses sont visibles
 avant le premier essai ; la conversation du Lab est indépendante du chat du site.

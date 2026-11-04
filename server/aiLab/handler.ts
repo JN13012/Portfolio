@@ -1,7 +1,8 @@
-import { aiLabCurriculum, cvMessage, cvText, defenseStages, isDocumentLevel, poisonedCv, stageRuns, type DefenseStageId } from '../../src/content/aiLab'
+import { aiLabCurriculum, cvMessage, cvText, defenseStages, inboxMessage, isDocumentLevel, isInboxLevel, isVisitorEmail, poisonedCv, paysVisitor, poisonedInbox, sourceForSearch, stageRuns, visitorEmails, type DefenseStageId, type EmailDraft } from '../../src/content/aiLab'
 import { inputAllowed, outputAllowed } from './filters'
 import { askClassifier, askGuard, askModel, type AiBinding, type ChatMessage } from './model'
-import { classifierInstructions, screeningInstructions, simpleInstructions } from './prompts'
+import { classifierInstructions, inboxInstructions, screeningInstructions, simpleInstructions } from './prompts'
+import { searchSources } from './search'
 
 type Statement = {
   bind(...values: (string | number)[]): Statement
@@ -31,7 +32,7 @@ const MAX_PROMPT = 2000
 const MAX_HISTORY_ANSWER = 1000
 const MAX_HISTORY_CHARS = 4000
 const MAX_EXCHANGES = 6
-// Measured on 31 October 2026: about 15 neurons for a usual attempt, 80 for the longest one allowed, plus up to 10 for level 3's classifier; about 20 for a level 4 screening (2 November).
+// Measured on 31 October 2026: about 15 neurons for a usual attempt, 80 for the longest one allowed, plus up to 10 for level 3's classifier; about 20 for a level 4 screening (2 November), and level 5's search adds about 0.02.
 export const QUOTAS = { session: 60, ip1h: 30, ip5h: 60, ip24h: 100, neuronsPerHour: 1000, neuronsPer5h: 3000, neuronsPer24h: 5000, reservedNeurons: 90, validations: 200 } as const
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const REAL_LEVELS: readonly number[] = aiLabCurriculum.flatMap(part => part.levels).filter(level => level.available).map(level => level.id)
@@ -131,6 +132,17 @@ function readCv(input: unknown): { profile: string; hidden: string } | null {
   return profile.trim() || hidden.trim() ? { profile, hidden } : null
 }
 
+/** Level 5 sends one to three emails, each with a bounded subject and a filled, bounded body. */
+function readEmails(input: unknown): EmailDraft[] | null {
+  if (!Array.isArray(input) || !input.length || input.length > poisonedInbox.maxEmails) return null
+  const emails: EmailDraft[] = []
+  for (const { subject, body } of input as { subject?: unknown; body?: unknown }[]) {
+    if (typeof subject !== 'string' || typeof body !== 'string' || subject.length > poisonedInbox.maxSubject || body.length > poisonedInbox.maxBody || !body.trim()) return null
+    emails.push({ subject, body })
+  }
+  return emails
+}
+
 async function createOrResume(request: Request, env: Ready, now: number) {
   const db = env.LAB_DB
   const hash = await sessionHashOf(request)
@@ -157,9 +169,11 @@ async function attempt(request: Request, env: Ready, now: number) {
   const level = body?.level
   if (typeof level !== 'number' || !REAL_LEVELS.includes(level) || typeof body?.requestId !== 'string' || !UUID.test(body.requestId)) return reply(400, { error: 'request' })
   const cv = isDocumentLevel(level) ? readCv(body.cv) : null
-  const history = cv ? [] : rebuildHistory(body.history)
+  const emails = isInboxLevel(level) ? readEmails(body.emails) : null
+  const history = cv || emails ? [] : rebuildHistory(body.history)
   const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : ''
-  if (!history || (isDocumentLevel(level) ? !cv : !prompt || prompt.length > MAX_PROMPT)) return reply(400, { error: 'request' })
+  const missing = isDocumentLevel(level) ? !cv : isInboxLevel(level) ? !emails : !prompt || prompt.length > MAX_PROMPT
+  if (!history || missing) return reply(400, { error: 'request' })
   const hash = await sessionHashOf(request)
   const session = hash ? await readSession(db, hash, now) : null
   if (!session) return reply(401, { error: 'session' })
@@ -229,6 +243,37 @@ async function attempt(request: Request, env: Ready, now: number) {
     return reply(200, {
       outcome: chosen ? 'recommended' : 'rejected', answer: answer.text, ...(chosen && { flag: await flagFor(session.secret, level) }),
       remaining, trace: stageTrace(level, { ...answered, response: 'passed', decision: chosen ? 'passed' : 'blocked' }),
+    })
+  }
+
+  // Neither does level 5's: the search runs for real, and only Sentry's answer decides.
+  if (emails) {
+    const sent = visitorEmails(emails)
+    let search: Awaited<ReturnType<typeof searchSources>>
+    try { search = await searchSources(env.AI, [...poisonedInbox.sources, ...sent]) }
+    catch { return failed({ index: 'error' }) }
+    const { ranking, retained } = search
+    // Emails the search leaves out cannot reach Sentry: no model call, but the attempt counts.
+    if (!retained.some(source => isVisitorEmail(source.id))) {
+      await Promise.all([release(false), settleBudget(costOf(search))])
+      return reply(200, { outcome: 'not-retrieved', ranking, remaining, trace: stageTrace(level, { index: 'passed', search: 'blocked' }) })
+    }
+    const found = { index: 'passed', search: 'passed', instructions: 'passed' } as const
+    let answer: Awaited<ReturnType<typeof askModel>>
+    try { answer = await askModel(env.AI, [{ role: 'system', content: inboxInstructions }, { role: 'user', content: inboxMessage(retained) }]) }
+    catch { return failed({ ...found, model: 'error' }, costOf(search)) }
+    const answered = { ...found, model: 'passed' } as const
+    let verdict: Awaited<ReturnType<typeof askGuard>>
+    // Measured on 2 November 2026, the safeguard holds back a quarter of the answers, honest ones included: S2 (fraud), S6 (financial advice)
+    // and S7 (privacy) fire on the exercise's own fictional IBANs and contacts, and the answer goes only to its author.
+    try { verdict = await askGuard(env.AI, sent.map(sourceForSearch).join('\n\n'), answer.text, ['S2', 'S6', 'S7']) }
+    catch { return failed({ ...answered, response: 'error' }, costOf(search, answer)) }
+    await Promise.all([release(false), settleBudget(costOf(search, answer, verdict))])
+    if (!verdict.allowed) return reply(200, { outcome: 'off-topic', ranking, remaining, trace: stageTrace(level, { ...answered, response: 'blocked' }) })
+    const paid = paysVisitor(answer.text)
+    return reply(200, {
+      outcome: paid ? 'diverted' : 'official-iban', answer: answer.text, ranking, ...(paid && { flag: await flagFor(session.secret, level) }),
+      remaining, trace: stageTrace(level, { ...answered, response: 'passed', payment: paid ? 'passed' : 'blocked' }),
     })
   }
 

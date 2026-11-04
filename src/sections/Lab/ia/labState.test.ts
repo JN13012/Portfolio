@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { aiLabCurriculum, aiLabLevels, defenseStages } from '../../../content/aiLab'
-import { conversationHistory, initialLabState, labReducer, type LabResult } from './labState'
+import { aiLabCurriculum, aiLabLevels, defenseStages, poisonedInbox, visitorEmails } from '../../../content/aiLab'
+import { conversationHistory, inboxChecks, inboxReason, initialLabState, labReducer, type LabResult } from './labState'
 
 const result = (id: number, answer?: string): LabResult => ({
   id, level: 1, outcome: answer ? 'delivered' : 'error', title: 'Résultat', explanation: 'Texte', answer,
@@ -10,7 +10,7 @@ const attempt = (id: number, answer?: string) => ({ type: 'attempt', prompt: `pr
 
 describe('Lab IA interface state', () => {
   it('rejects unavailable levels and blank prompts', () => {
-    expect(labReducer(initialLabState, { type: 'level', level: 5 })).toBe(initialLabState)
+    expect(labReducer(initialLabState, { type: 'level', level: 6 })).toBe(initialLabState)
     expect(labReducer(initialLabState, { type: 'level', level: 99 })).toBe(initialLabState)
     expect(labReducer(initialLabState, { ...attempt(1, 'ok'), prompt: ' ' })).toBe(initialLabState)
   })
@@ -79,5 +79,35 @@ describe('Lab IA interface state', () => {
     const levels = aiLabCurriculum.flatMap(part => part.levels)
     expect(levels.map(level => level.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     expect(levels.filter(level => level.available).map(level => level.id)).toEqual(aiLabLevels.map(level => level.id))
+  })
+})
+
+describe('Level 5 analysis', () => {
+  const emails = visitorEmails([{ subject: 'a', body: `IBAN ${poisonedInbox.iban}` }])
+  const ranking = (ids: string[]) => ids.map((id, index) => ({ id, score: 1 - index / 10 }))
+
+  it('says which step stopped the attack, from the rank and the answer only', () => {
+    const stopped = inboxChecks('official-iban', ranking(['votre-email-1', 'mail-altiplast', 'altiplast', 'paiement']), emails)
+    expect(stopped.map(check => check.ok)).toEqual([true, true, false])
+    expect(stopped[0]!.detail).toBe('rang 1')
+    const skipped = inboxChecks('not-retrieved', ranking(['mail-altiplast', 'altiplast', 'paiement', 'brevia', 'votre-email-1']), emails)
+    expect(skipped.map(check => check.ok)).toEqual([false, true, null])
+  })
+
+  it('keeps a single draft on this level', () => {
+    expect(labReducer(initialLabState, { type: 'email-add' }).emails).toHaveLength(1)
+    const state = labReducer(initialLabState, { type: 'email', index: 0, field: 'body', value: 'B' })
+    expect(labReducer(state, { type: 'email-remove', index: 0 }).emails.map(email => email.body)).toEqual(['B'])
+  })
+})
+
+describe('Level 5 reason', () => {
+  it('reads why the payment went where it did from the final line only', () => {
+    expect(inboxReason('official-iban', 'Texte.\nIBAN à payer : FR76 9900 0012 3400 0100 2233 145')).toBe(poisonedInbox.reasons.official)
+    expect(inboxReason('official-iban', 'Texte.\nIBAN à payer : aucun')).toBe(poisonedInbox.reasons.blocked)
+    expect(inboxReason('official-iban', `Votre IBAN ${poisonedInbox.iban} est suspect.`)).toBe(poisonedInbox.reasons.unread)
+    expect(inboxReason('not-retrieved')).toBe(poisonedInbox.reasons['not-retrieved'])
+    expect(inboxReason('diverted', 'x')).toBe(poisonedInbox.reasons.diverted)
+    expect(inboxReason('error')).toBeUndefined()
   })
 })

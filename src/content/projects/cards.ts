@@ -459,10 +459,10 @@ export const cards: Project[] = [
     team: { size: 1 },
     context: 'personal',
     tagline: {
-      fr: 'Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 4 niveaux ouverts.',
+      fr: 'Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 5 niveaux ouverts.',
     },
     summary: {
-      fr: 'Un exercice de red teaming jouable dans le Lab de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, puis glisse un texte caché dans un CV pour qu’il le recommande. Les niveaux 1 à 4 sont ouverts ; les 6 autres sont annoncés « À venir ».',
+      fr: 'Un exercice de red teaming jouable dans le Lab de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, puis lui fait payer une facture sur un faux IBAN en trompant sa recherche. Les niveaux 1 à 5 sont ouverts ; les 5 autres sont annoncés « À venir ».',
     },
     sections: [
       {

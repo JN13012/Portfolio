@@ -58,7 +58,7 @@ export const hero = {
   /** The labs. */
   labs: [
     { id: 'cyber', label: { fr: 'Lab cyber', en: 'Cyber lab' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
-    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red team IA · 4 niveaux', en: 'AI red team · 4 levels' } },
+    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red team IA · 5 niveaux', en: 'AI red team · 5 levels' } },
   ],
   /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
   labPanel: {

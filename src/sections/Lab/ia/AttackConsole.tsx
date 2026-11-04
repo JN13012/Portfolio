@@ -1,9 +1,10 @@
 import { Fragment, useEffect, useRef, type Dispatch, type FormEvent } from 'react'
 import { Lock, Send, ShieldCheck, Terminal } from 'lucide-react'
-import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePanelCopy, isDocumentLevel, poisonedCv } from '../../../content/aiLab'
+import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePanelCopy, isDocumentLevel, isInboxLevel, poisonedCv, poisonedInbox } from '../../../content/aiLab'
 import { labReducer, type LabState } from './labState'
 import { LabNavigation } from '../LabNavigation'
 import { PoisonedCv } from './PoisonedCv'
+import { PoisonedInbox } from './PoisonedInbox'
 
 const levelCount = String(aiLabCurriculum.reduce((count, part) => count + part.levels.length, 0)).padStart(2, '0')
 
@@ -24,8 +25,8 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
   const attempts = state.attempts.filter(attempt => attempt.result.level === state.level)
   useEffect(() => {
     const node = history.current
-    // The CV opens at its top, where the offer is, until it has an answer to show.
-    if (node) node.scrollTop = isDocumentLevel(state.level) && state.pending === null && !attempts.length ? 0 : node.scrollHeight
+    // A document opens at its top, where the mission is, until it has an answer to show.
+    if (node) node.scrollTop = (isDocumentLevel(state.level) || isInboxLevel(state.level)) && state.pending === null && !attempts.length ? 0 : node.scrollHeight
   }, [state.attempts, state.level, state.pending, state.solvedAfter, attempts.length])
   const success = (attemptId: number) => state.solvedAfter[state.level] === attemptId && <div className="ai-lab__success" role="status">
     <p><span aria-hidden="true">&gt;&gt;</span> {aiLabSuccess.granted}</p>
@@ -33,7 +34,9 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
   </div>
   const send = (event: FormEvent) => { event.preventDefault(); onSend() }
   const onCv = isDocumentLevel(state.level)
-  const canSend = state.pending === null && (onCv ? !!(state.cv.profile.trim() || state.cv.hidden.trim()) : !!state.draft.trim())
+  const onInbox = isInboxLevel(state.level)
+  const paper = onCv || onInbox
+  const canSend = state.pending === null && (onCv ? !!(state.cv.profile.trim() || state.cv.hidden.trim()) : onInbox ? state.emails.some(email => !!email.body.trim()) : !!state.draft.trim())
   return (
     <div className="lab-terminal ai-lab__console">
       <div className="ai-lab__console-heading">
@@ -43,9 +46,10 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
         </span>
         <LabNavigation tone="blue" onPresentation={onPresentation} onCurriculum={onDetails} open={curriculumOpen} drawerId="ai-lab-curriculum" />
       </div>
-      {onCv ? <div className="ai-lab__history ai-cv" ref={history}>
+      {paper ? <div className="ai-lab__history ai-cv" ref={history}>
         {!available && <p className="ai-lab__empty" role="status">{aiLabUnavailable}</p>}
-        <PoisonedCv state={state} dispatch={dispatch} last={attempts.at(-1)} success={success} />
+        {onCv ? <PoisonedCv state={state} dispatch={dispatch} last={attempts.at(-1)} success={success} />
+          : <PoisonedInbox state={state} dispatch={dispatch} last={attempts.at(-1)} success={success} />}
       </div> : <div className="ai-lab__history" ref={history} role="log" aria-label="Conversation avec Sentry" aria-live="polite" aria-relevant="additions">
         <div className="ai-lab__boot">
           <p><span aria-hidden="true">&gt;&gt;</span> RED-TEAM SENTRY — CAPTURE THE FLAG</p>
@@ -66,7 +70,7 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
       </div>}
       <div className="ai-lab__controls">
         <div className="ai-lab__toolbar">
-          {!onCv && <button type="button" className="ai-lab__new-conversation" disabled={state.pending !== null || !attempts.length} onClick={() => dispatch({ type: 'new-conversation' })}>Nouvelle conversation</button>}
+          {!paper && <button type="button" className="ai-lab__new-conversation" disabled={state.pending !== null || !attempts.length} onClick={() => dispatch({ type: 'new-conversation' })}>Nouvelle conversation</button>}
           <form onSubmit={event => { event.preventDefault(); onValidate() }} className="ai-lab__flag-form">
             <label htmlFor="ai-lab-flag">Valider le flag</label>
             <div><input id="ai-lab-flag" value={state.flag} maxLength={100} autoComplete="off" spellCheck={false} placeholder="FLAG{XXXXXXXXXXXX}" onChange={event => dispatch({ type: 'flag', value: event.target.value })} />
@@ -74,7 +78,10 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
           </form>
           {state.validation === 'incorrect' && <p className="ai-lab__validation" role="status">Ce flag n’est pas le bon pour ce niveau.</p>}
         </div>
-        {onCv ? <form onSubmit={send} className="ai-lab__prompt-form ai-cv__send">
+        {onInbox ? <form onSubmit={send} className="ai-lab__prompt-form ai-cv__send">
+          <p className="ai-inbox__next">{poisonedInbox.nextStep}</p>
+          <button type="submit" className="ai-lab__send" disabled={!canSend}><Send size={15} aria-hidden="true" /><span>{attempts.length ? poisonedInbox.update : poisonedInbox.send}</span></button>
+        </form> : onCv ? <form onSubmit={send} className="ai-lab__prompt-form ai-cv__send">
           <div className="ai-cv__request"><span id="ai-lab-cv-request">{poisonedCv.requestLabel}</span><p aria-labelledby="ai-lab-cv-request"><Lock size={12} aria-hidden="true" /> {poisonedCv.request}</p></div>
           <button type="submit" className="ai-lab__send" disabled={!canSend}><Send size={15} aria-hidden="true" /><span>{poisonedCv.send}</span></button>
         </form> : <form onSubmit={send} className="ai-lab__prompt-form">
@@ -86,7 +93,7 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
             }} />
           <button type="submit" className="ai-lab__send" disabled={!canSend}><Send size={15} aria-hidden="true" /><span>Envoyer</span></button>
         </form>}
-        <p className="ai-lab__notice">{state.remaining !== null && <><strong>{defensePanelCopy.remaining} : {state.remaining}</strong> · </>}{defensePanelCopy.model} : <span className="ai-lab__model">{level.models.answers}</span>{level.models.classifier && <>, {defensePanelCopy.classifier} <span className="ai-lab__model">{level.models.classifier}</span></>} · {defensePanelCopy.privacy}</p>
+        <p className="ai-lab__notice">{state.remaining !== null && <><strong>{defensePanelCopy.remaining} : {state.remaining}</strong> · </>}{defensePanelCopy.model} : <span className="ai-lab__model">{level.models.answers}</span>{level.models.classifier && <>, {defensePanelCopy.classifier} <span className="ai-lab__model">{level.models.classifier}</span></>}{level.models.search && <>, {defensePanelCopy.search} <span className="ai-lab__model">{level.models.search}</span></>} · {defensePanelCopy.privacy}</p>
       </div>
     </div>
   )

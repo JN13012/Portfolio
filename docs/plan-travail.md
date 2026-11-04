@@ -119,7 +119,8 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 
 ### 6. Fin du parcours du Lab IA
 
-- [ ] Niveaux 5 à 8 : sources et RAG, agent et outils, reconnaissance et API, chaîne complète.
+- [x] Niveau 5 réel, sur `developpement` : fournisseur homonyme et fraude à l’IBAN, recherche BGE-M3, mesuré sur le vrai modèle le 3 novembre (voir [le plan du Lab](conception-lab-ia.md#fournisseur-homonyme-05)).
+- [ ] Niveaux 6 à 8 : agent et outils, reconnaissance et API, chaîne complète.
 - [ ] Niveaux 9 et 10 : remédiation et durcissement, avec vérification avant/après.
 - [ ] Rapport de fin de parcours, généré à partir des vraies traces.
 - [ ] Hauteur du tiroir à revoir une fois tous les niveaux affichés.
@@ -155,5 +156,5 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 
 ## État des branches au 2 novembre 2026
 
-- `main` : la production, avec les étapes 0 à 4 et le Lab IA ouvert sur ses niveaux 1 à 3, publiés à la demande de Jérémie.
+- `main` : la production, avec les étapes 0 à 4 et le Lab IA ouvert sur ses niveaux 1 à 4, publiés à la demande de Jérémie.
 - `developpement` : tout le travail. Préversion : https://developpement-www.jeremie-nagi.workers.dev

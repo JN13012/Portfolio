@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-11-02 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-11-04 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Introduction
@@ -23,7 +23,7 @@ Certificats : IBM AI Developer (Professional Certificate) · Jr Penetration Test
 
 Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · paper trading) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
-Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red team IA · 4 niveaux)
+Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red team IA · 5 niveaux)
 
 **Lab cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 
@@ -380,9 +380,9 @@ Chiffres : 729 notes
 
 ### Lab IA — En développement · MVP
 
-*Carte* : Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 4 niveaux ouverts.
+*Carte* : Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 5 niveaux ouverts.
 
-Un exercice de red teaming jouable dans le Lab de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, puis glisse un texte caché dans un CV pour qu’il le recommande. Les niveaux 1 à 4 sont ouverts ; les 6 autres sont annoncés « À venir ».
+Un exercice de red teaming jouable dans le Lab de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, puis lui fait payer une facture sur un faux IBAN en trompant sa recherche. Les niveaux 1 à 5 sont ouverts ; les 5 autres sont annoncés « À venir ».
 
 **Sécurité.** Le serveur gère les flags et la progression, et applique des quotas par session et par adresse IP, sur 1 heure, 5 heures et 24 heures.
 
