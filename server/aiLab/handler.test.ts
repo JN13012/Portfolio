@@ -137,6 +137,11 @@ describe('Lab API', () => {
     expect((await attempt()).body.outcome).toBe('delivered')
   })
 
+  it('reports the provider\'s daily allocation running out as a quota, not as an error to retry', async () => {
+    run.mockRejectedValueOnce(new Error('AiError: 4006: you have used up your daily free allocation of 10,000 neurons'))
+    expect(await attempt()).toMatchObject({ status: 503, body: { outcome: 'quota', reason: 'provider', remaining: QUOTAS.session } })
+  })
+
   it('reports provider and safeguard failures as errors: nothing published, nothing charged', async () => {
     run.mockRejectedValueOnce(new Error('down'))
     const down = await attempt()

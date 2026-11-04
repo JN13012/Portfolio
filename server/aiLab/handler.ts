@@ -27,6 +27,8 @@ const SESSION_MS = 24 * 60 * 60 * 1000
 const HOUR_MS = 60 * 60 * 1000
 // Longer than the three model calls of an attempt can take together, at 20 s each.
 const BUSY_MS = 70_000
+// Cloudflare's error code once the account's daily Workers AI allocation is used up.
+const PROVIDER_QUOTA = 'AiError: 4006:'
 const MAX_BODY_BYTES = 16_384
 const MAX_PROMPT = 2000
 const MAX_HISTORY_ANSWER = 1000
@@ -219,8 +221,10 @@ async function attempt(request: Request, env: Ready, now: number) {
   const settleBudget = (spent: number) => db.prepare('UPDATE lab_budget_hours SET neurons = MAX(0, neurons - ?) WHERE hour = ?').bind(QUOTAS.reservedNeurons - Math.min(spent, QUOTAS.reservedNeurons), hour).run()
 
   // A provider failure is neither an attack blocked nor a spent attempt, but neurons already used stay counted.
-  const failed = async (ran: Partial<Record<DefenseStageId, StageStatus>>, spent = 0) => {
+  // Workers AI's daily allocation running out is a quota, not a fault: retrying would not help.
+  const failed = async (error: unknown, ran: Partial<Record<DefenseStageId, StageStatus>>, spent = 0) => {
     await Promise.all([release(true), releaseIp(), settleBudget(spent)])
+    if (String(error).includes(PROVIDER_QUOTA)) return unavailable(503, 'quota', 'provider', remaining + 1)
     return reply(200, { outcome: 'error', remaining: remaining + 1, trace: stageTrace(level, ran) })
   }
   // An unknown cost keeps the whole reservation rather than undercounting.
@@ -231,12 +235,12 @@ async function attempt(request: Request, env: Ready, now: number) {
     const read = { document: 'passed', instructions: 'passed' } as const
     let answer: Awaited<ReturnType<typeof askModel>>
     try { answer = await askModel(env.AI, [{ role: 'system', content: screeningInstructions }, { role: 'user', content: cvMessage(cv.profile, cv.hidden) }]) }
-    catch { return failed({ ...read, model: 'error' }) }
+    catch (error) { return failed(error, { ...read, model: 'error' }) }
     const answered = { ...read, model: 'passed' } as const
     let verdict: Awaited<ReturnType<typeof askGuard>>
     // S7 (privacy) fires on a named CV, measured 6 times in 32 on 2 November 2026; the candidate is fictional and the answer goes only to its author.
     try { verdict = await askGuard(env.AI, cvText(cv.profile, cv.hidden), answer.text, ['S7']) }
-    catch { return failed({ ...answered, response: 'error' }, costOf(answer)) }
+    catch (error) { return failed(error, { ...answered, response: 'error' }, costOf(answer)) }
     await Promise.all([release(false), settleBudget(costOf(answer, verdict))])
     if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...answered, response: 'blocked' }) })
     const chosen = recommends(answer.text)
@@ -251,7 +255,7 @@ async function attempt(request: Request, env: Ready, now: number) {
     const sent = visitorEmails(emails)
     let search: Awaited<ReturnType<typeof searchSources>>
     try { search = await searchSources(env.AI, [...poisonedInbox.sources, ...sent]) }
-    catch { return failed({ index: 'error' }) }
+    catch (error) { return failed(error, { index: 'error' }) }
     const { ranking, retained } = search
     // Emails the search leaves out cannot reach Sentry: no model call, but the attempt counts.
     if (!retained.some(source => isVisitorEmail(source.id))) {
@@ -261,13 +265,13 @@ async function attempt(request: Request, env: Ready, now: number) {
     const found = { index: 'passed', search: 'passed', instructions: 'passed' } as const
     let answer: Awaited<ReturnType<typeof askModel>>
     try { answer = await askModel(env.AI, [{ role: 'system', content: inboxInstructions }, { role: 'user', content: inboxMessage(retained) }]) }
-    catch { return failed({ ...found, model: 'error' }, costOf(search)) }
+    catch (error) { return failed(error, { ...found, model: 'error' }, costOf(search)) }
     const answered = { ...found, model: 'passed' } as const
     let verdict: Awaited<ReturnType<typeof askGuard>>
     // Measured on 2 November 2026, the safeguard holds back a quarter of the answers, honest ones included: S2 (fraud), S6 (financial advice)
     // and S7 (privacy) fire on the exercise's own fictional IBANs and contacts, and the answer goes only to its author.
     try { verdict = await askGuard(env.AI, sent.map(sourceForSearch).join('\n\n'), answer.text, ['S2', 'S6', 'S7']) }
-    catch { return failed({ ...answered, response: 'error' }, costOf(search, answer)) }
+    catch (error) { return failed(error, { ...answered, response: 'error' }, costOf(search, answer)) }
     await Promise.all([release(false), settleBudget(costOf(search, answer, verdict))])
     if (!verdict.allowed) return reply(200, { outcome: 'off-topic', ranking, remaining, trace: stageTrace(level, { ...answered, response: 'blocked' }) })
     const paid = paysVisitor(answer.text)
@@ -283,7 +287,7 @@ async function attempt(request: Request, env: Ready, now: number) {
   const messages: ChatMessage[] = [{ role: 'system', content: simpleInstructions(flag) }, ...history, { role: 'user', content: prompt }]
   let answer: Awaited<ReturnType<typeof askModel>>
   try { answer = await askModel(env.AI, messages) }
-  catch { return failed({ ...start, model: 'error' }) }
+  catch (error) { return failed(error, { ...start, model: 'error' }) }
   // Nothing is published, so the safeguard has nothing to check.
   if (filtered && !outputAllowed(answer.text, flag)) {
     await Promise.all([release(false), settleBudget(answer.neurons ?? QUOTAS.reservedNeurons)])
@@ -294,7 +298,7 @@ async function attempt(request: Request, env: Ready, now: number) {
   if (stageRuns('classifier', level)) {
     let judged: Awaited<ReturnType<typeof askClassifier>>
     try { judged = await askClassifier(env.AI, classifierInstructions(flag), answer.text) }
-    catch { return failed({ ...filteredOut, classifier: 'error' }, costOf(answer)) }
+    catch (error) { return failed(error, { ...filteredOut, classifier: 'error' }, costOf(answer)) }
     calls.push(judged)
     // Nothing is published here either, so the safeguard is skipped.
     if (!judged.allowed) {
@@ -305,7 +309,7 @@ async function attempt(request: Request, env: Ready, now: number) {
   const checked = { ...filteredOut, classifier: 'passed' } as const
   let verdict: Awaited<ReturnType<typeof askGuard>>
   try { verdict = await askGuard(env.AI, prompt, answer.text) }
-  catch { return failed({ ...checked, response: 'error' }, costOf(...calls)) }
+  catch (error) { return failed(error, { ...checked, response: 'error' }, costOf(...calls)) }
 
   const spent = costOf(...calls, verdict)
   await Promise.all([release(false), settleBudget(spent)])

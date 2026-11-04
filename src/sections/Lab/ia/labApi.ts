@@ -2,7 +2,7 @@ import type { LabLevel } from '../../../content/aiLab'
 import type { LabOutcome, LabTrace, SearchRanking } from './labState'
 
 type SessionReply = { available: true; completed: number[]; remaining: number }
-type AttemptReply = { outcome: LabOutcome; reason?: 'session' | 'ip' | 'budget' | 'busy'; answer?: string; flag?: string; ranking?: SearchRanking; remaining: number; trace: LabTrace }
+type AttemptReply = { outcome: LabOutcome; reason?: 'session' | 'ip' | 'budget' | 'busy' | 'provider'; answer?: string; flag?: string; ranking?: SearchRanking; remaining: number; trace: LabTrace }
 type ValidateReply = { correct: boolean; completed: number[] }
 
 const post = (path: string, body: object) => fetch(`/api/lab/${path}`, {

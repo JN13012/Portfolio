@@ -293,6 +293,7 @@ export const aiLabQuotaCopy = {
   ip: 'Trop d’essais depuis votre réseau. Réessayez plus tard.',
   budget: 'Le budget du CTF IA est épuisé pour le moment. Réessayez plus tard.',
   busy: 'Un essai est déjà en cours.',
+  provider: 'Le quota d’IA du jour est atteint : le CTF IA revient dans quelques heures. Cet essai n’est pas décompté.',
 } as const
 export const aiLabSuccess = {
   granted: '[+] Access Granted — niveau réussi',
