@@ -25,7 +25,6 @@ export function Lab() {
   return (
     <section id="lab" className="py-24">
       <SectionHeader index="03" title={ctfSection.title} />
-      <p className="-mt-10 mb-8 text-sm text-zinc-400">{ctfSection.subtitle}</p>
       <div id="lab-ia" role="group" aria-label={ctfSection.domains} className="mb-6 scroll-mt-24 flex flex-wrap items-center gap-x-8 gap-y-3 pb-2">
         <button type="button" aria-pressed={domain === 'cyber'} onClick={() => { setVisitedCyber(true); setDomain('cyber') }} className="group relative inline-flex cursor-pointer items-center gap-2 pb-2.5 text-lg">
           <span className={domain === 'cyber' ? 'bg-[linear-gradient(90deg,#f43f5e_10%,#fff_115%)] bg-clip-text font-semibold text-transparent' : 'text-zinc-400 transition-colors group-hover:text-zinc-200'}>Cyber</span>
