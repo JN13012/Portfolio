@@ -23,9 +23,9 @@ Certificats : IBM AI Developer (Professional Certificate) · Jr Penetration Test
 
 Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · paper trading) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
-Labs : Lab cyber (CTF 9 niveaux · {n} write-ups) · Lab IA (Red team IA · 5 niveaux)
+CTF : CTF Cyber (CTF 9 niveaux · {n} write-ups) · CTF IA (Red team IA · 5 niveaux)
 
-**Lab cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
+**CTF Cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 
 Disponible immédiatement · Alternance · MSc Epitech · Stage possible · Marseille · mobile
 
@@ -74,7 +74,7 @@ Salesforce Executor, développé chez ULIT pendant son poste de développeur ful
 
 *Sources* : salesforce-executor, parcours
 
-### Labs
+### CTF
 
 **Qu’a-t-il fait en pentest ?** (brouillon, à valider)
 
@@ -84,7 +84,7 @@ Il est certifié Jr Penetration Tester (TryHackMe, 96 h). Il a publié 25 write-
 
 **Peut-on tester ses défis ?** (brouillon, à valider)
 
-Oui : le Lab cyber propose un CTF à jouer dans le navigateur, du premier flag caché dans la page jusqu’aux niveaux suivants. Votre progression reste enregistrée dans ce navigateur.
+Oui : le CTF Cyber se joue dans le navigateur, du premier flag caché dans la page jusqu’aux niveaux suivants. Votre progression reste enregistrée dans ce navigateur.
 
 *Sources* : lab, ctf-du-site
 
@@ -378,21 +378,21 @@ Une base de connaissances personnelle sous Obsidian, tenue au fil des formations
 
 Chiffres : 729 notes
 
-### Lab IA — En développement · MVP
+### CTF IA — En développement · MVP
 
 *Carte* : Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 5 niveaux ouverts.
 
-Un exercice de red teaming jouable dans le Lab de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, puis lui fait payer une facture sur un faux IBAN en trompant sa recherche. Les niveaux 1 à 5 sont ouverts ; les 5 autres sont annoncés « À venir ».
+Un exercice de red teaming jouable dans le CTF de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, puis lui fait payer une facture sur un faux IBAN en trompant sa recherche. Les niveaux 1 à 5 sont ouverts ; les 5 autres sont annoncés « À venir ».
 
 **Sécurité.** Le serveur gère les flags et la progression, et applique des quotas par session et par adresse IP, sur 1 heure, 5 heures et 24 heures.
 
 Chiffres : 4 niveaux ouverts · 10 niveaux prévus · 39 tests du serveur
 
-### Lab cyber — Terminé
+### CTF Cyber — Terminé
 
 *Carte* : CTF en 9 niveaux jouable sur ce site : attaquer une machine, puis la défendre.
 
-Un CTF jouable dans le Lab de ce site, dans un terminal simulé. On attaque d’abord une machine fictive, de la reconnaissance à l’exploitation, puis on passe côté défense : analyser l’attaque, la contenir et durcir l’infrastructure.
+Un CTF jouable sur ce site, dans un terminal simulé. On attaque d’abord une machine fictive, de la reconnaissance à l’exploitation, puis on passe côté défense : analyser l’attaque, la contenir et durcir l’infrastructure.
 
 **Les 9 niveaux.**
 - Reconnaissance

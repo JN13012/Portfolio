@@ -77,7 +77,7 @@ export function AiLabIntro({ onEnter, completed }: { onEnter: (level: LabLevel) 
         <h3 id="ai-lab-entry-title" data-lab-intro-heading tabIndex={-1} className="outline-none"><Typed text={TITLE} from={0} chars={chars} /></h3>
         <p><Typed text={SUBTITLE} from={TITLE.length} chars={chars} /></p>
       </div>
-      <ol className="ai-lab-entry__phases" aria-label="Les niveaux prévus du Lab IA">
+      <ol className="ai-lab-entry__phases" aria-label="Les niveaux prévus du CTF IA">
         {pieces.phases.map(phase => <li key={phase.title}>
           <p className="ai-lab-entry__phase-title"><span aria-hidden="true" /><span><Typed text={phase.title} from={phase.head} chars={chars} /></span><span aria-hidden="true" /></p>
           <ol className="ai-lab-entry__levels">

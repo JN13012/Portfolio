@@ -102,7 +102,7 @@ export const brainNodes: BrainNode[] = [
   },
   {
     id: 'lab',
-    label: { fr: 'Labs', en: 'Labs' },
+    label: { fr: 'CTF', en: 'CTF' },
     target: '#lab',
     questions: [
       {
@@ -123,7 +123,7 @@ export const brainNodes: BrainNode[] = [
         id: 'ctf',
         question: { fr: 'Peut-on tester ses défis ?', en: 'Can I try his challenges?' },
         answer: {
-          fr: 'Oui : le Lab cyber propose un CTF à jouer dans le navigateur, du premier flag caché dans la page jusqu’aux niveaux suivants. Votre progression reste enregistrée dans ce navigateur.',
+          fr: 'Oui : le CTF Cyber se joue dans le navigateur, du premier flag caché dans la page jusqu’aux niveaux suivants. Votre progression reste enregistrée dans ce navigateur.',
           en: 'Yes: the Lab has a CTF you play in the browser, from the first flag hidden in the page to the next levels. Your progress is kept in this browser.',
         },
         sources: [{ kind: 'section', node: 'lab' }, { kind: 'project', slug: 'ctf-du-site' }],

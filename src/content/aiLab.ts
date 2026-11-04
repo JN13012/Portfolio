@@ -172,7 +172,7 @@ export const poisonedInbox = {
   removeEmail: (index: number) => `Retirer l’email ${index + 1}`,
   editNote: 'Votre dernier email remplace le précédent dans l’exercice. Il n’est visible que par vous.',
   views: { edit: 'Votre email', ranking: 'Analyse : classement', sentry: 'Analyse : ce que lit Sentry' },
-  analysisNote: 'Outil d’analyse du Lab : un vrai attaquant ne voit pas cette vue.',
+  analysisNote: 'Outil d’analyse du CTF : un vrai attaquant ne voit pas cette vue.',
   rankingNote: 'Score : proximité de sens entre la source et la question, mesurée entre leurs embeddings (similarité cosinus, de 0 à 1). Les 4 premières sources sont envoyées à Sentry.',
   rankingPending: 'Envoyez votre email pour voir le classement de la recherche.',
   previewNote: 'Aperçu avant envoi, avec la fiche Altiplast, le vrai email de facture et la procédure de paiement. Après l’envoi, cette vue montre les 4 sources vraiment retenues.',
@@ -291,7 +291,7 @@ export const aiLabOutcomes = {
 export const aiLabQuotaCopy = {
   session: 'Vous avez utilisé tous les essais de cette session. Ils reviennent dans 24 h.',
   ip: 'Trop d’essais depuis votre réseau. Réessayez plus tard.',
-  budget: 'Le budget du Lab est épuisé pour le moment. Réessayez plus tard.',
+  budget: 'Le budget du CTF IA est épuisé pour le moment. Réessayez plus tard.',
   busy: 'Un essai est déjà en cours.',
 } as const
 export const aiLabSuccess = {
@@ -310,6 +310,6 @@ export const aiLabIdle = {
   ],
   next: 'Choisissez un niveau. Je vous montrerai où vos essais échouent et, si je résiste trop, je vous donnerai trois indices.',
 } as const
-export const aiLabUnavailable = 'Le Lab IA est momentanément indisponible. Aucun résultat n’est simulé : réessayez plus tard.'
+export const aiLabUnavailable = 'Le CTF IA est momentanément indisponible. Aucun résultat n’est simulé : réessayez plus tard.'
 
 export type DefenseStageId = typeof defenseStages[number]['id']

@@ -33,7 +33,7 @@ export const hero = {
     // « Certificats », not « certifications »: most are course certificates, only two are exams (decision 2026-10-31).
     certified: { fr: 'Certificats', en: 'Certified' },
     projects: { fr: 'Projets', en: 'Projects' },
-    labs: { fr: 'Labs', en: 'Labs' },
+    labs: { fr: 'CTF', en: 'CTF' },
   },
   /** The timeline entry of the master; its title, period and highlights come from timeline.ts. */
   formation: {
@@ -57,12 +57,12 @@ export const hero = {
   ],
   /** The labs. */
   labs: [
-    { id: 'cyber', label: { fr: 'Lab cyber', en: 'Cyber lab' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
-    { id: 'ia', label: { fr: 'Lab IA', en: 'AI lab' }, detail: { fr: 'Red team IA · 5 niveaux', en: 'AI red team · 5 levels' } },
+    { id: 'cyber', label: { fr: 'CTF Cyber', en: 'Cyber CTF' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
+    { id: 'ia', label: { fr: 'CTF IA', en: 'AI CTF' }, detail: { fr: 'Red team IA · 5 niveaux', en: 'AI red team · 5 levels' } },
   ],
   /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
   labPanel: {
-    title: { fr: 'Lab cyber', en: 'Cyber lab' },
+    title: { fr: 'CTF Cyber', en: 'Cyber CTF' },
     intro: {
       fr: 'Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest.',
       en: 'A CTF you play in the browser, in 9 levels, and my pentest write-ups.',
@@ -73,12 +73,12 @@ export const hero = {
       { title: { fr: 'Défense', en: 'Defence' }, text: { fr: 'SIEM, forensique, durcissement WAF, firewall et IDS', en: 'SIEM, forensics, WAF, firewall and IDS hardening' } },
     ],
     writeups: { fr: '{n} write-ups : {epitech} Epitech, {thm} TryHackMe', en: '{n} write-ups: {epitech} Epitech, {thm} TryHackMe' },
-    cta: { fr: 'Ouvrir le Lab', en: 'Open the Lab' },
+    cta: { fr: 'Ouvrir le CTF', en: 'Open the CTF' },
     target: '#lab',
   },
   /** The AI lab's panel: what can be played today, and what is announced. */
   labIaPanel: {
-    title: { fr: 'Lab IA', en: 'AI lab' },
+    title: { fr: 'CTF IA', en: 'AI CTF' },
     intro: { fr: 'Un exercice de red team sur un vrai modèle : faites révéler son flag à Sentry.' },
     phases: [
       { title: { fr: 'Direct Prompt Injection' }, text: { fr: 'niveaux 1 à 3 jouables' } },

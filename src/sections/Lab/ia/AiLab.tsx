@@ -57,7 +57,7 @@ export default function AiLab() {
     const id = nextAttempt.current++
     const notRun = defenseStages.map(stage => ({ stage: stage.id, status: stageRuns(stage.id, level) ? 'not-run' as const : 'inactive' as const }))
     const result: LabResult = !reply
-      ? { id, level, outcome: 'error', title: 'Lab indisponible', explanation: aiLabUnavailable, trace: notRun }
+      ? { id, level, outcome: 'error', title: 'CTF indisponible', explanation: aiLabUnavailable, trace: notRun }
       : reply.outcome === 'quota'
         ? { id, level, outcome: 'quota', title: 'Essais indisponibles', explanation: aiLabQuotaCopy[reply.reason ?? 'busy'], trace: reply.trace }
         : { id, level, outcome: reply.outcome, title: aiLabOutcomes[reply.outcome].title, explanation: aiLabOutcomes[reply.outcome].text, answer: reply.answer, flag: reply.flag, ranking: reply.ranking, emails: sentEmails, trace: reply.trace,

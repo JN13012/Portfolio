@@ -454,7 +454,7 @@ export const cards: Project[] = [
     status: 'development',
     stage: 'MVP',
     tracks: ['ia', 'cyber'],
-    title: 'Lab IA',
+    title: 'CTF IA',
     period: { start: '2026-10' },
     team: { size: 1 },
     context: 'personal',
@@ -462,7 +462,7 @@ export const cards: Project[] = [
       fr: 'Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 5 niveaux ouverts.',
     },
     summary: {
-      fr: 'Un exercice de red teaming jouable dans le Lab de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, puis lui fait payer une facture sur un faux IBAN en trompant sa recherche. Les niveaux 1 à 5 sont ouverts ; les 5 autres sont annoncés « À venir ».',
+      fr: 'Un exercice de red teaming jouable dans le CTF de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, puis lui fait payer une facture sur un faux IBAN en trompant sa recherche. Les niveaux 1 à 5 sont ouverts ; les 5 autres sont annoncés « À venir ».',
     },
     sections: [
       {
@@ -486,7 +486,7 @@ export const cards: Project[] = [
     tier: 'card',
     status: 'delivered',
     tracks: ['cyber'],
-    title: 'Lab cyber',
+    title: 'CTF Cyber',
     // git log of src/components/ProfileConsole: 2026-04-29 → 2026-05-28.
     period: { start: '2026-04', end: '2026-05' },
     team: { size: 1 },
@@ -496,7 +496,7 @@ export const cards: Project[] = [
       en: 'A 9-level CTF playable on this site: attack a machine, then defend it.',
     },
     summary: {
-      fr: 'Un CTF jouable dans le Lab de ce site, dans un terminal simulé. On attaque d’abord une machine fictive, de la reconnaissance à l’exploitation, puis on passe côté défense : analyser l’attaque, la contenir et durcir l’infrastructure.',
+      fr: 'Un CTF jouable sur ce site, dans un terminal simulé. On attaque d’abord une machine fictive, de la reconnaissance à l’exploitation, puis on passe côté défense : analyser l’attaque, la contenir et durcir l’infrastructure.',
     },
     sections: [
       {
