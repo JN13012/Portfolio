@@ -162,14 +162,15 @@ describe('expertise order', () => {
 
   const ids = (t: Parameters<typeof orderedDomains>[0]) => orderedDomains(t).map((d) => d.id)
   it('keeps the default order without ?metier=', () => {
-    expect(ids([])).toEqual(['ia', 'data', 'offensive', 'defensive', 'devops', 'dev'])
+    expect(ids([])).toEqual(['ia', 'data', 'offensive', 'defensive', 'devops', 'dev', 'blockchain'])
   })
   it('uses one order per job and keeps every domain', () => {
-    expect(ids(['ia'])).toEqual(['ia', 'data', 'offensive', 'defensive', 'devops', 'dev'])
-    expect(ids(['data'])).toEqual(['data', 'ia', 'dev', 'devops', 'offensive', 'defensive'])
-    expect(ids(['cyber'])).toEqual(['offensive', 'defensive', 'ia', 'data', 'devops', 'dev'])
-    expect(ids(['dev'])).toEqual(['dev', 'devops', 'ia', 'data', 'offensive', 'defensive'])
-    expect(ids(['devops'])).toEqual(['devops', 'dev', 'offensive', 'defensive', 'ia', 'data'])
+    expect(ids(['ia'])).toEqual(['ia', 'data', 'offensive', 'defensive', 'devops', 'dev', 'blockchain'])
+    expect(ids(['data'])).toEqual(['data', 'ia', 'dev', 'devops', 'offensive', 'defensive', 'blockchain'])
+    expect(ids(['cyber'])).toEqual(['offensive', 'defensive', 'ia', 'data', 'devops', 'dev', 'blockchain'])
+    expect(ids(['dev'])).toEqual(['dev', 'devops', 'ia', 'data', 'offensive', 'defensive', 'blockchain'])
+    expect(ids(['devops'])).toEqual(['devops', 'dev', 'offensive', 'defensive', 'ia', 'data', 'blockchain'])
+    expect(ids(['blockchain'])).toEqual(['blockchain', 'offensive', 'dev', 'ia', 'data', 'defensive', 'devops'])
     expect(ids(['ia', 'cyber'])).toEqual(ids(['ia']))
   })
 })

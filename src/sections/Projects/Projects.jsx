@@ -41,6 +41,7 @@ import CTF_Hashcat from "../../assets/Projets/CTF_Hashcat.webp";
 import CTF_Forensic from "../../assets/Projets/CTF_Forensic.png";
 import OTP_RCS from "../../assets/Projets/OTP_RCS.webp";
 import Lab_IA from "../../assets/Projets/Lab_IA.webp";
+import CTF_Blockchain from "../../assets/Projets/CTF_Blockchain.webp";
 import FraudSignal from "../../assets/Projets/FraudSignal.webp";
 import BlockTrader_Emblem from "../../assets/Logos/BlockTrader_Emblem.webp";
 import Argos_Emblem from "../../assets/Logos/Argos_Emblem.webp";
@@ -98,6 +99,7 @@ const IMAGES = {
   "assistant-translator": [AI_Assistant_Translator],
   fraudsignal: [FraudSignal],
   "lab-ia": [Lab_IA],
+  "ctf-blockchain": [CTF_Blockchain],
   "generateur-otp-rcs": [OTP_RCS],
   "hackathon-citiz": [Hackathon_Citiz],
   platino: [Platino],
@@ -117,9 +119,9 @@ const IMAGES = {
   "llm-context-wrapper": [LLM_Context_Wrapper],
 };
 
-const TRACKS = ["ia", "data", "cyber", "dev", "devops"];
-const TRACK_LABEL = { ia: "IA", data: "Data", cyber: "Cyber", dev: "Dev", devops: "DevOps" };
-const TRACK_COLOR = { ia: "#38bdf8", data: "#facc15", cyber: "#f43f5e", dev: "#34d399", devops: "#fb923c" };
+const TRACKS = ["ia", "data", "cyber", "dev", "devops", "blockchain"];
+const TRACK_LABEL = { ia: "IA", data: "Data", cyber: "Cyber", dev: "Dev", devops: "DevOps", blockchain: "Blockchain" };
+const TRACK_COLOR = { ia: "#38bdf8", data: "#facc15", cyber: "#f43f5e", dev: "#34d399", devops: "#fb923c", blockchain: "#a78bfa" };
 
 const trackThemes = {
   ia: { card: "hover:border-cyber/40", badge: "text-blue-300 border-blue-500/30 bg-blue-500/10" },
@@ -127,6 +129,7 @@ const trackThemes = {
   cyber: { card: "hover:border-cyber/40", badge: "text-red-400 border-red-500/30 bg-red-500/10" },
   dev: { card: "hover:border-cyber/40", badge: "text-emerald-300 border-emerald-500/30 bg-emerald-500/10" },
   devops: { card: "hover:border-cyber/40", badge: "text-orange-300 border-orange-500/30 bg-orange-500/10" },
+  blockchain: { card: "hover:border-cyber/40", badge: "text-violet-300 border-violet-500/30 bg-violet-500/10" },
   // Projects outside the four jobs (Smart Fridge: project management).
   Default: { card: "hover:border-cyber/40", badge: "text-violet-300 border-violet-500/30 bg-violet-500/10" },
 };
@@ -269,7 +272,6 @@ const Projects = () => {
               </select>
               <ChevronDown aria-hidden="true" size={14} className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 text-zinc-500" />
             </label>
-            <span className="text-sm text-zinc-500 tabular-nums">{visible.length} projets</span>
           </div>
         </div>
 

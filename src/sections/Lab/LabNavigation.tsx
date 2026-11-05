@@ -1,7 +1,7 @@
 import { ChevronDown, Undo2 } from 'lucide-react'
 
 export function LabNavigation({ onPresentation, onCurriculum, open, drawerId, tone = 'green' }: {
-  onPresentation: () => void; onCurriculum: () => void; open: boolean; drawerId: string; tone?: 'green' | 'blue'
+  onPresentation: () => void; onCurriculum: () => void; open: boolean; drawerId: string; tone?: 'green' | 'blue' | 'violet'
 }) {
   return <div className="lab-navigation" data-tone={tone}>
     <button type="button" className="lab-navigation__return" aria-label="Revenir à la présentation" title="Revenir à la présentation" onClick={onPresentation}>

@@ -2,7 +2,7 @@ import { groupOf } from '../lib/projects'
 import { projects } from './projects'
 import type { Localized, Track } from './types'
 
-// Expertise carousel: six domains, each a list of tools that scrolls by.
+// Expertise carousel: seven domains, each a list of tools that scrolls by.
 // Only real technical stack (libraries, frameworks, languages, tools): no models or hosted
 // services (Llama 3, watsonx, Groq, Whisper) and no standards (OWASP Top 10, ISO 27001, RGPD).
 // Each domain's tools are grouped by sub-domain, in the order they are used (no group titles shown).
@@ -20,7 +20,7 @@ type ExpertiseTool = {
 }
 
 export type ExpertiseDomain = {
-  id: 'ia' | 'data' | 'offensive' | 'defensive' | 'devops' | 'dev'
+  id: 'ia' | 'data' | 'offensive' | 'defensive' | 'devops' | 'dev' | 'blockchain'
   /** Project filter the domain links to. */
   track: Track
   /** Family shown above the name on the carousel card. */
@@ -218,18 +218,43 @@ export const expertise: ExpertiseDomain[] = [
       used('Redis', ['kubernetes', 'popeye']),
     ],
   },
+  {
+    // Mining facts: timeline.ts (« Infrastructure de minage », 2018–2022); smart contracts: the ctf-blockchain project.
+    id: 'blockchain',
+    track: 'blockchain',
+    category: { fr: 'Web3' },
+    label: { fr: 'Blockchain' },
+    positioning: {
+      fr: 'Des smart contracts attaqués, corrigés et testés, après des années d’infrastructure de minage.',
+    },
+    proofs: [
+      { fr: 'Minage et infrastructure blockchain depuis 2018' },
+      { fr: 'Un CTF de smart contracts Solidity, 35 tests Foundry' },
+    ],
+    tools: [
+      used('Solidity', ['ctf-blockchain']),
+      used('Foundry', ['ctf-blockchain']),
+      used('OpenZeppelin', ['ctf-blockchain']),
+      used('Slither', ['ctf-blockchain']),
+      used('web3.py', ['blocktrader']),
+      t('Flashbots', 'transactions privées et MEV sur Ethereum, pendant le minage', 'private transactions and MEV on Ethereum, while mining'),
+      t('HiveOS', 'supervision des fermes de minage', 'mining farm monitoring'),
+      t('Braiins OS', 'firmware et supervision des mineurs Bitcoin', 'Bitcoin miner firmware and monitoring'),
+    ],
+  },
 ]
 
 /**
- * Full domain order when the visitor arrives through a targeted link (?metier=ia|data|cyber|dev|devops, see
+ * Full domain order when the visitor arrives through a targeted link (?metier=ia|data|cyber|dev|devops|blockchain, see
  * src/lib/projects.ts). One job per link: only the first value is used.
  */
 const domainOrderFor: Record<Track, ExpertiseDomain['id'][]> = {
-  ia: ['ia', 'data', 'offensive', 'defensive', 'devops', 'dev'],
-  data: ['data', 'ia', 'dev', 'devops', 'offensive', 'defensive'],
-  cyber: ['offensive', 'defensive', 'ia', 'data', 'devops', 'dev'],
-  dev: ['dev', 'devops', 'ia', 'data', 'offensive', 'defensive'],
-  devops: ['devops', 'dev', 'offensive', 'defensive', 'ia', 'data'],
+  ia: ['ia', 'data', 'offensive', 'defensive', 'devops', 'dev', 'blockchain'],
+  data: ['data', 'ia', 'dev', 'devops', 'offensive', 'defensive', 'blockchain'],
+  cyber: ['offensive', 'defensive', 'ia', 'data', 'devops', 'dev', 'blockchain'],
+  dev: ['dev', 'devops', 'ia', 'data', 'offensive', 'defensive', 'blockchain'],
+  devops: ['devops', 'dev', 'offensive', 'defensive', 'ia', 'data', 'blockchain'],
+  blockchain: ['blockchain', 'offensive', 'dev', 'ia', 'data', 'defensive', 'devops'],
 }
 
 /** The domains in display order for the job of the link (none = default order). */

@@ -41,6 +41,12 @@ import Sql from '../../../assets/Icon/Sql.webp'
 import Sqlmap from '../../../assets/Icon/Sqlmap.webp'
 import Wireshark from '../../../assets/Icon/Wireshark.webp'
 
+import Foundry from '../../../assets/Icon/Foundry.webp' // github.com/foundry-rs avatar, recoloured white on transparent
+import Slither from '../../../assets/Icon/Slither.webp' // logo.png (crytic/slither), the snake only, on transparent
+import Flashbots from '../../../assets/Icon/Flashbots.webp' // github.com/flashbots avatar, on transparent
+import HiveOS from '../../../assets/Icon/HiveOS.webp' // github.com/minershive avatar (Hive OS)
+import BraiinsOS from '../../../assets/Icon/BraiinsOS.webp' // github.com/braiins avatar, the wordmark on transparent
+
 export const TOOL_ICONS: Record<string, string> = {
   'John the Ripper': JohnTheRipper,
   Impacket: Impacket,
@@ -82,4 +88,9 @@ export const TOOL_ICONS: Record<string, string> = {
   React: React,
   SQL: Sql,
   Jenkins: Jenkins,
+  Foundry: Foundry,
+  Slither: Slither,
+  Flashbots: Flashbots,
+  HiveOS: HiveOS,
+  'Braiins OS': BraiinsOS,
 }

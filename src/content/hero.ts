@@ -22,6 +22,8 @@ export const hero = {
     fr: 'Je développe des solutions IA et identifie les vulnérabilités des systèmes pour mieux les sécuriser.',
     en: 'I develop AI solutions and identify system vulnerabilities to better secure them.',
   },
+  /** Second line of the pitch (2026-11-05): mining from 2018 (timeline.ts), smart contracts with the ctf-blockchain project. */
+  pitchChain: { fr: 'Dans la blockchain depuis 2018, du minage aux smart contracts.' },
   /**
    * Proofs under the pitch (2026-10-27), as a light list: one row per kind (label on the left, items as
    * text). The master in progress is not a certificate (started 09/2026, specialisation not chosen yet).
@@ -55,10 +57,12 @@ export const hero = {
     { slug: 'salesforce-executor', detail: { fr: 'En production chez ULIT', en: 'In production at ULIT' } },
     { slug: 'zeroday', detail: { fr: 'Jeu mobile · en conception', en: 'Mobile game · in design' } },
   ],
-  /** The labs. */
+  /** The three CTFs on one line, under the row's « CTF » label: short names, one short line each. */
   labs: [
-    { id: 'cyber', label: { fr: 'CTF Cyber', en: 'Cyber CTF' }, detail: { fr: 'CTF 9 niveaux · {n} write-ups', en: '9-level CTF · {n} write-ups' } },
-    { id: 'ia', label: { fr: 'CTF IA', en: 'AI CTF' }, detail: { fr: 'Red team IA · 5 niveaux', en: 'AI red team · 5 levels' } },
+    // Each CTF's total number of levels (Jérémie, 2026-11-05); its panel says which ones are playable today.
+    { id: 'cyber', label: { fr: 'Cyber', en: 'Cyber' }, detail: { fr: '9 niveaux', en: '9 levels' } },
+    { id: 'ia', label: { fr: 'IA', en: 'AI' }, detail: { fr: '10 niveaux', en: '10 levels' } },
+    { id: 'blockchain', label: { fr: 'Blockchain' }, detail: { fr: '3 niveaux' } },
   ],
   /** The cyber lab's panel (CTF levels as in CtfIntro, write-ups counted from writeups.json). */
   labPanel: {
@@ -82,12 +86,24 @@ export const hero = {
     intro: { fr: 'Un exercice de red team sur un vrai modèle : faites révéler son flag à Sentry.' },
     phases: [
       { title: { fr: 'Direct Prompt Injection' }, text: { fr: 'niveaux 1 à 3 jouables' } },
-      { title: { fr: 'Indirect Prompt Injection' }, text: { fr: 'niveau 4 jouable, niveau 5 à venir' } },
+      { title: { fr: 'Indirect Prompt Injection' }, text: { fr: 'niveaux 4 et 5 jouables' } },
       { title: { fr: 'Agents & API' }, text: { fr: 'à venir' } },
       { title: { fr: 'Hardening' }, text: { fr: 'à venir' } },
     ],
     cta: { fr: 'Jouer au niveau 1' },
     target: '#lab-ia',
+  },
+  /** The blockchain lab's panel: the levels of the smart-contract CTF, one playable so far. */
+  labChainPanel: {
+    title: { fr: 'CTF Blockchain' },
+    intro: { fr: 'De vrais smart contracts Solidity, exécutés par l’EVM dans votre navigateur : trouvez la faille, exploitez-la.' },
+    phases: [
+      { title: { fr: 'Réentrance' }, text: { fr: 'jouable' } },
+      { title: { fr: 'Initialisation non protégée' }, text: { fr: 'à venir' } },
+      { title: { fr: 'Hasard prévisible' }, text: { fr: 'à venir' } },
+    ],
+    cta: { fr: 'Jouer au niveau 1' },
+    target: '#lab-blockchain',
   },
   close: { fr: 'Fermer', en: 'Close' },
   /** Short availability shown in the hero, before the kind of contract. */
@@ -115,6 +131,7 @@ export const hero = {
 } satisfies {
   title: Array<{ text: Localized; tone: 'ai' | 'threat' }>
   pitch: Localized
+  pitchChain: Localized
   nodes: CoreNode[]
   [key: string]: unknown
 }

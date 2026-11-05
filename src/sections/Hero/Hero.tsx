@@ -86,7 +86,10 @@ export function Hero() {
                   ))}
                 </p>
               </div>
-              <p className="max-w-[34em] border-l-2 border-cyber/80 py-[0.2em] pl-[0.9em] text-lg leading-[1.55] text-zinc-200 lg:text-[1.1em]">{hero.pitch.fr}</p>
+              <div className="max-w-[34em] border-l-2 border-cyber/80 py-[0.2em] pl-[0.9em] text-lg leading-[1.55] lg:text-[1.1em]">
+                <p className="text-zinc-200">{hero.pitch.fr}</p>
+                <p className="mt-[0.3em] text-[0.9em] text-zinc-400">{hero.pitchChain.fr}</p>
+              </div>
             </div>
 
             <HeroProofs />
@@ -109,11 +112,11 @@ export function Hero() {
               <div className="flex flex-col items-start gap-[0.9em]">
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-[0.75em] border border-cyber/60 bg-cyber/10 px-[1.6em] py-[0.85em] tracking-[0.2em] text-cyber uppercase transition-colors hover:bg-cyber/20"
+                  className="inline-flex items-center gap-[0.75em] border border-cyber/60 bg-cyber/10 px-[1.25em] py-[0.6em] text-[0.875em] tracking-[0.18em] text-cyber uppercase transition-colors hover:bg-cyber/20"
                 >
                   <Mail aria-hidden="true" className="size-[1.125em]" /> {hero.ctaContact.fr}
                 </a>
-                <CvMenu up className="inline-flex items-center whitespace-nowrap gap-[0.75em] border border-white/20 px-[1.6em] py-[0.85em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40">
+                <CvMenu up className="inline-flex items-center whitespace-nowrap gap-[0.75em] border border-white/20 px-[1.25em] py-[0.6em] text-[0.875em] tracking-[0.18em] text-zinc-100 uppercase transition-colors hover:border-white/40">
                   <Download aria-hidden="true" className="size-[1.125em]" /> {hero.ctaCv.fr}
                 </CvMenu>
               </div>

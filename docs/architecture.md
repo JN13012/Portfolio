@@ -25,7 +25,7 @@ src/
     Profile/             profil, international, langues et centres d’intérêt
     Expertise/
     Projects/            Projects.jsx, ProjectCard.jsx et modales
-    Lab/                 Lab.tsx, CyberLab.tsx, CtfIntro.tsx, ctf/, ia/ (aperçu dev)
+    Lab/                 Lab.tsx, CyberLab.tsx, CtfIntro.tsx, ctf/, ia/ (aperçu dev), blockchain/
     Parcours/
     Certifications/
     Contact/
@@ -153,12 +153,22 @@ Les deux entrées partagent `components/ui/TerminalStartButton.tsx` : même bout
 avec palettes verte et bleue. L'entrée IA reprend le quadrillage, les scanlines et la typographie
 du Cyber, avec suspension du balayage et du bouton lorsqu'ils ne sont pas visibles.
 Leur apparition progressive utilise `lib/useTerminalTyping.ts` et `components/ui/TerminalTypedText.tsx`
-(170 caractères/seconde, une fois par session). L'entrée « Red-team Sentry » annonce
-« Faites révéler son flag à Sentry · parcours prévu en 10 niveaux » ; la mission est présentée dans la console.
+(170 caractères/seconde, une fois par session). Les trois entrées n'affichent que leur titre et leurs niveaux, sans sous-titre ;
+la mission est présentée dans la console. L'entrée Blockchain reprend celle de l'IA (`ai-lab-entry`), en violet.
 Le bouton « Commencer » déclenche une extinction CRT de 520 ms, dont la fin ouvre la console.
 Cette transition et l'apparition progressive sont immédiates avec réduction des mouvements.
 Les réponses viennent de `server/aiLab/`, jamais de résultats préparés.
 Les descriptions publiques sont dans `content/aiLab.ts`, sans consignes privées.
+
+### CTF Blockchain
+
+Le troisième onglet du CTF, chargé à la demande (`sections/Lab/blockchain/`, environ 120 Ko gzip), fait tourner
+une vraie EVM dans le navigateur (`@ethereumjs/evm`, ABI avec `viem`) : pas de réseau, de portefeuille ni d'ETH réel.
+Les contrats viennent du dépôt public `JN13012/smart-contract-ctf` : `npm run sync:blockchain-ctf` copie
+l'ABI, le bytecode et la source de chaque contrat dans `content/blockchainCtf.json`, avec le commit d'origine.
+La console accepte un sous-ensemble de `cast` et `forge create` (`blockchain/reentrancyLevel.ts`).
+Seul le niveau 1 (réentrance) est jouable ; les niveaux 2 et 3 sont « À venir » sur le site.
+La progression est gardée dans ce navigateur (clé `blockchain-ctf-progress`).
 
 `Lab.tsx` coordonne les écrans et conserve leur état avec les frontières `Activity` de React.
 `CyberLab.tsx` porte le CTF et les write-ups existants. Les effets masqués sont suspendus ;

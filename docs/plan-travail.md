@@ -45,6 +45,7 @@ Déroulé d’une étape :
   « Me contacter » est l’action principale du Hero.
 - [x] **CV de retour** (1er novembre) : CV général IA × cyber, sans téléphone, téléchargeable depuis le Hero et Contact.
 - [x] **Trois CV** (5 novembre) : développeur IA, cybersécurité, blockchain, sans téléphone (`src/assets/Jeremie_Nagi_CV_*.pdf`), dans un menu « Télécharger mon CV » du Hero et de Contact (`components/ui/CvMenu.tsx`).
+- [x] **CTF Blockchain** (5 novembre) : 3ᵉ onglet du CTF, niveau 1 (réentrance) jouable sur une vraie EVM dans le navigateur, contrats du dépôt public `JN13012/smart-contract-ctf` ; catégorie et onglet Blockchain dans Projets, domaine Blockchain en Expertise, 3 CTF dans le Hero, liens `?metier=cyber|ia|blockchain`.
 - [x] **Description Google** et réponse préparée « Qui est Jérémie ? » : intitulé de Parcours
   à la place de « MSc cybersécurité ».
 - [x] **En-têtes de sécurité** dans `public/_headers`, car le Worker ne s’exécute pas pour les fichiers statiques :

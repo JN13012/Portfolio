@@ -79,7 +79,7 @@ function LevelList({ groups, completed, current, onPick, onHint, details }: {
 
 export function LabCurriculumDrawer({ id, title, groups, completed, current, onClose, onSelect, details, tone = 'green' }: {
   id: string; title: string; groups: readonly LabCourseGroup[]; completed: readonly number[]; current?: number
-  onClose: () => void; onSelect: (level: number) => void; details?: (level: number) => ReactNode; tone?: 'green' | 'blue'
+  onClose: () => void; onSelect: (level: number) => void; details?: (level: number) => ReactNode; tone?: 'green' | 'blue' | 'violet'
 }) {
   const scope = useRef<HTMLDivElement>(null)
   const selected = useRef(false)

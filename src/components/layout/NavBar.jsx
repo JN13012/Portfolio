@@ -28,13 +28,15 @@ const NavBar = () => {
   return (
     <header className="fixed top-0 z-[1000] flex w-full flex-col">
       <nav aria-label="Navigation principale" className="border-b border-cyber/35 bg-black/85 py-4 backdrop-blur-md">
-        <div className="mx-auto flex w-[90%] max-w-[2400px] items-center justify-between gap-6">
-          <a href="#acceuil" className="min-w-0 text-[min(4.5vw,1rem)] leading-tight font-bold text-white sm:text-lg">
+        <div className="mx-auto flex w-[90%] max-w-[2400px] items-center justify-between gap-3 sm:gap-6">
+          <a href="#acceuil" className="min-w-0 text-[min(3.75vw,1rem)] leading-tight font-bold whitespace-nowrap text-white sm:text-lg">
             NAGI_JÉRÉMIE
             <span className="text-zinc-500">.</span>
             <span className="text-sky-400">IA</span>
             <span className="text-zinc-500">.</span>
             <span className="text-cyber">CYBER</span>
+            <span className="text-zinc-500">.</span>
+            <span className="text-violet-400">WEB3</span>
           </a>
 
           <ul className="hidden items-center gap-7 text-base xl:flex">
@@ -56,7 +58,7 @@ const NavBar = () => {
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((o) => !o)}
-            className="shrink-0 border border-cyber/40 px-3 py-1.5 text-sm tracking-widest whitespace-nowrap text-cyber xl:hidden"
+            className="shrink-0 border border-cyber/40 px-2 py-1.5 text-xs tracking-wider whitespace-nowrap text-cyber sm:px-3 sm:text-sm sm:tracking-widest xl:hidden"
           >
             {open ? "[ FERMER ]" : "[ MENU ]"}
           </button>

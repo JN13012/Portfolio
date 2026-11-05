@@ -79,4 +79,14 @@ export const skills: Record<Track, SkillGroup[]> = {
       items: ['GitHub Actions', 'Jenkins', 'Groovy'],
     },
   ],
+  blockchain: [
+    {
+      title: { fr: 'Smart contracts' },
+      items: ['Solidity', 'Foundry', 'OpenZeppelin', 'Slither', 'web3.py'],
+    },
+    {
+      title: { fr: 'Infrastructure de minage' },
+      items: ['HiveOS', 'Braiins OS', 'Flashbots'],
+    },
+  ],
 }

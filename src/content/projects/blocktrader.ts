@@ -6,7 +6,7 @@ export const blocktrader: Project = {
   tier: 'card',
   status: 'paper-trading',
   // AI is the target (validated by Jérémie, 2026-10-24): the text always says it is not wired in yet.
-  tracks: ['ia', 'data', 'dev'],
+  tracks: ['ia', 'data', 'dev', 'blockchain'],
   title: 'BlockTrader',
   period: { start: '2026-07' },
   team: { size: 1 },
@@ -25,6 +25,9 @@ export const blocktrader: Project = {
     data: {
       fr: 'Un observatoire du marché qui historise 11 indicateurs publics, et une méthodologie statistique contre le surapprentissage (Sharpe dégonflé, holdout scellé).',
       en: 'A market observatory logging 11 public indicators, and a statistical methodology against overfitting (deflated Sharpe, sealed holdout).',
+    },
+    blockchain: {
+      fr: 'Des stratégies sur BTC et ETH, et une lecture du marché crypto nourrie par des données publiques, dont celles de la chaîne via web3.py.',
     },
     dev: {
       fr: 'Moteur Python compilé (numba), vérifié contre VectorBT et une boucle de référence, 56 tests, CI durcie, exécution serverless.',

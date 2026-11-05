@@ -11,6 +11,8 @@ import {
   siDrizzle,
   siElectron,
   siEthereum,
+  siOpenzeppelin,
+  siSolidity,
   siExpress,
   siGeopandas,
   siGit,
@@ -156,6 +158,8 @@ export const VECTOR_LOGOS: Record<string, SimpleIcon> = {
   rust: siRust,
   // web3.py talks to Ethereum, which is what its chip stands for.
   web3py: siEthereum,
+  solidity: siSolidity,
+  openzeppelin: siOpenzeppelin,
   lightningwebcomponents: siSalesforce,
   toolingapi: siSalesforce,
 }

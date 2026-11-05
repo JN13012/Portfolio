@@ -3,7 +3,7 @@ import { useReducedMotion } from '../../lib/useReducedMotion'
 import './terminalStartButton.css'
 
 /** The same recessed key for both Lab entrances; only its color palette changes. */
-export function TerminalStartButton({ onClick, children, tone = 'green', disabled = false }: { onClick: () => void; children: ReactNode; tone?: 'green' | 'blue'; disabled?: boolean }) {
+export function TerminalStartButton({ onClick, children, tone = 'green', disabled = false }: { onClick: () => void; children: ReactNode; tone?: 'green' | 'blue' | 'violet'; disabled?: boolean }) {
   const root = useRef<HTMLSpanElement>(null)
   const tilt = useRef<HTMLSpanElement>(null)
   const reduced = useReducedMotion()

@@ -23,11 +23,11 @@ Certificats : IBM AI Developer (Professional Certificate) · Jr Penetration Test
 
 Projets : argos (Agents IA cyber · en développement) · blocktrader (Bot de trading · paper trading) · salesforce-executor (En production chez ULIT) · zeroday (Jeu mobile · en conception)
 
-CTF : CTF Cyber (CTF 9 niveaux · {n} write-ups) · CTF IA (Red team IA · 5 niveaux)
+CTF : Cyber (9 niveaux) · IA (10 niveaux) · Blockchain (3 niveaux)
 
 **CTF Cyber** : Un CTF jouable dans le navigateur, en 9 niveaux, et mes write-ups de pentest. Reconnaissance : Linux, réseau, scan et énumération · Exploitation : Web et injection SQL, hashs et SSH, élévation de privilèges · Défense : SIEM, forensique, durcissement WAF, firewall et IDS
 
-Disponible immédiatement · Alternance · MSc Epitech · Stage possible · Marseille · mobile
+Disponible immédiatement · Alternance · Stage possible · Marseille · mobile dans toute la France
 
 ## Profil
 
@@ -36,7 +36,7 @@ Je suis arrivé à l’IA et à la cybersécurité par un chemin peu commun. Cha
 **Avant l’informatique, et ce que j’en garde :**
 - **Décider sous pression, agir ensemble** (Armée, 2014 – 2016) : L’exigence du terrain m’a appris la discipline, la cohésion et l’importance de pouvoir compter les uns sur les autres.
 - **Diagnostiquer vite, sans droit à l’erreur** (Mécanique, 2017 – 2025) : Responsable des pneumatiques d’un prototype LMP2 lors du FIA World Endurance Championship, WEC 2017. Un arrêt au stand ne se rejoue pas.
-- **Monter et superviser une infra** (Minage, 2018 – 2022) : Ma première expérience entrepreneuriale dans l’exploitation de systèmes informatiques, avec la responsabilité du bon fonctionnement et de la rentabilité.
+- **Monter et superviser une infra** (Minage blockchain, 2018 – 2022) : Ma première expérience entrepreneuriale dans l’exploitation de systèmes informatiques, avec la responsabilité du bon fonctionnement et de la rentabilité.
 
 **International** — 5 langues · 6 pays où j’ai vécu. Un parcours immersif entre plusieurs pays m’a appris à m’adapter rapidement à de nouveaux environnements. FR 22 ans · LB 4 ans · SA 5 ans · QA 3 ans · CA 3 mois · PE 1 an et demi
 
@@ -160,6 +160,12 @@ Conteneurs, orchestration et intégration continue, avec un pipeline durci sur B
 
 Preuves : Déploiement Kubernetes multi-nœuds (Bernstein) · Jenkins configuré par le code (My_Marvin) · 56 tests et CI durcie sur BlockTrader
 
+### Blockchain
+
+Des smart contracts attaqués, corrigés et testés, après des années d’infrastructure de minage.
+
+Preuves : Minage et infrastructure blockchain depuis 2018 · Un CTF de smart contracts Solidity, 35 tests Foundry
+
 ## Dossiers
 
 ### Argos — En développement · POC (2026-07 → en cours)
@@ -225,6 +231,8 @@ Bot de trading crypto en paper trading : 40 stratégies sur BTC et ETH, évalué
 *Angle ia* : Pensé pour être piloté par une IA : stratégies évaluées et lecture du marché lui fourniront des conclusions vérifiables, et une règle de sûreté borne déjà ce qu’elle pourra faire.
 
 *Angle data* : Un observatoire du marché qui historise 11 indicateurs publics, et une méthodologie statistique contre le surapprentissage (Sharpe dégonflé, holdout scellé).
+
+*Angle blockchain* : Des stratégies sur BTC et ETH, et une lecture du marché crypto nourrie par des données publiques, dont celles de la chaîne via web3.py.
 
 *Angle dev* : Moteur Python compilé (numba), vérifié contre VectorBT et une boucle de référence, 56 tests, CI durcie, exécution serverless.
 
@@ -386,7 +394,17 @@ Un exercice de red teaming jouable dans le CTF de ce site, face à Sentry, qui r
 
 **Sécurité.** Le serveur gère les flags et la progression, et applique des quotas par session et par adresse IP, sur 1 heure, 5 heures et 24 heures.
 
-Chiffres : 4 niveaux ouverts · 10 niveaux prévus · 39 tests du serveur
+Chiffres : 5 niveaux ouverts · 10 niveaux prévus · 39 tests du serveur
+
+### CTF Blockchain — En développement · MVP
+
+*Carte* : Un CTF de smart contracts Solidity : chaque faille exploitée, corrigée et prouvée par des tests.
+
+Trois smart contracts Solidity volontairement vulnérables (réentrance, initialisation non protégée, hasard prévisible), chacun avec son contrat d’attaque, sa version corrigée et des tests qui prouvent les deux. Le niveau 1 se joue sur ce site : les contrats compilés tournent sur une vraie EVM dans le navigateur ; les niveaux 2 et 3 y sont « À venir ».
+
+**Sécurité.** Slither analyse les versions corrigées à chaque commit. Le README montre aussi ce que l’outil rate : la faille du niveau 2, une erreur de logique, ne se voit qu’à la relecture.
+
+Chiffres : 3 failles exploitées et corrigées · 35 tests Foundry · 1 niveau jouable sur ce site
 
 ### CTF Cyber — Terminé
 
@@ -633,6 +651,11 @@ De la préparation commando à l’engagement comme militaire du rang : rigueur,
 
 - **Conteneurs et orchestration** : Docker, Docker Compose, Kubernetes, k3d, Traefik
 - **Intégration continue** : GitHub Actions, Jenkins, Groovy
+
+### blockchain
+
+- **Smart contracts** : Solidity, Foundry, OpenZeppelin, Slither, web3.py
+- **Infrastructure de minage** : HiveOS, Braiins OS, Flashbots
 
 ## Certifications
 

@@ -7,11 +7,9 @@ import { TerminalTypedText as Typed } from '../../../components/ui/TerminalTyped
 import { useTerminalTyping } from '../../../lib/useTerminalTyping'
 
 const TITLE = 'Red-team Sentry'
-const levelCount = aiLabCurriculum.reduce((count, phase) => count + phase.levels.length, 0)
-const SUBTITLE = `Faites révéler son flag à Sentry · parcours prévu en ${levelCount} niveaux`
 const summaryOf = (level: { summary?: string }) => ` : ${level.summary}`
 const pieces = (() => {
-  let offset = TITLE.length + SUBTITLE.length
+  let offset = TITLE.length
   const phases = aiLabCurriculum.map(phase => {
     const head = offset
     offset += phase.title.length
@@ -75,7 +73,6 @@ export function AiLabIntro({ onEnter, completed }: { onEnter: (level: LabLevel) 
       <span aria-hidden="true" className="ai-lab-entry__scan"><span /></span>
       <div className="ai-lab-entry__heading">
         <h3 id="ai-lab-entry-title" data-lab-intro-heading tabIndex={-1} className="outline-none"><Typed text={TITLE} from={0} chars={chars} /></h3>
-        <p><Typed text={SUBTITLE} from={TITLE.length} chars={chars} /></p>
       </div>
       <ol className="ai-lab-entry__phases" aria-label="Les niveaux prévus du CTF IA">
         {pieces.phases.map(phase => <li key={phase.title}>

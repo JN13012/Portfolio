@@ -84,6 +84,18 @@ export const tracks: TrackContent[] = [
     ],
     featured: ['kubernetes', 'my-marvin'],
   },
+  {
+    id: 'blockchain',
+    label: { fr: 'Blockchain' },
+    positioning: {
+      fr: 'Des smart contracts attaqués, corrigés et testés, après des années d’infrastructure de minage.',
+    },
+    proofs: [
+      { fr: 'Minage et infrastructure blockchain depuis 2018' },
+      { fr: 'Un CTF de smart contracts Solidity, 35 tests Foundry' },
+    ],
+    featured: ['ctf-blockchain', 'blocktrader'],
+  },
 ]
 
 /** « En 30 secondes » strip. */

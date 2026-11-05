@@ -35,6 +35,8 @@ const HUE: Record<ExpertiseDomain['id'], { accent: string; text: string }> = {
   defensive: { accent: '#2563eb', text: '#60a5fa' },
   devops: { accent: '#f97316', text: '#fb923c' },
   dev: { accent: '#22c55e', text: '#4ade80' },
+  // Purple, clear of the AI's indigo; the logo's .WEB3 uses the same family.
+  blockchain: { accent: '#a855f7', text: '#c084fc' },
 }
 
 /**

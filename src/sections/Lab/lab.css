@@ -13,6 +13,7 @@
 /* --lab-terminal-bg: the terminal's colour as seen on screen, so the drawer opens directly on it. */
 .lab-navigation, .lab-curriculum { --lab-accent: #4ade80; --lab-terminal-bg: #000; }
 .lab-navigation[data-tone='blue'], .lab-curriculum[data-tone='blue'] { --lab-accent: #38bdf8; }
+.lab-navigation[data-tone='violet'], .lab-curriculum[data-tone='violet'] { --lab-accent: #a78bfa; }
 .lab-navigation { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
 .lab-navigation button { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 32px; padding: 4px 7px; color: #a1a1aa; cursor: pointer; font-size: 11px; }
 .lab-navigation button:hover { color: var(--lab-accent); background: #ffffff08; }

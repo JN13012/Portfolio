@@ -39,12 +39,13 @@ export const profile = {
   },
   /** What is being sought, most important first. */
   seeking: [
-    { fr: 'Alternance · MSc Epitech', en: 'Work-study · MSc Epitech' },
+    // The MSc is in the hero's Formation row just above: not repeated here (2026-11-05).
+    { fr: 'Alternance', en: 'Work-study' },
     { fr: 'Stage possible', en: 'Internship possible' },
   ],
   location: {
-    fr: 'Marseille · mobile',
-    en: 'Marseille · open to relocation',
+    fr: 'Marseille · mobile dans toute la France',
+    en: 'Marseille · open to relocation anywhere in France',
   },
   email: 'jeremie.nagi@epitech.eu',
   links: {
@@ -99,7 +100,7 @@ export const profile = {
     {
       id: 'blockchain',
       title: { fr: 'Monter et superviser une infra', en: 'Building and monitoring infrastructure' },
-      context: { fr: 'Minage', en: 'Mining' },
+      context: { fr: 'Minage blockchain', en: 'Blockchain mining' },
       period: { start: '2018', end: '2022' },
       text: {
         fr: 'Ma première expérience entrepreneuriale dans l’exploitation de systèmes informatiques, avec la responsabilité du bon fonctionnement et de la rentabilité.',
@@ -186,7 +187,7 @@ export const profile = {
   },
   /** At-a-glance facts of the Profil section. */
   facts: [
-    { label: { fr: 'Localisation', en: 'Location' }, value: { fr: 'Marseille · mobile', en: 'Marseille · open to relocation' } },
+    { label: { fr: 'Localisation', en: 'Location' }, value: { fr: 'Marseille · mobile dans toute la France', en: 'Marseille · open to relocation anywhere in France' } },
     { label: { fr: 'Recherche', en: 'Looking for' }, value: { fr: 'Alternance 4 j entreprise / 1 j école (stage possible)', en: 'Work-study, 4 days company / 1 day school (internship possible)' } },
     { label: { fr: 'Formation', en: 'Education' }, value: { fr: 'MSc Epitech · 2026 – 2028', en: 'MSc Epitech · 2026 – 2028' } },
     { label: { fr: 'Disponibilité', en: 'Availability' }, value: { fr: 'Immédiate', en: 'Immediate' } },

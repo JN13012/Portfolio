@@ -4,7 +4,7 @@ export type Locale = 'fr' | 'en'
 export type Localized = { fr: string; en?: string }
 
 /** The jobs the site targets. Also used for project filters (`?metier=`). */
-export type Track = 'ia' | 'data' | 'cyber' | 'dev' | 'devops'
+export type Track = 'ia' | 'data' | 'cyber' | 'dev' | 'devops' | 'blockchain'
 
 /**
  * Honest project status, always shown next to a project: still being built, or finished.

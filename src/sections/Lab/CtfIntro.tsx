@@ -21,11 +21,10 @@ const PHASES = [
 ]
 
 const TITLE = 'Laboratoire cybersécurité'
-const SUBTITLE = 'CTF en 9 niveaux · de la reconnaissance à la défense'
 
-// Where each typed piece starts, in reading order (title, subtitle, then phase titles and levels).
+// Where each typed piece starts, in reading order (title, then phase titles and levels).
 const PIECES = (() => {
-  let offset = TITLE.length + SUBTITLE.length
+  let offset = TITLE.length
   return PHASES.map((phase) => {
     const head = offset
     offset += phase.title.length
@@ -43,7 +42,7 @@ type StartButtonStyle = 'hud' | 'solid' | 'prompt' | 'key' | 'arrow' | 'neon' | 
 export function CtfIntro({ onStart, completed = [], button = 'socket' }: { onStart: (level: number) => void; completed?: readonly number[]; button?: StartButtonStyle }) {
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
-  const total = TITLE.length + SUBTITLE.length + PHASES.reduce((n, p) => n + p.title.length + p.levels.reduce((m, l) => m + typedLength(l), 0), 0)
+  const total = TITLE.length + PHASES.reduce((n, p) => n + p.title.length + p.levels.reduce((m, l) => m + typedLength(l), 0), 0)
   const chars = useTerminalTyping(root, total, 'ctf-intro-typed', reduced)
 
   const done = (n: number) => completed.includes(n)
@@ -93,9 +92,6 @@ export function CtfIntro({ onStart, completed = [], button = 'socket' }: { onSta
 
       <p data-lab-intro-heading tabIndex={-1} className="text-2xl font-bold tracking-[0.25em] text-cyber uppercase outline-none [text-shadow:0_0_18px_rgba(74,222,128,0.45)] motion-safe:animate-[crt-glitch_3s_steps(1)_infinite]">
         <Typed text={TITLE} from={0} chars={chars} />
-      </p>
-      <p className="mt-2 text-[15px] text-zinc-300 motion-safe:animate-[crt-glitch_4.2s_steps(1)_1.1s_infinite]">
-        <Typed text={SUBTITLE} from={TITLE.length} chars={chars} />
       </p>
 
       {/* The 9 levels as one centred path, in three phases; finished levels get a tick. */}

@@ -19,6 +19,7 @@ import ZeroDay from '../../assets/Projets/ZeroDay.webp'
 import { emitCore } from '../../lib/coreBus'
 import { cx } from '../../lib/cx'
 import { Sentry } from '../../components/Sentry'
+import { EthereumCrystal } from '../../components/ui/EthereumCrystal'
 
 const LOGOS: Record<string, string> = { ibm: Coursera, thm: THM }
 /** Project thumbnails: an emblem shown whole, or a screenshot cropped. */
@@ -36,12 +37,15 @@ const fill = (text: string) =>
     .replace('{epitech}', String(count('epitech')))
     .replace('{thm}', String(count('tryhackme')))
 
-type PanelId = 'master' | 'lab' | 'labIa'
+type PanelId = 'master' | 'lab' | 'labIa' | 'labChain'
 /** Where each panel opens on desktop: right of the pointer, growing down (master) or up (lab, low in the list). */
-const GROWS: Record<PanelId, 'down' | 'up'> = { master: 'down', lab: 'up', labIa: 'up' }
+const GROWS: Record<PanelId, 'down' | 'up'> = { master: 'down', lab: 'up', labIa: 'up', labChain: 'up' }
 /** The panel's anchor in the list's box (px): the click point, or the opener's right edge from the keyboard. */
 type Anchor = { x: number; y: number; height: number }
 const DESKTOP = '(min-width: 1024px)'
+
+/** The CTF row's thumbnails: a little narrower, three items share the width of two. */
+const CTF_THUMB = 'size-[2.35em]'
 
 /** A thumbnail slot, sized with the text column; its content is a framed image, or an emblem floating free. */
 function Thumb({ children, className }: { children: ReactNode; className?: string }) {
@@ -91,12 +95,16 @@ function Item({ thumb, title, sub, extra, onClick, panel, expanded }: ItemProps)
  * A row: its label on the left, level with the first items' titles, then its items on the two columns
  * shared by every row (2026-10-27, saves height). Medium column: the label above; narrow: everything stacked.
  */
-function Row({ label, total, rows = 1, children }: { label: string; total?: number; rows?: number; children: ReactNode }) {
+function Row({ label, total, rows = 1, columns = 2, children }: { label: string; total?: number; rows?: number; columns?: 2 | 3; children: ReactNode }) {
   return (
-    <div className="grid grid-cols-1 items-center gap-x-[1.25em] gap-y-[0.45em] py-[0.55em] @[24rem]:grid-cols-2 @[32rem]:grid-cols-[5.25em_minmax(0,1fr)_minmax(0,1fr)]">
+    <div className={cx('grid grid-cols-1 items-center gap-y-[0.45em] py-[0.55em]', columns === 3
+      // Three equal columns, each CTF at the start of its own (Jérémie, 2026-11-05).
+      ? 'gap-x-[1.25em] @[24rem]:grid-cols-3 @[32rem]:grid-cols-[5.25em_repeat(3,minmax(0,1fr))]'
+      : 'gap-x-[1.25em] @[24rem]:grid-cols-2 @[32rem]:grid-cols-[5.25em_minmax(0,1fr)_minmax(0,1fr)]')}>
       <dt
         className={cx(
-          'text-[max(10px,0.6875em)] tracking-[0.2em] text-zinc-500 uppercase @[24rem]:col-span-2 @[32rem]:col-span-1 @[32rem]:mt-[0.95em] @[32rem]:self-start',
+          'text-[max(10px,0.6875em)] tracking-[0.2em] text-zinc-500 uppercase @[32rem]:col-span-1 @[32rem]:mt-[0.95em] @[32rem]:self-start',
+          columns === 3 ? '@[24rem]:col-span-3' : '@[24rem]:col-span-2',
           rows === 2 && '@[32rem]:row-span-2',
         )}
       >
@@ -167,27 +175,30 @@ export function HeroProofs() {
             )
           })}
         </Row>
-        <Row label={hero.proofTitles.labs.fr}>
+        <Row label={hero.proofTitles.labs.fr} total={hero.labs.length} columns={3}>
           {hero.labs.map((l) => (
             <dd key={l.id} className="min-w-0">
               {l.id === 'ia' ? (
                 // The agent to red-team: its panel leads to the AI side of the Lab.
+                <Item thumb={<Thumb className={CTF_THUMB}><Sentry size={40} /></Thumb>} title={l.label.fr} sub={l.detail.fr} onClick={open('labIa')} panel expanded={panel === 'labIa'} />
+              ) : l.id === 'blockchain' ? (
                 <Item
                   thumb={
-                    <Thumb>
-                      <Sentry size={46} />
+                    <Thumb className={CTF_THUMB}>
+                      {/* Ethereum's crystal, floating free (no frame, no glow): the smart contracts run on its virtual machine. */}
+                      <EthereumCrystal className="h-[2.2em] w-auto" />
                     </Thumb>
                   }
                   title={l.label.fr}
                   sub={l.detail.fr}
-                  onClick={open('labIa')}
+                  onClick={open('labChain')}
                   panel
-                  expanded={panel === 'labIa'}
+                  expanded={panel === 'labChain'}
                 />
               ) : (
                 <Item
                   thumb={
-                    <Thumb>
+                    <Thumb className={CTF_THUMB}>
                       {/* A small terminal window: wider than tall. */}
                       <span className="grid h-[1.9em] w-full place-items-center rounded-md border border-white/10 bg-black/60">
                         <Terminal aria-hidden="true" className="size-[1.15em] text-cyber" />
@@ -195,7 +206,7 @@ export function HeroProofs() {
                     </Thumb>
                   }
                   title={l.label.fr}
-                  sub={fill(l.detail.fr)}
+                  sub={l.detail.fr}
                   onClick={open('lab')}
                   panel
                   expanded={panel === 'lab'}
@@ -230,13 +241,25 @@ export function HeroProofs() {
           <p className="text-zinc-400">{fill(hero.labPanel.writeups.fr)}</p>
         </Panel>
       )}
+      {panel === 'labChain' && (
+        <Panel tone="violet" style={place('labChain')} title={hero.labChainPanel.title.fr} onClose={close} cta={hero.labChainPanel.cta.fr} target={hero.labChainPanel.target}>
+          <p>{hero.labChainPanel.intro.fr}</p>
+          <ul className="space-y-[0.3em]">
+            {hero.labChainPanel.phases.map((x) => (
+              <li key={x.title.fr}>
+                <span className={PHASE_TONES.violet}>{x.title.fr}</span> · {x.text.fr}
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      )}
       {panel === 'labIa' && (
-        <Panel style={place('labIa')} title={hero.labIaPanel.title.fr} onClose={close} cta={hero.labIaPanel.cta.fr} target={hero.labIaPanel.target}>
+        <Panel tone="blue" style={place('labIa')} title={hero.labIaPanel.title.fr} onClose={close} cta={hero.labIaPanel.cta.fr} target={hero.labIaPanel.target}>
           <p>{hero.labIaPanel.intro.fr}</p>
           <ul className="space-y-[0.3em]">
             {hero.labIaPanel.phases.map((x) => (
               <li key={x.title.fr}>
-                <span className="text-cyber-light">{x.title.fr}</span> · {x.text.fr}
+                <span className={PHASE_TONES.blue}>{x.title.fr}</span> · {x.text.fr}
               </li>
             ))}
           </ul>
@@ -247,7 +270,15 @@ export function HeroProofs() {
 }
 
 /** A small panel over the hero, right of the pointer on desktop (placed by `style`), under the list on mobile: Escape, a click outside or ✕ close it. */
-function Panel({ title, cta, target, style, onClose, children }: { title: string; cta: string; target: string; style?: CSSProperties; onClose: () => void; children: ReactNode }) {
+/** Each CTF panel takes its domain's colour (green, blue, violet), like its tab in the CTF section. */
+const PANEL_TONES = {
+  green: { border: 'border-cyber/30', link: 'text-cyber hover:text-cyber-light' },
+  blue: { border: 'border-sky-400/30', link: 'text-sky-400 hover:text-sky-300' },
+  violet: { border: 'border-violet-400/30', link: 'text-violet-400 hover:text-violet-300' },
+} as const
+const PHASE_TONES = { green: 'text-cyber-light', blue: 'text-sky-300', violet: 'text-violet-300' } as const
+
+function Panel({ title, cta, target, style, onClose, children, tone = 'green' }: { title: string; cta: string; target: string; style?: CSSProperties; onClose: () => void; children: ReactNode; tone?: keyof typeof PANEL_TONES }) {
   const ref = useRef<HTMLDivElement>(null)
   const titleId = useId()
   // The latest onClose, so the listeners are set once while the panel is open.
@@ -277,7 +308,7 @@ function Panel({ title, cta, target, style, onClose, children }: { title: string
       aria-labelledby={titleId}
       tabIndex={-1}
       style={style}
-      className="absolute top-full left-0 z-30 mt-[0.5em] w-full max-w-[34em] lg:mt-0 lg:w-[30em] rounded-sm border border-cyber/30 bg-zinc-950/95 p-[1em] text-[0.875em] leading-relaxed text-zinc-200 shadow-[0_18px_48px_rgba(0,0,0,0.6)] backdrop-blur-md focus:outline-none"
+      className={cx('absolute top-full left-0 z-30 mt-[0.5em] w-full max-w-[34em] lg:mt-0 lg:w-[30em] rounded-sm border bg-zinc-950/95', PANEL_TONES[tone].border, ' p-[1em] text-[0.875em] leading-relaxed text-zinc-200 shadow-[0_18px_48px_rgba(0,0,0,0.6)] backdrop-blur-md focus:outline-none')}
     >
       <div className="mb-[0.5em] flex items-start justify-between gap-[1em]">
         <p id={titleId} className="font-semibold text-zinc-100">
@@ -288,7 +319,7 @@ function Panel({ title, cta, target, style, onClose, children }: { title: string
         </button>
       </div>
       <div className="space-y-[0.6em]">{children}</div>
-      <a href={target} onClick={onClose} className={cx('mt-[0.9em] inline-flex items-center gap-[0.4em] text-cyber hover:text-cyber-light focus-visible:shadow-focus focus-visible:outline-none')}>
+      <a href={target} onClick={onClose} className={cx('mt-[0.9em] inline-flex items-center gap-[0.4em] focus-visible:shadow-focus focus-visible:outline-none', PANEL_TONES[tone].link)}>
         {cta} <ArrowRight aria-hidden="true" className="size-[1em]" />
       </a>
     </div>

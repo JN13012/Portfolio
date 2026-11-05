@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { ChevronDown, Download } from 'lucide-react'
 import { profile } from '../../content/profile'
+import { tracksFromSearch } from '../../lib/projects'
 import { cvMenuUi } from '../../content/ui'
 import { cx } from '../../lib/cx'
 
@@ -8,6 +9,11 @@ import { cx } from '../../lib/cx'
  * One « Télécharger mon CV » button opening the list of the three CVs (profile.cv), each a direct
  * download. Escape or a click elsewhere closes it; Escape returns focus to the button.
  */
+/** The CV matching a targeted link (?metier=cyber|blockchain) comes first; otherwise the general AI × cyber one. */
+const FIRST_FOR_JOB: Partial<Record<string, string>> = { cyber: 'cyber', blockchain: 'ia-blockchain' }
+const firstId = FIRST_FOR_JOB[tracksFromSearch(window.location.search)[0] ?? '']
+const CVS = firstId ? [...profile.cv].sort((a, b) => Number(b.id === firstId) - Number(a.id === firstId)) : profile.cv
+
 export function CvMenu({ children, className, up = false }: { children: ReactNode; className: string; /** Opens above the button (the hero's button sits near the fold). */ up?: boolean }) {
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
@@ -50,7 +56,7 @@ export function CvMenu({ children, className, up = false }: { children: ReactNod
           aria-label={cvMenuUi.list.fr}
           className={cx('absolute left-0 z-30 min-w-full w-max max-w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-md border border-white/15 bg-zinc-950/95 py-1 text-left normal-case tracking-normal shadow-[0_18px_40px_-18px_rgb(0_0_0/0.9)] backdrop-blur', up ? 'bottom-full mb-2' : 'top-full mt-2')}
         >
-          {profile.cv.map((cv) => (
+          {CVS.map((cv) => (
             <li key={cv.id}>
               <a
                 href={cv.url}

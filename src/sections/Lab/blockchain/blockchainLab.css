@@ -1,0 +1,89 @@
+/* Blockchain CTF: same terminal as the other CTFs, violet accent (the .WEB3 of the logo). */
+.blockchain-lab { --chain-accent: #a78bfa; }
+.blockchain-lab__tabs button:focus-visible, .blockchain-lab__link:focus-visible, .blockchain-lab__source:focus-visible { outline: 2px solid var(--chain-accent); outline-offset: 2px; }
+
+.blockchain-lab__console { display: flex; flex: 1; min-height: 0; flex-direction: column; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6; }
+/* VS Code's default dark terminal: #cccccc text, ANSI green, blue, yellow and red. */
+.blockchain-lab__console { --term-fg: #cccccc; --term-dim: #858585; --term-green: #23d18b; --term-blue: #3b8eea; --term-yellow: #e5e510; --term-red: #f14c4c; }
+.blockchain-lab__output { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 14px 16px; color: var(--term-fg); }
+.blockchain-lab__output pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
+.blockchain-lab__output pre[data-tone='command'] { margin-top: 10px; }
+.blockchain-lab__output pre[data-tone='muted'] { color: var(--term-dim); }
+.blockchain-lab__output pre[data-tone='ok'] { color: var(--term-green); }
+.blockchain-lab__output pre[data-tone='error'] { color: var(--term-red); }
+.blockchain-lab__output pre[data-tone='flag'] { margin-top: 4px; color: var(--chain-accent); font-weight: 600; }
+.blockchain-lab__output .blockchain-lab__prompt b, .blockchain-lab__prompt b { color: var(--term-green); font-weight: 700; }
+.blockchain-lab__prompt i { color: var(--term-blue); font-style: normal; }
+.blockchain-lab__form { display: flex; align-items: center; gap: 8px; border-top: 1px solid #ffffff14; padding: 10px 16px; }
+.blockchain-lab__form label { flex-shrink: 0; color: var(--term-fg); }
+.blockchain-lab__form input { flex: 1; min-width: 0; min-height: 32px; background: transparent; color: var(--term-fg); outline: none; caret-color: var(--chain-accent); }
+.blockchain-lab__form input::placeholder { color: #71717a; }
+.blockchain-lab__form:focus-within { box-shadow: inset 0 1px 0 #a78bfa66; }
+
+/* Intro side: three blocks filling the console's height (title, the three steps, the GitHub link). */
+.blockchain-lab__aside { display: flex; flex-direction: column; align-items: center; gap: 32px; color: #d4d4d8; }
+.blockchain-lab__steps { display: flex; flex: 1; min-height: 0; width: 100%; flex-direction: column; justify-content: center; gap: 28px; counter-reset: step; }
+.blockchain-lab__steps li { position: relative; padding-left: 38px; line-height: 1.65; counter-increment: step; }
+.blockchain-lab__steps li::before { content: counter(step); position: absolute; left: 0; top: 1px; display: grid; width: 24px; height: 24px; place-items: center; border: 1px solid #a78bfa80; border-radius: 50%; font-size: 12px; color: var(--chain-accent); }
+
+/* Level side: same height as the console (.lab-terminal); the code viewer takes what is left and scrolls. */
+.blockchain-lab__panel { display: flex; flex-direction: column; gap: 14px; min-height: 0; color: #d4d4d8; }
+.blockchain-lab__panel > * { flex-shrink: 0; }
+.blockchain-lab__kicker, .blockchain-lab__panel h3 { line-height: 1; font-size: 20px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--chain-accent); }
+.blockchain-lab__link { display: inline-flex; width: fit-content; align-items: center; gap: 8px; border: 1px solid #a78bfa4d; background: #a78bfa0d; padding: 8px 14px; font-size: 14px; color: #ddd6fe; }
+.blockchain-lab__link:hover { background: #a78bfa1a; }
+.blockchain-lab__balances { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.blockchain-lab__balances div { border: 1px solid #ffffff14; background: #09090b99; padding: 8px 10px; }
+.blockchain-lab__balances dt { font-family: var(--font-mono); font-size: 11px; color: #a1a1aa; }
+.blockchain-lab__balances dd { font-variant-numeric: tabular-nums; color: #fafafa; }
+.blockchain-lab__hints { display: grid; grid-template-rows: auto 1fr; height: 6.25rem; border: 1px solid #ffffff14; background: #09090b99; font-size: 14px; }
+.blockchain-lab__hints header { display: flex; align-items: center; gap: 6px; padding: 0 4px 0 12px; border-bottom: 1px solid #ffffff0f; font-size: 12px; color: #c4b5fd; }
+.blockchain-lab__hints header button { display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center; color: #d4d4d8; cursor: pointer; }
+.blockchain-lab__hints header button:hover:not(:disabled) { color: var(--chain-accent); background: #ffffff08; }
+.blockchain-lab__hints header button:disabled { opacity: .3; cursor: default; }
+.blockchain-lab__hints header button:focus-visible { outline: 2px solid var(--chain-accent); outline-offset: 2px; }
+.blockchain-lab__hints p { overflow-y: auto; padding: 6px 12px 8px; line-height: 1.55; color: #e4e4e7; }
+.blockchain-lab__solved { display: grid; gap: 10px; border: 1px solid #a78bfa66; background: #a78bfa12; padding: 14px; }
+.blockchain-lab__solved code { font-family: var(--font-mono); color: var(--chain-accent); overflow-wrap: anywhere; }
+.blockchain-lab__tabs { display: flex; flex-wrap: wrap; gap: 4px 18px; border-bottom: 1px solid #ffffff14; }
+.blockchain-lab__tabs button { position: relative; min-height: 36px; padding-bottom: 6px; font-family: var(--font-mono); font-size: 12px; color: #a1a1aa; cursor: pointer; }
+.blockchain-lab__tabs button.is-active { color: #fafafa; }
+.blockchain-lab__tabs button.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--chain-accent); }
+.blockchain-lab__source { overflow: auto; overscroll-behavior: contain; margin: 0; border: 1px solid #ffffff14; background: #000; padding: 12px 0; font-family: var(--font-mono); font-size: 12px; line-height: 1.6; color: #d4d4d8; }
+.blockchain-lab__panel > .blockchain-lab__source { flex: 1 1 auto; min-height: 8rem; }
+.blockchain-lab__source span { display: block; padding-right: 12px; white-space: pre; }
+.blockchain-lab__source i { display: inline-block; width: 3.2em; padding-right: 1em; text-align: right; font-style: normal; color: #52525b; user-select: none; }
+
+/* VS Code Dark+ colours, shared by the source viewer and the console. */
+.blockchain-lab__source b { font-weight: inherit; }
+.blockchain-lab__source b[data-kind='comment'] { color: #6a9955; }
+.blockchain-lab__source b[data-kind='tag'] { color: #569cd6; }
+.blockchain-lab__source b[data-kind='string'] { color: #ce9178; }
+.blockchain-lab__source b[data-kind='number'] { color: #b5cea8; }
+.blockchain-lab__source b[data-kind='keyword'] { color: #569cd6; }
+.blockchain-lab__source b[data-kind='control'] { color: #c586c0; }
+.blockchain-lab__source b[data-kind='type'] { color: #4ec9b0; }
+.blockchain-lab__source b[data-kind='function'] { color: #dcdcaa; }
+/* The AI CTF's entry screen (aiLab.css), recoloured violet. */
+.blockchain-entry { border-color: rgb(167 139 250 / .25); }
+.blockchain-entry .ai-lab-entry__chrome > span, .blockchain-entry h3, .blockchain-entry .ai-lab-entry__level-number { color: #a78bfa; }
+.blockchain-entry h3 { text-shadow: 0 0 18px rgb(167 139 250 / .45); }
+.blockchain-entry .ai-lab-entry__body { background-image: radial-gradient(ellipse 70% 45% at 50% 0%, rgb(167 139 250 / .13), transparent 70%), linear-gradient(rgb(167 139 250 / .045) 1px, transparent 1px), linear-gradient(90deg, rgb(167 139 250 / .045) 1px, transparent 1px); }
+.blockchain-entry .ai-lab-entry__scan > span { background: linear-gradient(180deg, transparent, rgb(167 139 250 / .06) 50%, transparent); }
+.blockchain-entry .ai-lab-entry__levels { border-left-color: rgb(167 139 250 / .25); }
+.blockchain-entry .ai-lab-entry__levels li::before { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
+.blockchain-entry .lab-intro-level__title { text-transform: uppercase; }
+.blockchain-lab .lab-navigation { margin-left: auto; }
+/* Typed commands as zsh-syntax-highlighting shows them by default; help titles bold, as in a man page. */
+.blockchain-lab__output b { font-weight: inherit; }
+.blockchain-lab__output pre[data-tone='code'] b[data-kind='comment'] { color: #6a9955; }
+.blockchain-lab__output pre[data-tone='code'] b[data-kind='tag'], .blockchain-lab__output pre[data-tone='code'] b[data-kind='keyword'] { color: #569cd6; }
+.blockchain-lab__output pre[data-tone='code'] b[data-kind='string'] { color: #ce9178; }
+.blockchain-lab__output pre[data-tone='code'] b[data-kind='number'] { color: #b5cea8; }
+.blockchain-lab__output pre[data-tone='code'] b[data-kind='control'] { color: #c586c0; }
+.blockchain-lab__output pre[data-tone='code'] b[data-kind='type'] { color: #4ec9b0; }
+.blockchain-lab__output pre[data-tone='code'] b[data-kind='function'] { color: #dcdcaa; }
+.blockchain-lab__output pre:is([data-tone='command'], [data-tone='help']) b[data-kind='keyword'] { color: var(--term-green); }
+.blockchain-lab__output pre:is([data-tone='command'], [data-tone='help']) b[data-kind='string'] { color: var(--term-yellow); }
+.blockchain-lab__output b[data-kind='placeholder'] { color: var(--term-dim); font-style: italic; }
+.blockchain-lab__output b[data-kind='heading'] { color: #e5e5e5; font-weight: 700; }

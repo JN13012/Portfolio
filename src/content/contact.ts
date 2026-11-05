@@ -8,7 +8,7 @@ export const contact = {
     fr: 'Recruteur, RH ou porteur de projet : écrivez-moi ici, ou directement par email.',
     en: 'Recruiter, HR or project owner: write to me here, or directly by email.',
   },
-  // Longer than profile.location, which stays short for the hero.
+  // Same wording as profile.location since 2026-11-05.
   location: { fr: 'Marseille · mobile dans toute la France', en: 'Marseille · open to relocation anywhere in France' },
   available: { fr: 'Disponible', en: 'Available' },
   cv: { fr: 'Télécharger mon CV' },

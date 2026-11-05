@@ -39,7 +39,7 @@ export function sortProjects(projects: Project[], sort: ProjectSort) {
   return copy.sort((a, b) => byRecency(a, b) || complexityOf(b) - complexityOf(a))
 }
 
-const TRACKS: Track[] = ['ia', 'data', 'cyber', 'dev', 'devops']
+const TRACKS: Track[] = ['ia', 'data', 'cyber', 'dev', 'devops', 'blockchain']
 
 /** Reads `?metier=cyber,ia` from the URL (targeted application links). */
 export function tracksFromSearch(search: string): Track[] {
