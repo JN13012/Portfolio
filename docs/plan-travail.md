@@ -43,7 +43,8 @@ Déroulé d’une étape :
 - [x] **Hero sur téléphone** : titre, sous-titre et bouton Menu tiennent à 320, 360, 390, 430 et 768 px.
 - [x] **CV** : mention grisée dans le Hero et Contact, `CV.pdf` retiré du dépôt et du build,
   « Me contacter » est l’action principale du Hero.
-- [x] **CV de retour** (1er novembre) : CV général IA × cyber, sans téléphone, dans `src/assets/Jeremie_Nagi_CV.pdf`, téléchargeable depuis le Hero et Contact.
+- [x] **CV de retour** (1er novembre) : CV général IA × cyber, sans téléphone, téléchargeable depuis le Hero et Contact.
+- [x] **Trois CV** (5 novembre) : développeur IA, cybersécurité, blockchain, sans téléphone (`src/assets/Jeremie_Nagi_CV_*.pdf`), dans un menu « Télécharger mon CV » du Hero et de Contact (`components/ui/CvMenu.tsx`).
 - [x] **Description Google** et réponse préparée « Qui est Jérémie ? » : intitulé de Parcours
   à la place de « MSc cybersécurité ».
 - [x] **En-têtes de sécurité** dans `public/_headers`, car le Worker ne s’exécute pas pour les fichiers statiques :

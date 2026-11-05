@@ -150,8 +150,10 @@ export type Credential = {
   points?: Array<{ label?: Localized; text: Localized }>
   /** Tools and topics, tool names as in expertise.ts so their logos show. */
   stack: string[]
-  /** Courses bundled in a professional certificate. */
-  includes?: string[]
+  /** Course grade in percent, from Jérémie's Coursera accomplishments page (read on 2026-11-04). */
+  grade?: number
+  /** Courses bundled in a professional certificate; a course without its own card carries its grade here. */
+  includes?: Array<{ title: string; grade?: number }>
   /** An earlier completion of the same path, said in the modal. */
   previous?: Localized
   /** « PRO » badge: exam-based certification or professional certificate (choice of Jérémie). */

@@ -239,16 +239,16 @@ export const credentials: Credential[] = [
     ],
     stack: ['Python', 'Flask', 'JavaScript', 'Pandas', 'NumPy', 'LangChain', 'Hugging Face', 'LLM', 'RAG', 'Prompt Engineering', 'SDLC', 'Unit Testing'],
     includes: [
-      'Introduction to Software Engineering',
-      'Introduction to Artificial Intelligence (AI)',
-      'Generative AI: Introduction and Applications',
-      'Generative AI: Prompt Engineering Basics',
-      'Introduction to HTML, CSS, & JavaScript',
-      'Python for Data Science, AI & Development',
-      'Developing AI Applications with Python and Flask',
-      'Building Generative AI-Powered Applications with Python',
-      'Generative AI: Elevate your Software Development Career',
-      'Software Developer Career Guide and Interview Preparation',
+      { title: 'Introduction to Software Engineering' },
+      { title: 'Introduction to Artificial Intelligence (AI)' },
+      { title: 'Generative AI: Introduction and Applications' },
+      { title: 'Generative AI: Prompt Engineering Basics' },
+      { title: 'Introduction to HTML, CSS, & JavaScript' },
+      { title: 'Python for Data Science, AI & Development' },
+      { title: 'Developing AI Applications with Python and Flask' },
+      { title: 'Building Generative AI-Powered Applications with Python' },
+      { title: 'Generative AI: Elevate your Software Development Career' },
+      { title: 'Software Developer Career Guide and Interview Preparation', grade: 89.9 },
     ],
   },
   {
@@ -263,6 +263,7 @@ export const credentials: Credential[] = [
     credentialId: 'KGTVEZVG1XYB',
     verifyUrl: 'https://coursera.org/verify/KGTVEZVG1XYB',
     hours: 24,
+    grade: 96.33,
     note: {
       fr: 'L’IA générative appliquée à tout le travail du développeur, de la conception à la mise en production.',
       en: 'Generative AI applied to all of a developer’s work, from design to production.',
@@ -288,6 +289,7 @@ export const credentials: Credential[] = [
     credentialId: 'OM4ZXGM73HG4',
     verifyUrl: 'https://coursera.org/verify/OM4ZXGM73HG4',
     hours: 14,
+    grade: 98.33,
     // Points: what Jérémie built in each module, from his six public repos (Coursera-Lab, checked 2026-10-26).
     note: {
       fr: 'Une application d’IA générative par module, en Python. Six sont publiées sur GitHub et présentées dans les projets.',
@@ -316,6 +318,7 @@ export const credentials: Credential[] = [
     credentialId: 'F6WBNDC4FJY5',
     verifyUrl: 'https://coursera.org/verify/F6WBNDC4FJY5',
     hours: 13,
+    grade: 95,
     note: {
       fr: 'Développer, tester et déployer des applications d’IA avec Python et Flask.',
       en: 'Building, testing and deploying AI applications with Python and Flask.',
@@ -338,6 +341,7 @@ export const credentials: Credential[] = [
     credentialId: 'H95F0TYUMUAS',
     verifyUrl: 'https://coursera.org/verify/H95F0TYUMUAS',
     hours: 25,
+    grade: 95.25,
     note: {
       fr: 'Python, des bases jusqu’à la collecte et l’analyse de données.',
       en: 'Python, from the basics to collecting and analysing data.',
@@ -361,6 +365,7 @@ export const credentials: Credential[] = [
     credentialId: 'A20JJCLT97MT',
     verifyUrl: 'https://coursera.org/verify/A20JJCLT97MT',
     hours: 15,
+    grade: 79.5,
     note: {
       fr: 'Les bases du développement web côté navigateur.',
       en: 'The basics of web development in the browser.',
@@ -384,6 +389,7 @@ export const credentials: Credential[] = [
     credentialId: 'S75GBCKEF350',
     verifyUrl: 'https://coursera.org/verify/S75GBCKEF350',
     hours: 15,
+    grade: 85.7,
     note: {
       fr: 'Les principes de l’ingénierie logicielle, du cycle de vie au code.',
       en: 'Software engineering principles, from the lifecycle to the code.',
@@ -407,6 +413,7 @@ export const credentials: Credential[] = [
     credentialId: '3XOZ0WH2CR6Q',
     verifyUrl: 'https://coursera.org/verify/3XOZ0WH2CR6Q',
     hours: 9,
+    grade: 95,
     note: {
       fr: 'Écrire des prompts clairs qui donnent des réponses fiables.',
       en: 'Writing clear prompts that give reliable answers.',
@@ -431,6 +438,7 @@ export const credentials: Credential[] = [
     credentialId: '3927OTCZAQJ5',
     verifyUrl: 'https://coursera.org/verify/3927OTCZAQJ5',
     hours: 8,
+    grade: 95,
     note: {
       fr: 'Ce qu’est l’IA générative, ce qu’elle sait faire et avec quels outils.',
       en: 'What generative AI is, what it can do and with which tools.',
@@ -453,6 +461,7 @@ export const credentials: Credential[] = [
     credentialId: 'P1E4SA74GBKA',
     verifyUrl: 'https://coursera.org/verify/P1E4SA74GBKA',
     hours: 14,
+    grade: 94,
     note: {
       fr: 'Les fondamentaux de l’IA et de ses usages.',
       en: 'AI fundamentals and how AI is used.',
@@ -514,3 +523,15 @@ export const inProgress: InProgress[] = [
     stack: ['SIEM', 'Splunk', 'Wireshark', 'EDR', 'Phishing Analysis', 'Incident Response'],
   },
 ]
+
+const byTitle = (title: string) => credentials.find(c => c.title === title)
+
+/** Grades of a professional certificate's courses, from their own cards or from its list. */
+export const courseGrades = (c: Credential) => (c.includes ?? []).map(course => course.grade ?? byTitle(course.title)?.grade)
+
+/** Plain mean of the course grades, rounded: Coursera gives none for the whole certificate. */
+export function averageGrade(c: Credential) {
+  const grades = courseGrades(c)
+  if (!grades.length || grades.some(grade => grade === undefined)) return undefined
+  return Math.round(grades.reduce<number>((sum, grade) => sum + grade!, 0) / grades.length)
+}

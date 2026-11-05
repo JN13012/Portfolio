@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-11-04 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-11-05 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Introduction
@@ -120,7 +120,7 @@ Oui, immédiatement. Il cherche une alternance (4 jours en entreprise, 1 jour à
 
 **Comment le contacter ?** (brouillon, à valider)
 
-Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Son CV se télécharge depuis l’accueil et la section Contact.
+Par le formulaire de contact du site ou par e-mail (jeremie.nagi@epitech.eu). Ses trois CV (développeur IA, cybersécurité, blockchain) se téléchargent depuis l’accueil et la section Contact.
 
 *Sources* : contact
 

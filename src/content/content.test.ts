@@ -1,8 +1,9 @@
+import { existsSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { complexityOf, filterProjects, sortProjects, tracksFromSearch } from '../lib/projects'
 import { assistantUi, brainNodes } from './assistant'
 import { complexity } from './complexity'
-import { credentials, inProgress } from './certifications'
+import { averageGrade, courseGrades, credentials, inProgress } from './certifications'
 import { cyberLabCurriculum } from './cyberLab'
 import { CTF_LEVELS } from '../sections/Lab/ctf/ctfData'
 import { contact } from './contact'
@@ -35,6 +36,22 @@ const displayed = (value: unknown) =>
   JSON.stringify(value, (key, v) => (key === 'doNotClaim' || key === 'source' ? undefined : v))
 
 describe('content', () => {
+  it('offers three distinct public CVs, each from its own file in src/assets', () => {
+    expect(profile.cv).toHaveLength(3)
+    expect(new Set(profile.cv.map((cv) => cv.id)).size).toBe(3)
+    for (const cv of profile.cv) {
+      expect(cv.fileName).toMatch(/^Jeremie_Nagi_CV_[\w-]+\.pdf$/)
+      expect(existsSync(new URL(`../assets/${cv.fileName}`, import.meta.url)), cv.fileName).toBe(true)
+    }
+  })
+
+  it('grades every course of the IBM certificate, and averages them without rounding up', () => {
+    const ibm = credentials.find(c => c.id === 'ibm-ai-developer')!
+    expect(courseGrades(ibm).every(grade => typeof grade === 'number' && grade > 0 && grade <= 100)).toBe(true)
+    // Mean of the 10 grades on the Coursera accomplishments page: 924.01 / 10 = 92.4.
+    expect(averageGrade(ibm)).toBe(92)
+  })
+
   it('has every user-facing string in French', () => {
     for (const [path, text] of localizedIn(allContent)) expect(text.fr.trim(), `${path}.fr`).not.toBe('')
   })

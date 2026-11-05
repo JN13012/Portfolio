@@ -13,8 +13,8 @@ import { useImageGallery } from "../../components/ui/dialogs/useImageGallery";
 import SectionHeader from "../../components/ui/SectionHeader";
 import { StackLine } from "../../components/ui/StackLine";
 import TopicIcon from "../../components/ui/TopicIcon";
-import { credentials, inProgress } from "../../content/certifications";
-import { dialogUi, credentialKindLabels, credentialLevelLabels } from "../../content/ui";
+import { averageGrade, credentials, inProgress } from "../../content/certifications";
+import { dialogUi, credentialKindLabels, credentialLevelLabels, gradeLabels } from "../../content/ui";
 import { tracksFromSearch } from "../../lib/projects";
 import { onCore } from "../../lib/coreBus";
 import CYBERSECYRITY_101 from "../../assets/THM/Cybersecurity_101.webp";
@@ -103,6 +103,11 @@ const monthOf = (date) => date.split("-").slice(0, 2).reverse().join("/");
 const fullDate = (date) => date.split("-").reverse().join("/");
 const percent = (c) => `${Math.round(c.progress * 100)} % au ${fullDate(c.measuredAt)}`;
 const duration = (c) => (c.hours ? `${c.hours} h` : c.examHours ? `Examen ${c.examHours} h` : null);
+/** A course shows its grade in the modal; a professional certificate shows the mean of its courses, on its card too. */
+const gradeLine = (c) => {
+  const average = averageGrade(c);
+  return average !== undefined ? gradeLabels.average(average, c.includes.length) : c.grade !== undefined ? gradeLabels.grade(c.grade) : null;
+};
 
 /** In progress first, then most recent or hardest first; among the same level a PRO comes first (Pro Medium > Medium). */
 const sortEntries = (list, sort) =>
@@ -364,6 +369,11 @@ const Certifications = () => {
                     <BadgeCheck size={18} aria-hidden="true" className="mt-0.5 shrink-0" /> {selected.result.fr}
                   </p>
                 )}
+                {gradeLine(selected) && (
+                  <p className="flex items-start gap-2 pl-4 text-[15px] text-cyber">
+                    <BadgeCheck size={18} aria-hidden="true" className="mt-0.5 shrink-0" /> {gradeLine(selected)}
+                  </p>
+                )}
                 {selected.goal && (
                   <p className="pl-4 text-[15px] leading-relaxed text-zinc-300">
                     <span className="font-semibold text-zinc-100">Objectif</span> : {selected.goal.fr}
@@ -391,18 +401,20 @@ const Certifications = () => {
                     <span className="text-cyber">▸</span> {selected.includes.length} cours
                   </h4>
                   <ol className="list-inside list-decimal space-y-1 text-[15px] text-zinc-300 marker:text-zinc-500">
-                    {selected.includes.map((course) => {
+                    {selected.includes.map(({ title, grade }) => {
                       // A course with its own card opens it in place; the others stay plain text.
-                      const own = ENTRIES.find((c) => c.title === course);
+                      const own = ENTRIES.find((c) => c.title === title);
+                      const shown = grade ?? own?.grade;
                       return (
-                        <li key={course}>
+                        <li key={title}>
                           {own ? (
                             <button type="button" onClick={() => open(own, selected)} className="cursor-pointer text-left text-zinc-200 underline decoration-white/20 underline-offset-4 transition-colors hover:text-cyber hover:decoration-cyber/60">
-                              {course}
+                              {title}
                             </button>
                           ) : (
-                            course
+                            title
                           )}
+                          {shown !== undefined && <span className="ml-2 text-zinc-400 tabular-nums">{shown.toLocaleString("fr-FR")}&nbsp;%</span>}
                         </li>
                       );
                     })}
@@ -488,7 +500,10 @@ function CertCard({ c, onClick }) {
           <Progress c={c} />
         ) : (
           <div className="flex items-baseline justify-between text-xs">
-            <span className="text-zinc-300 tabular-nums">{duration(c)}</span>
+            <span className="text-zinc-300 tabular-nums">
+              {duration(c)}
+              {averageGrade(c) !== undefined && <span className="text-zinc-400"> · {gradeLabels.card(averageGrade(c))}</span>}
+            </span>
             <span className="tracking-wide text-zinc-400 transition-colors group-hover:text-cyber/80">{monthOf(c.date)}</span>
           </div>
         )}

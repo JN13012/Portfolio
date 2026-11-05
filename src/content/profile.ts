@@ -1,4 +1,6 @@
-import cvUrl from '../assets/Jeremie_Nagi_CV.pdf'
+import cvAiCyber from '../assets/Jeremie_Nagi_CV_IA-Cyber.pdf'
+import cvCyber from '../assets/Jeremie_Nagi_CV_Cybersecurite.pdf'
+import cvAiBlockchain from '../assets/Jeremie_Nagi_CV_IA-Blockchain.pdf'
 import type { Localized } from './types'
 
 type Language = {
@@ -8,6 +10,9 @@ type Language = {
   level: string
   note?: Localized
 }
+
+/** A downloadable CV: the role it targets (menu label) and the file. */
+export type CvFile = { id: string; label: Localized; url: string; fileName: string }
 
 type Strength = {
   id: string
@@ -21,8 +26,13 @@ type Strength = {
 export const profile = {
   firstName: 'Jérémie',
   lastName: 'Nagi',
-  // General AI × cyber CV, public: no phone number. Source kept outside the repo (2026-11-01).
-  cv: { url: cvUrl, fileName: 'Jeremie_Nagi_CV.pdf' },
+  // Three public CVs, one per kind of role, all without a phone number; sources kept outside the
+  // repo (2026-11-05). The first one is the general AI × cyber CV, matching the hero's title.
+  cv: [
+    { id: 'ia-cyber', label: { fr: 'Développeur IA' }, url: cvAiCyber, fileName: 'Jeremie_Nagi_CV_IA-Cyber.pdf' },
+    { id: 'cyber', label: { fr: 'Cybersécurité' }, url: cvCyber, fileName: 'Jeremie_Nagi_CV_Cybersecurite.pdf' },
+    { id: 'ia-blockchain', label: { fr: 'Blockchain' }, url: cvAiBlockchain, fileName: 'Jeremie_Nagi_CV_IA-Blockchain.pdf' },
+  ],
   availability: {
     fr: 'Disponible immédiatement',
     en: 'Available immediately',
@@ -188,7 +198,7 @@ export const profile = {
 } satisfies {
   firstName: string
   lastName: string
-  cv: { url: string; fileName: string }
+  cv: CvFile[]
   availability: Localized
   seeking: Localized[]
   location: Localized

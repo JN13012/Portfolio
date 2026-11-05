@@ -81,3 +81,16 @@ export const dialogUi = {
   previousImage: { fr: 'Image précédente', en: 'Previous image' },
   nextImage: { fr: 'Image suivante', en: 'Next image' },
 }
+
+const percent = (value: number) => `${value.toLocaleString('fr-FR')}\u00a0%`
+export const gradeLabels = {
+  grade: (value: number) => `Note : ${percent(value)}`,
+  average: (value: number, courses: number) => `Moyenne : ${percent(value)} sur les ${courses} cours`,
+  card: (value: number) => `Moyenne ${percent(value)}`,
+}
+
+/** The CV download menu of the hero and Contact. */
+export const cvMenuUi = {
+  /** Accessible name of the list of CVs. */
+  list: { fr: 'Choisir un CV' },
+} satisfies Record<string, Localized>

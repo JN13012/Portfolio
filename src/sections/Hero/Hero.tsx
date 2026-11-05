@@ -1,5 +1,6 @@
 import { useMemo, useState, useSyncExternalStore, type CSSProperties } from 'react'
 import { Download, Mail, MapPin } from 'lucide-react'
+import { CvMenu } from '../../components/ui/CvMenu'
 import { hero } from '../../content/hero'
 import { profile } from '../../content/profile'
 import { currentRun, useAssistant } from '../../lib/assistantStore'
@@ -112,13 +113,9 @@ export function Hero() {
                 >
                   <Mail aria-hidden="true" className="size-[1.125em]" /> {hero.ctaContact.fr}
                 </a>
-                <a
-                  href={profile.cv.url}
-                  download={profile.cv.fileName}
-                  className="inline-flex items-center gap-[0.75em] border border-white/20 px-[1.6em] py-[0.85em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40"
-                >
+                <CvMenu up className="inline-flex items-center whitespace-nowrap gap-[0.75em] border border-white/20 px-[1.6em] py-[0.85em] tracking-[0.2em] text-zinc-100 uppercase transition-colors hover:border-white/40">
                   <Download aria-hidden="true" className="size-[1.125em]" /> {hero.ctaCv.fr}
-                </a>
+                </CvMenu>
               </div>
             </div>
           </div>
