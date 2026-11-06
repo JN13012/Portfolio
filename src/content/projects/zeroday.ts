@@ -1,4 +1,5 @@
 import type { Project } from '../types'
+import zeroDayImg from '../../assets/Projets/ZeroDay.webp'
 
 // Facts verified in /home/cyber/work/ZeroDay on 2026-10-17 and 2026-10-26 (ZeroDay-gd is a worktree of the same repo).
 // Mobile game per the Vision v1.14; multiplayer with leaderboard and the « play humanity » V2 are plans told by Jérémie (2026-10-26).
@@ -6,8 +7,8 @@ export const zeroday: Project = {
   slug: 'zeroday',
   tier: 'dossier',
   status: 'development',
-  // Game development on a security theme, not security work.
-  tracks: ['dev'],
+  // Game development on a security theme, not security work; blockchain for its planned Web3 V3.
+  tracks: ['dev', 'blockchain'],
   title: 'ZeroDay',
   period: { start: '2026-08' },
   team: { size: 1 },
@@ -17,7 +18,7 @@ export const zeroday: Project = {
     en: 'A mobile strategy game: play a malware spreading across the world against its defences.',
   },
   summary: {
-    fr: 'Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se propage dans le monde entier, pendant que les pays réagissent, se défendent et développent un antivirus pour l’éradiquer. Un multijoueur avec classement et une version où l’on joue l’humanité sont prévus.',
+    fr: 'Jeu mobile de stratégie où le joueur incarne un malware évolutif qui se propage à travers les infrastructures mondiales, jusqu’à corrompre une IA et menacer l’existence de l’humanité. Les nations réagissent, renforcent leur cybersécurité et développent un neutralisateur pour l’éradiquer.',
     en: 'A mobile strategy game, in design: the player is a malware spreading across the world while countries react, defend themselves and build a cure. Multiplayer with a leaderboard and a version where you play humanity are planned.',
   },
   angles: {
@@ -29,14 +30,22 @@ export const zeroday: Project = {
   sections: [
     {
       kind: 'approach',
-      title: { fr: 'Le jeu prévu' },
-      body: { fr: 'Le joueur fait évoluer son malware dans 3 arbres (Propagation, Adaptation, Impact), avec 9 classes, du Ver à l’IA rogue.' },
+      title: { fr: 'Évolution du projet' },
+      points: [
+        { text: { fr: 'V0 – Prototype : moteur de simulation, carte mondiale interactive et mécanique de jeu.' } },
+        { text: { fr: 'V1 – Jeu solo : 9 classes de malwares, 3 arbres d’évolution et simulation des réactions mondiales.' } },
+        { text: { fr: 'V2 – Multijoueur : affrontements entre joueurs, classements et possibilité d’incarner l’humanité.' } },
+        { text: { fr: 'V3 – Écosystème Web3 : économie crypto (ZDAY coin), NFT (malwares, skins, profils, territoires) et marketplace.' } },
+      ],
     },
     {
       kind: 'result',
       title: { fr: 'Où en est le projet' },
-      body: { fr: 'Un prototype en cours de conception.' },
+      body: { fr: 'Prototype V0 en cours de conception.' },
     },
+  ],
+  images: [
+    { src: zeroDayImg },
   ],
   stack: ['Unity', 'C#', 'JavaScript'],
   links: { privateRepo: true },
@@ -46,5 +55,4 @@ export const zeroday: Project = {
     { value: '≈ 141 000', label: { fr: 'mots de game design', en: 'words of game design' }, source: 'docs/*.md excluding docs/archive (wc -w)' },
   ],
   scale: { months: 2, tests: 5 },
-  doNotClaim: ['Playable game', 'A 1:1 implementation of MITRE ATT&CK', 'Multiplayer, leaderboard or the humanity V2 as existing (plans only)'],
 }

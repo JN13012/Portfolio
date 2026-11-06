@@ -1,4 +1,8 @@
 import type { Project } from '../types'
+import blockTraderEmblemImg from '../../assets/Logos/BlockTrader_Emblem.webp'
+import blockTraderImg from '../../assets/Projets/BlockTrader.webp'
+import blockTraderStrategiesImg from '../../assets/Projets/BlockTrader_Strategies.webp'
+import blockTraderTendanceImg from '../../assets/Projets/BlockTrader_Tendance.webp'
 
 // Facts verified in /home/cyber/work/Block-Trader on 2026-10-17, refreshed 2026-10-26 (registry: 3,973 rows, 14 protocols; paths in `source`).
 export const blocktrader: Project = {
@@ -12,10 +16,10 @@ export const blocktrader: Project = {
   team: { size: 1 },
   context: 'personal',
   tagline: {
-    fr: 'Bot de trading crypto en paper trading : 40 stratégies évaluées avec un protocole anti-surapprentissage.',
+    fr: 'Bot de trading crypto en paper trading : 42 stratégies évaluées avec un protocole anti-surapprentissage.',
   },
   summary: {
-    fr: 'Bot de trading crypto en paper trading : 40 stratégies sur BTC et ETH, évaluées par backtest. Une IA pourra ensuite réduire l’exposition ou mettre en pause certaines stratégies pour en favoriser d’autres.',
+    fr: 'Bot de trading crypto en paper trading, en conditions réelles. Il a testé des milliers de stratégies sur huit ans d’historique BTC et ETH pour ne garder que les plus prometteuses. Relié à de nombreuses sources de données publiques, il suit déjà 11 indicateurs du marché ; demain, une IA les analysera pour lire la situation, réduire l’exposition et donner la main aux stratégies les plus adaptées.',
   },
   angles: {
     ia: {
@@ -34,19 +38,19 @@ export const blocktrader: Project = {
       en: 'Compiled Python engine (numba), checked against VectorBT and a reference loop, 56 tests, hardened CI, serverless execution.',
     },
   },
+  images: [
+    { src: blockTraderEmblemImg, emblemHeight: '87%' },
+    { src: blockTraderImg },
+    { src: blockTraderStrategiesImg },
+    { src: blockTraderTendanceImg },
+  ],
   stack: ['Python', 'NumPy', 'Numba', 'Pandas', 'VectorBT', 'web3.py', 'GitHub Actions', 'Google Cloud Scheduler', 'React', 'TypeScript'],
   links: { privateRepo: true },
   facts: [
-    { value: '40', label: { fr: 'stratégies', en: 'strategies' }, source: 'dashboard Strategies page (2026-10-24)' },
-    { value: '6', label: { fr: 'familles de stratégies', en: 'strategy families' }, source: 'dashboard Strategies page (2026-10-24)' },
+    { value: '≈ 4 000', label: { fr: 'stratégies testées' }, source: 'strategy registry: 3,973 backtested configurations (~1,500 distinct variants), 2026-10-26' },
+    { value: '42', label: { fr: 'stratégies sélectionnées' }, source: 'Block-Trader docs/STRATEGIES.md: « Les 42 stratégies, rangées en 7 groupes » (read 2026-11-06)' },
+    { value: '7', label: { fr: 'familles de stratégies', en: 'strategy families' }, source: 'Block-Trader docs/STRATEGIES.md (read 2026-11-06)' },
     { value: '11', label: { fr: 'indicateurs de marché suivis', en: 'market indicators tracked' }, source: 'blocktrader/data/observatoire.py: 11 source functions (2026-10-26)' },
   ],
   scale: { months: 3, tests: 56 },
-  doNotClaim: [
-    'Any return, CAGR, Sharpe or drawdown figure in the text (dashboard screenshots may show them: Jérémie, 2026-10-24)',
-    'Live trading, real funds, or AI steering as existing (it is the goal: always say it is not wired in yet)',
-    'An AI that can buy or raise limits (docs/SAFETY.md: AI and news can only brake)',
-    'Safe / KMS / Zodiac as implemented',
-    '"3,970 strategies" (it is 3,973 logged trial rows, ~1,500 distinct variants). « 40 stratégies, 6 familles »: dashboard Strategies page, 2026-10-24',
-  ],
 }

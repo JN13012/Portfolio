@@ -1,6 +1,6 @@
 import type { Dispatch, ReactNode } from 'react'
 import { Lock } from 'lucide-react'
-import { cvMessage, defensePanelCopy, poisonedCv } from '../../../content/aiLab'
+import { cvMessage, defensePanelCopy, poisonedCv } from '../../../content/lab/ai'
 import type { CvView, labReducer, LabAttempt, LabState } from './labState'
 
 type Props = {

@@ -120,7 +120,6 @@ scripts/
   sections: [...]                               // problème → architecture → sécurité → résultat (dossiers)
   stack: [...], links: { github?, demo?, writeup? },
   facts: [...],                                 // chiffres vérifiables uniquement
-  doNotClaim: [...]                             // garde-fou éditorial (non affiché)
 }
 ```
 

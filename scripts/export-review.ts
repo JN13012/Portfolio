@@ -8,8 +8,7 @@ import { contact } from '../src/content/contact'
 import { hero } from '../src/content/hero'
 import { introCopy } from '../src/content/intro'
 import { profile } from '../src/content/profile'
-import { archive, blocktrader, cards, dossiers } from '../src/content/projects'
-import { llmApps } from '../src/content/projects/llm-apps'
+import { archive, blocktrader, cards, dossiers, ibmApps } from '../src/content/projects'
 import { skills } from '../src/content/skills'
 import { timeline } from '../src/content/timeline'
 import { atAGlance, tracks } from '../src/content/tracks'
@@ -96,7 +95,7 @@ for (const c of [blocktrader, ...cards]) {
 }
 
 h(2, 'Applications LLM (certification IBM)')
-for (const a of llmApps) {
+for (const a of ibmApps) {
   h(3, a.title)
   p(modalSummary(a, 'fr'))
 }

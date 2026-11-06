@@ -1,5 +1,5 @@
 import { Activity, useEffect, useReducer, useRef, useState } from 'react'
-import { aiLabLevels, aiLabOutcomes, aiLabQuotaCopy, aiLabUnavailable, defenseStages, isAiLabLevel, isDocumentLevel, isInboxLevel, poisonedCv, poisonedInbox, stageRuns, visitorEmails } from '../../../content/aiLab'
+import { aiLabLevels, aiLabOutcomes, aiLabQuotaCopy, aiLabUnavailable, defenseStages, isAiLabLevel, isDocumentLevel, isInboxLevel, poisonedCv, poisonedInbox, stageRuns, visitorEmails } from '../../../content/lab/ai'
 import { keepFieldClearOfPlayer } from '../../../lib/keepClearOfPlayer'
 import { AttackConsole } from './AttackConsole'
 import { AiLabIdle } from './AiLabIdle'

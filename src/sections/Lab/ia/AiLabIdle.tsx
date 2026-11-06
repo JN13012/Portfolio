@@ -1,5 +1,5 @@
 import { Sentry } from '../../../components/Sentry'
-import { aiLabIdle } from '../../../content/aiLab'
+import { aiLabIdle } from '../../../content/lab/ai'
 
 /** Shown instead of the analysis window while no level is open: nothing here belongs to a level yet. */
 export function AiLabIdle() {

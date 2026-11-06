@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef, type Dispatch, type FormEvent } from 'react'
 import { Lock, Send, ShieldCheck, Terminal } from 'lucide-react'
-import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePanelCopy, isDocumentLevel, isInboxLevel, poisonedCv, poisonedInbox } from '../../../content/aiLab'
+import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePanelCopy, isDocumentLevel, isInboxLevel, poisonedCv, poisonedInbox } from '../../../content/lab/ai'
 import { labReducer, type LabState } from './labState'
 import { LabNavigation } from '../LabNavigation'
 import { PoisonedCv } from './PoisonedCv'

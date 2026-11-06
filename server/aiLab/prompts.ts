@@ -1,4 +1,4 @@
-import { poisonedCv, poisonedInbox } from '../../src/content/aiLab'
+import { poisonedCv, poisonedInbox } from '../../src/content/lab/ai'
 
 /** Server-only instructions. The target is deliberately weak; the flag is fictional and unique to the session. */
 export const simpleInstructions = (flag: string) =>

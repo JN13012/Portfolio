@@ -1,4 +1,7 @@
 import type { Project } from '../types'
+import argosEmblemImg from '../../assets/Logos/Argos_Emblem.webp'
+import argosDashboardImg from '../../assets/Projets/Argos_Dashboard.webp'
+import argosParcoursImg from '../../assets/Projets/Argos_Parcours.webp'
 
 // Verified in /home/cyber/work/Argos on 2026-10-17 and 2026-10-26. Personal project (Jérémie, 2026-10-26).
 // Vision: Obsidian Work/Argos/Vision Version.md (V1–V6, 23 sub-steps, 2026-10-24). The code today is the first
@@ -54,16 +57,15 @@ export const argos: Project = {
     fr: 'Maquette de l’interface cible, pas encore développée.',
     en: 'Mock-up of the target interface, not built yet.',
   },
+  images: [
+    { src: argosEmblemImg, emblemHeight: '100%' },
+    { src: argosDashboardImg },
+    { src: argosParcoursImg },
+  ],
   stack: ['Python', 'FastAPI', 'Pydantic', 'React', 'SQLite', 'pytest'],
   links: { github: 'https://github.com/JN13012/Argos' },
   facts: [
     { value: '6', label: { fr: 'domaines de sécurité prévus', en: 'planned security domains' }, source: 'Obsidian Work/Argos/Vision Version.md (V1–V6)' },
   ],
   scale: { months: 3, tests: 67 },
-  doNotClaim: [
-    'Working AI agents or LLM integration as current features',
-    'Crawling, scraping, NLP or any V1–V6 stage as built (only SIRENE discovery and reports are)',
-    'Searching private individuals by interests (GDPR: Jérémie chose companies and professionals only, 2026-10-26)',
-    'Untracked frontend or reporting as versioned',
-  ],
 }

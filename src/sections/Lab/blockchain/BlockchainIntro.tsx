@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Check } from 'lucide-react'
-import { blockchainLab as copy } from '../../../content/blockchainLab'
+import { blockchainLab as copy } from '../../../content/lab/blockchain'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
 import { TerminalStartButton } from '../../../components/ui/TerminalStartButton'
 import { TerminalTypedText as Typed } from '../../../components/ui/TerminalTypedText'
@@ -21,16 +21,19 @@ const pieces = (() => {
   return { head, levels, total: offset }
 })()
 
-export function BlockchainIntro({ onEnter, completed }: { onEnter: () => void; completed: readonly number[] }) {
+export function BlockchainIntro({ onEnter, completed }: { onEnter: (level?: number) => void; completed: readonly number[] }) {
   const entry = useRef<HTMLDivElement>(null)
   const screen = useRef<HTMLDivElement>(null)
   const reduced = useReducedMotion()
   const chars = useTerminalTyping(screen, pieces.total, 'blockchain-lab-intro-typed', reduced)
   const typing = chars < pieces.total
   const [leaving, setLeaving] = useState(false)
-  const go = () => {
+  // The level picked on this screen, if any; « Commencer » leaves the choice to the lab.
+  const chosen = useRef<number | undefined>(undefined)
+  const go = (level?: number) => {
     if (typing || leaving) return
-    if (reduced) onEnter()
+    chosen.current = level
+    if (reduced) onEnter(level)
     else setLeaving(true)
   }
   useEffect(() => {
@@ -41,7 +44,7 @@ export function BlockchainIntro({ onEnter, completed }: { onEnter: () => void; c
       { transform: 'scale(1, .012)', filter: 'brightness(2.6)', opacity: 1, offset: .55 },
       { transform: 'scale(0, .012)', filter: 'brightness(3)', opacity: 0, offset: 1 },
     ], { duration: 520, easing: 'ease-in', fill: 'forwards' })
-    animation.onfinish = () => onEnter()
+    animation.onfinish = () => onEnter(chosen.current)
     return () => { animation.onfinish = null; animation.cancel() }
   }, [leaving, onEnter])
   useEffect(() => {
@@ -69,7 +72,7 @@ export function BlockchainIntro({ onEnter, completed }: { onEnter: () => void; c
           <p className="ai-lab-entry__phase-title"><span aria-hidden="true" /><span><Typed text={copy.phase} from={pieces.head} chars={chars} /></span><span aria-hidden="true" /></p>
           <ol className="ai-lab-entry__levels">
             {pieces.levels.map(level => <li key={level.id}><button type="button" className="lab-intro-level" disabled={!level.available || typing || leaving}
-              aria-label={`Ouvrir le niveau ${level.id} : ${level.title}${summaryOf(level)}${!level.available ? ` — ${copy.soon}` : completed.includes(level.id) ? ` — ${copy.done}` : ''}`} onClick={go}>
+              aria-label={`Ouvrir le niveau ${level.id} : ${level.title}${summaryOf(level)}${!level.available ? ` — ${copy.soon}` : completed.includes(level.id) ? ` — ${copy.done}` : ''}`} onClick={() => go(level.id)}>
               <span className="ai-lab-entry__level-number">{String(level.id).padStart(2, '0')}</span><span className="lab-intro-level__title"><Typed text={level.title} from={level.from} chars={chars} /></span>
               <span className="text-zinc-400"><Typed text={summaryOf(level)} from={level.from + level.title.length} chars={chars} /></span>
               {!level.available && <span className="ml-2 text-[10px] text-zinc-500">{copy.soon}</span>}
@@ -80,7 +83,7 @@ export function BlockchainIntro({ onEnter, completed }: { onEnter: () => void; c
       </ol>
       <div className="ai-lab-entry__footer" data-typing={typing || undefined} aria-hidden={typing || undefined}>
         <span className="ai-lab-entry__button-blink"><span className="ai-lab-entry__button-glitch">
-          <TerminalStartButton tone="violet" disabled={typing || leaving} onClick={go}>{copy.start}</TerminalStartButton>
+          <TerminalStartButton tone="violet" disabled={typing || leaving} onClick={() => go()}>{copy.start}</TerminalStartButton>
         </span></span>
       </div>
     </div>

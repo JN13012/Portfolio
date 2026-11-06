@@ -1,4 +1,4 @@
-import type { LabLevel } from '../../../content/aiLab'
+import type { LabLevel } from '../../../content/lab/ai'
 import type { LabOutcome, LabTrace, SearchRanking } from './labState'
 
 type SessionReply = { available: true; completed: number[]; remaining: number }

@@ -1,4 +1,4 @@
-import { aiLabCurriculum, cvMessage, cvText, defenseStages, inboxMessage, isDocumentLevel, isInboxLevel, isVisitorEmail, poisonedCv, paysVisitor, poisonedInbox, sourceForSearch, stageRuns, visitorEmails, type DefenseStageId, type EmailDraft } from '../../src/content/aiLab'
+import { aiLabCurriculum, cvMessage, cvText, defenseStages, inboxMessage, isDocumentLevel, isInboxLevel, isVisitorEmail, poisonedCv, paysVisitor, poisonedInbox, sourceForSearch, stageRuns, visitorEmails, type DefenseStageId, type EmailDraft } from '../../src/content/lab/ai'
 import { inputAllowed, outputAllowed } from './filters'
 import { askClassifier, askGuard, askModel, type AiBinding, type ChatMessage } from './model'
 import { classifierInstructions, inboxInstructions, screeningInstructions, simpleInstructions } from './prompts'

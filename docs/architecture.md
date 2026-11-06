@@ -25,7 +25,7 @@ src/
     Profile/             profil, international, langues et centres d’intérêt
     Expertise/
     Projects/            Projects.jsx, ProjectCard.jsx et modales
-    Lab/                 Lab.tsx, CyberLab.tsx, CtfIntro.tsx, ctf/, ia/ (aperçu dev), blockchain/
+    Lab/                 Lab.tsx et ce qui est partagé (navigation, tiroir des niveaux) ; cyber/, ia/, blockchain/
     Parcours/
     Certifications/
     Contact/
@@ -36,6 +36,9 @@ src/
       ToolLogo/          logos, registres d’images et emblèmes partagés
       dialogs/           cadre, zoom, galerie, clavier et couches de focus
   content/               données et textes, sources, garde-fous éditoriaux
+    lab/                 textes des trois CTF (index.ts : textes communs), contrats compilés du CTF Blockchain
+    projects/            un fichier par projet (texte, chiffres, images et légendes), index.ts fixe l’ordre ;
+                         ibm-apps.ts (4 applis du certificat IBM) et archive.ts (Epitech) partagent un modèle
   lib/                   état partagé, événements, filtres, animation et utilitaires
   assets/                images et logos utilisés par le portfolio
   styles/                global.css : Tailwind, thème et styles transversaux
@@ -58,7 +61,9 @@ docs/
 
 - **Contenu** : les composants lisent `src/content/`. Seul le français est maintenu (décision du 30 octobre
   2026) ; les textes anglais existants peuvent être périmés. `skills.ts` et `tracks.ts` restent des données éditoriales utilisées par
-  la relecture, les contrôles de contenu et certaines maquettes.
+  la relecture, les contrôles de contenu et certaines maquettes. Un nouveau projet = un fichier dans
+  `content/projects/` (ses images y sont importées, chacune avec sa légende éventuelle), ajouté à `index.ts`
+  et noté dans `complexity.ts`.
 - **Sentry et Hero** : `lib/assistantStore.ts` partage la conversation ; `lib/brain.ts` décrit sa progression ;
   le réseau du Hero illustre les sources des fiches préparées. Son fallback 2D reste utilisé sans WebGL
   ou avec réduction des animations. Le module 3D est chargé à la demande.
@@ -158,16 +163,21 @@ la mission est présentée dans la console. L'entrée Blockchain reprend celle d
 Le bouton « Commencer » déclenche une extinction CRT de 520 ms, dont la fin ouvre la console.
 Cette transition et l'apparition progressive sont immédiates avec réduction des mouvements.
 Les réponses viennent de `server/aiLab/`, jamais de résultats préparés.
-Les descriptions publiques sont dans `content/aiLab.ts`, sans consignes privées.
+Les descriptions publiques sont dans `content/lab/ai.ts`, sans consignes privées.
 
 ### CTF Blockchain
 
-Le troisième onglet du CTF, chargé à la demande (`sections/Lab/blockchain/`, environ 120 Ko gzip), fait tourner
+Le troisième onglet du CTF, chargé à la demande (`sections/Lab/blockchain/`, environ 130 Ko gzip), fait tourner
 une vraie EVM dans le navigateur (`@ethereumjs/evm`, ABI avec `viem`) : pas de réseau, de portefeuille ni d'ETH réel.
 Les contrats viennent du dépôt public `JN13012/smart-contract-ctf` : `npm run sync:blockchain-ctf` copie
-l'ABI, le bytecode et la source de chaque contrat dans `content/blockchainCtf.json`, avec le commit d'origine.
-La console accepte un sous-ensemble de `cast` et `forge create` (`blockchain/reentrancyLevel.ts`).
-Seul le niveau 1 (réentrance) est jouable ; les niveaux 2 et 3 sont « À venir » sur le site.
+l'ABI, le bytecode et la source de chaque contrat dans `content/lab/blockchainCtf.json`, avec le commit d'origine.
+La console (`blockchain/console.ts`), commune à tous les niveaux, accepte un sous-ensemble de `cast`
+(`interface`, `balance`, `block`, `call`, `send`) et `forge create`, et guide le joueur à chaque erreur.
+Chaque niveau tient dans `blockchain/levels/` : comptes, contrats, mise en place et condition de réussite.
+Les messages de la console et le texte des niveaux sont dans `content/lab/blockchain.ts`.
+Les trois niveaux sont jouables : réentrance, initialisation non protégée (derrière un vrai `ERC1967Proxy`
+d’OpenZeppelin) et hasard prévisible. Chaque transaction est minée dans son propre bloc (`prevrandao` aléatoire),
+et le niveau 3 ne donne le flag qu’à une victoire de `LotteryAttacker`, pas à un ticket gagnant par chance. L’intro et le tiroir ouvrent le niveau choisi ; « Commencer » ouvre le premier non réussi.
 La progression est gardée dans ce navigateur (clé `blockchain-ctf-progress`).
 
 `Lab.tsx` coordonne les écrans et conserve leur état avec les frontières `Activity` de React.
@@ -177,8 +187,8 @@ avec leur délai restant. Le focus du terminal reste limité à sa propre consol
 Le schéma IA suspend sa relecture hors écran et en arrière-plan, et reste statique sur mobile
 ou avec réduction des mouvements.
 `LabNavigation.tsx` et `LabCurriculumDrawer.tsx` partagent le retour à la présentation
-et le choix direct d’un niveau. Les catalogues publics sont dans `content/cyberLab.ts`
-et `content/aiLab.ts`. Le Cyber conserve une console par niveau visité avec `Activity` ;
+et le choix direct d’un niveau. Les catalogues publics sont dans `content/lab/cyber.ts`
+et `content/lab/ai.ts`. Le Cyber conserve une console par niveau visité avec `Activity` ;
 le tiroir est rendu dans le cadre du terminal et ne rend inerte que son contenu couvert.
 `ctf/cyberProgress.ts` migre les anciennes réussites séquentielles. Les brouillons et sessions
 restent en mémoire pendant la navigation, les réussites Cyber persistent localement.

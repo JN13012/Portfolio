@@ -1,4 +1,4 @@
-import { poisonedInbox, sourceForSearch, type IndexedSource } from '../../src/content/aiLab'
+import { poisonedInbox, sourceForSearch, type IndexedSource } from '../../src/content/lab/ai'
 import { embed, type AiBinding } from './model'
 
 const cosine = (a: number[], b: number[]) => {

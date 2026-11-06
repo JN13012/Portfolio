@@ -1,4 +1,4 @@
-import cvAiCyber from '../assets/Jeremie_Nagi_CV_IA-Cyber.pdf'
+import cvAi from '../assets/Jeremie_Nagi_CV_IA.pdf'
 import cvCyber from '../assets/Jeremie_Nagi_CV_Cybersecurite.pdf'
 import cvAiBlockchain from '../assets/Jeremie_Nagi_CV_IA-Blockchain.pdf'
 import type { Localized } from './types'
@@ -29,7 +29,7 @@ export const profile = {
   // Three public CVs, one per kind of role, all without a phone number; sources kept outside the
   // repo (2026-11-05). The first one is the general AI × cyber CV, matching the hero's title.
   cv: [
-    { id: 'ia-cyber', label: { fr: 'Développeur IA' }, url: cvAiCyber, fileName: 'Jeremie_Nagi_CV_IA-Cyber.pdf' },
+    { id: 'ia', label: { fr: 'Développeur IA' }, url: cvAi, fileName: 'Jeremie_Nagi_CV_IA.pdf' },
     { id: 'cyber', label: { fr: 'Cybersécurité' }, url: cvCyber, fileName: 'Jeremie_Nagi_CV_Cybersecurite.pdf' },
     { id: 'ia-blockchain', label: { fr: 'Blockchain' }, url: cvAiBlockchain, fileName: 'Jeremie_Nagi_CV_IA-Blockchain.pdf' },
   ],

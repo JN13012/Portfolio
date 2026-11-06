@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
 import { Check, Play } from 'lucide-react'
-import { cx } from '../../lib/cx'
-import { useReducedMotion } from '../../lib/useReducedMotion'
-import { TerminalStartButton } from '../../components/ui/TerminalStartButton'
-import { TerminalTypedText as Typed } from '../../components/ui/TerminalTypedText'
-import { useTerminalTyping } from '../../lib/useTerminalTyping'
-import { cyberLabCurriculum } from '../../content/cyberLab'
+import { cx } from '../../../lib/cx'
+import { useReducedMotion } from '../../../lib/useReducedMotion'
+import { TerminalStartButton } from '../../../components/ui/TerminalStartButton'
+import { TerminalTypedText as Typed } from '../../../components/ui/TerminalTypedText'
+import { useTerminalTyping } from '../../../lib/useTerminalTyping'
+import { cyberLabCurriculum } from '../../../content/lab/cyber'
 
 // Intro screen of the CTF terminal: what the 9 levels train, typed in once per visit, with the
 // visitor's progress (kept in this browser by the console) and the button that opens the console.

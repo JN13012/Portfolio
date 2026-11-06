@@ -1,4 +1,17 @@
 import type { Project } from '../types'
+import platinoImg from '../../assets/Projets/Platino.webp'
+import popeyeImg from '../../assets/Projets/Popeye.png'
+import myMarvinImg from '../../assets/Projets/My_marvin.png'
+import vaultbornImg from '../../assets/Projets/Vaultborn.webp'
+import cyberpongImg from '../../assets/Projets/Cyberpong.png'
+import cyberpong2Img from '../../assets/Projets/Cyberpong2.webp'
+import cyberpong7Img from '../../assets/Projets/Cyberpong7.webp'
+import cyberpong11Img from '../../assets/Projets/Cyberpong11.webp'
+import unitConverterImg from '../../assets/Projets/Unit_converter.png'
+import convertisseur1Img from '../../assets/Projets/Convertisseur1.webp'
+import convertisseur2Img from '../../assets/Projets/Convertisseur2.webp'
+import vocalAssistantAIImg from '../../assets/Projets/Vocal_assistant_AI.png'
+import lLMContextWrapperImg from '../../assets/Projets/LLM-Context-Wrapper.png'
 
 // « Archives »: earlier or smaller projects, folded by year.
 const archived = (p: Omit<Project, 'tier' | 'facts' | 'team'> & { team?: Project['team'] }): Project => ({
@@ -43,6 +56,9 @@ export const archive: Project[] = [
         ],
       },
     ],
+    images: [
+      { src: platinoImg },
+    ],
     stack: ['Express', 'PostgreSQL', 'Tailwind CSS'],
     links: { privateRepo: true },
     scale: { months: 1 },
@@ -72,6 +88,9 @@ export const archive: Project[] = [
         ],
       },
     ],
+    images: [
+      { src: popeyeImg },
+    ],
     stack: ['Docker', 'Docker Compose', 'Redis', 'PostgreSQL'],
     links: { github: 'https://github.com/JN13012/POPEYE' },
     scale: { months: 1 },
@@ -97,6 +116,9 @@ export const archive: Project[] = [
         title: { fr: 'Jobs' },
         body: { fr: 'Les jobs sont créés par un script Job DSL en Groovy.' },
       },
+    ],
+    images: [
+      { src: myMarvinImg },
     ],
     stack: ['Jenkins', 'Groovy', 'Docker'],
     links: { github: 'https://github.com/JN13012/My_Marvin' },
@@ -130,6 +152,9 @@ export const archive: Project[] = [
         ],
       },
     ],
+    images: [
+      { src: vaultbornImg },
+    ],
     stack: ['Java', 'LibGDX'],
     links: { github: 'https://github.com/JN13012/Vaultborn' },
     scale: { months: 1 },
@@ -155,6 +180,12 @@ export const archive: Project[] = [
         title: { fr: 'Les 7 virus' },
         body: { fr: 'Les raquettes rétrécissent, la balle accélère, l’écran tremble, un mur apparaît au milieu… Chaque virus a sa musique.' },
       },
+    ],
+    images: [
+      { src: cyberpongImg },
+      { src: cyberpong2Img },
+      { src: cyberpong7Img },
+      { src: cyberpong11Img },
     ],
     stack: ['Python', 'Pygame'],
     links: { github: 'https://github.com/JN13012/CyberPong' },
@@ -182,6 +213,11 @@ export const archive: Project[] = [
         body: { fr: 'Température, masse, longueur, temps, volume, surface, vitesse et stockage.' },
       },
     ],
+    images: [
+      { src: unitConverterImg },
+      { src: convertisseur1Img },
+      { src: convertisseur2Img },
+    ],
     stack: ['Python', 'Tkinter'],
     links: { github: 'https://github.com/JN13012/Unit_converter' },
     scale: { months: 1 },
@@ -200,6 +236,9 @@ export const archive: Project[] = [
     summary: {
       fr: 'Un assistant vocal : IBM Watson reconnaît et synthétise la voix, Llama 3.3 répond via Groq.',
     },
+    images: [
+      { src: vocalAssistantAIImg },
+    ],
     stack: ['Python', 'Flask', 'Groq', 'IBM Watson'],
     links: { github: 'https://github.com/JN13012/AI-Voice-Assistant' },
     scale: { months: 1 },
@@ -229,6 +268,9 @@ export const archive: Project[] = [
           { label: { fr: 'Pipeline', en: 'Pipeline' }, text: { fr: 'tokenisation, inférence, puis décodage.', en: 'tokenisation, inference, then decoding.' } },
         ],
       },
+    ],
+    images: [
+      { src: lLMContextWrapperImg },
     ],
     stack: ['Python', 'Transformers', 'PyTorch'],
     links: { github: 'https://github.com/JN13012/LLM-Context-Wrapper' },

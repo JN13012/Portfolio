@@ -1,5 +1,5 @@
 // Dev-only: the styles proposed for the CTF start button (mockups.html?view=ctfbuttons).
-import { StartButton } from "../../src/sections/Lab/CtfIntro";
+import { StartButton } from "../../src/sections/Lab/cyber/CtfIntro";
 
 const STYLES = [
   ["socket", "N · Bouton dans son socle : la touche s'enfonce dans un boîtier fixe"],

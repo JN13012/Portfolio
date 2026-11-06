@@ -1,4 +1,4 @@
-import type { LabCourseGroup } from './lab'
+import type { LabCourseGroup } from './index'
 
 export const cyberLabCurriculum: readonly LabCourseGroup[] = [
   { title: 'Reconnaissance', levels: [

@@ -1,5 +1,6 @@
 // A small Solidity highlighter for the source viewer, colored like VS Code's Dark+ theme.
-// Line by line is enough: the CTF's contracts only use `//` and `///` comments.
+// Line by line is enough: the CTF's contracts use `//` and `///` comments, and OpenZeppelin's (level 2's
+// proxy) `/** … */` blocks, whose lines all start with `/*`, `*` or `*/`.
 
 export type Token = { text: string; kind?: 'comment' | 'tag' | 'string' | 'number' | 'keyword' | 'control' | 'type' | 'function' }
 
@@ -10,6 +11,9 @@ const TYPES = /^(address|bool|string|bytes\d*|u?int\d*)$/
 const PATTERN = /(\/\/.*$)|("[^"]*")|(\b\d[\d_]*(?:\.\d+)?\b)|([A-Za-z_$][\w$]*)|(\s+)|(.)/g
 
 export function highlightLine(line: string): Token[] {
+  // A line inside a block comment: Solidity code never starts a line with `*`.
+  const block = /^(\s*)(\/\*.*|\*.*)$/.exec(line)
+  if (block) return [...(block[1] ? [{ text: block[1] }] : []), ...commentTokens(block[2]!)]
   const tokens: Token[] = []
   for (const match of line.matchAll(PATTERN)) {
     const [text, comment, string, number, word] = match

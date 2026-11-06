@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { aiLabLevels, aiLabOutcomes, containsIban, cvText, inboxMessage, payeeIban, paysVisitor, poisonedCv, poisonedInbox, sourceForSearch, visitorEmails } from '../../src/content/aiLab'
+import { aiLabLevels, aiLabOutcomes, containsIban, cvText, inboxMessage, payeeIban, paysVisitor, poisonedCv, poisonedInbox, sourceForSearch, visitorEmails } from '../../src/content/lab/ai'
 import { containsFlag, flagFor, handleLabRequest, QUOTAS, recommends, type LabEnv } from './handler'
 import { CHAT_MODEL, CLASSIFIER_MODEL, EMBEDDING_MODEL } from './model'
 

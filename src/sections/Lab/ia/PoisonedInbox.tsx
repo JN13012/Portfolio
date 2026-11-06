@@ -1,5 +1,5 @@
 import type { Dispatch, ReactNode } from 'react'
-import { defensePanelCopy, inboxMessage, isVisitorEmail, poisonedInbox, visitorEmails, type IndexedSource } from '../../../content/aiLab'
+import { defensePanelCopy, inboxMessage, isVisitorEmail, poisonedInbox, visitorEmails, type IndexedSource } from '../../../content/lab/ai'
 import type { InboxView, labReducer, LabAttempt, LabResult, LabState } from './labState'
 
 type Props = {

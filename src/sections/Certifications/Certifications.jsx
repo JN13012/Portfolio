@@ -17,26 +17,6 @@ import { averageGrade, credentials, inProgress } from "../../content/certificati
 import { dialogUi, credentialKindLabels, credentialLevelLabels, gradeLabels } from "../../content/ui";
 import { tracksFromSearch } from "../../lib/projects";
 import { onCore } from "../../lib/coreBus";
-import CYBERSECYRITY_101 from "../../assets/THM/Cybersecurity_101.webp";
-import THM_SEC0 from "../../assets/THM/THM - SEC0.png";
-import RESULT_SEC0 from "../../assets/THM/Result - SEC0.webp";
-import THM_SEC1 from "../../assets/THM/THM - SEC1.png";
-import RESULT_SEC1 from "../../assets/THM/Result - SEC1.webp";
-import Introduction_to_AI from "../../assets/Coursera/Introduction_to_Artificial_Intelligence.webp";
-import Generative_AI_Introduction from "../../assets/Coursera/Generative_AI_Introduction_and_Applications.webp";
-import Prompt_Engineering from "../../assets/Coursera/Generative_AI_Prompt_Engineering_Basics.webp";
-import Software_Engineering from "../../assets/Coursera/Introduction_to_Software_Engineering.webp";
-import Intro_HTML_CSS_JavaScript from "../../assets/Coursera/Introduction_to_HTML_CSS_JavaScript.webp";
-import Python_Data_Science from "../../assets/Coursera/Python_for_Data_Science_AI_Development.webp";
-import Developing_AI_With_Python_Flask from "../../assets/Coursera/Developing_AI_Applications_with_Python_and_Flask.webp";
-import Building_Generative_AI_Powered_Applications_with_Python from "../../assets/Coursera/Building_Generative_AI_Powered_Applications_with_Python.webp";
-import IBM_AI_Developer from "../../assets/Coursera/IBM_AI_Developer.webp";
-import Generative_AI_Elevate_Career from "../../assets/Coursera/Generative_AI_Elevate_Career.webp";
-import THM_PreSecurity1 from "../../assets/THM/THM_PreSecurity1.webp";
-import THM_JR_PENTESTER from "../../assets/THM/THM_Jr_Pentester.png";
-import THM_SECURITY_ENGINEER from "../../assets/THM/THM_Security_Engineer.webp";
-import THM_DEVSECOPS from "../../assets/THM/THM_DevSecOps.webp";
-import THM_SUPERCHARGING_AI from "../../assets/THM/THM_Supercharging_AI.webp";
 import IBM_LOGO from "../../assets/Logos/ibm.svg"; // IBM 8-bar logo (Wikimedia Commons, public domain), thickened for the dark cards
 
 // Cards shown before « Voir les N autres » (same as Projets).
@@ -56,39 +36,6 @@ const LEVEL_STYLE = {
   3: { text: "text-yellow-300", bg: "bg-yellow-300/90" },
   4: { text: "text-orange-400", bg: "bg-orange-400/90" },
   5: { text: "text-red-500", bg: "bg-red-500/90" },
-};
-
-/** Certificate visuals per credential id (first image = card thumbnail). */
-const IMAGES = {
-  "thm-jr-penetration-tester": [THM_JR_PENTESTER],
-  "thm-security-engineer": [THM_SECURITY_ENGINEER],
-  "thm-devsecops": [THM_DEVSECOPS],
-  "thm-supercharging-pentesting-ai": [THM_SUPERCHARGING_AI],
-  "thm-sec1": [THM_SEC1, RESULT_SEC1],
-  "thm-sec0": [THM_SEC0, RESULT_SEC0],
-  "thm-pre-security": [THM_PreSecurity1],
-  "thm-cyber-security-101": [CYBERSECYRITY_101],
-  "ibm-ai-developer": [IBM_AI_Developer],
-  "coursera-ai-for-developers": [Generative_AI_Elevate_Career],
-  "coursera-ai-powered-apps": [Building_Generative_AI_Powered_Applications_with_Python],
-  "coursera-ai-apps-flask": [Developing_AI_With_Python_Flask],
-  "coursera-python-data-science": [Python_Data_Science],
-  "coursera-frontend-basics": [Intro_HTML_CSS_JavaScript],
-  "coursera-software-engineering": [Software_Engineering],
-  "coursera-prompt-engineering": [Prompt_Engineering],
-  "coursera-genai-introduction": [Generative_AI_Introduction],
-  "coursera-introduction-to-ai": [Introduction_to_AI],
-};
-
-/** Where to crop each certificate in the card thumbnail (default: centre), so its title shows. */
-const THUMB_POSITION = {
-  "thm-security-engineer": "center 18%",
-  "thm-devsecops": "center 21%",
-  "thm-jr-penetration-tester": "center 43%",
-  "thm-cyber-security-101": "center 43%",
-  "thm-pre-security": "center 43%",
-  "thm-supercharging-pentesting-ai": "center 57%",
-  "ibm-ai-developer": "center 0%",
 };
 
 const ONGOING_BADGE = "text-sky-300 border-sky-500/40 bg-sky-500/10";
@@ -131,7 +78,7 @@ const Certifications = () => {
   const [expanded, setExpanded] = useState(false);
   // A link with ?certificat=<id> opens on that certificate's modal (used from the GitHub profile).
   const [selected, setSelected] = useState(() => ENTRIES.find((c) => c.id === credentialFromSearch(window.location.search)) ?? null);
-  const images = selected ? IMAGES[selected.id] ?? [] : [];
+  const images = selected?.images ?? [];
   const { imageIndex, zoomed, reset: resetGallery, openZoom, closeZoom, step: stepImage } = useImageGallery(images.length);
   const shouldRestoreFocus = useRef(true);
   const close = (reason = "dismiss") => {
@@ -462,7 +409,7 @@ const Certifications = () => {
  * Cours…) is only said in the modal. A path in progress shows « En cours » and its progress instead.
  */
 function CertCard({ c, onClick }) {
-  const image = IMAGES[c.id]?.[0];
+  const image = c.images?.[0];
   return (
     <button
       type="button"
@@ -471,7 +418,7 @@ function CertCard({ c, onClick }) {
     >
       <div className="relative aspect-[5/2] overflow-hidden border-b border-white/10 bg-black">
         {image ? (
-          <img src={image} alt="" loading="lazy" decoding="async" style={{ objectPosition: THUMB_POSITION[c.id] }} className="size-full object-cover opacity-60 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-90" />
+          <img src={image} alt="" loading="lazy" decoding="async" style={{ objectPosition: c.thumbPosition }} className="size-full object-cover opacity-60 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-90" />
         ) : (
           <div
             className="size-full"

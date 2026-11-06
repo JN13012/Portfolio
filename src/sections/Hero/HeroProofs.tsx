@@ -9,26 +9,11 @@ import { hero } from '../../content/hero'
 import { projects } from '../../content/projects'
 import { timeline } from '../../content/timeline'
 import writeups from '../../content/writeups.json'
-import Coursera from '../../assets/COURSERA.webp'
-import THM from '../../assets/THM.jpg'
-import Epitech from '../../assets/Formations/Epitech.webp'
-import CodeExecutor from '../../assets/Logos/ULIT_Heart_sm.webp'
-import BlockTrader from '../../assets/Logos/BlockTrader_Emblem_sm.webp'
-import Argos from '../../assets/Logos/Argos_Emblem_sm.webp'
-import ZeroDay from '../../assets/Projets/ZeroDay.webp'
 import { emitCore } from '../../lib/coreBus'
 import { cx } from '../../lib/cx'
 import { Sentry } from '../../components/Sentry'
 import { EthereumCrystal } from '../../components/ui/EthereumCrystal'
 
-const LOGOS: Record<string, string> = { ibm: Coursera, thm: THM }
-/** Project thumbnails: an emblem shown whole, or a screenshot cropped. */
-const PROJECT_IMAGES: Record<string, { src: string; fit: 'contain' | 'cover' }> = {
-  'salesforce-executor': { src: CodeExecutor, fit: 'contain' },
-  blocktrader: { src: BlockTrader, fit: 'contain' },
-  argos: { src: Argos, fit: 'contain' },
-  zeroday: { src: ZeroDay, fit: 'cover' },
-}
 const master = timeline.find((t) => t.id === hero.formation.timeline)!
 const count = (source: string) => writeups.writeups.filter((w) => w.source === source).length
 const fill = (text: string) =>
@@ -69,7 +54,8 @@ function Item({ thumb, title, sub, extra, onClick, panel, expanded }: ItemProps)
       {thumb}
       <span className="min-w-0 flex-1">
         <span className={cx('flex items-center gap-[0.5em] text-[1.0625em] leading-tight', onClick ? 'text-zinc-100' : 'text-zinc-400')}>
-          <span className="truncate underline decoration-transparent decoration-1 underline-offset-[0.25em] transition-colors group-hover:decoration-cyber">{title}</span>
+          {/* Room under the title: truncate clips its overflow, and the underline sits below the line box. */}
+          <span className="-mb-[0.35em] truncate pb-[0.35em] underline decoration-transparent decoration-1 underline-offset-[0.25em] transition-colors group-hover:decoration-cyber">{title}</span>
           {extra}
         </span>
         <span className="mt-[0.2em] block truncate text-[max(11px,0.8125em)] text-zinc-400">{sub}</span>
@@ -150,23 +136,22 @@ export function HeroProofs() {
       <dl className="divide-y divide-white/8 border-y border-white/8">
         <Row label={hero.proofTitles.formation.fr}>
           <dd className="@[24rem]:col-span-2">
-            <Item thumb={<Thumb>{img(Epitech)}</Thumb>} title={hero.formation.title.fr} sub={hero.formation.detail.fr} onClick={open('master')} panel expanded={panel === 'master'} />
+            <Item thumb={<Thumb>{img(hero.formation.thumb)}</Thumb>} title={hero.formation.title.fr} sub={hero.formation.detail.fr} onClick={open('master')} panel expanded={panel === 'master'} />
           </dd>
         </Row>
         <Row label={hero.proofTitles.certified.fr} total={credentials.length}>
           {hero.certificates.map((c) => (
             <dd key={c.id} className="min-w-0">
-              <Item thumb={<Thumb>{img(LOGOS[c.id]!)}</Thumb>} title={c.title} sub={c.detail.fr} onClick={() => emitCore('openCredential', { id: c.credential })} />
+              <Item thumb={<Thumb>{img(c.thumb)}</Thumb>} title={c.title} sub={c.detail.fr} onClick={() => emitCore('openCredential', { id: c.credential })} />
             </dd>
           ))}
         </Row>
         <Row label={hero.proofTitles.projects.fr} total={projects.length} rows={2}>
           {hero.projects.map((x) => {
-            const image = PROJECT_IMAGES[x.slug]!
             return (
               <dd key={x.slug} className="min-w-0">
                 <Item
-                  thumb={<Thumb>{img(image.src, image.fit)}</Thumb>}
+                  thumb={<Thumb>{img(x.thumb.src, x.thumb.fit)}</Thumb>}
                   title={projects.find((p) => p.slug === x.slug)!.title}
                   sub={x.detail.fr}
                   onClick={() => emitCore('openProject', { slug: x.slug })}

@@ -1,4 +1,4 @@
-import type { LabCourseLevel } from './lab'
+import type { LabCourseLevel } from './index'
 
 /** Full curriculum, displayed at the entrance. Only levels with `available` run on the real model. */
 export const aiLabCurriculum: readonly { title: string; levels: readonly LabCourseLevel[] }[] = [

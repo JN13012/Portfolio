@@ -56,6 +56,14 @@ export type DossierSection = {
   points?: Array<{ label?: Localized; text: Localized }>
 }
 
+/** One visual of a project. An emblem is shown zoomed out, without a frame or a note. */
+export type ProjectImage = {
+  src: string
+  note?: Localized
+  /** Emblems only: the logo's height in its card. */
+  emblemHeight?: string
+}
+
 export type Project = {
   slug: string
   tier: ProjectTier
@@ -82,10 +90,10 @@ export type Project = {
   angles?: Partial<Record<Track, Localized>>
   /** Dossiers only: problem → approach → architecture → security → result → limits. */
   sections?: DossierSection[]
-  /** Shown under the visuals when they are not the real product (e.g. a design mock-up). */
+  /** Visuals, in gallery order; the first one is the card's background. Without any, the card gets a pattern. */
+  images?: readonly ProjectImage[]
+  /** Shown under every visual without its own note, when they are not the real product (e.g. a design mock-up). */
   imageNote?: Localized
-  /** One note per image, in gallery order, when `imageNote` would not be true of all of them. */
-  imageNotes?: readonly Localized[]
   /** Languages, frameworks, databases and tools used, without small libraries or build tools (decision 2026-10-31). */
   stack: string[]
   links: {
@@ -105,8 +113,6 @@ export type Project = {
   facts: Fact[]
   /** Inputs of the « envergure » sort (computed, see lib/projects.ts). */
   scale: { months: number; tests?: number }
-  /** Editorial guard rail, never displayed. */
-  doNotClaim?: string[]
 }
 
 // ── Credentials ─────────────────────────────────────────────────────────────
@@ -148,6 +154,10 @@ export type Credential = {
   goal?: Localized
   /** The detail as a short list: one line each, with an optional bold label. */
   points?: Array<{ label?: Localized; text: Localized }>
+  /** Certificate visuals; the first one is the card's thumbnail. */
+  images?: string[]
+  /** Where to crop the thumbnail (default: centre), so the certificate's title shows. */
+  thumbPosition?: string
   /** Tools and topics, tool names as in expertise.ts so their logos show. */
   stack: string[]
   /** Course grade in percent, from Jérémie's Coursera accomplishments page (read on 2026-11-04). */
@@ -193,7 +203,12 @@ export type TimelineEntry = {
   /** Label inside the bar on the axis. */
   short: Localized
   /** Several for a block grouping jobs; `url` = the school's or company's site. */
-  organisations: { name: string; url?: string; place?: Localized }[]
+  /** A logo shows beside a company's name when one entry groups several. */
+  organisations: { name: string; url?: string; place?: Localized; logo?: string }[]
+  /** Logo of the school or company: `dark` = a white logo, on a dark tile; `bleed` = fills its tile. */
+  logo?: { src: string; dark?: boolean; bleed?: boolean }
+  /** A wide picture beside the details that shows the work; `fit: 'contain'` keeps a screenshot whole. */
+  picture?: { src: string; fit?: 'contain' }
   /** ISO 3166-1 alpha-2, for the V1.1 globe. */
   country: string
   /** Position on the axis, months inclusive; no end = still going on (drawn up to today). */

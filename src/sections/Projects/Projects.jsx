@@ -10,59 +10,6 @@ import { projects } from "../../content/projects";
 import { dialogUi, modalSummary, statusLabels, teamLabel } from "../../content/ui";
 import { filterProjects, groupOf, sortProjects, tracksFromSearch } from "../../lib/projects";
 import { onCore } from "../../lib/coreBus";
-import Smartfridge from "../../assets/Projets/Smartfridge.png";
-import Cyberpong from "../../assets/Projets/Cyberpong.png";
-import Chronox from "../../assets/Projets/Chronox.webp";
-import Writeups_rapport from "../../assets/Projets/Writeups_rapport.webp";
-import Writeups_liste from "../../assets/Projets/Writeups_liste.webp";
-import Chronox_capture from "../../assets/Projets/Chronox_capture.webp";
-import My_marvin from "../../assets/Projets/My_marvin.png";
-import Popeye from "../../assets/Projets/Popeye.png";
-import Vaultborn from "../../assets/Projets/Vaultborn.webp";
-import Vocal_assistant_AI from "../../assets/Projets/Vocal_assistant_AI.png";
-import LLM_Context_Wrapper from "../../assets/Projets/LLM-Context-Wrapper.png";
-import Unit_converter from "../../assets/Projets/Unit_converter.png";
-import Business_AI_Meeting from "../../assets/Projets/Business_AI_Meeting_Companion_STT.webp";
-import RAG_pdf_Chatbot from "../../assets/Projets/RAG_PDF_Chatbot.webp";
-import AI_Assistant_Translator from "../../assets/Projets/AI_Assistant_Translator.jpg";
-import AI_Career_Coach from "../../assets/Projets/AI-Career-Coach-Conseils.webp";
-import AI_Career_Coach_Lettre from "../../assets/Projets/AI-Career-Coach-Lettre.webp";
-import AI_Career_Coach_Lettres from "../../assets/Projets/AI-Career-Coach-Lettres.webp";
-import Arena_Dashboard from "../../assets/Projets/Arena_Dashboard.webp";
-import Arena_Path from "../../assets/Projets/Arena_Path.webp";
-import Audit_Tor from "../../assets/Projets/Audit_Tor.webp";
-import Audit_Gobuster from "../../assets/Projets/Audit_Gobuster.webp";
-import Audit_Sqlmap from "../../assets/Projets/Audit_Sqlmap.webp";
-import Chatflow from "../../assets/Projets/Chatflow.webp";
-import CTF_Metasploit from "../../assets/Projets/CTF_Metasploit.webp";
-import CTF_John from "../../assets/Projets/CTF_John.webp";
-import CTF_Snort from "../../assets/Projets/CTF_Snort.webp";
-import CTF_Hashcat from "../../assets/Projets/CTF_Hashcat.webp";
-import CTF_Forensic from "../../assets/Projets/CTF_Forensic.png";
-import OTP_RCS from "../../assets/Projets/OTP_RCS.webp";
-import Lab_IA from "../../assets/Projets/Lab_IA.webp";
-import CTF_Blockchain from "../../assets/Projets/CTF_Blockchain.webp";
-import FraudSignal from "../../assets/Projets/FraudSignal.webp";
-import BlockTrader_Emblem from "../../assets/Logos/BlockTrader_Emblem.webp";
-import Argos_Emblem from "../../assets/Logos/Argos_Emblem.webp";
-import BlockTrader from "../../assets/Projets/BlockTrader.webp";
-import BlockTrader_Strategies from "../../assets/Projets/BlockTrader_Strategies.webp";
-import BlockTrader_Tendance from "../../assets/Projets/BlockTrader_Tendance.webp";
-import ZeroDay from "../../assets/Projets/ZeroDay.webp";
-import Argos_Dashboard from "../../assets/Projets/Argos_Dashboard.webp";
-import Argos_Parcours from "../../assets/Projets/Argos_Parcours.webp";
-import Cyberpong2 from "../../assets/Projets/Cyberpong2.webp";
-import Cyberpong7 from "../../assets/Projets/Cyberpong7.webp";
-import Cyberpong11 from "../../assets/Projets/Cyberpong11.webp";
-import Convertisseur1 from "../../assets/Projets/Convertisseur1.webp";
-import Convertisseur2 from "../../assets/Projets/Convertisseur2.webp";
-import Platino from "../../assets/Projets/Platino.webp";
-import Hackathon_Citiz from "../../assets/Projets/Hackathon_Citiz.webp";
-import Salesforce from "../../assets/Experiences/Salesforce_dev.webp";
-import UlitLogo from "../../assets/Experiences/ULIT-removebg-preview.png";
-import Obsidian from "../../assets/Obsidian.webp";
-import Obsidian0 from "../../assets/Obsidian0.png";
-import Obsidian1 from "../../assets/obsidian1.png";
 
 // Cards shown per group before « Voir les N autres ».
 const FIRST_CARDS = 8;
@@ -75,49 +22,6 @@ const GROUPS = [
 // Context pill on the card, only where the group title doesn't already say it
 // (perso, ULIT and Epitech are implied by « Projets perso & pro » / « Projets Epitech »).
 const CONTEXT_PILL = { ibm: "IBM", hackathon: "Hackathon" };
-
-/** Project emblems: shown first (card background, zoomed out; first image of the modal, without a frame), never under the mock-up note. */
-const EMBLEMS = new Map([
-  // Height of the emblem in its card, tuned by Jérémie.
-  [BlockTrader_Emblem, "87%"],
-  [Argos_Emblem, "100%"],
-  // A wide logo: a smaller height keeps it inside the card.
-  [UlitLogo, "40%"],
-]);
-
-/** Visuals per project slug (first image = card background). Projects without one get a pattern. */
-const IMAGES = {
-  blocktrader: [BlockTrader_Emblem, BlockTrader, BlockTrader_Strategies, BlockTrader_Tendance],
-  zeroday: [ZeroDay],
-  // Redacted by Jérémie (client hidden); JoomScan, Nmap and Tor start-up left out (CMS version, Tor warnings).
-  "audit-web": [Audit_Tor, Audit_Gobuster, Audit_Sqlmap],
-  argos: [Argos_Emblem, Argos_Dashboard, Argos_Parcours],
-  "argos-security-arena": [Arena_Dashboard, Arena_Path],
-  "rag-pdf-chatbot": [RAG_pdf_Chatbot],
-  "meeting-companion": [Business_AI_Meeting],
-  "career-coach": [AI_Career_Coach, AI_Career_Coach_Lettre, AI_Career_Coach_Lettres],
-  "assistant-translator": [AI_Assistant_Translator],
-  fraudsignal: [FraudSignal],
-  "lab-ia": [Lab_IA],
-  "ctf-blockchain": [CTF_Blockchain],
-  "generateur-otp-rcs": [OTP_RCS],
-  "hackathon-citiz": [Hackathon_Citiz],
-  platino: [Platino],
-  chatflow: [Chatflow],
-  chronox: [Chronox, Chronox_capture],
-  pentest: [Writeups_liste, Writeups_rapport],
-  "salesforce-executor": [UlitLogo, Salesforce],
-  "base-de-connaissance": [Obsidian, Obsidian0, Obsidian1],
-  "ctf-du-site": [CTF_John, CTF_Hashcat, CTF_Metasploit, CTF_Forensic, CTF_Snort],
-  "smart-fridge": [Smartfridge],
-  popeye: [Popeye],
-  "my-marvin": [My_marvin],
-  vaultborn: [Vaultborn],
-  cyberpong: [Cyberpong, Cyberpong2, Cyberpong7, Cyberpong11],
-  "unit-converter": [Unit_converter, Convertisseur1, Convertisseur2],
-  "ai-voice-assistant": [Vocal_assistant_AI],
-  "llm-context-wrapper": [LLM_Context_Wrapper],
-};
 
 const TRACKS = ["ia", "data", "cyber", "dev", "devops", "blockchain"];
 const TRACK_LABEL = { ia: "IA", data: "Data", cyber: "Cyber", dev: "Dev", devops: "DevOps", blockchain: "Blockchain" };
@@ -149,12 +53,13 @@ const categoriesOf = (p) =>
 // When it was finished, its last addition, or where it stands (card and modal).
 const cardDate = ({ period, status }) => (period.end ? period.end.split("-").reverse().join("/") : status === "development" ? "En cours" : statusLabels[status].fr);
 
-
 const Projects = () => {
   const [selected, setSelected] = useState(null);
-  const images = selected ? IMAGES[selected.slug] ?? [] : [];
+  const gallery = selected?.images ?? [];
+  const images = gallery.map((image) => image.src);
   const { imageIndex, zoomed, reset: resetGallery, openZoom, closeZoom, step: stepImage } = useImageGallery(images.length);
-  const imageNote = selected?.imageNotes?.[imageIndex] ?? selected?.imageNote;
+  const isEmblem = Boolean(gallery[imageIndex]?.emblemHeight);
+  const imageNote = isEmblem ? undefined : gallery[imageIndex]?.note ?? selected?.imageNote;
   const shouldRestoreFocus = useRef(true);
   const close = (reason = "dismiss") => {
     shouldRestoreFocus.current = reason !== "navigate";
@@ -207,8 +112,8 @@ const Projects = () => {
       titre={p.title}
       description={(p.tagline ?? p.summary).fr}
       tags={p.stack}
-      image={IMAGES[p.slug]?.[0]}
-      emblem={EMBLEMS.get(IMAGES[p.slug]?.[0])}
+      image={p.images?.[0]?.src}
+      emblem={p.images?.[0]?.emblemHeight}
       categories={categoriesOf(p)}
       date={cardDate(p)}
       ongoing={!p.period.end}
@@ -327,7 +232,7 @@ const Projects = () => {
                   onPrevious={images.length > 1 ? () => stepImage(-1) : undefined}
                   onNext={images.length > 1 ? () => stepImage(1) : undefined}
                   labels={{ previous: dialogUi.previousImage.fr, next: dialogUi.nextImage.fr }}
-                  caption={imageNote && !EMBLEMS.has(images[imageIndex]) ? <p className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/75 px-4 py-2 text-base text-zinc-200">{imageNote.fr}</p> : undefined}
+                  caption={imageNote ? <p className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/75 px-4 py-2 text-base text-zinc-200">{imageNote.fr}</p> : undefined}
                 />
               )}
               {/* Previous / next project, outside the modal (also ← →). Hidden on phones, where the modal fills the width. */}
@@ -396,8 +301,8 @@ const Projects = () => {
                     </button>
                   )}
                   {/* An emblem floats without a frame, kept clear of the arrows. */}
-                  <button type="button" onClick={openZoom} aria-label="Agrandir l’image" className={`cursor-zoom-in ${EMBLEMS.has(images[imageIndex]) ? "px-16" : ""}`}>
-                    <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className={`max-w-full object-contain ${EMBLEMS.has(images[imageIndex]) ? "max-h-[52vh]" : `${imageNote ? "max-h-[min(62vh,calc(90vh-20rem))]" : "max-h-[62vh]"} border border-white/10 shadow-2xl`}`} />
+                  <button type="button" onClick={openZoom} aria-label="Agrandir l’image" className={`cursor-zoom-in ${isEmblem ? "px-16" : ""}`}>
+                    <img loading="lazy" decoding="async" src={images[imageIndex]} alt={selected.title} className={`max-w-full object-contain ${isEmblem ? "max-h-[52vh]" : `${imageNote ? "max-h-[min(62vh,calc(90vh-20rem))]" : "max-h-[62vh]"} border border-white/10 shadow-2xl`}`} />
                   </button>
                   {images.length > 1 && (
                     <button type="button" onClick={() => stepImage(1)} aria-label={dialogUi.nextImage.fr} className="absolute right-0 z-20 cursor-pointer bg-black/55 px-3 py-2 text-4xl leading-none text-cyber/60 backdrop-blur-sm transition-colors hover:text-cyber">
@@ -406,7 +311,7 @@ const Projects = () => {
                   )}
                 </div>
                 {/* Under the image, so a note never hides what it describes. */}
-                {imageNote && !EMBLEMS.has(images[imageIndex]) && (
+                {imageNote && (
                   <p className="relative z-10 mt-2 text-center text-sm text-zinc-300">{imageNote.fr}</p>
                 )}
               </div>

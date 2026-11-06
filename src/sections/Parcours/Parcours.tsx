@@ -5,36 +5,7 @@ import type { TimelineEntry, TimelineTone, YearMonth } from '../../content/types
 import { parcoursEffectsLabels } from '../../content/ui'
 import { useReducedMotion } from '../../lib/useReducedMotion'
 import { cx } from '../../lib/cx'
-import { Lock, type LucideIcon } from 'lucide-react'
-import CryptoLogo from '../../assets/Logos/btc-eth.svg'
-import CandlesLogo from '../../assets/Logos/candles.svg'
-import EpitechLogo from '../../assets/Logos/epitech.svg'
-import EdpLogo from '../../assets/Logos/edp-dark.png'
-import RimaLogo from '../../assets/Logos/rima.jpg'
-import UlitLogo from '../../assets/Experiences/ULIT-removebg-preview.png'
-import GDriveLogo from '../../assets/Logos/gdrive.webp'
-import WartsilaLogo from '../../assets/Logos/wartsila.svg'
-import RenaultLogo from '../../assets/Logos/renault.svg'
-import HiveOs from '../../assets/Experiences/HiveOs_monitoring.webp'
-import Wec2017 from '../../assets/Experiences/Wec2017.webp'
-
-/**
- * The logo next to the title identifies the school or company (`dark` = a white logo, on a dark tile; an icon when there is none);
- * the optional wide picture beside the details shows the work. `fit: 'contain'` keeps a screenshot whole.
- */
-type Thumb = { logo: string; dark?: boolean; bleed?: boolean } | { icon: LucideIcon }
-const MEDIA: Record<string, { thumb: Thumb; picture?: string; fit?: 'contain' }> = {
-  'epitech-msc': { thumb: { logo: EpitechLogo } },
-  'epitech-pre-msc': { thumb: { logo: EpitechLogo } },
-  ulit: { thumb: { logo: UlitLogo } },
-  crypto: { thumb: { logo: CandlesLogo, bleed: true } },
-  blockchain: { thumb: { logo: CryptoLogo, bleed: true }, picture: HiveOs, fit: 'contain' },
-  motorsport: { thumb: { logo: GDriveLogo }, picture: Wec2017 },
-  'ecole-performance': { thumb: { logo: EdpLogo } },
-  rima: { thumb: { logo: RimaLogo } },
-}
-/** Small logos beside the names when one block groups several companies. */
-const ORG_LOGOS: Record<string, string> = { 'G-Drive Racing': GDriveLogo, Wärtsilä: WartsilaLogo, Renault: RenaultLogo }
+import { Lock } from 'lucide-react'
 
 const LANES = [
   { kind: 'experience', label: 'Expérience' },
@@ -296,12 +267,11 @@ function Axis({ selected, onSelect }: { selected: string; onSelect: (id: string)
 }
 
 function Details({ entry: e, className }: { entry: TimelineEntry; className?: string }) {
-  const media = MEDIA[e.id]
   return (
-    <article className={cx('grid gap-6 rounded-xl border border-white/10 bg-zinc-950/55 p-6 backdrop-blur-sm lg:p-8', media?.picture && 'md:grid-cols-[1fr_20rem] xl:grid-cols-[1fr_24rem]', className)}>
+    <article className={cx('grid gap-6 rounded-xl border border-white/10 bg-zinc-950/55 p-6 backdrop-blur-sm lg:p-8', e.picture && 'md:grid-cols-[1fr_20rem] xl:grid-cols-[1fr_24rem]', className)}>
       <div className="min-w-0">
         <div className="flex items-start gap-4">
-          {media && <ThumbTile thumb={media.thumb} />}
+          {e.logo && <Logo logo={e.logo} />}
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2 text-sm">
               <span className="font-medium text-cyber">{e.periodLabel.fr}</span>
@@ -313,8 +283,8 @@ function Details({ entry: e, className }: { entry: TimelineEntry; className?: st
               {e.organisations.map((o, i) => (
                 <span key={o.name}>
                   {i > 0 && ' · '}
-                  {e.organisations.length > 1 && ORG_LOGOS[o.name] && (
-                    <img src={ORG_LOGOS[o.name]} alt="" className="mr-1.5 inline-block h-4 w-auto rounded-[3px] bg-white p-px align-[-3px]" />
+                  {e.organisations.length > 1 && o.logo && (
+                    <img src={o.logo} alt="" className="mr-1.5 inline-block h-4 w-auto rounded-[3px] bg-white p-px align-[-3px]" />
                   )}
                   {o.url ? (
                     <a href={o.url} target="_blank" rel="noopener noreferrer" className="text-zinc-300 underline decoration-white/20 underline-offset-4 transition-colors hover:text-cyber hover:decoration-cyber">
@@ -356,13 +326,13 @@ function Details({ entry: e, className }: { entry: TimelineEntry; className?: st
           </div>
         )}
       </div>
-      {media?.picture && (
-        <div className={cx('group/pic hidden min-h-0 overflow-hidden md:block', media.fit !== 'contain' && 'rounded-lg border border-white/10')}>
+      {e.picture && (
+        <div className={cx('group/pic hidden min-h-0 overflow-hidden md:block', e.picture.fit !== 'contain' && 'rounded-lg border border-white/10')}>
           <img
-            src={media.picture}
+            src={e.picture.src}
             alt=""
             loading="lazy"
-            className={cx('size-full transition-transform duration-500 group-hover/pic:scale-110', media.fit === 'contain' ? 'object-contain' : 'object-cover')}
+            className={cx('size-full transition-transform duration-500 group-hover/pic:scale-110', e.picture.fit === 'contain' ? 'object-contain' : 'object-cover')}
           />
         </div>
       )}
@@ -370,21 +340,13 @@ function Details({ entry: e, className }: { entry: TimelineEntry; className?: st
   )
 }
 
-function ThumbTile({ thumb }: { thumb: Thumb }) {
-  if ('icon' in thumb) {
-    const Icon = thumb.icon
-    return (
-      <span className="flex size-20 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 text-zinc-300">
-        <Icon size={34} aria-hidden="true" />
-      </span>
-    )
-  }
+function Logo({ logo }: { logo: NonNullable<TimelineEntry['logo']> }) {
   return (
     <img
-      src={thumb.logo}
+      src={logo.src}
       alt=""
       loading="lazy"
-      className={cx('size-20 shrink-0 rounded-xl', thumb.bleed ? 'border border-white/10 object-cover' : 'object-contain p-1.5', !thumb.bleed && (thumb.dark ? 'border border-white/10 bg-zinc-900' : 'bg-white'))}
+      className={cx('size-20 shrink-0 rounded-xl', logo.bleed ? 'border border-white/10 object-cover' : 'object-contain p-1.5', !logo.bleed && (logo.dark ? 'border border-white/10 bg-zinc-900' : 'bg-white'))}
     />
   )
 }

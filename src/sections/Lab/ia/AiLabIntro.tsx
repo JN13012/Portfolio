@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { aiLabCurriculum, isAiLabLevel, type LabLevel } from '../../../content/aiLab'
+import { aiLabCurriculum, isAiLabLevel, type LabLevel } from '../../../content/lab/ai'
 import { Check } from 'lucide-react'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
 import { TerminalStartButton } from '../../../components/ui/TerminalStartButton'

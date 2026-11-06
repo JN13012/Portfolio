@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-11-05 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-11-06 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Introduction
@@ -208,13 +208,17 @@ Stack : Nmap, Gobuster, Burp Suite, Hydra, Netcat, NetExec, Impacket, Hashcat, J
 
 *Carte* : Jeu mobile de stratégie : incarner un malware qui se propage, face aux défenses du monde.
 
-Jeu mobile de stratégie, en conception : le joueur incarne un malware qui se propage dans le monde entier, pendant que les pays réagissent, se défendent et développent un antivirus pour l’éradiquer. Un multijoueur avec classement et une version où l’on joue l’humanité sont prévus.
+Jeu mobile de stratégie où le joueur incarne un malware évolutif qui se propage à travers les infrastructures mondiales, jusqu’à corrompre une IA et menacer l’existence de l’humanité. Les nations réagissent, renforcent leur cybersécurité et développent un neutralisateur pour l’éradiquer.
 
 *Angle dev* : Cœur de simulation déterministe sous Unity, vérifié par des tests, et un éditeur d’arbres d’évolution écrit à la main, sans framework.
 
-**Le jeu prévu.** Le joueur fait évoluer son malware dans 3 arbres (Propagation, Adaptation, Impact), avec 9 classes, du Ver à l’IA rogue.
+**Évolution du projet.**
+- V0 – Prototype : moteur de simulation, carte mondiale interactive et mécanique de jeu.
+- V1 – Jeu solo : 9 classes de malwares, 3 arbres d’évolution et simulation des réactions mondiales.
+- V2 – Multijoueur : affrontements entre joueurs, classements et possibilité d’incarner l’humanité.
+- V3 – Écosystème Web3 : économie crypto (ZDAY coin), NFT (malwares, skins, profils, territoires) et marketplace.
 
-**Où en est le projet.** Un prototype en cours de conception.
+**Où en est le projet.** Prototype V0 en cours de conception.
 
 Chiffres : 9 classes de malware · 3 arbres d’évolution · ≈ 141 000 mots de game design
 
@@ -224,9 +228,9 @@ Stack : Unity, C#, JavaScript
 
 ### BlockTrader — Paper trading
 
-*Carte* : Bot de trading crypto en paper trading : 40 stratégies évaluées avec un protocole anti-surapprentissage.
+*Carte* : Bot de trading crypto en paper trading : 42 stratégies évaluées avec un protocole anti-surapprentissage.
 
-Bot de trading crypto en paper trading : 40 stratégies sur BTC et ETH, évaluées par backtest. Une IA pourra ensuite réduire l’exposition ou mettre en pause certaines stratégies pour en favoriser d’autres.
+Bot de trading crypto en paper trading, en conditions réelles. Il a testé des milliers de stratégies sur huit ans d’historique BTC et ETH pour ne garder que les plus prometteuses. Relié à de nombreuses sources de données publiques, il suit déjà 11 indicateurs du marché ; demain, une IA les analysera pour lire la situation, réduire l’exposition et donner la main aux stratégies les plus adaptées.
 
 *Angle ia* : Pensé pour être piloté par une IA : stratégies évaluées et lecture du marché lui fourniront des conclusions vérifiables, et une règle de sûreté borne déjà ce qu’elle pourra faire.
 
@@ -236,7 +240,7 @@ Bot de trading crypto en paper trading : 40 stratégies sur BTC et ETH, évalué
 
 *Angle dev* : Moteur Python compilé (numba), vérifié contre VectorBT et une boucle de référence, 56 tests, CI durcie, exécution serverless.
 
-Chiffres : 40 stratégies · 6 familles de stratégies · 11 indicateurs de marché suivis
+Chiffres : ≈ 4 000 stratégies testées · 42 stratégies sélectionnées · 7 familles de stratégies · 11 indicateurs de marché suivis
 
 ### FraudSignal — Terminé
 
@@ -258,7 +262,7 @@ Curieux de connaître ma moyenne d’heures travaillées, j’ai créé Chronox 
 
 **Comment ça marche.** Écrit en C++, il enregistre le temps chaque minute. Performances mesurées sur un échantillon de 8 heures : environ 8 Mo de mémoire et 0,15 % d’un cœur.
 
-**Vision.** Il pourrait ensuite reconnaître l’application au premier plan, rattacher le temps à des projets et préparer un compte rendu quotidien, relié à GitHub, Jira, l’agenda ou d’autres applications.
+**Vision.** Il pourrait ensuite reconnaître l’application au premier plan, rattacher le temps à des projets et préparer un compte rendu quotidien, relié à GitHub, l’agenda ou d’autres applications.
 
 ### Maria Agent — En développement · POC
 
@@ -400,11 +404,11 @@ Chiffres : 5 niveaux ouverts · 10 niveaux prévus · 39 tests du serveur
 
 *Carte* : Un CTF de smart contracts Solidity : chaque faille exploitée, corrigée et prouvée par des tests.
 
-Trois smart contracts Solidity volontairement vulnérables (réentrance, initialisation non protégée, hasard prévisible), chacun avec son contrat d’attaque, sa version corrigée et des tests qui prouvent les deux. Le niveau 1 se joue sur ce site : les contrats compilés tournent sur une vraie EVM dans le navigateur ; les niveaux 2 et 3 y sont « À venir ».
+Trois smart contracts Solidity volontairement vulnérables (réentrance, initialisation non protégée, hasard prévisible), chacun avec son contrat d’attaque, sa version corrigée et des tests qui prouvent les deux. Les trois niveaux se jouent sur ce site : les contrats compilés tournent sur une vraie EVM dans le navigateur.
 
 **Sécurité.** Slither analyse les versions corrigées à chaque commit. Le README montre aussi ce que l’outil rate : la faille du niveau 2, une erreur de logique, ne se voit qu’à la relecture.
 
-Chiffres : 3 failles exploitées et corrigées · 35 tests Foundry · 1 niveau jouable sur ce site
+Chiffres : 3 failles exploitées et corrigées · 35 tests Foundry · 3 niveaux jouables sur ce site
 
 ### CTF Cyber — Terminé
 

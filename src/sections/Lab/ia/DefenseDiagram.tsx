@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from 'react'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { Sentry } from '../../../components/Sentry'
-import { aiLabLevels, defensePanelCopy, defenseStages, poisonedInbox, stageRuns, type DefenseStageId, type LabLevel } from '../../../content/aiLab'
+import { aiLabLevels, defensePanelCopy, defenseStages, poisonedInbox, stageRuns, type DefenseStageId, type LabLevel } from '../../../content/lab/ai'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
 import { stageStatusLabels, type LabCheck, type LabResult, type LabTrace } from './labState'
 

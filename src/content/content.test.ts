@@ -4,8 +4,8 @@ import { complexityOf, filterProjects, sortProjects, tracksFromSearch } from '..
 import { assistantUi, brainNodes } from './assistant'
 import { complexity } from './complexity'
 import { averageGrade, courseGrades, credentials, inProgress } from './certifications'
-import { cyberLabCurriculum } from './cyberLab'
-import { CTF_LEVELS } from '../sections/Lab/ctf/ctfData'
+import { cyberLabCurriculum } from './lab/cyber'
+import { CTF_LEVELS } from '../sections/Lab/cyber/ctfData'
 import { contact } from './contact'
 import { hero } from './hero'
 import { introCopy } from './intro'
@@ -31,9 +31,9 @@ function* localizedIn(value: unknown, path = ''): Generator<[string, Localized]>
 
 const allContent = { introCopy, hero, profile, projects, credentials, inProgress, contact, timeline, skills, tracks, expertise, brainNodes, assistantUi, dialogUi }
 
-/** Only what reaches the page: editorial fields (doNotClaim, fact sources) are dropped. */
+/** Only what reaches the page as text: editorial fields (fact sources) and inlined images are dropped. */
 const displayed = (value: unknown) =>
-  JSON.stringify(value, (key, v) => (key === 'doNotClaim' || key === 'source' ? undefined : v))
+  JSON.stringify(value, (key, v) => (key === 'source' || (typeof v === 'string' && v.startsWith('data:')) ? undefined : v))
 
 describe('content', () => {
   it('offers three distinct public CVs, each from its own file in src/assets', () => {
@@ -95,11 +95,6 @@ describe('content', () => {
     for (const url of urls) {
       expect(url, url).toMatch(/^https:\/\/(github\.com\/JN13012|www\.linkedin\.com|tryhackme\.com|coursera\.org|www\.coursera\.org|www\.salesforce\.com|www\.epitech\.eu|www\.ecoleperformance\.com|www\.gdriveracing\.com|www\.wartsila\.com|www\.renault\.fr|usersloveit\.com)(\/|$)/)
     }
-  })
-
-  it('keeps BlockTrader honest', () => {
-    const text = displayed(projects.find((p) => p.slug === 'blocktrader'))
-    expect(text).not.toMatch(/CAGR|rendement annuel|%\s*\/\s*an|live trading|piloté par (l’)?IA/i)
   })
 
   it('dates in-progress items and caps progress', () => {

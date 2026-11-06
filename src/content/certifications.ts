@@ -1,4 +1,24 @@
 import type { Credential, InProgress } from './types'
+import thmJrPentesterImg from '../assets/THM/THM_Jr_Pentester.png'
+import thmSecurityEngineerImg from '../assets/THM/THM_Security_Engineer.webp'
+import thmDevSecOpsImg from '../assets/THM/THM_DevSecOps.webp'
+import thmSuperchargingAIImg from '../assets/THM/THM_Supercharging_AI.webp'
+import thmSEC1Img from '../assets/THM/THM - SEC1.png'
+import resultSEC1Img from '../assets/THM/Result - SEC1.webp'
+import thmSEC0Img from '../assets/THM/THM - SEC0.png'
+import resultSEC0Img from '../assets/THM/Result - SEC0.webp'
+import thmPreSecurity1Img from '../assets/THM/THM_PreSecurity1.webp'
+import cybersecurity101Img from '../assets/THM/Cybersecurity_101.webp'
+import ibmAiDeveloperImg from '../assets/Coursera/IBM_AI_Developer.webp'
+import generativeAIElevateCareerImg from '../assets/Coursera/Generative_AI_Elevate_Career.webp'
+import buildingGenerativeAIPoweredApplicationsWithPythonImg from '../assets/Coursera/Building_Generative_AI_Powered_Applications_with_Python.webp'
+import developingAIApplicationsWithPythonAndFlaskImg from '../assets/Coursera/Developing_AI_Applications_with_Python_and_Flask.webp'
+import pythonForDataScienceAIDevelopmentImg from '../assets/Coursera/Python_for_Data_Science_AI_Development.webp'
+import introductionToHTMLCSSJavaScriptImg from '../assets/Coursera/Introduction_to_HTML_CSS_JavaScript.webp'
+import introductionToSoftwareEngineeringImg from '../assets/Coursera/Introduction_to_Software_Engineering.webp'
+import generativeAIPromptEngineeringBasicsImg from '../assets/Coursera/Generative_AI_Prompt_Engineering_Basics.webp'
+import generativeAIIntroductionAndApplicationsImg from '../assets/Coursera/Generative_AI_Introduction_and_Applications.webp'
+import introductionToArtificialIntelligenceImg from '../assets/Coursera/Introduction_to_Artificial_Intelligence.webp'
 
 // Source: certificate files in C:\Users\Cyber\Documents\Certifications (read 2026-10-17, THM again 2026-10-25).
 // Hours are the course durations printed on the certificates, rounded up to the hour; Coursera
@@ -32,6 +52,8 @@ export const credentials: Credential[] = [
       { label: { fr: 'IA', en: 'AI' }, text: { fr: 'pentest de modèles de langage (LLM)', en: 'pentesting language models (LLMs)' } },
       { label: { fr: 'Méthode', en: 'Method' }, text: { fr: 'scripts Python, rédaction de rapport, challenges complets de la reconnaissance à la compromission', en: 'Python scripting, report writing, full challenges from reconnaissance to compromise' } },
     ],
+    images: [thmJrPentesterImg],
+    thumbPosition: 'center 43%',
     stack: ['Nmap', 'Burp Suite', 'Metasploit', 'Hydra', 'Python', 'Linux', 'OWASP Top 10', 'Active Directory', 'Privilege Escalation', 'LLM Pentesting'],
   },
   {
@@ -56,6 +78,8 @@ export const credentials: Credential[] = [
       { label: { fr: 'Risques', en: 'Risk' }, text: { fr: 'gestion des vulnérabilités et des risques', en: 'vulnerability and risk management' } },
       { label: { fr: 'Incidents', en: 'Incidents' }, text: { fr: 'réponse à incident', en: 'incident response' } },
     ],
+    images: [thmSecurityEngineerImg],
+    thumbPosition: 'center 18%',
     stack: ['Threat Modelling', 'SSDLC', 'SAST / DAST', 'Hardening', 'Network Security', 'Risk Management', 'Incident Response'],
   },
   {
@@ -80,6 +104,8 @@ export const credentials: Credential[] = [
       { label: { fr: 'Conteneurs', en: 'Containers' }, text: { fr: 'fonctionnement, failles et durcissement', en: 'how they work, flaws and hardening' } },
       { label: { fr: 'Infrastructure as Code', en: 'Infrastructure as Code' }, text: { fr: 'sur site et dans le cloud', en: 'on premises and in the cloud' } },
     ],
+    images: [thmDevSecOpsImg],
+    thumbPosition: 'center 21%',
     stack: ['CI/CD Security', 'SAST / DAST', 'Dependency Management', 'Container Security', 'Infrastructure as Code'],
   },
   {
@@ -111,6 +137,8 @@ export const credentials: Credential[] = [
       { text: { fr: 'Vérifier l’efficacité des prompts, contourner des garde-fous et durcir les siens', en: 'Check how well prompts work, bypass guardrails and harden your own' } },
       { text: { fr: 'Mettre en pratique dans des labs, puis un CTF', en: 'Practise in labs, then a CTF' } },
     ],
+    images: [thmSuperchargingAIImg],
+    thumbPosition: 'center 57%',
     stack: ['AI Pentesting', 'Claude', 'Ollama', 'Qwen 3.8 27B', 'Agents & sub-agents', 'Harness', 'MCP', 'Kali Linux', 'SQLMap', 'Prompt hardening', 'CTF'],
   },
   {
@@ -140,6 +168,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'SOC', en: 'SOC' }, text: { fr: 'journaux de pare-feu, alertes et règle Snort, réponse à incident', en: 'firewall logs, Snort alerts and rule, incident response' } },
       { label: { fr: 'Malware', en: 'Malware' }, text: { fr: 'analyse statique et extraction d’IOC (CAPA, FLOSS)', en: 'static analysis and IOC extraction (CAPA, FLOSS)' } },
     ],
+    images: [thmSEC1Img, resultSEC1Img],
     stack: ['Wireshark', 'Nmap', 'Burp Suite', 'SQLMap', 'Gobuster', 'Hydra', 'John the Ripper', 'Hashcat', 'Snort', 'PowerShell', 'Linux', 'CAPA / FLOSS', 'MITRE ATT&CK'],
   },
   {
@@ -160,6 +189,7 @@ export const credentials: Credential[] = [
       en: 'Entry exam in cybersecurity across six domains: how computers work, operating systems, software basics, networking, the web, attacks and defences.',
     },
     result: { fr: '540\u00a0/\u00a0600 (90\u00a0%) · terminé en 1\u00a0h\u00a058', en: '540\u00a0/\u00a0600 (90%) · completed in 1\u00a0h\u00a058' },
+    images: [thmSEC0Img, resultSEC0Img],
     stack: ['Networking', 'Linux', 'Windows', 'Web', 'Security Concepts'],
   },
   {
@@ -183,6 +213,8 @@ export const credentials: Credential[] = [
       { label: { fr: 'Systèmes', en: 'Systems' }, text: { fr: 'Linux et Windows', en: 'Linux and Windows' } },
       { label: { fr: 'Sécurité', en: 'Security' }, text: { fr: 'principes de l’attaque et de la défense', en: 'offensive and defensive principles' } },
     ],
+    images: [thmPreSecurity1Img],
+    thumbPosition: 'center 43%',
     stack: ['Networking', 'Linux', 'Windows', 'Web', 'Offensive Security', 'Defensive Security'],
     // THM-ZCUCFFIQO5, 2025-09-04, 7 h 38: the version before TryHackMe rebuilt the path.
     previous: {
@@ -212,6 +244,8 @@ export const credentials: Credential[] = [
       { label: { fr: 'Attaque', en: 'Offence' }, text: { fr: 'exploitation de vulnérabilités web et système', en: 'web and system exploitation' } },
       { label: { fr: 'Défense', en: 'Defence' }, text: { fr: 'réponse à incident et analyse forensique', en: 'incident response and forensics' } },
     ],
+    images: [cybersecurity101Img],
+    thumbPosition: 'center 43%',
     stack: ['Nmap', 'Wireshark', 'Burp Suite', 'Metasploit', 'John the Ripper', 'Hashcat', 'Hydra', 'Linux', 'Active Directory', 'IDS/IPS', 'Forensics'],
   },
   {
@@ -237,6 +271,8 @@ export const credentials: Credential[] = [
       { label: { fr: 'IA générative', en: 'Generative AI' }, text: { fr: 'concepts, prompt engineering, LLM, RAG avec LangChain', en: 'concepts, prompt engineering, LLMs, RAG with LangChain' } },
       { label: { fr: 'Projets', en: 'Projects' }, text: { fr: 'analyse de sentiments, légendes d’images, chatbot, assistant vocal, compte rendu de réunion, traducteur vocal', en: 'sentiment analysis, image captioning, chatbot, voice assistant, meeting companion, voice translator' } },
     ],
+    images: [ibmAiDeveloperImg],
+    thumbPosition: 'center 0%',
     stack: ['Python', 'Flask', 'JavaScript', 'Pandas', 'NumPy', 'LangChain', 'Hugging Face', 'LLM', 'RAG', 'Prompt Engineering', 'SDLC', 'Unit Testing'],
     includes: [
       { title: 'Introduction to Software Engineering' },
@@ -275,6 +311,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'Agents', en: 'Agents' }, text: { fr: 'agents IA, RAG avec LangChain, vibe coding', en: 'AI agents, RAG with LangChain, vibe coding' } },
       { label: { fr: 'Projet final', en: 'Final project' }, text: { fr: 'CodeCraftHub, une plateforme d’apprentissage pour développeurs', en: 'CodeCraftHub, a learning platform for developers' } },
     ],
+    images: [generativeAIElevateCareerImg],
     stack: ['Generative AI', 'OpenAI', 'LangChain', 'AI Agents', 'RAG', 'Code Review', 'Unit Testing', 'Docker', 'CI/CD'],
   },
   {
@@ -304,6 +341,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'Coach', en: 'Coach' }, text: { fr: 'CV adapté, lettre de motivation et conseils (Llama 3.2 sur watsonx, Gradio)', en: 'tailored CV, cover letter and advice (Llama 3.2 on watsonx, Gradio)' } },
       { label: { fr: 'Image', en: 'Image' }, text: { fr: 'légendes de photos générées (BLIP, Gradio)', en: 'generated photo captions (BLIP, Gradio)' } },
     ],
+    images: [buildingGenerativeAIPoweredApplicationsWithPythonImg],
     stack: ['Python', 'Flask', 'Gradio', 'Hugging Face', 'LangChain', 'FAISS', 'Llama', 'watsonx', 'IBM Watson', 'Whisper', 'RAG', 'STT / TTS'],
   },
   {
@@ -328,6 +366,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'Web', en: 'Web' }, text: { fr: 'applications Flask et API REST : routes, GET et POST, erreurs, CRUD, déploiement', en: 'Flask apps and REST APIs: routes, GET and POST, errors, CRUD, deployment' } },
       { label: { fr: 'IA', en: 'AI' }, text: { fr: 'analyse de sentiments et détecteur d’émotions avec IBM Watson', en: 'sentiment analysis and an emotion detector with IBM Watson' } },
     ],
+    images: [developingAIApplicationsWithPythonAndFlaskImg],
     stack: ['Python', 'Flask', 'REST API', 'IBM Watson', 'NLP', 'Unit Testing'],
   },
   {
@@ -352,6 +391,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'Collecte', en: 'Collection' }, text: { fr: 'API REST et web scraping', en: 'REST APIs and web scraping' } },
       { label: { fr: 'Outils', en: 'Tools' }, text: { fr: 'notebooks Jupyter, scripts d’automatisation', en: 'Jupyter notebooks, automation scripts' } },
     ],
+    images: [pythonForDataScienceAIDevelopmentImg],
     stack: ['Python', 'Pandas', 'NumPy', 'Jupyter', 'BeautifulSoup', 'Requests'],
   },
   {
@@ -376,6 +416,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'JavaScript', en: 'JavaScript' }, text: { fr: 'interactivité et manipulation du DOM', en: 'interactivity and DOM manipulation' } },
       { label: { fr: 'Projet final', en: 'Final project' }, text: { fr: 'un site portfolio', en: 'a portfolio website' } },
     ],
+    images: [introductionToHTMLCSSJavaScriptImg],
     stack: ['HTML', 'CSS', 'JavaScript', 'DOM', 'Responsive'],
   },
   {
@@ -400,6 +441,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'Programmation', en: 'Programming' }, text: { fr: 'bases de la programmation', en: 'programming basics' } },
       { label: { fr: 'Architecture', en: 'Architecture' }, text: { fr: 'conception logicielle, design patterns, UML', en: 'software design, design patterns, UML' } },
     ],
+    images: [introductionToSoftwareEngineeringImg],
     stack: ['Python', 'SDLC', 'Software Architecture', 'Design Patterns', 'UML', 'Git'],
   },
   {
@@ -424,6 +466,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'Évaluation', en: 'Evaluation' }, text: { fr: 'juger la justesse et l’utilité des réponses', en: 'judging how accurate and useful answers are' } },
       { label: { fr: 'Usages', en: 'Uses' }, text: { fr: 'prompts pour le texte, l’image et le multimodal', en: 'prompts for text, images and multimodal tools' } },
     ],
+    images: [generativeAIPromptEngineeringBasicsImg],
     stack: ['Prompt Engineering', 'Chain-of-Thought', 'Few-shot', 'Generative AI'],
   },
   {
@@ -448,6 +491,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'Usages', en: 'Uses' }, text: { fr: 'texte, code, image, audio et vidéo', en: 'text, code, images, audio and video' } },
       { label: { fr: 'Outils', en: 'Tools' }, text: { fr: 'panorama des outils et cas d’usage par secteur', en: 'an overview of tools and use cases by industry' } },
     ],
+    images: [generativeAIIntroductionAndApplicationsImg],
     stack: ['Generative AI', 'LLM', 'Machine Learning'],
   },
   {
@@ -472,6 +516,7 @@ export const credentials: Credential[] = [
       { label: { fr: 'Entreprises', en: 'Business' }, text: { fr: 'transformation des métiers et des carrières', en: 'how jobs and careers change' } },
       { label: { fr: 'Éthique', en: 'Ethics' }, text: { fr: 'enjeux, risques et IA responsable', en: 'issues, risks and responsible AI' } },
     ],
+    images: [introductionToArtificialIntelligenceImg],
     stack: ['Machine Learning', 'Deep Learning', 'Generative AI', 'Responsible AI'],
   },
 ]

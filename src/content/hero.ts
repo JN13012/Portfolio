@@ -1,4 +1,11 @@
 import type { Localized } from './types'
+import courseraLogo from '../assets/COURSERA.webp'
+import thmLogo from '../assets/THM.jpg'
+import epitechThumb from '../assets/Formations/Epitech.webp'
+import codeExecutorThumb from '../assets/Logos/ULIT_Heart_sm.webp'
+import blockTraderThumb from '../assets/Logos/BlockTrader_Emblem_sm.webp'
+import argosThumb from '../assets/Logos/Argos_Emblem_sm.webp'
+import zeroDayThumb from '../assets/Projets/ZeroDay.webp'
 
 export type CoreNodeId = 'ia' | 'cyber' | 'dev' | 'parcours' | 'contact'
 
@@ -40,22 +47,24 @@ export const hero = {
   /** The timeline entry of the master; its title, period and highlights come from timeline.ts. */
   formation: {
     timeline: 'epitech-msc',
+    thumb: epitechThumb,
     title: { fr: 'Master of Science · Architecte des SI', en: 'Master of Science · IS Architect' },
     detail: { fr: 'Epitech Marseille · 1re année', en: 'Epitech Marseille · first year' },
     cta: { fr: 'Voir tout le parcours', en: 'See the whole journey' },
     target: '#parcours',
   },
   certificates: [
-    { id: 'ibm', credential: 'ibm-ai-developer', title: 'IBM AI Developer', detail: { fr: 'Professional Certificate', en: 'Professional Certificate' } },
+    { id: 'ibm', thumb: courseraLogo, credential: 'ibm-ai-developer', title: 'IBM AI Developer', detail: { fr: 'Professional Certificate', en: 'Professional Certificate' } },
     // 89 rooms: the path's 2026 version, as in its credential note (certifications.ts).
-    { id: 'thm', credential: 'thm-jr-penetration-tester', title: 'Jr Penetration Tester', detail: { fr: 'TryHackMe · 89 labs', en: 'TryHackMe · 89 labs' } },
+    { id: 'thm', thumb: thmLogo, credential: 'thm-jr-penetration-tester', title: 'Jr Penetration Tester', detail: { fr: 'TryHackMe · 89 labs', en: 'TryHackMe · 89 labs' } },
   ],
-  /** Four projects on two lines, in this order (Argos, BlockTrader / Code Executor, ZeroDay); the wording follows each one's status (never « live »). */
+  /** Four projects on two lines, in this order (Argos, BlockTrader / Code Executor, ZeroDay); the wording follows each one's status (never « live »).
+   *  Thumbnails: an emblem shown whole (`contain`), or a screenshot cropped (`cover`). */
   projects: [
-    { slug: 'argos', detail: { fr: 'Agents IA cyber · en développement', en: 'Cyber AI agents · in development' } },
-    { slug: 'blocktrader', detail: { fr: 'Bot de trading · paper trading', en: 'Trading bot · paper trading' } },
-    { slug: 'salesforce-executor', detail: { fr: 'En production chez ULIT', en: 'In production at ULIT' } },
-    { slug: 'zeroday', detail: { fr: 'Jeu mobile · en conception', en: 'Mobile game · in design' } },
+    { slug: 'argos', thumb: { src: argosThumb, fit: 'contain' as const }, detail: { fr: 'Agents IA cyber · en développement', en: 'Cyber AI agents · in development' } },
+    { slug: 'blocktrader', thumb: { src: blockTraderThumb, fit: 'contain' as const }, detail: { fr: 'Bot de trading · paper trading', en: 'Trading bot · paper trading' } },
+    { slug: 'salesforce-executor', thumb: { src: codeExecutorThumb, fit: 'contain' as const }, detail: { fr: 'En production chez ULIT', en: 'In production at ULIT' } },
+    { slug: 'zeroday', thumb: { src: zeroDayThumb, fit: 'cover' as const }, detail: { fr: 'Jeu mobile · en conception', en: 'Mobile game · in design' } },
   ],
   /** The three CTFs on one line, under the row's « CTF » label: short names, one short line each. */
   labs: [
@@ -93,14 +102,14 @@ export const hero = {
     cta: { fr: 'Jouer au niveau 1' },
     target: '#lab-ia',
   },
-  /** The blockchain lab's panel: the levels of the smart-contract CTF, one playable so far. */
+  /** The blockchain lab's panel: the levels of the smart-contract CTF, all playable. */
   labChainPanel: {
     title: { fr: 'CTF Blockchain' },
     intro: { fr: 'De vrais smart contracts Solidity, exécutés par l’EVM dans votre navigateur : trouvez la faille, exploitez-la.' },
     phases: [
       { title: { fr: 'Réentrance' }, text: { fr: 'jouable' } },
-      { title: { fr: 'Initialisation non protégée' }, text: { fr: 'à venir' } },
-      { title: { fr: 'Hasard prévisible' }, text: { fr: 'à venir' } },
+      { title: { fr: 'Initialisation non protégée' }, text: { fr: 'jouable' } },
+      { title: { fr: 'Hasard prévisible' }, text: { fr: 'jouable' } },
     ],
     cta: { fr: 'Jouer au niveau 1' },
     target: '#lab-blockchain',

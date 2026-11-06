@@ -1,7 +1,7 @@
-import { ArrowUpRight, Bot, Briefcase, GraduationCap, Dumbbell, Github, Globe2, Landmark, Linkedin, MapPin, Plane, RotateCcw, type LucideIcon } from 'lucide-react'
+import { ArrowUpRight, Bot, Briefcase, GraduationCap, Dumbbell, Globe2, Landmark, MapPin, Plane, RotateCcw, type LucideIcon } from 'lucide-react'
 import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
-import { siCoursera, siSalesforce, siTryhackme, type SimpleIcon } from 'simple-icons'
 import SectionHeader from '../../components/ui/SectionHeader'
+import { socialLinks } from '../../components/ui/socialLinks'
 import { brainNodes } from '../../content/assistant'
 import { profile } from '../../content/profile'
 import { projects } from '../../content/projects'
@@ -16,23 +16,7 @@ import qa from 'flag-icons/flags/4x3/qa.svg'
 import ca from 'flag-icons/flags/4x3/ca.svg'
 import pe from 'flag-icons/flags/4x3/pe.svg'
 
-/** Simple Icons mark (CC0), in the current text colour. */
-const Mark = ({ icon }: { icon: SimpleIcon }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[18px]">
-    <path d={icon.path} fill="currentColor" />
-  </svg>
-)
-
-// Use GitHub's inverse white mark on the dark background.
-// TryHackMe red is sampled from https://tryhackme.com/favicon-96x96.png.
-// Trailblazer is Salesforce's profile.
-const SOCIALS = [
-  { label: 'GitHub', url: profile.links.github, color: '#ffffff', icon: <Github size={18} aria-hidden="true" /> },
-  { label: 'LinkedIn', url: profile.links.linkedin, color: '#0a66c2', icon: <Linkedin size={18} aria-hidden="true" /> },
-  { label: 'TryHackMe', url: profile.links.tryhackme, color: '#c11111', icon: <Mark icon={siTryhackme} /> },
-  { label: 'Coursera', url: profile.links.coursera, color: `#${siCoursera.hex}`, icon: <Mark icon={siCoursera} /> },
-  { label: 'Salesforce Trailblazer', url: profile.links.trailblazer, color: `#${siSalesforce.hex}`, icon: <Mark icon={siSalesforce} /> },
-]
+const SOCIALS = socialLinks
 
 const profileNode = brainNodes.find((n) => n.id === 'profile')!
 const SENTRY_QUESTIONS = profile.sentryQuestions.flatMap((id) => profileNode.questions.filter((q) => q.id === id))

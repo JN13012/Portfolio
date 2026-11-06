@@ -1,4 +1,4 @@
-import { aiLabCurriculum, type LabLevel } from '../../../content/aiLab'
+import { aiLabCurriculum, type LabLevel } from '../../../content/lab/ai'
 import { LabCurriculumDrawer } from '../LabCurriculumDrawer'
 
 export function LevelDrawer({ level, completed, onClose, onSelect }: {

@@ -1,18 +1,23 @@
 import type { Project } from '../types'
+import rAGPDFChatbotImg from '../../assets/Projets/RAG_PDF_Chatbot.webp'
+import businessAIMeetingCompanionSTTImg from '../../assets/Projets/Business_AI_Meeting_Companion_STT.webp'
+import aICareerCoachConseilsImg from '../../assets/Projets/AI-Career-Coach-Conseils.webp'
+import aICareerCoachLettreImg from '../../assets/Projets/AI-Career-Coach-Lettre.webp'
+import aICareerCoachLettresImg from '../../assets/Projets/AI-Career-Coach-Lettres.webp'
+import aIAssistantTranslatorImg from '../../assets/Projets/AI_Assistant_Translator.jpg'
 
 // Four generative AI applications built alone during the IBM AI Developer certificate
 // (guided course projects, public repos on JN13012). Dates from each repository's git history.
-const ibmApp = (p: Omit<Project, 'tier' | 'status' | 'tracks' | 'team' | 'context' | 'doNotClaim'>): Project => ({
+const ibmApp = (p: Omit<Project, 'tier' | 'status' | 'tracks' | 'team' | 'context'>): Project => ({
   tier: 'card',
   status: 'delivered',
   tracks: ['ia'],
   team: { size: 1 },
   context: 'ibm',
-  doNotClaim: ['Production use', 'Original research: these are guided course projects'],
   ...p,
 })
 
-export const llmApps: Project[] = [
+export const ibmApps: Project[] = [
   ibmApp({
     slug: 'rag-pdf-chatbot',
     title: 'RAG PDF Chatbot',
@@ -38,6 +43,9 @@ export const llmApps: Project[] = [
       },
     ],
     // No Dockerfile in the repo (checked 2026-10-26): Docker removed.
+    images: [
+      { src: rAGPDFChatbotImg },
+    ],
     stack: ['Python', 'LangChain', 'FAISS', 'Hugging Face', 'watsonx', 'Llama 3', 'Flask'],
     links: { github: 'https://github.com/JN13012/RAG-pdf-Chatbot' },
     facts: [],
@@ -55,6 +63,9 @@ export const llmApps: Project[] = [
       fr: 'Un assistant de réunion transcrit l’audio avec Whisper, puis en tire résumé, plan d’action et analyse de tonalité avec le modèle Granite d’IBM.',
       en: 'A meeting assistant that transcribes audio with Whisper, then produces a summary, action plan and tone analysis with IBM’s Granite model.',
     },
+    images: [
+      { src: businessAIMeetingCompanionSTTImg },
+    ],
     stack: ['Python', 'Whisper', 'Granite', 'Hugging Face', 'Gradio'],
     links: { github: 'https://github.com/JN13012/Business_AI_Meeting_Companion_STT' },
     facts: [],
@@ -78,6 +89,11 @@ export const llmApps: Project[] = [
         body: { fr: 'Llama 3.2 sur IBM watsonx.ai, interface Gradio.' },
       },
     ],
+    images: [
+      { src: aICareerCoachConseilsImg },
+      { src: aICareerCoachLettreImg },
+      { src: aICareerCoachLettresImg },
+    ],
     stack: ['Python', 'IBM watsonx', 'Llama 3', 'Gradio'],
     links: { github: 'https://github.com/JN13012/AI-Career-Coach' },
     facts: [],
@@ -94,6 +110,9 @@ export const llmApps: Project[] = [
     summary: {
       fr: 'Un traducteur vocal : IBM Watson transcrit la parole, Llama 3.3 la traduit via Groq, puis Watson lit la traduction à voix haute.',
     },
+    images: [
+      { src: aIAssistantTranslatorImg },
+    ],
     stack: ['Python', 'Groq', 'Llama 3', 'IBM Watson', 'Flask'],
     links: { github: 'https://github.com/JN13012/AI-Assistant-Translator' },
     facts: [],

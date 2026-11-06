@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { aiLabCurriculum, aiLabLevels, defenseStages, poisonedInbox, visitorEmails } from '../../../content/aiLab'
+import { aiLabCurriculum, aiLabLevels, defenseStages, poisonedInbox, visitorEmails } from '../../../content/lab/ai'
 import { conversationHistory, inboxChecks, inboxReason, initialLabState, labReducer, type LabResult } from './labState'
 
 const result = (id: number, answer?: string): LabResult => ({

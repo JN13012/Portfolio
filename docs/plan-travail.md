@@ -24,7 +24,7 @@ Déroulé d’une étape :
   existants restent dans le dépôt, sans garantie d’être à jour ; ils seront repris avec la version anglaise.
 - **ULIT** : mission de 6 mois, de janvier à juin 2026. Le site est juste, le CV ne l’est plus.
 - **Master** : les dates de la section Parcours font foi (Pré-MSc 2025–2026, MSc 2026–2028).
-- **WAF de l’audit web** : le texte du projet (`content/projects/pentest.ts`) est la référence :
+- **WAF de l’audit web** : le texte du projet (`content/projects/audit-web.ts`) est la référence :
   WAF observé, tests de filtrage via Tor.
 - **CV** : le PDF actuel est périmé. Le bouton est grisé avec « CV en cours de mise à jour » jusqu’à
   ce que Jérémie fournisse le nouveau, plutôt que de diffuser une information fausse.
@@ -46,6 +46,20 @@ Déroulé d’une étape :
 - [x] **CV de retour** (1er novembre) : CV général IA × cyber, sans téléphone, téléchargeable depuis le Hero et Contact.
 - [x] **Trois CV** (5 novembre) : développeur IA, cybersécurité, blockchain, sans téléphone (`src/assets/Jeremie_Nagi_CV_*.pdf`), dans un menu « Télécharger mon CV » du Hero et de Contact (`components/ui/CvMenu.tsx`).
 - [x] **CTF Blockchain** (5 novembre) : 3ᵉ onglet du CTF, niveau 1 (réentrance) jouable sur une vraie EVM dans le navigateur, contrats du dépôt public `JN13012/smart-contract-ctf` ; catégorie et onglet Blockchain dans Projets, domaine Blockchain en Expertise, 3 CTF dans le Hero, liens `?metier=cyber|ia|blockchain`.
+- **CTF Blockchain, niveau 2** (initialisation non protégée, `SharedWallet` derrière un `ERC1967Proxy`), décidé le 6 novembre, sans bonus sur l’implémentation :
+  - [x] Guider le joueur au niveau 1 : `cast interface <contrat>`, messages qui nomment l’argument attendu et ce qui a été reçu, lecture et écriture distinguées (`call`/`send`), montants en wei signalés, explication sous chaque erreur Solidity, syntaxe exacte de `cast` affichée quand la signature est abrégée.
+  - [x] Console commune aux niveaux (`console.ts`) et un fichier par niveau (`levels/`) ; messages de la console dans `src/content/lab/blockchain.ts`, erreurs Solidity expliquées par contrat (`Contrat.Erreur`).
+  - [x] `SharedWallet` et `ERC1967Proxy` (OpenZeppelin) dans `scripts/sync-blockchain-ctf.mjs` ; dans `chain.ts`, le proxy répond avec l’ABI de `SharedWallet` (`useAbi`), et `transfer` envoie des ETH sans données.
+  - [x] Niveau 2 : Alice propriétaire de `wallet` (10 ETH), Mallory 2 ETH ; réussi quand le portefeuille est vide.
+  - [x] Contenu (objectif, indices, texte de réussite, write-up), choix du niveau depuis l’intro et le tiroir, progression par niveau.
+  - [x] Tests (console et niveau 2 joué dans le navigateur), `npm run review`, `architecture.md`, textes du Hero et du projet.
+  - [ ] Lighthouse mobile sur la préversion, puis mise en ligne quand Jérémie le décide.
+- **CTF Blockchain, niveau 3** (hasard prévisible, `Lottery` et `LotteryAttacker`), plan du 6 novembre :
+  - [x] Blocs réalistes dans `chain.ts` : chaque transaction dans un nouveau bloc (numéro +1, horodatage +12 s, `prevrandao` aléatoire), passé à `runCall` ; aujourd’hui, tout s’exécute dans un bloc vide et le tirage serait constant.
+  - [x] `Lottery` et `LotteryAttacker` dans `scripts/sync-blockchain-ctf.mjs` ; `cast block` (numéro, horodatage, prevrandao du dernier bloc) pour montrer que les ingrédients du tirage sont publics ; arguments des events affichés (`Played` : guess, winningNumber, prize).
+  - [x] Niveau 3 : cagnotte de 10 ETH, ticket à 0,1 ETH, chiffre de 0 à 9, Mallory 1 ETH. Le flag exige une victoire certaine (choix validé le 6 novembre), par `LotteryAttacker` : un ticket gagnant joué à la main (1 chance sur 10) vide la loterie mais affiche « Gagné par chance », sans flag, avec `reset` pour rejouer.
+  - [x] Contenu (objectif, indices, explications des fonctions et des erreurs, write-up `03-randomness.md`), `available: true`, textes du Hero et du projet.
+  - [ ] Tests (tirage différent d’un bloc à l’autre, victoire certaine par l’attaquant, chance sans flag), navigateur, Lighthouse mobile.
 - [x] **Description Google** et réponse préparée « Qui est Jérémie ? » : intitulé de Parcours
   à la place de « MSc cybersécurité ».
 - [x] **En-têtes de sécurité** dans `public/_headers`, car le Worker ne s’exécute pas pour les fichiers statiques :
@@ -69,7 +83,7 @@ Déroulé d’une étape :
 - [x] Noms du terminal corrigés : « FORENSICS » et « HARDENING » (31 octobre). « FOOTPRINTING » reste le nom du niveau 1.
 - [x] Lab cyber : intro en « NOM : description courte », tiroir avec le nom seul et la description en infobulle au survol (demande du 31 octobre), textes à valider.
 - [x] Lab IA : retirer du tiroir « Mission » et « Indices » (décision du 31 octobre) et « de la première maquette »
-  du texte. Seul « À retenir » reste, une fois le niveau réussi. Les textes restent dans `content/aiLab.ts`.
+  du texte. Seul « À retenir » reste, une fois le niveau réussi. Les textes restent dans `content/lab/ai.ts`.
 - [x] Lab IA : retirer le double en-tête « 01/09 · Consignes » / « Sentry · niveau 1 ».
 - [x] Tiroir en menu déroulant sous la barre, sommaire inspiré de Nautilus Trader : texte à gauche, frise sur deux positions, allumée du haut jusqu’au niveau sélectionné, niveau sélectionné
   dans la couleur du Lab (demande du 31 octobre), à valider.

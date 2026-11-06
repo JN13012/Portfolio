@@ -1,8 +1,8 @@
 import { useEffect, useState, type ChangeEvent, type CSSProperties, type FormEvent } from 'react'
-import { AlertTriangle, Briefcase, Check, CheckCircle2, Copy, Download, Github, Linkedin, Mail, MapPin, Send } from 'lucide-react'
-import { siCoursera, siTryhackme, type SimpleIcon } from 'simple-icons'
+import { AlertTriangle, Briefcase, Check, CheckCircle2, Copy, Download, Mail, MapPin, Send } from 'lucide-react'
 import { CvMenu } from '../../components/ui/CvMenu'
 import SectionHeader from '../../components/ui/SectionHeader'
+import { socialLinks } from '../../components/ui/socialLinks'
 import { contact, contactLimits } from '../../content/contact'
 import { profile } from '../../content/profile'
 import { cx } from '../../lib/cx'
@@ -19,40 +19,8 @@ const seeking = profile.facts.find((f) => f.label.fr === 'Recherche')?.value.fr
 const empty = { name: '', email: '', subject: '', message: '', company: '' }
 type Status = 'idle' | 'sending' | 'success' | 'error'
 
-/** Simple Icons mark (CC0), in the current text colour. */
-const Mark = ({ icon }: { icon: SimpleIcon }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[18px]">
-    <path d={icon.path} fill="currentColor" />
-  </svg>
-)
-
-// Same hover colours as Profil: GitHub's inverse white mark, TryHackMe's red sampled from its favicon.
-const SOCIALS = [
-  {
-    label: 'GitHub',
-    url: profile.links.github,
-    color: '#ffffff',
-    icon: <Github size={18} aria-hidden="true" />,
-  },
-  {
-    label: 'LinkedIn',
-    url: profile.links.linkedin,
-    color: '#0a66c2',
-    icon: <Linkedin size={18} aria-hidden="true" />,
-  },
-  {
-    label: 'TryHackMe',
-    url: profile.links.tryhackme,
-    color: '#c11111',
-    icon: <Mark icon={siTryhackme} />,
-  },
-  {
-    label: 'Coursera',
-    url: profile.links.coursera,
-    color: `#${siCoursera.hex}`,
-    icon: <Mark icon={siCoursera} />,
-  },
-]
+// Every profile but Trailblazer, which only Profil shows.
+const SOCIALS = socialLinks.filter((s) => s.id !== 'trailblazer')
 
 /**
  * Contact: invitation, availability, what is sought and where, email (with copy) and CV, profiles on the

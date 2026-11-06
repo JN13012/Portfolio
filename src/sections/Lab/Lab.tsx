@@ -1,9 +1,9 @@
 import { Activity, lazy, Suspense, useEffect, useState } from 'react'
 import SectionHeader from '../../components/ui/SectionHeader'
-import { blockchainLab } from '../../content/blockchainLab'
+import { blockchainLab } from '../../content/lab/blockchain'
 import { ctfSection } from '../../content/lab'
 import { tracksFromSearch } from '../../lib/projects'
-import { CyberLab } from './CyberLab'
+import { CyberLab } from './cyber/CyberLab'
 import './lab.css'
 
 const AiLab = lazy(() => import('./ia/AiLab'))

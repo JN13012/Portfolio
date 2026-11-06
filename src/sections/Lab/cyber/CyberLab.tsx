@@ -1,14 +1,14 @@
 import { Activity, lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
-import writeupsIndex from '../../content/writeups.json'
+import writeupsIndex from '../../../content/writeups.json'
 import { CtfIntro } from './CtfIntro'
-import { cx } from '../../lib/cx'
-import { cyberLabCurriculum } from '../../content/cyberLab'
-import { CYBER_PROGRESS_KEY, completeCyberLevel, readCyberProgress } from './ctf/cyberProgress'
-import { LabCurriculumDrawer } from './LabCurriculumDrawer'
-import { keepFieldClearOfPlayer } from '../../lib/keepClearOfPlayer'
+import { cx } from '../../../lib/cx'
+import { cyberLabCurriculum } from '../../../content/lab/cyber'
+import { CYBER_PROGRESS_KEY, completeCyberLevel, readCyberProgress } from './cyberProgress'
+import { LabCurriculumDrawer } from '../LabCurriculumDrawer'
+import { keepFieldClearOfPlayer } from '../../../lib/keepClearOfPlayer'
 
 // The CTF console (3,000+ lines) is fetched only when the Lab comes near the viewport.
-const CtfConsole = lazy(() => import('./ctf/CtfConsole'))
+const CtfConsole = lazy(() => import('./CtfConsole'))
 
 const TOPICS = {
   web: { label: 'Web', title: 'Web', rule: /web/i },

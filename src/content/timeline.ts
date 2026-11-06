@@ -1,4 +1,15 @@
 import type { TimelineEntry } from './types'
+import epitechLogo from '../assets/Logos/epitech.svg'
+import ulitLogo from '../assets/Experiences/ULIT-removebg-preview.png'
+import candlesLogo from '../assets/Logos/candles.svg'
+import cryptoLogo from '../assets/Logos/btc-eth.svg'
+import hiveOsPicture from '../assets/Experiences/HiveOs_monitoring.webp'
+import gDriveLogo from '../assets/Logos/gdrive.webp'
+import wec2017Picture from '../assets/Experiences/Wec2017.webp'
+import wartsilaLogo from '../assets/Logos/wartsila.svg'
+import renaultLogo from '../assets/Logos/renault.svg'
+import edpLogo from '../assets/Logos/edp-dark.png'
+import rimaLogo from '../assets/Logos/rima.jpg'
 
 // Experiences and education on one axis, most recent first (the order of the list on small screens).
 // Source: legacy Experiences.jsx / Formations.jsx (migrated 2026-10-17) and Jérémie's answers (2026-10-24):
@@ -17,6 +28,7 @@ export const timeline: TimelineEntry[] = [
     },
     short: { fr: 'Master of Science - Epitech', en: 'Master of Science - Epitech' },
     organisations: [{ name: 'Epitech', url: 'https://www.epitech.eu/formation-alternance/master-of-science-post-bac3/', place: { fr: 'Marseille (13)', en: 'Marseille (13)' } }],
+    logo: { src: epitechLogo },
     country: 'FR',
     span: { start: '2026-09' },
     expectedEnd: '2028-08',
@@ -59,6 +71,7 @@ export const timeline: TimelineEntry[] = [
     title: { fr: 'Développeur full-stack Salesforce', en: 'Full-stack Salesforce developer' },
     short: { fr: 'ULIT', en: 'ULIT' },
     organisations: [{ name: 'ULIT', url: 'https://usersloveit.com/wp/' }],
+    logo: { src: ulitLogo },
     country: 'FR',
     span: { start: '2026-01', end: '2026-06' },
     periodLabel: { fr: '01/2026 – 06/2026', en: '01/2026 – 06/2026' },
@@ -92,6 +105,7 @@ export const timeline: TimelineEntry[] = [
     title: { fr: 'Pré-MSc', en: 'Pre-MSc' },
     short: { fr: 'Pré-MSc', en: 'Pre-MSc' },
     organisations: [{ name: 'Epitech', url: 'https://www.epitech.eu/formation-alternance/pre-msc-post-bac2/', place: { fr: 'Marseille (13)', en: 'Marseille (13)' } }],
+    logo: { src: epitechLogo },
     country: 'FR',
     span: { start: '2025-09', end: '2026-08' },
     periodLabel: { fr: '09/2025 – 2026', en: '09/2025 – 2026' },
@@ -123,6 +137,7 @@ export const timeline: TimelineEntry[] = [
     title: { fr: 'Investissement et veille crypto', en: 'Crypto investing and monitoring' },
     short: { fr: 'Veille crypto', en: 'Crypto watch' },
     organisations: [{ name: 'Personnel' }],
+    logo: { src: candlesLogo, bleed: true },
     country: 'FR',
     span: { start: '2022-10' },
     periodLabel: { fr: 'Depuis 2022', en: 'Since 2022' },
@@ -142,6 +157,8 @@ export const timeline: TimelineEntry[] = [
     title: { fr: 'Infrastructure de minage', en: 'Mining infrastructure' },
     short: { fr: 'Minage', en: 'Mining' },
     organisations: [{ name: 'Indépendant' }],
+    logo: { src: cryptoLogo, bleed: true },
+    picture: { src: hiveOsPicture, fit: 'contain' },
     country: 'FR',
     span: { start: '2018-01', end: '2022-09' },
     periodLabel: { fr: '2018 – 09/2022', en: '2018 – 09/2022' },
@@ -176,10 +193,12 @@ export const timeline: TimelineEntry[] = [
     title: { fr: 'Technicien mécanique - compétition et maintenance', en: 'Mechanical technician - racing and maintenance' },
     short: { fr: 'Sport auto · mécanique', en: 'Motorsport · mechanics' },
     organisations: [
-      { name: 'G-Drive Racing', url: 'https://www.gdriveracing.com/', place: { fr: 'Saint-Aunès (34)', en: 'Saint-Aunès (34)' } },
-      { name: 'Wärtsilä', url: 'https://www.wartsila.com/', place: { fr: 'Marseille (13)', en: 'Marseille (13)' } },
-      { name: 'Renault', url: 'https://www.renault.fr/', place: { fr: 'Marseille (13)', en: 'Marseille (13)' } },
+      { name: 'G-Drive Racing', logo: gDriveLogo, url: 'https://www.gdriveracing.com/', place: { fr: 'Saint-Aunès (34)', en: 'Saint-Aunès (34)' } },
+      { name: 'Wärtsilä', logo: wartsilaLogo, url: 'https://www.wartsila.com/', place: { fr: 'Marseille (13)', en: 'Marseille (13)' } },
+      { name: 'Renault', logo: renaultLogo, url: 'https://www.renault.fr/', place: { fr: 'Marseille (13)', en: 'Marseille (13)' } },
     ],
+    logo: { src: gDriveLogo },
+    picture: { src: wec2017Picture },
     country: 'FR',
     span: { start: '2017-01', end: '2025-07' },
     periodLabel: { fr: '2017 – 07/2025', en: '2017 – 07/2025' },
@@ -210,6 +229,7 @@ export const timeline: TimelineEntry[] = [
     },
     short: { fr: 'Bac+2', en: '2-yr degree' },
     organisations: [{ name: 'École de la Performance', url: 'https://www.ecoleperformance.com/formations/technicien-de-competition-option-automobile', place: { fr: 'Nogaro (32)', en: 'Nogaro (32)' } }],
+    logo: { src: edpLogo },
     country: 'FR',
     span: { start: '2017-01', end: '2017-12' },
     periodLabel: { fr: '2017', en: '2017' },
@@ -246,6 +266,7 @@ export const timeline: TimelineEntry[] = [
     title: { fr: 'Formation militaire', en: 'Military training' },
     short: { fr: 'Armée de terre', en: 'French Army' },
     organisations: [{ name: 'Armée de terre' }],
+    logo: { src: rimaLogo },
     country: 'FR',
     span: { start: '2014-10', end: '2016-12' },
     periodLabel: { fr: '2014 – 2016', en: '2014 – 2016' },

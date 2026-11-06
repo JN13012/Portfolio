@@ -14,5 +14,9 @@ describe('highlightLine', () => {
     expect(kinds('if (amount == 0) revert NothingToWithdraw();')).toEqual(['control:if', 'number:0', 'control:revert', 'type:NothingToWithdraw'])
     expect(kinds('mapping(address account => uint256 amount) public balanceOf;')).toEqual(['keyword:mapping', 'type:address', 'type:uint256', 'keyword:public'])
     expect(kinds('/// @notice Sends it back.')).toEqual(['comment:/// ', 'tag:@notice', 'comment: Sends it back.'])
+    // OpenZeppelin's block comments, line by line.
+    expect(kinds('    /**')).toEqual(['comment:/**'])
+    expect(kinds(' * @dev This contract implements an address.')).toEqual(['comment:* ', 'tag:@dev', 'comment: This contract implements an address.'])
+    expect(kinds('     */')).toEqual(['comment:*/'])
   })
 })

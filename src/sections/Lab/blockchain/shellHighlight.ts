@@ -4,9 +4,9 @@ import type { Token } from './solidityHighlight'
 // tools and subcommands, account names, quoted signatures, flags, <placeholders> and amounts.
 
 const TOOLS = new Set(['cast', 'forge', 'ls', 'cat', 'accounts', 'reset', 'clear', 'help'])
-const SUBCOMMANDS = new Set(['balance', 'call', 'send', 'create'])
-const ACCOUNTS = new Set(['mallory', 'alice', 'bob', 'vault', 'attacker'])
-const PATTERN = /("[^"]*")|(<[^>]+>)|(--[\w-]+)|(0x[0-9a-fA-F…]*)|(\b\d+(?:\.\d+)?(?:ether)?\b)|([\w.]+)|(\s+)|(.)/g
+const SUBCOMMANDS = new Set(['interface', 'balance', 'block', 'call', 'send', 'create'])
+const ACCOUNTS = new Set(['mallory', 'alice', 'bob', 'vault', 'attacker', 'wallet'])
+const PATTERN = /("[^"]*")|(<[^>]+>)|(--[\w-]+)|(0x[0-9a-fA-F…]*)|(\b\d+(?:\.\d+)?(?:ether|gwei|wei)?\b)|([\w.]+)|(\s+)|(.)/g
 
 export type ShellToken = { text: string; kind?: Token['kind'] | 'placeholder' | 'flag' | 'account' | 'heading' }
 
