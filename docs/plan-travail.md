@@ -59,7 +59,11 @@ Déroulé d’une étape :
   - [x] `Lottery` et `LotteryAttacker` dans `scripts/sync-blockchain-ctf.mjs` ; `cast block` (numéro, horodatage, prevrandao du dernier bloc) pour montrer que les ingrédients du tirage sont publics ; arguments des events affichés (`Played` : guess, winningNumber, prize).
   - [x] Niveau 3 : cagnotte de 10 ETH, ticket à 0,1 ETH, chiffre de 0 à 9, Mallory 1 ETH. Le flag exige une victoire certaine (choix validé le 6 novembre), par `LotteryAttacker` : un ticket gagnant joué à la main (1 chance sur 10) vide la loterie mais affiche « Gagné par chance », sans flag, avec `reset` pour rejouer.
   - [x] Contenu (objectif, indices, explications des fonctions et des erreurs, write-up `03-randomness.md`), `available: true`, textes du Hero et du projet.
-  - [ ] Tests (tirage différent d’un bloc à l’autre, victoire certaine par l’attaquant, chance sans flag), navigateur, Lighthouse mobile.
+  - [x] Tests (tirage différent d’un bloc à l’autre, victoire certaine par l’attaquant, chance sans flag), navigateur ; en production le 6 novembre.
+- **Performance mobile** (Lighthouse en production le 6 novembre : 52, LCP 8,6 s, 1,8 Mo d’images au chargement) :
+  - [x] Images : fonds des cartes de projets chargés à l’approche de l’écran (`lib/useNearViewport.ts`), images hors écran en `loading="lazy"`, versions réduites du robot Sentry et des vignettes ZeroDay et Coursera du Hero. Mesure locale (`vite preview`) : 69, LCP 4,5 s, 328 Ko d’images.
+  - [x] Différer le code des sections basses : Projets, CTF, Expertise, Certifications, Parcours et Contact en fichiers séparés (`lazy` dans `App.jsx`), défilement vers l’ancre une fois chargées. JS principal : 249 → 193 Ko compressés. Mesure locale : 73 à 75, LCP 4,1 s.
+  - [ ] Élément le plus lent à s’afficher : le rendre prioritaire.
 - [x] **Description Google** et réponse préparée « Qui est Jérémie ? » : intitulé de Parcours
   à la place de « MSc cybersécurité ».
 - [x] **En-têtes de sécurité** dans `public/_headers`, car le Worker ne s’exécute pas pour les fichiers statiques :

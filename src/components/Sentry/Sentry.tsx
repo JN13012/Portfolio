@@ -1,5 +1,5 @@
 import { memo, useRef, type CSSProperties } from 'react'
-import shell from '../../assets/mascot/robot-shell.webp'
+import shell from '../../assets/mascot/robot-shell_sm.webp'
 import { SentryFace } from './SentryFace'
 import type { SentryState } from './sentryActivity'
 import { useSentryMotion } from './useSentryMotion'
@@ -40,7 +40,7 @@ export const Sentry = memo(function Sentry({ state = 'idle', size = 48, classNam
       data-compact={size < 64 || undefined}
       style={{ '--sentry-size': `${size}px` } as CSSProperties}
     >
-      <img className="sentry__shell" src={shell} width="1254" height="1254" alt="" draggable="false" />
+      <img className="sentry__shell" src={shell} width="320" height="320" alt="" draggable="false" decoding="async" fetchPriority="low" />
       <SentryFace state={state} />
     </span>
   )

@@ -1,11 +1,11 @@
 import type { Localized } from './types'
-import courseraLogo from '../assets/COURSERA.webp'
+import courseraLogo from '../assets/COURSERA_sm.webp'
 import thmLogo from '../assets/THM.jpg'
 import epitechThumb from '../assets/Formations/Epitech.webp'
 import codeExecutorThumb from '../assets/Logos/ULIT_Heart_sm.webp'
 import blockTraderThumb from '../assets/Logos/BlockTrader_Emblem_sm.webp'
 import argosThumb from '../assets/Logos/Argos_Emblem_sm.webp'
-import zeroDayThumb from '../assets/Projets/ZeroDay.webp'
+import zeroDayThumb from '../assets/Projets/ZeroDay_sm.webp'
 
 export type CoreNodeId = 'ia' | 'cyber' | 'dev' | 'parcours' | 'contact'
 

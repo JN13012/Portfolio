@@ -5,16 +5,10 @@ import "./App.css";
 import NavBar from "../components/layout/NavBar";
 import { VisitCounter } from "../components/layout/VisitCounter";
 import { PresentationAudioLifecycle } from "../components/Sentry/PresentationAudioLifecycle";
-import Projects from "../sections/Projects/Projects";
-import Certifications from "../sections/Certifications/Certifications";
 import { NetworkBackground } from "../components/layout/NetworkBackground";
 import { Hero } from "../sections/Hero/Hero";
 import { SentryChat } from "../components/Sentry/SentryChat";
 import { Profile } from "../sections/Profile/Profile";
-import { Lab } from "../sections/Lab/Lab";
-import { Expertise } from "../sections/Expertise/Expertise";
-import { Parcours } from "../sections/Parcours/Parcours";
-import { Contact } from "../sections/Contact/Contact";
 import { profile } from "../content/profile";
 import { footerUi } from "../content/ui";
 import { onCore } from "../lib/coreBus";
@@ -22,6 +16,24 @@ import { sentryWelcome } from "../lib/sentryWelcome";
 
 // three.js intro, loaded only when it is shown.
 const GlobeGate = lazy(() => import("../sections/Gate/GlobeGate"));
+
+// Sections below the first screen are separate files: the hero and profile render without waiting
+// for their code, which starts downloading at once, in parallel, right after the first render.
+const Projects = lazy(() => import("../sections/Projects/Projects"));
+const Certifications = lazy(() => import("../sections/Certifications/Certifications"));
+const Lab = lazy(() => import("../sections/Lab/Lab").then(m => ({ default: m.Lab })));
+const Expertise = lazy(() => import("../sections/Expertise/Expertise").then(m => ({ default: m.Expertise })));
+const Parcours = lazy(() => import("../sections/Parcours/Parcours").then(m => ({ default: m.Parcours })));
+const Contact = lazy(() => import("../sections/Contact/Contact").then(m => ({ default: m.Contact })));
+
+/** Once the lazy sections exist, scrolls to the link's anchor (#projets, #lab-blockchain…) the browser could not find. */
+function ScrollToHash() {
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (id) document.getElementById(id)?.scrollIntoView();
+  }, []);
+  return null;
+}
 
 const GATE_KEY = "gate-seen";
 
@@ -92,12 +104,16 @@ function App() {
           <main className="relative z-10 mx-auto w-[90%] max-w-[2400px]" inert={gateOpen || undefined}>
             <Hero />
             <Profile />
-            <Projects />
-            <Lab />
-            <Expertise />
-            <Certifications />
-            <Parcours effects />
-            <Contact />
+            {/* Placeholder height while the sections load, so the footer does not jump up meanwhile. */}
+            <Suspense fallback={<div className="min-h-screen" />}>
+              <Projects />
+              <Lab />
+              <Expertise />
+              <Certifications />
+              <Parcours effects />
+              <Contact />
+              <ScrollToHash />
+            </Suspense>
             {/* Sentry, the assistant, docked at the bottom right of every page. */}
             <SentryChat introComplete={!gateOpen} />
           </main>

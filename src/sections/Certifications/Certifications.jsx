@@ -471,7 +471,7 @@ function Issuer({ name }) {
   if (name === "IBM · Coursera")
     return (
       <span className="flex items-center gap-2 text-sm font-semibold text-zinc-200">
-        <img src={IBM_LOGO} alt="IBM" className="h-4 w-auto" />
+        <img src={IBM_LOGO} alt="IBM" loading="lazy" decoding="async" className="h-4 w-auto" />
         <span aria-hidden="true" className="text-zinc-500">·</span>
         Coursera
       </span>

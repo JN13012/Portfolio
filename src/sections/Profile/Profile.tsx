@@ -114,7 +114,7 @@ function WorldRoute() {
           className="pointer-events-none absolute z-10 inline-flex -translate-x-1/2 -translate-y-[calc(100%+12px)] items-center gap-1.5 rounded-md border border-white/10 bg-zinc-900 px-2 py-1 text-xs whitespace-nowrap text-zinc-300 shadow-lg"
           style={{ left: `${(px(tip.lon) / MAP_W) * 100}%`, top: `${(py(tip.lat) / MAP_H) * 100}%` }}
         >
-          <img src={FLAGS[hover]} alt="" className="h-3 w-4 shrink-0 rounded-[1px]" />
+          <img src={FLAGS[hover]} alt="" loading="lazy" decoding="async" className="h-3 w-4 shrink-0 rounded-[1px]" />
           {COUNTRY_NAMES[hover]?.fr} · {STAYS[hover]?.fr}
         </span>
       )}

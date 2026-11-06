@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useNearViewport } from "../../lib/useNearViewport";
 import { StackLine } from "../../components/ui/StackLine";
 
 // Compact project card on a dark panel inset from the image edges: context and production mention,
 // domain badges (a project can have several: Argos is Cyber and IA), title, two lines of summary,
 // one line of stack and date.
 const ProjectCard = ({ titre, description, tags, image, emblem, categories, date, onClick, theme, inProduction, ongoing, context, silver }) => {
+  // The image is only fetched near the viewport: most cards sit far below the hero.
+  const card = useRef(null);
+  const near = useNearViewport(card);
   return (
     <button
+      ref={card}
       type="button"
       onClick={onClick}
       className={`group relative flex h-full min-h-[15rem] cursor-crosshair flex-col overflow-hidden border border-white/15 bg-black/40 text-left transition-all duration-500 focus-visible:outline-2 focus-visible:outline-cyber ${theme.card}`}
       // Background image (or a fine pattern when the project has no visual yet).
       style={{
-        backgroundImage: image
+        backgroundImage: image && near
           ? `url(${image})`
+          : image
+          ? "none"
           : "repeating-linear-gradient(135deg, rgba(74,222,128,0.06) 0 2px, transparent 2px 14px), radial-gradient(circle at 30% 20%, rgba(74,222,128,0.14), transparent 60%)",
         // A project emblem (its height in the card) is shown whole, rather than cropped like a screenshot.
         backgroundSize: emblem ? `auto ${emblem}` : "cover",

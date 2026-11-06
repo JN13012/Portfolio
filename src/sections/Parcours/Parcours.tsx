@@ -284,7 +284,7 @@ function Details({ entry: e, className }: { entry: TimelineEntry; className?: st
                 <span key={o.name}>
                   {i > 0 && ' · '}
                   {e.organisations.length > 1 && o.logo && (
-                    <img src={o.logo} alt="" className="mr-1.5 inline-block h-4 w-auto rounded-[3px] bg-white p-px align-[-3px]" />
+                    <img src={o.logo} alt="" loading="lazy" decoding="async" className="mr-1.5 inline-block h-4 w-auto rounded-[3px] bg-white p-px align-[-3px]" />
                   )}
                   {o.url ? (
                     <a href={o.url} target="_blank" rel="noopener noreferrer" className="text-zinc-300 underline decoration-white/20 underline-offset-4 transition-colors hover:text-cyber hover:decoration-cyber">
