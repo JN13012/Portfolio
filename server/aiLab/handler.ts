@@ -295,10 +295,12 @@ async function attempt(request: Request, env: Ready, now: number) {
     catch (error) { return failed(error, { ...answered, response: 'error' }, costOf(agent)) }
     await Promise.all([release(false), settleBudget(costOf(agent, verdict))])
     if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...answered, response: 'blocked' }) })
+    // A plain question changes nothing and gets no verdict: « denied » only when Sentry did call the tool that adds to a group.
     const granted = directory.granted()
+    const tried = agent.calls.some(call => call.name === 'ajouter_au_groupe')
     return reply(200, {
-      outcome: granted ? 'granted' : 'denied', answer: agent.text, tools: agent.calls, ...(granted && { flag: await flagFor(session.secret, level) }),
-      remaining, trace: stageTrace(level, { ...answered, response: 'passed', access: granted ? 'passed' : 'blocked' }),
+      outcome: granted ? 'granted' : tried ? 'denied' : 'answered', answer: agent.text, tools: agent.calls, ...(granted && { flag: await flagFor(session.secret, level) }),
+      remaining, trace: stageTrace(level, { ...answered, response: 'passed', access: granted ? 'passed' : tried ? 'blocked' : 'not-run' }),
     })
   }
 

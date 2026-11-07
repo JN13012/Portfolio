@@ -1,7 +1,7 @@
 import { agentAdvice, aiLabAdvice, aiLabOutcomes, containsIban, defenseStages, helpdesk, isAiLabLevel, payeeIban, poisonedCv, poisonedInbox, sourceForSearch, type DefenseStageId, type EmailDraft, type IndexedSource, type LabLevel, type ToolCall } from '../../../content/lab/ai'
 
 export type StageStatus = 'inactive' | 'passed' | 'blocked' | 'error' | 'not-run'
-export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'recommended' | 'rejected' | 'diverted' | 'official-iban' | 'not-retrieved' | 'granted' | 'denied' | 'off-topic' | 'error' | 'quota'
+export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'recommended' | 'rejected' | 'diverted' | 'official-iban' | 'not-retrieved' | 'granted' | 'answered' | 'denied' | 'off-topic' | 'error' | 'quota'
 export type LabTrace = { stage: DefenseStageId; status: StageStatus }[]
 export type LabResult = {
   id: number
@@ -163,7 +163,7 @@ export function agentChecks(outcome: LabOutcome, tools: readonly ToolCall[]): La
 
 /** What to try next. Only facts the server returned are used: the level, the outcome and, on level 6, the calls it ran. */
 export function adviceFor(level: LabLevel, outcome: LabOutcome, tools?: readonly ToolCall[]): string | undefined {
-  if (tools && outcome === 'denied') {
+  if (tools && (outcome === 'answered' || outcome === 'denied')) {
     if (!tools.length) return agentAdvice.noTool
     const adds = tools.filter(call => call.name === 'ajouter_au_groupe')
     return adds.length ? agentAdvice.wrongAdd : agentAdvice.noAdd

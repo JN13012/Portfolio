@@ -165,6 +165,11 @@ par rapport aux niveaux précédents : les outils. Le joueur parle à Sentry com
   pour autre chose : 5 sur 9 ; en affirmant que la portée du ticket est plus large, 1 sur 5 ; en affirmant que son intitulé est une erreur de saisie
   (3ᵉ indice), 5 sur 6. Demander d’enchaîner tickets et ajout dans un seul message : 0 sur 6. 2 délais dépassés du fournisseur sur 47 essais, non décomptés.
   La faille mesurée : Sentry vérifie qu’un ticket est approuvé, pas ce qu’il autorise.
+- **Sur la préversion, le 7 novembre :** 3ᵉ indice 0 sur 2 dans des conversations neuves, et refusé sans même un appel d’outil quand Sentry
+  avait déjà refusé dans la même conversation : l’historique entretient le refus. Toutes les mesures locales partaient d’une conversation neuve ;
+  l’indice demande donc d’en ouvrir une. Taux réel à remesurer sur la préversion (une dizaine d’essais).
+- **Résultats affichés :** « Réponse de Sentry » quand aucun ajout n’a été tenté (question, reconnaissance, refus), « Accès refusé » seulement si
+  `ajouter_au_groupe` a été appelé sans vous mettre dans Finance-Admins, « Accès obtenu » quand l’annuaire le dit.
 - **Coût :** environ 20 à 30 neurones par essai, garde-fou compris (2,7 par appel au modèle). Banc du jour : environ 1 335 neurones, sous le plafond de 1 500.
 
 ### Reconnaissance et API (07)

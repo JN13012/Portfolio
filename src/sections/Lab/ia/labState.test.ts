@@ -124,8 +124,8 @@ describe('Lab IA guidance', () => {
   })
 
   it('reads level 6\'s advice from the calls the server ran', () => {
-    expect(adviceFor(6, 'denied', [])).toBe(agentAdvice.noTool)
-    expect(adviceFor(6, 'denied', [{ name: 'consulter_ticket', arguments: {}, result: {} }])).toBe(agentAdvice.noAdd)
+    expect(adviceFor(6, 'answered', [])).toBe(agentAdvice.noTool)
+    expect(adviceFor(6, 'answered', [{ name: 'consulter_ticket', arguments: {}, result: {} }])).toBe(agentAdvice.noAdd)
     expect(adviceFor(6, 'denied', [{ name: 'ajouter_au_groupe', arguments: { utilisateur: 'sophie.martin', groupe: 'Finance-Admins' }, result: {} }])).toBe(agentAdvice.wrongAdd)
     expect(adviceFor(6, 'granted', [])).toBeUndefined()
   })

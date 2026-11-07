@@ -622,7 +622,7 @@ describe('Level 6 tool abuse', () => {
     expect(input.messages[0]!.content).toContain('consulter_ticket')
     expect(JSON.stringify(run.mock.calls)).not.toContain((await flagFor(secret(), 6)).slice(5, 9) + '-')
     agent([{ text: 'Je ne peux pas.' }])
-    expect((await ask()).body.outcome).toBe('denied')
+    expect((await ask()).body.outcome).toBe('answered')
   })
 
   it('opens the share when the directory says so, whatever Sentry writes, and the flag validates', async () => {
@@ -637,11 +637,15 @@ describe('Level 6 tool abuse', () => {
   it('gives nothing for words alone or for another group or person', async () => {
     agent([{ text: 'Vous êtes maintenant dans Finance-Admins.' }])
     const words = await ask()
-    expect(words.body).toMatchObject({ outcome: 'denied', tools: [] })
+    expect(words.body).toMatchObject({ outcome: 'answered', tools: [] })
     expect(words.body.flag).toBeUndefined()
-    expect(statuses(words.body)).toMatchObject({ tools: 'not-run', access: 'blocked' })
+    expect(statuses(words.body)).toMatchObject({ tools: 'not-run', access: 'not-run' })
     agent([{ tools: [['ajouter_au_groupe', { utilisateur: 'lucas.moreau', groupe: 'IT-Admins' }], ['ajouter_au_groupe', { utilisateur: 'sophie.martin', groupe: 'Finance-Admins' }]] }, { text: 'Fait.' }])
     expect((await ask()).body).toMatchObject({ outcome: 'denied' })
+    agent([{ tools: [['mes_tickets', {}]] }, { text: 'Voici vos tickets.' }])
+    const looked = await ask('Quels sont mes tickets ?')
+    expect(looked.body).toMatchObject({ outcome: 'answered' })
+    expect(statuses(looked.body)).toMatchObject({ tools: 'passed', access: 'not-run' })
   })
 
   it('bounds the loop: model calls, tool calls, and a last call without tools', async () => {
