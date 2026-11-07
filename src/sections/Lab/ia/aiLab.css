@@ -322,3 +322,7 @@ g[data-status='error'] .ai-lab__check-mark { stroke: #fcd34d; }
 .ai-lab__advice { margin-top: .5rem !important; padding: .4rem .55rem; border-left: 2px solid #e7c77a; background: #e7c77a10; font-size: 12px; line-height: 1.55; }
 .ai-lab__advice strong { margin-right: .35rem; color: #e7c77a; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
 .ai-lab__nudge { margin-top: .4rem !important; color: #a1a1aa; font-size: 11.5px; font-style: italic; }
+
+/* One short line of named techniques, under the attack and the defense. */
+.ai-lab__lesson .ai-lab__techniques { margin: .5rem 0 .4rem; font-size: 12.5px; color: #e4e4e7; }
+.ai-lab__techniques strong { color: #7dd3fc; font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }

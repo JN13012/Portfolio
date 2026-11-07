@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from 'react'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { Sentry } from '../../../components/Sentry'
-import { adviceLabel, aiLabLevels, defensePanelCopy, defenseStages, hintNudge, poisonedInbox, stageRuns, type DefenseStageId, type LabLevel } from '../../../content/lab/ai'
+import { adviceLabel, techniquesLabel, aiLabLevels, defensePanelCopy, defenseStages, hintNudge, poisonedInbox, stageRuns, type DefenseStageId, type LabLevel } from '../../../content/lab/ai'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
 import { stageWord, type LabCheck, type LabResult, type LabTrace } from './labState'
 
@@ -206,6 +206,7 @@ function Lesson({ level, solved }: { level: LabLevel; solved: boolean }) {
       <div><dt>Type d’attaque</dt><dd>{brief.attack}</dd></div>
       <div><dt>Défense en place</dt><dd>{brief.defense}</dd></div>
     </dl>
+    <p className="ai-lab__techniques"><strong>{techniquesLabel}</strong> : {brief.techniques.join(', ')}</p>
     <a href={brief.reference.url} target="_blank" rel="noreferrer">{brief.reference.label}</a>
     {solved && <div data-solved="true"><h4>À retenir</h4><p>{brief.takeaway}</p></div>}
   </div>
