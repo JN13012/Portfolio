@@ -29,6 +29,11 @@ function advance(state: WelcomeSnapshot): WelcomeSnapshot {
   return state
 }
 
+/** A first visit's greeting, as the prerendered page shows it (server snapshot of useSyncExternalStore). */
+export const FIRST_VISIT_WELCOME: WelcomeSnapshot = {
+  phase: 'pending', portalVisible: false, opened: false, finalReady: false, completed: 0, cue: 0,
+}
+
 export function createSentryWelcome(seen: boolean, persistSeen = markSeen) {
   let state: WelcomeSnapshot = {
     phase: seen ? 'dismissed' : 'pending', portalVisible: false,

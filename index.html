@@ -30,6 +30,11 @@
 
     <meta name="theme-color" content="#05070a" />
 
+    <!-- The prerendered page (scripts/prerender.mjs) shows before the JavaScript. When the globe intro will
+         open (same rule as shouldOpenGate in src/app/App.jsx), it stays hidden until the intro takes over.
+         Allowed by its hash in public/_headers (CSP); a test keeps the two in step. -->
+    <script>try{var q=function(m){return matchMedia(m).matches},s;try{s=sessionStorage.getItem("gate-seen")}catch(e){}if(!q("(prefers-reduced-motion: reduce)")&&q("(min-width: 1024px)")&&!(navigator.connection&&navigator.connection.saveData)&&!new URLSearchParams(location.search).has("certificat")&&s!=="1")document.documentElement.setAttribute("data-intro-pending","")}catch(e){}</script>
+
   </head>
   <body class="bg-black">
     <div id="root"></div>

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Clock3 } from "lucide-react";
 import "./App.css";
 
@@ -26,6 +26,16 @@ const Expertise = lazy(() => import("../sections/Expertise/Expertise").then(m =>
 const Parcours = lazy(() => import("../sections/Parcours/Parcours").then(m => ({ default: m.Parcours })));
 const Contact = lazy(() => import("../sections/Contact/Contact").then(m => ({ default: m.Contact })));
 
+const subscribeNever = () => () => {};
+
+/**
+ * False in the prerendered page and while React takes it over, true afterwards. The lazy sections render
+ * only then: renderToString cannot wait for their code, and React would report the gap as an error.
+ */
+function useHydrated() {
+  return useSyncExternalStore(subscribeNever, () => true, () => false);
+}
+
 /** Once the lazy sections exist, scrolls to the link's anchor (#projets, #lab-blockchain…) the browser could not find. */
 function ScrollToHash() {
   useEffect(() => {
@@ -38,11 +48,13 @@ function ScrollToHash() {
 const GATE_KEY = "gate-seen";
 
 /**
+ * Keep in step with the inline script of index.html, which hides the prerendered page until the intro starts.
  * The globe intro opens once per session, on wide screens only (a 3D scene is
  * too heavy for a phone's first seconds), never under reduced motion or Save-Data.
  * A replay asks for it explicitly; a direct link to a certificate skips it.
  */
 function shouldOpenGate(replay = false) {
+  if (typeof window === "undefined" || !window.matchMedia) return false;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
   if (!window.matchMedia("(min-width: 1024px)").matches) return false;
   if (navigator.connection?.saveData) return false;
@@ -58,7 +70,13 @@ function shouldOpenGate(replay = false) {
 
 function App() {
   const [gateOpen, setGateOpen] = useState(shouldOpenGate);
+  const hydrated = useHydrated();
   const portfolioRef = useRef(null);
+  // The live page is in place (intro or not): the prerendered one no longer needs hiding. Before paint.
+  useLayoutEffect(() => {
+    document.documentElement.removeAttribute("data-intro-pending");
+    document.documentElement.setAttribute("data-live", "");
+  }, []);
 
   // « Revoir le globe » in Profil plays the intro again.
   useEffect(() => onCore("replayGate", () => {
@@ -105,15 +123,17 @@ function App() {
             <Hero />
             <Profile />
             {/* Placeholder height while the sections load, so the footer does not jump up meanwhile. */}
-            <Suspense fallback={<div className="min-h-screen" />}>
-              <Projects />
-              <Lab />
-              <Expertise />
-              <Certifications />
-              <Parcours effects />
-              <Contact />
-              <ScrollToHash />
-            </Suspense>
+            {hydrated ? (
+              <Suspense fallback={<div className="min-h-screen" />}>
+                <Projects />
+                <Lab />
+                <Expertise />
+                <Certifications />
+                <Parcours effects />
+                <Contact />
+                <ScrollToHash />
+              </Suspense>
+            ) : <div className="min-h-screen" />}
             {/* Sentry, the assistant, docked at the bottom right of every page. */}
             <SentryChat introComplete={!gateOpen} />
           </main>

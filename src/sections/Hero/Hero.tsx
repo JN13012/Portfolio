@@ -124,9 +124,10 @@ export function Hero() {
           </div>
         </div>
 
-        {/* The network (desktop only). Its drawing area can reach past its box (HERO_PLACEMENT); it lets
+        {/* The network (desktop only). Hidden until the live page runs: the prerendered
+            page's nodes would sit elsewhere until the live network places them (global.css). Its drawing area can reach past its box (HERO_PLACEMENT); it lets
             clicks through. The empty third column is the chat's room. */}
-        <div className="relative hidden min-w-0 lg:block lg:h-[min(44rem,calc(100vh-8rem))]">
+        <div data-prerender-hidden className="relative hidden min-w-0 lg:block lg:h-[min(44rem,calc(100vh-8rem))]">
           <div className="absolute" style={box}>
             <NeuralHero nodes={assistantNetworkNodes} settings={HERO_NETWORK} run={run} className="aspect-auto absolute inset-0" />
           </div>

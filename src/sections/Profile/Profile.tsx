@@ -1,5 +1,5 @@
 import { ArrowUpRight, Bot, Briefcase, GraduationCap, Dumbbell, Globe2, Landmark, MapPin, Plane, RotateCcw, type LucideIcon } from 'lucide-react'
-import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react'
 import SectionHeader from '../../components/ui/SectionHeader'
 import { socialLinks } from '../../components/ui/socialLinks'
 import { brainNodes } from '../../content/assistant'
@@ -316,6 +316,7 @@ function StrengthsTimeline() {
 
 /** The globe intro only runs on wide screens without reduced motion (App.shouldOpenGate). */
 const canReplayGlobe = () => window.matchMedia('(min-width: 1024px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const subscribeNever = () => () => {}
 
 const pill = 'inline-flex cursor-pointer items-center gap-1 rounded-full border border-white/15 px-2.5 py-0.5 text-xs text-zinc-300 transition-colors hover:border-cyber/50 hover:text-cyber'
 
@@ -325,7 +326,8 @@ const pill = 'inline-flex cursor-pointer items-center gap-1 rounded-full border 
  */
 export function Profile() {
   const { ui, international } = profile
-  const [replay] = useState(canReplayGlobe)
+  // Not in the prerendered page (scripts/prerender.mjs), which is a phone's: added once React has taken over.
+  const replay = useSyncExternalStore(subscribeNever, canReplayGlobe, () => false)
   return (
     <section id="profile" className="py-24">
       <SectionHeader index="01" title="Profil" />

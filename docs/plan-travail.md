@@ -63,7 +63,9 @@ Déroulé d’une étape :
 - **Performance mobile** (Lighthouse en production le 6 novembre : 52, LCP 8,6 s, 1,8 Mo d’images au chargement) :
   - [x] Images : fonds des cartes de projets chargés à l’approche de l’écran (`lib/useNearViewport.ts`), images hors écran en `loading="lazy"`, versions réduites du robot Sentry et des vignettes ZeroDay et Coursera du Hero. Mesure locale (`vite preview`) : 69, LCP 4,5 s, 328 Ko d’images.
   - [x] Différer le code des sections basses : Projets, CTF, Expertise, Certifications, Parcours et Contact en fichiers séparés (`lazy` dans `App.jsx`), défilement vers l’ancre une fois chargées. JS principal : 249 → 193 Ko compressés. Mesure locale : 73 à 75, LCP 4,1 s.
-  - [ ] Élément le plus lent à s’afficher : le rendre prioritaire.
+  - [x] Premier écran pré-rendu au build et hydraté (`scripts/prerender.mjs`) : le texte du Hero s’affiche avant le JavaScript. Téléphone simulé : LCP observé 1,4 s au lieu d’environ 3,2 s ; Lighthouse local 78 à 81.
+  - [x] Intro : variables de la fenêtre non héritées. Le réseau 3D du Hero reste animé pendant la plongée (essai de le figer annulé le 7 novembre : moins beau, et l’intro est fluide sur PC).
+- **Lighthouse mobile ≥ 90 n’est plus obligatoire** (décision du 7 novembre) : c’est un repère, à suivre sans bloquer une étape.
 - [x] **Description Google** et réponse préparée « Qui est Jérémie ? » : intitulé de Parcours
   à la place de « MSc cybersécurité ».
 - [x] **En-têtes de sécurité** dans `public/_headers`, car le Worker ne s’exécute pas pour les fichiers statiques :

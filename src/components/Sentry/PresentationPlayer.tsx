@@ -5,7 +5,7 @@ import { presentationChapters, presentationCopy as copy } from '../../content/pr
 import { presentationAudio } from '../../lib/presentationAudio'
 import { autoFoldDelay, canGoQuiet, presentationDisplay, QUIET_MS } from '../../lib/presentationDisplay'
 import { foldPlayer } from '../../lib/presentationFold'
-import { sentryWelcome } from '../../lib/sentryWelcome'
+import { FIRST_VISIT_WELCOME, sentryWelcome } from '../../lib/sentryWelcome'
 import { useDocumentVisible } from '../../lib/useDocumentVisible'
 import { usePresentationAudio, usePresentationDisplay } from '../../lib/usePresentationAudio'
 import { useReducedMotion } from '../../lib/useReducedMotion'
@@ -105,10 +105,11 @@ function usePlayerLayout(root: React.RefObject<HTMLDivElement | null>, inChat: b
 }
 
 /** Fixed, outside the Hero's flow; both views still control the same lazy media element. */
-export function PresentationPlayer({ inChat = false }: { inChat?: boolean }) {
+/** `intro`: the globe intro is running; the strip is shown in its window, but folds nothing until it ends. */
+export function PresentationPlayer({ inChat = false, intro = false }: { inChat?: boolean; intro?: boolean }) {
   const audio = usePresentationAudio()
   const display = usePresentationDisplay()
-  const welcome = useSyncExternalStore(sentryWelcome.subscribe, sentryWelcome.get, sentryWelcome.get)
+  const welcome = useSyncExternalStore(sentryWelcome.subscribe, sentryWelcome.get, () => FIRST_VISIT_WELCOME)
   const documentVisible = useDocumentVisible()
   const reduced = useReducedMotion()
   const root = useRef<HTMLDivElement>(null)
@@ -131,7 +132,7 @@ export function PresentationPlayer({ inChat = false }: { inChat?: boolean }) {
   // Leaving the Hero folds the strip, playing or not. Keyboard users inside it keep it.
   useEffect(() => {
     const hero = document.getElementById('acceuil')
-    if (inChat || !hero) return
+    if (inChat || intro || !hero) return
     let inside: boolean | undefined
     const observer = new IntersectionObserver(([entry]) => {
       const now = !!entry?.isIntersecting
@@ -141,18 +142,18 @@ export function PresentationPlayer({ inChat = false }: { inChat?: boolean }) {
     }, { rootMargin: '-50% 0px -50% 0px' })
     observer.observe(hero)
     return () => observer.disconnect()
-  }, [inChat, setView])
+  }, [inChat, intro, setView])
 
   // Idle, paused or finished: no timer while the tab is hidden or the strip is in use.
   const welcomeDone = welcome.phase === 'dismissed'
   const held = hovered || keyboard
   useEffect(() => {
-    if (inChat || display.minimized || !documentVisible) return
+    if (inChat || intro || display.minimized || !documentVisible) return
     const delay = autoFoldDelay({ status: audio.status, pinned: presentationDisplay.pinned(), welcomeDone, held, phone: window.matchMedia('(max-width: 767px)').matches })
     if (delay === null) return
     const timer = window.setTimeout(() => void setView(true), delay)
     return () => window.clearTimeout(timer)
-  }, [inChat, display.minimized, documentVisible, audio.status, welcomeDone, held, setView])
+  }, [inChat, intro, display.minimized, documentVisible, audio.status, welcomeDone, held, setView])
 
   // Reduced and unused: play fades away after a while. Hovering the chevron or keyboard focus brings it back.
   const canQuiet = !inChat && display.minimized && !held && canGoQuiet(audio.status)

@@ -9,7 +9,7 @@ import { emitCore } from '../../lib/coreBus'
 import { cx } from '../../lib/cx'
 import { Sentry, type SentryState } from './Sentry'
 import { SentryWelcome } from './SentryWelcome'
-import { LAST_CUE_DELAY_MS, sentryWelcome } from '../../lib/sentryWelcome'
+import { FIRST_VISIT_WELCOME, LAST_CUE_DELAY_MS, sentryWelcome } from '../../lib/sentryWelcome'
 import { useDocumentVisible } from '../../lib/useDocumentVisible'
 import { useSentryActivity } from './useSentryActivity'
 import { PresentationPlayer } from './PresentationPlayer'
@@ -67,7 +67,7 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
   const { open, exchanges } = useAssistant()
   const last = exchanges.at(-1) ?? null
   const [draft, setDraft] = useState('')
-  const welcome = useSyncExternalStore(sentryWelcome.subscribe, sentryWelcome.get, sentryWelcome.get)
+  const welcome = useSyncExternalStore(sentryWelcome.subscribe, sentryWelcome.get, () => FIRST_VISIT_WELCOME)
   const documentVisible = useDocumentVisible()
   const { state, busy, face } = useSentryActivity(preview ? last?.run ?? null : null, preview && !!draft.trim(), introComplete, activity)
   const log = useRef<HTMLDivElement>(null)
@@ -135,7 +135,8 @@ export function SentryChat({ serviceAvailable = false, activity, introComplete =
         onDone={sentryWelcome.dismiss}
       />}
 
-      {!open && introComplete && <PresentationPlayer />}
+      {/* Already in the window that flies in during the globe intro, as the page will look once landed. */}
+      {!open && <PresentationPlayer intro={!introComplete} />}
       {!open && introComplete && <PresentationSpeech />}
 
       <button

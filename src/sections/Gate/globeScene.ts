@@ -353,6 +353,13 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
   const stillTrail = { head: 0, tail: 0, opacity: 0 }
   const windowState = { scale: 0, opacity: 0, edge: 0 }
   let portfolioRevealed = false
+  // Writes a window variable only when it changes: each write restyles the window (App.css).
+  const portalValues = new Map<string, string>()
+  const setPortal = (name: string, value: string) => {
+    if (portalValues.get(name) === value || !portfolio) return
+    portalValues.set(name, value)
+    portfolio.style.setProperty(name, value)
+  }
   let width = 1
   let height = 1
   let lensShift = 1
@@ -444,10 +451,10 @@ export async function createGlobeScene({ host, cover, portfolio, controls, annot
       divePosition(exitFromPosition, worldDiveTarget, flight, camera.position)
       if (portfolio) {
         const window = portfolioWindowAt(exitElapsed, camera.position.length(), windowState)
-        portfolio.style.setProperty('--portal-y', '0px')
-        portfolio.style.setProperty('--portal-scale', window.scale.toFixed(6))
-        portfolio.style.setProperty('--portal-opacity', window.opacity.toFixed(5))
-        portfolio.style.setProperty('--portal-edge', window.edge.toFixed(5))
+        setPortal('--portal-y', '0px')
+        setPortal('--portal-scale', window.scale.toFixed(6))
+        setPortal('--portal-opacity', window.opacity.toFixed(5))
+        setPortal('--portal-edge', window.edge.toFixed(5))
         if (!portfolioRevealed && window.opacity >= 1) {
           portfolioRevealed = true
           onPortfolioVisible?.()

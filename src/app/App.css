@@ -13,6 +13,14 @@
   background: #22c55e;
 }
 
+/* The intro's globe animates the window through these variables, every frame. Not inherited: otherwise
+   each change would restyle the whole page inside the window (globeScene.ts also writes them only when
+   they change). */
+@property --portal-y { syntax: '*'; inherits: false; }
+@property --portal-scale { syntax: '*'; inherits: false; }
+@property --portal-opacity { syntax: '*'; inherits: false; }
+@property --portal-edge { syntax: '*'; inherits: false; }
+
 .portfolio-window.is-intro-window {
   position: fixed;
   inset: 0;
@@ -27,14 +35,9 @@
   opacity: var(--portal-opacity, 0);
   border-radius: calc(18px * var(--portal-edge, 1));
   box-shadow: 0 0 0 2px rgb(148 180 198 / .25), 0 24px 100px #000a;
+  /* The window's inner edge, over the page, fading as the window fills the screen. An outline rather than
+     a ::after, which would need --portal-edge to be inherited by the whole page. */
+  outline: 2px solid rgb(185 233 217 / calc(.333 * var(--portal-edge, 1)));
+  outline-offset: -2px;
   will-change: transform, opacity;
-}
-.portfolio-window.is-intro-window::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 2px #b9e9d955;
-  opacity: var(--portal-edge, 1);
-  pointer-events: none;
 }

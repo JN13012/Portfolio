@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "dev:lab": "npx wrangler dev --port 8787 --ip 127.0.0.1",
-    "build": "vite build",
-    "deploy:worker": "vite build && npx wrangler deploy",
+    "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr --logLevel warn && node scripts/prerender.mjs",
+    "deploy:worker": "npm run build && npx wrangler deploy",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json",

@@ -14,6 +14,17 @@ de refonte sont conservées dans [archive/](archive/). Elles ne constituent plus
 
 L’introduction anime la fenêtre contenant le vrai portfolio ; elle ne charge pas une seconde version.
 Elle est évitée sur mobile, avec réduction des animations ou Save-Data, et mémorisée par session.
+Pendant la plongée, la fenêtre est animée par des variables CSS non héritées (`@property` dans `App.css`),
+écrites seulement quand elles changent. Le réseau 3D du Hero reste animé pendant la plongée (choix du 7 novembre).
+
+**Premier écran pré-rendu.** `npm run build` rend aussi l’application dans Node (`src/entry-server.tsx`,
+`scripts/prerender.mjs`) et écrit ce HTML dans `dist/index.html` : le Hero s’affiche avant le JavaScript,
+puis `main.jsx` l’hydrate (React reprend ces éléments au lieu de les recréer). Le rendu correspond à une
+première visite sur téléphone ; ce qui dépend du navigateur passe par `useSyncExternalStore` avec une
+valeur « première visite » côté serveur, et les sections chargées à la demande n’arrivent qu’après
+l’hydratation. Quand l’intro du globe va s’ouvrir, le script intégré de `index.html` masque cette page et
+`main.jsx` la recrée. La CSP autorise ce script par son empreinte (`public/_headers`, vérifiée par un test)
+et les attributs `style` du rendu par les leurs, ajoutées au `_headers` du build.
 
 ```text
 src/

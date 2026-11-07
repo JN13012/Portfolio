@@ -139,3 +139,9 @@ body {
     opacity: 0;
   }
 }
+
+/* Until the globe intro starts, the prerendered page stays hidden behind black (inline script of index.html). */
+/* What only the live page can place (the hero's network) stays empty until it runs. */
+html:not([data-live]) [data-prerender-hidden] { visibility: hidden; }
+html[data-intro-pending] { background: #000; }
+html[data-intro-pending] #root { visibility: hidden; }
