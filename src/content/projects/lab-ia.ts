@@ -13,10 +13,10 @@ export const labIa: Project = {
   team: { size: 1 },
   context: 'personal',
   tagline: {
-    fr: 'Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 5 niveaux ouverts.',
+    fr: 'Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 6 niveaux ouverts.',
   },
   summary: {
-    fr: 'Un exercice de red teaming jouable dans le CTF de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, puis lui fait payer une facture sur un faux IBAN en trompant sa recherche. Les niveaux 1 à 5 sont ouverts ; les 5 autres sont annoncés « À venir ».',
+    fr: 'Un exercice de red teaming jouable dans le CTF de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, lui fait payer une facture sur un faux IBAN en trompant sa recherche, puis détourne ses outils pour obtenir un accès qu’il doit refuser. Les niveaux 1 à 6 sont ouverts ; les 4 autres sont annoncés « À venir ».',
   },
   sections: [
     {

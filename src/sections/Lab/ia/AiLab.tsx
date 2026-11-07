@@ -7,7 +7,7 @@ import { AiLabIntro } from './AiLabIntro'
 import { DefenseDiagram } from './DefenseDiagram'
 import { LevelDrawer } from './LevelDrawer'
 import { openSession, sendAttempt, validateFlag } from './labApi'
-import { conversationHistory, inboxChecks, inboxReason, initialLabState, labReducer, type LabResult } from './labState'
+import { agentChecks, conversationHistory, inboxChecks, inboxReason, initialLabState, labReducer, type LabResult } from './labState'
 import './aiLab.css'
 
 /** Real attempts on the real model, through `/api/lab`. Nothing here is simulated. */
@@ -60,8 +60,8 @@ export default function AiLab() {
       ? { id, level, outcome: 'error', title: 'CTF indisponible', explanation: aiLabUnavailable, trace: notRun }
       : reply.outcome === 'quota'
         ? { id, level, outcome: 'quota', title: 'Essais indisponibles', explanation: aiLabQuotaCopy[reply.reason ?? 'busy'], trace: reply.trace }
-        : { id, level, outcome: reply.outcome, title: aiLabOutcomes[reply.outcome].title, explanation: aiLabOutcomes[reply.outcome].text, answer: reply.answer, flag: reply.flag, ranking: reply.ranking, emails: sentEmails, trace: reply.trace,
-          checks: sentEmails && reply.ranking ? inboxChecks(reply.outcome, reply.ranking, sentEmails) : undefined,
+        : { id, level, outcome: reply.outcome, title: aiLabOutcomes[reply.outcome].title, explanation: aiLabOutcomes[reply.outcome].text, answer: reply.answer, flag: reply.flag, ranking: reply.ranking, emails: sentEmails, tools: reply.tools, trace: reply.trace,
+          checks: sentEmails && reply.ranking ? inboxChecks(reply.outcome, reply.ranking, sentEmails) : reply.tools ? agentChecks(reply.outcome, reply.tools) : undefined,
           reason: sentEmails ? inboxReason(reply.outcome, reply.answer) : undefined }
     dispatch({ type: 'attempt', prompt, result, remaining: reply?.remaining ?? null })
   }

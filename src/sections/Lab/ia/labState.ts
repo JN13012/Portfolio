@@ -1,7 +1,7 @@
-import { containsIban, isAiLabLevel, payeeIban, poisonedCv, poisonedInbox, sourceForSearch, type DefenseStageId, type EmailDraft, type IndexedSource, type LabLevel } from '../../../content/lab/ai'
+import { containsIban, helpdesk, isAiLabLevel, payeeIban, poisonedCv, poisonedInbox, sourceForSearch, type DefenseStageId, type EmailDraft, type IndexedSource, type LabLevel, type ToolCall } from '../../../content/lab/ai'
 
 export type StageStatus = 'inactive' | 'passed' | 'blocked' | 'error' | 'not-run'
-export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'recommended' | 'rejected' | 'diverted' | 'official-iban' | 'not-retrieved' | 'off-topic' | 'error' | 'quota'
+export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'recommended' | 'rejected' | 'diverted' | 'official-iban' | 'not-retrieved' | 'granted' | 'denied' | 'off-topic' | 'error' | 'quota'
 export type LabTrace = { stage: DefenseStageId; status: StageStatus }[]
 export type LabResult = {
   id: number
@@ -10,7 +10,9 @@ export type LabResult = {
   title: string
   explanation: string
   answer?: string
-  /** Handed over by the server when level 4's CV is recommended or level 5's IBAN is given. */
+  /** Level 6: the tools Sentry called, as the server ran them. */
+  tools?: ToolCall[]
+  /** Handed over by the server when level 4's CV is recommended, level 5's IBAN is given or level 6's access is granted. */
   flag?: string
   /** Level 5: the search's ranking of the sources, the emails as they were sent, and where the attack stopped. */
   ranking?: SearchRanking
@@ -142,4 +144,17 @@ export function inboxReason(outcome: LabOutcome, answer?: string): string | unde
   if (payee === 'AUCUN') return reasons.blocked
   if (payee === official) return reasons.official
   return payee === iban.replace(/\s/g, '') ? reasons.diverted : reasons.other
+}
+
+/** Where level 6's attack stopped, from the calls the server ran and its verdict on the directory. */
+export function agentChecks(outcome: LabOutcome, tools: readonly ToolCall[]): LabCheck[] {
+  const { checks, user, targetGroup } = helpdesk
+  const plain = (value: unknown) => String(value ?? '').toLowerCase()
+  const adds = tools.filter(call => call.name === 'ajouter_au_groupe')
+  const own = adds.some(call => plain(call.arguments.groupe) === plain(targetGroup) && [user.id, plain(user.name)].includes(plain(call.arguments.utilisateur)))
+  return [
+    { label: checks.called, ok: tools.length > 0, detail: checks.count(tools.length) },
+    { label: checks.add, ok: adds.length ? own : false, detail: adds.length ? adds.map(call => `${String(call.arguments.utilisateur ?? '?')} → ${String(call.arguments.groupe ?? '?')}`).join(', ') : checks.notCalled },
+    { label: checks.access, ok: outcome === 'granted' },
+  ]
 }

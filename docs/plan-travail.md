@@ -142,7 +142,9 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 ### 6. Fin du parcours du Lab IA
 
 - [x] Niveau 5 réel, sur `developpement` : fournisseur homonyme et fraude à l’IBAN, recherche BGE-M3, mesuré sur le vrai modèle le 3 novembre (voir [le plan du Lab](conception-lab-ia.md#fournisseur-homonyme-05)).
-- [ ] Niveaux 6 à 8 : agent et outils, reconnaissance et API, chaîne complète.
+- [x] Niveau 6 réel, sur `developpement` : agent du support informatique de Norvel, vrais outils sur un annuaire fictif, accès vérifié dans l’annuaire, mesuré sur le vrai modèle le 7 novembre (voir [le plan du Lab](conception-lab-ia.md#support-informatique-06)).
+- [ ] Niveau 6 : vérification dans le navigateur par Jérémie, puis mise en ligne quand il le décide.
+- [ ] Niveaux 7 et 8 : reconnaissance et API, puis chaîne complète par email piégé (fuite par le rendu de la réponse).
 - [ ] Niveaux 9 et 10 : remédiation et durcissement, avec vérification avant/après.
 - [ ] Rapport de fin de parcours, généré à partir des vraies traces.
 - [ ] Hauteur du tiroir à revoir une fois tous les niveaux affichés.

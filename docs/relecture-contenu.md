@@ -1,6 +1,6 @@
 # Relecture du contenu V1 (FR)
 
-> Généré par `npm run review` le 2026-11-06 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
+> Généré par `npm run review` le 2026-11-07 à partir de `src/content/`. Ne pas modifier ce fichier à la main : corriger le contenu source, puis régénérer.
 > Les chiffres viennent des dépôts et des certificats (voir les champs `source` dans le code).
 
 ## Introduction
@@ -392,9 +392,9 @@ Chiffres : 729 notes
 
 ### CTF IA — En développement · MVP
 
-*Carte* : Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 5 niveaux ouverts.
+*Carte* : Un exercice de red teaming sur un vrai modèle, jouable sur ce site : 6 niveaux ouverts.
 
-Un exercice de red teaming jouable dans le CTF de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, puis lui fait payer une facture sur un faux IBAN en trompant sa recherche. Les niveaux 1 à 5 sont ouverts ; les 5 autres sont annoncés « À venir ».
+Un exercice de red teaming jouable dans le CTF de ce site, face à Sentry, qui répond avec un vrai modèle. Le visiteur lui fait révéler un flag fictif, glisse un texte caché dans un CV pour qu’il le recommande, lui fait payer une facture sur un faux IBAN en trompant sa recherche, puis détourne ses outils pour obtenir un accès qu’il doit refuser. Les niveaux 1 à 6 sont ouverts ; les 4 autres sont annoncés « À venir ».
 
 **Sécurité.** Le serveur gère les flags et la progression, et applique des quotas par session et par adresse IP, sur 1 heure, 5 heures et 24 heures.
 

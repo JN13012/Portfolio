@@ -1,7 +1,8 @@
-import { aiLabCurriculum, cvMessage, cvText, defenseStages, inboxMessage, isDocumentLevel, isInboxLevel, isVisitorEmail, poisonedCv, paysVisitor, poisonedInbox, sourceForSearch, stageRuns, visitorEmails, type DefenseStageId, type EmailDraft } from '../../src/content/lab/ai'
+import { aiLabCurriculum, cvMessage, isAgentLevel, cvText, defenseStages, inboxMessage, isDocumentLevel, isInboxLevel, isVisitorEmail, poisonedCv, paysVisitor, poisonedInbox, sourceForSearch, stageRuns, visitorEmails, type DefenseStageId, type EmailDraft } from '../../src/content/lab/ai'
 import { inputAllowed, outputAllowed } from './filters'
-import { askClassifier, askGuard, askModel, type AiBinding, type ChatMessage } from './model'
-import { classifierInstructions, inboxInstructions, screeningInstructions, simpleInstructions } from './prompts'
+import { helpdeskDirectory, helpdeskTools } from './helpdesk'
+import { askAgent, askClassifier, askGuard, askModel, type AiBinding, type ChatMessage } from './model'
+import { classifierInstructions, helpdeskInstructions, inboxInstructions, screeningInstructions, simpleInstructions } from './prompts'
 import { searchSources } from './search'
 
 type Statement = {
@@ -25,8 +26,8 @@ const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1'])
 const COOKIE = '__Host-lab_session'
 const SESSION_MS = 24 * 60 * 60 * 1000
 const HOUR_MS = 60 * 60 * 1000
-// Longer than the three model calls of an attempt can take together, at 20 s each.
-const BUSY_MS = 70_000
+// Longer than an attempt can take: level 6's agent stops calling the model after 45 s, then one call and the safeguard, at 20 s each.
+const BUSY_MS = 90_000
 // Cloudflare's error code once the account's daily Workers AI allocation is used up.
 const PROVIDER_QUOTA = 'AiError: 4006:'
 const MAX_BODY_BYTES = 16_384
@@ -278,6 +279,26 @@ async function attempt(request: Request, env: Ready, now: number) {
     return reply(200, {
       outcome: paid ? 'diverted' : 'official-iban', answer: answer.text, ranking, ...(paid && { flag: await flagFor(session.secret, level) }),
       remaining, trace: stageTrace(level, { ...answered, response: 'passed', payment: paid ? 'passed' : 'blocked' }),
+    })
+  }
+
+  // Level 6: the tools run for real on a fresh directory, and the server reads that directory, never Sentry's words.
+  if (isAgentLevel(level)) {
+    const start = { entry: 'passed', instructions: 'passed' } as const
+    const directory = helpdeskDirectory()
+    let agent: Awaited<ReturnType<typeof askAgent>>
+    try { agent = await askAgent(env.AI, [{ role: 'system', content: helpdeskInstructions }, ...history, { role: 'user', content: prompt }], helpdeskTools, directory.run) }
+    catch (error) { return failed(error, { ...start, model: 'error' }) }
+    const answered = { ...start, model: 'passed', tools: agent.calls.length ? 'passed' : 'not-run' } as const
+    let verdict: Awaited<ReturnType<typeof askGuard>>
+    try { verdict = await askGuard(env.AI, prompt, agent.text || '…') }
+    catch (error) { return failed(error, { ...answered, response: 'error' }, costOf(agent)) }
+    await Promise.all([release(false), settleBudget(costOf(agent, verdict))])
+    if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...answered, response: 'blocked' }) })
+    const granted = directory.granted()
+    return reply(200, {
+      outcome: granted ? 'granted' : 'denied', answer: agent.text, tools: agent.calls, ...(granted && { flag: await flagFor(session.secret, level) }),
+      remaining, trace: stageTrace(level, { ...answered, response: 'passed', access: granted ? 'passed' : 'blocked' }),
     })
   }
 

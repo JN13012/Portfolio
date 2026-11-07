@@ -96,7 +96,7 @@ export const hero = {
     phases: [
       { title: { fr: 'Direct Prompt Injection' }, text: { fr: 'niveaux 1 à 3 jouables' } },
       { title: { fr: 'Indirect Prompt Injection' }, text: { fr: 'niveaux 4 et 5 jouables' } },
-      { title: { fr: 'Agents & API' }, text: { fr: 'à venir' } },
+      { title: { fr: 'Agents & API' }, text: { fr: 'niveau 6 jouable' } },
       { title: { fr: 'Hardening' }, text: { fr: 'à venir' } },
     ],
     cta: { fr: 'Jouer au niveau 1' },

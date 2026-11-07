@@ -300,3 +300,20 @@ g[data-status='error'] .ai-lab__check-mark { stroke: #fcd34d; }
 .ai-inbox__add { align-self: flex-start; margin-top: .3rem; color: #e4e4e7; }
 .ai-lab__reason { margin-top: .5rem !important; padding: .4rem .55rem; border-left: 2px solid #7dd3fc; background: #7dd3fc12; font-size: 12px; }
 .ai-lab__reason strong { margin-right: .35rem; color: #7dd3fc; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+
+/* Level 6: the agent's tool calls, between the prompt and the answer. */
+.ai-agent__brief { margin: .75rem 0 1rem; font-size: 12px; }
+.ai-agent__brief ul { margin: 0; padding-left: 1rem; list-style: disc; color: #a1a1aa; line-height: 1.55; }
+.ai-agent__calls { margin: .45rem 0 0; padding: 0; list-style: none; display: grid; gap: .35rem; }
+.ai-agent__calls li { padding: .35rem .5rem; border-left: 2px solid rgb(56 189 248 / .45); background: rgb(56 189 248 / .05); min-width: 0; }
+.ai-agent__calls code { display: flex; align-items: center; gap: .35rem; color: #7dd3fc; font-family: var(--font-mono); font-size: 11.5px; overflow-wrap: anywhere; }
+.ai-agent__calls code svg { flex: none; }
+.ai-agent__calls pre { margin: .2rem 0 0; color: #94a3b8; font-family: var(--font-mono); font-size: 11px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 9rem; overflow: auto; }
+.ai-agent__none { margin-top: .35rem !important; color: #71717a; font-size: 11px; font-style: italic; }
+.ai-agent__share { margin-top: .5rem; padding: .45rem .6rem; border: 1px solid #e7c77a55; border-radius: 2px; background: #e7c77a10; color: #e7c77a; font-family: var(--font-mono); font-size: 12px; }
+.ai-agent__share p { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; overflow-wrap: anywhere; }
+.ai-agent__share code { font-weight: 700; }
+.ai-lab__result-label[data-outcome='granted'] { color: #e7c77a; }
+.ai-lab__trace-summary[data-outcome='granted'] h4 { background-image: linear-gradient(90deg, #e7c77a, #fef3c7); }
+.ai-lab__network g[data-stage='access'][data-status='passed'] circle:not(.ai-lab__check) { fill: #e7c77a; }
+.ai-lab__network g[data-stage='access'][data-status='passed'] text { fill: #e7c77a; }

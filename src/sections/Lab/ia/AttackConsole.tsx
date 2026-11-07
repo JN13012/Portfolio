@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useRef, type Dispatch, type FormEvent } from 'react'
 import { Lock, Send, ShieldCheck, Terminal } from 'lucide-react'
-import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePanelCopy, isDocumentLevel, isInboxLevel, poisonedCv, poisonedInbox } from '../../../content/lab/ai'
+import { aiLabCurriculum, aiLabLevels, aiLabSuccess, aiLabUnavailable, defensePanelCopy, isAgentLevel, isDocumentLevel, isInboxLevel, poisonedCv, poisonedInbox } from '../../../content/lab/ai'
+import { AgentBrief, AgentCalls, AgentShare } from './AgentTools'
 import { labReducer, type LabState } from './labState'
 import { LabNavigation } from '../LabNavigation'
 import { PoisonedCv } from './PoisonedCv'
@@ -36,6 +37,7 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
   const onCv = isDocumentLevel(state.level)
   const onInbox = isInboxLevel(state.level)
   const paper = onCv || onInbox
+  const onAgent = isAgentLevel(state.level)
   const canSend = state.pending === null && (onCv ? !!(state.cv.profile.trim() || state.cv.hidden.trim()) : onInbox ? state.emails.some(email => !!email.body.trim()) : !!state.draft.trim())
   return (
     <div className="lab-terminal ai-lab__console">
@@ -55,12 +57,15 @@ export function AttackConsole({ state, dispatch, available, onSend, onValidate, 
           <p><span aria-hidden="true">&gt;&gt;</span> RED-TEAM SENTRY — CAPTURE THE FLAG</p>
           <p><span aria-hidden="true">&gt;&gt;</span> Saisissez votre premier prompt pour commencer.</p>
         </div>
+        {onAgent && <AgentBrief />}
         {!available && <p className="ai-lab__empty" role="status">{aiLabUnavailable}</p>}
         {success(0)}
         {attempts.map(({ prompt, result }) => <Fragment key={result.id}><div className="ai-lab__exchange">
           <p className="ai-lab__prompt"><span className="sr-only">Vous : </span>{prompt}</p>
           <p className="ai-lab__result-label" data-outcome={result.outcome}>{result.title}</p>
+          {result.tools && <AgentCalls tools={result.tools} />}
           {result.answer && <p className="ai-lab__answer"><span>sentry&gt;</span> {result.answer}</p>}
+          {result.tools && result.flag && <AgentShare flag={result.flag} />}
           <button type="button" className="ai-lab__see-trace" onClick={() => document.getElementById('ai-lab-defenses')?.scrollIntoView()}>{defensePanelCopy.seeTrace}</button>
         </div>{success(result.id)}</Fragment>)}
         {state.pending !== null && <div className="ai-lab__exchange">

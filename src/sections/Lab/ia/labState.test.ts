@@ -10,7 +10,7 @@ const attempt = (id: number, answer?: string) => ({ type: 'attempt', prompt: `pr
 
 describe('Lab IA interface state', () => {
   it('rejects unavailable levels and blank prompts', () => {
-    expect(labReducer(initialLabState, { type: 'level', level: 6 })).toBe(initialLabState)
+    expect(labReducer(initialLabState, { type: 'level', level: 7 })).toBe(initialLabState)
     expect(labReducer(initialLabState, { type: 'level', level: 99 })).toBe(initialLabState)
     expect(labReducer(initialLabState, { ...attempt(1, 'ok'), prompt: ' ' })).toBe(initialLabState)
   })

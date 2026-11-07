@@ -161,7 +161,7 @@ Ces comparaisons ne remplacent pas les contrôles d’interaction et ne constitu
 
 Le sélecteur IA du Lab ouvre une interface chargée à la demande : console,
 tiroir des dix niveaux et schéma SVG. `/?lab=ia#lab` l'ouvre directement.
-Les niveaux 1 à 5 tournent sur le vrai modèle ; les cinq autres restent « À venir ».
+Les niveaux 1 à 6 tournent sur le vrai modèle ; les quatre autres restent « À venir ».
 En local, l'API demande `npm run dev:lab` à côté de `npm run dev`, qui lui transmet `/api/lab`, et un `LAB_IP_SECRET` dans `.dev.vars`.
 La mascotte n’est plus affichée entre le titre et la liste d’entrée. Les défenses sont visibles
 avant le premier essai ; la conversation du Lab est indépendante du chat du site.
@@ -174,6 +174,8 @@ la mission est présentée dans la console. L'entrée Blockchain reprend celle d
 Le bouton « Commencer » déclenche une extinction CRT de 520 ms, dont la fin ouvre la console.
 Cette transition et l'apparition progressive sont immédiates avec réduction des mouvements.
 Les réponses viennent de `server/aiLab/`, jamais de résultats préparés.
+Au niveau 6, Sentry est un agent : `model.ts` (`askAgent`) borne sa boucle d'appels d'outils, `helpdesk.ts` tient l'annuaire,
+les tickets et les outils, exécutés pour de vrai sur une copie neuve à chaque essai ; la console affiche les appels (`ia/AgentTools.tsx`).
 Les descriptions publiques sont dans `content/lab/ai.ts`, sans consignes privées.
 
 ### CTF Blockchain

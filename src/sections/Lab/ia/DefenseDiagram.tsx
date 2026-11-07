@@ -31,11 +31,13 @@ const STAGE_LAYOUT: Record<DefenseStageId, { rows: readonly number[]; label: rea
   input: { rows: [1], label: ['Filtre', 'd’entrée'], check: true },
   instructions: { rows: [1], label: ['Consignes'] },
   model: { rows: [1], label: ['Modèle'] },
+  tools: { rows: [1], label: ['Outils'] },
   output: { rows: [1], label: ['Filtre', 'de sortie'], check: true },
   classifier: { rows: [1], label: ['Classifieur', 'IA'], check: true },
   response: { rows: [1], label: ['Réponse'] },
   flag: { rows: [1], label: ['Flag'] },
   decision: { rows: [1], label: ['Décision'], check: true },
+  access: { rows: [1], label: ['Accès'], check: true },
   payment: { rows: [1], label: ['Virement'], check: true },
 }
 type Point = { x: number; y: number }

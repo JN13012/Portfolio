@@ -1,3 +1,5 @@
+import type { ToolCall } from '../../src/content/lab/ai'
+
 export type ChatMessage = { role: 'system' | 'user' | 'assistant'; content: string }
 export type AiBinding = { run(model: string, input: object): Promise<unknown> }
 type Completion = { text: string; neurons: number | null }
@@ -64,4 +66,52 @@ export async function askGuard(ai: AiBinding, prompt: string, answer: string, al
   if (lines[0] !== 'unsafe') throw new Error('unclear verdict')
   const categories = (lines[1] ?? '').split(',').map(category => category.trim()).filter(Boolean)
   return { allowed: categories.length > 0 && categories.every(category => IGNORED_GUARD_CATEGORIES.has(category) || alsoIgnored.includes(category)), neurons }
+}
+
+type ToolSpec = { type: 'function'; function: { name: string; description: string; parameters: object } }
+type ToolRequest = { id?: unknown; function?: { name?: unknown; arguments?: unknown } }
+type AgentMessage = ChatMessage | { role: 'assistant'; content: string; tool_calls: { id: string; type: 'function'; function: { name: string; arguments: string } }[] } | { role: 'tool'; tool_call_id: string; content: string }
+// Level 6's loop, bounded so one attempt stays one attempt: at most 5 model calls and 6 tool calls,
+// and no new model call once 45 s have passed. The last call may not ask for tools.
+export const AGENT_LIMITS = { modelCalls: 5, toolCalls: 6, wallMs: 45_000 } as const
+
+/**
+ * Level 6's agent. The model asks for tools, `runTool` really runs them, their results go back to it, until it
+ * answers in text or the bounds are reached. Only the published content and the calls are returned.
+ */
+export async function askAgent(ai: AiBinding, messages: ChatMessage[], tools: readonly ToolSpec[], runTool: (name: string, args: unknown) => ToolCall, now = Date.now): Promise<{ text: string; calls: ToolCall[]; neurons: number | null }> {
+  const started = now()
+  const conversation: AgentMessage[] = [...messages]
+  const calls: ToolCall[] = []
+  let neurons: number | null = 0
+  for (let round = 1; ; round++) {
+    const last = round >= AGENT_LIMITS.modelCalls || calls.length >= AGENT_LIMITS.toolCalls || now() - started > AGENT_LIMITS.wallMs
+    const output = await withTimeout(ai.run(CHAT_MODEL, {
+      messages: conversation, tools, ...(last && { tool_choice: 'none' }),
+      max_tokens: MAX_OUTPUT_TOKENS, temperature: 0.6, chat_template_kwargs: { enable_thinking: false },
+    })) as { choices?: { message?: { content?: unknown; tool_calls?: unknown } }[]; usage?: { neurons?: unknown } }
+    const spent = neuronsOf(output)
+    neurons = neurons === null || spent === null ? null : neurons + spent
+    const message = output.choices?.[0]?.message
+    if (!message) throw new Error('empty answer')
+    const content = typeof message.content === 'string' ? message.content.trim() : ''
+    const requested = Array.isArray(message.tool_calls) ? message.tool_calls as ToolRequest[] : []
+    // A last call that still asks for tools gets no more of them: its text, if any, is the answer.
+    if (last || !requested.length) {
+      if (!content && !calls.length) throw new Error('empty answer')
+      return { text: content, calls, neurons }
+    }
+    const asked = requested.map((request, index) => ({
+      id: typeof request.id === 'string' && request.id ? request.id.slice(0, 64) : `call-${round}-${index}`,
+      name: typeof request.function?.name === 'string' ? request.function.name : '',
+      arguments: typeof request.function?.arguments === 'string' ? request.function.arguments : JSON.stringify(request.function?.arguments ?? {}),
+    }))
+    conversation.push({ role: 'assistant', content, tool_calls: asked.map(call => ({ id: call.id, type: 'function', function: { name: call.name, arguments: call.arguments } })) })
+    for (const call of asked) {
+      // Calls beyond the bound are answered without running, so every request id still gets its result.
+      const result = calls.length < AGENT_LIMITS.toolCalls ? runTool(call.name, call.arguments) : null
+      if (result) calls.push(result)
+      conversation.push({ role: 'tool', tool_call_id: call.id, content: JSON.stringify(result ? result.result : { erreur: 'Limite d’appels atteinte.' }) })
+    }
+  }
 }
