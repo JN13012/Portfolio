@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { aiLabCurriculum, aiLabLevels, defenseStages, poisonedInbox, visitorEmails } from '../../../content/lab/ai'
-import { conversationHistory, inboxChecks, inboxReason, initialLabState, labReducer, type LabResult } from './labState'
+import { agentAdvice, aiLabAdvice, aiLabCurriculum, aiLabLevels, aiLabOutcomes, defenseStages, poisonedInbox, visitorEmails } from '../../../content/lab/ai'
+import { adviceFor, conversationHistory, failuresInARow, inboxChecks, inboxReason, initialLabState, labReducer, stageWord, type LabAttempt, type LabOutcome, type LabResult } from './labState'
 
 const result = (id: number, answer?: string): LabResult => ({
   id, level: 1, outcome: answer ? 'delivered' : 'error', title: 'Résultat', explanation: 'Texte', answer,
@@ -109,5 +109,36 @@ describe('Level 5 reason', () => {
     expect(inboxReason('not-retrieved')).toBe(poisonedInbox.reasons['not-retrieved'])
     expect(inboxReason('diverted', 'x')).toBe(poisonedInbox.reasons.diverted)
     expect(inboxReason('error')).toBeUndefined()
+  })
+})
+
+describe('Lab IA guidance', () => {
+  const ended = (outcome: LabOutcome, level = 1): LabAttempt => ({ prompt: 'p', result: { ...result(1), level, outcome } })
+
+  it('gives advice from the level and the outcome, and the safeguard\'s advice on every level', () => {
+    expect(adviceFor(1, 'delivered')).toBe(aiLabAdvice[1]!.delivered)
+    expect(adviceFor(2, 'blocked-input')).toBe(aiLabAdvice[2]!['blocked-input'])
+    expect(adviceFor(4, 'off-topic')).toBe(aiLabOutcomes['off-topic'].advice)
+    expect(adviceFor(1, 'flag')).toBeUndefined()
+    expect(adviceFor(1, 'error')).toBeUndefined()
+  })
+
+  it('reads level 6\'s advice from the calls the server ran', () => {
+    expect(adviceFor(6, 'denied', [])).toBe(agentAdvice.noTool)
+    expect(adviceFor(6, 'denied', [{ name: 'consulter_ticket', arguments: {}, result: {} }])).toBe(agentAdvice.noAdd)
+    expect(adviceFor(6, 'denied', [{ name: 'ajouter_au_groupe', arguments: { utilisateur: 'sophie.martin', groupe: 'Finance-Admins' }, result: {} }])).toBe(agentAdvice.wrongAdd)
+    expect(adviceFor(6, 'granted', [])).toBeUndefined()
+  })
+
+  it('counts failures in a row on the level only, ignoring errors and quotas, until a success', () => {
+    expect(failuresInARow([ended('delivered'), ended('error'), ended('delivered'), ended('quota'), ended('delivered', 2), ended('delivered')], 1)).toBe(3)
+    expect(failuresInARow([ended('delivered'), ended('flag'), ended('delivered')], 1)).toBe(1)
+    expect(failuresInARow([], 1)).toBe(0)
+  })
+
+  it('says why a check stopped the request when it can, such as an absent flag', () => {
+    expect(stageWord('flag', 'blocked')).toBe('Absent')
+    expect(stageWord('flag', 'passed')).toBe('Passée')
+    expect(stageWord('input', 'blocked')).toBe('Bloquée')
   })
 })

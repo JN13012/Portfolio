@@ -7,7 +7,7 @@ import { AiLabIntro } from './AiLabIntro'
 import { DefenseDiagram } from './DefenseDiagram'
 import { LevelDrawer } from './LevelDrawer'
 import { openSession, sendAttempt, validateFlag } from './labApi'
-import { agentChecks, conversationHistory, inboxChecks, inboxReason, initialLabState, labReducer, type LabResult } from './labState'
+import { adviceFor, agentChecks, conversationHistory, failuresInARow, inboxChecks, inboxReason, initialLabState, labReducer, type LabResult } from './labState'
 import './aiLab.css'
 
 /** Real attempts on the real model, through `/api/lab`. Nothing here is simulated. */
@@ -62,7 +62,7 @@ export default function AiLab() {
         ? { id, level, outcome: 'quota', title: 'Essais indisponibles', explanation: aiLabQuotaCopy[reply.reason ?? 'busy'], trace: reply.trace }
         : { id, level, outcome: reply.outcome, title: aiLabOutcomes[reply.outcome].title, explanation: aiLabOutcomes[reply.outcome].text, answer: reply.answer, flag: reply.flag, ranking: reply.ranking, emails: sentEmails, tools: reply.tools, trace: reply.trace,
           checks: sentEmails && reply.ranking ? inboxChecks(reply.outcome, reply.ranking, sentEmails) : reply.tools ? agentChecks(reply.outcome, reply.tools) : undefined,
-          reason: sentEmails ? inboxReason(reply.outcome, reply.answer) : undefined }
+          reason: sentEmails ? inboxReason(reply.outcome, reply.answer) : undefined, advice: adviceFor(level, reply.outcome, reply.tools) }
     dispatch({ type: 'attempt', prompt, result, remaining: reply?.remaining ?? null })
   }
   const validate = async () => {
@@ -82,7 +82,7 @@ export default function AiLab() {
         {drawer && <LevelDrawer level={entered ? state.level : undefined} completed={state.completed} onClose={() => setDrawer(false)} onSelect={selectLevel} />}
       </div>
       {/* Hidden rather than unmounted, so coming back to a level does not replay its last trace. */}
-      <Activity mode={entered ? 'visible' : 'hidden'}><DefenseDiagram level={state.level} result={last} solved={state.completed.includes(state.level)} hint={state.hints[state.level] ?? 0}
+      <Activity mode={entered ? 'visible' : 'hidden'}><DefenseDiagram level={state.level} result={last} solved={state.completed.includes(state.level)} hint={state.hints[state.level] ?? 0} failures={failuresInARow(state.attempts, state.level)}
         onHint={value => dispatch({ type: 'hint', value, total: aiLabLevels[state.level - 1]!.hints.length })}
         onUsePrompt={prompt => {
           const onCv = isDocumentLevel(state.level)

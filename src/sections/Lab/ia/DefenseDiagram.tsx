@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from 'react'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import { Sentry } from '../../../components/Sentry'
-import { aiLabLevels, defensePanelCopy, defenseStages, poisonedInbox, stageRuns, type DefenseStageId, type LabLevel } from '../../../content/lab/ai'
+import { adviceLabel, aiLabLevels, defensePanelCopy, defenseStages, hintNudge, poisonedInbox, stageRuns, type DefenseStageId, type LabLevel } from '../../../content/lab/ai'
 import { useReducedMotion } from '../../../lib/useReducedMotion'
-import { stageStatusLabels, type LabCheck, type LabResult, type LabTrace } from './labState'
+import { stageWord, type LabCheck, type LabResult, type LabTrace } from './labState'
 
 const subscribeVisibility = (callback: () => void) => {
   document.addEventListener('visibilitychange', callback)
@@ -35,7 +35,7 @@ const STAGE_LAYOUT: Record<DefenseStageId, { rows: readonly number[]; label: rea
   output: { rows: [1], label: ['Filtre', 'de sortie'], check: true },
   classifier: { rows: [1], label: ['Classifieur', 'IA'], check: true },
   response: { rows: [1], label: ['Réponse'] },
-  flag: { rows: [1], label: ['Flag'] },
+  flag: { rows: [1], label: ['Flag'], check: true },
   decision: { rows: [1], label: ['Décision'], check: true },
   access: { rows: [1], label: ['Accès'], check: true },
   payment: { rows: [1], label: ['Virement'], check: true },
@@ -108,7 +108,7 @@ function NetworkPicture({ trace, network, revealed, waiting = false, moving = fa
             </g>
           : <circle key={`${node.x}-${node.y}`} cx={node.x} cy={node.y} r={entry.stage === 'model' ? 6 : 3.5} />))}
         <text className="ai-lab__stage-name" x={labelX} y={layout.label.length > 1 ? 12 : 27} textAnchor="middle">{layout.label.map((label, line) => <tspan key={label} x={labelX} dy={line ? 15 : 0}>{label}</tspan>)}</text>
-        {(status === 'blocked' || status === 'error') && <text className="ai-lab__stage-word" x={layout.check ? labelX - 4 : labelX} y={centerY + (layout.check ? 30 : rowGap + 22)} textAnchor={layout.check ? 'start' : 'middle'}>{stageStatusLabels[status]}</text>}
+        {(status === 'blocked' || status === 'error') && <text className="ai-lab__stage-word" x={layout.check ? labelX - 4 : labelX} y={centerY + (layout.check ? 30 : rowGap + 22)} textAnchor={layout.check ? 'start' : 'middle'}>{stageWord(entry.stage, status)}</text>}
       </g>
     })}
     {moving && <circle ref={pulseRef} className="ai-lab__pulse" cx={MARGIN_X} cy={centerY} r={2.5} />}
@@ -116,7 +116,7 @@ function NetworkPicture({ trace, network, revealed, waiting = false, moving = fa
 }
 
 /** What happens and why, in a space kept for it so nothing jumps: the current stage, then the verdict. */
-function Explanation({ title, text, outcome, checks, reason, live = true }: { title: string; text: string; outcome?: string; checks?: LabCheck[]; reason?: string; live?: boolean }) {
+function Explanation({ title, text, outcome, checks, reason, advice, nudge, live = true }: { title: string; text: string; outcome?: string; checks?: LabCheck[]; reason?: string; advice?: string; nudge?: boolean; live?: boolean }) {
   return <div className="ai-lab__trace-summary" data-outcome={outcome} role="status" aria-live={live ? 'polite' : 'off'}>
     <h4>{title}</h4>
     <p>{text}</p>
@@ -126,6 +126,8 @@ function Explanation({ title, text, outcome, checks, reason, live = true }: { ti
       <span className="sr-only">{check.ok === null ? 'non atteint' : check.ok ? 'réussi' : 'échoué'}</span>
     </li>)}</ul>}
     {reason && <p className="ai-lab__reason"><strong>{poisonedInbox.reasonLabel}</strong> {reason}</p>}
+    {advice && <p className="ai-lab__advice"><strong>{adviceLabel}</strong> {advice}</p>}
+    {nudge && <p className="ai-lab__nudge">{hintNudge.text}</p>}
   </div>
 }
 
@@ -138,7 +140,7 @@ function WaitingPicture({ trace, level }: { trace: LabTrace; level: LabLevel }) 
   </div>
 }
 
-function Trace({ result }: { result: LabResult }) {
+function Trace({ result, nudge }: { result: LabResult; nudge: boolean }) {
   const reduced = useReducedMotion()
   const visible = useSyncExternalStore(subscribeVisibility, () => !document.hidden, () => false)
   const desktop = useSyncExternalStore(subscribeWidth, () => window.matchMedia('(min-width: 1024px)').matches, () => false)
@@ -188,7 +190,7 @@ function Trace({ result }: { result: LabResult }) {
       <NetworkPicture trace={result.trace} network={network} revealed={ordered.slice(0, shown).map(entry => entry.stage)} moving={!instant && !done}
         front={done ? stop : MARGIN_X} frontRef={frontRef} pulseRef={pulseRef} title={result.title} />
     </div>
-    {done ? <Explanation title={result.title} text={result.explanation} outcome={result.outcome} checks={result.checks} reason={result.reason} />
+    {done ? <Explanation title={result.title} text={result.explanation} outcome={result.outcome} checks={result.checks} reason={result.reason} advice={result.advice} nudge={nudge} />
       : <Explanation title={stage?.label ?? defensePanelCopy.analysing} text={stage?.note ?? defensePanelCopy.analysing} live={false} />}
   </>
 }
@@ -225,8 +227,8 @@ function HintCarousel({ level, hint, onHint, onUsePrompt }: { level: LabLevel; h
   </section>
 }
 
-export function DefenseDiagram({ level, result, solved, hint, onHint, onUsePrompt }: {
-  level: LabLevel; result?: LabResult; solved: boolean; hint: number; onHint: (value: number) => void; onUsePrompt: (prompt: string) => void
+export function DefenseDiagram({ level, result, solved, hint, failures, onHint, onUsePrompt }: {
+  level: LabLevel; result?: LabResult; solved: boolean; hint: number; failures: number; onHint: (value: number) => void; onUsePrompt: (prompt: string) => void
 }) {
   const [replay, setReplay] = useState(0)
   const brief = aiLabLevels[level - 1]!
@@ -235,12 +237,12 @@ export function DefenseDiagram({ level, result, solved, hint, onHint, onUsePromp
     <header><p><Sentry size={32} animated={false} /><span>Analyse et guide · niveau {level}</span></p>
       <button type="button" className="ai-lab__replay" disabled={!result} onClick={() => setReplay(value => value + 1)}><RotateCcw size={14} aria-hidden="true" /> Rejouer</button></header>
     <div className="ai-lab__defenses-body">
-      {result ? <Trace key={`${result.id}-${replay}`} result={result} /> : <WaitingPicture trace={trace} level={level} />}
+      {result ? <Trace key={`${result.id}-${replay}`} result={result} nudge={!solved && hint === 0 && failures >= hintNudge.after} /> : <WaitingPicture trace={trace} level={level} />}
       {!result && <Explanation title={`Niveau ${level} · ${brief.title}`} text={brief.description} />}
       <Lesson level={level} solved={solved} />
       <HintCarousel level={level} hint={hint} onHint={onHint} onUsePrompt={onUsePrompt} />
       <ol className="ai-lab__stage-list" aria-label={result ? 'Étapes du dernier essai' : 'Défenses disponibles'}>{trace.filter(entry => entry.status !== 'inactive').map(entry => <li key={entry.stage} data-status={!result ? 'ready' : entry.status}>
-        <span>{defenseStages.find(stage => stage.id === entry.stage)!.label}</span><span>{!result ? 'Prête' : stageStatusLabels[entry.status]}</span>
+        <span>{defenseStages.find(stage => stage.id === entry.stage)!.label}</span><span>{!result ? 'Prête' : stageWord(entry.stage, entry.status)}</span>
       </li>)}</ol>
     </div>
   </aside>

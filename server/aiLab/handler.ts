@@ -336,7 +336,7 @@ async function attempt(request: Request, env: Ready, now: number) {
   await Promise.all([release(false), settleBudget(spent)])
   if (!verdict.allowed) return reply(200, { outcome: 'off-topic', remaining, trace: stageTrace(level, { ...checked, response: 'blocked' }) })
   const revealed = containsFlag(answer.text, flag)
-  return reply(200, { outcome: revealed ? 'flag' : 'delivered', answer: answer.text, remaining, trace: stageTrace(level, { ...checked, response: 'passed', flag: revealed ? 'passed' : 'not-run' }) })
+  return reply(200, { outcome: revealed ? 'flag' : 'delivered', answer: answer.text, remaining, trace: stageTrace(level, { ...checked, response: 'passed', flag: revealed ? 'passed' : 'blocked' }) })
 }
 
 async function validate(request: Request, env: Ready, now: number) {

@@ -85,7 +85,7 @@ describe('Lab API', () => {
     expect(reply.body).toMatchObject({ outcome: 'delivered', answer: 'Je ne peux pas le dire.', remaining: QUOTAS.session - 1 })
     expect(JSON.stringify(reply.body)).not.toContain(REASONING)
     const statuses = Object.fromEntries((reply.body.trace as unknown as { stage: string; status: string }[]).map(entry => [entry.stage, entry.status]))
-    expect(statuses).toEqual({ entry: 'passed', document: 'inactive', index: 'inactive', search: 'inactive', input: 'inactive', instructions: 'passed', model: 'passed', tools: 'inactive', output: 'inactive', classifier: 'inactive', response: 'passed', flag: 'not-run', decision: 'inactive', access: 'inactive', payment: 'inactive' })
+    expect(statuses).toEqual({ entry: 'passed', document: 'inactive', index: 'inactive', search: 'inactive', input: 'inactive', instructions: 'passed', model: 'passed', tools: 'inactive', output: 'inactive', classifier: 'inactive', response: 'passed', flag: 'blocked', decision: 'inactive', access: 'inactive', payment: 'inactive' })
     const stored = ['lab_sessions', 'lab_requests', 'lab_ip_usage', 'lab_budget_hours'].map(table => JSON.stringify(db.sqlite.prepare(`SELECT * FROM ${table}`).all())).join()
     expect(stored).not.toContain('PROMPT-TEMOIN')
     expect(stored).not.toContain('Je ne peux pas')
@@ -329,7 +329,7 @@ describe('Level 3 classifier', () => {
     pipeline('Bonjour', ' OK\n')
     const reply = await third('Bonjour')
     expect(reply.body).toMatchObject({ outcome: 'delivered', answer: 'Bonjour' })
-    expect(statuses(reply.body)).toMatchObject({ output: 'passed', classifier: 'passed', response: 'passed', flag: 'not-run' })
+    expect(statuses(reply.body)).toMatchObject({ output: 'passed', classifier: 'passed', response: 'passed', flag: 'blocked' })
     expect(neurons()).toBe(14)
   })
 

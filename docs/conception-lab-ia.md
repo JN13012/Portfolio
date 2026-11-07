@@ -245,6 +245,11 @@ en ne comptant que la réponse publiée. Outils : 4 appels par cas, sur un agend
 - Entrée envoie ; Maj+Entrée ajoute une ligne ; pas d’envoi pendant une composition IME.
 - Les essais restants viennent du serveur. Blocage, réponse délivrée, hors exercice, erreur, quota et validation
   sont des états distincts. Un refus du modèle reste une réponse délivrée : le détecter demanderait un classifieur, et une liste de mots serait trompeuse.
+- Guidage par scripts (7 novembre, demande de Jérémie) : le point « Flag » est une vérification qui s’arrête sur « Absent » quand le serveur ne trouve pas le flag ;
+  le titre dit « Pas de flag dans la réponse » et que c’est le modèle qui a suivi sa consigne ; une ligne « À tenter », propre au niveau et au résultat
+  (au niveau 6, lue dans les appels d’outils), oriente sans donner la solution ; après 3 échecs de suite, la fenêtre invite à ouvrir l’indice 1.
+  Rien n’est deviné : seuls l’étape, le résultat et les appels renvoyés par le serveur sont utilisés. Un second modèle « coach » a été écarté :
+  coût doublé par essai, explication devinée d’un refus, lui-même attaquable. Gardé pour plus tard : un bouton « Analyser mon essai » à la demande, limité.
 - Le prompt part de la zone de saisie dès l’envoi. Pendant l’attente, seuls trois points animés s’affichent dans la conversation :
   la trace rejoue ensuite la réponse du serveur, sans étapes simulées en direct ni faux temps d’inférence. Pas de streaming dans cette version.
 - Le dessin ne tourne que pendant une tentative ou un « Rejouer », se suspend hors écran et reste statique

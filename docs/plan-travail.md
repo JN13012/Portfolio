@@ -144,6 +144,8 @@ Créer une ressource distante (binding, base D1) demande l’accord de Jérémie
 - [x] Niveau 5 réel, sur `developpement` : fournisseur homonyme et fraude à l’IBAN, recherche BGE-M3, mesuré sur le vrai modèle le 3 novembre (voir [le plan du Lab](conception-lab-ia.md#fournisseur-homonyme-05)).
 - [x] Niveau 6 réel, sur `developpement` : agent du support informatique de Norvel, vrais outils sur un annuaire fictif, accès vérifié dans l’annuaire, mesuré sur le vrai modèle le 7 novembre (voir [le plan du Lab](conception-lab-ia.md#support-informatique-06)).
 - [ ] Niveau 6 : vérification dans le navigateur par Jérémie, puis mise en ligne quand il le décide.
+- [x] Guidage par scripts dans la fenêtre d’analyse (7 novembre) : « Flag » vérifié et « Absent », titre « Pas de flag dans la réponse », ligne « À tenter » par niveau et par résultat, invitation à l’indice 1 après 3 échecs.
+- [ ] Plus tard, à décider : bouton « Analyser mon essai » avec un second modèle, à la demande et limité.
 - [ ] Niveaux 7 et 8 : reconnaissance et API, puis chaîne complète par email piégé (fuite par le rendu de la réponse).
 - [ ] Niveaux 9 et 10 : remédiation et durcissement, avec vérification avant/après.
 - [ ] Rapport de fin de parcours, généré à partir des vraies traces.

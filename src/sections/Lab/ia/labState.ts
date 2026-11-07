@@ -1,4 +1,4 @@
-import { containsIban, helpdesk, isAiLabLevel, payeeIban, poisonedCv, poisonedInbox, sourceForSearch, type DefenseStageId, type EmailDraft, type IndexedSource, type LabLevel, type ToolCall } from '../../../content/lab/ai'
+import { agentAdvice, aiLabAdvice, aiLabOutcomes, containsIban, defenseStages, helpdesk, isAiLabLevel, payeeIban, poisonedCv, poisonedInbox, sourceForSearch, type DefenseStageId, type EmailDraft, type IndexedSource, type LabLevel, type ToolCall } from '../../../content/lab/ai'
 
 export type StageStatus = 'inactive' | 'passed' | 'blocked' | 'error' | 'not-run'
 export type LabOutcome = 'delivered' | 'flag' | 'blocked-input' | 'blocked-output' | 'blocked-classifier' | 'recommended' | 'rejected' | 'diverted' | 'official-iban' | 'not-retrieved' | 'granted' | 'denied' | 'off-topic' | 'error' | 'quota'
@@ -20,6 +20,8 @@ export type LabResult = {
   checks?: LabCheck[]
   /** Why it stopped there, read from Sentry's final line. */
   reason?: string
+  /** What to try next, from the level and the outcome only. */
+  advice?: string
   trace: LabTrace
 }
 export type SearchRanking = { id: string; score: number }[]
@@ -157,4 +159,33 @@ export function agentChecks(outcome: LabOutcome, tools: readonly ToolCall[]): La
     { label: checks.add, ok: adds.length ? own : false, detail: adds.length ? adds.map(call => `${String(call.arguments.utilisateur ?? '?')} → ${String(call.arguments.groupe ?? '?')}`).join(', ') : checks.notCalled },
     { label: checks.access, ok: outcome === 'granted' },
   ]
+}
+
+/** What to try next. Only facts the server returned are used: the level, the outcome and, on level 6, the calls it ran. */
+export function adviceFor(level: LabLevel, outcome: LabOutcome, tools?: readonly ToolCall[]): string | undefined {
+  if (tools && outcome === 'denied') {
+    if (!tools.length) return agentAdvice.noTool
+    const adds = tools.filter(call => call.name === 'ajouter_au_groupe')
+    return adds.length ? agentAdvice.wrongAdd : agentAdvice.noAdd
+  }
+  const generic = outcome in aiLabOutcomes ? aiLabOutcomes[outcome as keyof typeof aiLabOutcomes] : undefined
+  return aiLabAdvice[level]?.[outcome] ?? (generic && 'advice' in generic ? generic.advice : undefined)
+}
+
+const SUCCESS: readonly LabOutcome[] = ['flag', 'recommended', 'diverted', 'granted']
+/** Attempts in a row that reached the model without success, newest first; technical errors and quotas do not count. */
+export function failuresInARow(attempts: readonly LabAttempt[], level: LabLevel) {
+  let count = 0
+  for (const { result } of [...attempts].reverse()) {
+    if (result.level !== level || result.outcome === 'error' || result.outcome === 'quota') continue
+    if (SUCCESS.includes(result.outcome)) break
+    count++
+  }
+  return count
+}
+
+/** The word shown for a stage: a check that stops a request may say why, such as an absent flag. */
+export const stageWord = (stage: DefenseStageId, status: StageStatus) => {
+  const own = defenseStages.find(entry => entry.id === stage) as { stopWord?: string } | undefined
+  return status === 'blocked' && own?.stopWord ? own.stopWord : stageStatusLabels[status]
 }
